@@ -17,6 +17,7 @@ namespace ScreenShotTool
         ImageFormat DestinationFormat = ImageFormat.Jpeg;
         string fileExtension = ".jpg";
         int maxApplicationNameLength = 16;
+        int counter = 0;
 
         public Dictionary<string, Hotkey> hotkeyList = new Dictionary<string, Hotkey>
         {
@@ -28,7 +29,7 @@ namespace ScreenShotTool
         public MainForm()
         {
             InitializeComponent();
-            hotkeyList = HotkeyTools.LoadHotkeys(hotkeyList,this);
+            hotkeyList = HotkeyTools.LoadHotkeys(hotkeyList, this);
 
             if (settings.RegisterHotkeys)
             {
@@ -69,6 +70,8 @@ namespace ScreenShotTool
                 {
                     CaptureAction(CaptureMode.Region);
                 }
+
+                /*
                 else if (id == hotkeyList["CaptureWindow"].ghk.id)
                 {
                     CaptureAction(CaptureMode.Window);
@@ -77,6 +80,7 @@ namespace ScreenShotTool
                 {
                     CaptureAction(CaptureMode.AllScreens);
                 }
+                */
             }
         }
 
@@ -93,7 +97,7 @@ namespace ScreenShotTool
             CaptureAction(CaptureMode.Window);
         }
 
-        
+
         /* public bool CaptureScreen()
         {
             try
@@ -142,7 +146,8 @@ namespace ScreenShotTool
                 DateTime.Now.Day.ToString() + " " +
                 DateTime.Now.Hour.ToString() + "_" +
                 DateTime.Now.Minute.ToString() + "_" +
-                DateTime.Now.Second.ToString();
+                DateTime.Now.Second.ToString() + "_" +
+                DateTime.Now.Millisecond.ToString();
             //time = time.Replace(":", "");
             DestinationFileName = time + fileExtension;
             if (mode == CaptureMode.Window)
@@ -163,10 +168,22 @@ namespace ScreenShotTool
         public void CaptureWindow(string folder, string filename, ImageFormat format)
         {
             RECT windowRect;
-            GetWindowRect(GetActiveWindow(), out windowRect);            
-
+            GetWindowRect(GetActiveWindow(), out windowRect);
+            windowRect.Left += (int)trimLeft.Value;
+            windowRect.Right -= (int)trimRight.Value;
+            windowRect.Top += (int)trimTop.Value;
+            windowRect.Bottom -= (int)trimBottom.Value;
             Bitmap capture = CaptureBitmap(windowRect.Left, windowRect.Top, windowRect.Width, windowRect.Height);
+
+            textBoxLog.Text = textBoxLog.Text + "Saving " + counter + Environment.NewLine;
+            counter++;
+            //Task.Run(() => SaveBitmap(folder, filename, format, capture));
             SaveBitmap(folder, filename, format, capture);
+        }
+
+        static async Task SaveBitmapAsync(string folder, string filename, ImageFormat format, Bitmap capture)
+        {
+
         }
 
         private bool SaveBitmap(string folder, string filename, ImageFormat format, Bitmap capture)
@@ -185,7 +202,7 @@ namespace ScreenShotTool
                 catch (Exception ex)
                 {
                     writeMessage("Could not save file to:\n"
-                        + folder + "\\" + filename + "\n" 
+                        + folder + "\\" + filename + "\n"
                         + "Check that you have write permission for this folder\n"
                         + "\n"
                         + ex.ToString());
@@ -197,7 +214,7 @@ namespace ScreenShotTool
                 writeMessage("Folder not found: " + folder);
                 return false;
             }
-
+            //writeMessage("ok");
             return true;
         }
 
