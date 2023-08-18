@@ -13,9 +13,9 @@ namespace ScreenShotTool
         Settings settings = Settings.Default;
         string DestinationFolder = "";
         string DestinationFileName = "capture.png";
-        int DestinationFileNumber = 0;
-        ImageFormat DestinationFormat = ImageFormat.Jpeg;
-        string fileExtension = ".jpg";
+        //int DestinationFileNumber = 0;
+        ImageFormat DestinationFormat;// = ImageFormat.Jpeg;
+        //string fileExtension = ".jpg";
         int maxApplicationNameLength = 16;
         int counter = 0;
 
@@ -140,23 +140,75 @@ namespace ScreenShotTool
         public void CaptureAction(CaptureMode mode)
         {
             DestinationFolder = textBoxFolder.Text;
-            string time =
-                DateTime.Now.Year.ToString() + "-" +
-                DateTime.Now.Month.ToString() + "-" +
-                DateTime.Now.Day.ToString() + " " +
-                DateTime.Now.Hour.ToString() + "_" +
-                DateTime.Now.Minute.ToString() + "_" +
-                DateTime.Now.Second.ToString() + "_" +
-                DateTime.Now.Millisecond.ToString();
+            SetImageFormat();
             //time = time.Replace(":", "");
-            DestinationFileName = time + fileExtension;
+            //DestinationFileName = time + comboBoxFileType.Text;
             if (mode == CaptureMode.Window)
             {
-                string WindowTitle = MakeValidFileName(GetActiveWindowTitle());
-                WindowTitle = ShortenString(WindowTitle, maxApplicationNameLength);
-                if (WindowTitle.Length == 0) { WindowTitle = "capture"; }
-                DestinationFileName = WindowTitle + " - " + DestinationFileName;
-                CaptureWindow(DestinationFolder, DestinationFileName, DestinationFormat);
+                DestinationFolder = ComposeFileName(textBoxFolder.Text);
+                DestinationFileName = ComposeFileName(textBoxFilename.Text);
+                CaptureWindow(DestinationFolder, DestinationFileName + comboBoxFileType.Text, DestinationFormat);
+                numericUpDownCounter.Value++;
+            }
+        }
+
+        private string ComposeFileName(string text)
+        {
+            string date =
+                DateTime.Now.Year.ToString() + "-" +
+                DateTime.Now.Month.ToString() + "-" +
+                DateTime.Now.Day.ToString();
+            string time =
+                DateTime.Now.Hour.ToString() + "_" +
+                DateTime.Now.Minute.ToString() + "_" +
+                DateTime.Now.Second.ToString();
+            string millisecond =
+                DateTime.Now.Millisecond.ToString();
+
+            string windowTitle = MakeValidFileName(GetActiveWindowTitle());
+            windowTitle = ShortenString(windowTitle, maxApplicationNameLength);
+            if (windowTitle.Length == 0) { windowTitle = "capture"; }
+            /*
+            string folder = textBoxFolder.Text;
+            string file = textBoxFilename.Text;
+            string extension = comboBoxFileType.Text;
+            string finalname = folder + "\\" + file + extension;
+            */
+
+
+            text = text.Replace("$d", date);
+            text = text.Replace("$t", time);
+            text = text.Replace("$ms", millisecond);
+            text = text.Replace("$w", windowTitle);
+            text = text.Replace("$c", numericUpDownCounter.Value.ToString().PadLeft(3, '0'));
+
+            return text;
+        }
+
+
+
+        private void SetImageFormat()
+        {
+            switch (comboBoxFileType.Text)
+            {
+                case ".jpg":
+                    DestinationFormat = ImageFormat.Jpeg;
+                    break;
+                case ".png":
+                    DestinationFormat = ImageFormat.Png;
+                    break;
+                case ".gif":
+                    DestinationFormat = ImageFormat.Gif;
+                    break;
+                case ".bmp":
+                    DestinationFormat = ImageFormat.Bmp;
+                    break;
+                case ".tiff":
+                    DestinationFormat = ImageFormat.Tiff;
+                    break;
+                default:
+                    DestinationFormat = ImageFormat.Jpeg;
+                    break;
             }
         }
 
@@ -173,17 +225,12 @@ namespace ScreenShotTool
             windowRect.Right -= (int)trimRight.Value;
             windowRect.Top += (int)trimTop.Value;
             windowRect.Bottom -= (int)trimBottom.Value;
-            Bitmap capture = CaptureBitmap(windowRect.Left, windowRect.Top, windowRect.Width, windowRect.Height);
+            Bitmap bitmap = CaptureBitmap(windowRect.Left, windowRect.Top, windowRect.Width, windowRect.Height);
 
             textBoxLog.Text = textBoxLog.Text + "Saving " + counter + Environment.NewLine;
             counter++;
             //Task.Run(() => SaveBitmap(folder, filename, format, capture));
-            SaveBitmap(folder, filename, format, capture);
-        }
-
-        static async Task SaveBitmapAsync(string folder, string filename, ImageFormat format, Bitmap capture)
-        {
-
+            SaveBitmap(folder, filename, format, bitmap);
         }
 
         private bool SaveBitmap(string folder, string filename, ImageFormat format, Bitmap capture)
@@ -300,5 +347,20 @@ namespace ScreenShotTool
         }
         #endregion
 
+        private void buttonHelp_Click(object sender, EventArgs e)
+        {
+            textBoxLog.Text = "Default filename values:" + Environment.NewLine +
+                "$w - $d $t $ms ($c)" + Environment.NewLine +
+                "$w: Active Window Title" + Environment.NewLine +
+                "$d/t/ms: Date, Time, Milliseconds" + Environment.NewLine +
+                "$c: Counter number (auto increments)";
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog dialog = new FolderBrowserDialog();
+            dialog.ShowDialog();
+            textBoxFolder.Text = dialog.SelectedPath;
+        }
     }
 }
