@@ -97,7 +97,7 @@ namespace ScreenShotTool.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("PrintScreen")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string hkCaptureRegionKey {
             get {
                 return ((string)(this["hkCaptureRegionKey"]));
@@ -133,7 +133,7 @@ namespace ScreenShotTool.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool hkCaptureRegionShift {
             get {
                 return ((bool)(this["hkCaptureRegionShift"]));
@@ -152,6 +152,66 @@ namespace ScreenShotTool.Properties {
             }
             set {
                 this["hkCaptureRegionWin"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("PrintScreen")]
+        public string hkBrowseFolderKey {
+            get {
+                return ((string)(this["hkBrowseFolderKey"]));
+            }
+            set {
+                this["hkBrowseFolderKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool hkBrowseFolderCtrl {
+            get {
+                return ((bool)(this["hkBrowseFolderCtrl"]));
+            }
+            set {
+                this["hkBrowseFolderCtrl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool hkBrowseFolderAlt {
+            get {
+                return ((bool)(this["hkBrowseFolderAlt"]));
+            }
+            set {
+                this["hkBrowseFolderAlt"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool hkBrowseFolderShift {
+            get {
+                return ((bool)(this["hkBrowseFolderShift"]));
+            }
+            set {
+                this["hkBrowseFolderShift"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool hkBrowseFolderWin {
+            get {
+                return ((bool)(this["hkBrowseFolderWin"]));
+            }
+            set {
+                this["hkBrowseFolderWin"] = value;
             }
         }
     }

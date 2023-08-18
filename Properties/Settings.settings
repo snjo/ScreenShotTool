@@ -21,7 +21,7 @@
       <Value Profile="(Default)">PrintScreen</Value>
     </Setting>
     <Setting Name="hkCaptureRegionKey" Type="System.String" Scope="User">
-      <Value Profile="(Default)">PrintScreen</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="hkCaptureRegionCtrl" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -30,9 +30,24 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="hkCaptureRegionShift" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="hkCaptureRegionWin" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="hkBrowseFolderKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">PrintScreen</Value>
+    </Setting>
+    <Setting Name="hkBrowseFolderCtrl" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="hkBrowseFolderAlt" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="hkBrowseFolderShift" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="hkBrowseFolderWin" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>

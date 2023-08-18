@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            buttonScreenshot = new Button();
             textBoxFolder = new TextBox();
             label1 = new Label();
             textBoxLog = new TextBox();
@@ -37,7 +36,7 @@
             trimBottom = new NumericUpDown();
             trimTop = new NumericUpDown();
             labelTrim = new Label();
-            button1 = new Button();
+            buttonSelectFolder = new Button();
             textBoxFilename = new TextBox();
             comboBoxFileType = new ComboBox();
             label3 = new Label();
@@ -45,6 +44,8 @@
             label2 = new Label();
             buttonHelp = new Button();
             folderBrowserDialog1 = new FolderBrowserDialog();
+            buttonBrowseFolder = new Button();
+            buttonOpenLastFolder = new Button();
             ((System.ComponentModel.ISupportInitialize)trimLeft).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
@@ -52,21 +53,11 @@
             ((System.ComponentModel.ISupportInitialize)numericUpDownCounter).BeginInit();
             SuspendLayout();
             // 
-            // buttonScreenshot
-            // 
-            buttonScreenshot.Location = new Point(345, 225);
-            buttonScreenshot.Name = "buttonScreenshot";
-            buttonScreenshot.Size = new Size(48, 23);
-            buttonScreenshot.TabIndex = 0;
-            buttonScreenshot.Text = "Test";
-            buttonScreenshot.UseVisualStyleBackColor = true;
-            buttonScreenshot.Click += buttonScreenshot_Click;
-            // 
             // textBoxFolder
             // 
             textBoxFolder.Location = new Point(11, 22);
             textBoxFolder.Name = "textBoxFolder";
-            textBoxFolder.Size = new Size(302, 23);
+            textBoxFolder.Size = new Size(292, 23);
             textBoxFolder.TabIndex = 1;
             // 
             // label1
@@ -84,7 +75,8 @@
             textBoxLog.Location = new Point(12, 254);
             textBoxLog.Multiline = true;
             textBoxLog.Name = "textBoxLog";
-            textBoxLog.Size = new Size(382, 143);
+            textBoxLog.ScrollBars = ScrollBars.Vertical;
+            textBoxLog.Size = new Size(413, 143);
             textBoxLog.TabIndex = 3;
             textBoxLog.Text = "Default filename values:\r\n$w $c\r\n\r\n$w: Active Window Title\r\n$d/t/ms: Date, Time, Milliseconds\r\n$c: Counter number (auto increments)";
             // 
@@ -133,21 +125,21 @@
             labelTrim.TabIndex = 8;
             labelTrim.Text = "Trim window";
             // 
-            // button1
+            // buttonSelectFolder
             // 
-            button1.Location = new Point(319, 22);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 23);
-            button1.TabIndex = 9;
-            button1.Text = "Open";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            buttonSelectFolder.Location = new Point(309, 22);
+            buttonSelectFolder.Name = "buttonSelectFolder";
+            buttonSelectFolder.Size = new Size(53, 23);
+            buttonSelectFolder.TabIndex = 9;
+            buttonSelectFolder.Text = "Select";
+            buttonSelectFolder.UseVisualStyleBackColor = true;
+            buttonSelectFolder.Click += buttonSelectFolder_Click;
             // 
             // textBoxFilename
             // 
             textBoxFilename.Location = new Point(12, 73);
             textBoxFilename.Name = "textBoxFilename";
-            textBoxFilename.Size = new Size(272, 23);
+            textBoxFilename.Size = new Size(291, 23);
             textBoxFilename.TabIndex = 10;
             textBoxFilename.Text = "$w $c";
             // 
@@ -155,9 +147,9 @@
             // 
             comboBoxFileType.FormattingEnabled = true;
             comboBoxFileType.Items.AddRange(new object[] { ".png", ".jpg", ".gif", ".bmp", ".tiff" });
-            comboBoxFileType.Location = new Point(290, 73);
+            comboBoxFileType.Location = new Point(309, 73);
             comboBoxFileType.Name = "comboBoxFileType";
-            comboBoxFileType.Size = new Size(75, 23);
+            comboBoxFileType.Size = new Size(53, 23);
             comboBoxFileType.TabIndex = 11;
             comboBoxFileType.Text = ".png";
             // 
@@ -197,18 +189,40 @@
             buttonHelp.UseVisualStyleBackColor = true;
             buttonHelp.Click += buttonHelp_Click;
             // 
+            // buttonBrowseFolder
+            // 
+            buttonBrowseFolder.Location = new Point(368, 22);
+            buttonBrowseFolder.Name = "buttonBrowseFolder";
+            buttonBrowseFolder.Size = new Size(57, 23);
+            buttonBrowseFolder.TabIndex = 17;
+            buttonBrowseFolder.Text = "Browse";
+            buttonBrowseFolder.UseVisualStyleBackColor = true;
+            buttonBrowseFolder.Click += buttonBrowseFolder_Click;
+            // 
+            // buttonOpenLastFolder
+            // 
+            buttonOpenLastFolder.Location = new Point(268, 225);
+            buttonOpenLastFolder.Name = "buttonOpenLastFolder";
+            buttonOpenLastFolder.Size = new Size(156, 23);
+            buttonOpenLastFolder.TabIndex = 18;
+            buttonOpenLastFolder.Text = "Open Last Folder Used";
+            buttonOpenLastFolder.UseVisualStyleBackColor = true;
+            buttonOpenLastFolder.Click += buttonOpenLastFolder_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(405, 408);
+            ClientSize = new Size(436, 408);
+            Controls.Add(buttonOpenLastFolder);
+            Controls.Add(buttonBrowseFolder);
             Controls.Add(buttonHelp);
             Controls.Add(label2);
             Controls.Add(numericUpDownCounter);
             Controls.Add(label3);
             Controls.Add(comboBoxFileType);
             Controls.Add(textBoxFilename);
-            Controls.Add(button1);
+            Controls.Add(buttonSelectFolder);
             Controls.Add(labelTrim);
             Controls.Add(trimTop);
             Controls.Add(trimBottom);
@@ -217,7 +231,6 @@
             Controls.Add(textBoxLog);
             Controls.Add(label1);
             Controls.Add(textBoxFolder);
-            Controls.Add(buttonScreenshot);
             Name = "MainForm";
             Text = "Form1";
             FormClosing += Form1_FormClosing;
@@ -241,7 +254,7 @@
         private NumericUpDown trimBottom;
         private NumericUpDown trimTop;
         private Label labelTrim;
-        private Button button1;
+        private Button buttonSelectFolder;
         private TextBox textBoxFilename;
         private ComboBox comboBoxFileType;
         private Label label3;
@@ -249,5 +262,7 @@
         private Label label2;
         private Button buttonHelp;
         private FolderBrowserDialog folderBrowserDialog1;
+        private Button buttonBrowseFolder;
+        private Button buttonOpenLastFolder;
     }
 }

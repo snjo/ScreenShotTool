@@ -11,14 +11,17 @@ namespace Hotkeys
         {
             foreach (KeyValuePair<string, Hotkey> kvp in hotkeyList)
             {
-                hotkeyList[kvp.Key] = LoadHotkey(kvp.Key, parent);
+                hotkeyList[kvp.Key] = LoadHotkey(kvp.Key, parent);                
             }
+
+            //MessageBox.Show("hotKeyList " + hotkeyList.Count);
             return hotkeyList;
         }
 
         public static Hotkey LoadHotkey(string hotkeyName, Form parent) //char settingHotkey
         {
             Hotkey hotkey = new Hotkey();
+            
             hotkey.key = Settings.Default["hk" + hotkeyName + "Key"].ToString();
             hotkey.Ctrl = (bool)Settings.Default["hk" + hotkeyName + "Ctrl"];
             hotkey.Alt = (bool)Settings.Default["hk" + hotkeyName + "Alt"];
@@ -26,6 +29,7 @@ namespace Hotkeys
             hotkey.Win = (bool)Settings.Default["hk" + hotkeyName + "Win"];
             hotkey.ghk = new GlobalHotkey(hotkey.Modifiers(), hotkey.key, parent);
 
+            //MessageBox.Show("LoadHotkey: " + hotkeyName + " / " + hotkey.Win);
             return hotkey;
         }
 
@@ -45,7 +49,8 @@ namespace Hotkeys
             {
                 if (ghk != null)
                 {
-                    if (warning) MessageBox.Show("Could not register hotkey " + ghk.key);
+                    if (warning && ghk.hotkey == null) MessageBox.Show("Could not register hotkey " + ghk.key + ", ghk.hotkey is null");
+                    else if (warning) MessageBox.Show("Could not register hotkey " + ghk.key + "ghk.hotkey.Win is " + ghk.hotkey.Win);
                 }
                 else
                 {
@@ -64,8 +69,12 @@ namespace Hotkeys
         {
             string warningKeys = "";
             foreach (KeyValuePair<string, Hotkey> ghk in hotkeyList)
-            {                
-                if (!RegisterHotKey(ghk.Value.ghk, false)) //register the key, add a warning to the list if it fails
+            { 
+                if (ghk.Value.key == string.Empty)
+                {
+                    //MessageBox.Show("Skipping hotkey");
+                }
+                else if (!RegisterHotKey(ghk.Value.ghk, false)) //register the key, add a warning to the list if it fails
                 {
                     warningKeys += ghk.Key + "\n";
                 }

@@ -1,5 +1,7 @@
 using Hotkeys;
 using ScreenShotTool.Properties;
+using System.Configuration;
+using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Net.Security;
 using System.Runtime.InteropServices;
@@ -16,13 +18,15 @@ namespace ScreenShotTool
         //int DestinationFileNumber = 0;
         ImageFormat DestinationFormat;// = ImageFormat.Jpeg;
         //string fileExtension = ".jpg";
-        int maxApplicationNameLength = 16;
+        int maxApplicationNameLength = 30;
         int counter = 0;
+        string lastFolder = ".";
 
         public Dictionary<string, Hotkey> hotkeyList = new Dictionary<string, Hotkey>
         {
             {"CaptureWindow", new Hotkey(new GlobalHotkey())},
-            {"CaptureRegion", new Hotkey(new GlobalHotkey())},
+            //{"CaptureRegion", new Hotkey(new GlobalHotkey())},
+            {"BrowseFolder", new Hotkey(new GlobalHotkey())},
         };
 
         #region form open and close
@@ -66,9 +70,9 @@ namespace ScreenShotTool
                 {
                     CaptureAction(CaptureMode.Window);
                 }
-                else if (id == hotkeyList["CaptureRegion"].ghk.id)
+                else if (id == hotkeyList["BrowseFolder"].ghk.id)
                 {
-                    CaptureAction(CaptureMode.Region);
+                    BrowseFolderInExplorer(lastFolder);
                 }
 
                 /*
@@ -151,6 +155,12 @@ namespace ScreenShotTool
                 CaptureWindow(DestinationFolder, DestinationFileName + comboBoxFileType.Text, DestinationFormat);
                 numericUpDownCounter.Value++;
             }
+            else if (mode == CaptureMode.Region)
+            {
+                writeMessage("Region capture not yet implemented");
+                // ------------ TODO --------------
+            }
+
         }
 
         private string ComposeFileName(string text)
@@ -252,12 +262,14 @@ namespace ScreenShotTool
                     writeMessage("Couldn't find or create folder " + folder);
                 }
             }
-                
+
             if (Directory.Exists(folder))
             {
                 try
                 {
                     capture.Save(folder + "\\" + filename, format);
+                    writeMessage("Saved " + folder + "\\" + filename);
+                    lastFolder = folder;
                 }
                 catch (Exception ex)
                 {
@@ -369,11 +381,44 @@ namespace ScreenShotTool
                 "$c: Counter number (auto increments)";
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonSelectFolder_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog dialog = new FolderBrowserDialog();
             dialog.ShowDialog();
             textBoxFolder.Text = dialog.SelectedPath;
         }
+
+        private void buttonBrowseFolder_Click(object sender, EventArgs e)
+        {
+            //string file = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal).FilePath;
+            //string folder = Path.GetDirectoryName(file);
+            string folder = textBoxFolder.Text;
+            folder = BrowseFolderInExplorer(folder);
+        }
+
+        private string BrowseFolderInExplorer(string folder)
+        {
+            if (folder.Length < 1)
+            {
+                folder = ".";
+            }
+            if (Directory.Exists(folder))
+            {
+                Process.Start(new ProcessStartInfo() { FileName = folder, UseShellExecute = true });
+            }
+            else
+            {
+                writeMessage("Can't open folder " + folder);
+            }
+
+            return folder;
+        }
+
+        private void buttonOpenLastFolder_Click(object sender, EventArgs e)
+        {
+            BrowseFolderInExplorer(lastFolder);
+        }
+
+        
     }
 }

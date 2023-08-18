@@ -61,16 +61,19 @@ namespace Hotkeys
             if (validKey == false)
             {
                 registered = false;
+                //MessageBox.Show("Validkey false");
                 return registered;
             }
             if (id != 0)
             {
                 registered = RegisterHotKey(hWnd, id, modifier, key);
+                //MessageBox.Show("Registered:" + registered.ToString() + " / " + key + " / " + modifier);
                 return registered;
             }
             else
             {
                 registered = false;
+                //MessageBox.Show("Unknown register error");
                 return registered;
             }
         }
