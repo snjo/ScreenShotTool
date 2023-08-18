@@ -89,7 +89,8 @@ namespace ScreenShotTool
         #region capture
         private void writeMessage(string text)
         {
-            MessageBox.Show(text);
+            //MessageBox.Show(text);
+            textBoxLog.Text = text + Environment.NewLine + textBoxLog.Text;
         }
 
         private void buttonScreenshot_Click(object sender, EventArgs e)
@@ -227,7 +228,7 @@ namespace ScreenShotTool
             windowRect.Bottom -= (int)trimBottom.Value;
             Bitmap bitmap = CaptureBitmap(windowRect.Left, windowRect.Top, windowRect.Width, windowRect.Height);
 
-            textBoxLog.Text = textBoxLog.Text + "Saving " + counter + Environment.NewLine;
+            //textBoxLog.Text = textBoxLog.Text + "Saving " + counter + Environment.NewLine;
             counter++;
             //Task.Run(() => SaveBitmap(folder, filename, format, capture));
             SaveBitmap(folder, filename, format, bitmap);
@@ -240,6 +241,18 @@ namespace ScreenShotTool
                 folder = ".";
             }
 
+            if (!Directory.Exists(folder))
+            {
+                try
+                {
+                    Directory.CreateDirectory(folder);
+                }
+                catch
+                {
+                    writeMessage("Couldn't find or create folder " + folder);
+                }
+            }
+                
             if (Directory.Exists(folder))
             {
                 try
