@@ -1,27 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Configuration;
-using ClipboardTool;
 using ScreenShotTool.Properties;
-using static ScreenShotTool.Form1;
 
 namespace Hotkeys
 {
-    class Hotkeys
+    /*class Hotkeys
     {
-    }
+    }*/
 
 
 
     [Serializable]
     public class HotkeyList// : ApplicationSettingsBase
     {
-        public Hotkey CaptureWindow = new();
+        //public Hotkey CaptureWindow = new();
     }
     
 
