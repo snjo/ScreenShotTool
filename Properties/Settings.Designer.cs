@@ -94,5 +94,65 @@ namespace ScreenShotTool.Properties {
                 this["hkCaptureWindowKey"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("PrintScreen")]
+        public string hkCaptureRegionKey {
+            get {
+                return ((string)(this["hkCaptureRegionKey"]));
+            }
+            set {
+                this["hkCaptureRegionKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool hkCaptureRegionCtrl {
+            get {
+                return ((bool)(this["hkCaptureRegionCtrl"]));
+            }
+            set {
+                this["hkCaptureRegionCtrl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool hkCaptureRegionAlt {
+            get {
+                return ((bool)(this["hkCaptureRegionAlt"]));
+            }
+            set {
+                this["hkCaptureRegionAlt"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool hkCaptureRegionShift {
+            get {
+                return ((bool)(this["hkCaptureRegionShift"]));
+            }
+            set {
+                this["hkCaptureRegionShift"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool hkCaptureRegionWin {
+            get {
+                return ((bool)(this["hkCaptureRegionWin"]));
+            }
+            set {
+                this["hkCaptureRegionWin"] = value;
+            }
+        }
     }
 }

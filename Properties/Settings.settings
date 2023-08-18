@@ -20,5 +20,20 @@
     <Setting Name="hkCaptureWindowKey" Type="System.String" Scope="User">
       <Value Profile="(Default)">PrintScreen</Value>
     </Setting>
+    <Setting Name="hkCaptureRegionKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">PrintScreen</Value>
+    </Setting>
+    <Setting Name="hkCaptureRegionCtrl" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="hkCaptureRegionAlt" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="hkCaptureRegionShift" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="hkCaptureRegionWin" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

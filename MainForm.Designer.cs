@@ -1,6 +1,6 @@
 ﻿namespace ScreenShotTool
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -49,7 +49,6 @@
             textBoxFolder.Name = "textBoxFolder";
             textBoxFolder.Size = new Size(382, 23);
             textBoxFolder.TabIndex = 1;
-            textBoxFolder.Text = "e:\\capture";
             // 
             // label1
             // 
@@ -60,7 +59,7 @@
             label1.TabIndex = 2;
             label1.Text = "Folder";
             // 
-            // Form1
+            // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -68,7 +67,7 @@
             Controls.Add(label1);
             Controls.Add(textBoxFolder);
             Controls.Add(buttonScreenshot);
-            Name = "Form1";
+            Name = "MainForm";
             Text = "Form1";
             FormClosing += Form1_FormClosing;
             ResumeLayout(false);

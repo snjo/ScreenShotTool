@@ -1,12 +1,14 @@
 using Hotkeys;
 using ScreenShotTool.Properties;
 using System.Drawing.Imaging;
+using System.Net.Security;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace ScreenShotTool
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         Settings settings = Settings.Default;
         string DestinationFolder = "";
@@ -14,32 +16,33 @@ namespace ScreenShotTool
         int DestinationFileNumber = 0;
         ImageFormat DestinationFormat = ImageFormat.Jpeg;
         string fileExtension = ".jpg";
-
-        private bool hotkeysSet = false;
+        int maxApplicationNameLength = 16;
 
         public Dictionary<string, Hotkey> hotkeyList = new Dictionary<string, Hotkey>
         {
-            //{"UpperCase", new GlobalHotkey(new Hotkey())},
-            //{"CaptureWindow", new Hotkey(new GlobalHotkey())},
+            {"CaptureWindow", new Hotkey(new GlobalHotkey())},
+            {"CaptureRegion", new Hotkey(new GlobalHotkey())},
         };
 
-        public Form1()
+        #region form open and close
+        public MainForm()
         {
             InitializeComponent();
-            hotkeyList = new Dictionary<string, Hotkey>
+            hotkeyList = HotkeyTools.LoadHotkeys(hotkeyList,this);
+
+            if (settings.RegisterHotkeys)
             {
-                //{"UpperCase", new GlobalHotkey(new Hotkey())},
-                {"CaptureWindow", new Hotkey(new GlobalHotkey())},
-            };
-            LoadHotkeys(this);
-            RegisterHotkeys();
+                HotkeyTools.RegisterHotkeys(hotkeyList);
+            }
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            ReleaseHotkeys();
+            HotkeyTools.ReleaseHotkeys(hotkeyList);
         }
+        #endregion
 
+        #region Hotkeys
         protected override void WndProc(ref Message m)
         {
             base.WndProc(ref m);
@@ -53,86 +56,6 @@ namespace ScreenShotTool
             }
         }
 
-
-        #region Hotkeys
-        public void LoadHotkeys(Form parent)
-        {
-            //Settings newSettings = new();
-
-            foreach (KeyValuePair<string, Hotkey> kvp in hotkeyList)
-            {
-                hotkeyList[kvp.Key] = LoadHotkey(kvp.Key, parent);
-            }
-        }
-
-        private Hotkey LoadHotkey(string hotkeyName, Form parent) //char settingHotkey
-        {
-            //Settings.Default["hk" + hotkeyName + "Key"]
-            Hotkey hotkey = new Hotkey();
-            hotkey.key = Settings.Default["hk" + hotkeyName + "Key"].ToString();
-            hotkey.Ctrl = (bool)Settings.Default["hk" + hotkeyName + "Ctrl"];
-            hotkey.Alt = (bool)Settings.Default["hk" + hotkeyName + "Alt"];
-            hotkey.Shift = (bool)Settings.Default["hk" + hotkeyName + "Shift"];
-            hotkey.Win = (bool)Settings.Default["hk" + hotkeyName + "Win"];
-            hotkey.ghk = new GlobalHotkey(hotkey.Modifiers(), hotkey.key, parent);
-
-            //test
-            //writeMessage("key: " + Settings.Default["hk" + hotkeyName + "Key"].ToString());
-
-            return hotkey;
-        }
-
-        public void RegisterHotkeys()
-        {
-            if (!settings.RegisterHotkeys) return;
-
-            hotkeysSet = true;
-
-            string errorMessages = "";
-            //trying to register hotkey
-
-            foreach (KeyValuePair<string, Hotkey> ghk in hotkeyList)
-            {
-                RegisterHotKey(ghk.Value.ghk);
-            }
-
-            if (errorMessages.Length > 0)
-            {
-                //writeMessage(errorMessages);
-            }
-        }
-
-        private void RegisterHotKey(GlobalHotkey ghk)
-        {
-            if (ghk != null)
-            {
-                //writeMessage("hk reg " + ghk.id);
-                if (!ghk.Register())
-                {
-                    //writeMessage("register hotkey failed");
-                }
-            }
-        }
-
-        public void ReleaseHotkeys()
-        {
-            if (!hotkeysSet) return;
-
-            foreach (KeyValuePair<string, Hotkey> ghk in hotkeyList)
-            {
-                ReleaseHotkey(ghk.Value.ghk);
-            }
-        }
-
-        private void ReleaseHotkey(GlobalHotkey ghk)
-        {
-            if (ghk != null)
-            {
-                ghk.Unregister();
-            }
-        }
-
-
         private void HandleHotkey(int id)
         {
 
@@ -142,13 +65,24 @@ namespace ScreenShotTool
                 {
                     CaptureAction(CaptureMode.Window);
                 }
+                else if (id == hotkeyList["CaptureRegion"].ghk.id)
+                {
+                    CaptureAction(CaptureMode.Region);
+                }
+                else if (id == hotkeyList["CaptureWindow"].ghk.id)
+                {
+                    CaptureAction(CaptureMode.Window);
+                }
+                else if (id == hotkeyList["CaptureAllscreens"].ghk.id)
+                {
+                    CaptureAction(CaptureMode.AllScreens);
+                }
             }
         }
 
-
         #endregion
 
-
+        #region capture
         private void writeMessage(string text)
         {
             MessageBox.Show(text);
@@ -159,7 +93,8 @@ namespace ScreenShotTool
             CaptureAction(CaptureMode.Window);
         }
 
-        public bool CaptureScreen()
+        
+        /* public bool CaptureScreen()
         {
             try
             {
@@ -187,7 +122,7 @@ namespace ScreenShotTool
                 MessageBox.Show(ex.Message);
             }
             return true;
-        }
+        }*/
 
 
         public enum CaptureMode
@@ -201,7 +136,7 @@ namespace ScreenShotTool
         public void CaptureAction(CaptureMode mode)
         {
             DestinationFolder = textBoxFolder.Text;
-            string time = 
+            string time =
                 DateTime.Now.Year.ToString() + "-" +
                 DateTime.Now.Month.ToString() + "-" +
                 DateTime.Now.Day.ToString() + " " +
@@ -209,47 +144,60 @@ namespace ScreenShotTool
                 DateTime.Now.Minute.ToString() + "_" +
                 DateTime.Now.Second.ToString();
             //time = time.Replace(":", "");
-            DestinationFileName = "capture " + time + fileExtension;
+            DestinationFileName = time + fileExtension;
             if (mode == CaptureMode.Window)
             {
+                string WindowTitle = MakeValidFileName(GetActiveWindowTitle());
+                WindowTitle = ShortenString(WindowTitle, maxApplicationNameLength);
+                if (WindowTitle.Length == 0) { WindowTitle = "capture"; }
+                DestinationFileName = WindowTitle + " - " + DestinationFileName;
                 CaptureWindow(DestinationFolder, DestinationFileName, DestinationFormat);
             }
         }
 
-        public bool CaptureWindow(string folder, string filename, ImageFormat format)
+        private string ShortenString(string input, int maxLength)
         {
-            try
+            return input.Substring(0, Math.Min(maxLength, input.Length)).Trim();
+        }
+
+        public void CaptureWindow(string folder, string filename, ImageFormat format)
+        {
+            RECT windowRect;
+            GetWindowRect(GetActiveWindow(), out windowRect);            
+
+            Bitmap capture = CaptureBitmap(windowRect.Left, windowRect.Top, windowRect.Width, windowRect.Height);
+            SaveBitmap(folder, filename, format, capture);
+        }
+
+        private bool SaveBitmap(string folder, string filename, ImageFormat format, Bitmap capture)
+        {
+            if (folder.Length < 1)
             {
-                //Saving the Image File (I am here Saving it in My E drive).
-                //captureBitmap.Save(@"E:\Capture.jpg", ImageFormat.Jpeg);
+                folder = ".";
+            }
 
-                RECT windowRect;
-                GetWindowRect(GetActiveWindow(), out windowRect);
-
-                Bitmap capture = CaptureBitmap(windowRect.Left, windowRect.Top, windowRect.Width, windowRect.Height);
-
-                if (folder.Length < 1)
-                {
-                    folder = ".";
-                }
-
-                if (Directory.Exists(folder))
+            if (Directory.Exists(folder))
+            {
+                try
                 {
                     capture.Save(folder + "\\" + filename, format);
-                    //writeMessage("Saved to: " + folder + "\\" + filename);
                 }
-                else
+                catch (Exception ex)
                 {
-                    writeMessage("Folder not found: " + folder);
+                    writeMessage("Could not save file to:\n"
+                        + folder + "\\" + filename + "\n" 
+                        + "Check that you have write permission for this folder\n"
+                        + "\n"
+                        + ex.ToString());
+                    return false;
                 }
-
-                //Displaying the Successfull Result
-                //MessageBox.Show("Screen Captured");
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show(ex.Message);
+                writeMessage("Folder not found: " + folder);
+                return false;
             }
+
             return true;
         }
 
@@ -268,21 +216,31 @@ namespace ScreenShotTool
             return captureBitmap;
         }
 
+        //https://stackoverflow.com/questions/309485/c-sharp-sanitize-file-name
+        private static string MakeValidFileName(string name)
+        {
+            string invalidChars = System.Text.RegularExpressions.Regex.Escape(new string(System.IO.Path.GetInvalidFileNameChars()));
+            string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
 
+            return System.Text.RegularExpressions.Regex.Replace(name, invalidRegStr, "_");
+        }
 
-        #region active window  location
+        #endregion
+
+        #region active window location
         // https://stackoverflow.com/questions/5878963/getting-active-window-coordinates-and-height-width-in-c-sharp
 
         [DllImport("user32.dll")]
         static extern IntPtr GetForegroundWindow();
 
+        [DllImport("user32.dll")]
+        static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
 
         private IntPtr GetActiveWindow()
         {
             IntPtr handle = IntPtr.Zero;
             return GetForegroundWindow();
         }
-
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -310,26 +268,19 @@ namespace ScreenShotTool
                 }
             }
         }
-        #endregion
 
-        #region alternate active window rect
-        /*
-        [DllImport("user32.dll")]
-        private static extern bool SetProcessDPIAware();
-        [DllImport("user32.dll")]
-        static extern IntPtr GetForegroundWindow();
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool GetWindowRect(IntPtr hWnd, out Rectangle lpRect);
-
-        public Rectangle GetWindowRect()
+        private string GetActiveWindowTitle()
         {
-            SetProcessDPIAware();
-            Rectangle t2;
-            GetWindowRect(GetForegroundWindow(), out t2);
-            return t2;
+            const int nChars = 256;
+            StringBuilder Buff = new StringBuilder(nChars);
+            IntPtr handle = GetForegroundWindow();
+
+            if (GetWindowText(handle, Buff, nChars) > 0)
+            {
+                return Buff.ToString();
+            }
+            return null;
         }
-        */
         #endregion
 
     }
