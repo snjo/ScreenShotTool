@@ -214,5 +214,29 @@ namespace ScreenShotTool.Properties {
                 this["hkBrowseFolderWin"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("$w $c")]
+        public string Filename {
+            get {
+                return ((string)(this["Filename"]));
+            }
+            set {
+                this["Filename"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(".\\$w")]
+        public string Foldername {
+            get {
+                return ((string)(this["Foldername"]));
+            }
+            set {
+                this["Foldername"] = value;
+            }
+        }
     }
 }

@@ -50,5 +50,11 @@
     <Setting Name="hkBrowseFolderWin" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="Filename" Type="System.String" Scope="User">
+      <Value Profile="(Default)">$w $c</Value>
+    </Setting>
+    <Setting Name="Foldername" Type="System.String" Scope="User">
+      <Value Profile="(Default)">.\$w</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

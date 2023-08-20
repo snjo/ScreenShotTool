@@ -141,7 +141,7 @@
             textBoxFilename.Name = "textBoxFilename";
             textBoxFilename.Size = new Size(291, 23);
             textBoxFilename.TabIndex = 10;
-            textBoxFilename.Text = "$w $c";
+            textBoxFilename.Text = "$w - $c";
             // 
             // comboBoxFileType
             // 

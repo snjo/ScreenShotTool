@@ -39,11 +39,28 @@ namespace ScreenShotTool
             {
                 HotkeyTools.RegisterHotkeys(hotkeyList);
             }
+            LoadSettings();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             HotkeyTools.ReleaseHotkeys(hotkeyList);
+            SaveSettings();
+        }
+        #endregion
+
+        #region Settings
+        private void SaveSettings()
+        {
+            settings.Filename = textBoxFilename.Text;
+            settings.Foldername = textBoxFolder.Text;
+            settings.Save();
+        }
+
+        private void LoadSettings()
+        {
+            textBoxFilename.Text = settings.Filename;
+            textBoxFolder.Text = settings.Foldername;
         }
         #endregion
 
@@ -419,6 +436,6 @@ namespace ScreenShotTool
             BrowseFolderInExplorer(lastFolder);
         }
 
-        
+
     }
 }
