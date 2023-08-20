@@ -54,6 +54,11 @@ namespace ScreenShotTool
         {
             settings.Filename = textBoxFilename.Text;
             settings.Foldername = textBoxFolder.Text;
+            settings.TrimBottom = (int)trimBottom.Value;
+            settings.TrimTop = (int)trimTop.Value;
+            settings.TrimLeft = (int)trimLeft.Value;
+            settings.TrimRight = (int)trimRight.Value;
+            settings.trimChecked = checkBoxTrim.Checked;
             settings.Save();
         }
 
@@ -61,6 +66,11 @@ namespace ScreenShotTool
         {
             textBoxFilename.Text = settings.Filename;
             textBoxFolder.Text = settings.Foldername;
+            trimTop.Value = settings.TrimTop;
+            trimBottom.Value = settings.TrimBottom;
+            trimLeft.Value = settings.TrimLeft;
+            trimRight.Value = settings.TrimRight;
+            checkBoxTrim.Checked = settings.trimChecked;
         }
         #endregion
 
@@ -249,10 +259,13 @@ namespace ScreenShotTool
         {
             RECT windowRect;
             GetWindowRect(GetActiveWindow(), out windowRect);
-            windowRect.Left += (int)trimLeft.Value;
-            windowRect.Right -= (int)trimRight.Value;
-            windowRect.Top += (int)trimTop.Value;
-            windowRect.Bottom -= (int)trimBottom.Value;
+            if (checkBoxTrim.Checked)
+            {
+                windowRect.Left += (int)trimLeft.Value;
+                windowRect.Right -= (int)trimRight.Value;
+                windowRect.Top += (int)trimTop.Value;
+                windowRect.Bottom -= (int)trimBottom.Value;
+            }
             Bitmap bitmap = CaptureBitmap(windowRect.Left, windowRect.Top, windowRect.Width, windowRect.Height);
 
             //textBoxLog.Text = textBoxLog.Text + "Saving " + counter + Environment.NewLine;

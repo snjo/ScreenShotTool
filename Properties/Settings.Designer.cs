@@ -238,5 +238,65 @@ namespace ScreenShotTool.Properties {
                 this["Foldername"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("32")]
+        public int TrimTop {
+            get {
+                return ((int)(this["TrimTop"]));
+            }
+            set {
+                this["TrimTop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int TrimBottom {
+            get {
+                return ((int)(this["TrimBottom"]));
+            }
+            set {
+                this["TrimBottom"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int TrimLeft {
+            get {
+                return ((int)(this["TrimLeft"]));
+            }
+            set {
+                this["TrimLeft"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int TrimRight {
+            get {
+                return ((int)(this["TrimRight"]));
+            }
+            set {
+                this["TrimRight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool trimChecked {
+            get {
+                return ((bool)(this["trimChecked"]));
+            }
+            set {
+                this["trimChecked"] = value;
+            }
+        }
     }
 }

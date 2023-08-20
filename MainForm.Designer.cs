@@ -35,7 +35,6 @@
             trimRight = new NumericUpDown();
             trimBottom = new NumericUpDown();
             trimTop = new NumericUpDown();
-            labelTrim = new Label();
             buttonSelectFolder = new Button();
             textBoxFilename = new TextBox();
             comboBoxFileType = new ComboBox();
@@ -46,6 +45,7 @@
             folderBrowserDialog1 = new FolderBrowserDialog();
             buttonBrowseFolder = new Button();
             buttonOpenLastFolder = new Button();
+            checkBoxTrim = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)trimLeft).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
@@ -116,15 +116,6 @@
             trimTop.Size = new Size(70, 23);
             trimTop.TabIndex = 7;
             // 
-            // labelTrim
-            // 
-            labelTrim.AutoSize = true;
-            labelTrim.Location = new Point(11, 153);
-            labelTrim.Name = "labelTrim";
-            labelTrim.Size = new Size(75, 15);
-            labelTrim.TabIndex = 8;
-            labelTrim.Text = "Trim window";
-            // 
             // buttonSelectFolder
             // 
             buttonSelectFolder.Location = new Point(309, 22);
@@ -164,7 +155,7 @@
             // 
             // numericUpDownCounter
             // 
-            numericUpDownCounter.Location = new Point(12, 120);
+            numericUpDownCounter.Location = new Point(309, 102);
             numericUpDownCounter.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             numericUpDownCounter.Name = "numericUpDownCounter";
             numericUpDownCounter.Size = new Size(67, 23);
@@ -173,7 +164,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(11, 102);
+            label2.Location = new Point(253, 104);
             label2.Name = "label2";
             label2.Size = new Size(50, 15);
             label2.TabIndex = 15;
@@ -209,11 +200,22 @@
             buttonOpenLastFolder.UseVisualStyleBackColor = true;
             buttonOpenLastFolder.Click += buttonOpenLastFolder_Click;
             // 
+            // checkBoxTrim
+            // 
+            checkBoxTrim.AutoSize = true;
+            checkBoxTrim.Location = new Point(11, 146);
+            checkBoxTrim.Name = "checkBoxTrim";
+            checkBoxTrim.Size = new Size(142, 19);
+            checkBoxTrim.TabIndex = 19;
+            checkBoxTrim.Text = "Crop Window capture";
+            checkBoxTrim.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(436, 408);
+            Controls.Add(checkBoxTrim);
             Controls.Add(buttonOpenLastFolder);
             Controls.Add(buttonBrowseFolder);
             Controls.Add(buttonHelp);
@@ -223,7 +225,6 @@
             Controls.Add(comboBoxFileType);
             Controls.Add(textBoxFilename);
             Controls.Add(buttonSelectFolder);
-            Controls.Add(labelTrim);
             Controls.Add(trimTop);
             Controls.Add(trimBottom);
             Controls.Add(trimRight);
@@ -253,7 +254,6 @@
         private NumericUpDown trimRight;
         private NumericUpDown trimBottom;
         private NumericUpDown trimTop;
-        private Label labelTrim;
         private Button buttonSelectFolder;
         private TextBox textBoxFilename;
         private ComboBox comboBoxFileType;
@@ -264,5 +264,6 @@
         private FolderBrowserDialog folderBrowserDialog1;
         private Button buttonBrowseFolder;
         private Button buttonOpenLastFolder;
+        private CheckBox checkBoxTrim;
     }
 }
