@@ -3,24 +3,42 @@ using ScreenShotTool.Properties;
 using System.Configuration;
 using System.Diagnostics;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Net.Security;
 using System.Runtime.InteropServices;
+using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace ScreenShotTool
 {
     public partial class MainForm : Form
     {
         Settings settings = Settings.Default;
-        string DestinationFolder = "";
-        string DestinationFileName = "capture.png";
+        public string PatternFolder = "";
+        public string PatternFileName = "";
+        public string PatternFileExtension = "";
+
+        private string DestinationFolder = "";
+        private string DestinationFileName = "capture.png";
+        private string DestinationFileExtension = ".jpg";
         //int DestinationFileNumber = 0;
         ImageFormat DestinationFormat;// = ImageFormat.Jpeg;
         //string fileExtension = ".jpg";
         int maxApplicationNameLength = 30;
         int counter = 0;
         string lastFolder = ".";
+        string lastSavedFile = "";
+        public int trimTop = 0;
+        public int trimBottom = 0;
+        public int trimLeft = 0;
+        public int trimRight = 0;
+        public bool trim = false;
+
+        public bool showThumbnails = true;
+        Bitmap bitmap;
+        ImageList imageList = new ImageList();
 
         public Dictionary<string, Hotkey> hotkeyList = new Dictionary<string, Hotkey>
         {
@@ -42,6 +60,14 @@ namespace ScreenShotTool
             LoadSettings();
         }
 
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            imageList.ImageSize = new Size(100, 100);
+            imageList.ColorDepth = ColorDepth.Depth32Bit;
+            listView1.LargeImageList = imageList;
+            //listView1.Focus();
+        }
+
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             HotkeyTools.ReleaseHotkeys(hotkeyList);
@@ -50,27 +76,29 @@ namespace ScreenShotTool
         #endregion
 
         #region Settings
-        private void SaveSettings()
+        public void SaveSettings()
         {
-            settings.Filename = textBoxFilename.Text;
-            settings.Foldername = textBoxFolder.Text;
-            settings.TrimBottom = (int)trimBottom.Value;
-            settings.TrimTop = (int)trimTop.Value;
-            settings.TrimLeft = (int)trimLeft.Value;
-            settings.TrimRight = (int)trimRight.Value;
-            settings.trimChecked = checkBoxTrim.Checked;
+            settings.Filename = PatternFileName;
+            settings.Foldername = PatternFolder;
+            settings.FileExtension = PatternFileExtension;
+            settings.TrimTop = trimTop;
+            settings.TrimBottom = trimBottom;
+            settings.TrimLeft = trimLeft;
+            settings.TrimRight = trimRight;
+            settings.trimChecked = trim;
             settings.Save();
         }
 
         private void LoadSettings()
         {
-            textBoxFilename.Text = settings.Filename;
-            textBoxFolder.Text = settings.Foldername;
-            trimTop.Value = settings.TrimTop;
-            trimBottom.Value = settings.TrimBottom;
-            trimLeft.Value = settings.TrimLeft;
-            trimRight.Value = settings.TrimRight;
-            checkBoxTrim.Checked = settings.trimChecked;
+            PatternFileName = settings.Filename;
+            PatternFolder = settings.Foldername;
+            PatternFileExtension = settings.FileExtension;
+            trimTop = settings.TrimTop;
+            trimBottom = settings.TrimBottom;
+            trimLeft = settings.TrimLeft;
+            trimRight = settings.TrimRight;
+            trim = settings.trimChecked;
         }
         #endregion
 
@@ -171,15 +199,14 @@ namespace ScreenShotTool
 
         public void CaptureAction(CaptureMode mode)
         {
-            DestinationFolder = textBoxFolder.Text;
+            DestinationFolder = PatternFolder;
             SetImageFormat();
-            //time = time.Replace(":", "");
-            //DestinationFileName = time + comboBoxFileType.Text;
+
             if (mode == CaptureMode.Window)
             {
-                DestinationFolder = ComposeFileName(textBoxFolder.Text);
-                DestinationFileName = ComposeFileName(textBoxFilename.Text);
-                CaptureWindow(DestinationFolder, DestinationFileName + comboBoxFileType.Text, DestinationFormat);
+                DestinationFolder = ComposeFileName(PatternFolder);
+                DestinationFileName = ComposeFileName(PatternFileName);
+                CaptureWindow(DestinationFolder, DestinationFileName + DestinationFileExtension, DestinationFormat);
                 numericUpDownCounter.Value++;
             }
             else if (mode == CaptureMode.Region)
@@ -188,6 +215,10 @@ namespace ScreenShotTool
                 // ------------ TODO --------------
             }
 
+            if (showThumbnails)
+            {
+                UpdateThumbnails();
+            }
         }
 
         private string ComposeFileName(string text)
@@ -223,11 +254,88 @@ namespace ScreenShotTool
             return text;
         }
 
+        private void UpdateThumbnails()
+        {
+            //listView1.View = View.LargeIcon;
+            //Image img = bitmap;
+            imageList.Images.Add(getThumbnailImage(imageList.ImageSize.Width, bitmap));
+            ListViewItem thumb = listView1.Items.Add(DestinationFileName);
+            thumb.Text = DestinationFileName;
+            thumb.Tag = lastSavedFile;
+            thumb.ImageIndex = imageList.Images.Count - 1;
 
+            //listView1.Items.Add(DestinationFileName, )
+        }
+
+        private Image getThumbnailImage(int width, Image img)
+        {
+            Image thumb = new Bitmap(width, width);
+            Image tmp = null;
+
+            if (img.Width < width && img.Height < width)
+            {
+                using (Graphics g = Graphics.FromImage(thumb))
+                {
+                    int xoffset = (int)((width - img.Width) / 2);
+                    int yoffset = (int)((width - img.Height) / 2);
+                    g.DrawImage(img, xoffset, yoffset, img.Width, img.Height);
+                }
+            }
+            else
+            {
+                Image.GetThumbnailImageAbort myCallback = new
+                    Image.GetThumbnailImageAbort(ThumbnailCallback);
+
+                if (img.Width == img.Height)
+                {
+                    thumb = img.GetThumbnailImage(
+                             width, width,
+                             myCallback, IntPtr.Zero);
+                }
+                else
+                {
+                    int k = 0;
+                    int xoffset = 0;
+                    int yoffset = 0;
+
+                    if (img.Width < img.Height)
+                    {
+                        k = (int)(width * img.Width / img.Height);
+                        tmp = img.GetThumbnailImage(k, width, myCallback, IntPtr.Zero);
+                        xoffset = (int)((width - k) / 2);
+
+                    }
+
+                    if (img.Width > img.Height)
+                    {
+                        k = (int)(width * img.Height / img.Width);
+                        tmp = img.GetThumbnailImage(width, k, myCallback, IntPtr.Zero);
+                        yoffset = (int)((width - k) / 2);
+                    }
+
+                    using (Graphics g = Graphics.FromImage(thumb))
+                    {
+                        g.DrawImage(tmp, xoffset, yoffset, tmp.Width, tmp.Height);
+                    }
+                }
+            }
+
+            using (Graphics g = Graphics.FromImage(thumb))
+            {
+                g.DrawRectangle(Pens.Green, 0, 0, thumb.Width - 1, thumb.Height - 1);
+            }
+
+            return thumb;
+        }
+
+        public bool ThumbnailCallback()
+        {
+            return true;
+        }
 
         private void SetImageFormat()
         {
-            switch (comboBoxFileType.Text)
+            switch (DestinationFileExtension)
             {
                 case ".jpg":
                     DestinationFormat = ImageFormat.Jpeg;
@@ -259,14 +367,14 @@ namespace ScreenShotTool
         {
             RECT windowRect;
             GetWindowRect(GetActiveWindow(), out windowRect);
-            if (checkBoxTrim.Checked)
+            if (trim)
             {
-                windowRect.Left += (int)trimLeft.Value;
-                windowRect.Right -= (int)trimRight.Value;
-                windowRect.Top += (int)trimTop.Value;
-                windowRect.Bottom -= (int)trimBottom.Value;
+                windowRect.Left += trimLeft;
+                windowRect.Right -= trimRight;
+                windowRect.Top += trimTop;
+                windowRect.Bottom -= trimBottom;
             }
-            Bitmap bitmap = CaptureBitmap(windowRect.Left, windowRect.Top, windowRect.Width, windowRect.Height);
+            bitmap = CaptureBitmap(windowRect.Left, windowRect.Top, windowRect.Width, windowRect.Height);
 
             //textBoxLog.Text = textBoxLog.Text + "Saving " + counter + Environment.NewLine;
             counter++;
@@ -299,6 +407,7 @@ namespace ScreenShotTool
                 {
                     capture.Save(folder + "\\" + filename, format);
                     writeMessage("Saved " + folder + "\\" + filename);
+                    lastSavedFile = folder + "\\" + filename;
                     lastFolder = folder;
                 }
                 catch (Exception ex)
@@ -411,20 +520,14 @@ namespace ScreenShotTool
                 "$c: Counter number (auto increments)";
         }
 
-        private void buttonSelectFolder_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog dialog = new FolderBrowserDialog();
-            dialog.ShowDialog();
-            textBoxFolder.Text = dialog.SelectedPath;
-        }
-
+        /*
         private void buttonBrowseFolder_Click(object sender, EventArgs e)
         {
             //string file = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal).FilePath;
             //string folder = Path.GetDirectoryName(file);
             string folder = textBoxFolder.Text;
             folder = BrowseFolderInExplorer(folder);
-        }
+        }*/
 
         private string BrowseFolderInExplorer(string folder)
         {
@@ -449,6 +552,75 @@ namespace ScreenShotTool
             BrowseFolderInExplorer(lastFolder);
         }
 
+        private void buttonOptions_Click(object sender, EventArgs e)
+        {
+            Options options = new Options(this);
+            options.ShowDialog();
+        }
 
+        private void listView1_DoubleClick(object sender, EventArgs e)
+        {
+            OpenImageExternal();
+        }
+
+        private void OpenImageExternal()
+        {
+            if (listView1.SelectedItems.Count > 0)
+            {
+                ListViewItem item = listView1.SelectedItems[0];
+                if (item != null)
+                {
+                    string itemFile = item.Tag.ToString();
+                    //MessageBox.Show(item.Tag.ToString());
+                    if (File.Exists(itemFile))
+                    {
+                        Process.Start(new ProcessStartInfo() { FileName = itemFile, UseShellExecute = true });
+                    }
+                }
+            }
+        }
+
+
+        private void listView1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                if (listView1.SelectedItems.Count > 0)
+                {
+                    //MessageBox.Show("deleting " + listView1.SelectedItems[0].Text);
+                    foreach (ListViewItem item in listView1.SelectedItems)
+                    {
+                        try
+                        {
+                            File.Delete(item.Tag.ToString());
+                            item.Remove();
+                            //listView1.AutoArrange = true;                            
+                        }
+                        catch
+                        {
+                            //MessageBox.Show("No file to delete: " + item.Tag.ToString());
+                        }
+                    }
+
+                }
+                e.Handled = true;
+            }
+            if (e.KeyCode == Keys.Enter)
+            {
+                OpenImageExternal();
+                e.Handled = true;
+            }
+            else
+            {
+                //MessageBox.Show("pressed" + e.KeyCode.ToString());
+                e.Handled = false;
+            }
+            
+        }
+
+        private void buttonClearList_Click(object sender, EventArgs e)
+        {
+            listView1.Clear();
+        }
     }
 }

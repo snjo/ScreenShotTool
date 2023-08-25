@@ -298,5 +298,17 @@ namespace ScreenShotTool.Properties {
                 this["trimChecked"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(".jpg")]
+        public string FileExtension {
+            get {
+                return ((string)(this["FileExtension"]));
+            }
+            set {
+                this["FileExtension"] = value;
+            }
+        }
     }
 }
