@@ -615,7 +615,7 @@ namespace ScreenShotTool
                 //MessageBox.Show("pressed" + e.KeyCode.ToString());
                 e.Handled = false;
             }
-            
+
         }
 
         private void buttonClearList_Click(object sender, EventArgs e)

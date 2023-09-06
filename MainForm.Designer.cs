@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             textBoxLog = new TextBox();
             folderBrowserDialog1 = new FolderBrowserDialog();
             buttonOpenLastFolder = new Button();
@@ -120,6 +121,7 @@
             Controls.Add(numericUpDownCounter);
             Controls.Add(buttonOpenLastFolder);
             Controls.Add(textBoxLog);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MainForm";
             Text = "Screenshot Tool";
             FormClosing += Form1_FormClosing;
