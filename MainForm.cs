@@ -219,6 +219,8 @@ namespace ScreenShotTool
             {
                 UpdateThumbnails();
             }
+
+            if (bitmap != null) bitmap.Dispose();
         }
 
         private string ComposeFileName(string text)
@@ -258,7 +260,9 @@ namespace ScreenShotTool
         {
             //listView1.View = View.LargeIcon;
             //Image img = bitmap;
-            imageList.Images.Add(getThumbnailImage(imageList.ImageSize.Width, bitmap));
+            Image thumbImg = getThumbnailImage(imageList.ImageSize.Width, bitmap);
+            imageList.Images.Add(thumbImg);
+            thumbImg.Dispose();
             ListViewItem thumb = listView1.Items.Add(DestinationFileName);
             thumb.Text = DestinationFileName;
             thumb.Tag = lastSavedFile;
@@ -318,13 +322,15 @@ namespace ScreenShotTool
                         g.DrawImage(tmp, xoffset, yoffset, tmp.Width, tmp.Height);
                     }
                 }
+                
             }
 
             using (Graphics g = Graphics.FromImage(thumb))
             {
                 g.DrawRectangle(Pens.Green, 0, 0, thumb.Width - 1, thumb.Height - 1);
             }
-
+            //if (thumb != null) thumb.Dispose();
+            if (tmp != null) tmp.Dispose();
             return thumb;
         }
 
@@ -380,6 +386,7 @@ namespace ScreenShotTool
             counter++;
             //Task.Run(() => SaveBitmap(folder, filename, format, capture));
             SaveBitmap(folder, filename, format, bitmap);
+            //if (bitmap != null) bitmap.Dispose();
         }
 
         private bool SaveBitmap(string folder, string filename, ImageFormat format, Bitmap capture)
@@ -406,6 +413,7 @@ namespace ScreenShotTool
                 try
                 {
                     capture.Save(folder + "\\" + filename, format);
+                    //capture.Dispose();
                     writeMessage("Saved " + folder + "\\" + filename);
                     lastSavedFile = folder + "\\" + filename;
                     lastFolder = folder;
@@ -417,15 +425,18 @@ namespace ScreenShotTool
                         + "Check that you have write permission for this folder\n"
                         + "\n"
                         + ex.ToString());
+                    //if (capture != null) capture.Dispose();
                     return false;
                 }
             }
             else
             {
                 writeMessage("Folder not found: " + folder);
+                //if (capture != null) capture.Dispose();
                 return false;
             }
             //writeMessage("ok");
+            //if (capture != null) capture.Dispose();
             return true;
         }
 
@@ -441,6 +452,8 @@ namespace ScreenShotTool
 
             //captureGraphics.CopyFromScreen(captureRectangle.Left, captureRectangle.Top, 0, 0, captureRectangle.Size);
             captureGraphics.CopyFromScreen(captureRectangle.Left, captureRectangle.Top, 0, 0, captureRectangle.Size);
+            //captureBitmap.Dispose();
+            captureGraphics.Dispose();
             return captureBitmap;
         }
 
@@ -620,6 +633,44 @@ namespace ScreenShotTool
 
         private void buttonClearList_Click(object sender, EventArgs e)
         {
+
+            /*
+            foreach (ListViewItem item in listView1.Items)
+            {
+                Debug.WriteLine("item");
+                if (item != null)
+                {
+                    Debug.WriteLine("item not null");
+                    if (item.ImageList != null)
+                    {
+                        item.ImageList.Dispose();
+                        Debug.WriteLine("Disposing Imagelist");
+                    }
+                    else
+                    {
+                        Debug.WriteLine("imagelist is null");
+                    }
+                }
+                else
+                {
+                    Debug.WriteLine("item is null");
+                }
+            }*/
+            foreach (Image img in imageList.Images)
+            {
+                Debug.WriteLine("img");
+                if (img != null)
+                {
+                    img.Dispose();
+                    Debug.WriteLine("Disposing Image");
+                }
+                else
+                {
+                    Debug.WriteLine("img is null");
+                }
+            }
+            imageList.Images.Clear();
+            //imageList.Dispose();
             listView1.Clear();
         }
     }
