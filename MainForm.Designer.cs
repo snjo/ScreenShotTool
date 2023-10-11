@@ -49,7 +49,6 @@
             textBoxLog.ScrollBars = ScrollBars.Vertical;
             textBoxLog.Size = new Size(517, 119);
             textBoxLog.TabIndex = 5;
-            textBoxLog.Text = "Default filename values:\r\n$w $c\r\n\r\n$w: Active Window Title\r\n$d/t/ms: Date, Time, Milliseconds\r\n$c: Counter number (auto increments)";
             // 
             // buttonOpenLastFolder
             // 

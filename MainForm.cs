@@ -16,6 +16,7 @@ namespace ScreenShotTool
     public partial class MainForm : Form
     {
         Settings settings = Settings.Default;
+        TextWindow helpWindow;
         public string PatternFolder = "";
         public string PatternFileName = "";
         public string PatternFileExtension = "";
@@ -36,6 +37,13 @@ namespace ScreenShotTool
         public string alternateTitle = "Capture";
         public string splitTitleString = "";
         public int splitTitleIndex = 0;
+
+        public string helpText =
+            "Default filename values:\r" +
+            "\n$w $c\r\n\r" +
+            "\n$w: Active Window Title\r" +
+            "\n$d/t/ms: Date, Time, Milliseconds\r" +
+            "\n$c: Counter number (auto increments)";
 
         public bool showThumbnails = true;
         Bitmap bitmap;
@@ -216,7 +224,7 @@ namespace ScreenShotTool
             if (splitTitleString.Length > 0)
             {
                 string[] titleSplit = windowTitle.Split(splitTitleString);
-                int splitIndex = Math.Min(splitTitleIndex, titleSplit.Length-1);
+                int splitIndex = Math.Min(splitTitleIndex, titleSplit.Length - 1);
                 if (titleSplit.Length > 1) windowTitle = titleSplit[splitIndex];
             }
             if (windowTitle.Length == 0) { windowTitle = alternateTitle; }
@@ -290,7 +298,7 @@ namespace ScreenShotTool
                     {
                         g.DrawImage(tmp, xoffset, yoffset, tmp.Width, tmp.Height);
                     }
-                } 
+                }
             }
 
             using (Graphics g = Graphics.FromImage(thumb))
@@ -514,7 +522,7 @@ namespace ScreenShotTool
         private void buttonOptions_Click(object sender, EventArgs e)
         {
             Options options = new Options(this);
-            options.ShowDialog();
+            options.Show();
         }
 
         private void listView1_DoubleClick(object sender, EventArgs e)
@@ -589,6 +597,19 @@ namespace ScreenShotTool
             }
             imageList.Images.Clear();
             listView1.Clear();
+        }
+
+        public void OpenHelp()
+        {
+            if (helpWindow == null)
+            {
+                helpWindow = new TextWindow(this, helpText);
+            }
+            if (helpWindow.IsDisposed)
+            {
+                helpWindow = new TextWindow(this, helpText);
+            }
+            helpWindow.Show();
         }
     }
 }

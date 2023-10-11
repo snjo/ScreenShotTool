@@ -76,5 +76,10 @@ namespace ScreenShotTool
         {
             Close();
         }
+
+        private void buttonHelp_Click(object sender, EventArgs e)
+        {
+            mainForm.OpenHelp();
+        }
     }
 }
