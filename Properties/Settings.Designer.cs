@@ -358,5 +358,17 @@ namespace ScreenShotTool.Properties {
                 this["SplitTitleIndex"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("95")]
+        public long JpegQuality {
+            get {
+                return ((long)(this["JpegQuality"]));
+            }
+            set {
+                this["JpegQuality"] = value;
+            }
+        }
     }
 }

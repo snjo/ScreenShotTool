@@ -19,11 +19,11 @@ namespace ScreenShotTool
         TextWindow helpWindow;
         public string PatternFolder = "";
         public string PatternFileName = "";
-        public string PatternFileExtension = "";
+        //public string PatternFileExtension = "";
 
         private string DestinationFolder = "";
         private string DestinationFileName = "capture.png";
-        private string DestinationFileExtension = ".jpg";
+        public string DestinationFileExtension = ".jpg";
         ImageFormat DestinationFormat;
         public int titleMaxLength = 30;
         int counter = 0;
@@ -37,6 +37,7 @@ namespace ScreenShotTool
         public string alternateTitle = "Capture";
         public string splitTitleString = "";
         public int splitTitleIndex = 0;
+        public long JpegQuality = 95L;
 
         public string helpText =
             "Default filename values:\r" +
@@ -88,7 +89,7 @@ namespace ScreenShotTool
         {
             settings.Filename = PatternFileName;
             settings.Foldername = PatternFolder;
-            settings.FileExtension = PatternFileExtension;
+            //settings.FileExtension = PatternFileExtension;
             settings.TrimTop = trimTop;
             settings.TrimBottom = trimBottom;
             settings.TrimLeft = trimLeft;
@@ -98,6 +99,8 @@ namespace ScreenShotTool
             settings.TitleMaxLength = titleMaxLength;
             settings.SplitTitleString = splitTitleString;
             settings.SplitTitleIndex = splitTitleIndex;
+            settings.JpegQuality = JpegQuality;
+            settings.FileExtension = DestinationFileExtension;
             settings.Save();
         }
 
@@ -105,7 +108,7 @@ namespace ScreenShotTool
         {
             PatternFileName = settings.Filename;
             PatternFolder = settings.Foldername;
-            PatternFileExtension = settings.FileExtension;
+            //PatternFileExtension = settings.FileExtension;
             trimTop = settings.TrimTop;
             trimBottom = settings.TrimBottom;
             trimLeft = settings.TrimLeft;
@@ -115,6 +118,8 @@ namespace ScreenShotTool
             titleMaxLength = settings.TitleMaxLength;
             splitTitleString = settings.SplitTitleString;
             splitTitleIndex = settings.SplitTitleIndex;
+            JpegQuality = settings.JpegQuality;
+            DestinationFileExtension = settings.FileExtension;
         }
         #endregion
 
@@ -316,6 +321,7 @@ namespace ScreenShotTool
 
         private void SetImageFormat()
         {
+            Debug.WriteLine("Set imageformat " + DestinationFileExtension);
             switch (DestinationFileExtension)
             {
                 case ".jpg":
@@ -383,7 +389,15 @@ namespace ScreenShotTool
             {
                 try
                 {
-                    capture.Save(folder + "\\" + filename, format);
+                    if (format == ImageFormat.Jpeg)
+                    {
+                        SaveJpeg(folder + "\\" + filename, capture, JpegQuality);
+                    }
+                    else
+                    {
+                        capture.Save(folder + "\\" + filename, format);
+                        Debug.WriteLine("Saving image with format " + format.ToString());
+                    }
                     writeMessage("Saved " + folder + "\\" + filename);
                     lastSavedFile = folder + "\\" + filename;
                     lastFolder = folder;
@@ -404,6 +418,23 @@ namespace ScreenShotTool
                 return false;
             }
             return true;
+        }
+
+        //https://stackoverflow.com/questions/1484759/quality-of-a-saved-jpg-in-c-sharp
+        public static void SaveJpeg(string path, Bitmap image)
+        {
+            SaveJpeg(path, image, 95L);
+        }
+        public static void SaveJpeg(string path, Bitmap image, long quality)
+        {
+            Debug.WriteLine("Saving JPEG with quality " + quality);
+            using (EncoderParameters encoderParameters = new EncoderParameters(1))
+            using (EncoderParameter encoderParameter = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, quality))
+            {
+                ImageCodecInfo codecInfo = ImageCodecInfo.GetImageDecoders().First(codec => codec.FormatID == ImageFormat.Jpeg.Guid);
+                encoderParameters.Param[0] = encoderParameter;
+                image.Save(path, codecInfo, encoderParameters);
+            }
         }
 
         public Bitmap CaptureBitmap(int x, int y, int width, int height)

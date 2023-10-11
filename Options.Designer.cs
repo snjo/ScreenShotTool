@@ -52,12 +52,15 @@
             numericUpDownSplitIndex = new NumericUpDown();
             label6 = new Label();
             textBoxSplitString = new TextBox();
+            numericUpDownJpegQuality = new NumericUpDown();
+            label7 = new Label();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimLeft).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownTitleMaxLength).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownSplitIndex).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownJpegQuality).BeginInit();
             SuspendLayout();
             // 
             // checkBoxTrim
@@ -72,7 +75,7 @@
             // 
             // buttonBrowseFolder
             // 
-            buttonBrowseFolder.Location = new Point(369, 30);
+            buttonBrowseFolder.Location = new Point(384, 30);
             buttonBrowseFolder.Name = "buttonBrowseFolder";
             buttonBrowseFolder.Size = new Size(57, 23);
             buttonBrowseFolder.TabIndex = 33;
@@ -81,11 +84,12 @@
             // 
             // buttonHelp
             // 
-            buttonHelp.Location = new Point(369, 81);
+            buttonHelp.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            buttonHelp.Location = new Point(13, 379);
             buttonHelp.Name = "buttonHelp";
-            buttonHelp.Size = new Size(26, 23);
+            buttonHelp.Size = new Size(54, 23);
             buttonHelp.TabIndex = 32;
-            buttonHelp.Text = "?";
+            buttonHelp.Text = "Help";
             buttonHelp.UseVisualStyleBackColor = true;
             buttonHelp.Click += buttonHelp_Click;
             // 
@@ -120,7 +124,7 @@
             // 
             buttonSelectFolder.Location = new Point(310, 30);
             buttonSelectFolder.Name = "buttonSelectFolder";
-            buttonSelectFolder.Size = new Size(53, 23);
+            buttonSelectFolder.Size = new Size(68, 23);
             buttonSelectFolder.TabIndex = 26;
             buttonSelectFolder.Text = "Select";
             buttonSelectFolder.UseVisualStyleBackColor = true;
@@ -179,7 +183,8 @@
             // 
             // buttonOK
             // 
-            buttonOK.Location = new Point(350, 328);
+            buttonOK.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            buttonOK.Location = new Point(370, 379);
             buttonOK.Name = "buttonOK";
             buttonOK.Size = new Size(75, 23);
             buttonOK.TabIndex = 35;
@@ -189,7 +194,8 @@
             // 
             // buttonApply
             // 
-            buttonApply.Location = new Point(269, 328);
+            buttonApply.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            buttonApply.Location = new Point(289, 379);
             buttonApply.Name = "buttonApply";
             buttonApply.Size = new Size(75, 23);
             buttonApply.TabIndex = 36;
@@ -199,7 +205,8 @@
             // 
             // buttonCancel
             // 
-            buttonCancel.Location = new Point(188, 328);
+            buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            buttonCancel.Location = new Point(208, 379);
             buttonCancel.Name = "buttonCancel";
             buttonCancel.Size = new Size(75, 23);
             buttonCancel.TabIndex = 37;
@@ -272,11 +279,30 @@
             textBoxSplitString.Size = new Size(70, 23);
             textBoxSplitString.TabIndex = 46;
             // 
+            // numericUpDownJpegQuality
+            // 
+            numericUpDownJpegQuality.Location = new Point(369, 81);
+            numericUpDownJpegQuality.Name = "numericUpDownJpegQuality";
+            numericUpDownJpegQuality.Size = new Size(70, 23);
+            numericUpDownJpegQuality.TabIndex = 48;
+            numericUpDownJpegQuality.Value = new decimal(new int[] { 95, 0, 0, 0 });
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(369, 63);
+            label7.Name = "label7";
+            label7.Size = new Size(72, 15);
+            label7.TabIndex = 47;
+            label7.Text = "Jpeg Quality";
+            // 
             // Options
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(435, 360);
+            ClientSize = new Size(455, 410);
+            Controls.Add(numericUpDownJpegQuality);
+            Controls.Add(label7);
             Controls.Add(textBoxSplitString);
             Controls.Add(numericUpDownSplitIndex);
             Controls.Add(label6);
@@ -309,6 +335,7 @@
             ((System.ComponentModel.ISupportInitialize)trimLeft).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownTitleMaxLength).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownSplitIndex).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownJpegQuality).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -339,5 +366,7 @@
         private NumericUpDown numericUpDownSplitIndex;
         private Label label6;
         private TextBox textBoxSplitString;
+        private NumericUpDown numericUpDownJpegQuality;
+        private Label label7;
     }
 }

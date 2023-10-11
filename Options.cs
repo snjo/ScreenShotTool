@@ -25,7 +25,7 @@ namespace ScreenShotTool
         {
             textBoxFilename.Text = mainForm.PatternFileName;
             textBoxFolder.Text = mainForm.PatternFolder;
-            comboBoxFileExtension.Text = mainForm.PatternFileExtension;
+            comboBoxFileExtension.Text = mainForm.DestinationFileExtension;
             checkBoxTrim.Checked = mainForm.trim;
             trimTop.Value = mainForm.trimTop;
             trimBottom.Value = mainForm.trimBottom;
@@ -35,6 +35,7 @@ namespace ScreenShotTool
             numericUpDownTitleMaxLength.Value = mainForm.titleMaxLength;
             textBoxSplitString.Text = mainForm.splitTitleString;
             numericUpDownSplitIndex.Value = mainForm.splitTitleIndex;
+            numericUpDownJpegQuality.Value = mainForm.JpegQuality;
         }
 
         private void buttonSelectFolder_Click(object sender, EventArgs e)
@@ -54,7 +55,7 @@ namespace ScreenShotTool
         {
             mainForm.PatternFileName = textBoxFilename.Text;
             mainForm.PatternFolder = textBoxFolder.Text;
-            mainForm.PatternFileExtension = comboBoxFileExtension.Text;
+            mainForm.DestinationFileExtension = comboBoxFileExtension.Text;
             mainForm.trim = checkBoxTrim.Checked;
             mainForm.trimTop = (int)trimTop.Value;
             mainForm.trimBottom = (int)trimBottom.Value;
@@ -64,6 +65,7 @@ namespace ScreenShotTool
             mainForm.titleMaxLength = (int)numericUpDownTitleMaxLength.Value;
             mainForm.splitTitleString = textBoxSplitString.Text;
             mainForm.splitTitleIndex = (int)numericUpDownSplitIndex.Value;
+            mainForm.JpegQuality = (long)numericUpDownJpegQuality.Value;
             mainForm.SaveSettings();
         }
 
