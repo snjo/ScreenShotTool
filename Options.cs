@@ -32,6 +32,9 @@ namespace ScreenShotTool
             trimLeft.Value = mainForm.trimLeft;
             trimRight.Value = mainForm.trimRight;
             textBoxAlternateTitle.Text = mainForm.alternateTitle;
+            numericUpDownTitleMaxLength.Value = mainForm.titleMaxLength;
+            textBoxSplitString.Text = mainForm.splitTitleString;
+            numericUpDownSplitIndex.Value = mainForm.splitTitleIndex;
         }
 
         private void buttonSelectFolder_Click(object sender, EventArgs e)
@@ -58,6 +61,9 @@ namespace ScreenShotTool
             mainForm.trimLeft = (int)trimLeft.Value;
             mainForm.trimRight = (int)trimRight.Value;
             mainForm.alternateTitle = textBoxAlternateTitle.Text;
+            mainForm.titleMaxLength = (int)numericUpDownTitleMaxLength.Value;
+            mainForm.splitTitleString = textBoxSplitString.Text;
+            mainForm.splitTitleIndex = (int)numericUpDownSplitIndex.Value;
             mainForm.SaveSettings();
         }
 

@@ -77,5 +77,14 @@
     <Setting Name="AlternateTitle" Type="System.String" Scope="User">
       <Value Profile="(Default)">Capture</Value>
     </Setting>
+    <Setting Name="TitleMaxLength" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">30</Value>
+    </Setting>
+    <Setting Name="SplitTitleString" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="SplitTitleIndex" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

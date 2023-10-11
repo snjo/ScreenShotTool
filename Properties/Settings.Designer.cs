@@ -322,5 +322,41 @@ namespace ScreenShotTool.Properties {
                 this["AlternateTitle"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        public int TitleMaxLength {
+            get {
+                return ((int)(this["TitleMaxLength"]));
+            }
+            set {
+                this["TitleMaxLength"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SplitTitleString {
+            get {
+                return ((string)(this["SplitTitleString"]));
+            }
+            set {
+                this["SplitTitleString"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int SplitTitleIndex {
+            get {
+                return ((int)(this["SplitTitleIndex"]));
+            }
+            set {
+                this["SplitTitleIndex"] = value;
+            }
+        }
     }
 }

@@ -46,16 +46,24 @@
             buttonCancel = new Button();
             textBoxAlternateTitle = new TextBox();
             label2 = new Label();
+            label4 = new Label();
+            numericUpDownTitleMaxLength = new NumericUpDown();
+            label5 = new Label();
+            numericUpDownSplitIndex = new NumericUpDown();
+            label6 = new Label();
+            textBoxSplitString = new TextBox();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimLeft).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownTitleMaxLength).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownSplitIndex).BeginInit();
             SuspendLayout();
             // 
             // checkBoxTrim
             // 
             checkBoxTrim.AutoSize = true;
-            checkBoxTrim.Location = new Point(15, 211);
+            checkBoxTrim.Location = new Point(221, 173);
             checkBoxTrim.Name = "checkBoxTrim";
             checkBoxTrim.Size = new Size(142, 19);
             checkBoxTrim.TabIndex = 34;
@@ -83,7 +91,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(13, 63);
+            label3.Location = new Point(12, 63);
             label3.Name = "label3";
             label3.Size = new Size(55, 15);
             label3.TabIndex = 29;
@@ -101,7 +109,7 @@
             // 
             // textBoxFilename
             // 
-            textBoxFilename.Location = new Point(13, 81);
+            textBoxFilename.Location = new Point(12, 82);
             textBoxFilename.Name = "textBoxFilename";
             textBoxFilename.Size = new Size(291, 23);
             textBoxFilename.TabIndex = 27;
@@ -118,7 +126,7 @@
             // 
             // trimTop
             // 
-            trimTop.Location = new Point(73, 236);
+            trimTop.Location = new Point(279, 198);
             trimTop.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             trimTop.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
             trimTop.Name = "trimTop";
@@ -127,7 +135,7 @@
             // 
             // trimBottom
             // 
-            trimBottom.Location = new Point(73, 290);
+            trimBottom.Location = new Point(279, 252);
             trimBottom.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             trimBottom.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
             trimBottom.Name = "trimBottom";
@@ -136,7 +144,7 @@
             // 
             // trimRight
             // 
-            trimRight.Location = new Point(137, 261);
+            trimRight.Location = new Point(343, 223);
             trimRight.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             trimRight.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
             trimRight.Name = "trimRight";
@@ -145,7 +153,7 @@
             // 
             // trimLeft
             // 
-            trimLeft.Location = new Point(15, 261);
+            trimLeft.Location = new Point(221, 223);
             trimLeft.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             trimLeft.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
             trimLeft.Name = "trimLeft";
@@ -155,7 +163,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(13, 12);
+            label1.Location = new Point(12, 13);
             label1.Name = "label1";
             label1.Size = new Size(40, 15);
             label1.TabIndex = 21;
@@ -163,7 +171,7 @@
             // 
             // textBoxFolder
             // 
-            textBoxFolder.Location = new Point(12, 30);
+            textBoxFolder.Location = new Point(12, 31);
             textBoxFolder.Name = "textBoxFolder";
             textBoxFolder.Size = new Size(292, 23);
             textBoxFolder.TabIndex = 20;
@@ -214,11 +222,66 @@
             label2.TabIndex = 39;
             label2.Text = "Alternate title if $w returns empty title";
             // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(12, 173);
+            label4.Name = "label4";
+            label4.Size = new Size(137, 15);
+            label4.TabIndex = 40;
+            label4.Text = "Window title max length";
+            // 
+            // numericUpDownTitleMaxLength
+            // 
+            numericUpDownTitleMaxLength.Location = new Point(12, 191);
+            numericUpDownTitleMaxLength.Name = "numericUpDownTitleMaxLength";
+            numericUpDownTitleMaxLength.Size = new Size(70, 23);
+            numericUpDownTitleMaxLength.TabIndex = 41;
+            numericUpDownTitleMaxLength.Value = new decimal(new int[] { 30, 0, 0, 0 });
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(12, 225);
+            label5.Name = "label5";
+            label5.Size = new Size(165, 15);
+            label5.TabIndex = 42;
+            label5.Text = "Split Window title using string";
+            // 
+            // numericUpDownSplitIndex
+            // 
+            numericUpDownSplitIndex.Location = new Point(12, 287);
+            numericUpDownSplitIndex.Name = "numericUpDownSplitIndex";
+            numericUpDownSplitIndex.Size = new Size(70, 23);
+            numericUpDownSplitIndex.TabIndex = 45;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(12, 269);
+            label6.Name = "label6";
+            label6.Size = new Size(126, 15);
+            label6.TabIndex = 44;
+            label6.Text = "Keep split text in index";
+            // 
+            // textBoxSplitString
+            // 
+            textBoxSplitString.Location = new Point(12, 243);
+            textBoxSplitString.Name = "textBoxSplitString";
+            textBoxSplitString.Size = new Size(70, 23);
+            textBoxSplitString.TabIndex = 46;
+            // 
             // Options
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(435, 360);
+            Controls.Add(textBoxSplitString);
+            Controls.Add(numericUpDownSplitIndex);
+            Controls.Add(label6);
+            Controls.Add(label5);
+            Controls.Add(numericUpDownTitleMaxLength);
+            Controls.Add(label4);
             Controls.Add(label2);
             Controls.Add(textBoxAlternateTitle);
             Controls.Add(buttonCancel);
@@ -243,6 +306,8 @@
             ((System.ComponentModel.ISupportInitialize)trimBottom).EndInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).EndInit();
             ((System.ComponentModel.ISupportInitialize)trimLeft).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownTitleMaxLength).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownSplitIndex).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -267,5 +332,11 @@
         private Button buttonCancel;
         private TextBox textBoxAlternateTitle;
         private Label label2;
+        private Label label4;
+        private NumericUpDown numericUpDownTitleMaxLength;
+        private Label label5;
+        private NumericUpDown numericUpDownSplitIndex;
+        private Label label6;
+        private TextBox textBoxSplitString;
     }
 }

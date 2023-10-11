@@ -24,7 +24,7 @@ namespace ScreenShotTool
         private string DestinationFileName = "capture.png";
         private string DestinationFileExtension = ".jpg";
         ImageFormat DestinationFormat;
-        int maxApplicationNameLength = 30;
+        public int titleMaxLength = 30;
         int counter = 0;
         string lastFolder = ".";
         string lastSavedFile = "";
@@ -34,6 +34,8 @@ namespace ScreenShotTool
         public int trimRight = 0;
         public bool trim = false;
         public string alternateTitle = "Capture";
+        public string splitTitleString = "";
+        public int splitTitleIndex = 0;
 
         public bool showThumbnails = true;
         Bitmap bitmap;
@@ -85,6 +87,9 @@ namespace ScreenShotTool
             settings.TrimRight = trimRight;
             settings.trimChecked = trim;
             settings.AlternateTitle = alternateTitle;
+            settings.TitleMaxLength = titleMaxLength;
+            settings.SplitTitleString = splitTitleString;
+            settings.SplitTitleIndex = splitTitleIndex;
             settings.Save();
         }
 
@@ -99,6 +104,9 @@ namespace ScreenShotTool
             trimRight = settings.TrimRight;
             trim = settings.trimChecked;
             alternateTitle = settings.AlternateTitle;
+            titleMaxLength = settings.TitleMaxLength;
+            splitTitleString = settings.SplitTitleString;
+            splitTitleIndex = settings.SplitTitleIndex;
         }
         #endregion
 
@@ -204,7 +212,13 @@ namespace ScreenShotTool
                 DateTime.Now.Millisecond.ToString();
 
             string windowTitle = MakeValidFileName(GetActiveWindowTitle());
-            windowTitle = ShortenString(windowTitle, maxApplicationNameLength);
+            windowTitle = ShortenString(windowTitle, titleMaxLength);
+            if (splitTitleString.Length > 0)
+            {
+                string[] titleSplit = windowTitle.Split(splitTitleString);
+                int splitIndex = Math.Min(splitTitleIndex, titleSplit.Length-1);
+                if (titleSplit.Length > 1) windowTitle = titleSplit[splitIndex];
+            }
             if (windowTitle.Length == 0) { windowTitle = alternateTitle; }
 
             text = text.Replace("$d", date);
