@@ -31,6 +31,7 @@ namespace ScreenShotTool
             trimBottom.Value = mainForm.trimBottom;
             trimLeft.Value = mainForm.trimLeft;
             trimRight.Value = mainForm.trimRight;
+            textBoxAlternateTitle.Text = mainForm.alternateTitle;
         }
 
         private void buttonSelectFolder_Click(object sender, EventArgs e)
@@ -56,6 +57,7 @@ namespace ScreenShotTool
             mainForm.trimBottom = (int)trimBottom.Value;
             mainForm.trimLeft = (int)trimLeft.Value;
             mainForm.trimRight = (int)trimRight.Value;
+            mainForm.alternateTitle = textBoxAlternateTitle.Text;
             mainForm.SaveSettings();
         }
 

@@ -44,6 +44,8 @@
             buttonOK = new Button();
             buttonApply = new Button();
             buttonCancel = new Button();
+            textBoxAlternateTitle = new TextBox();
+            label2 = new Label();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
@@ -53,7 +55,7 @@
             // checkBoxTrim
             // 
             checkBoxTrim.AutoSize = true;
-            checkBoxTrim.Location = new Point(12, 154);
+            checkBoxTrim.Location = new Point(15, 211);
             checkBoxTrim.Name = "checkBoxTrim";
             checkBoxTrim.Size = new Size(142, 19);
             checkBoxTrim.TabIndex = 34;
@@ -116,7 +118,7 @@
             // 
             // trimTop
             // 
-            trimTop.Location = new Point(70, 179);
+            trimTop.Location = new Point(73, 236);
             trimTop.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             trimTop.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
             trimTop.Name = "trimTop";
@@ -125,7 +127,7 @@
             // 
             // trimBottom
             // 
-            trimBottom.Location = new Point(70, 233);
+            trimBottom.Location = new Point(73, 290);
             trimBottom.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             trimBottom.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
             trimBottom.Name = "trimBottom";
@@ -134,7 +136,7 @@
             // 
             // trimRight
             // 
-            trimRight.Location = new Point(134, 204);
+            trimRight.Location = new Point(137, 261);
             trimRight.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             trimRight.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
             trimRight.Name = "trimRight";
@@ -143,7 +145,7 @@
             // 
             // trimLeft
             // 
-            trimLeft.Location = new Point(12, 204);
+            trimLeft.Location = new Point(15, 261);
             trimLeft.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             trimLeft.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
             trimLeft.Name = "trimLeft";
@@ -168,7 +170,7 @@
             // 
             // buttonOK
             // 
-            buttonOK.Location = new Point(348, 275);
+            buttonOK.Location = new Point(350, 328);
             buttonOK.Name = "buttonOK";
             buttonOK.Size = new Size(75, 23);
             buttonOK.TabIndex = 35;
@@ -178,7 +180,7 @@
             // 
             // buttonApply
             // 
-            buttonApply.Location = new Point(267, 275);
+            buttonApply.Location = new Point(269, 328);
             buttonApply.Name = "buttonApply";
             buttonApply.Size = new Size(75, 23);
             buttonApply.TabIndex = 36;
@@ -188,7 +190,7 @@
             // 
             // buttonCancel
             // 
-            buttonCancel.Location = new Point(186, 275);
+            buttonCancel.Location = new Point(188, 328);
             buttonCancel.Name = "buttonCancel";
             buttonCancel.Size = new Size(75, 23);
             buttonCancel.TabIndex = 37;
@@ -196,11 +198,29 @@
             buttonCancel.UseVisualStyleBackColor = true;
             buttonCancel.Click += buttonCancel_Click;
             // 
+            // textBoxAlternateTitle
+            // 
+            textBoxAlternateTitle.Location = new Point(12, 134);
+            textBoxAlternateTitle.Name = "textBoxAlternateTitle";
+            textBoxAlternateTitle.Size = new Size(292, 23);
+            textBoxAlternateTitle.TabIndex = 38;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(12, 116);
+            label2.Name = "label2";
+            label2.Size = new Size(206, 15);
+            label2.TabIndex = 39;
+            label2.Text = "Alternate title if $w returns empty title";
+            // 
             // Options
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(435, 310);
+            ClientSize = new Size(435, 360);
+            Controls.Add(label2);
+            Controls.Add(textBoxAlternateTitle);
             Controls.Add(buttonCancel);
             Controls.Add(buttonApply);
             Controls.Add(buttonOK);
@@ -245,5 +265,7 @@
         private Button buttonOK;
         private Button buttonApply;
         private Button buttonCancel;
+        private TextBox textBoxAlternateTitle;
+        private Label label2;
     }
 }

@@ -310,5 +310,17 @@ namespace ScreenShotTool.Properties {
                 this["FileExtension"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Capture")]
+        public string AlternateTitle {
+            get {
+                return ((string)(this["AlternateTitle"]));
+            }
+            set {
+                this["AlternateTitle"] = value;
+            }
+        }
     }
 }

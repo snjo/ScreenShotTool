@@ -23,9 +23,7 @@ namespace ScreenShotTool
         private string DestinationFolder = "";
         private string DestinationFileName = "capture.png";
         private string DestinationFileExtension = ".jpg";
-        //int DestinationFileNumber = 0;
-        ImageFormat DestinationFormat;// = ImageFormat.Jpeg;
-        //string fileExtension = ".jpg";
+        ImageFormat DestinationFormat;
         int maxApplicationNameLength = 30;
         int counter = 0;
         string lastFolder = ".";
@@ -35,6 +33,7 @@ namespace ScreenShotTool
         public int trimLeft = 0;
         public int trimRight = 0;
         public bool trim = false;
+        public string alternateTitle = "Capture";
 
         public bool showThumbnails = true;
         Bitmap bitmap;
@@ -65,7 +64,6 @@ namespace ScreenShotTool
             imageList.ImageSize = new Size(100, 100);
             imageList.ColorDepth = ColorDepth.Depth32Bit;
             listView1.LargeImageList = imageList;
-            //listView1.Focus();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -86,6 +84,7 @@ namespace ScreenShotTool
             settings.TrimLeft = trimLeft;
             settings.TrimRight = trimRight;
             settings.trimChecked = trim;
+            settings.AlternateTitle = alternateTitle;
             settings.Save();
         }
 
@@ -99,6 +98,7 @@ namespace ScreenShotTool
             trimLeft = settings.TrimLeft;
             trimRight = settings.TrimRight;
             trim = settings.trimChecked;
+            alternateTitle = settings.AlternateTitle;
         }
         #endregion
 
@@ -148,7 +148,6 @@ namespace ScreenShotTool
         #region capture
         private void writeMessage(string text)
         {
-            //MessageBox.Show(text);
             textBoxLog.Text = text + Environment.NewLine + textBoxLog.Text;
         }
 
@@ -156,38 +155,6 @@ namespace ScreenShotTool
         {
             CaptureAction(CaptureMode.Window);
         }
-
-
-        /* public bool CaptureScreen()
-        {
-            try
-            {
-                //Creating a new Bitmap object
-                Bitmap captureBitmap = new Bitmap(1024, 768, PixelFormat.Format32bppArgb);
-                //Bitmap captureBitmap = new Bitmap(int width, int height, PixelFormat);
-                //Creating a Rectangle object which will
-                //capture our Current Screen
-                Rectangle captureRectangle = Screen.AllScreens[0].Bounds;
-                //Creating a New Graphics Object
-                Graphics captureGraphics = Graphics.FromImage(captureBitmap);
-                //Copying Image from The Screen
-                captureGraphics.CopyFromScreen(captureRectangle.Left, captureRectangle.Top, 0, 0, captureRectangle.Size);
-
-                //Saving the Image File (I am here Saving it in My E drive).
-                //captureBitmap.Save(@"E:\Capture.jpg", ImageFormat.Jpeg);
-                captureBitmap.Save(@"E:\Capture.png", ImageFormat.Png);
-                captureBitmap.Save(@"E:\Capture.jpg", ImageFormat.Jpeg);
-
-                //Displaying the Successfull Result
-                MessageBox.Show("Screen Captured");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            return true;
-        }*/
-
 
         public enum CaptureMode
         {
@@ -238,14 +205,7 @@ namespace ScreenShotTool
 
             string windowTitle = MakeValidFileName(GetActiveWindowTitle());
             windowTitle = ShortenString(windowTitle, maxApplicationNameLength);
-            if (windowTitle.Length == 0) { windowTitle = "capture"; }
-            /*
-            string folder = textBoxFolder.Text;
-            string file = textBoxFilename.Text;
-            string extension = comboBoxFileType.Text;
-            string finalname = folder + "\\" + file + extension;
-            */
-
+            if (windowTitle.Length == 0) { windowTitle = alternateTitle; }
 
             text = text.Replace("$d", date);
             text = text.Replace("$t", time);
@@ -258,8 +218,6 @@ namespace ScreenShotTool
 
         private void UpdateThumbnails()
         {
-            //listView1.View = View.LargeIcon;
-            //Image img = bitmap;
             Image thumbImg = getThumbnailImage(imageList.ImageSize.Width, bitmap);
             imageList.Images.Add(thumbImg);
             thumbImg.Dispose();
@@ -267,8 +225,6 @@ namespace ScreenShotTool
             thumb.Text = DestinationFileName;
             thumb.Tag = lastSavedFile;
             thumb.ImageIndex = imageList.Images.Count - 1;
-
-            //listView1.Items.Add(DestinationFileName, )
         }
 
         private Image getThumbnailImage(int width, Image img)
@@ -307,7 +263,6 @@ namespace ScreenShotTool
                         k = (int)(width * img.Width / img.Height);
                         tmp = img.GetThumbnailImage(k, width, myCallback, IntPtr.Zero);
                         xoffset = (int)((width - k) / 2);
-
                     }
 
                     if (img.Width > img.Height)
@@ -321,15 +276,13 @@ namespace ScreenShotTool
                     {
                         g.DrawImage(tmp, xoffset, yoffset, tmp.Width, tmp.Height);
                     }
-                }
-                
+                } 
             }
 
             using (Graphics g = Graphics.FromImage(thumb))
             {
                 g.DrawRectangle(Pens.Green, 0, 0, thumb.Width - 1, thumb.Height - 1);
             }
-            //if (thumb != null) thumb.Dispose();
             if (tmp != null) tmp.Dispose();
             return thumb;
         }
@@ -381,12 +334,8 @@ namespace ScreenShotTool
                 windowRect.Bottom -= trimBottom;
             }
             bitmap = CaptureBitmap(windowRect.Left, windowRect.Top, windowRect.Width, windowRect.Height);
-
-            //textBoxLog.Text = textBoxLog.Text + "Saving " + counter + Environment.NewLine;
             counter++;
-            //Task.Run(() => SaveBitmap(folder, filename, format, capture));
             SaveBitmap(folder, filename, format, bitmap);
-            //if (bitmap != null) bitmap.Dispose();
         }
 
         private bool SaveBitmap(string folder, string filename, ImageFormat format, Bitmap capture)
@@ -413,7 +362,6 @@ namespace ScreenShotTool
                 try
                 {
                     capture.Save(folder + "\\" + filename, format);
-                    //capture.Dispose();
                     writeMessage("Saved " + folder + "\\" + filename);
                     lastSavedFile = folder + "\\" + filename;
                     lastFolder = folder;
@@ -425,18 +373,14 @@ namespace ScreenShotTool
                         + "Check that you have write permission for this folder\n"
                         + "\n"
                         + ex.ToString());
-                    //if (capture != null) capture.Dispose();
                     return false;
                 }
             }
             else
             {
                 writeMessage("Folder not found: " + folder);
-                //if (capture != null) capture.Dispose();
                 return false;
             }
-            //writeMessage("ok");
-            //if (capture != null) capture.Dispose();
             return true;
         }
 
@@ -449,10 +393,7 @@ namespace ScreenShotTool
             Rectangle captureRectangle = new Rectangle(x, y, width, height);
 
             //Copying Image from The Screen
-
-            //captureGraphics.CopyFromScreen(captureRectangle.Left, captureRectangle.Top, 0, 0, captureRectangle.Size);
             captureGraphics.CopyFromScreen(captureRectangle.Left, captureRectangle.Top, 0, 0, captureRectangle.Size);
-            //captureBitmap.Dispose();
             captureGraphics.Dispose();
             return captureBitmap;
         }
@@ -532,15 +473,6 @@ namespace ScreenShotTool
                 "$d/t/ms: Date, Time, Milliseconds" + Environment.NewLine +
                 "$c: Counter number (auto increments)";
         }
-
-        /*
-        private void buttonBrowseFolder_Click(object sender, EventArgs e)
-        {
-            //string file = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal).FilePath;
-            //string folder = Path.GetDirectoryName(file);
-            string folder = textBoxFolder.Text;
-            folder = BrowseFolderInExplorer(folder);
-        }*/
 
         private string BrowseFolderInExplorer(string folder)
         {
@@ -634,43 +566,14 @@ namespace ScreenShotTool
         private void buttonClearList_Click(object sender, EventArgs e)
         {
 
-            /*
-            foreach (ListViewItem item in listView1.Items)
-            {
-                Debug.WriteLine("item");
-                if (item != null)
-                {
-                    Debug.WriteLine("item not null");
-                    if (item.ImageList != null)
-                    {
-                        item.ImageList.Dispose();
-                        Debug.WriteLine("Disposing Imagelist");
-                    }
-                    else
-                    {
-                        Debug.WriteLine("imagelist is null");
-                    }
-                }
-                else
-                {
-                    Debug.WriteLine("item is null");
-                }
-            }*/
             foreach (Image img in imageList.Images)
             {
-                Debug.WriteLine("img");
                 if (img != null)
                 {
                     img.Dispose();
-                    Debug.WriteLine("Disposing Image");
-                }
-                else
-                {
-                    Debug.WriteLine("img is null");
                 }
             }
             imageList.Images.Clear();
-            //imageList.Dispose();
             listView1.Clear();
         }
     }
