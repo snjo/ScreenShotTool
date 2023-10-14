@@ -22,7 +22,7 @@ namespace ScreenShotTool
         //public string PatternFileExtension = "";
 
         private string DestinationFolder = "";
-        private string DestinationFileName = "capture.png";
+        private string DestinationFileName = "";
         public string DestinationFileExtension = ".jpg";
         ImageFormat DestinationFormat;
         public int titleMaxLength = 30;
@@ -38,6 +38,7 @@ namespace ScreenShotTool
         public string splitTitleString = "";
         public int splitTitleIndex = 0;
         public long JpegQuality = 95L;
+        public bool StartHidden = false;
 
         public string helpText =
             "Default filename values:\r" +
@@ -61,6 +62,7 @@ namespace ScreenShotTool
         public MainForm()
         {
             InitializeComponent();
+
             hotkeyList = HotkeyTools.LoadHotkeys(hotkeyList, this);
 
             if (settings.RegisterHotkeys)
@@ -68,6 +70,7 @@ namespace ScreenShotTool
                 HotkeyTools.RegisterHotkeys(hotkeyList);
             }
             LoadSettings();
+            //if (settings.StartHidden) Hide();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -75,6 +78,18 @@ namespace ScreenShotTool
             imageList.ImageSize = new Size(100, 100);
             imageList.ColorDepth = ColorDepth.Depth32Bit;
             listView1.LargeImageList = imageList;
+            if (Settings.Default.StartHidden)
+            {
+                //WindowState = FormWindowState.Minimized;
+                //this.Hide();
+                timerHide.Start();
+                Debug.WriteLine("Hiding application");
+            }
+            else
+            {
+                this.WindowState = FormWindowState.Normal;
+                Debug.WriteLine("Starting in non-hidden state");
+            }
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -101,6 +116,7 @@ namespace ScreenShotTool
             settings.SplitTitleIndex = splitTitleIndex;
             settings.JpegQuality = JpegQuality;
             settings.FileExtension = DestinationFileExtension;
+            settings.StartHidden = StartHidden;
             settings.Save();
         }
 
@@ -120,6 +136,7 @@ namespace ScreenShotTool
             splitTitleIndex = settings.SplitTitleIndex;
             JpegQuality = settings.JpegQuality;
             DestinationFileExtension = settings.FileExtension;
+            StartHidden = settings.StartHidden;
         }
         #endregion
 
@@ -641,6 +658,23 @@ namespace ScreenShotTool
                 helpWindow = new TextWindow(this, helpText);
             }
             helpWindow.Show();
+        }
+
+        private void notifyIcon1_DoubleClick(object sender, EventArgs e)
+        {
+            this.Show();
+            BringToFront();
+        }
+
+        private void buttonHide_Click(object sender, EventArgs e)
+        {
+            Hide();
+        }
+
+        private void timerHide_Tick(object sender, EventArgs e)
+        {
+            Hide();
+            timerHide.Stop();
         }
     }
 }

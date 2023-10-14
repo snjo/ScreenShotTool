@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             textBoxLog = new TextBox();
             folderBrowserDialog1 = new FolderBrowserDialog();
@@ -37,6 +38,9 @@
             buttonOptions = new Button();
             listView1 = new ListView();
             buttonClearList = new Button();
+            notifyIcon1 = new NotifyIcon(components);
+            buttonHide = new Button();
+            timerHide = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)numericUpDownCounter).BeginInit();
             SuspendLayout();
             // 
@@ -100,7 +104,7 @@
             // 
             // buttonClearList
             // 
-            buttonClearList.Location = new Point(184, 3);
+            buttonClearList.Location = new Point(135, 3);
             buttonClearList.Name = "buttonClearList";
             buttonClearList.Size = new Size(75, 23);
             buttonClearList.TabIndex = 2;
@@ -108,11 +112,33 @@
             buttonClearList.UseVisualStyleBackColor = true;
             buttonClearList.Click += buttonClearList_Click;
             // 
+            // notifyIcon1
+            // 
+            notifyIcon1.Icon = (Icon)resources.GetObject("notifyIcon1.Icon");
+            notifyIcon1.Text = "Screenshot Tool";
+            notifyIcon1.Visible = true;
+            notifyIcon1.DoubleClick += notifyIcon1_DoubleClick;
+            // 
+            // buttonHide
+            // 
+            buttonHide.Location = new Point(216, 3);
+            buttonHide.Name = "buttonHide";
+            buttonHide.Size = new Size(75, 23);
+            buttonHide.TabIndex = 34;
+            buttonHide.Text = "Hide";
+            buttonHide.UseVisualStyleBackColor = true;
+            buttonHide.Click += buttonHide_Click;
+            // 
+            // timerHide
+            // 
+            timerHide.Tick += timerHide_Tick;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(541, 407);
+            Controls.Add(buttonHide);
             Controls.Add(buttonClearList);
             Controls.Add(listView1);
             Controls.Add(buttonOptions);
@@ -141,5 +167,8 @@
         private Button buttonOptions;
         private ListView listView1;
         private Button buttonClearList;
+        private NotifyIcon notifyIcon1;
+        private Button buttonHide;
+        private System.Windows.Forms.Timer timerHide;
     }
 }

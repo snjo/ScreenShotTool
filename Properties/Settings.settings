@@ -89,5 +89,8 @@
     <Setting Name="JpegQuality" Type="System.Int64" Scope="User">
       <Value Profile="(Default)">95</Value>
     </Setting>
+    <Setting Name="StartHidden" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

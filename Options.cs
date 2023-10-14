@@ -36,6 +36,7 @@ namespace ScreenShotTool
             textBoxSplitString.Text = mainForm.splitTitleString;
             numericUpDownSplitIndex.Value = mainForm.splitTitleIndex;
             numericUpDownJpegQuality.Value = mainForm.JpegQuality;
+            checkBoxStartHidden.Checked = mainForm.StartHidden;
         }
 
         private void buttonSelectFolder_Click(object sender, EventArgs e)
@@ -66,6 +67,7 @@ namespace ScreenShotTool
             mainForm.splitTitleString = textBoxSplitString.Text;
             mainForm.splitTitleIndex = (int)numericUpDownSplitIndex.Value;
             mainForm.JpegQuality = (long)numericUpDownJpegQuality.Value;
+            mainForm.StartHidden = checkBoxStartHidden.Checked;
             mainForm.SaveSettings();
         }
 

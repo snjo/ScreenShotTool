@@ -54,6 +54,7 @@
             textBoxSplitString = new TextBox();
             numericUpDownJpegQuality = new NumericUpDown();
             label7 = new Label();
+            checkBoxStartHidden = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
@@ -296,11 +297,22 @@
             label7.TabIndex = 47;
             label7.Text = "Jpeg Quality";
             // 
+            // checkBoxStartHidden
+            // 
+            checkBoxStartHidden.AutoSize = true;
+            checkBoxStartHidden.Location = new Point(12, 333);
+            checkBoxStartHidden.Name = "checkBoxStartHidden";
+            checkBoxStartHidden.Size = new Size(92, 19);
+            checkBoxStartHidden.TabIndex = 49;
+            checkBoxStartHidden.Text = "Start Hidden";
+            checkBoxStartHidden.UseVisualStyleBackColor = true;
+            // 
             // Options
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(455, 410);
+            Controls.Add(checkBoxStartHidden);
             Controls.Add(numericUpDownJpegQuality);
             Controls.Add(label7);
             Controls.Add(textBoxSplitString);
@@ -368,5 +380,6 @@
         private TextBox textBoxSplitString;
         private NumericUpDown numericUpDownJpegQuality;
         private Label label7;
+        private CheckBox checkBoxStartHidden;
     }
 }
