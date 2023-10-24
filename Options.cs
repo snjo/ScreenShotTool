@@ -40,6 +40,8 @@ namespace ScreenShotTool
             numericUpDownJpegQuality.Value = Settings.Default.JpegQuality;
             checkBoxStartHidden.Checked = Settings.Default.StartHidden;
             checkBoxCropThumbnails.Checked = Settings.Default.CropThumbnails;
+            numericThumbWidth.Value = Settings.Default.ThumbnailWidth;
+            numericThumbHeight.Value = Settings.Default.ThumbnailHeight;
         }
 
         private void buttonSelectFolder_Click(object sender, EventArgs e)
@@ -72,6 +74,8 @@ namespace ScreenShotTool
             Settings.Default.JpegQuality = (long)numericUpDownJpegQuality.Value;
             Settings.Default.StartHidden = checkBoxStartHidden.Checked;
             Settings.Default.CropThumbnails = checkBoxCropThumbnails.Checked;
+            Settings.Default.ThumbnailWidth = (int)numericThumbWidth.Value;
+            Settings.Default.ThumbnailHeight = (int)numericThumbHeight.Value;
             Settings.Default.Save();
             //mainForm.SaveSettings();
         }

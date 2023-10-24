@@ -56,6 +56,10 @@
             label7 = new Label();
             checkBoxStartHidden = new CheckBox();
             checkBoxCropThumbnails = new CheckBox();
+            numericThumbWidth = new NumericUpDown();
+            numericThumbHeight = new NumericUpDown();
+            label8 = new Label();
+            label9 = new Label();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
@@ -63,6 +67,8 @@
             ((System.ComponentModel.ISupportInitialize)numericUpDownTitleMaxLength).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownSplitIndex).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownJpegQuality).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericThumbWidth).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericThumbHeight).BeginInit();
             SuspendLayout();
             // 
             // checkBoxTrim
@@ -87,7 +93,7 @@
             // buttonHelp
             // 
             buttonHelp.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            buttonHelp.Location = new Point(13, 379);
+            buttonHelp.Location = new Point(13, 535);
             buttonHelp.Name = "buttonHelp";
             buttonHelp.Size = new Size(54, 23);
             buttonHelp.TabIndex = 32;
@@ -186,7 +192,7 @@
             // buttonOK
             // 
             buttonOK.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonOK.Location = new Point(370, 379);
+            buttonOK.Location = new Point(370, 535);
             buttonOK.Name = "buttonOK";
             buttonOK.Size = new Size(75, 23);
             buttonOK.TabIndex = 35;
@@ -197,7 +203,7 @@
             // buttonApply
             // 
             buttonApply.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonApply.Location = new Point(289, 379);
+            buttonApply.Location = new Point(289, 535);
             buttonApply.Name = "buttonApply";
             buttonApply.Size = new Size(75, 23);
             buttonApply.TabIndex = 36;
@@ -208,7 +214,7 @@
             // buttonCancel
             // 
             buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonCancel.Location = new Point(208, 379);
+            buttonCancel.Location = new Point(208, 535);
             buttonCancel.Name = "buttonCancel";
             buttonCancel.Size = new Size(75, 23);
             buttonCancel.TabIndex = 37;
@@ -311,18 +317,60 @@
             // checkBoxCropThumbnails
             // 
             checkBoxCropThumbnails.AutoSize = true;
-            checkBoxCropThumbnails.Location = new Point(12, 354);
+            checkBoxCropThumbnails.Location = new Point(12, 369);
             checkBoxCropThumbnails.Name = "checkBoxCropThumbnails";
             checkBoxCropThumbnails.Size = new Size(115, 19);
             checkBoxCropThumbnails.TabIndex = 50;
             checkBoxCropThumbnails.Text = "Crop thumbnails";
             checkBoxCropThumbnails.UseVisualStyleBackColor = true;
             // 
+            // numericThumbWidth
+            // 
+            numericThumbWidth.Location = new Point(119, 391);
+            numericThumbWidth.Maximum = new decimal(new int[] { 256, 0, 0, 0 });
+            numericThumbWidth.Minimum = new decimal(new int[] { 20, 0, 0, 0 });
+            numericThumbWidth.Name = "numericThumbWidth";
+            numericThumbWidth.Size = new Size(55, 23);
+            numericThumbWidth.TabIndex = 51;
+            numericThumbWidth.Value = new decimal(new int[] { 20, 0, 0, 0 });
+            // 
+            // numericThumbHeight
+            // 
+            numericThumbHeight.Location = new Point(119, 419);
+            numericThumbHeight.Maximum = new decimal(new int[] { 256, 0, 0, 0 });
+            numericThumbHeight.Minimum = new decimal(new int[] { 20, 0, 0, 0 });
+            numericThumbHeight.Name = "numericThumbHeight";
+            numericThumbHeight.Size = new Size(54, 23);
+            numericThumbHeight.TabIndex = 52;
+            numericThumbHeight.Value = new decimal(new int[] { 20, 0, 0, 0 });
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(13, 393);
+            label8.Name = "label8";
+            label8.Size = new Size(99, 15);
+            label8.TabIndex = 53;
+            label8.Text = "Thumbnail Width";
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(13, 421);
+            label9.Name = "label9";
+            label9.Size = new Size(103, 15);
+            label9.TabIndex = 54;
+            label9.Text = "Thumbnail Height";
+            // 
             // Options
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(455, 410);
+            ClientSize = new Size(455, 566);
+            Controls.Add(label9);
+            Controls.Add(label8);
+            Controls.Add(numericThumbHeight);
+            Controls.Add(numericThumbWidth);
             Controls.Add(checkBoxCropThumbnails);
             Controls.Add(checkBoxStartHidden);
             Controls.Add(numericUpDownJpegQuality);
@@ -360,6 +408,8 @@
             ((System.ComponentModel.ISupportInitialize)numericUpDownTitleMaxLength).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownSplitIndex).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownJpegQuality).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericThumbWidth).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericThumbHeight).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -394,5 +444,9 @@
         private Label label7;
         private CheckBox checkBoxStartHidden;
         private CheckBox checkBoxCropThumbnails;
+        private NumericUpDown numericThumbWidth;
+        private NumericUpDown numericThumbHeight;
+        private Label label8;
+        private Label label9;
     }
 }

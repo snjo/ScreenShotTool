@@ -58,7 +58,9 @@ namespace ScreenShotTool
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            imageList.ImageSize = new Size(100, 100);
+            if (settings.ThumbnailWidth > 256) settings.ThumbnailWidth = 256;
+            if (settings.ThumbnailHeight>256) settings.ThumbnailHeight = 256;
+            imageList.ImageSize = new Size(settings.ThumbnailWidth, settings.ThumbnailHeight);
             imageList.ColorDepth = ColorDepth.Depth32Bit;
             listView1.LargeImageList = imageList;
             if (Settings.Default.StartHidden)
@@ -200,7 +202,7 @@ namespace ScreenShotTool
             if (bitmap == null) return;
             string DestinationFileName = settings.Filename;
             int width = imageList.ImageSize.Width;
-            Image thumbImg = ResizeImage(bitmap, width, width, Settings.Default.CropThumbnails);
+            Image thumbImg = ResizeImage(bitmap, settings.ThumbnailWidth, settings.ThumbnailHeight, Settings.Default.CropThumbnails);
             imageList.Images.Add(thumbImg);
             thumbImg.Dispose();
             ListViewItem thumb = listView1.Items.Add(DestinationFileName);
@@ -227,7 +229,8 @@ namespace ScreenShotTool
             Image cropped;
             if (crop)
             {
-                cropped = cropImageSquare(image);
+                //cropped = cropImageSquare(image);
+                cropped = cropImageToAspectRatio(image, Settings.Default.ThumbnailWidth, Settings.Default.ThumbnailHeight);
                 Debug.WriteLine("Crop to square: " + image.Width + "x" + image.Height + " to" + cropped.Width + "x" + cropped.Height);
             }
             else
@@ -254,6 +257,46 @@ namespace ScreenShotTool
             return destImage;
         }
 
+        private static Image cropImageToAspectRatio(Image img, int aspectRatioWidth, int aspectRatioHeight)
+        {
+            int width = img.Width;
+            int height = img.Height;
+            Rectangle cropArea;
+            float aspectRatioImg = (float)width / (float)height;
+            float aspectRatioCrop = (float)aspectRatioWidth / (float)aspectRatioHeight;
+            float aspectRatioCropInvert = (float)aspectRatioHeight / (float)aspectRatioWidth;
+
+            Debug.WriteLine("Crop from: " + img.Width + "x" + img.Height + " to: " + aspectRatioWidth + "x" + aspectRatioHeight);
+
+            if (aspectRatioImg == aspectRatioCrop)
+            {
+                Debug.WriteLine("Crop aspectratio match: " + aspectRatioImg + " / " + aspectRatioCrop);
+                return img;
+            }
+
+            if (aspectRatioImg > aspectRatioCrop) //input img is wider than output crop
+            {
+                int newWidth = (int)(img.Height * aspectRatioCrop); //could be 1 pixel off...
+                Debug.WriteLine("Wider img, Crop width: " + newWidth + " from " + img.Height + ":" + aspectRatioCrop);
+                int overflow = img.Width - newWidth;
+                int overflowLeft = overflow / 2;
+                cropArea = new Rectangle(overflowLeft, 0, width - overflow, height);
+                Debug.WriteLine("Wider img, Crop size: " + cropArea);
+            }
+            else //input img is taller than output crop
+            {
+                int newHeight = (int)(img.Width * aspectRatioCropInvert); //could be 1 pixel off...
+                Debug.WriteLine("Taller img, Crop height: " + newHeight + " from " + img.Width + ":" +aspectRatioCropInvert);
+                int overflow = img.Height - newHeight;
+                int overflowTop = overflow / 2;
+                cropArea = new Rectangle(0, overflowTop, width, height - overflow);
+                Debug.WriteLine("Taller img, Crop size: " + cropArea);
+            }
+
+            Bitmap bmpImage = new Bitmap(img);
+            return bmpImage.Clone(cropArea, bmpImage.PixelFormat);
+        }
+
         private static Image cropImageSquare(Image img)
         {
             int width = img.Width;
@@ -263,12 +306,12 @@ namespace ScreenShotTool
             {
                 return img;
             }
-            else if (width>height)
+            else if (width > height)
             {
                 int overflow = img.Width - img.Height;
                 int overflowLeft = overflow / 2;
                 int overflowRight = overflow - overflowLeft;
-                cropArea = new Rectangle(overflowLeft, 0, width-overflow, height);
+                cropArea = new Rectangle(overflowLeft, 0, width - overflow, height);
             }
             else
             {
@@ -324,9 +367,16 @@ namespace ScreenShotTool
                 windowRect.Top += settings.TrimTop;
                 windowRect.Bottom -= settings.TrimBottom;
             }
-            bitmap = CaptureBitmap(windowRect.Left, windowRect.Top, windowRect.Width, windowRect.Height);
-            counter++;
-            SaveBitmap(folder, filename, format, bitmap);
+            if (windowRect.Width > 0 && windowRect.Height > 0)
+            {
+                bitmap = CaptureBitmap(windowRect.Left, windowRect.Top, windowRect.Width, windowRect.Height);
+                counter++;
+                SaveBitmap(folder, filename, format, bitmap);
+            }
+            else
+            {
+                Debug.WriteLine("Capture size is less than zero. Capture aborted.");
+            }
         }
 
         private bool SaveBitmap(string folder, string filename, ImageFormat format, Bitmap capture)
@@ -433,7 +483,6 @@ namespace ScreenShotTool
         private IntPtr GetActiveWindow()
         {
             IntPtr handle = IntPtr.Zero;
-            Debug.WriteLine("Handle:" + handle);
             Debug.WriteLine("ForeGround Window:" + GetForegroundWindow());
             return GetForegroundWindow();
         }
@@ -547,7 +596,7 @@ namespace ScreenShotTool
             {
                 if (listView1.SelectedItems.Count > 0)
                 {
-                    //MessageBox.Show("deleting " + listView1.SelectedItems[0].Text);
+                    Debug.WriteLine("deleting " + listView1.SelectedItems[0].Text);
                     foreach (ListViewItem item in listView1.SelectedItems)
                     {
                         try

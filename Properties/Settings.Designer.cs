@@ -394,5 +394,29 @@ namespace ScreenShotTool.Properties {
                 this["CropThumbnails"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("150")]
+        public int ThumbnailWidth {
+            get {
+                return ((int)(this["ThumbnailWidth"]));
+            }
+            set {
+                this["ThumbnailWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int ThumbnailHeight {
+            get {
+                return ((int)(this["ThumbnailHeight"]));
+            }
+            set {
+                this["ThumbnailHeight"] = value;
+            }
+        }
     }
 }
