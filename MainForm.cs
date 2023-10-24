@@ -17,8 +17,8 @@ namespace ScreenShotTool
     public partial class MainForm : Form
     {
         Settings settings = Settings.Default;
-        TextWindow helpWindow;
-        ImageFormat DestinationFormat;
+        TextWindow? helpWindow;
+        ImageFormat DestinationFormat = ImageFormat.Jpeg;
         int counter = 0;
         string lastFolder = ".";
         string lastSavedFile = "";
@@ -31,7 +31,7 @@ namespace ScreenShotTool
             "\n$c: Counter number (auto increments)";
 
         public bool showThumbnails = true;
-        Bitmap bitmap;
+        Bitmap? bitmap;
         ImageList imageList = new ImageList();
 
         public Dictionary<string, Hotkey> hotkeyList = new Dictionary<string, Hotkey>
@@ -98,28 +98,15 @@ namespace ScreenShotTool
 
         private void HandleHotkey(int id)
         {
+            if (!hotkeyList.ContainsKey("CaptureWindow") || !hotkeyList.ContainsKey("BrowseFolder")) return;
 
-            if (hotkeyList["CaptureWindow"] != null)
+            if (id == hotkeyList["CaptureWindow"].ghk.id)
             {
-                if (id == hotkeyList["CaptureWindow"].ghk.id)
-                {
-                    CaptureAction(CaptureMode.Window);
-                }
-                else if (id == hotkeyList["BrowseFolder"].ghk.id)
-                {
-                    BrowseFolderInExplorer(lastFolder);
-                }
-
-                /*
-                else if (id == hotkeyList["CaptureWindow"].ghk.id)
-                {
-                    CaptureAction(CaptureMode.Window);
-                }
-                else if (id == hotkeyList["CaptureAllscreens"].ghk.id)
-                {
-                    CaptureAction(CaptureMode.AllScreens);
-                }
-                */
+                CaptureAction(CaptureMode.Window);
+            }
+            else if (id == hotkeyList["BrowseFolder"].ghk.id)
+            {
+                BrowseFolderInExplorer(lastFolder);
             }
         }
 
@@ -210,6 +197,7 @@ namespace ScreenShotTool
 
         private void UpdateThumbnails()
         {
+            if (bitmap == null) return;
             string DestinationFileName = settings.Filename;
             int width = imageList.ImageSize.Width;
             Image thumbImg = ResizeImage(bitmap, width, width, Settings.Default.CropThumbnails);
@@ -541,11 +529,12 @@ namespace ScreenShotTool
                 ListViewItem item = listView1.SelectedItems[0];
                 if (item != null)
                 {
-                    string itemFile = item.Tag.ToString();
+                    string itemFile = item.Tag.ToString()+"";
                     //MessageBox.Show(item.Tag.ToString());
-                    if (File.Exists(itemFile))
+                    if (itemFile.Length>0)
                     {
-                        Process.Start(new ProcessStartInfo() { FileName = itemFile, UseShellExecute = true });
+                        if (File.Exists(itemFile))
+                            Process.Start(new ProcessStartInfo() { FileName = itemFile, UseShellExecute = true });
                     }
                 }
             }
@@ -563,13 +552,16 @@ namespace ScreenShotTool
                     {
                         try
                         {
-                            File.Delete(item.Tag.ToString());
-                            item.Remove();
-                            //listView1.AutoArrange = true;                            
+                            string deleteFile = item.Tag.ToString() + "";
+                            if (File.Exists(deleteFile))
+                            {
+                                File.Delete(deleteFile);
+                            }
+                            item.Remove();                        
                         }
                         catch
                         {
-                            //MessageBox.Show("No file to delete: " + item.Tag.ToString());
+                            Debug.WriteLine("No file to delete: " + item.Tag.ToString());
                         }
                     }
 

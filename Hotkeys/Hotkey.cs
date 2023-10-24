@@ -12,13 +12,14 @@ namespace Hotkeys
         public bool Alt;
         public bool Shift;
         public bool Win;
-        public GlobalHotkey? ghk;
+        public GlobalHotkey ghk;
         public bool hotkeysSet;
-        Settings settings;
+        //Settings settings;
         //public bool registered; // TODO
 
         public Hotkey()
         {
+            ghk = new GlobalHotkey();
         }
 
         public Hotkey(GlobalHotkey globalHK)
@@ -34,7 +35,6 @@ namespace Hotkeys
             if (Shift) result += (int)KeyModifier.Shift;
             if (Win) result += (int)KeyModifier.WinKey;
             return result;
-
         }
 
         public string Text()
