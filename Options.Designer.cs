@@ -55,6 +55,7 @@
             numericUpDownJpegQuality = new NumericUpDown();
             label7 = new Label();
             checkBoxStartHidden = new CheckBox();
+            checkBoxCropThumbnails = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
@@ -307,11 +308,22 @@
             checkBoxStartHidden.Text = "Start Hidden";
             checkBoxStartHidden.UseVisualStyleBackColor = true;
             // 
+            // checkBoxCropThumbnails
+            // 
+            checkBoxCropThumbnails.AutoSize = true;
+            checkBoxCropThumbnails.Location = new Point(12, 354);
+            checkBoxCropThumbnails.Name = "checkBoxCropThumbnails";
+            checkBoxCropThumbnails.Size = new Size(115, 19);
+            checkBoxCropThumbnails.TabIndex = 50;
+            checkBoxCropThumbnails.Text = "Crop thumbnails";
+            checkBoxCropThumbnails.UseVisualStyleBackColor = true;
+            // 
             // Options
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(455, 410);
+            Controls.Add(checkBoxCropThumbnails);
             Controls.Add(checkBoxStartHidden);
             Controls.Add(numericUpDownJpegQuality);
             Controls.Add(label7);
@@ -381,5 +393,6 @@
         private NumericUpDown numericUpDownJpegQuality;
         private Label label7;
         private CheckBox checkBoxStartHidden;
+        private CheckBox checkBoxCropThumbnails;
     }
 }

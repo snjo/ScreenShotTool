@@ -290,12 +290,12 @@ namespace ScreenShotTool.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool trimChecked {
+        public bool TrimChecked {
             get {
-                return ((bool)(this["trimChecked"]));
+                return ((bool)(this["TrimChecked"]));
             }
             set {
-                this["trimChecked"] = value;
+                this["TrimChecked"] = value;
             }
         }
         
@@ -380,6 +380,18 @@ namespace ScreenShotTool.Properties {
             }
             set {
                 this["StartHidden"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool CropThumbnails {
+            get {
+                return ((bool)(this["CropThumbnails"]));
+            }
+            set {
+                this["CropThumbnails"] = value;
             }
         }
     }

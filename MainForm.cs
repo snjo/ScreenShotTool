@@ -2,6 +2,7 @@ using Hotkeys;
 using ScreenShotTool.Properties;
 using System.Configuration;
 using System.Diagnostics;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Net.Security;
@@ -17,28 +18,10 @@ namespace ScreenShotTool
     {
         Settings settings = Settings.Default;
         TextWindow helpWindow;
-        public string PatternFolder = "";
-        public string PatternFileName = "";
-        //public string PatternFileExtension = "";
-
-        private string DestinationFolder = "";
-        private string DestinationFileName = "";
-        public string DestinationFileExtension = ".jpg";
         ImageFormat DestinationFormat;
-        public int titleMaxLength = 30;
         int counter = 0;
         string lastFolder = ".";
         string lastSavedFile = "";
-        public int trimTop = 0;
-        public int trimBottom = 0;
-        public int trimLeft = 0;
-        public int trimRight = 0;
-        public bool trim = false;
-        public string alternateTitle = "Capture";
-        public string splitTitleString = "";
-        public int splitTitleIndex = 0;
-        public long JpegQuality = 95L;
-        public bool StartHidden = false;
 
         public string helpText =
             "Default filename values:\r" +
@@ -69,7 +52,7 @@ namespace ScreenShotTool
             {
                 HotkeyTools.RegisterHotkeys(hotkeyList);
             }
-            LoadSettings();
+            //LoadSettings();
             //if (settings.StartHidden) Hide();
         }
 
@@ -95,48 +78,7 @@ namespace ScreenShotTool
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             HotkeyTools.ReleaseHotkeys(hotkeyList);
-            SaveSettings();
-        }
-        #endregion
-
-        #region Settings
-        public void SaveSettings()
-        {
-            settings.Filename = PatternFileName;
-            settings.Foldername = PatternFolder;
-            //settings.FileExtension = PatternFileExtension;
-            settings.TrimTop = trimTop;
-            settings.TrimBottom = trimBottom;
-            settings.TrimLeft = trimLeft;
-            settings.TrimRight = trimRight;
-            settings.trimChecked = trim;
-            settings.AlternateTitle = alternateTitle;
-            settings.TitleMaxLength = titleMaxLength;
-            settings.SplitTitleString = splitTitleString;
-            settings.SplitTitleIndex = splitTitleIndex;
-            settings.JpegQuality = JpegQuality;
-            settings.FileExtension = DestinationFileExtension;
-            settings.StartHidden = StartHidden;
-            settings.Save();
-        }
-
-        private void LoadSettings()
-        {
-            PatternFileName = settings.Filename;
-            PatternFolder = settings.Foldername;
-            //PatternFileExtension = settings.FileExtension;
-            trimTop = settings.TrimTop;
-            trimBottom = settings.TrimBottom;
-            trimLeft = settings.TrimLeft;
-            trimRight = settings.TrimRight;
-            trim = settings.trimChecked;
-            alternateTitle = settings.AlternateTitle;
-            titleMaxLength = settings.TitleMaxLength;
-            splitTitleString = settings.SplitTitleString;
-            splitTitleIndex = settings.SplitTitleIndex;
-            JpegQuality = settings.JpegQuality;
-            DestinationFileExtension = settings.FileExtension;
-            StartHidden = settings.StartHidden;
+            //SaveSettings();
         }
         #endregion
 
@@ -204,13 +146,15 @@ namespace ScreenShotTool
 
         public void CaptureAction(CaptureMode mode)
         {
-            DestinationFolder = PatternFolder;
+            string DestinationFolder = settings.Foldername;
+            string DestinationFileName = settings.Filename;
+            string DestinationFileExtension = settings.FileExtension;
             SetImageFormat();
 
             if (mode == CaptureMode.Window)
             {
-                DestinationFolder = ComposeFileName(PatternFolder);
-                DestinationFileName = ComposeFileName(PatternFileName);
+                DestinationFolder = ComposeFileName(settings.Foldername);
+                DestinationFileName = ComposeFileName(settings.Filename);
                 CaptureWindow(DestinationFolder, DestinationFileName + DestinationFileExtension, DestinationFormat);
                 numericUpDownCounter.Value++;
             }
@@ -230,6 +174,10 @@ namespace ScreenShotTool
 
         private string ComposeFileName(string text)
         {
+            string splitTitleString = settings.SplitTitleString;
+            int titleMaxLength = settings.TitleMaxLength;
+            int splitTitleIndex = settings.SplitTitleIndex;
+            string alternateTitle = settings.AlternateTitle;
             string date =
                 DateTime.Now.Year.ToString() + "-" +
                 DateTime.Now.Month.ToString() + "-" +
@@ -262,7 +210,9 @@ namespace ScreenShotTool
 
         private void UpdateThumbnails()
         {
-            Image thumbImg = getThumbnailImage(imageList.ImageSize.Width, bitmap);
+            string DestinationFileName = settings.Filename;
+            int width = imageList.ImageSize.Width;
+            Image thumbImg = ResizeImage(bitmap, width, width, Settings.Default.CropThumbnails);
             imageList.Images.Add(thumbImg);
             thumbImg.Dispose();
             ListViewItem thumb = listView1.Items.Add(DestinationFileName);
@@ -271,73 +221,81 @@ namespace ScreenShotTool
             thumb.ImageIndex = imageList.Images.Count - 1;
         }
 
-        private Image getThumbnailImage(int width, Image img)
+        /// <summary>
+        /// Resize the image to the specified width and height.
+        /// </summary>
+        /// <param name="image">The image to resize.</param>
+        /// <param name="width">The width to resize to.</param>
+        /// <param name="height">The height to resize to.</param>
+        /// <param name="crop">Crop the image</param>
+        /// <returns>The resized image.</returns>
+        public static Bitmap ResizeImage(Image image, int width, int height, bool crop=false)
         {
-            Image thumb = new Bitmap(width, width);
-            Image tmp = null;
+            //https://stackoverflow.com/questions/1922040/how-to-resize-an-image-c-sharp
+            Debug.WriteLine("Resizing image from: " + image.Width + "x" + image.Height + " to " + width + "x" + height);
+            var destRect = new Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
 
-            if (img.Width < width && img.Height < width)
+            Image cropped;
+            if (crop)
             {
-                using (Graphics g = Graphics.FromImage(thumb))
+                cropped = cropImageSquare(image);
+                Debug.WriteLine("Crop to square: " + image.Width + "x" + image.Height + " to" + cropped.Width + "x" + cropped.Height);
+            }
+            else
+                cropped = image;
+
+            destImage.SetResolution(cropped.HorizontalResolution, cropped.VerticalResolution);
+
+            using (var graphics = Graphics.FromImage(destImage))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes())
                 {
-                    int xoffset = (int)((width - img.Width) / 2);
-                    int yoffset = (int)((width - img.Height) / 2);
-                    g.DrawImage(img, xoffset, yoffset, img.Width, img.Height);
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(cropped, destRect, 0, 0, cropped.Width, cropped.Height, GraphicsUnit.Pixel, wrapMode);
                 }
+            }
+
+            Debug.WriteLine("Resize image returns:" + destImage.Width + "x" + destImage.Height);
+            return destImage;
+        }
+
+        private static Image cropImageSquare(Image img)
+        {
+            int width = img.Width;
+            int height = img.Height;
+            Rectangle cropArea;
+            if (width == height)
+            {
+                return img;
+            }
+            else if (width>height)
+            {
+                int overflow = img.Width - img.Height;
+                int overflowLeft = overflow / 2;
+                int overflowRight = overflow - overflowLeft;
+                cropArea = new Rectangle(overflowLeft, 0, width-overflow, height);
             }
             else
             {
-                Image.GetThumbnailImageAbort myCallback = new
-                    Image.GetThumbnailImageAbort(ThumbnailCallback);
-
-                if (img.Width == img.Height)
-                {
-                    thumb = img.GetThumbnailImage(
-                             width, width,
-                             myCallback, IntPtr.Zero);
-                }
-                else
-                {
-                    int k = 0;
-                    int xoffset = 0;
-                    int yoffset = 0;
-
-                    if (img.Width < img.Height)
-                    {
-                        k = (int)(width * img.Width / img.Height);
-                        tmp = img.GetThumbnailImage(k, width, myCallback, IntPtr.Zero);
-                        xoffset = (int)((width - k) / 2);
-                    }
-
-                    if (img.Width > img.Height)
-                    {
-                        k = (int)(width * img.Height / img.Width);
-                        tmp = img.GetThumbnailImage(width, k, myCallback, IntPtr.Zero);
-                        yoffset = (int)((width - k) / 2);
-                    }
-
-                    using (Graphics g = Graphics.FromImage(thumb))
-                    {
-                        g.DrawImage(tmp, xoffset, yoffset, tmp.Width, tmp.Height);
-                    }
-                }
+                int overflow = img.Height - img.Width;
+                int overflowTop = overflow / 2;
+                int overflowBottom = overflow - overflowTop;
+                cropArea = new Rectangle(0, overflowTop, width, height - overflow);
             }
-
-            using (Graphics g = Graphics.FromImage(thumb))
-            {
-                g.DrawRectangle(Pens.Green, 0, 0, thumb.Width - 1, thumb.Height - 1);
-            }
-            if (tmp != null) tmp.Dispose();
-            return thumb;
-        }
-
-        public bool ThumbnailCallback()
-        {
-            return true;
+            Bitmap bmpImage = new Bitmap(img);
+            return bmpImage.Clone(cropArea, bmpImage.PixelFormat);
         }
 
         private void SetImageFormat()
         {
+            string DestinationFileExtension = settings.FileExtension;
             Debug.WriteLine("Set imageformat " + DestinationFileExtension);
             switch (DestinationFileExtension)
             {
@@ -371,12 +329,12 @@ namespace ScreenShotTool
         {
             RECT windowRect;
             GetWindowRect(GetActiveWindow(), out windowRect);
-            if (trim)
+            if (settings.TrimChecked)
             {
-                windowRect.Left += trimLeft;
-                windowRect.Right -= trimRight;
-                windowRect.Top += trimTop;
-                windowRect.Bottom -= trimBottom;
+                windowRect.Left += settings.TrimLeft;
+                windowRect.Right -= settings.TrimRight;
+                windowRect.Top += settings.TrimTop;
+                windowRect.Bottom -= settings.TrimBottom;
             }
             bitmap = CaptureBitmap(windowRect.Left, windowRect.Top, windowRect.Width, windowRect.Height);
             counter++;
@@ -408,7 +366,7 @@ namespace ScreenShotTool
                 {
                     if (format == ImageFormat.Jpeg)
                     {
-                        SaveJpeg(folder + "\\" + filename, capture, JpegQuality);
+                        SaveJpeg(folder + "\\" + filename, capture, settings.JpegQuality);
                     }
                     else
                     {
@@ -438,11 +396,7 @@ namespace ScreenShotTool
         }
 
         //https://stackoverflow.com/questions/1484759/quality-of-a-saved-jpg-in-c-sharp
-        public static void SaveJpeg(string path, Bitmap image)
-        {
-            SaveJpeg(path, image, 95L);
-        }
-        public static void SaveJpeg(string path, Bitmap image, long quality)
+        public static void SaveJpeg(string path, Bitmap image, long quality=95L)
         {
             Debug.WriteLine("Saving JPEG with quality " + quality);
             using (EncoderParameters encoderParameters = new EncoderParameters(1))
@@ -491,6 +445,8 @@ namespace ScreenShotTool
         private IntPtr GetActiveWindow()
         {
             IntPtr handle = IntPtr.Zero;
+            Debug.WriteLine("Handle:" + handle);
+            Debug.WriteLine("ForeGround Window:" + GetForegroundWindow());
             return GetForegroundWindow();
         }
 
@@ -531,7 +487,7 @@ namespace ScreenShotTool
             {
                 return Buff.ToString();
             }
-            return null;
+            return string.Empty;
         }
         #endregion
 

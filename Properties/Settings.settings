@@ -68,7 +68,7 @@
     <Setting Name="TrimRight" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
-    <Setting Name="trimChecked" Type="System.Boolean" Scope="User">
+    <Setting Name="TrimChecked" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="FileExtension" Type="System.String" Scope="User">
@@ -91,6 +91,9 @@
     </Setting>
     <Setting Name="StartHidden" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="CropThumbnails" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>
