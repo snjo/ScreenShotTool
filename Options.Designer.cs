@@ -89,6 +89,7 @@
             buttonBrowseFolder.TabIndex = 33;
             buttonBrowseFolder.Text = "Browse";
             buttonBrowseFolder.UseVisualStyleBackColor = true;
+            buttonBrowseFolder.Click += buttonBrowseFolder_Click;
             // 
             // buttonHelp
             // 
@@ -332,7 +333,7 @@
             numericThumbWidth.Name = "numericThumbWidth";
             numericThumbWidth.Size = new Size(55, 23);
             numericThumbWidth.TabIndex = 51;
-            numericThumbWidth.Value = new decimal(new int[] { 20, 0, 0, 0 });
+            numericThumbWidth.Value = new decimal(new int[] { 100, 0, 0, 0 });
             // 
             // numericThumbHeight
             // 
@@ -342,7 +343,7 @@
             numericThumbHeight.Name = "numericThumbHeight";
             numericThumbHeight.Size = new Size(54, 23);
             numericThumbHeight.TabIndex = 52;
-            numericThumbHeight.Value = new decimal(new int[] { 20, 0, 0, 0 });
+            numericThumbHeight.Value = new decimal(new int[] { 100, 0, 0, 0 });
             // 
             // label8
             // 

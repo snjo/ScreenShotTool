@@ -22,6 +22,7 @@ namespace ScreenShotTool
         int counter = 0;
         string lastFolder = ".";
         string lastSavedFile = "";
+        Options options;
 
         public string helpText =
             "Default filename values:\r" +
@@ -41,6 +42,9 @@ namespace ScreenShotTool
             {"BrowseFolder", new Hotkey(new GlobalHotkey())},
         };
 
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
+
         #region form open and close
         public MainForm()
         {
@@ -54,27 +58,61 @@ namespace ScreenShotTool
             }
             //LoadSettings();
             //if (settings.StartHidden) Hide();
+
+            if (Settings.Default.StartHidden)
+            {
+                HideApplication();
+            }
+            else
+            {
+                ShowApplication();
+            }
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             if (settings.ThumbnailWidth > 256) settings.ThumbnailWidth = 256;
-            if (settings.ThumbnailHeight>256) settings.ThumbnailHeight = 256;
+            if (settings.ThumbnailHeight > 256) settings.ThumbnailHeight = 256;
             imageList.ImageSize = new Size(settings.ThumbnailWidth, settings.ThumbnailHeight);
             imageList.ColorDepth = ColorDepth.Depth32Bit;
             listView1.LargeImageList = imageList;
-            if (Settings.Default.StartHidden)
+            //if (Settings.Default.StartHidden)
+            //{
+            //    //WindowState = FormWindowState.Minimized;
+            //    //this.Hide();
+            //    //timerHide.Start();
+            //    Debug.WriteLine("Hiding application");
+            //    this.ShowInTaskbar = false;
+            //    this.WindowState = FormWindowState.Minimized;
+            //}
+            //else
+            //{
+            //    this.WindowState = FormWindowState.Normal;
+            //    this.ShowInTaskbar = true;
+            //    Debug.WriteLine("Starting in non-hidden state");
+            //}
+        }
+
+        private void HideApplication()
+        {
+            Debug.WriteLine("Hiding application");
+            //this.ShowInTaskbar = false; // breaks hotkeys
+            this.WindowState = FormWindowState.Minimized;
+            Hide();
+        }
+
+        private void ShowApplication()
+        {
+            this.WindowState = FormWindowState.Normal;
+            //this.ShowInTaskbar = true; // breaks hotkeys
+            Debug.WriteLine("Showing Application");
+            if (this.Size.Height < 50)
             {
-                //WindowState = FormWindowState.Minimized;
-                //this.Hide();
-                timerHide.Start();
-                Debug.WriteLine("Hiding application");
+                Size = DefaultSize;
             }
-            else
-            {
-                this.WindowState = FormWindowState.Normal;
-                Debug.WriteLine("Starting in non-hidden state");
-            }
+            Show();
+            BringToFront();
+            SetForegroundWindow(this.Handle);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -100,6 +138,7 @@ namespace ScreenShotTool
 
         private void HandleHotkey(int id)
         {
+            Debug.WriteLine("Handle hotkey: " + id);
             if (!hotkeyList.ContainsKey("CaptureWindow") || !hotkeyList.ContainsKey("BrowseFolder")) return;
 
             if (id == hotkeyList["CaptureWindow"].ghk.id)
@@ -135,6 +174,7 @@ namespace ScreenShotTool
 
         public void CaptureAction(CaptureMode mode)
         {
+            Debug.WriteLine("CaptureAction started");
             string DestinationFolder = settings.Foldername;
             string DestinationFileName = settings.Filename;
             string DestinationFileExtension = settings.FileExtension;
@@ -219,7 +259,7 @@ namespace ScreenShotTool
         /// <param name="height">The height to resize to.</param>
         /// <param name="crop">Crop the image</param>
         /// <returns>The resized image.</returns>
-        public static Bitmap ResizeImage(Image image, int width, int height, bool crop=false)
+        public static Bitmap ResizeImage(Image image, int width, int height, bool crop = false)
         {
             //https://stackoverflow.com/questions/1922040/how-to-resize-an-image-c-sharp
             Debug.WriteLine("Resizing image from: " + image.Width + "x" + image.Height + " to " + width + "x" + height);
@@ -286,7 +326,7 @@ namespace ScreenShotTool
             else //input img is taller than output crop
             {
                 int newHeight = (int)(img.Width * aspectRatioCropInvert); //could be 1 pixel off...
-                Debug.WriteLine("Taller img, Crop height: " + newHeight + " from " + img.Width + ":" +aspectRatioCropInvert);
+                Debug.WriteLine("Taller img, Crop height: " + newHeight + " from " + img.Width + ":" + aspectRatioCropInvert);
                 int overflow = img.Height - newHeight;
                 int overflowTop = overflow / 2;
                 cropArea = new Rectangle(0, overflowTop, width, height - overflow);
@@ -434,7 +474,7 @@ namespace ScreenShotTool
         }
 
         //https://stackoverflow.com/questions/1484759/quality-of-a-saved-jpg-in-c-sharp
-        public static void SaveJpeg(string path, Bitmap image, long quality=95L)
+        public static void SaveJpeg(string path, Bitmap image, long quality = 95L)
         {
             Debug.WriteLine("Saving JPEG with quality " + quality);
             using (EncoderParameters encoderParameters = new EncoderParameters(1))
@@ -537,7 +577,7 @@ namespace ScreenShotTool
                 "$c: Counter number (auto increments)";
         }
 
-        private string BrowseFolderInExplorer(string folder)
+        public string BrowseFolderInExplorer(string folder)
         {
             if (folder.Length < 1)
             {
@@ -545,6 +585,7 @@ namespace ScreenShotTool
             }
             if (Directory.Exists(folder))
             {
+                Debug.WriteLine("Opening folder: " + folder);
                 Process.Start(new ProcessStartInfo() { FileName = folder, UseShellExecute = true });
             }
             else
@@ -562,31 +603,44 @@ namespace ScreenShotTool
 
         private void buttonOptions_Click(object sender, EventArgs e)
         {
-            Options options = new Options(this);
+            OpenOptions();
+        }
+
+        private void OpenOptions()
+        {
+            if (options == null || options.IsDisposed)
+                options = new Options(this);
             options.Show();
+            options.WindowState = FormWindowState.Normal;
+            SetForegroundWindow(options.Handle);
         }
 
         private void listView1_DoubleClick(object sender, EventArgs e)
         {
-            OpenImageExternal();
+            OpenSelectedImageExternal();
         }
 
-        private void OpenImageExternal()
+        private void OpenSelectedImageExternal()
         {
             if (listView1.SelectedItems.Count > 0)
             {
                 ListViewItem item = listView1.SelectedItems[0];
                 if (item != null)
                 {
-                    string itemFile = item.Tag.ToString()+"";
+                    string itemFile = item.Tag.ToString() + "";
                     //MessageBox.Show(item.Tag.ToString());
-                    if (itemFile.Length>0)
+                    if (itemFile.Length > 0)
                     {
-                        if (File.Exists(itemFile))
-                            Process.Start(new ProcessStartInfo() { FileName = itemFile, UseShellExecute = true });
+                        OpenFileExternal(itemFile);
                     }
                 }
             }
+        }
+
+        private void OpenFileExternal(string file)
+        {
+            if (File.Exists(file))
+                Process.Start(new ProcessStartInfo() { FileName = file, UseShellExecute = true });
         }
 
 
@@ -606,7 +660,7 @@ namespace ScreenShotTool
                             {
                                 File.Delete(deleteFile);
                             }
-                            item.Remove();                        
+                            item.Remove();
                         }
                         catch
                         {
@@ -619,7 +673,7 @@ namespace ScreenShotTool
             }
             if (e.KeyCode == Keys.Enter)
             {
-                OpenImageExternal();
+                OpenSelectedImageExternal();
                 e.Handled = true;
             }
             else
@@ -655,12 +709,12 @@ namespace ScreenShotTool
                 helpWindow = new TextWindow(this, helpText);
             }
             helpWindow.Show();
+            helpWindow.WindowState = FormWindowState.Normal;
         }
 
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)
         {
-            this.Show();
-            BringToFront();
+            ShowApplication();
         }
 
         private void buttonHide_Click(object sender, EventArgs e)
@@ -672,6 +726,32 @@ namespace ScreenShotTool
         {
             Hide();
             timerHide.Stop();
+        }
+
+        private void MainForm_SizeChanged(object sender, EventArgs e)
+        {
+            if (WindowState == FormWindowState.Minimized)
+            {
+                if (Settings.Default.StartHidden)
+                {
+                    HideApplication();
+                }
+            }
+        }
+
+        private void openProgramToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowApplication();
+        }
+
+        private void exitApplicationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void pToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileExternal(lastSavedFile);
         }
     }
 }

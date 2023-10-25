@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -93,6 +94,21 @@ namespace ScreenShotTool
         private void buttonHelp_Click(object sender, EventArgs e)
         {
             mainForm.OpenHelp();
+        }
+
+        private void buttonBrowseFolder_Click(object sender, EventArgs e)
+        {
+            string folder = textBoxFolder.Text;
+            if (Directory.Exists(folder) )
+            {
+                mainForm.BrowseFolderInExplorer(folder);
+            }
+            else
+            {
+                string folderParent = Path.GetDirectoryName(textBoxFolder.Text)+"";
+                Debug.WriteLine("Couldn't open directory " + folder + ", trying to open " + folderParent);
+                mainForm.BrowseFolderInExplorer(folderParent);
+            }
         }
     }
 }

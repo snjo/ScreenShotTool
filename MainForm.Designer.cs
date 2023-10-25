@@ -39,19 +39,26 @@
             listView1 = new ListView();
             buttonClearList = new Button();
             notifyIcon1 = new NotifyIcon(components);
+            contextMenuSysTray = new ContextMenuStrip(components);
+            openProgramToolStripMenuItem = new ToolStripMenuItem();
+            optionsToolStripMenuItem = new ToolStripMenuItem();
+            openLastUsedFolderToolStripMenuItem = new ToolStripMenuItem();
+            pToolStripMenuItem = new ToolStripMenuItem();
+            exitApplicationToolStripMenuItem = new ToolStripMenuItem();
             buttonHide = new Button();
             timerHide = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)numericUpDownCounter).BeginInit();
+            contextMenuSysTray.SuspendLayout();
             SuspendLayout();
             // 
             // textBoxLog
             // 
             textBoxLog.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            textBoxLog.Location = new Point(12, 276);
+            textBoxLog.Location = new Point(12, 288);
             textBoxLog.Multiline = true;
             textBoxLog.Name = "textBoxLog";
             textBoxLog.ScrollBars = ScrollBars.Vertical;
-            textBoxLog.Size = new Size(517, 119);
+            textBoxLog.Size = new Size(519, 119);
             textBoxLog.TabIndex = 5;
             // 
             // buttonOpenLastFolder
@@ -96,7 +103,7 @@
             listView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             listView1.Location = new Point(12, 32);
             listView1.Name = "listView1";
-            listView1.Size = new Size(518, 237);
+            listView1.Size = new Size(520, 249);
             listView1.TabIndex = 0;
             listView1.UseCompatibleStateImageBehavior = false;
             listView1.DoubleClick += listView1_DoubleClick;
@@ -114,10 +121,52 @@
             // 
             // notifyIcon1
             // 
+            notifyIcon1.ContextMenuStrip = contextMenuSysTray;
             notifyIcon1.Icon = (Icon)resources.GetObject("notifyIcon1.Icon");
             notifyIcon1.Text = "Screenshot Tool";
             notifyIcon1.Visible = true;
             notifyIcon1.DoubleClick += notifyIcon1_DoubleClick;
+            // 
+            // contextMenuSysTray
+            // 
+            contextMenuSysTray.Items.AddRange(new ToolStripItem[] { openProgramToolStripMenuItem, optionsToolStripMenuItem, openLastUsedFolderToolStripMenuItem, pToolStripMenuItem, exitApplicationToolStripMenuItem });
+            contextMenuSysTray.Name = "contextMenuSysTray";
+            contextMenuSysTray.Size = new Size(187, 114);
+            // 
+            // openProgramToolStripMenuItem
+            // 
+            openProgramToolStripMenuItem.Name = "openProgramToolStripMenuItem";
+            openProgramToolStripMenuItem.Size = new Size(186, 22);
+            openProgramToolStripMenuItem.Text = "Open Program";
+            openProgramToolStripMenuItem.Click += openProgramToolStripMenuItem_Click;
+            // 
+            // optionsToolStripMenuItem
+            // 
+            optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            optionsToolStripMenuItem.Size = new Size(186, 22);
+            optionsToolStripMenuItem.Text = "Options";
+            optionsToolStripMenuItem.Click += buttonOptions_Click;
+            // 
+            // openLastUsedFolderToolStripMenuItem
+            // 
+            openLastUsedFolderToolStripMenuItem.Name = "openLastUsedFolderToolStripMenuItem";
+            openLastUsedFolderToolStripMenuItem.Size = new Size(186, 22);
+            openLastUsedFolderToolStripMenuItem.Text = "Open last used folder";
+            openLastUsedFolderToolStripMenuItem.Click += buttonOpenLastFolder_Click;
+            // 
+            // pToolStripMenuItem
+            // 
+            pToolStripMenuItem.Name = "pToolStripMenuItem";
+            pToolStripMenuItem.Size = new Size(186, 22);
+            pToolStripMenuItem.Text = "Open last screenshot";
+            pToolStripMenuItem.Click += pToolStripMenuItem_Click;
+            // 
+            // exitApplicationToolStripMenuItem
+            // 
+            exitApplicationToolStripMenuItem.Name = "exitApplicationToolStripMenuItem";
+            exitApplicationToolStripMenuItem.Size = new Size(186, 22);
+            exitApplicationToolStripMenuItem.Text = "Exit application";
+            exitApplicationToolStripMenuItem.Click += exitApplicationToolStripMenuItem_Click;
             // 
             // buttonHide
             // 
@@ -137,7 +186,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(541, 407);
+            ClientSize = new Size(543, 419);
             Controls.Add(buttonHide);
             Controls.Add(buttonClearList);
             Controls.Add(listView1);
@@ -151,7 +200,9 @@
             Text = "Screenshot Tool";
             FormClosing += Form1_FormClosing;
             Load += MainForm_Load;
+            SizeChanged += MainForm_SizeChanged;
             ((System.ComponentModel.ISupportInitialize)numericUpDownCounter).EndInit();
+            contextMenuSysTray.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -170,5 +221,11 @@
         private NotifyIcon notifyIcon1;
         private Button buttonHide;
         private System.Windows.Forms.Timer timerHide;
+        private ContextMenuStrip contextMenuSysTray;
+        private ToolStripMenuItem openProgramToolStripMenuItem;
+        private ToolStripMenuItem optionsToolStripMenuItem;
+        private ToolStripMenuItem openLastUsedFolderToolStripMenuItem;
+        private ToolStripMenuItem pToolStripMenuItem;
+        private ToolStripMenuItem exitApplicationToolStripMenuItem;
     }
 }
