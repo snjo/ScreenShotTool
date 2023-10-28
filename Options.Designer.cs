@@ -137,6 +137,7 @@
             buttonSelectFolder.TabIndex = 26;
             buttonSelectFolder.Text = "Select";
             buttonSelectFolder.UseVisualStyleBackColor = true;
+            buttonSelectFolder.Click += buttonSelectFolder_Click;
             // 
             // trimTop
             // 

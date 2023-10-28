@@ -1,16 +1,10 @@
 using Hotkeys;
 using ScreenShotTool.Properties;
-using System.Configuration;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Net.Security;
 using System.Runtime.InteropServices;
-using System.Security.Policy;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
 
 namespace ScreenShotTool
 {
@@ -419,11 +413,12 @@ namespace ScreenShotTool
                 try
                 {
                     Directory.CreateDirectory(folder);
+                    notifyIcon1.ShowBalloonTip(1000, "Folder Created", "Selected folder " + folder + " did not already exist.", ToolTipIcon.Warning);
                 }
                 catch
                 {
                     writeMessage("Couldn't find or create folder " + folder);
-                    //notifyIcon1.ShowBalloonTip(1000, "Capture error", "Couldn't find or create folder." + folder, ToolTipIcon.Warning);
+                    notifyIcon1.ShowBalloonTip(1000, "Capture error", "Couldn't find or create folder." + folder, ToolTipIcon.Warning);
                 }
             }
 
@@ -451,13 +446,14 @@ namespace ScreenShotTool
                         + "Check that you have write permission for this folder\n"
                         + "\n"
                         + ex.ToString());
-                    //notifyIcon1.ShowBalloonTip(1000, "Capture error", "Couldn't save file folder." + folder + "\\" + filename, ToolTipIcon.Warning);
+                    notifyIcon1.ShowBalloonTip(1000, "Capture error", "Couldn't save to folder." + folder + "\nCheck permission for this folder\n", ToolTipIcon.Warning);
                     return false;
                 }
             }
             else
             {
                 writeMessage("Folder not found: " + folder);
+                notifyIcon1.ShowBalloonTip(1000, "Capture error", "Folder not found: " + folder, ToolTipIcon.Warning);
                 return false;
             }
             return true;

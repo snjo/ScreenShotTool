@@ -1,6 +1,5 @@
 ﻿// add using for the active project's Properties here
 // ex: using MyApp.Properties;
-using ScreenShotTool.Properties;
 
 namespace Hotkeys
 {

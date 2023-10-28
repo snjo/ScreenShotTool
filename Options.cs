@@ -1,14 +1,5 @@
 ﻿using ScreenShotTool.Properties;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace ScreenShotTool
 {
@@ -99,13 +90,13 @@ namespace ScreenShotTool
         private void buttonBrowseFolder_Click(object sender, EventArgs e)
         {
             string folder = textBoxFolder.Text;
-            if (Directory.Exists(folder) )
+            if (Directory.Exists(folder))
             {
                 mainForm.BrowseFolderInExplorer(folder);
             }
             else
             {
-                string folderParent = Path.GetDirectoryName(textBoxFolder.Text)+"";
+                string folderParent = Path.GetDirectoryName(textBoxFolder.Text) + "";
                 Debug.WriteLine("Couldn't open directory " + folder + ", trying to open " + folderParent);
                 mainForm.BrowseFolderInExplorer(folderParent);
             }
