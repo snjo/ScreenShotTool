@@ -121,6 +121,9 @@
             // 
             // notifyIcon1
             // 
+            notifyIcon1.BalloonTipIcon = ToolTipIcon.Warning;
+            notifyIcon1.BalloonTipText = "No capture done";
+            notifyIcon1.BalloonTipTitle = "Problem";
             notifyIcon1.ContextMenuStrip = contextMenuSysTray;
             notifyIcon1.Icon = (Icon)resources.GetObject("notifyIcon1.Icon");
             notifyIcon1.Text = "Screenshot Tool";

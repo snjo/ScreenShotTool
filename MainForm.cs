@@ -56,8 +56,6 @@ namespace ScreenShotTool
             {
                 HotkeyTools.RegisterHotkeys(hotkeyList);
             }
-            //LoadSettings();
-            //if (settings.StartHidden) Hide();
 
             if (Settings.Default.StartHidden)
             {
@@ -76,27 +74,12 @@ namespace ScreenShotTool
             imageList.ImageSize = new Size(settings.ThumbnailWidth, settings.ThumbnailHeight);
             imageList.ColorDepth = ColorDepth.Depth32Bit;
             listView1.LargeImageList = imageList;
-            //if (Settings.Default.StartHidden)
-            //{
-            //    //WindowState = FormWindowState.Minimized;
-            //    //this.Hide();
-            //    //timerHide.Start();
-            //    Debug.WriteLine("Hiding application");
-            //    this.ShowInTaskbar = false;
-            //    this.WindowState = FormWindowState.Minimized;
-            //}
-            //else
-            //{
-            //    this.WindowState = FormWindowState.Normal;
-            //    this.ShowInTaskbar = true;
-            //    Debug.WriteLine("Starting in non-hidden state");
-            //}
         }
 
         private void HideApplication()
         {
+            //Don't use this.ShowInTaskbar = true/false, it breaks hotkeys
             Debug.WriteLine("Hiding application");
-            //this.ShowInTaskbar = false; // breaks hotkeys
             this.WindowState = FormWindowState.Minimized;
             Hide();
         }
@@ -104,7 +87,6 @@ namespace ScreenShotTool
         private void ShowApplication()
         {
             this.WindowState = FormWindowState.Normal;
-            //this.ShowInTaskbar = true; // breaks hotkeys
             Debug.WriteLine("Showing Application");
             if (this.Size.Height < 50)
             {
@@ -118,7 +100,6 @@ namespace ScreenShotTool
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             HotkeyTools.ReleaseHotkeys(hotkeyList);
-            //SaveSettings();
         }
         #endregion
 
@@ -131,22 +112,28 @@ namespace ScreenShotTool
                 Keys key = (Keys)(((int)m.LParam >> 16) & 0xFFFF);                  // The key of the hotkey that was pressed.
                 KeyModifier modifier = (KeyModifier)((int)m.LParam & 0xFFFF);       // The modifier of the hotkey that was pressed.
                 int id = m.WParam.ToInt32();                                        // The id of the hotkey that was pressed.
-                //MessageBox.Show("Hotkey " + id + " has been pressed!");
                 HandleHotkey(id);
             }
         }
 
         private void HandleHotkey(int id)
         {
-            Debug.WriteLine("Handle hotkey: " + id);
-            if (!hotkeyList.ContainsKey("CaptureWindow") || !hotkeyList.ContainsKey("BrowseFolder")) return;
+            //Debug.WriteLine("Handle hotkey: " + id);
+            //textBoxLog.Text += Environment.NewLine + "hotkey pressed: " + id + " at " + DateTime.Now.TimeOfDay;
+            if (!hotkeyList.ContainsKey("CaptureWindow") || !hotkeyList.ContainsKey("BrowseFolder"))
+            {
+                textBoxLog.Text += Environment.NewLine + "hotkey invalid: " + id;
+                return;
+            }
 
             if (id == hotkeyList["CaptureWindow"].ghk.id)
             {
+                //textBoxLog.Text += Environment.NewLine + "hotkey Capture Window";
                 CaptureAction(CaptureMode.Window);
             }
             else if (id == hotkeyList["BrowseFolder"].ghk.id)
             {
+                //textBoxLog.Text += Environment.NewLine + "Browse";
                 BrowseFolderInExplorer(lastFolder);
             }
         }
@@ -174,7 +161,7 @@ namespace ScreenShotTool
 
         public void CaptureAction(CaptureMode mode)
         {
-            Debug.WriteLine("CaptureAction started");
+            //Debug.WriteLine("CaptureAction started");
             string DestinationFolder = settings.Foldername;
             string DestinationFileName = settings.Filename;
             string DestinationFileExtension = settings.FileExtension;
@@ -416,6 +403,7 @@ namespace ScreenShotTool
             else
             {
                 Debug.WriteLine("Capture size is less than zero. Capture aborted.");
+                notifyIcon1.ShowBalloonTip(1000, "Capture error", "Capture size is less than zero. Capture aborted.", ToolTipIcon.Warning);
             }
         }
 
@@ -435,6 +423,7 @@ namespace ScreenShotTool
                 catch
                 {
                     writeMessage("Couldn't find or create folder " + folder);
+                    //notifyIcon1.ShowBalloonTip(1000, "Capture error", "Couldn't find or create folder." + folder, ToolTipIcon.Warning);
                 }
             }
 
@@ -462,6 +451,7 @@ namespace ScreenShotTool
                         + "Check that you have write permission for this folder\n"
                         + "\n"
                         + ex.ToString());
+                    //notifyIcon1.ShowBalloonTip(1000, "Capture error", "Couldn't save file folder." + folder + "\\" + filename, ToolTipIcon.Warning);
                     return false;
                 }
             }
