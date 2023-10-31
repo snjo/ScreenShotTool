@@ -11,13 +11,13 @@ namespace Hotkeys
         [DllImport("user32.dll")]
         private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
-        private int modifier;
+        public int modifier;
         public int key;
         private IntPtr hWnd;
         public int id;
-        public Hotkey? hotkey;
         public bool registered;
         private bool validKey;
+        public string displayName = "Unnamed";
 
         public Keys stringToKey(string keystring)
         {
@@ -38,12 +38,13 @@ namespace Hotkeys
             return new Keys();
         }
 
-        public GlobalHotkey(int modifier, string keystring, Form form)
+        public GlobalHotkey(int modifier, string keystring, Form form, string name = "Unnamed")
         {
             this.modifier = modifier;
             Keys key = stringToKey(keystring);  // assigns validKey
             this.key = (int)key;
             this.hWnd = form.Handle;
+            displayName = name;
             id = this.GetHashCode();
         }
 
@@ -68,7 +69,7 @@ namespace Hotkeys
             if (id != 0)
             {
                 registered = RegisterHotKey(hWnd, id, modifier, key);
-                Debug.WriteLine("Registered hotkey:" + registered.ToString() + " / " + key + " / " + modifier);
+                //Debug.WriteLine("Registered hotkey:" + registered.ToString() + " / " + key + " / " + modifier);
                 return registered;
             }
             else

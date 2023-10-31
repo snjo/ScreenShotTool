@@ -1,6 +1,7 @@
 ﻿// add using for the active project's Properties here
 // ex: using MyApp.Properties;
 using ScreenShotTool.Properties;
+using System.Diagnostics;
 
 namespace Hotkeys
 {
@@ -27,7 +28,7 @@ namespace Hotkeys
             hotkey.Alt = (bool)Settings.Default["hk" + hotkeyName + "Alt"];
             hotkey.Shift = (bool)Settings.Default["hk" + hotkeyName + "Shift"];
             hotkey.Win = (bool)Settings.Default["hk" + hotkeyName + "Win"];
-            hotkey.ghk = new GlobalHotkey(hotkey.Modifiers(), hotkey.Key, parent);
+            hotkey.ghk = new GlobalHotkey(hotkey.Modifiers(), hotkey.Key, parent, hotkeyName);
 
             //MessageBox.Show("LoadHotkey: " + hotkeyName + " / " + hotkey.Win);
             return hotkey;
@@ -43,14 +44,14 @@ namespace Hotkeys
             if (ghk == null) return false;
             if (ghk.Register())
             {
+                Debug.WriteLine("Registered hotkey named " + ghk.displayName + ", key: " + ghk.key + ", modifiers:" + ghk.modifier);
                 return true;
             }
             else
             {
                 if (ghk != null)
                 {
-                    if (warning && ghk.hotkey == null) MessageBox.Show("Could not register hotkey " + ghk.key + ", ghk.hotkey is null");
-                    else if (warning) MessageBox.Show("Could not register hotkey " + ghk.key + "ghk.hotkey.Win is " + ghk.hotkey.Win);
+                    if (warning) MessageBox.Show("Could not register hotkey named " + ghk.displayName + ", key: " + ghk.key);
                 }
                 else
                 {

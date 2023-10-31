@@ -16,7 +16,7 @@ namespace ScreenShotTool
         int counter = 0;
         string lastFolder = ".";
         string lastSavedFile = "";
-        Options options;
+        Options? options;
 
         public string helpText =
             "Default filename values:\r" +

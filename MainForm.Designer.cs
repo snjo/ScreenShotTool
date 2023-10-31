@@ -212,7 +212,6 @@
 
         #endregion
 
-        private Button buttonScreenshot;
         private TextBox textBoxLog;
         private FolderBrowserDialog folderBrowserDialog1;
         private Button buttonOpenLastFolder;
