@@ -60,6 +60,8 @@
             numericThumbHeight = new NumericUpDown();
             label8 = new Label();
             label9 = new Label();
+            checkBoxTrayTooltipInfo = new CheckBox();
+            checkBoxTrayTooltipWarning = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
@@ -309,7 +311,7 @@
             // checkBoxStartHidden
             // 
             checkBoxStartHidden.AutoSize = true;
-            checkBoxStartHidden.Location = new Point(12, 333);
+            checkBoxStartHidden.Location = new Point(13, 432);
             checkBoxStartHidden.Name = "checkBoxStartHidden";
             checkBoxStartHidden.Size = new Size(92, 19);
             checkBoxStartHidden.TabIndex = 49;
@@ -319,7 +321,7 @@
             // checkBoxCropThumbnails
             // 
             checkBoxCropThumbnails.AutoSize = true;
-            checkBoxCropThumbnails.Location = new Point(12, 369);
+            checkBoxCropThumbnails.Location = new Point(12, 330);
             checkBoxCropThumbnails.Name = "checkBoxCropThumbnails";
             checkBoxCropThumbnails.Size = new Size(115, 19);
             checkBoxCropThumbnails.TabIndex = 50;
@@ -328,7 +330,7 @@
             // 
             // numericThumbWidth
             // 
-            numericThumbWidth.Location = new Point(119, 391);
+            numericThumbWidth.Location = new Point(119, 352);
             numericThumbWidth.Maximum = new decimal(new int[] { 256, 0, 0, 0 });
             numericThumbWidth.Minimum = new decimal(new int[] { 20, 0, 0, 0 });
             numericThumbWidth.Name = "numericThumbWidth";
@@ -338,7 +340,7 @@
             // 
             // numericThumbHeight
             // 
-            numericThumbHeight.Location = new Point(119, 419);
+            numericThumbHeight.Location = new Point(119, 380);
             numericThumbHeight.Maximum = new decimal(new int[] { 256, 0, 0, 0 });
             numericThumbHeight.Minimum = new decimal(new int[] { 20, 0, 0, 0 });
             numericThumbHeight.Name = "numericThumbHeight";
@@ -349,7 +351,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(13, 393);
+            label8.Location = new Point(13, 354);
             label8.Name = "label8";
             label8.Size = new Size(99, 15);
             label8.TabIndex = 53;
@@ -358,17 +360,39 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(13, 421);
+            label9.Location = new Point(13, 382);
             label9.Name = "label9";
             label9.Size = new Size(103, 15);
             label9.TabIndex = 54;
             label9.Text = "Thumbnail Height";
+            // 
+            // checkBoxTrayTooltipInfo
+            // 
+            checkBoxTrayTooltipInfo.AutoSize = true;
+            checkBoxTrayTooltipInfo.Location = new Point(12, 457);
+            checkBoxTrayTooltipInfo.Name = "checkBoxTrayTooltipInfo";
+            checkBoxTrayTooltipInfo.Size = new Size(211, 19);
+            checkBoxTrayTooltipInfo.TabIndex = 55;
+            checkBoxTrayTooltipInfo.Text = "System tray tooltip when capturing";
+            checkBoxTrayTooltipInfo.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxTrayTooltipWarning
+            // 
+            checkBoxTrayTooltipWarning.AutoSize = true;
+            checkBoxTrayTooltipWarning.Location = new Point(12, 482);
+            checkBoxTrayTooltipWarning.Name = "checkBoxTrayTooltipWarning";
+            checkBoxTrayTooltipWarning.Size = new Size(176, 19);
+            checkBoxTrayTooltipWarning.TabIndex = 56;
+            checkBoxTrayTooltipWarning.Text = "System tray tooltip warnings";
+            checkBoxTrayTooltipWarning.UseVisualStyleBackColor = true;
             // 
             // Options
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(455, 566);
+            Controls.Add(checkBoxTrayTooltipWarning);
+            Controls.Add(checkBoxTrayTooltipInfo);
             Controls.Add(label9);
             Controls.Add(label8);
             Controls.Add(numericThumbHeight);
@@ -450,5 +474,7 @@
         private NumericUpDown numericThumbHeight;
         private Label label8;
         private Label label9;
+        private CheckBox checkBoxTrayTooltipInfo;
+        private CheckBox checkBoxTrayTooltipWarning;
     }
 }

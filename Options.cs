@@ -34,6 +34,8 @@ namespace ScreenShotTool
             checkBoxCropThumbnails.Checked = Settings.Default.CropThumbnails;
             numericThumbWidth.Value = Settings.Default.ThumbnailWidth;
             numericThumbHeight.Value = Settings.Default.ThumbnailHeight;
+            checkBoxTrayTooltipInfo.Checked = Settings.Default.AllowTrayTooltipInfo;
+            checkBoxTrayTooltipWarning.Checked = Settings.Default.AllowTrayTooltipWarning;
         }
 
         private void buttonSelectFolder_Click(object sender, EventArgs e)
@@ -68,6 +70,8 @@ namespace ScreenShotTool
             Settings.Default.CropThumbnails = checkBoxCropThumbnails.Checked;
             Settings.Default.ThumbnailWidth = (int)numericThumbWidth.Value;
             Settings.Default.ThumbnailHeight = (int)numericThumbHeight.Value;
+            Settings.Default.AllowTrayTooltipInfo = checkBoxTrayTooltipInfo.Checked;
+            Settings.Default.AllowTrayTooltipWarning = checkBoxTrayTooltipWarning.Checked;
             Settings.Default.Save();
             //mainForm.SaveSettings();
         }

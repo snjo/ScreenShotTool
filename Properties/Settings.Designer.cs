@@ -418,5 +418,29 @@ namespace ScreenShotTool.Properties {
                 this["ThumbnailHeight"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AllowTrayTooltipWarning {
+            get {
+                return ((bool)(this["AllowTrayTooltipWarning"]));
+            }
+            set {
+                this["AllowTrayTooltipWarning"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AllowTrayTooltipInfo {
+            get {
+                return ((bool)(this["AllowTrayTooltipInfo"]));
+            }
+            set {
+                this["AllowTrayTooltipInfo"] = value;
+            }
+        }
     }
 }

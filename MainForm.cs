@@ -397,7 +397,8 @@ namespace ScreenShotTool
             else
             {
                 Debug.WriteLine("Capture size is less than zero. Capture aborted.");
-                notifyIcon1.ShowBalloonTip(1000, "Capture error", "Capture size is less than zero. Capture aborted.", ToolTipIcon.Warning);
+                if (Settings.Default.AllowTrayTooltipWarning)
+                    notifyIcon1.ShowBalloonTip(1000, "Capture error", "Capture size is less than zero. Capture aborted.", ToolTipIcon.Warning);
             }
         }
 
@@ -413,12 +414,14 @@ namespace ScreenShotTool
                 try
                 {
                     Directory.CreateDirectory(folder);
-                    notifyIcon1.ShowBalloonTip(1000, "Folder Created", "Selected folder " + folder + " did not already exist.", ToolTipIcon.Warning);
+                    if (Settings.Default.AllowTrayTooltipWarning)
+                        notifyIcon1.ShowBalloonTip(1000, "Folder Created", "Selected folder " + folder + " did not already exist.", ToolTipIcon.Info);
                 }
                 catch
                 {
                     writeMessage("Couldn't find or create folder " + folder);
-                    notifyIcon1.ShowBalloonTip(1000, "Capture error", "Couldn't find or create folder." + folder, ToolTipIcon.Warning);
+                    if (Settings.Default.AllowTrayTooltipWarning)
+                        notifyIcon1.ShowBalloonTip(1000, "Capture error", "Couldn't find or create folder." + folder, ToolTipIcon.Warning);
                 }
             }
 
@@ -436,6 +439,8 @@ namespace ScreenShotTool
                         Debug.WriteLine("Saving image with format " + format.ToString());
                     }
                     writeMessage("Saved " + folder + "\\" + filename);
+                    if (Settings.Default.AllowTrayTooltipInfo)
+                        notifyIcon1.ShowBalloonTip(1000, "Capture saved", folder + Environment.NewLine + filename, ToolTipIcon.Info);
                     lastSavedFile = folder + "\\" + filename;
                     lastFolder = folder;
                 }
@@ -446,14 +451,16 @@ namespace ScreenShotTool
                         + "Check that you have write permission for this folder\n"
                         + "\n"
                         + ex.ToString());
-                    notifyIcon1.ShowBalloonTip(1000, "Capture error", "Couldn't save to folder." + folder + "\nCheck permission for this folder\n", ToolTipIcon.Warning);
+                    if (Settings.Default.AllowTrayTooltipWarning)
+                        notifyIcon1.ShowBalloonTip(1000, "Capture error", "Couldn't save to folder." + folder + "\nCheck permission for this folder\n", ToolTipIcon.Warning);
                     return false;
                 }
             }
             else
             {
                 writeMessage("Folder not found: " + folder);
-                notifyIcon1.ShowBalloonTip(1000, "Capture error", "Folder not found: " + folder, ToolTipIcon.Warning);
+                if (Settings.Default.AllowTrayTooltipWarning)
+                    notifyIcon1.ShowBalloonTip(1000, "Capture error", "Folder not found: " + folder, ToolTipIcon.Warning);
                 return false;
             }
             return true;
