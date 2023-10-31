@@ -460,6 +460,7 @@ namespace ScreenShotTool
             }
             else
             {
+                //this shouldn't be reachable
                 writeMessage("Folder not found: " + folder);
                 if (Settings.Default.AllowTrayTooltipWarning)
                     notifyIcon1.ShowBalloonTip(1000, "Capture error", "Folder not found: " + folder, ToolTipIcon.Warning);
