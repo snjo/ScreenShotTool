@@ -66,14 +66,14 @@ namespace Hotkeys
         /// </summary>
         /// <param name="hotkeyList">A dictionary with hotkey names and Hotkey objects</param>
         /// <param name="warning">Displays a MessageBox warning if the key fails to register.</param>
-        public static void RegisterHotkeys(Dictionary<string, Hotkey> hotkeyList, bool warning = true)
+        public static void RegisterHotkeys(Dictionary<string, Hotkey> hotkeyList)
         {
             string warningKeys = "";
             foreach (KeyValuePair<string, Hotkey> ghk in hotkeyList)
             {
                 if (ghk.Value.Key == string.Empty)
                 {
-                    //MessageBox.Show("Skipping hotkey");
+                    Debug.WriteLine("Skipping hotkey with no Key string set");
                 }
                 else if (!RegisterHotKey(ghk.Value.ghk, false)) //register the key, add a warning to the list if it fails
                 {

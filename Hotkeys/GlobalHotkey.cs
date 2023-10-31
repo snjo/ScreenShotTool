@@ -86,6 +86,5 @@ namespace Hotkeys
             registered = false;
             return UnregisterHotKey(hWnd, id);
         }
-
     }
 }
