@@ -181,9 +181,7 @@ namespace ScreenShotTool
 
         private void reloadHotkeys()
         {
-            HotkeyTools.ReleaseHotkeys(mainForm.HotkeyList);
-            HotkeyTools.LoadHotkeys(mainForm.HotkeyList, mainForm);
-            HotkeyTools.RegisterHotkeys(mainForm.HotkeyList);
+            HotkeyTools.UpdateHotkeys(mainForm.HotkeyList, mainForm.HotkeyNames, mainForm);
             Debug.WriteLine("Released and re-registered hotkeys");
         }
     }

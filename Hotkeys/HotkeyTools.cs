@@ -7,14 +7,14 @@ namespace Hotkeys
     public class HotkeyTools
     {
 
-        public static Dictionary<string, Hotkey> LoadHotkeys(Dictionary<string, Hotkey> hotkeyList, Form parent)
+        public static Dictionary<string, Hotkey> LoadHotkeys(Dictionary<string, Hotkey> hotkeyList, List<string> hotkeyNames, Form parent)
         {
-            foreach (KeyValuePair<string, Hotkey> kvp in hotkeyList)
+            foreach (string name in hotkeyNames)
             {
-                hotkeyList[kvp.Key] = LoadHotkey(kvp.Key, parent);
+                if (hotkeyList.ContainsKey(name))
+                    hotkeyList.Remove(name);
+                hotkeyList.Add(name, LoadHotkey(name, parent));
             }
-
-            //MessageBox.Show("hotKeyList " + hotkeyList.Count);
             return hotkeyList;
         }
 
@@ -22,7 +22,7 @@ namespace Hotkeys
         {
             Hotkey hotkey = new Hotkey();
 
-            hotkey.Key = Settings.Default["hk" + hotkeyName + "Key"].ToString();
+            hotkey.Key = Settings.Default["hk" + hotkeyName + "Key"].ToString()+"";
             hotkey.Ctrl = (bool)Settings.Default["hk" + hotkeyName + "Ctrl"];
             hotkey.Alt = (bool)Settings.Default["hk" + hotkeyName + "Alt"];
             hotkey.Shift = (bool)Settings.Default["hk" + hotkeyName + "Shift"];
@@ -99,6 +99,13 @@ namespace Hotkeys
             {
                 ghk.Unregister();
             }
+        }
+
+        public static void UpdateHotkeys(Dictionary<string, Hotkey> hotkeyList, List<string> hotkeyNames, Form parent)
+        {
+            ReleaseHotkeys(hotkeyList);
+            LoadHotkeys(hotkeyList, hotkeyNames, parent);
+            RegisterHotkeys(hotkeyList);
         }
     }
 }

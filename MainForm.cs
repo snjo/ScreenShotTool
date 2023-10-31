@@ -29,22 +29,23 @@ namespace ScreenShotTool
         Bitmap? bitmap;
         ImageList imageList = new ImageList();
 
-        public Dictionary<string, Hotkey> HotkeyList = new Dictionary<string, Hotkey>
-        {
-            {"CaptureWindow", new Hotkey(new GlobalHotkey())},
-            //{"CaptureRegion", new Hotkey(new GlobalHotkey())},
-            {"BrowseFolder", new Hotkey(new GlobalHotkey())},
-        };
-
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        public Dictionary<string, Hotkey> HotkeyList = new Dictionary<string, Hotkey>();
+
+        public List<string> HotkeyNames = new List<string>
+        {
+            "CaptureWindow",
+            "BrowseFolder",
+        };
 
         #region form open and close
         public MainForm()
         {
             InitializeComponent();
 
-            HotkeyList = HotkeyTools.LoadHotkeys(HotkeyList, this);
+            HotkeyList = HotkeyTools.LoadHotkeys(HotkeyList, HotkeyNames, this);
 
             if (settings.RegisterHotkeys)
             {
@@ -422,6 +423,7 @@ namespace ScreenShotTool
                     writeMessage("Couldn't find or create folder " + folder);
                     if (Settings.Default.AllowTrayTooltipWarning)
                         notifyIcon1.ShowBalloonTip(1000, "Capture error", "Couldn't find or create folder." + folder, ToolTipIcon.Warning);
+                    return false;
                 }
             }
 
