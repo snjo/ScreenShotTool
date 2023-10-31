@@ -29,7 +29,7 @@ namespace ScreenShotTool
         Bitmap? bitmap;
         ImageList imageList = new ImageList();
 
-        public Dictionary<string, Hotkey> hotkeyList = new Dictionary<string, Hotkey>
+        public Dictionary<string, Hotkey> HotkeyList = new Dictionary<string, Hotkey>
         {
             {"CaptureWindow", new Hotkey(new GlobalHotkey())},
             //{"CaptureRegion", new Hotkey(new GlobalHotkey())},
@@ -44,11 +44,11 @@ namespace ScreenShotTool
         {
             InitializeComponent();
 
-            hotkeyList = HotkeyTools.LoadHotkeys(hotkeyList, this);
+            HotkeyList = HotkeyTools.LoadHotkeys(HotkeyList, this);
 
             if (settings.RegisterHotkeys)
             {
-                HotkeyTools.RegisterHotkeys(hotkeyList);
+                HotkeyTools.RegisterHotkeys(HotkeyList);
             }
 
             if (Settings.Default.StartHidden)
@@ -93,7 +93,7 @@ namespace ScreenShotTool
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            HotkeyTools.ReleaseHotkeys(hotkeyList);
+            HotkeyTools.ReleaseHotkeys(HotkeyList);
         }
         #endregion
 
@@ -114,18 +114,18 @@ namespace ScreenShotTool
         {
             //Debug.WriteLine("Handle hotkey: " + id);
             //textBoxLog.Text += Environment.NewLine + "hotkey pressed: " + id + " at " + DateTime.Now.TimeOfDay;
-            if (!hotkeyList.ContainsKey("CaptureWindow") || !hotkeyList.ContainsKey("BrowseFolder"))
+            if (!HotkeyList.ContainsKey("CaptureWindow") || !HotkeyList.ContainsKey("BrowseFolder"))
             {
                 textBoxLog.Text += Environment.NewLine + "hotkey invalid: " + id;
                 return;
             }
 
-            if (id == hotkeyList["CaptureWindow"].ghk.id)
+            if (id == HotkeyList["CaptureWindow"].ghk.id)
             {
                 //textBoxLog.Text += Environment.NewLine + "hotkey Capture Window";
                 CaptureAction(CaptureMode.Window);
             }
-            else if (id == hotkeyList["BrowseFolder"].ghk.id)
+            else if (id == HotkeyList["BrowseFolder"].ghk.id)
             {
                 //textBoxLog.Text += Environment.NewLine + "Browse";
                 BrowseFolderInExplorer(lastFolder);

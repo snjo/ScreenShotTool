@@ -6,7 +6,7 @@ namespace Hotkeys
     [Serializable]
     public class Hotkey
     {
-        public string key = String.Empty;
+        public string Key = String.Empty;
         public bool Ctrl;
         public bool Alt;
         public bool Shift;
@@ -39,13 +39,13 @@ namespace Hotkeys
         public string Text()
         {
             string result = "";
-            if (key != "") // != 0   if key is char 
+            if (Key != "") // != 0   if key is char 
             {
                 if (Ctrl) result += "Ctrl+";
                 if (Alt) result += "Alt+";
                 if (Shift) result += "Shift+";
                 if (Win) result += "Win+";
-                result += key;
+                result += Key;
             }
             else
             {

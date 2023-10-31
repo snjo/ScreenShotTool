@@ -62,6 +62,17 @@
             label9 = new Label();
             checkBoxTrayTooltipInfo = new CheckBox();
             checkBoxTrayTooltipWarning = new CheckBox();
+            tabControl1 = new TabControl();
+            tabPage1 = new TabPage();
+            tabPage2 = new TabPage();
+            tabPage3 = new TabPage();
+            HotkeyGrid = new DataGridView();
+            ColumnFunction = new DataGridViewTextBoxColumn();
+            ColumnKey = new DataGridViewTextBoxColumn();
+            ColumnCtrl = new DataGridViewCheckBoxColumn();
+            ColumnAlt = new DataGridViewCheckBoxColumn();
+            ColumnShift = new DataGridViewCheckBoxColumn();
+            ColumnWin = new DataGridViewCheckBoxColumn();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
@@ -71,12 +82,17 @@
             ((System.ComponentModel.ISupportInitialize)numericUpDownJpegQuality).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericThumbWidth).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericThumbHeight).BeginInit();
+            tabControl1.SuspendLayout();
+            tabPage1.SuspendLayout();
+            tabPage2.SuspendLayout();
+            tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)HotkeyGrid).BeginInit();
             SuspendLayout();
             // 
             // checkBoxTrim
             // 
             checkBoxTrim.AutoSize = true;
-            checkBoxTrim.Location = new Point(221, 173);
+            checkBoxTrim.Location = new Point(6, 328);
             checkBoxTrim.Name = "checkBoxTrim";
             checkBoxTrim.Size = new Size(142, 19);
             checkBoxTrim.TabIndex = 34;
@@ -85,7 +101,7 @@
             // 
             // buttonBrowseFolder
             // 
-            buttonBrowseFolder.Location = new Point(384, 30);
+            buttonBrowseFolder.Location = new Point(378, 26);
             buttonBrowseFolder.Name = "buttonBrowseFolder";
             buttonBrowseFolder.Size = new Size(57, 23);
             buttonBrowseFolder.TabIndex = 33;
@@ -96,7 +112,7 @@
             // buttonHelp
             // 
             buttonHelp.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            buttonHelp.Location = new Point(13, 535);
+            buttonHelp.Location = new Point(13, 497);
             buttonHelp.Name = "buttonHelp";
             buttonHelp.Size = new Size(54, 23);
             buttonHelp.TabIndex = 32;
@@ -107,7 +123,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(12, 63);
+            label3.Location = new Point(6, 59);
             label3.Name = "label3";
             label3.Size = new Size(55, 15);
             label3.TabIndex = 29;
@@ -117,7 +133,7 @@
             // 
             comboBoxFileExtension.FormattingEnabled = true;
             comboBoxFileExtension.Items.AddRange(new object[] { ".png", ".jpg", ".gif", ".bmp", ".tiff" });
-            comboBoxFileExtension.Location = new Point(310, 81);
+            comboBoxFileExtension.Location = new Point(304, 77);
             comboBoxFileExtension.Name = "comboBoxFileExtension";
             comboBoxFileExtension.Size = new Size(53, 23);
             comboBoxFileExtension.TabIndex = 28;
@@ -125,7 +141,7 @@
             // 
             // textBoxFilename
             // 
-            textBoxFilename.Location = new Point(12, 82);
+            textBoxFilename.Location = new Point(6, 78);
             textBoxFilename.Name = "textBoxFilename";
             textBoxFilename.Size = new Size(291, 23);
             textBoxFilename.TabIndex = 27;
@@ -133,7 +149,7 @@
             // 
             // buttonSelectFolder
             // 
-            buttonSelectFolder.Location = new Point(310, 30);
+            buttonSelectFolder.Location = new Point(304, 26);
             buttonSelectFolder.Name = "buttonSelectFolder";
             buttonSelectFolder.Size = new Size(68, 23);
             buttonSelectFolder.TabIndex = 26;
@@ -143,7 +159,7 @@
             // 
             // trimTop
             // 
-            trimTop.Location = new Point(279, 198);
+            trimTop.Location = new Point(64, 353);
             trimTop.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             trimTop.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
             trimTop.Name = "trimTop";
@@ -152,7 +168,7 @@
             // 
             // trimBottom
             // 
-            trimBottom.Location = new Point(279, 252);
+            trimBottom.Location = new Point(64, 407);
             trimBottom.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             trimBottom.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
             trimBottom.Name = "trimBottom";
@@ -161,7 +177,7 @@
             // 
             // trimRight
             // 
-            trimRight.Location = new Point(343, 223);
+            trimRight.Location = new Point(128, 378);
             trimRight.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             trimRight.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
             trimRight.Name = "trimRight";
@@ -170,7 +186,7 @@
             // 
             // trimLeft
             // 
-            trimLeft.Location = new Point(221, 223);
+            trimLeft.Location = new Point(6, 378);
             trimLeft.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             trimLeft.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
             trimLeft.Name = "trimLeft";
@@ -180,7 +196,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(12, 13);
+            label1.Location = new Point(6, 9);
             label1.Name = "label1";
             label1.Size = new Size(40, 15);
             label1.TabIndex = 21;
@@ -188,7 +204,7 @@
             // 
             // textBoxFolder
             // 
-            textBoxFolder.Location = new Point(12, 31);
+            textBoxFolder.Location = new Point(6, 27);
             textBoxFolder.Name = "textBoxFolder";
             textBoxFolder.Size = new Size(292, 23);
             textBoxFolder.TabIndex = 20;
@@ -196,7 +212,7 @@
             // buttonOK
             // 
             buttonOK.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonOK.Location = new Point(370, 535);
+            buttonOK.Location = new Point(410, 497);
             buttonOK.Name = "buttonOK";
             buttonOK.Size = new Size(75, 23);
             buttonOK.TabIndex = 35;
@@ -207,7 +223,7 @@
             // buttonApply
             // 
             buttonApply.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonApply.Location = new Point(289, 535);
+            buttonApply.Location = new Point(329, 497);
             buttonApply.Name = "buttonApply";
             buttonApply.Size = new Size(75, 23);
             buttonApply.TabIndex = 36;
@@ -218,7 +234,7 @@
             // buttonCancel
             // 
             buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonCancel.Location = new Point(208, 535);
+            buttonCancel.Location = new Point(248, 497);
             buttonCancel.Name = "buttonCancel";
             buttonCancel.Size = new Size(75, 23);
             buttonCancel.TabIndex = 37;
@@ -228,7 +244,7 @@
             // 
             // textBoxAlternateTitle
             // 
-            textBoxAlternateTitle.Location = new Point(12, 134);
+            textBoxAlternateTitle.Location = new Point(6, 130);
             textBoxAlternateTitle.Name = "textBoxAlternateTitle";
             textBoxAlternateTitle.Size = new Size(292, 23);
             textBoxAlternateTitle.TabIndex = 38;
@@ -236,7 +252,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(12, 116);
+            label2.Location = new Point(6, 112);
             label2.Name = "label2";
             label2.Size = new Size(206, 15);
             label2.TabIndex = 39;
@@ -245,7 +261,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(12, 173);
+            label4.Location = new Point(6, 163);
             label4.Name = "label4";
             label4.Size = new Size(137, 15);
             label4.TabIndex = 40;
@@ -253,7 +269,7 @@
             // 
             // numericUpDownTitleMaxLength
             // 
-            numericUpDownTitleMaxLength.Location = new Point(12, 191);
+            numericUpDownTitleMaxLength.Location = new Point(6, 181);
             numericUpDownTitleMaxLength.Name = "numericUpDownTitleMaxLength";
             numericUpDownTitleMaxLength.Size = new Size(70, 23);
             numericUpDownTitleMaxLength.TabIndex = 41;
@@ -262,7 +278,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(12, 225);
+            label5.Location = new Point(6, 215);
             label5.Name = "label5";
             label5.Size = new Size(165, 15);
             label5.TabIndex = 42;
@@ -270,7 +286,7 @@
             // 
             // numericUpDownSplitIndex
             // 
-            numericUpDownSplitIndex.Location = new Point(12, 287);
+            numericUpDownSplitIndex.Location = new Point(6, 283);
             numericUpDownSplitIndex.Name = "numericUpDownSplitIndex";
             numericUpDownSplitIndex.Size = new Size(70, 23);
             numericUpDownSplitIndex.TabIndex = 45;
@@ -278,7 +294,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(12, 269);
+            label6.Location = new Point(6, 265);
             label6.Name = "label6";
             label6.Size = new Size(126, 15);
             label6.TabIndex = 44;
@@ -286,14 +302,14 @@
             // 
             // textBoxSplitString
             // 
-            textBoxSplitString.Location = new Point(12, 243);
+            textBoxSplitString.Location = new Point(6, 233);
             textBoxSplitString.Name = "textBoxSplitString";
             textBoxSplitString.Size = new Size(70, 23);
             textBoxSplitString.TabIndex = 46;
             // 
             // numericUpDownJpegQuality
             // 
-            numericUpDownJpegQuality.Location = new Point(369, 81);
+            numericUpDownJpegQuality.Location = new Point(363, 77);
             numericUpDownJpegQuality.Name = "numericUpDownJpegQuality";
             numericUpDownJpegQuality.Size = new Size(70, 23);
             numericUpDownJpegQuality.TabIndex = 48;
@@ -302,7 +318,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(369, 63);
+            label7.Location = new Point(363, 59);
             label7.Name = "label7";
             label7.Size = new Size(72, 15);
             label7.TabIndex = 47;
@@ -311,7 +327,7 @@
             // checkBoxStartHidden
             // 
             checkBoxStartHidden.AutoSize = true;
-            checkBoxStartHidden.Location = new Point(13, 432);
+            checkBoxStartHidden.Location = new Point(6, 14);
             checkBoxStartHidden.Name = "checkBoxStartHidden";
             checkBoxStartHidden.Size = new Size(92, 19);
             checkBoxStartHidden.TabIndex = 49;
@@ -321,7 +337,7 @@
             // checkBoxCropThumbnails
             // 
             checkBoxCropThumbnails.AutoSize = true;
-            checkBoxCropThumbnails.Location = new Point(12, 330);
+            checkBoxCropThumbnails.Location = new Point(6, 98);
             checkBoxCropThumbnails.Name = "checkBoxCropThumbnails";
             checkBoxCropThumbnails.Size = new Size(115, 19);
             checkBoxCropThumbnails.TabIndex = 50;
@@ -330,7 +346,7 @@
             // 
             // numericThumbWidth
             // 
-            numericThumbWidth.Location = new Point(119, 352);
+            numericThumbWidth.Location = new Point(113, 120);
             numericThumbWidth.Maximum = new decimal(new int[] { 256, 0, 0, 0 });
             numericThumbWidth.Minimum = new decimal(new int[] { 20, 0, 0, 0 });
             numericThumbWidth.Name = "numericThumbWidth";
@@ -340,7 +356,7 @@
             // 
             // numericThumbHeight
             // 
-            numericThumbHeight.Location = new Point(119, 380);
+            numericThumbHeight.Location = new Point(113, 148);
             numericThumbHeight.Maximum = new decimal(new int[] { 256, 0, 0, 0 });
             numericThumbHeight.Minimum = new decimal(new int[] { 20, 0, 0, 0 });
             numericThumbHeight.Name = "numericThumbHeight";
@@ -351,7 +367,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(13, 354);
+            label8.Location = new Point(7, 122);
             label8.Name = "label8";
             label8.Size = new Size(99, 15);
             label8.TabIndex = 53;
@@ -360,7 +376,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(13, 382);
+            label9.Location = new Point(7, 150);
             label9.Name = "label9";
             label9.Size = new Size(103, 15);
             label9.TabIndex = 54;
@@ -369,7 +385,7 @@
             // checkBoxTrayTooltipInfo
             // 
             checkBoxTrayTooltipInfo.AutoSize = true;
-            checkBoxTrayTooltipInfo.Location = new Point(12, 457);
+            checkBoxTrayTooltipInfo.Location = new Point(5, 39);
             checkBoxTrayTooltipInfo.Name = "checkBoxTrayTooltipInfo";
             checkBoxTrayTooltipInfo.Size = new Size(211, 19);
             checkBoxTrayTooltipInfo.TabIndex = 55;
@@ -379,52 +395,146 @@
             // checkBoxTrayTooltipWarning
             // 
             checkBoxTrayTooltipWarning.AutoSize = true;
-            checkBoxTrayTooltipWarning.Location = new Point(12, 482);
+            checkBoxTrayTooltipWarning.Location = new Point(5, 64);
             checkBoxTrayTooltipWarning.Name = "checkBoxTrayTooltipWarning";
             checkBoxTrayTooltipWarning.Size = new Size(176, 19);
             checkBoxTrayTooltipWarning.TabIndex = 56;
             checkBoxTrayTooltipWarning.Text = "System tray tooltip warnings";
             checkBoxTrayTooltipWarning.UseVisualStyleBackColor = true;
             // 
+            // tabControl1
+            // 
+            tabControl1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            tabControl1.Controls.Add(tabPage1);
+            tabControl1.Controls.Add(tabPage2);
+            tabControl1.Controls.Add(tabPage3);
+            tabControl1.Location = new Point(3, 5);
+            tabControl1.Name = "tabControl1";
+            tabControl1.SelectedIndex = 0;
+            tabControl1.Size = new Size(490, 486);
+            tabControl1.TabIndex = 57;
+            // 
+            // tabPage1
+            // 
+            tabPage1.Controls.Add(textBoxFolder);
+            tabPage1.Controls.Add(textBoxSplitString);
+            tabPage1.Controls.Add(numericUpDownJpegQuality);
+            tabPage1.Controls.Add(numericUpDownSplitIndex);
+            tabPage1.Controls.Add(checkBoxTrim);
+            tabPage1.Controls.Add(label1);
+            tabPage1.Controls.Add(trimTop);
+            tabPage1.Controls.Add(label6);
+            tabPage1.Controls.Add(trimBottom);
+            tabPage1.Controls.Add(label7);
+            tabPage1.Controls.Add(trimRight);
+            tabPage1.Controls.Add(label5);
+            tabPage1.Controls.Add(trimLeft);
+            tabPage1.Controls.Add(buttonSelectFolder);
+            tabPage1.Controls.Add(numericUpDownTitleMaxLength);
+            tabPage1.Controls.Add(label4);
+            tabPage1.Controls.Add(textBoxFilename);
+            tabPage1.Controls.Add(comboBoxFileExtension);
+            tabPage1.Controls.Add(label3);
+            tabPage1.Controls.Add(buttonBrowseFolder);
+            tabPage1.Controls.Add(textBoxAlternateTitle);
+            tabPage1.Controls.Add(label2);
+            tabPage1.Location = new Point(4, 24);
+            tabPage1.Name = "tabPage1";
+            tabPage1.Padding = new Padding(3);
+            tabPage1.Size = new Size(482, 458);
+            tabPage1.TabIndex = 0;
+            tabPage1.Text = "Capture";
+            tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            tabPage2.Controls.Add(checkBoxStartHidden);
+            tabPage2.Controls.Add(label9);
+            tabPage2.Controls.Add(checkBoxTrayTooltipWarning);
+            tabPage2.Controls.Add(label8);
+            tabPage2.Controls.Add(checkBoxTrayTooltipInfo);
+            tabPage2.Controls.Add(numericThumbHeight);
+            tabPage2.Controls.Add(checkBoxCropThumbnails);
+            tabPage2.Controls.Add(numericThumbWidth);
+            tabPage2.Location = new Point(4, 24);
+            tabPage2.Name = "tabPage2";
+            tabPage2.Padding = new Padding(3);
+            tabPage2.Size = new Size(482, 458);
+            tabPage2.TabIndex = 1;
+            tabPage2.Text = "Application";
+            tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // tabPage3
+            // 
+            tabPage3.Controls.Add(HotkeyGrid);
+            tabPage3.Location = new Point(4, 24);
+            tabPage3.Name = "tabPage3";
+            tabPage3.Padding = new Padding(3);
+            tabPage3.Size = new Size(482, 458);
+            tabPage3.TabIndex = 2;
+            tabPage3.Text = "Hotkeys";
+            tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // HotkeyGrid
+            // 
+            HotkeyGrid.AllowUserToAddRows = false;
+            HotkeyGrid.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            HotkeyGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            HotkeyGrid.Columns.AddRange(new DataGridViewColumn[] { ColumnFunction, ColumnKey, ColumnCtrl, ColumnAlt, ColumnShift, ColumnWin });
+            HotkeyGrid.Location = new Point(6, 6);
+            HotkeyGrid.Name = "HotkeyGrid";
+            HotkeyGrid.RowHeadersVisible = false;
+            HotkeyGrid.RowTemplate.Height = 25;
+            HotkeyGrid.Size = new Size(470, 446);
+            HotkeyGrid.TabIndex = 0;
+            // 
+            // ColumnFunction
+            // 
+            ColumnFunction.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            ColumnFunction.HeaderText = "Function";
+            ColumnFunction.Name = "ColumnFunction";
+            ColumnFunction.ReadOnly = true;
+            // 
+            // ColumnKey
+            // 
+            ColumnKey.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            ColumnKey.HeaderText = "Key";
+            ColumnKey.Name = "ColumnKey";
+            // 
+            // ColumnCtrl
+            // 
+            ColumnCtrl.HeaderText = "Ctrl";
+            ColumnCtrl.Name = "ColumnCtrl";
+            ColumnCtrl.Width = 50;
+            // 
+            // ColumnAlt
+            // 
+            ColumnAlt.HeaderText = "Alt";
+            ColumnAlt.Name = "ColumnAlt";
+            ColumnAlt.Width = 50;
+            // 
+            // ColumnShift
+            // 
+            ColumnShift.HeaderText = "Shift";
+            ColumnShift.Name = "ColumnShift";
+            ColumnShift.Width = 50;
+            // 
+            // ColumnWin
+            // 
+            ColumnWin.HeaderText = "Win";
+            ColumnWin.Name = "ColumnWin";
+            ColumnWin.Width = 50;
+            // 
             // Options
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(455, 566);
-            Controls.Add(checkBoxTrayTooltipWarning);
-            Controls.Add(checkBoxTrayTooltipInfo);
-            Controls.Add(label9);
-            Controls.Add(label8);
-            Controls.Add(numericThumbHeight);
-            Controls.Add(numericThumbWidth);
-            Controls.Add(checkBoxCropThumbnails);
-            Controls.Add(checkBoxStartHidden);
-            Controls.Add(numericUpDownJpegQuality);
-            Controls.Add(label7);
-            Controls.Add(textBoxSplitString);
-            Controls.Add(numericUpDownSplitIndex);
-            Controls.Add(label6);
-            Controls.Add(label5);
-            Controls.Add(numericUpDownTitleMaxLength);
-            Controls.Add(label4);
-            Controls.Add(label2);
-            Controls.Add(textBoxAlternateTitle);
+            ClientSize = new Size(495, 528);
+            Controls.Add(tabControl1);
             Controls.Add(buttonCancel);
             Controls.Add(buttonApply);
             Controls.Add(buttonOK);
-            Controls.Add(checkBoxTrim);
-            Controls.Add(buttonBrowseFolder);
             Controls.Add(buttonHelp);
-            Controls.Add(label3);
-            Controls.Add(comboBoxFileExtension);
-            Controls.Add(textBoxFilename);
-            Controls.Add(buttonSelectFolder);
-            Controls.Add(trimTop);
-            Controls.Add(trimBottom);
-            Controls.Add(trimRight);
-            Controls.Add(trimLeft);
-            Controls.Add(label1);
-            Controls.Add(textBoxFolder);
             Name = "Options";
             Text = "Settings";
             ((System.ComponentModel.ISupportInitialize)trimTop).EndInit();
@@ -436,8 +546,14 @@
             ((System.ComponentModel.ISupportInitialize)numericUpDownJpegQuality).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericThumbWidth).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericThumbHeight).EndInit();
+            tabControl1.ResumeLayout(false);
+            tabPage1.ResumeLayout(false);
+            tabPage1.PerformLayout();
+            tabPage2.ResumeLayout(false);
+            tabPage2.PerformLayout();
+            tabPage3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)HotkeyGrid).EndInit();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -476,5 +592,16 @@
         private Label label9;
         private CheckBox checkBoxTrayTooltipInfo;
         private CheckBox checkBoxTrayTooltipWarning;
+        private TabControl tabControl1;
+        private TabPage tabPage1;
+        private TabPage tabPage2;
+        private TabPage tabPage3;
+        private DataGridView HotkeyGrid;
+        private DataGridViewTextBoxColumn ColumnFunction;
+        private DataGridViewTextBoxColumn ColumnKey;
+        private DataGridViewCheckBoxColumn ColumnCtrl;
+        private DataGridViewCheckBoxColumn ColumnAlt;
+        private DataGridViewCheckBoxColumn ColumnShift;
+        private DataGridViewCheckBoxColumn ColumnWin;
     }
 }

@@ -22,12 +22,12 @@ namespace Hotkeys
         {
             Hotkey hotkey = new Hotkey();
 
-            hotkey.key = Settings.Default["hk" + hotkeyName + "Key"].ToString();
+            hotkey.Key = Settings.Default["hk" + hotkeyName + "Key"].ToString();
             hotkey.Ctrl = (bool)Settings.Default["hk" + hotkeyName + "Ctrl"];
             hotkey.Alt = (bool)Settings.Default["hk" + hotkeyName + "Alt"];
             hotkey.Shift = (bool)Settings.Default["hk" + hotkeyName + "Shift"];
             hotkey.Win = (bool)Settings.Default["hk" + hotkeyName + "Win"];
-            hotkey.ghk = new GlobalHotkey(hotkey.Modifiers(), hotkey.key, parent);
+            hotkey.ghk = new GlobalHotkey(hotkey.Modifiers(), hotkey.Key, parent);
 
             //MessageBox.Show("LoadHotkey: " + hotkeyName + " / " + hotkey.Win);
             return hotkey;
@@ -70,7 +70,7 @@ namespace Hotkeys
             string warningKeys = "";
             foreach (KeyValuePair<string, Hotkey> ghk in hotkeyList)
             {
-                if (ghk.Value.key == string.Empty)
+                if (ghk.Value.Key == string.Empty)
                 {
                     //MessageBox.Show("Skipping hotkey");
                 }

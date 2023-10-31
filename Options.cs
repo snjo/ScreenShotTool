@@ -1,4 +1,5 @@
-﻿using ScreenShotTool.Properties;
+﻿using Hotkeys;
+using ScreenShotTool.Properties;
 using System.Diagnostics;
 
 namespace ScreenShotTool
@@ -36,6 +37,7 @@ namespace ScreenShotTool
             numericThumbHeight.Value = Settings.Default.ThumbnailHeight;
             checkBoxTrayTooltipInfo.Checked = Settings.Default.AllowTrayTooltipInfo;
             checkBoxTrayTooltipWarning.Checked = Settings.Default.AllowTrayTooltipWarning;
+            fillHotkeyGrid();
         }
 
         private void buttonSelectFolder_Click(object sender, EventArgs e)
@@ -72,8 +74,75 @@ namespace ScreenShotTool
             Settings.Default.ThumbnailHeight = (int)numericThumbHeight.Value;
             Settings.Default.AllowTrayTooltipInfo = checkBoxTrayTooltipInfo.Checked;
             Settings.Default.AllowTrayTooltipWarning = checkBoxTrayTooltipWarning.Checked;
+
+            int i = 0;
+            foreach (KeyValuePair<string, Hotkey> kvp in mainForm.HotkeyList)
+            {
+                string keyName = kvp.Key;
+                if (HotkeyGrid.Rows[i].Cells[1].Value == null)
+                {
+                    HotkeyGrid.Rows[i].Cells[1].Value = "";
+                }
+                Properties.Settings.Default["hk" + keyName + "Key"] = HotkeyGrid.Rows[i].Cells[1].Value.ToString();
+
+                Properties.Settings.Default["hk" + keyName + "Ctrl"] = Convert.ToBoolean(HotkeyGrid.Rows[i].Cells[2].Value);
+                Properties.Settings.Default["hk" + keyName + "Alt"] = Convert.ToBoolean(HotkeyGrid.Rows[i].Cells[3].Value);
+                Properties.Settings.Default["hk" + keyName + "Shift"] = Convert.ToBoolean(HotkeyGrid.Rows[i].Cells[4].Value);
+                Properties.Settings.Default["hk" + keyName + "Win"] = Convert.ToBoolean(HotkeyGrid.Rows[i].Cells[5].Value);
+
+                mainForm.HotkeyList[keyName] = GetHotkeyFromGrid(mainForm.HotkeyList[keyName], HotkeyGrid.Rows[i].Cells);
+
+                i++;
+            }
+
             Settings.Default.Save();
+
+            reloadHotkeys();
             //mainForm.SaveSettings();
+        }
+
+        private Hotkey GetHotkeyFromGrid(Hotkey hotkey, DataGridViewCellCollection settingRow)
+        {
+            string settingKey = string.Empty;
+            DataGridViewCell cell = settingRow[1];
+            if (cell != null)
+            {
+                if (cell.Value != null)
+                    settingKey = (string)cell.Value;
+                if (settingKey == null) settingKey = string.Empty;
+            }
+
+            if (settingKey.Length > 0)
+                hotkey.Key = settingKey;
+            else
+                hotkey.Key = new string("");
+
+            hotkey.Ctrl = Convert.ToBoolean(settingRow[2].Value);
+            hotkey.Alt = Convert.ToBoolean(settingRow[3].Value);
+            hotkey.Shift = Convert.ToBoolean(settingRow[4].Value);
+            hotkey.Win = Convert.ToBoolean(settingRow[5].Value);
+
+            return hotkey;
+        }
+
+        private void fillHotkeyGrid()
+        {
+            HotkeyGrid.Rows.Clear();
+            HotkeyGrid.Rows.Add(mainForm.HotkeyList.Count);
+
+            int i = 0;
+            foreach (KeyValuePair<string, Hotkey> kvp in mainForm.HotkeyList)
+            {
+                string keyName = kvp.Key;
+                Hotkey hotkey = kvp.Value;
+                HotkeyGrid.Rows[i].Cells[0].Value = keyName;
+                HotkeyGrid.Rows[i].Cells[1].Value = hotkey.Key;
+                HotkeyGrid.Rows[i].Cells[2].Value = hotkey.Ctrl;
+                HotkeyGrid.Rows[i].Cells[3].Value = hotkey.Alt;
+                HotkeyGrid.Rows[i].Cells[4].Value = hotkey.Shift;
+                HotkeyGrid.Rows[i].Cells[5].Value = hotkey.Win;
+                i++;
+            }
         }
 
         private void buttonApply_Click(object sender, EventArgs e)
@@ -104,6 +173,18 @@ namespace ScreenShotTool
                 Debug.WriteLine("Couldn't open directory " + folder + ", trying to open " + folderParent);
                 mainForm.BrowseFolderInExplorer(folderParent);
             }
+        }
+
+        private void buttonRegisterHotkeys_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void reloadHotkeys()
+        {
+            HotkeyTools.ReleaseHotkeys(mainForm.HotkeyList);
+            HotkeyTools.LoadHotkeys(mainForm.HotkeyList, mainForm);
+            HotkeyTools.RegisterHotkeys(mainForm.HotkeyList);
+            Debug.WriteLine("Released and re-registered hotkeys");
         }
     }
 }
