@@ -50,6 +50,7 @@ namespace ScreenShotTool
             if (settings.RegisterHotkeys)
             {
                 string[] warningKeys = HotkeyTools.RegisterHotkeys(HotkeyList);
+
                 if (warningKeys.Length > 0 && Settings.Default.AllowTrayTooltipWarning)
                 {
                     string warningText = "";
