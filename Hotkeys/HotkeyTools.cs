@@ -1,6 +1,7 @@
 ﻿// add using for the active project's Properties here
 // ex: using MyApp.Properties;
 using ScreenShotTool.Properties;
+using System.Configuration;
 using System.Diagnostics;
 
 namespace Hotkeys
@@ -23,15 +24,44 @@ namespace Hotkeys
         {
             Hotkey hotkey = new Hotkey();
 
-            hotkey.Key = Settings.Default["hk" + hotkeyName + "Key"].ToString()+"";
-            hotkey.Ctrl = (bool)Settings.Default["hk" + hotkeyName + "Ctrl"];
-            hotkey.Alt = (bool)Settings.Default["hk" + hotkeyName + "Alt"];
-            hotkey.Shift = (bool)Settings.Default["hk" + hotkeyName + "Shift"];
-            hotkey.Win = (bool)Settings.Default["hk" + hotkeyName + "Win"];
+            hotkey.Key = getSettingString("hk" + hotkeyName + "Key", "");
+            hotkey.Ctrl = getSettingBool("hk" + hotkeyName + "Ctrl", false);
+            hotkey.Alt = getSettingBool("hk" + hotkeyName + "Alt", false);
+            hotkey.Shift = getSettingBool("hk" + hotkeyName + "Shift", false);
+            hotkey.Win = getSettingBool("hk" + hotkeyName + "Win", false);
             hotkey.ghk = new GlobalHotkey(hotkey.Modifiers(), hotkey.Key, parent, hotkeyName);
-
-            //MessageBox.Show("LoadHotkey: " + hotkeyName + " / " + hotkey.Win);
             return hotkey;
+        }
+
+        private static string getSettingString(string key, string fallback)
+        {
+            if (DoesSettingExist(key))
+            {
+                return (string)Settings.Default[key];
+            }
+            else
+            {
+                Debug.WriteLine("Setting " + key + " does not exist");
+                return fallback;
+            }
+        }
+
+        private static bool getSettingBool(string key, bool fallback)
+        {
+            if (DoesSettingExist(key))
+            {
+                return (bool)Settings.Default[key];
+            }
+            else
+            {
+                Debug.WriteLine("Setting " + key + " does not exist");
+                return fallback;
+            }
+        }
+
+        private static bool DoesSettingExist(string settingName)
+        {
+            return Settings.Default.Properties.Cast<SettingsProperty>().Any(prop => prop.Name == settingName);
         }
 
         /// <summary>
@@ -66,24 +96,34 @@ namespace Hotkeys
         /// </summary>
         /// <param name="hotkeyList">A dictionary with hotkey names and Hotkey objects</param>
         /// <param name="warning">Displays a MessageBox warning if the key fails to register.</param>
-        public static void RegisterHotkeys(Dictionary<string, Hotkey> hotkeyList)
+        public static string[] RegisterHotkeys(Dictionary<string, Hotkey> hotkeyList, bool warning = false)
         {
-            string warningKeys = "";
-            foreach (KeyValuePair<string, Hotkey> ghk in hotkeyList)
+            string warningText = "Could not register hotkeys:";
+            List<string> warningKeys = new List<string>();
+            foreach (KeyValuePair<string, Hotkey> hk in hotkeyList)
             {
-                if (ghk.Value.Key == string.Empty)
+                if (hk.Value.Key == string.Empty)
                 {
                     Debug.WriteLine("Skipping hotkey with no Key string set");
                 }
-                else if (!RegisterHotKey(ghk.Value.ghk, false)) //register the key, add a warning to the list if it fails
+                else if (!RegisterHotKey(hk.Value.ghk, false)) //register the key, add a warning to the list if it fails
                 {
-                    warningKeys += ghk.Key + "\n";
+                    warningKeys.Add(hk.Key);
                 }
             }
-            if (warningKeys.Length > 0)
+
+            if (warningKeys.Count > 0)
             {
-                MessageBox.Show("Could not register hotkeys:\n" + warningKeys);
+                foreach (string key in warningKeys)
+                {
+                    warningText += Environment.NewLine + key;
+                }
+                Debug.WriteLine(warningText);
+                if (warning)
+                    MessageBox.Show(warningText);
             }
+                
+            return warningKeys.ToArray();
         }
 
         public static void ReleaseHotkeys(Dictionary<string, Hotkey> hotkeyList)
@@ -106,7 +146,7 @@ namespace Hotkeys
         {
             ReleaseHotkeys(hotkeyList);
             LoadHotkeys(hotkeyList, hotkeyNames, parent);
-            RegisterHotkeys(hotkeyList);
+            RegisterHotkeys(hotkeyList, true);
         }
     }
 }

@@ -49,7 +49,19 @@ namespace ScreenShotTool
 
             if (settings.RegisterHotkeys)
             {
-                HotkeyTools.RegisterHotkeys(HotkeyList);
+                string[] warningKeys = HotkeyTools.RegisterHotkeys(HotkeyList);
+                if (warningKeys.Length > 0 && Settings.Default.AllowTrayTooltipWarning)
+                {
+                    string warningText = "";
+                    if (warningKeys.Length > 0)
+                    {
+                        foreach (string key in warningKeys)
+                        {
+                            warningText += Environment.NewLine + key;
+                        }
+                    }
+                    notifyIcon1.ShowBalloonTip(1000, "Could not register hotkeys", warningText, ToolTipIcon.Warning);
+                }
             }
 
             if (Settings.Default.StartHidden)
