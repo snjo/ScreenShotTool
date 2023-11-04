@@ -47,6 +47,7 @@
             exitApplicationToolStripMenuItem = new ToolStripMenuItem();
             buttonHide = new Button();
             timerHide = new System.Windows.Forms.Timer(components);
+            enableCroppingToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)numericUpDownCounter).BeginInit();
             contextMenuSysTray.SuspendLayout();
             SuspendLayout();
@@ -132,9 +133,9 @@
             // 
             // contextMenuSysTray
             // 
-            contextMenuSysTray.Items.AddRange(new ToolStripItem[] { openProgramToolStripMenuItem, optionsToolStripMenuItem, openLastUsedFolderToolStripMenuItem, pToolStripMenuItem, exitApplicationToolStripMenuItem });
+            contextMenuSysTray.Items.AddRange(new ToolStripItem[] { openProgramToolStripMenuItem, optionsToolStripMenuItem, enableCroppingToolStripMenuItem, openLastUsedFolderToolStripMenuItem, pToolStripMenuItem, exitApplicationToolStripMenuItem });
             contextMenuSysTray.Name = "contextMenuSysTray";
-            contextMenuSysTray.Size = new Size(187, 114);
+            contextMenuSysTray.Size = new Size(187, 158);
             // 
             // openProgramToolStripMenuItem
             // 
@@ -185,6 +186,13 @@
             // 
             timerHide.Tick += timerHide_Tick;
             // 
+            // enableCroppingToolStripMenuItem
+            // 
+            enableCroppingToolStripMenuItem.Name = "enableCroppingToolStripMenuItem";
+            enableCroppingToolStripMenuItem.Size = new Size(186, 22);
+            enableCroppingToolStripMenuItem.Text = "Enable Cropping";
+            enableCroppingToolStripMenuItem.Click += enableCroppingToolStripMenuItem_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -229,5 +237,6 @@
         private ToolStripMenuItem openLastUsedFolderToolStripMenuItem;
         private ToolStripMenuItem pToolStripMenuItem;
         private ToolStripMenuItem exitApplicationToolStripMenuItem;
+        private ToolStripMenuItem enableCroppingToolStripMenuItem;
     }
 }

@@ -98,6 +98,7 @@ namespace ScreenShotTool
             Settings.Default.Save();
 
             reloadHotkeys();
+            mainForm.updateTrimStatus();
             //mainForm.SaveSettings();
         }
 
@@ -183,6 +184,11 @@ namespace ScreenShotTool
         {
             HotkeyTools.UpdateHotkeys(mainForm.HotkeyList, mainForm.HotkeyNames, mainForm);
             Debug.WriteLine("Released and re-registered hotkeys");
+        }
+
+        public void updateTrimCheck()
+        {
+            checkBoxTrim.Checked = Settings.Default.TrimChecked;
         }
     }
 }

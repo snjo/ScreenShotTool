@@ -65,6 +65,8 @@ namespace ScreenShotTool
                 }
             }
 
+            updateTrimStatus();
+
             if (Settings.Default.StartHidden)
             {
                 HideApplication();
@@ -761,6 +763,32 @@ namespace ScreenShotTool
         private void pToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileExternal(lastSavedFile);
+        }
+
+        private void enableCroppingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            settings.TrimChecked = !settings.TrimChecked;
+            settings.Save();
+            updateTrimStatus();
+        }
+
+        public void updateTrimStatus()
+        {
+            if (settings.TrimChecked)
+            {
+                enableCroppingToolStripMenuItem.Text = "Disable Cropping";
+            }
+            else
+            {
+                enableCroppingToolStripMenuItem.Text = "Enable Cropping";
+            }
+            if (options != null)
+            {
+                if (!options.IsDisposed)
+                {
+                    options.updateTrimCheck();
+                }
+            }
         }
     }
 }
