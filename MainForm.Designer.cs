@@ -42,12 +42,12 @@
             contextMenuSysTray = new ContextMenuStrip(components);
             openProgramToolStripMenuItem = new ToolStripMenuItem();
             optionsToolStripMenuItem = new ToolStripMenuItem();
+            enableCroppingToolStripMenuItem = new ToolStripMenuItem();
             openLastUsedFolderToolStripMenuItem = new ToolStripMenuItem();
             pToolStripMenuItem = new ToolStripMenuItem();
             exitApplicationToolStripMenuItem = new ToolStripMenuItem();
             buttonHide = new Button();
             timerHide = new System.Windows.Forms.Timer(components);
-            enableCroppingToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)numericUpDownCounter).BeginInit();
             contextMenuSysTray.SuspendLayout();
             SuspendLayout();
@@ -135,41 +135,50 @@
             // 
             contextMenuSysTray.Items.AddRange(new ToolStripItem[] { openProgramToolStripMenuItem, optionsToolStripMenuItem, enableCroppingToolStripMenuItem, openLastUsedFolderToolStripMenuItem, pToolStripMenuItem, exitApplicationToolStripMenuItem });
             contextMenuSysTray.Name = "contextMenuSysTray";
-            contextMenuSysTray.Size = new Size(187, 158);
+            contextMenuSysTray.ShowImageMargin = false;
+            contextMenuSysTray.Size = new Size(164, 158);
             // 
             // openProgramToolStripMenuItem
             // 
             openProgramToolStripMenuItem.Name = "openProgramToolStripMenuItem";
-            openProgramToolStripMenuItem.Size = new Size(186, 22);
-            openProgramToolStripMenuItem.Text = "Open Program";
+            openProgramToolStripMenuItem.Size = new Size(163, 22);
+            openProgramToolStripMenuItem.Text = "Open &Program";
             openProgramToolStripMenuItem.Click += openProgramToolStripMenuItem_Click;
             // 
             // optionsToolStripMenuItem
             // 
             optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            optionsToolStripMenuItem.Size = new Size(186, 22);
-            optionsToolStripMenuItem.Text = "Options";
+            optionsToolStripMenuItem.ShortcutKeyDisplayString = "";
+            optionsToolStripMenuItem.Size = new Size(163, 22);
+            optionsToolStripMenuItem.Text = "&Options";
             optionsToolStripMenuItem.Click += buttonOptions_Click;
+            // 
+            // enableCroppingToolStripMenuItem
+            // 
+            enableCroppingToolStripMenuItem.Name = "enableCroppingToolStripMenuItem";
+            enableCroppingToolStripMenuItem.Size = new Size(163, 22);
+            enableCroppingToolStripMenuItem.Text = "Enable &Cropping";
+            enableCroppingToolStripMenuItem.Click += enableCroppingToolStripMenuItem_Click;
             // 
             // openLastUsedFolderToolStripMenuItem
             // 
             openLastUsedFolderToolStripMenuItem.Name = "openLastUsedFolderToolStripMenuItem";
-            openLastUsedFolderToolStripMenuItem.Size = new Size(186, 22);
-            openLastUsedFolderToolStripMenuItem.Text = "Open last used folder";
+            openLastUsedFolderToolStripMenuItem.Size = new Size(163, 22);
+            openLastUsedFolderToolStripMenuItem.Text = "Open last used &Folder";
             openLastUsedFolderToolStripMenuItem.Click += buttonOpenLastFolder_Click;
             // 
             // pToolStripMenuItem
             // 
             pToolStripMenuItem.Name = "pToolStripMenuItem";
-            pToolStripMenuItem.Size = new Size(186, 22);
-            pToolStripMenuItem.Text = "Open last screenshot";
+            pToolStripMenuItem.Size = new Size(163, 22);
+            pToolStripMenuItem.Text = "Open last &Screenshot";
             pToolStripMenuItem.Click += pToolStripMenuItem_Click;
             // 
             // exitApplicationToolStripMenuItem
             // 
             exitApplicationToolStripMenuItem.Name = "exitApplicationToolStripMenuItem";
-            exitApplicationToolStripMenuItem.Size = new Size(186, 22);
-            exitApplicationToolStripMenuItem.Text = "Exit application";
+            exitApplicationToolStripMenuItem.Size = new Size(163, 22);
+            exitApplicationToolStripMenuItem.Text = "E&xit application";
             exitApplicationToolStripMenuItem.Click += exitApplicationToolStripMenuItem_Click;
             // 
             // buttonHide
@@ -185,13 +194,6 @@
             // timerHide
             // 
             timerHide.Tick += timerHide_Tick;
-            // 
-            // enableCroppingToolStripMenuItem
-            // 
-            enableCroppingToolStripMenuItem.Name = "enableCroppingToolStripMenuItem";
-            enableCroppingToolStripMenuItem.Size = new Size(186, 22);
-            enableCroppingToolStripMenuItem.Text = "Enable Cropping";
-            enableCroppingToolStripMenuItem.Click += enableCroppingToolStripMenuItem_Click;
             // 
             // MainForm
             // 

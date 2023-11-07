@@ -776,11 +776,11 @@ namespace ScreenShotTool
         {
             if (settings.TrimChecked)
             {
-                enableCroppingToolStripMenuItem.Text = "Disable Cropping";
+                enableCroppingToolStripMenuItem.Text = "Disable &Cropping";
             }
             else
             {
-                enableCroppingToolStripMenuItem.Text = "Enable Cropping";
+                enableCroppingToolStripMenuItem.Text = "Enable &Cropping";
             }
             if (options != null)
             {
