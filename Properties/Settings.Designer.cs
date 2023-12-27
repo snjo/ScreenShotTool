@@ -12,7 +12,7 @@ namespace ScreenShotTool.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.6.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.8.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -433,13 +433,25 @@ namespace ScreenShotTool.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool AllowTrayTooltipInfo {
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AllowTrayTooltipInfoFolder {
             get {
-                return ((bool)(this["AllowTrayTooltipInfo"]));
+                return ((bool)(this["AllowTrayTooltipInfoFolder"]));
             }
             set {
-                this["AllowTrayTooltipInfo"] = value;
+                this["AllowTrayTooltipInfoFolder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AllowTrayTooltipInfoCapture {
+            get {
+                return ((bool)(this["AllowTrayTooltipInfoCapture"]));
+            }
+            set {
+                this["AllowTrayTooltipInfoCapture"] = value;
             }
         }
     }

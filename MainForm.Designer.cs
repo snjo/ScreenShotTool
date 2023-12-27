@@ -129,6 +129,7 @@
             notifyIcon1.Icon = (Icon)resources.GetObject("notifyIcon1.Icon");
             notifyIcon1.Text = "Screenshot Tool";
             notifyIcon1.Visible = true;
+            notifyIcon1.BalloonTipClicked += notifyIcon1_BalloonTipClicked;
             notifyIcon1.DoubleClick += notifyIcon1_DoubleClick;
             // 
             // contextMenuSysTray
@@ -136,7 +137,7 @@
             contextMenuSysTray.Items.AddRange(new ToolStripItem[] { openProgramToolStripMenuItem, optionsToolStripMenuItem, enableCroppingToolStripMenuItem, openLastUsedFolderToolStripMenuItem, pToolStripMenuItem, exitApplicationToolStripMenuItem });
             contextMenuSysTray.Name = "contextMenuSysTray";
             contextMenuSysTray.ShowImageMargin = false;
-            contextMenuSysTray.Size = new Size(164, 158);
+            contextMenuSysTray.Size = new Size(164, 136);
             // 
             // openProgramToolStripMenuItem
             // 

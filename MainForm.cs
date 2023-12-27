@@ -51,7 +51,7 @@ namespace ScreenShotTool
             {
                 string[] warningKeys = HotkeyTools.RegisterHotkeys(HotkeyList);
 
-                if (warningKeys.Length > 0 && Settings.Default.AllowTrayTooltipWarning)
+                if (warningKeys.Length > 0)
                 {
                     string warningText = "";
                     if (warningKeys.Length > 0)
@@ -61,7 +61,7 @@ namespace ScreenShotTool
                             warningText += Environment.NewLine + key;
                         }
                     }
-                    notifyIcon1.ShowBalloonTip(1000, "Could not register hotkeys", warningText, ToolTipIcon.Warning);
+                    ShowBalloonToolTip("Could not register hotkeys", warningText, ToolTipIcon.Warning, BalloonTipType.HotkeyError);
                 }
             }
 
@@ -413,8 +413,8 @@ namespace ScreenShotTool
             else
             {
                 Debug.WriteLine("Capture size is less than zero. Capture aborted.");
-                if (Settings.Default.AllowTrayTooltipWarning)
-                    notifyIcon1.ShowBalloonTip(1000, "Capture error", "Capture size is less than zero. Capture aborted.", ToolTipIcon.Warning);
+
+                ShowBalloonToolTip("Capture error", "Capture size is less than zero. Capture aborted.", ToolTipIcon.Warning, BalloonTipType.ScreenshotError);
             }
         }
 
@@ -430,14 +430,16 @@ namespace ScreenShotTool
                 try
                 {
                     Directory.CreateDirectory(folder);
-                    if (Settings.Default.AllowTrayTooltipWarning)
-                        notifyIcon1.ShowBalloonTip(1000, "Folder Created", "Selected folder " + folder + " did not already exist.", ToolTipIcon.Info);
+
+                    ShowBalloonToolTip("Folder Created", "Selected folder " + folder + " did not already exist.", ToolTipIcon.Info, BalloonTipType.FolderCreated);
+                    
                 }
                 catch
                 {
                     writeMessage("Couldn't find or create folder " + folder);
-                    if (Settings.Default.AllowTrayTooltipWarning)
-                        notifyIcon1.ShowBalloonTip(1000, "Capture error", "Couldn't find or create folder." + folder, ToolTipIcon.Warning);
+
+                    ShowBalloonToolTip("Capture error", "Couldn't find or create folder." + folder, ToolTipIcon.Warning, BalloonTipType.FolderError);
+                    
                     return false;
                 }
             }
@@ -456,8 +458,9 @@ namespace ScreenShotTool
                         Debug.WriteLine("Saving image with format " + format.ToString());
                     }
                     writeMessage("Saved " + folder + "\\" + filename);
-                    if (Settings.Default.AllowTrayTooltipInfo)
-                        notifyIcon1.ShowBalloonTip(1000, "Capture saved", folder + Environment.NewLine + filename, ToolTipIcon.Info);
+
+                    ShowBalloonToolTip("Capture saved", folder + Environment.NewLine + filename, ToolTipIcon.Info, BalloonTipType.ScreenshotSaved);
+                    
                     lastSavedFile = folder + "\\" + filename;
                     lastFolder = folder;
                 }
@@ -468,8 +471,9 @@ namespace ScreenShotTool
                         + "Check that you have write permission for this folder\n"
                         + "\n"
                         + ex.ToString());
-                    if (Settings.Default.AllowTrayTooltipWarning)
-                        notifyIcon1.ShowBalloonTip(1000, "Capture error", "Couldn't save to folder." + folder + "\nCheck permission for this folder\n", ToolTipIcon.Warning);
+
+                    ShowBalloonToolTip("Capture error", "Couldn't save to folder." + folder + "\nCheck permission for this folder\n", ToolTipIcon.Warning, BalloonTipType.FolderError);
+                    
                     return false;
                 }
             }
@@ -477,8 +481,9 @@ namespace ScreenShotTool
             {
                 //this shouldn't be reachable
                 writeMessage("Folder not found: " + folder);
-                if (Settings.Default.AllowTrayTooltipWarning)
-                    notifyIcon1.ShowBalloonTip(1000, "Capture error", "Folder not found: " + folder, ToolTipIcon.Warning);
+
+                ShowBalloonToolTip("Capture error", "Folder not found: " + folder, ToolTipIcon.Warning, BalloonTipType.FolderError);
+                
                 return false;
             }
             return true;
@@ -607,14 +612,18 @@ namespace ScreenShotTool
             return folder;
         }
 
-        private void buttonOpenLastFolder_Click(object sender, EventArgs e)
+        public void OpenHelp()
         {
-            BrowseFolderInExplorer(lastFolder);
-        }
-
-        private void buttonOptions_Click(object sender, EventArgs e)
-        {
-            OpenOptions();
+            if (helpWindow == null)
+            {
+                helpWindow = new TextWindow(this, helpText);
+            }
+            if (helpWindow.IsDisposed)
+            {
+                helpWindow = new TextWindow(this, helpText);
+            }
+            helpWindow.Show();
+            helpWindow.WindowState = FormWindowState.Normal;
         }
 
         private void OpenOptions()
@@ -652,6 +661,17 @@ namespace ScreenShotTool
         {
             if (File.Exists(file))
                 Process.Start(new ProcessStartInfo() { FileName = file, UseShellExecute = true });
+        }
+
+        #region click events --------------------------------------------------------
+        private void buttonOpenLastFolder_Click(object sender, EventArgs e)
+        {
+            BrowseFolderInExplorer(lastFolder);
+        }
+
+        private void buttonOptions_Click(object sender, EventArgs e)
+        {
+            OpenOptions();
         }
 
 
@@ -709,19 +729,7 @@ namespace ScreenShotTool
             listView1.Clear();
         }
 
-        public void OpenHelp()
-        {
-            if (helpWindow == null)
-            {
-                helpWindow = new TextWindow(this, helpText);
-            }
-            if (helpWindow.IsDisposed)
-            {
-                helpWindow = new TextWindow(this, helpText);
-            }
-            helpWindow.Show();
-            helpWindow.WindowState = FormWindowState.Normal;
-        }
+
 
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)
         {
@@ -737,17 +745,6 @@ namespace ScreenShotTool
         {
             Hide();
             timerHide.Stop();
-        }
-
-        private void MainForm_SizeChanged(object sender, EventArgs e)
-        {
-            if (WindowState == FormWindowState.Minimized)
-            {
-                if (Settings.Default.StartHidden)
-                {
-                    HideApplication();
-                }
-            }
         }
 
         private void openProgramToolStripMenuItem_Click(object sender, EventArgs e)
@@ -772,6 +769,10 @@ namespace ScreenShotTool
             updateTrimStatus();
         }
 
+        #endregion
+
+
+
         public void updateTrimStatus()
         {
             if (settings.TrimChecked)
@@ -790,5 +791,80 @@ namespace ScreenShotTool
                 }
             }
         }
+
+        private void MainForm_SizeChanged(object sender, EventArgs e)
+        {
+            if (WindowState == FormWindowState.Minimized)
+            {
+                if (Settings.Default.StartHidden)
+                {
+                    HideApplication();
+                }
+            }
+        }
+
+        #region Balloon Tip ----------------------------------------------------------------
+
+        private BalloonTipType lastBallonTip = BalloonTipType.NotSet;
+
+        private void ShowBalloonToolTip (string title, string text, ToolTipIcon icon, BalloonTipType tipType)
+        {
+            
+            int timeout = 1000;
+            
+
+            bool showToolTip = false;
+
+            if (tipType == BalloonTipType.ScreenshotSaved && settings.AllowTrayTooltipInfoCapture)
+                showToolTip = true;
+            else if  (tipType == BalloonTipType.FolderCreated && settings.AllowTrayTooltipInfoFolder)
+                showToolTip = true;
+            else if (tipType >= BalloonTipType.Error && settings.AllowTrayTooltipWarning)
+                showToolTip = true;
+
+            if (showToolTip)
+            {
+                Debug.WriteLine("Showing Balloon tip: " + tipType.ToString());
+                lastBallonTip = tipType;
+                notifyIcon1.ShowBalloonTip(timeout, title, text, icon);
+            }
+            else
+            {
+                Debug.WriteLine("Supressing Balloon tip: " + tipType.ToString());
+            }
+        }
+
+        private enum BalloonTipType
+        {
+            NotSet,
+            ScreenshotSaved,
+            FolderCreated,
+            Error, // only errors below this enum
+            FolderError,
+            ScreenshotError,
+            HotkeyError
+        }
+
+        private void notifyIcon1_BalloonTipClicked(object sender, EventArgs e)
+        {
+            Debug.WriteLine("Balloon clicked, last type: " + lastBallonTip.ToString());
+            if (lastBallonTip == BalloonTipType.FolderCreated)
+            {
+                Debug.WriteLine("Balloon click, Open last image: " + lastFolder);
+                BrowseFolderInExplorer(lastFolder);
+            }
+            if (lastBallonTip == BalloonTipType.ScreenshotSaved)
+            {
+                Debug.WriteLine("Balloon click, Open last image: " + lastSavedFile);
+                OpenFileExternal(lastSavedFile);
+            }
+            if (lastBallonTip >= BalloonTipType.Error)
+            {
+                Debug.WriteLine("Balloon click, Error, open Options");
+                OpenOptions();
+            }
+        }
+
+        #endregion
     }
 }

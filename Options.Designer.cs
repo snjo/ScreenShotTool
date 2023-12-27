@@ -60,11 +60,12 @@
             numericThumbHeight = new NumericUpDown();
             label8 = new Label();
             label9 = new Label();
-            checkBoxTrayTooltipInfo = new CheckBox();
+            checkBoxTrayTooltipInfoCapture = new CheckBox();
             checkBoxTrayTooltipWarning = new CheckBox();
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
             tabPage2 = new TabPage();
+            checkBoxTrayTooltipInfoFolder = new CheckBox();
             tabPage3 = new TabPage();
             HotkeyGrid = new DataGridView();
             ColumnFunction = new DataGridViewTextBoxColumn();
@@ -327,7 +328,7 @@
             // checkBoxStartHidden
             // 
             checkBoxStartHidden.AutoSize = true;
-            checkBoxStartHidden.Location = new Point(6, 14);
+            checkBoxStartHidden.Location = new Point(5, 14);
             checkBoxStartHidden.Name = "checkBoxStartHidden";
             checkBoxStartHidden.Size = new Size(92, 19);
             checkBoxStartHidden.TabIndex = 49;
@@ -337,7 +338,7 @@
             // checkBoxCropThumbnails
             // 
             checkBoxCropThumbnails.AutoSize = true;
-            checkBoxCropThumbnails.Location = new Point(6, 98);
+            checkBoxCropThumbnails.Location = new Point(5, 114);
             checkBoxCropThumbnails.Name = "checkBoxCropThumbnails";
             checkBoxCropThumbnails.Size = new Size(115, 19);
             checkBoxCropThumbnails.TabIndex = 50;
@@ -346,7 +347,7 @@
             // 
             // numericThumbWidth
             // 
-            numericThumbWidth.Location = new Point(113, 120);
+            numericThumbWidth.Location = new Point(112, 136);
             numericThumbWidth.Maximum = new decimal(new int[] { 256, 0, 0, 0 });
             numericThumbWidth.Minimum = new decimal(new int[] { 20, 0, 0, 0 });
             numericThumbWidth.Name = "numericThumbWidth";
@@ -356,7 +357,7 @@
             // 
             // numericThumbHeight
             // 
-            numericThumbHeight.Location = new Point(113, 148);
+            numericThumbHeight.Location = new Point(112, 164);
             numericThumbHeight.Maximum = new decimal(new int[] { 256, 0, 0, 0 });
             numericThumbHeight.Minimum = new decimal(new int[] { 20, 0, 0, 0 });
             numericThumbHeight.Name = "numericThumbHeight";
@@ -367,7 +368,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(7, 122);
+            label8.Location = new Point(6, 138);
             label8.Name = "label8";
             label8.Size = new Size(99, 15);
             label8.TabIndex = 53;
@@ -376,26 +377,26 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(7, 150);
+            label9.Location = new Point(6, 166);
             label9.Name = "label9";
             label9.Size = new Size(103, 15);
             label9.TabIndex = 54;
             label9.Text = "Thumbnail Height";
             // 
-            // checkBoxTrayTooltipInfo
+            // checkBoxTrayTooltipInfoCapture
             // 
-            checkBoxTrayTooltipInfo.AutoSize = true;
-            checkBoxTrayTooltipInfo.Location = new Point(5, 39);
-            checkBoxTrayTooltipInfo.Name = "checkBoxTrayTooltipInfo";
-            checkBoxTrayTooltipInfo.Size = new Size(211, 19);
-            checkBoxTrayTooltipInfo.TabIndex = 55;
-            checkBoxTrayTooltipInfo.Text = "System tray tooltip when capturing";
-            checkBoxTrayTooltipInfo.UseVisualStyleBackColor = true;
+            checkBoxTrayTooltipInfoCapture.AutoSize = true;
+            checkBoxTrayTooltipInfoCapture.Location = new Point(5, 39);
+            checkBoxTrayTooltipInfoCapture.Name = "checkBoxTrayTooltipInfoCapture";
+            checkBoxTrayTooltipInfoCapture.Size = new Size(211, 19);
+            checkBoxTrayTooltipInfoCapture.TabIndex = 55;
+            checkBoxTrayTooltipInfoCapture.Text = "System tray tooltip when capturing";
+            checkBoxTrayTooltipInfoCapture.UseVisualStyleBackColor = true;
             // 
             // checkBoxTrayTooltipWarning
             // 
             checkBoxTrayTooltipWarning.AutoSize = true;
-            checkBoxTrayTooltipWarning.Location = new Point(5, 64);
+            checkBoxTrayTooltipWarning.Location = new Point(5, 89);
             checkBoxTrayTooltipWarning.Name = "checkBoxTrayTooltipWarning";
             checkBoxTrayTooltipWarning.Size = new Size(176, 19);
             checkBoxTrayTooltipWarning.TabIndex = 56;
@@ -448,11 +449,12 @@
             // 
             // tabPage2
             // 
+            tabPage2.Controls.Add(checkBoxTrayTooltipInfoFolder);
             tabPage2.Controls.Add(checkBoxStartHidden);
             tabPage2.Controls.Add(label9);
             tabPage2.Controls.Add(checkBoxTrayTooltipWarning);
             tabPage2.Controls.Add(label8);
-            tabPage2.Controls.Add(checkBoxTrayTooltipInfo);
+            tabPage2.Controls.Add(checkBoxTrayTooltipInfoCapture);
             tabPage2.Controls.Add(numericThumbHeight);
             tabPage2.Controls.Add(checkBoxCropThumbnails);
             tabPage2.Controls.Add(numericThumbWidth);
@@ -463,6 +465,16 @@
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Application";
             tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxTrayTooltipInfoFolder
+            // 
+            checkBoxTrayTooltipInfoFolder.AutoSize = true;
+            checkBoxTrayTooltipInfoFolder.Location = new Point(5, 64);
+            checkBoxTrayTooltipInfoFolder.Name = "checkBoxTrayTooltipInfoFolder";
+            checkBoxTrayTooltipInfoFolder.Size = new Size(237, 19);
+            checkBoxTrayTooltipInfoFolder.TabIndex = 57;
+            checkBoxTrayTooltipInfoFolder.Text = "System tray tooltip when creating folder";
+            checkBoxTrayTooltipInfoFolder.UseVisualStyleBackColor = true;
             // 
             // tabPage3
             // 
@@ -590,7 +602,7 @@
         private NumericUpDown numericThumbHeight;
         private Label label8;
         private Label label9;
-        private CheckBox checkBoxTrayTooltipInfo;
+        private CheckBox checkBoxTrayTooltipInfoCapture;
         private CheckBox checkBoxTrayTooltipWarning;
         private TabControl tabControl1;
         private TabPage tabPage1;
@@ -603,5 +615,6 @@
         private DataGridViewCheckBoxColumn ColumnAlt;
         private DataGridViewCheckBoxColumn ColumnShift;
         private DataGridViewCheckBoxColumn ColumnWin;
+        private CheckBox checkBoxTrayTooltipInfoFolder;
     }
 }

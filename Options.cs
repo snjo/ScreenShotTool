@@ -35,7 +35,8 @@ namespace ScreenShotTool
             checkBoxCropThumbnails.Checked = Settings.Default.CropThumbnails;
             numericThumbWidth.Value = Settings.Default.ThumbnailWidth;
             numericThumbHeight.Value = Settings.Default.ThumbnailHeight;
-            checkBoxTrayTooltipInfo.Checked = Settings.Default.AllowTrayTooltipInfo;
+            checkBoxTrayTooltipInfoCapture.Checked = Settings.Default.AllowTrayTooltipInfoCapture;
+            checkBoxTrayTooltipInfoFolder.Checked = Settings.Default.AllowTrayTooltipInfoFolder;
             checkBoxTrayTooltipWarning.Checked = Settings.Default.AllowTrayTooltipWarning;
             fillHotkeyGrid();
         }
@@ -72,7 +73,8 @@ namespace ScreenShotTool
             Settings.Default.CropThumbnails = checkBoxCropThumbnails.Checked;
             Settings.Default.ThumbnailWidth = (int)numericThumbWidth.Value;
             Settings.Default.ThumbnailHeight = (int)numericThumbHeight.Value;
-            Settings.Default.AllowTrayTooltipInfo = checkBoxTrayTooltipInfo.Checked;
+            Settings.Default.AllowTrayTooltipInfoCapture = checkBoxTrayTooltipInfoCapture.Checked;
+            Settings.Default.AllowTrayTooltipInfoFolder = checkBoxTrayTooltipInfoFolder.Checked;
             Settings.Default.AllowTrayTooltipWarning = checkBoxTrayTooltipWarning.Checked;
 
             int i = 0;
