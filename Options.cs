@@ -1,7 +1,6 @@
 ﻿using Hotkeys;
 using ScreenShotTool.Properties;
 using System.Diagnostics;
-using System.Runtime;
 
 namespace ScreenShotTool
 {

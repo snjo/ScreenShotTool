@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
+﻿using System.Diagnostics;
 using System.Drawing.Text;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace ScreenShotTool
 {
@@ -23,7 +14,8 @@ namespace ScreenShotTool
         public bool CompleteCaptureOnMoureRelease = false;
         public bool SaveToFile = false;
         public bool SendToClipboard = false;
-        private bool AdjustRegionIsPosition = false;
+        public bool ShowAdjustmentArrows = true;
+        private bool showHelp = false;
 
         private enum AdjustMode
         {
@@ -36,6 +28,7 @@ namespace ScreenShotTool
         public ImageView(bool startCropping, Screen activeScreen, Bitmap? image)
         {
             InitializeComponent();
+            BringToFront();
             this.screen = activeScreen;
             if (startCropping)
             {
@@ -44,9 +37,6 @@ namespace ScreenShotTool
             if (image != null)
             {
                 ImageSource = image;
-                //pictureBoxScreenshot.BackgroundImage = ImageResult;
-                //pictureBoxScreenshot.BackgroundImageLayout = ImageLayout.None;
-                //pictureBoxScreenshot.Image = ImageResult;
             }
             pictureBoxDraw.Image = new Bitmap(1000, 1000);
         }
@@ -55,12 +45,6 @@ namespace ScreenShotTool
         {
             return ImageResult;
         }
-
-        //public void SetBackgroundImage()
-        //{
-        //    pictureBoxScreenshot.BackgroundImage = ImageResult;
-        //    pictureBoxScreenshot.BackgroundImageLayout = ImageLayout.None;
-        //}
 
         public void SetImage()
         {
@@ -100,6 +84,10 @@ namespace ScreenShotTool
             {
                 adjustMode = AdjustMode.Position;
             }
+            if (e.KeyCode == Keys.H)
+            {
+                showHelp = !showHelp;
+            }
 
             if (e.Modifiers == Keys.Shift)
             {
@@ -114,7 +102,6 @@ namespace ScreenShotTool
             {
                 if (e.Modifiers == Keys.Control)
                 {
-                    //AdjustRegionSetMultiplier(1, 0, 0, 0);
                     AdjustLeftMultiplier = 1;
                     AdjustRightMultiplier = 0;
                 }
@@ -159,6 +146,8 @@ namespace ScreenShotTool
                     AdjustRegion(0, 1);
                 }
             }
+
+            pictureBoxDraw.Image = DrawSquare(pictureBoxDraw.Image, true, true);
         }
 
         #region Adjust Region bounds -------------------
@@ -177,7 +166,6 @@ namespace ScreenShotTool
             {
                 AdjustRegionPosition(x, y);
             }
-            pictureBoxDraw.Image = DrawSquare(pictureBoxDraw.Image, true, true);
             CloneRegionImage();
         }
 
@@ -200,14 +188,6 @@ namespace ScreenShotTool
             regionRect.Y += y * boostMultiplier;
         }
 
-        //private void AdjustRegionSetMultiplier(int Left, int Right, int Top, int Bottom)
-        //{
-        //    AdjustLeftMultiplier = Left;
-        //    AdjustRightMultiplier = Right;
-        //    AdjustTopMultiplier = Top;
-        //    AdjustBottomMultiplier = Bottom;
-        //}
-
         #endregion
 
         private void DisposeAllImages()
@@ -225,10 +205,7 @@ namespace ScreenShotTool
 
         private void pictureBoxDraw_Click(object sender, EventArgs e)
         {
-            //mouseDrag = false;
-            //squareCreated = false;
-            //mouseRect = new Rectangle();
-            //Debug.WriteLine("Clicked on Draw image");
+
         }
 
         bool squareCreated = false;
@@ -241,11 +218,9 @@ namespace ScreenShotTool
             squareCreated = false;
             regionRect = new Rectangle();
             pictureBoxDraw.Image = new Bitmap(this.Width, this.Height);
-            //Debug.WriteLine(this.Width + " " + this.Height);
             mouseStartX = Cursor.Position.X;
             mouseStartY = Cursor.Position.Y;
-            //Debug.WriteLine("Cursor start:" +  mouseStartX + " " + mouseStartY);
-            mouseDrag = true; 
+            mouseDrag = true;
         }
 
         private void pictureBoxDraw_MouseUp(object sender, MouseEventArgs e)
@@ -290,6 +265,7 @@ namespace ScreenShotTool
         public SolidBrush brush = new SolidBrush(Color.Gray);
         public SolidBrush brushFill = new SolidBrush(Color.Gray);
         Pen pen = new Pen(Color.Gray);
+        Pen arrowPen = new Pen(Color.Yellow);
         Color drawColor = Color.Green;
         Rectangle regionRect = new Rectangle();
 
@@ -347,8 +323,43 @@ namespace ScreenShotTool
             {
                 int textX = Cursor.Position.X + 20 - screen.Bounds.X;
                 int textY = Cursor.Position.Y + 20 - screen.Bounds.Y;
-                graphic.DrawString($"W:{regionRect.Width} H:{regionRect.Height}", this.Font, brush, textX, textY);
-                graphic.DrawString($"Enter: Save, C: Copy, Esc: Cancel", this.Font, brush, textX, textY + 20);
+                graphic.DrawString($"W:{regionRect.Width} H:{regionRect.Height}\nEnter: Save, C: Clipboard, H: Help, Esc: Exit", this.Font, brush, textX, textY);
+                if (showHelp)
+                {
+                    graphic.FillRectangle(new SolidBrush(Color.FromArgb(200, 0, 0, 0)), new Rectangle(screen.Bounds.X + 10, screen.Bounds.Y + 10, 250, 200));
+                    graphic.DrawString($"Enter: Save\nC: Copy\nEsc: Cancel\nS: Size\nP: Position\nArrows: Move\nCtrl+Arrows: Select adjust side\nShift+Arrows: Fast adjust", this.Font, brush, screen.Bounds.X + 20, screen.Bounds.Y + 20);
+                }
+
+            }
+
+            if (ShowAdjustmentArrows)
+            {
+                int RightSide = regionRect.Right;
+                int LeftSide = regionRect.Left;
+                int TopSide = regionRect.Top;
+                int BottomSide = regionRect.Bottom;
+                int HalfHeight = regionRect.Height / 2;
+                int HalfWidth = regionRect.Width / 2;
+                int MiddleVertical = TopSide + HalfHeight;
+                int MiddleHorizontal = LeftSide + HalfWidth;
+
+                if (AdjustRightMultiplier != 0 || adjustMode == AdjustMode.Position)
+                {
+                    graphic.DrawPolygon(arrowPen, new Point[] { new Point(RightSide + 5, MiddleVertical - 5), new Point(RightSide + 10, MiddleVertical), new Point(RightSide + 5, MiddleVertical + 5) });
+                }
+                if (AdjustLeftMultiplier != 0 || adjustMode == AdjustMode.Position)
+                {
+                    graphic.DrawPolygon(arrowPen, new Point[] { new Point(LeftSide - 5, MiddleVertical - 5), new Point(LeftSide - 10, MiddleVertical), new Point(LeftSide - 5, MiddleVertical + 5) });
+                }
+
+                if (AdjustTopMultiplier != 0 || adjustMode == AdjustMode.Position)
+                {
+                    graphic.DrawPolygon(arrowPen, new Point[] { new Point(MiddleHorizontal - 5, TopSide - 5), new Point(MiddleHorizontal, TopSide - 10), new Point(MiddleHorizontal + 5, TopSide - 5) });
+                }
+                if (AdjustBottomMultiplier != 0 || adjustMode == AdjustMode.Position)
+                {
+                    graphic.DrawPolygon(arrowPen, new Point[] { new Point(MiddleHorizontal - 5, BottomSide + 5), new Point(MiddleHorizontal, BottomSide + 10), new Point(MiddleHorizontal + 5, BottomSide + 5) });
+                }
             }
 
             if (rectWidth > 0 && rectHeight > 0)

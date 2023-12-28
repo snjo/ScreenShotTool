@@ -122,7 +122,7 @@ namespace Hotkeys
                 if (warning)
                     MessageBox.Show(warningText);
             }
-                
+
             return warningKeys.ToArray();
         }
 

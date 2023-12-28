@@ -242,7 +242,7 @@ namespace ScreenShotTool
                 windowTitle = overrideTitle;
             }
             else
-            { 
+            {
                 windowTitle = MakeValidFileName(GetActiveWindowTitle());
                 windowTitle = ShortenString(windowTitle, titleMaxLength);
             }
@@ -276,10 +276,10 @@ namespace ScreenShotTool
                 Debug.WriteLine("AddThumbnail, bitmap error");
                 return;
             }
-            
+
 
             int width = imageList.ImageSize.Width;
-            
+
             Image thumbImg = ResizeImage(bitmap, settings.ThumbnailWidth, settings.ThumbnailHeight, Settings.Default.CropThumbnails);
             imageList.Images.Add(thumbImg);
             thumbImg.Dispose();
@@ -475,16 +475,11 @@ namespace ScreenShotTool
         public bool CaptureRegion(string folder, string filename, ImageFormat format)
         {
             bool saved = false;
-            //bitmap = GetAllScreensImage();
-            //counter++;
             Screen screen = Screen.FromPoint(Cursor.Position);
             Bitmap bmp = GetScreenImage(screen);
             ImageView imgView = new ImageView(true, screen, bmp);
 
-            //imgView.X = screen.Bounds.X;
-            //imgView.Y = screen.Bounds.Y;
             imgView.Location = new Point(screen.Bounds.X, screen.Bounds.Y);
-            //imgView.SetBackgroundImage();
             imgView.SetImage();
             imgView.CompleteCaptureOnMoureRelease = settings.RegionCompletesOnMouseRelease;
             imgView.SaveToFile = settings.RegionToFile;
@@ -498,21 +493,11 @@ namespace ScreenShotTool
                     //save to file or copy to clipboard is handled inside the viewer
                     saved = SaveBitmap(folder, filename, format, bmpResult);
 
-                    //if (settings.RegionToFile)
-                    //{
-                    //    saved = SaveBitmap(folder, filename, format, bmpResult);
-                    //}
-                    //if (settings.RegionToClipboard)
-                    //{
-                    //    Clipboard.SetImage(bmpResult);
-                    //}
-
                     if (bitmap != null)
                     {
                         bitmap.Dispose();
                     }
                     bitmap = bmpResult;
-                    //bmpResult.Dispose();
                 }
                 else
                 {
@@ -577,7 +562,7 @@ namespace ScreenShotTool
                 Debug.WriteLine("Screen bounds size is less than zero. Capture aborted.");
                 ShowBalloonToolTip("Capture error", "Screen bounds  size is less than zero. Capture aborted.", ToolTipIcon.Warning, BalloonTipType.ScreenshotError);
             }
-            return new Bitmap(0,0);
+            return new Bitmap(0, 0);
         }
 
         private Bitmap GetScreenImage(Screen screen)
@@ -592,7 +577,7 @@ namespace ScreenShotTool
                 Debug.WriteLine("Screen bounds size is less than zero. Capture aborted.");
                 ShowBalloonToolTip("Capture error", "Screen bounds  size is less than zero. Capture aborted.", ToolTipIcon.Warning, BalloonTipType.ScreenshotError);
             }
-            
+
             return new Bitmap(0, 0);
         }
 
@@ -610,14 +595,14 @@ namespace ScreenShotTool
                     Directory.CreateDirectory(folder);
 
                     ShowBalloonToolTip("Folder Created", "Selected folder " + folder + " did not already exist.", ToolTipIcon.Info, BalloonTipType.FolderCreated);
-                    
+
                 }
                 catch
                 {
                     writeMessage("Couldn't find or create folder " + folder);
 
                     ShowBalloonToolTip("Capture error", "Couldn't find or create folder." + folder, ToolTipIcon.Warning, BalloonTipType.FolderError);
-                    
+
                     return false;
                 }
             }
@@ -634,12 +619,11 @@ namespace ScreenShotTool
                     {
                         Debug.WriteLine("Saving image with format " + format.ToString() + " to " + folder + "\\" + filename);
                         capture.Save(folder + "\\" + filename, format);
-                        //capture.Save("test.png", format);
                     }
                     writeMessage("Saved " + folder + "\\" + filename);
 
                     ShowBalloonToolTip("Capture saved", folder + Environment.NewLine + filename, ToolTipIcon.Info, BalloonTipType.ScreenshotSaved);
-                    
+
                     lastSavedFile = folder + "\\" + filename;
                     lastFolder = folder;
                 }
@@ -652,7 +636,7 @@ namespace ScreenShotTool
                         + ex.Message);
 
                     ShowBalloonToolTip("Capture error", "Couldn't save to folder." + folder + "\nCheck permission for this folder\n", ToolTipIcon.Warning, BalloonTipType.FolderError);
-                    
+
                     return false;
                 }
             }
@@ -662,7 +646,7 @@ namespace ScreenShotTool
                 writeMessage("Folder not found: " + folder);
 
                 ShowBalloonToolTip("Capture error", "Folder not found: " + folder, ToolTipIcon.Warning, BalloonTipType.FolderError);
-                
+
                 return false;
             }
             return true;
@@ -686,7 +670,6 @@ namespace ScreenShotTool
             Bitmap captureBitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb);
             Graphics captureGraphics = Graphics.FromImage(captureBitmap);
 
-            //Rectangle captureRectangle = Screen.AllScreens[0].Bounds;
             Rectangle captureRectangle = new Rectangle(x, y, width, height);
 
             //Copying Image from The Screen
@@ -986,17 +969,17 @@ namespace ScreenShotTool
 
         private BalloonTipType lastBallonTip = BalloonTipType.NotSet;
 
-        private void ShowBalloonToolTip (string title, string text, ToolTipIcon icon, BalloonTipType tipType)
+        private void ShowBalloonToolTip(string title, string text, ToolTipIcon icon, BalloonTipType tipType)
         {
-            
+
             int timeout = 1000;
-            
+
 
             bool showToolTip = false;
 
             if (tipType == BalloonTipType.ScreenshotSaved && settings.AllowTrayTooltipInfoCapture)
                 showToolTip = true;
-            else if  (tipType == BalloonTipType.FolderCreated && settings.AllowTrayTooltipInfoFolder)
+            else if (tipType == BalloonTipType.FolderCreated && settings.AllowTrayTooltipInfoFolder)
                 showToolTip = true;
             else if (tipType >= BalloonTipType.Error && settings.AllowTrayTooltipWarning)
                 showToolTip = true;
