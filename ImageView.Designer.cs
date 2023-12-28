@@ -88,6 +88,7 @@
             StartPosition = FormStartPosition.Manual;
             Text = "ImageView";
             WindowState = FormWindowState.Maximized;
+            Load += ImageView_Load;
             KeyDown += ImageView_KeyDown;
             ((System.ComponentModel.ISupportInitialize)pictureBoxScreenshot).EndInit();
             panel1.ResumeLayout(false);

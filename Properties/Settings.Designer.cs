@@ -682,5 +682,17 @@ namespace ScreenShotTool.Properties {
                 this["hkCaptureCurrentScreenWin"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        public int MaxFramerate {
+            get {
+                return ((int)(this["MaxFramerate"]));
+            }
+            set {
+                this["MaxFramerate"] = value;
+            }
+        }
     }
 }

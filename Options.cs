@@ -45,6 +45,7 @@ namespace ScreenShotTool
                 checkBoxRegionToFile.Enabled = false;
                 checkBoxRegionToClipboard.Enabled = false;
             }
+            numericUpDownFramerate.Value = settings.MaxFramerate;
 
             checkBoxWindowToFile.Checked = settings.WindowToFile;
             checkBoxWindowToClipboard.Checked = settings.WindowToClipboard;
@@ -106,6 +107,7 @@ namespace ScreenShotTool
             settings.RegionToFile = checkBoxRegionToFile.Checked;
             settings.RegionToClipboard = checkBoxRegionToClipboard.Checked;
             settings.RegionCompletesOnMouseRelease = checkBoxRegionComplete.Checked;
+            settings.MaxFramerate = (int)numericUpDownFramerate.Value;
 
             settings.WindowToFile = checkBoxWindowToFile.Checked;
             settings.WindowToClipboard = checkBoxWindowToClipboard.Checked;
@@ -255,6 +257,11 @@ namespace ScreenShotTool
                 checkBoxRegionToFile.Enabled = false;
                 checkBoxRegionToClipboard.Enabled = false;
             }
+        }
+
+        private void label12_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
