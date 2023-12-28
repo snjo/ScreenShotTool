@@ -454,5 +454,233 @@ namespace ScreenShotTool.Properties {
                 this["AllowTrayTooltipInfoCapture"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("PrintScreen")]
+        public string hkCaptureAllScreensKey {
+            get {
+                return ((string)(this["hkCaptureAllScreensKey"]));
+            }
+            set {
+                this["hkCaptureAllScreensKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool hkCaptureAllScreensCtrl {
+            get {
+                return ((bool)(this["hkCaptureAllScreensCtrl"]));
+            }
+            set {
+                this["hkCaptureAllScreensCtrl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool hkCaptureAllScreensAlt {
+            get {
+                return ((bool)(this["hkCaptureAllScreensAlt"]));
+            }
+            set {
+                this["hkCaptureAllScreensAlt"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool hkCaptureAllScreensWin {
+            get {
+                return ((bool)(this["hkCaptureAllScreensWin"]));
+            }
+            set {
+                this["hkCaptureAllScreensWin"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool hkCaptureAllScreensShift {
+            get {
+                return ((bool)(this["hkCaptureAllScreensShift"]));
+            }
+            set {
+                this["hkCaptureAllScreensShift"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool RegionCompletesOnMouseRelease {
+            get {
+                return ((bool)(this["RegionCompletesOnMouseRelease"]));
+            }
+            set {
+                this["RegionCompletesOnMouseRelease"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool RegionToFile {
+            get {
+                return ((bool)(this["RegionToFile"]));
+            }
+            set {
+                this["RegionToFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool RegionToClipboard {
+            get {
+                return ((bool)(this["RegionToClipboard"]));
+            }
+            set {
+                this["RegionToClipboard"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool WindowToFile {
+            get {
+                return ((bool)(this["WindowToFile"]));
+            }
+            set {
+                this["WindowToFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool WindowToClipboard {
+            get {
+                return ((bool)(this["WindowToClipboard"]));
+            }
+            set {
+                this["WindowToClipboard"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ScreenToFile {
+            get {
+                return ((bool)(this["ScreenToFile"]));
+            }
+            set {
+                this["ScreenToFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ScreenToClipboard {
+            get {
+                return ((bool)(this["ScreenToClipboard"]));
+            }
+            set {
+                this["ScreenToClipboard"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AllScreensToFile {
+            get {
+                return ((bool)(this["AllScreensToFile"]));
+            }
+            set {
+                this["AllScreensToFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AllScreensToClipboard {
+            get {
+                return ((bool)(this["AllScreensToClipboard"]));
+            }
+            set {
+                this["AllScreensToClipboard"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("PrintScreen")]
+        public string hkCaptureCurrentScreenKey {
+            get {
+                return ((string)(this["hkCaptureCurrentScreenKey"]));
+            }
+            set {
+                this["hkCaptureCurrentScreenKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool hkCaptureCurrentScreenCtrl {
+            get {
+                return ((bool)(this["hkCaptureCurrentScreenCtrl"]));
+            }
+            set {
+                this["hkCaptureCurrentScreenCtrl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool hkCaptureCurrentScreenAlt {
+            get {
+                return ((bool)(this["hkCaptureCurrentScreenAlt"]));
+            }
+            set {
+                this["hkCaptureCurrentScreenAlt"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool hkCaptureCurrentScreenShift {
+            get {
+                return ((bool)(this["hkCaptureCurrentScreenShift"]));
+            }
+            set {
+                this["hkCaptureCurrentScreenShift"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool hkCaptureCurrentScreenWin {
+            get {
+                return ((bool)(this["hkCaptureCurrentScreenWin"]));
+            }
+            set {
+                this["hkCaptureCurrentScreenWin"] = value;
+            }
+        }
     }
 }

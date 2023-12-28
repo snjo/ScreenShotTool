@@ -20,6 +20,9 @@ namespace ScreenShotTool
         public int X = 0;
         public int Y = 0;
         Screen screen;
+        public bool CompleteCaptureOnMoureRelease = false;
+        public bool SaveToFile = false;
+        public bool SendToClipboard = false;
 
         public ImageView(bool startCropping, Screen activeScreen, Bitmap? image)
         {
@@ -63,16 +66,12 @@ namespace ScreenShotTool
         {
             if (e.KeyCode == Keys.Escape)
             {
-                if (ImageResult != null)
-                    ImageResult.Dispose();
-                if (ImageSource != null)
-                    ImageSource.Dispose();
+                DisposeAllImages();
                 DialogResult = DialogResult.Cancel;
             }
             if (e.KeyCode == Keys.Return)
             {
-                if (ImageSource != null)
-                    ImageSource.Dispose();
+                DisposeSourceImage();
                 DialogResult = DialogResult.Yes;
             }
             if (e.KeyCode == Keys.C)
@@ -81,12 +80,22 @@ namespace ScreenShotTool
                 {
                     Clipboard.SetImage(ImageResult);
                 }
-                if (ImageResult != null)
-                    ImageResult.Dispose();
-                if (ImageSource != null)
-                    ImageSource.Dispose();
+                DisposeAllImages();
                 DialogResult = DialogResult.No;
             }
+        }
+
+        private void DisposeAllImages()
+        {
+            if (ImageResult != null)
+                ImageResult.Dispose();
+            if (ImageSource != null)
+                ImageSource.Dispose();
+        }
+        private void DisposeSourceImage()
+        {
+            if (ImageSource != null)
+                ImageSource.Dispose();
         }
 
         private void pictureBoxDraw_Click(object sender, EventArgs e)
@@ -110,14 +119,14 @@ namespace ScreenShotTool
             //Debug.WriteLine(this.Width + " " + this.Height);
             mouseStartX = Cursor.Position.X;
             mouseStartY = Cursor.Position.Y;
-            Debug.WriteLine("Cursor start:" +  mouseStartX + " " + mouseStartY);
+            //Debug.WriteLine("Cursor start:" +  mouseStartX + " " + mouseStartY);
             mouseDrag = true; 
         }
 
         private void pictureBoxDraw_MouseUp(object sender, MouseEventArgs e)
         {
             mouseDrag = false;
-            Debug.WriteLine("Rectangle confirmed: " + mouseRect);
+            
             if (mouseRect.Width > 0 && mouseRect.Height > 0)
             {
                 Bitmap regionBmp;
@@ -127,6 +136,27 @@ namespace ScreenShotTool
             else
             {
                 Debug.WriteLine("Region size is zero wide or high, can't save");
+            }
+
+            if (CompleteCaptureOnMoureRelease)
+            {
+                if (SendToClipboard)
+                {
+                    if (ImageResult != null)
+                    {
+                        Clipboard.SetImage(ImageResult);
+                    }
+                }
+                if (SaveToFile)
+                {
+                    DisposeSourceImage();
+                    DialogResult = DialogResult.Yes;
+                }
+                else
+                {
+                    DisposeAllImages();
+                    DialogResult = DialogResult.No;
+                }
             }
         }
 

@@ -36,9 +36,11 @@ namespace ScreenShotTool
 
         public List<string> HotkeyNames = new List<string>
         {
+            "CaptureRegion",
             "CaptureWindow",
+            "CaptureCurrentScreen",
+            "CaptureAllScreens",
             "BrowseFolder",
-            "CaptureRegion"
         };
 
         #region form open and close
@@ -145,6 +147,14 @@ namespace ScreenShotTool
             {
                 CaptureAction(CaptureMode.Region);
             }
+            if (id == HotkeyList["CaptureCurrentScreen"].ghk.id)
+            {
+                CaptureAction(CaptureMode.SingleScreen);
+            }
+            if (id == HotkeyList["CaptureAllScreens"].ghk.id)
+            {
+                CaptureAction(CaptureMode.AllScreens);
+            }
             else if (id == HotkeyList["BrowseFolder"].ghk.id)
             {
                 BrowseFolderInExplorer(lastFolder);
@@ -185,9 +195,14 @@ namespace ScreenShotTool
                 savedToFile = CaptureWindow(DestinationFolder, DestinationFileName + DestinationFileExtension, DestinationFormat);
                 numericUpDownCounter.Value++;
             }
+            else if (mode == CaptureMode.SingleScreen)
+            {
+                savedToFile = CaptureSingleScreen(ComposeFileName(settings.Foldername, "Screen"), ComposeFileName("Capture $c") + DestinationFileExtension, DestinationFormat);
+                numericUpDownCounter.Value++;
+            }
             else if (mode == CaptureMode.AllScreens)
             {
-                savedToFile = CaptureAllScreens(ComposeFileName(settings.Foldername, "AllScreens"), ComposeFileName("Capture $c") + DestinationFileExtension, DestinationFormat);
+                savedToFile = CaptureAllScreens(ComposeFileName(settings.Foldername, "Screen"), ComposeFileName("Capture $c") + DestinationFileExtension, DestinationFormat);
                 numericUpDownCounter.Value++;
             }
             else if (mode == CaptureMode.Region)
@@ -250,6 +265,7 @@ namespace ScreenShotTool
 
         private void AddThumbnail(string DestinationFileName)
         {
+            Debug.WriteLine("Add thumbnail: " + DestinationFileName);
             if (bitmap == null) return;
             try
             {
@@ -391,7 +407,7 @@ namespace ScreenShotTool
         private void SetImageFormat()
         {
             string DestinationFileExtension = settings.FileExtension;
-            Debug.WriteLine("Set imageformat " + DestinationFileExtension);
+            //Debug.WriteLine("Set imageformat " + DestinationFileExtension);
             switch (DestinationFileExtension)
             {
                 case ".jpg":
@@ -422,7 +438,7 @@ namespace ScreenShotTool
 
         public bool CaptureWindow(string folder, string filename, ImageFormat format)
         {
-            //RECT windowRect;
+            bool saved = false;
             GetWindowRect(GetActiveWindow(), out RECT windowRect);
             if (settings.TrimChecked)
             {
@@ -433,10 +449,20 @@ namespace ScreenShotTool
             }
             if (windowRect.Width > 0 && windowRect.Height > 0)
             {
+                if (bitmap != null)
+                {
+                    bitmap.Dispose();
+                }
                 bitmap = CaptureBitmap(windowRect.Left, windowRect.Top, windowRect.Width, windowRect.Height);
-                //counter++;
-                bool saved = SaveBitmap(folder, filename, format, bitmap);
-                return (saved);
+                if (settings.WindowToFile)
+                {
+                    saved = SaveBitmap(folder, filename, format, bitmap);
+                }
+                if (settings.WindowToClipboard)
+                {
+                    Clipboard.SetImage(bitmap);
+                }
+                return saved;
             }
             else
             {
@@ -448,6 +474,7 @@ namespace ScreenShotTool
 
         public bool CaptureRegion(string folder, string filename, ImageFormat format)
         {
+            bool saved = false;
             //bitmap = GetAllScreensImage();
             //counter++;
             Screen screen = Screen.FromPoint(Cursor.Position);
@@ -459,30 +486,82 @@ namespace ScreenShotTool
             imgView.Location = new Point(screen.Bounds.X, screen.Bounds.Y);
             //imgView.SetBackgroundImage();
             imgView.SetImage();
+            imgView.CompleteCaptureOnMoureRelease = settings.RegionCompletesOnMouseRelease;
+            imgView.SaveToFile = settings.RegionToFile;
+            imgView.SendToClipboard = settings.RegionToClipboard;
             DialogResult result = imgView.ShowDialog();
-            if (result == DialogResult.Yes)
+            if (result == DialogResult.Yes) // Yes means save to file
             {
                 Bitmap? bmpResult = imgView.GetBitmap();
                 if (bmpResult != null)
                 {
-                    SaveBitmap(folder, filename, format, bmpResult);
-                    bmpResult.Dispose();
-                    return true;
+                    //save to file or copy to clipboard is handled inside the viewer
+                    saved = SaveBitmap(folder, filename, format, bmpResult);
+
+                    //if (settings.RegionToFile)
+                    //{
+                    //    saved = SaveBitmap(folder, filename, format, bmpResult);
+                    //}
+                    //if (settings.RegionToClipboard)
+                    //{
+                    //    Clipboard.SetImage(bmpResult);
+                    //}
+
+                    if (bitmap != null)
+                    {
+                        bitmap.Dispose();
+                    }
+                    bitmap = bmpResult;
+                    //bmpResult.Dispose();
                 }
                 else
                 {
                     Debug.WriteLine("ImageView result image was null");
-                    return false;
+                    saved = false;
                 }
             }
-            return false;
+            return saved;
+        }
+
+        public bool CaptureSingleScreen(string folder, string filename, ImageFormat format)
+        {
+            bool saved = false;
+            Screen screen = Screen.FromPoint(Cursor.Position);
+            if (bitmap != null)
+            {
+                bitmap.Dispose();
+            }
+            bitmap = GetScreenImage(screen);
+
+            if (settings.ScreenToFile)
+            {
+                saved = SaveBitmap(folder, filename, format, bitmap);
+            }
+            if (settings.ScreenToClipboard)
+            {
+                Clipboard.SetImage(bitmap);
+            }
+            return saved;
         }
 
         public bool CaptureAllScreens(string folder, string filename, ImageFormat format)
         {
+            bool saved = false;
+            if (bitmap != null)
+            {
+                bitmap.Dispose();
+            }
             bitmap = GetAllScreensImage();
-            //counter++;
-            return SaveBitmap(folder, filename, format, bitmap);
+
+            if (settings.ScreenToFile)
+            {
+                saved = SaveBitmap(folder, filename, format, bitmap);
+            }
+            if (settings.ScreenToClipboard)
+            {
+                Clipboard.SetImage(bitmap);
+            }
+            return saved;
         }
 
 

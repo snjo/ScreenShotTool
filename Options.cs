@@ -1,12 +1,14 @@
 ﻿using Hotkeys;
 using ScreenShotTool.Properties;
 using System.Diagnostics;
+using System.Runtime;
 
 namespace ScreenShotTool
 {
     public partial class Options : Form
     {
         MainForm mainForm;
+        Settings settings = Settings.Default;
 
         public Options(MainForm parent)
         {
@@ -17,27 +19,55 @@ namespace ScreenShotTool
 
         private void FillSettings()
         {
-            //textBoxFilename.Text = mainForm.PatternFileName;
-            textBoxFilename.Text = Settings.Default.Filename;
-            textBoxFolder.Text = Settings.Default.Foldername;
-            comboBoxFileExtension.Text = Settings.Default.FileExtension;
-            checkBoxTrim.Checked = Settings.Default.TrimChecked;
-            trimTop.Value = Settings.Default.TrimTop;
-            trimBottom.Value = Settings.Default.TrimBottom;
-            trimLeft.Value = Settings.Default.TrimLeft;
-            trimRight.Value = Settings.Default.TrimRight;
-            textBoxAlternateTitle.Text = Settings.Default.AlternateTitle;
-            numericUpDownTitleMaxLength.Value = Settings.Default.TitleMaxLength;
-            textBoxSplitString.Text = Settings.Default.SplitTitleString;
-            numericUpDownSplitIndex.Value = Settings.Default.SplitTitleIndex;
-            numericUpDownJpegQuality.Value = Settings.Default.JpegQuality;
-            checkBoxStartHidden.Checked = Settings.Default.StartHidden;
-            checkBoxCropThumbnails.Checked = Settings.Default.CropThumbnails;
-            numericThumbWidth.Value = Settings.Default.ThumbnailWidth;
-            numericThumbHeight.Value = Settings.Default.ThumbnailHeight;
-            checkBoxTrayTooltipInfoCapture.Checked = Settings.Default.AllowTrayTooltipInfoCapture;
-            checkBoxTrayTooltipInfoFolder.Checked = Settings.Default.AllowTrayTooltipInfoFolder;
-            checkBoxTrayTooltipWarning.Checked = Settings.Default.AllowTrayTooltipWarning;
+            //Tab: Capture Output
+            textBoxFolder.Text = settings.Foldername;
+
+            textBoxFilename.Text = settings.Filename;
+            comboBoxFileExtension.Text = settings.FileExtension;
+            numericUpDownJpegQuality.Value = settings.JpegQuality;
+
+            textBoxAlternateTitle.Text = settings.AlternateTitle;
+            numericUpDownTitleMaxLength.Value = settings.TitleMaxLength;
+            textBoxSplitString.Text = settings.SplitTitleString;
+            numericUpDownSplitIndex.Value = settings.SplitTitleIndex;
+
+            checkBoxTrim.Checked = settings.TrimChecked;
+            trimTop.Value = settings.TrimTop;
+            trimBottom.Value = settings.TrimBottom;
+            trimLeft.Value = settings.TrimLeft;
+            trimRight.Value = settings.TrimRight;
+
+            //Tab: Modes
+            checkBoxRegionComplete.Checked = settings.RegionCompletesOnMouseRelease;
+            checkBoxRegionToFile.Checked = settings.RegionToFile;
+            checkBoxRegionToClipboard.Checked = settings.RegionToClipboard;
+            if (settings.RegionCompletesOnMouseRelease == false)
+            {
+                checkBoxRegionToFile.Enabled = false;
+                checkBoxRegionToClipboard.Enabled = false;
+            }
+
+            checkBoxWindowToFile.Checked = settings.WindowToFile;
+            checkBoxWindowToClipboard.Checked = settings.WindowToClipboard;
+
+            checkBoxScreenToFile.Checked = settings.ScreenToFile;
+            checkBoxScreenToClipboard.Checked = settings.ScreenToClipboard;
+
+            checkBoxAllScreensToFile.Checked = settings.AllScreensToFile;
+            checkBoxAllScreensToClipboard.Checked = settings.AllScreensToClipboard;
+
+            //Tab: Application
+            checkBoxStartHidden.Checked = settings.StartHidden;
+            checkBoxTrayTooltipInfoCapture.Checked = settings.AllowTrayTooltipInfoCapture;
+            checkBoxTrayTooltipInfoFolder.Checked = settings.AllowTrayTooltipInfoFolder;
+            checkBoxTrayTooltipWarning.Checked = settings.AllowTrayTooltipWarning;
+
+            checkBoxCropThumbnails.Checked = settings.CropThumbnails;
+            numericThumbWidth.Value = settings.ThumbnailWidth;
+            numericThumbHeight.Value = settings.ThumbnailHeight;
+
+            //Tab: Hotkeys
+
             fillHotkeyGrid();
         }
 
@@ -56,27 +86,47 @@ namespace ScreenShotTool
 
         private void ApplySettings()
         {
-            Settings.Default.Filename = textBoxFilename.Text;
-            Settings.Default.Foldername = textBoxFolder.Text;
-            Settings.Default.FileExtension = comboBoxFileExtension.Text;
-            Settings.Default.TrimChecked = checkBoxTrim.Checked;
-            Settings.Default.TrimTop = (int)trimTop.Value;
-            Settings.Default.TrimBottom = (int)trimBottom.Value;
-            Settings.Default.TrimLeft = (int)trimLeft.Value;
-            Settings.Default.TrimRight = (int)trimRight.Value;
-            Settings.Default.AlternateTitle = textBoxAlternateTitle.Text;
-            Settings.Default.TitleMaxLength = (int)numericUpDownTitleMaxLength.Value;
-            Settings.Default.SplitTitleString = textBoxSplitString.Text;
-            Settings.Default.SplitTitleIndex = (int)numericUpDownSplitIndex.Value;
-            Settings.Default.JpegQuality = (long)numericUpDownJpegQuality.Value;
-            Settings.Default.StartHidden = checkBoxStartHidden.Checked;
-            Settings.Default.CropThumbnails = checkBoxCropThumbnails.Checked;
-            Settings.Default.ThumbnailWidth = (int)numericThumbWidth.Value;
-            Settings.Default.ThumbnailHeight = (int)numericThumbHeight.Value;
-            Settings.Default.AllowTrayTooltipInfoCapture = checkBoxTrayTooltipInfoCapture.Checked;
-            Settings.Default.AllowTrayTooltipInfoFolder = checkBoxTrayTooltipInfoFolder.Checked;
-            Settings.Default.AllowTrayTooltipWarning = checkBoxTrayTooltipWarning.Checked;
+            //Tab: Capture Output
+            settings.Filename = textBoxFilename.Text;
+            settings.Foldername = textBoxFolder.Text;
+            settings.FileExtension = comboBoxFileExtension.Text;
+            settings.JpegQuality = (long)numericUpDownJpegQuality.Value;
 
+            settings.AlternateTitle = textBoxAlternateTitle.Text;
+            settings.TitleMaxLength = (int)numericUpDownTitleMaxLength.Value;
+            settings.SplitTitleString = textBoxSplitString.Text;
+            settings.SplitTitleIndex = (int)numericUpDownSplitIndex.Value;
+
+            settings.TrimChecked = checkBoxTrim.Checked;
+            settings.TrimTop = (int)trimTop.Value;
+            settings.TrimBottom = (int)trimBottom.Value;
+            settings.TrimLeft = (int)trimLeft.Value;
+            settings.TrimRight = (int)trimRight.Value;
+
+            //Tab: Modes
+            settings.RegionToFile = checkBoxRegionToFile.Checked;
+            settings.RegionToClipboard = checkBoxRegionToClipboard.Checked;
+            settings.RegionCompletesOnMouseRelease = checkBoxRegionComplete.Checked;
+
+            settings.WindowToFile = checkBoxWindowToFile.Checked;
+            settings.WindowToClipboard = checkBoxWindowToClipboard.Checked;
+
+            settings.ScreenToFile = checkBoxScreenToFile.Checked;
+            settings.ScreenToClipboard = checkBoxScreenToClipboard.Checked;
+
+            settings.AllScreensToFile = checkBoxAllScreensToFile.Checked;
+            settings.AllScreensToClipboard = checkBoxAllScreensToClipboard.Checked;
+
+            //Tab: Application
+            settings.StartHidden = checkBoxStartHidden.Checked;
+            settings.CropThumbnails = checkBoxCropThumbnails.Checked;
+            settings.ThumbnailWidth = (int)numericThumbWidth.Value;
+            settings.ThumbnailHeight = (int)numericThumbHeight.Value;
+            settings.AllowTrayTooltipInfoCapture = checkBoxTrayTooltipInfoCapture.Checked;
+            settings.AllowTrayTooltipInfoFolder = checkBoxTrayTooltipInfoFolder.Checked;
+            settings.AllowTrayTooltipWarning = checkBoxTrayTooltipWarning.Checked;
+
+            //Tab: Hotkeys
             int i = 0;
             foreach (KeyValuePair<string, Hotkey> kvp in mainForm.HotkeyList)
             {
@@ -87,15 +137,16 @@ namespace ScreenShotTool
                 }
                 Properties.Settings.Default["hk" + keyName + "Key"] = HotkeyGrid.Rows[i].Cells[1].Value.ToString();
 
-                Properties.Settings.Default["hk" + keyName + "Ctrl"] = Convert.ToBoolean(HotkeyGrid.Rows[i].Cells[2].Value);
-                Properties.Settings.Default["hk" + keyName + "Alt"] = Convert.ToBoolean(HotkeyGrid.Rows[i].Cells[3].Value);
-                Properties.Settings.Default["hk" + keyName + "Shift"] = Convert.ToBoolean(HotkeyGrid.Rows[i].Cells[4].Value);
-                Properties.Settings.Default["hk" + keyName + "Win"] = Convert.ToBoolean(HotkeyGrid.Rows[i].Cells[5].Value);
+                settings["hk" + keyName + "Ctrl"] = Convert.ToBoolean(HotkeyGrid.Rows[i].Cells[2].Value);
+                settings["hk" + keyName + "Alt"] = Convert.ToBoolean(HotkeyGrid.Rows[i].Cells[3].Value);
+                settings["hk" + keyName + "Shift"] = Convert.ToBoolean(HotkeyGrid.Rows[i].Cells[4].Value);
+                settings["hk" + keyName + "Win"] = Convert.ToBoolean(HotkeyGrid.Rows[i].Cells[5].Value);
 
                 mainForm.HotkeyList[keyName] = GetHotkeyFromGrid(mainForm.HotkeyList[keyName], HotkeyGrid.Rows[i].Cells);
 
                 i++;
             }
+
 
             Settings.Default.Save();
 
@@ -190,7 +241,21 @@ namespace ScreenShotTool
 
         public void updateTrimCheck()
         {
-            checkBoxTrim.Checked = Settings.Default.TrimChecked;
+            checkBoxTrim.Checked = settings.TrimChecked;
+        }
+
+        private void checkBoxRegionComplete_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxRegionComplete.Checked)
+            {
+                checkBoxRegionToFile.Enabled = true;
+                checkBoxRegionToClipboard.Enabled = true;
+            }
+            else
+            {
+                checkBoxRegionToFile.Enabled = false;
+                checkBoxRegionToClipboard.Enabled = false;
+            }
         }
     }
 }

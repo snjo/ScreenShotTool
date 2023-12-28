@@ -63,10 +63,24 @@
             checkBoxTrayTooltipInfoCapture = new CheckBox();
             checkBoxTrayTooltipWarning = new CheckBox();
             tabControl1 = new TabControl();
-            tabPage1 = new TabPage();
-            tabPage2 = new TabPage();
+            tabPageOutput = new TabPage();
+            tabPageModes = new TabPage();
+            checkBoxRegionComplete = new CheckBox();
+            checkBoxAllScreensToClipboard = new CheckBox();
+            checkBoxAllScreensToFile = new CheckBox();
+            label10 = new Label();
+            checkBoxScreenToClipboard = new CheckBox();
+            checkBoxScreenToFile = new CheckBox();
+            label11 = new Label();
+            checkBoxRegionToClipboard = new CheckBox();
+            checkBoxRegionToFile = new CheckBox();
+            labelRegion = new Label();
+            checkBoxWindowToClipboard = new CheckBox();
+            checkBoxWindowToFile = new CheckBox();
+            labelWindow = new Label();
+            tabPageApplication = new TabPage();
             checkBoxTrayTooltipInfoFolder = new CheckBox();
-            tabPage3 = new TabPage();
+            tabPageHotkeys = new TabPage();
             HotkeyGrid = new DataGridView();
             ColumnFunction = new DataGridViewTextBoxColumn();
             ColumnKey = new DataGridViewTextBoxColumn();
@@ -84,9 +98,10 @@
             ((System.ComponentModel.ISupportInitialize)numericThumbWidth).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericThumbHeight).BeginInit();
             tabControl1.SuspendLayout();
-            tabPage1.SuspendLayout();
-            tabPage2.SuspendLayout();
-            tabPage3.SuspendLayout();
+            tabPageOutput.SuspendLayout();
+            tabPageModes.SuspendLayout();
+            tabPageApplication.SuspendLayout();
+            tabPageHotkeys.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)HotkeyGrid).BeginInit();
             SuspendLayout();
             // 
@@ -113,7 +128,7 @@
             // buttonHelp
             // 
             buttonHelp.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            buttonHelp.Location = new Point(13, 497);
+            buttonHelp.Location = new Point(13, 494);
             buttonHelp.Name = "buttonHelp";
             buttonHelp.Size = new Size(54, 23);
             buttonHelp.TabIndex = 32;
@@ -213,7 +228,7 @@
             // buttonOK
             // 
             buttonOK.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonOK.Location = new Point(410, 497);
+            buttonOK.Location = new Point(410, 494);
             buttonOK.Name = "buttonOK";
             buttonOK.Size = new Size(75, 23);
             buttonOK.TabIndex = 35;
@@ -224,7 +239,7 @@
             // buttonApply
             // 
             buttonApply.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonApply.Location = new Point(329, 497);
+            buttonApply.Location = new Point(329, 494);
             buttonApply.Name = "buttonApply";
             buttonApply.Size = new Size(75, 23);
             buttonApply.TabIndex = 36;
@@ -235,7 +250,7 @@
             // buttonCancel
             // 
             buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonCancel.Location = new Point(248, 497);
+            buttonCancel.Location = new Point(248, 494);
             buttonCancel.Name = "buttonCancel";
             buttonCancel.Size = new Size(75, 23);
             buttonCancel.TabIndex = 37;
@@ -406,65 +421,219 @@
             // tabControl1
             // 
             tabControl1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            tabControl1.Controls.Add(tabPage1);
-            tabControl1.Controls.Add(tabPage2);
-            tabControl1.Controls.Add(tabPage3);
+            tabControl1.Controls.Add(tabPageOutput);
+            tabControl1.Controls.Add(tabPageModes);
+            tabControl1.Controls.Add(tabPageApplication);
+            tabControl1.Controls.Add(tabPageHotkeys);
             tabControl1.Location = new Point(3, 5);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(490, 486);
+            tabControl1.Size = new Size(490, 483);
             tabControl1.TabIndex = 57;
             // 
-            // tabPage1
+            // tabPageOutput
             // 
-            tabPage1.Controls.Add(textBoxFolder);
-            tabPage1.Controls.Add(textBoxSplitString);
-            tabPage1.Controls.Add(numericUpDownJpegQuality);
-            tabPage1.Controls.Add(numericUpDownSplitIndex);
-            tabPage1.Controls.Add(checkBoxTrim);
-            tabPage1.Controls.Add(label1);
-            tabPage1.Controls.Add(trimTop);
-            tabPage1.Controls.Add(label6);
-            tabPage1.Controls.Add(trimBottom);
-            tabPage1.Controls.Add(label7);
-            tabPage1.Controls.Add(trimRight);
-            tabPage1.Controls.Add(label5);
-            tabPage1.Controls.Add(trimLeft);
-            tabPage1.Controls.Add(buttonSelectFolder);
-            tabPage1.Controls.Add(numericUpDownTitleMaxLength);
-            tabPage1.Controls.Add(label4);
-            tabPage1.Controls.Add(textBoxFilename);
-            tabPage1.Controls.Add(comboBoxFileExtension);
-            tabPage1.Controls.Add(label3);
-            tabPage1.Controls.Add(buttonBrowseFolder);
-            tabPage1.Controls.Add(textBoxAlternateTitle);
-            tabPage1.Controls.Add(label2);
-            tabPage1.Location = new Point(4, 24);
-            tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(482, 458);
-            tabPage1.TabIndex = 0;
-            tabPage1.Text = "Capture";
-            tabPage1.UseVisualStyleBackColor = true;
+            tabPageOutput.Controls.Add(textBoxFolder);
+            tabPageOutput.Controls.Add(textBoxSplitString);
+            tabPageOutput.Controls.Add(numericUpDownJpegQuality);
+            tabPageOutput.Controls.Add(numericUpDownSplitIndex);
+            tabPageOutput.Controls.Add(checkBoxTrim);
+            tabPageOutput.Controls.Add(label1);
+            tabPageOutput.Controls.Add(trimTop);
+            tabPageOutput.Controls.Add(label6);
+            tabPageOutput.Controls.Add(trimBottom);
+            tabPageOutput.Controls.Add(label7);
+            tabPageOutput.Controls.Add(trimRight);
+            tabPageOutput.Controls.Add(label5);
+            tabPageOutput.Controls.Add(trimLeft);
+            tabPageOutput.Controls.Add(buttonSelectFolder);
+            tabPageOutput.Controls.Add(numericUpDownTitleMaxLength);
+            tabPageOutput.Controls.Add(label4);
+            tabPageOutput.Controls.Add(textBoxFilename);
+            tabPageOutput.Controls.Add(comboBoxFileExtension);
+            tabPageOutput.Controls.Add(label3);
+            tabPageOutput.Controls.Add(buttonBrowseFolder);
+            tabPageOutput.Controls.Add(textBoxAlternateTitle);
+            tabPageOutput.Controls.Add(label2);
+            tabPageOutput.Location = new Point(4, 24);
+            tabPageOutput.Name = "tabPageOutput";
+            tabPageOutput.Padding = new Padding(3);
+            tabPageOutput.Size = new Size(482, 455);
+            tabPageOutput.TabIndex = 0;
+            tabPageOutput.Text = "Capture Output";
+            tabPageOutput.UseVisualStyleBackColor = true;
             // 
-            // tabPage2
+            // tabPageModes
             // 
-            tabPage2.Controls.Add(checkBoxTrayTooltipInfoFolder);
-            tabPage2.Controls.Add(checkBoxStartHidden);
-            tabPage2.Controls.Add(label9);
-            tabPage2.Controls.Add(checkBoxTrayTooltipWarning);
-            tabPage2.Controls.Add(label8);
-            tabPage2.Controls.Add(checkBoxTrayTooltipInfoCapture);
-            tabPage2.Controls.Add(numericThumbHeight);
-            tabPage2.Controls.Add(checkBoxCropThumbnails);
-            tabPage2.Controls.Add(numericThumbWidth);
-            tabPage2.Location = new Point(4, 24);
-            tabPage2.Name = "tabPage2";
-            tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(482, 458);
-            tabPage2.TabIndex = 1;
-            tabPage2.Text = "Application";
-            tabPage2.UseVisualStyleBackColor = true;
+            tabPageModes.Controls.Add(checkBoxRegionComplete);
+            tabPageModes.Controls.Add(checkBoxAllScreensToClipboard);
+            tabPageModes.Controls.Add(checkBoxAllScreensToFile);
+            tabPageModes.Controls.Add(label10);
+            tabPageModes.Controls.Add(checkBoxScreenToClipboard);
+            tabPageModes.Controls.Add(checkBoxScreenToFile);
+            tabPageModes.Controls.Add(label11);
+            tabPageModes.Controls.Add(checkBoxRegionToClipboard);
+            tabPageModes.Controls.Add(checkBoxRegionToFile);
+            tabPageModes.Controls.Add(labelRegion);
+            tabPageModes.Controls.Add(checkBoxWindowToClipboard);
+            tabPageModes.Controls.Add(checkBoxWindowToFile);
+            tabPageModes.Controls.Add(labelWindow);
+            tabPageModes.Location = new Point(4, 24);
+            tabPageModes.Name = "tabPageModes";
+            tabPageModes.Size = new Size(482, 455);
+            tabPageModes.TabIndex = 3;
+            tabPageModes.Text = "Modes";
+            tabPageModes.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxRegionComplete
+            // 
+            checkBoxRegionComplete.AutoSize = true;
+            checkBoxRegionComplete.Location = new Point(24, 30);
+            checkBoxRegionComplete.Name = "checkBoxRegionComplete";
+            checkBoxRegionComplete.Size = new Size(242, 19);
+            checkBoxRegionComplete.TabIndex = 12;
+            checkBoxRegionComplete.Text = "Complete capture when releasing mouse";
+            checkBoxRegionComplete.UseVisualStyleBackColor = true;
+            checkBoxRegionComplete.CheckedChanged += checkBoxRegionComplete_CheckedChanged;
+            // 
+            // checkBoxAllScreensToClipboard
+            // 
+            checkBoxAllScreensToClipboard.AutoSize = true;
+            checkBoxAllScreensToClipboard.Location = new Point(24, 275);
+            checkBoxAllScreensToClipboard.Name = "checkBoxAllScreensToClipboard";
+            checkBoxAllScreensToClipboard.Size = new Size(123, 19);
+            checkBoxAllScreensToClipboard.TabIndex = 11;
+            checkBoxAllScreensToClipboard.Text = "Copy to Clipboard";
+            checkBoxAllScreensToClipboard.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxAllScreensToFile
+            // 
+            checkBoxAllScreensToFile.AutoSize = true;
+            checkBoxAllScreensToFile.Location = new Point(24, 250);
+            checkBoxAllScreensToFile.Name = "checkBoxAllScreensToFile";
+            checkBoxAllScreensToFile.Size = new Size(85, 19);
+            checkBoxAllScreensToFile.TabIndex = 10;
+            checkBoxAllScreensToFile.Text = "Save to File";
+            checkBoxAllScreensToFile.UseVisualStyleBackColor = true;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label10.Location = new Point(6, 232);
+            label10.Name = "label10";
+            label10.Size = new Size(106, 15);
+            label10.TabIndex = 9;
+            label10.Text = "Mode: All Screens";
+            // 
+            // checkBoxScreenToClipboard
+            // 
+            checkBoxScreenToClipboard.AutoSize = true;
+            checkBoxScreenToClipboard.Location = new Point(24, 210);
+            checkBoxScreenToClipboard.Name = "checkBoxScreenToClipboard";
+            checkBoxScreenToClipboard.Size = new Size(123, 19);
+            checkBoxScreenToClipboard.TabIndex = 8;
+            checkBoxScreenToClipboard.Text = "Copy to Clipboard";
+            checkBoxScreenToClipboard.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxScreenToFile
+            // 
+            checkBoxScreenToFile.AutoSize = true;
+            checkBoxScreenToFile.Location = new Point(24, 185);
+            checkBoxScreenToFile.Name = "checkBoxScreenToFile";
+            checkBoxScreenToFile.Size = new Size(85, 19);
+            checkBoxScreenToFile.TabIndex = 7;
+            checkBoxScreenToFile.Text = "Save to File";
+            checkBoxScreenToFile.UseVisualStyleBackColor = true;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label11.Location = new Point(6, 167);
+            label11.Name = "label11";
+            label11.Size = new Size(130, 15);
+            label11.TabIndex = 6;
+            label11.Text = "Mode: Current Screen";
+            // 
+            // checkBoxRegionToClipboard
+            // 
+            checkBoxRegionToClipboard.AutoSize = true;
+            checkBoxRegionToClipboard.Location = new Point(36, 80);
+            checkBoxRegionToClipboard.Name = "checkBoxRegionToClipboard";
+            checkBoxRegionToClipboard.Size = new Size(123, 19);
+            checkBoxRegionToClipboard.TabIndex = 5;
+            checkBoxRegionToClipboard.Text = "Copy to Clipboard";
+            checkBoxRegionToClipboard.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxRegionToFile
+            // 
+            checkBoxRegionToFile.AutoSize = true;
+            checkBoxRegionToFile.Location = new Point(36, 55);
+            checkBoxRegionToFile.Name = "checkBoxRegionToFile";
+            checkBoxRegionToFile.Size = new Size(85, 19);
+            checkBoxRegionToFile.TabIndex = 4;
+            checkBoxRegionToFile.Text = "Save to File";
+            checkBoxRegionToFile.UseVisualStyleBackColor = true;
+            // 
+            // labelRegion
+            // 
+            labelRegion.AutoSize = true;
+            labelRegion.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            labelRegion.Location = new Point(6, 12);
+            labelRegion.Name = "labelRegion";
+            labelRegion.Size = new Size(84, 15);
+            labelRegion.TabIndex = 3;
+            labelRegion.Text = "Mode: Region";
+            // 
+            // checkBoxWindowToClipboard
+            // 
+            checkBoxWindowToClipboard.AutoSize = true;
+            checkBoxWindowToClipboard.Location = new Point(24, 145);
+            checkBoxWindowToClipboard.Name = "checkBoxWindowToClipboard";
+            checkBoxWindowToClipboard.Size = new Size(123, 19);
+            checkBoxWindowToClipboard.TabIndex = 2;
+            checkBoxWindowToClipboard.Text = "Copy to Clipboard";
+            checkBoxWindowToClipboard.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxWindowToFile
+            // 
+            checkBoxWindowToFile.AutoSize = true;
+            checkBoxWindowToFile.Location = new Point(24, 120);
+            checkBoxWindowToFile.Name = "checkBoxWindowToFile";
+            checkBoxWindowToFile.Size = new Size(85, 19);
+            checkBoxWindowToFile.TabIndex = 1;
+            checkBoxWindowToFile.Text = "Save to File";
+            checkBoxWindowToFile.UseVisualStyleBackColor = true;
+            // 
+            // labelWindow
+            // 
+            labelWindow.AutoSize = true;
+            labelWindow.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            labelWindow.Location = new Point(6, 102);
+            labelWindow.Name = "labelWindow";
+            labelWindow.Size = new Size(91, 15);
+            labelWindow.TabIndex = 0;
+            labelWindow.Text = "Mode: Window";
+            // 
+            // tabPageApplication
+            // 
+            tabPageApplication.Controls.Add(checkBoxTrayTooltipInfoFolder);
+            tabPageApplication.Controls.Add(checkBoxStartHidden);
+            tabPageApplication.Controls.Add(label9);
+            tabPageApplication.Controls.Add(checkBoxTrayTooltipWarning);
+            tabPageApplication.Controls.Add(label8);
+            tabPageApplication.Controls.Add(checkBoxTrayTooltipInfoCapture);
+            tabPageApplication.Controls.Add(numericThumbHeight);
+            tabPageApplication.Controls.Add(checkBoxCropThumbnails);
+            tabPageApplication.Controls.Add(numericThumbWidth);
+            tabPageApplication.Location = new Point(4, 24);
+            tabPageApplication.Name = "tabPageApplication";
+            tabPageApplication.Padding = new Padding(3);
+            tabPageApplication.Size = new Size(482, 455);
+            tabPageApplication.TabIndex = 1;
+            tabPageApplication.Text = "Application";
+            tabPageApplication.UseVisualStyleBackColor = true;
             // 
             // checkBoxTrayTooltipInfoFolder
             // 
@@ -476,16 +645,16 @@
             checkBoxTrayTooltipInfoFolder.Text = "System tray tooltip when creating folder";
             checkBoxTrayTooltipInfoFolder.UseVisualStyleBackColor = true;
             // 
-            // tabPage3
+            // tabPageHotkeys
             // 
-            tabPage3.Controls.Add(HotkeyGrid);
-            tabPage3.Location = new Point(4, 24);
-            tabPage3.Name = "tabPage3";
-            tabPage3.Padding = new Padding(3);
-            tabPage3.Size = new Size(482, 458);
-            tabPage3.TabIndex = 2;
-            tabPage3.Text = "Hotkeys";
-            tabPage3.UseVisualStyleBackColor = true;
+            tabPageHotkeys.Controls.Add(HotkeyGrid);
+            tabPageHotkeys.Location = new Point(4, 24);
+            tabPageHotkeys.Name = "tabPageHotkeys";
+            tabPageHotkeys.Padding = new Padding(3);
+            tabPageHotkeys.Size = new Size(482, 455);
+            tabPageHotkeys.TabIndex = 2;
+            tabPageHotkeys.Text = "Hotkeys";
+            tabPageHotkeys.UseVisualStyleBackColor = true;
             // 
             // HotkeyGrid
             // 
@@ -497,7 +666,7 @@
             HotkeyGrid.Name = "HotkeyGrid";
             HotkeyGrid.RowHeadersVisible = false;
             HotkeyGrid.RowTemplate.Height = 25;
-            HotkeyGrid.Size = new Size(470, 446);
+            HotkeyGrid.Size = new Size(470, 443);
             HotkeyGrid.TabIndex = 0;
             // 
             // ColumnFunction
@@ -541,7 +710,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(495, 528);
+            ClientSize = new Size(495, 525);
             Controls.Add(tabControl1);
             Controls.Add(buttonCancel);
             Controls.Add(buttonApply);
@@ -559,11 +728,13 @@
             ((System.ComponentModel.ISupportInitialize)numericThumbWidth).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericThumbHeight).EndInit();
             tabControl1.ResumeLayout(false);
-            tabPage1.ResumeLayout(false);
-            tabPage1.PerformLayout();
-            tabPage2.ResumeLayout(false);
-            tabPage2.PerformLayout();
-            tabPage3.ResumeLayout(false);
+            tabPageOutput.ResumeLayout(false);
+            tabPageOutput.PerformLayout();
+            tabPageModes.ResumeLayout(false);
+            tabPageModes.PerformLayout();
+            tabPageApplication.ResumeLayout(false);
+            tabPageApplication.PerformLayout();
+            tabPageHotkeys.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)HotkeyGrid).EndInit();
             ResumeLayout(false);
         }
@@ -605,9 +776,9 @@
         private CheckBox checkBoxTrayTooltipInfoCapture;
         private CheckBox checkBoxTrayTooltipWarning;
         private TabControl tabControl1;
-        private TabPage tabPage1;
-        private TabPage tabPage2;
-        private TabPage tabPage3;
+        private TabPage tabPageOutput;
+        private TabPage tabPageApplication;
+        private TabPage tabPageHotkeys;
         private DataGridView HotkeyGrid;
         private DataGridViewTextBoxColumn ColumnFunction;
         private DataGridViewTextBoxColumn ColumnKey;
@@ -616,5 +787,19 @@
         private DataGridViewCheckBoxColumn ColumnShift;
         private DataGridViewCheckBoxColumn ColumnWin;
         private CheckBox checkBoxTrayTooltipInfoFolder;
+        private TabPage tabPageModes;
+        private CheckBox checkBoxWindowToClipboard;
+        private CheckBox checkBoxWindowToFile;
+        private Label labelWindow;
+        private CheckBox checkBoxRegionComplete;
+        private CheckBox checkBoxAllScreensToClipboard;
+        private CheckBox checkBoxAllScreensToFile;
+        private Label label10;
+        private CheckBox checkBoxScreenToClipboard;
+        private CheckBox checkBoxScreenToFile;
+        private Label label11;
+        private CheckBox checkBoxRegionToClipboard;
+        private CheckBox checkBoxRegionToFile;
+        private Label labelRegion;
     }
 }
