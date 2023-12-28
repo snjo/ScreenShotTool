@@ -13,7 +13,7 @@ namespace ScreenShotTool
         Settings settings = Settings.Default;
         TextWindow? helpWindow;
         ImageFormat DestinationFormat = ImageFormat.Jpeg;
-        int counter = 0;
+        //int counter = 0;
         string lastFolder = ".";
         string lastSavedFile = "";
         Options? options;
@@ -38,6 +38,7 @@ namespace ScreenShotTool
         {
             "CaptureWindow",
             "BrowseFolder",
+            "CaptureRegion"
         };
 
         #region form open and close
@@ -138,12 +139,14 @@ namespace ScreenShotTool
 
             if (id == HotkeyList["CaptureWindow"].ghk.id)
             {
-                //textBoxLog.Text += Environment.NewLine + "hotkey Capture Window";
                 CaptureAction(CaptureMode.Window);
+            }
+            if (id == HotkeyList["CaptureRegion"].ghk.id)
+            {
+                CaptureAction(CaptureMode.Region);
             }
             else if (id == HotkeyList["BrowseFolder"].ghk.id)
             {
-                //textBoxLog.Text += Environment.NewLine + "Browse";
                 BrowseFolderInExplorer(lastFolder);
             }
         }
@@ -171,35 +174,39 @@ namespace ScreenShotTool
 
         public void CaptureAction(CaptureMode mode)
         {
-            //Debug.WriteLine("CaptureAction started");
-            string DestinationFolder = settings.Foldername;
-            string DestinationFileName = settings.Filename;
+            string DestinationFolder = ComposeFileName(settings.Foldername);
+            string DestinationFileName = ComposeFileName(settings.Filename);
             string DestinationFileExtension = settings.FileExtension;
+            bool savedToFile = false;
             SetImageFormat();
 
             if (mode == CaptureMode.Window)
             {
-                DestinationFolder = ComposeFileName(settings.Foldername);
-                DestinationFileName = ComposeFileName(settings.Filename);
-                CaptureWindow(DestinationFolder, DestinationFileName + DestinationFileExtension, DestinationFormat);
+                savedToFile = CaptureWindow(DestinationFolder, DestinationFileName + DestinationFileExtension, DestinationFormat);
+                numericUpDownCounter.Value++;
+            }
+            else if (mode == CaptureMode.AllScreens)
+            {
+                savedToFile = CaptureAllScreens(ComposeFileName(settings.Foldername, "AllScreens"), ComposeFileName("Capture $c") + DestinationFileExtension, DestinationFormat);
                 numericUpDownCounter.Value++;
             }
             else if (mode == CaptureMode.Region)
             {
-                writeMessage("Region capture not yet implemented");
-                // ------------ TODO --------------
+                savedToFile = CaptureRegion(ComposeFileName(settings.Foldername, "Region"), ComposeFileName("Capture $d $t $c") + DestinationFileExtension, DestinationFormat);
+                numericUpDownCounter.Value++;
             }
 
-            if (showThumbnails)
+            if (showThumbnails && savedToFile)
             {
-                UpdateThumbnails();
+                AddThumbnail(DestinationFileName);
             }
 
             if (bitmap != null) bitmap.Dispose();
         }
 
-        private string ComposeFileName(string text)
+        private string ComposeFileName(string text, string overrideTitle = "")
         {
+            string windowTitle = string.Empty;
             string splitTitleString = settings.SplitTitleString;
             int titleMaxLength = settings.TitleMaxLength;
             int splitTitleIndex = settings.SplitTitleIndex;
@@ -215,8 +222,15 @@ namespace ScreenShotTool
             string millisecond =
                 DateTime.Now.Millisecond.ToString();
 
-            string windowTitle = MakeValidFileName(GetActiveWindowTitle());
-            windowTitle = ShortenString(windowTitle, titleMaxLength);
+            if (overrideTitle.Length > 0)
+            {
+                windowTitle = overrideTitle;
+            }
+            else
+            { 
+                windowTitle = MakeValidFileName(GetActiveWindowTitle());
+                windowTitle = ShortenString(windowTitle, titleMaxLength);
+            }
             if (splitTitleString.Length > 0)
             {
                 string[] titleSplit = windowTitle.Split(splitTitleString);
@@ -234,11 +248,22 @@ namespace ScreenShotTool
             return text;
         }
 
-        private void UpdateThumbnails()
+        private void AddThumbnail(string DestinationFileName)
         {
             if (bitmap == null) return;
-            string DestinationFileName = settings.Filename;
+            try
+            {
+                Debug.WriteLine("AddThumbnail, bitmap: " + bitmap.Size);
+            }
+            catch
+            {
+                Debug.WriteLine("AddThumbnail, bitmap error");
+                return;
+            }
+            
+
             int width = imageList.ImageSize.Width;
+            
             Image thumbImg = ResizeImage(bitmap, settings.ThumbnailWidth, settings.ThumbnailHeight, Settings.Default.CropThumbnails);
             imageList.Images.Add(thumbImg);
             thumbImg.Dispose();
@@ -259,7 +284,7 @@ namespace ScreenShotTool
         public static Bitmap ResizeImage(Image image, int width, int height, bool crop = false)
         {
             //https://stackoverflow.com/questions/1922040/how-to-resize-an-image-c-sharp
-            Debug.WriteLine("Resizing image from: " + image.Width + "x" + image.Height + " to " + width + "x" + height);
+            //Debug.WriteLine("Resizing image from: " + image.Width + "x" + image.Height + " to " + width + "x" + height);
             var destRect = new Rectangle(0, 0, width, height);
             var destImage = new Bitmap(width, height);
 
@@ -271,7 +296,9 @@ namespace ScreenShotTool
                 Debug.WriteLine("Crop to square: " + image.Width + "x" + image.Height + " to" + cropped.Width + "x" + cropped.Height);
             }
             else
+            {
                 cropped = image;
+            }
 
             destImage.SetResolution(cropped.HorizontalResolution, cropped.VerticalResolution);
 
@@ -393,10 +420,10 @@ namespace ScreenShotTool
             return input.Substring(0, Math.Min(maxLength, input.Length)).Trim();
         }
 
-        public void CaptureWindow(string folder, string filename, ImageFormat format)
+        public bool CaptureWindow(string folder, string filename, ImageFormat format)
         {
-            RECT windowRect;
-            GetWindowRect(GetActiveWindow(), out windowRect);
+            //RECT windowRect;
+            GetWindowRect(GetActiveWindow(), out RECT windowRect);
             if (settings.TrimChecked)
             {
                 windowRect.Left += settings.TrimLeft;
@@ -407,15 +434,87 @@ namespace ScreenShotTool
             if (windowRect.Width > 0 && windowRect.Height > 0)
             {
                 bitmap = CaptureBitmap(windowRect.Left, windowRect.Top, windowRect.Width, windowRect.Height);
-                counter++;
-                SaveBitmap(folder, filename, format, bitmap);
+                //counter++;
+                bool saved = SaveBitmap(folder, filename, format, bitmap);
+                return (saved);
             }
             else
             {
                 Debug.WriteLine("Capture size is less than zero. Capture aborted.");
-
                 ShowBalloonToolTip("Capture error", "Capture size is less than zero. Capture aborted.", ToolTipIcon.Warning, BalloonTipType.ScreenshotError);
+                return false;
             }
+        }
+
+        public bool CaptureRegion(string folder, string filename, ImageFormat format)
+        {
+            //bitmap = GetAllScreensImage();
+            //counter++;
+            Screen screen = Screen.FromPoint(Cursor.Position);
+            Bitmap bmp = GetScreenImage(screen);
+            ImageView imgView = new ImageView(true, screen, bmp);
+
+            //imgView.X = screen.Bounds.X;
+            //imgView.Y = screen.Bounds.Y;
+            imgView.Location = new Point(screen.Bounds.X, screen.Bounds.Y);
+            //imgView.SetBackgroundImage();
+            imgView.SetImage();
+            DialogResult result = imgView.ShowDialog();
+            if (result == DialogResult.Yes)
+            {
+                Bitmap? bmpResult = imgView.GetBitmap();
+                if (bmpResult != null)
+                {
+                    SaveBitmap(folder, filename, format, bmpResult);
+                    bmpResult.Dispose();
+                    return true;
+                }
+                else
+                {
+                    Debug.WriteLine("ImageView result image was null");
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        public bool CaptureAllScreens(string folder, string filename, ImageFormat format)
+        {
+            bitmap = GetAllScreensImage();
+            //counter++;
+            return SaveBitmap(folder, filename, format, bitmap);
+        }
+
+
+        private Bitmap GetAllScreensImage()
+        {
+            Rectangle screenBound = SystemInformation.VirtualScreen;
+            if (screenBound.Width > 0 && screenBound.Height > 0)
+            {
+                return CaptureBitmap(screenBound.Left, screenBound.Top, screenBound.Width, screenBound.Height);
+            }
+            else
+            {
+                Debug.WriteLine("Screen bounds size is less than zero. Capture aborted.");
+                ShowBalloonToolTip("Capture error", "Screen bounds  size is less than zero. Capture aborted.", ToolTipIcon.Warning, BalloonTipType.ScreenshotError);
+            }
+            return new Bitmap(0,0);
+        }
+
+        private Bitmap GetScreenImage(Screen screen)
+        {
+            Rectangle screenBound = screen.Bounds;//SystemInformation.VirtualScreen;
+            if (screenBound.Width > 0 && screenBound.Height > 0)
+            {
+                return CaptureBitmap(screenBound.Left, screenBound.Top, screenBound.Width, screenBound.Height);
+            }
+            else
+            {
+                Debug.WriteLine("Screen bounds size is less than zero. Capture aborted.");
+                ShowBalloonToolTip("Capture error", "Screen bounds  size is less than zero. Capture aborted.", ToolTipIcon.Warning, BalloonTipType.ScreenshotError);
+            }
+            
+            return new Bitmap(0, 0);
         }
 
         private bool SaveBitmap(string folder, string filename, ImageFormat format, Bitmap capture)
@@ -454,8 +553,9 @@ namespace ScreenShotTool
                     }
                     else
                     {
+                        Debug.WriteLine("Saving image with format " + format.ToString() + " to " + folder + "\\" + filename);
                         capture.Save(folder + "\\" + filename, format);
-                        Debug.WriteLine("Saving image with format " + format.ToString());
+                        //capture.Save("test.png", format);
                     }
                     writeMessage("Saved " + folder + "\\" + filename);
 
@@ -470,7 +570,7 @@ namespace ScreenShotTool
                         + folder + "\\" + filename + "\n"
                         + "Check that you have write permission for this folder\n"
                         + "\n"
-                        + ex.ToString());
+                        + ex.Message);
 
                     ShowBalloonToolTip("Capture error", "Couldn't save to folder." + folder + "\nCheck permission for this folder\n", ToolTipIcon.Warning, BalloonTipType.FolderError);
                     

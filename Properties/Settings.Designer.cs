@@ -97,7 +97,7 @@ namespace ScreenShotTool.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("PrintScreen")]
         public string hkCaptureRegionKey {
             get {
                 return ((string)(this["hkCaptureRegionKey"]));
@@ -121,7 +121,7 @@ namespace ScreenShotTool.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool hkCaptureRegionAlt {
             get {
                 return ((bool)(this["hkCaptureRegionAlt"]));
