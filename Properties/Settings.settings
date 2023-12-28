@@ -111,16 +111,16 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="hkCaptureAllScreensKey" Type="System.String" Scope="User">
-      <Value Profile="(Default)">PrintScreen</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="hkCaptureAllScreensCtrl" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="hkCaptureAllScreensAlt" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="hkCaptureAllScreensWin" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="hkCaptureAllScreensShift" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -156,7 +156,7 @@
       <Value Profile="(Default)">PrintScreen</Value>
     </Setting>
     <Setting Name="hkCaptureCurrentScreenCtrl" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="hkCaptureCurrentScreenAlt" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>

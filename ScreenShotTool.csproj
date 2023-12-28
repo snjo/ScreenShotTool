@@ -7,6 +7,8 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>img\sst.ico</ApplicationIcon>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>D:\Github\cert\keypair.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>

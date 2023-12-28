@@ -23,6 +23,15 @@ namespace ScreenShotTool
         public bool CompleteCaptureOnMoureRelease = false;
         public bool SaveToFile = false;
         public bool SendToClipboard = false;
+        private bool AdjustRegionIsPosition = false;
+
+        private enum AdjustMode
+        {
+            None,
+            Position,
+            Size
+        }
+        private AdjustMode adjustMode = AdjustMode.Size;
 
         public ImageView(bool startCropping, Screen activeScreen, Bitmap? image)
         {
@@ -83,7 +92,123 @@ namespace ScreenShotTool
                 DisposeAllImages();
                 DialogResult = DialogResult.No;
             }
+            if (e.KeyCode == Keys.S)
+            {
+                adjustMode = AdjustMode.Size;
+            }
+            if (e.KeyCode == Keys.P)
+            {
+                adjustMode = AdjustMode.Position;
+            }
+
+            if (e.Modifiers == Keys.Shift)
+            {
+                boostMultiplier = 10;
+            }
+            else
+            {
+                boostMultiplier = 1;
+            }
+
+            if (e.KeyCode == Keys.Left)
+            {
+                if (e.Modifiers == Keys.Control)
+                {
+                    //AdjustRegionSetMultiplier(1, 0, 0, 0);
+                    AdjustLeftMultiplier = 1;
+                    AdjustRightMultiplier = 0;
+                }
+                else
+                {
+                    AdjustRegion(-1, 0);
+                }
+            }
+            if (e.KeyCode == Keys.Right)
+            {
+                if (e.Modifiers == Keys.Control)
+                {
+                    AdjustLeftMultiplier = 0;
+                    AdjustRightMultiplier = 1;
+                }
+                else
+                {
+                    AdjustRegion(1, 0);
+                }
+            }
+            if (e.KeyCode == Keys.Up)
+            {
+                if (e.Modifiers == Keys.Control)
+                {
+                    AdjustTopMultiplier = 1;
+                    AdjustBottomMultiplier = 0;
+                }
+                else
+                {
+                    AdjustRegion(0, -1);
+                }
+            }
+            if (e.KeyCode == Keys.Down)
+            {
+                if (e.Modifiers == Keys.Control)
+                {
+                    AdjustTopMultiplier = 0;
+                    AdjustBottomMultiplier = 1;
+                }
+                else
+                {
+                    AdjustRegion(0, 1);
+                }
+            }
         }
+
+        #region Adjust Region bounds -------------------
+        int AdjustLeftMultiplier = 0;
+        int AdjustRightMultiplier = 1;
+        int AdjustTopMultiplier = 0;
+        int AdjustBottomMultiplier = 1;
+        int boostMultiplier = 1;
+        private void AdjustRegion(int x, int y)
+        {
+            if (adjustMode == AdjustMode.Size)
+            {
+                AdjustRegionSize(x, y);
+            }
+            else if (adjustMode == AdjustMode.Position)
+            {
+                AdjustRegionPosition(x, y);
+            }
+            pictureBoxDraw.Image = DrawSquare(pictureBoxDraw.Image, true, true);
+            CloneRegionImage();
+        }
+
+        private void AdjustRegionSize(int x, int y)
+        {
+            Debug.WriteLine($"Adjusting region: {x}, {y}");
+            Debug.WriteLine(regionRect.ToString());
+
+            regionRect.X += x * AdjustLeftMultiplier * boostMultiplier;
+            regionRect.Width += ((x * AdjustRightMultiplier) - (x * AdjustLeftMultiplier)) * boostMultiplier; //if Left is changed, width must update to keep size
+            regionRect.Y += y * AdjustTopMultiplier * boostMultiplier;
+            regionRect.Height += ((y * AdjustBottomMultiplier) - (y * AdjustTopMultiplier)) * boostMultiplier;
+
+            Debug.WriteLine(regionRect.ToString());
+        }
+
+        private void AdjustRegionPosition(int x, int y)
+        {
+            regionRect.X += x * boostMultiplier;
+            regionRect.Y += y * boostMultiplier;
+        }
+
+        //private void AdjustRegionSetMultiplier(int Left, int Right, int Top, int Bottom)
+        //{
+        //    AdjustLeftMultiplier = Left;
+        //    AdjustRightMultiplier = Right;
+        //    AdjustTopMultiplier = Top;
+        //    AdjustBottomMultiplier = Bottom;
+        //}
+
+        #endregion
 
         private void DisposeAllImages()
         {
@@ -114,7 +239,7 @@ namespace ScreenShotTool
         private void pictureBoxDraw_MouseDown(object sender, MouseEventArgs e)
         {
             squareCreated = false;
-            mouseRect = new Rectangle();
+            regionRect = new Rectangle();
             pictureBoxDraw.Image = new Bitmap(this.Width, this.Height);
             //Debug.WriteLine(this.Width + " " + this.Height);
             mouseStartX = Cursor.Position.X;
@@ -126,17 +251,8 @@ namespace ScreenShotTool
         private void pictureBoxDraw_MouseUp(object sender, MouseEventArgs e)
         {
             mouseDrag = false;
-            
-            if (mouseRect.Width > 0 && mouseRect.Height > 0)
-            {
-                Bitmap regionBmp;
-                regionBmp = new Bitmap(pictureBoxScreenshot.Image);
-                ImageResult = regionBmp.Clone(mouseRect, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            }
-            else
-            {
-                Debug.WriteLine("Region size is zero wide or high, can't save");
-            }
+
+            CloneRegionImage();
 
             if (CompleteCaptureOnMoureRelease)
             {
@@ -160,12 +276,22 @@ namespace ScreenShotTool
             }
         }
 
-        
+        private void CloneRegionImage()
+        {
+            if (regionRect.Width > 0 && regionRect.Height > 0)
+            {
+                Bitmap regionBmp;
+                regionBmp = new Bitmap(pictureBoxScreenshot.Image);
+                ImageResult = regionBmp.Clone(regionRect, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                regionBmp.Dispose();
+            }
+        }
+
         public SolidBrush brush = new SolidBrush(Color.Gray);
         public SolidBrush brushFill = new SolidBrush(Color.Gray);
         Pen pen = new Pen(Color.Gray);
         Color drawColor = Color.Green;
-        Rectangle mouseRect = new Rectangle();
+        Rectangle regionRect = new Rectangle();
 
         private void pictureBoxDraw_MouseMove(object sender, MouseEventArgs e)
         {
@@ -208,20 +334,20 @@ namespace ScreenShotTool
 
             if (mouseDrag)
             {
-                mouseRect = new Rectangle(rectX, rectY, rectWidth, rectHeight);
+                regionRect = new Rectangle(rectX, rectY, rectWidth, rectHeight);
             }
 
             if (drawSquare)
             {
-                graphic.DrawRectangle(pen, mouseRect);
-                graphic.FillRectangle(brushFill, mouseRect);
+                graphic.DrawRectangle(pen, regionRect);
+                graphic.FillRectangle(brushFill, regionRect);
             }
 
             if (drawText)
             {
                 int textX = Cursor.Position.X + 20 - screen.Bounds.X;
                 int textY = Cursor.Position.Y + 20 - screen.Bounds.Y;
-                graphic.DrawString($"W:{mouseRect.Width} H:{mouseRect.Height}", this.Font, brush, textX, textY);
+                graphic.DrawString($"W:{regionRect.Width} H:{regionRect.Height}", this.Font, brush, textX, textY);
                 graphic.DrawString($"Enter: Save, C: Copy, Esc: Cancel", this.Font, brush, textX, textY + 20);
             }
 
