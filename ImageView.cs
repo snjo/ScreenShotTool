@@ -59,6 +59,7 @@ namespace ScreenShotTool
         {
             if (e.KeyCode == Keys.Escape)
             {
+                Debug.WriteLine("Exiting ImageView");
                 DisposeAllImages();
                 DialogResult = DialogResult.Cancel;
             }
@@ -147,7 +148,8 @@ namespace ScreenShotTool
                 }
             }
 
-            pictureBoxDraw.Image = DrawSquare(pictureBoxDraw.Image, true, true);
+            //pictureBoxDraw.Image = DrawOverlay(pictureBoxDraw.Image, true, true);
+            updateOverlay();
         }
 
         #region Adjust Region bounds -------------------
@@ -171,15 +173,10 @@ namespace ScreenShotTool
 
         private void AdjustRegionSize(int x, int y)
         {
-            Debug.WriteLine($"Adjusting region: {x}, {y}");
-            Debug.WriteLine(regionRect.ToString());
-
             regionRect.X += x * AdjustLeftMultiplier * boostMultiplier;
             regionRect.Width += ((x * AdjustRightMultiplier) - (x * AdjustLeftMultiplier)) * boostMultiplier; //if Left is changed, width must update to keep size
             regionRect.Y += y * AdjustTopMultiplier * boostMultiplier;
             regionRect.Height += ((y * AdjustBottomMultiplier) - (y * AdjustTopMultiplier)) * boostMultiplier;
-
-            Debug.WriteLine(regionRect.ToString());
         }
 
         private void AdjustRegionPosition(int x, int y)
@@ -271,22 +268,50 @@ namespace ScreenShotTool
 
         private void pictureBoxDraw_MouseMove(object sender, MouseEventArgs e)
         {
-            if (mouseDrag || squareCreated)
+            //if (mouseDrag || squareCreated)
+            //{
+            //    pictureBoxDraw.Image = 
+            //        DrawOverlay(pictureBoxDraw.Image, true, true);
+            //}
+            //else
+            //{
+            //    pictureBoxDraw.Image = 
+            //        DrawOverlay(pictureBoxDraw.Image, true, true);
+            //}
+            updateOverlay();
+        }
+
+        public float frameRate = 60f; // 1 second / frames per second, in millis
+        int skippedFrames = 0;
+        DateTime LastFrame = DateTime.Now;
+
+        private void updateOverlay()
+        {
+            float MilliSecondsPerFrame = (1f / frameRate) * 1000;
+            //Debug.WriteLine("MS per frame: " + MilliSecondsPerFrame);
+            TimeSpan ts = DateTime.Now - LastFrame;
+            if (ts.Milliseconds >= MilliSecondsPerFrame)
             {
-                pictureBoxDraw.Image = DrawSquare(pictureBoxDraw.Image, true, true);
+                pictureBoxDraw.Image =
+                    DrawOverlay(pictureBoxDraw.Image, true, true);
+                Debug.WriteLine(skippedFrames);
+                LastFrame = DateTime.Now;
+                skippedFrames = 0;
             }
             else
             {
-                pictureBoxDraw.Image = DrawSquare(pictureBoxDraw.Image, false, true);
-
+                skippedFrames++;
             }
         }
 
-        private Image DrawSquare(Image outputImage, bool drawSquare, bool drawText)
+        
+
+        private Image DrawOverlay(Image outputImage, bool drawSquare, bool drawText, bool drawZoom = true)
         {
             Graphics graphic;
             outputImage = new Bitmap(this.Width, this.Height);
             graphic = Graphics.FromImage(outputImage);
+            graphic.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
             graphic.TextRenderingHint = TextRenderingHint.AntiAliasGridFit; // fixes ugly aliasing on text
 
             brush = new SolidBrush(drawColor);
@@ -315,51 +340,23 @@ namespace ScreenShotTool
 
             if (drawSquare)
             {
-                graphic.DrawRectangle(pen, regionRect);
-                graphic.FillRectangle(brushFill, regionRect);
+                DrawSelectionBox(graphic, pen);
             }
 
             if (drawText)
             {
-                int textX = Cursor.Position.X + 20 - screen.Bounds.X;
-                int textY = Cursor.Position.Y + 20 - screen.Bounds.Y;
-                graphic.DrawString($"W:{regionRect.Width} H:{regionRect.Height}\nEnter: Save, C: Clipboard, H: Help, Esc: Exit", this.Font, brush, textX, textY);
-                if (showHelp)
-                {
-                    graphic.FillRectangle(new SolidBrush(Color.FromArgb(200, 0, 0, 0)), new Rectangle(screen.Bounds.X + 10, screen.Bounds.Y + 10, 250, 200));
-                    graphic.DrawString($"Enter: Save\nC: Copy\nEsc: Cancel\nS: Size\nP: Position\nArrows: Move\nCtrl+Arrows: Select adjust side\nShift+Arrows: Fast adjust", this.Font, brush, screen.Bounds.X + 20, screen.Bounds.Y + 20);
-                }
+                DrawInfoText(graphic);
 
             }
 
             if (ShowAdjustmentArrows)
             {
-                int RightSide = regionRect.Right;
-                int LeftSide = regionRect.Left;
-                int TopSide = regionRect.Top;
-                int BottomSide = regionRect.Bottom;
-                int HalfHeight = regionRect.Height / 2;
-                int HalfWidth = regionRect.Width / 2;
-                int MiddleVertical = TopSide + HalfHeight;
-                int MiddleHorizontal = LeftSide + HalfWidth;
+                DrawAdjustmentArrows(graphic);
+            }
 
-                if (AdjustRightMultiplier != 0 || adjustMode == AdjustMode.Position)
-                {
-                    graphic.DrawPolygon(arrowPen, new Point[] { new Point(RightSide + 5, MiddleVertical - 5), new Point(RightSide + 10, MiddleVertical), new Point(RightSide + 5, MiddleVertical + 5) });
-                }
-                if (AdjustLeftMultiplier != 0 || adjustMode == AdjustMode.Position)
-                {
-                    graphic.DrawPolygon(arrowPen, new Point[] { new Point(LeftSide - 5, MiddleVertical - 5), new Point(LeftSide - 10, MiddleVertical), new Point(LeftSide - 5, MiddleVertical + 5) });
-                }
-
-                if (AdjustTopMultiplier != 0 || adjustMode == AdjustMode.Position)
-                {
-                    graphic.DrawPolygon(arrowPen, new Point[] { new Point(MiddleHorizontal - 5, TopSide - 5), new Point(MiddleHorizontal, TopSide - 10), new Point(MiddleHorizontal + 5, TopSide - 5) });
-                }
-                if (AdjustBottomMultiplier != 0 || adjustMode == AdjustMode.Position)
-                {
-                    graphic.DrawPolygon(arrowPen, new Point[] { new Point(MiddleHorizontal - 5, BottomSide + 5), new Point(MiddleHorizontal, BottomSide + 10), new Point(MiddleHorizontal + 5, BottomSide + 5) });
-                }
+            if (drawZoom)
+            {
+                DrawZoomView(graphic, pictureBoxScreenshot.Image);
             }
 
             if (rectWidth > 0 && rectHeight > 0)
@@ -367,6 +364,126 @@ namespace ScreenShotTool
                 squareCreated = true;
             }
             return outputImage;
+        }
+
+        //int frameCountdown = 0;
+        //int frameFrequency = 1;
+        private void DrawZoomView(Graphics graphic, Image screenshotInput)
+        {
+            try
+            {
+                Bitmap screenshot = new Bitmap(screenshotInput);
+                int zoomRadius = 20;
+                int zoomLevel = 10;
+                int distanceFromCursor = 80;
+                //screenshot = new Bitmap(pictureBoxScreenshot.Image);
+                int cursorX = Cursor.Position.X - screen.Bounds.X;
+                int cursorY = Cursor.Position.Y - screen.Bounds.Y;
+                Rectangle zoomRect = new Rectangle(Math.Max(0, cursorX - zoomRadius), Math.Max(0, cursorY - zoomRadius), zoomRadius * 2, zoomRadius * 2);
+
+                //TODO - fix zoom image not working at the edegs of the screen (showing wrong pixels for position)
+
+                if (zoomRect.X + zoomRect.Width > screenshot.Width)
+                {
+                   zoomRect.X = screenshot.Width - zoomRect.Width;
+                }
+                if (zoomRect.Y + zoomRect.Height > screenshot.Height)
+                {
+                    zoomRect.Y = screenshot.Height - zoomRect.Height;
+                }
+
+                Bitmap zoomImage = screenshot.Clone(zoomRect, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                Rectangle zoomBorder = new Rectangle(Cursor.Position.X - screen.Bounds.X, Cursor.Position.Y - screen.Bounds.Y + distanceFromCursor, zoomRadius * zoomLevel, zoomRadius * zoomLevel);
+                if (zoomBorder.X + zoomBorder.Width > screenshot.Width)
+                {
+                    zoomBorder.X = Cursor.Position.X - zoomBorder.Width - -30;
+                }
+                if (zoomBorder.Y + zoomBorder.Height > screenshot.Height)
+                {
+                    zoomBorder.Y = Cursor.Position.Y - zoomBorder.Height - 30;
+                }
+
+                graphic.DrawImage(zoomImage, zoomBorder.X, zoomBorder.Y, zoomBorder.Width, zoomBorder.Height);
+
+                graphic.DrawRectangle(pen, zoomBorder);
+
+                graphic.DrawLine(pen, 
+                    zoomBorder.X + (zoomBorder.Width / 2) - (zoomLevel/4), 
+                    zoomBorder.Y, 
+                    zoomBorder.X + (zoomBorder.Width / 2) - (zoomLevel/4), 
+                    zoomBorder.Y + zoomBorder.Height);
+                graphic.DrawLine(pen,
+                    zoomBorder.X,
+                    zoomBorder.Y + (zoomBorder.Height / 2) - (zoomLevel / 4), 
+                    zoomBorder.X + zoomBorder.Width,
+                    zoomBorder.Y + (zoomBorder.Height / 2) - (zoomLevel / 4));
+
+                //Rectangle rectAbove = new Rectangle(zoomBorder.X, zoomBorder.Y, 50, 50);
+                ////Debug.WriteLine(rectAbove);
+                //graphic.FillRectangle(brushFill, rectAbove);
+
+                screenshot.Dispose();
+                zoomImage.Dispose();
+            }
+            catch
+            {
+                Debug.WriteLine("Error updating Zoom view. Possibly when Disposing and closing form.");
+            }
+            
+            //    frameCountdown = frameFrequency;
+            //}
+            //else
+            //{
+            //    frameCountdown--;
+            //}
+        }
+
+        private void DrawInfoText(Graphics graphic)
+        {
+            int textX = Cursor.Position.X + 20 - screen.Bounds.X;
+            int textY = Cursor.Position.Y + 20 - screen.Bounds.Y;
+            graphic.DrawString($"W:{regionRect.Width} H:{regionRect.Height}\nEnter: Save, C: Clipboard, H: Help, Esc: Exit", this.Font, brush, textX, textY);
+            if (showHelp)
+            {
+                graphic.FillRectangle(new SolidBrush(Color.FromArgb(200, 0, 0, 0)), new Rectangle(screen.Bounds.X + 10, screen.Bounds.Y + 10, 250, 200));
+                graphic.DrawString($"Enter: Save\nC: Copy\nEsc: Cancel\nS: Size\nP: Position\nArrows: Move\nCtrl+Arrows: Select adjust side\nShift+Arrows: Fast adjust", this.Font, brush, screen.Bounds.X + 20, screen.Bounds.Y + 20);
+            }
+        }
+
+        private void DrawSelectionBox(Graphics graphic, Pen pen)
+        {
+            graphic.DrawRectangle(pen, regionRect);
+            graphic.FillRectangle(brushFill, regionRect);
+        }
+
+        private void DrawAdjustmentArrows(Graphics graphic)
+        {
+            int RightSide = regionRect.Right;
+            int LeftSide = regionRect.Left;
+            int TopSide = regionRect.Top;
+            int BottomSide = regionRect.Bottom;
+            int HalfHeight = regionRect.Height / 2;
+            int HalfWidth = regionRect.Width / 2;
+            int MiddleVertical = TopSide + HalfHeight;
+            int MiddleHorizontal = LeftSide + HalfWidth;
+
+            if (AdjustRightMultiplier != 0 || adjustMode == AdjustMode.Position)
+            {
+                graphic.DrawPolygon(arrowPen, new Point[] { new Point(RightSide + 5, MiddleVertical - 5), new Point(RightSide + 10, MiddleVertical), new Point(RightSide + 5, MiddleVertical + 5) });
+            }
+            if (AdjustLeftMultiplier != 0 || adjustMode == AdjustMode.Position)
+            {
+                graphic.DrawPolygon(arrowPen, new Point[] { new Point(LeftSide - 5, MiddleVertical - 5), new Point(LeftSide - 10, MiddleVertical), new Point(LeftSide - 5, MiddleVertical + 5) });
+            }
+
+            if (AdjustTopMultiplier != 0 || adjustMode == AdjustMode.Position)
+            {
+                graphic.DrawPolygon(arrowPen, new Point[] { new Point(MiddleHorizontal - 5, TopSide - 5), new Point(MiddleHorizontal, TopSide - 10), new Point(MiddleHorizontal + 5, TopSide - 5) });
+            }
+            if (AdjustBottomMultiplier != 0 || adjustMode == AdjustMode.Position)
+            {
+                graphic.DrawPolygon(arrowPen, new Point[] { new Point(MiddleHorizontal - 5, BottomSide + 5), new Point(MiddleHorizontal, BottomSide + 10), new Point(MiddleHorizontal + 5, BottomSide + 5) });
+            }
         }
 
         private void pictureBoxDraw_MouseLeave(object sender, EventArgs e)

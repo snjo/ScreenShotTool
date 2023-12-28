@@ -301,7 +301,7 @@ namespace ScreenShotTool.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(".jpg")]
+        [global::System.Configuration.DefaultSettingValueAttribute(".png")]
         public string FileExtension {
             get {
                 return ((string)(this["FileExtension"]));
