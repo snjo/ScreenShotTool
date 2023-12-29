@@ -347,12 +347,12 @@ namespace ScreenShotTool
             if (drawSquare)
             {
                 DrawSelectionBox(graphic, pen);
+                MaskRectangle(graphic, screen.Bounds, regionRect);
             }
 
             if (drawText)
             {
                 DrawInfoText(graphic);
-
             }
 
             if (ShowAdjustmentArrows)
@@ -483,36 +483,8 @@ namespace ScreenShotTool
 
                 // draw masking
 
-                int LeftSide = Math.Clamp(ActiveRegionRect.Left, zoomBorder.Left, zoomBorder.Right);
-                int RightSide = Math.Clamp(ActiveRegionRect.Right, zoomBorder.Left, zoomBorder.Right);
-                int TopSide = Math.Clamp(ActiveRegionRect.Top, zoomBorder.Top, zoomBorder.Bottom);
-                int BottomSide = Math.Clamp(ActiveRegionRect.Bottom, zoomBorder.Top, zoomBorder.Bottom);
-                int LeftSpace = LeftSide - zoomBorder.Left;
-                int RightSpace = zoomBorder.Right - RightSide;
-                int TopSpace = TopSide - zoomBorder.Top;
-                int BottomSpace = zoomBorder.Bottom - BottomSide;
-                int width = RightSide - LeftSide;
-                int height = BottomSide - TopSide;
-
-                if (ActiveRegionRect.Left > zoomBorder.Left)
-                {
-                    graphic.FillRectangle(brushFill, new Rectangle(zoomBorder.Left, zoomBorder.Top, LeftSpace, zoomBorder.Height));
-                }
-                if (ActiveRegionRect.Right < zoomBorder.Right)
-                {   
-                    graphic.FillRectangle(brushFill, new Rectangle(RightSide, zoomBorder.Top, RightSpace, zoomBorder.Height));
-                }
-
+                MaskRectangle(graphic, zoomBorder, ActiveRegionRect);
                 
-                if (ActiveRegionRect.Top > zoomBorder.Top)
-                {
-                    graphic.FillRectangle(brushFill, new Rectangle(LeftSide, zoomBorder.Top, width, TopSpace));
-                }
-
-                if (ActiveRegionRect.Bottom < zoomBorder.Bottom)
-                {
-                    graphic.FillRectangle(brushFill, new Rectangle(LeftSide, BottomSide, width, BottomSpace));
-                }
 
                 //----
 
@@ -522,6 +494,40 @@ namespace ScreenShotTool
             catch
             {
                 Debug.WriteLine("Error updating Zoom view. Possibly when Disposing and closing form.");
+            }
+        }
+
+        private void MaskRectangle(Graphics graphic, Rectangle ContainerRegion, Rectangle ActiveRegion)
+        {
+            int LeftSide = Math.Clamp(ActiveRegion.Left, ContainerRegion.Left, ContainerRegion.Right);
+            int RightSide = Math.Clamp(ActiveRegion.Right, ContainerRegion.Left, ContainerRegion.Right);
+            int TopSide = Math.Clamp(ActiveRegion.Top, ContainerRegion.Top, ContainerRegion.Bottom);
+            int BottomSide = Math.Clamp(ActiveRegion.Bottom, ContainerRegion.Top, ContainerRegion.Bottom);
+            int LeftSpace = LeftSide - ContainerRegion.Left;
+            int RightSpace = ContainerRegion.Right - RightSide;
+            int TopSpace = TopSide - ContainerRegion.Top;
+            int BottomSpace = ContainerRegion.Bottom - BottomSide;
+            int width = RightSide - LeftSide;
+            int height = BottomSide - TopSide;
+
+            if (ActiveRegion.Left > ContainerRegion.Left)
+            {
+                graphic.FillRectangle(brushFill, new Rectangle(ContainerRegion.Left, ContainerRegion.Top, LeftSpace, ContainerRegion.Height));
+            }
+            if (ActiveRegion.Right < ContainerRegion.Right)
+            {
+                graphic.FillRectangle(brushFill, new Rectangle(RightSide, ContainerRegion.Top, RightSpace, ContainerRegion.Height));
+            }
+
+
+            if (ActiveRegion.Top > ContainerRegion.Top)
+            {
+                graphic.FillRectangle(brushFill, new Rectangle(LeftSide, ContainerRegion.Top, width, TopSpace));
+            }
+
+            if (ActiveRegion.Bottom < ContainerRegion.Bottom)
+            {
+                graphic.FillRectangle(brushFill, new Rectangle(LeftSide, BottomSide, width, BottomSpace));
             }
         }
 
@@ -541,7 +547,7 @@ namespace ScreenShotTool
         {
             if (regionRect.Width == 0 || regionRect.Height == 0) return;
             graphic.DrawRectangle(pen, regionRect);
-            graphic.FillRectangle(brushFill, regionRect);
+            //graphic.FillRectangle(brushFill, regionRect);
         }
 
         private void DrawAdjustmentArrows(Graphics graphic)
