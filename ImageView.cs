@@ -188,7 +188,6 @@ namespace ScreenShotTool
                 }
             }
 
-            //pictureBoxDraw.Image = DrawOverlay(pictureBoxDraw.Image, true, true);
             updateOverlay();
         }
 
@@ -245,14 +244,12 @@ namespace ScreenShotTool
 
         }
 
-        //bool squareCreated = false;
         bool mouseDrag = false;
         int mouseStartX = 0;
         int mouseStartY = 0;
 
         private void pictureBoxDraw_MouseDown(object sender, MouseEventArgs e)
         {
-            //squareCreated = false;
             regionRect = new Rectangle();
             pictureBoxDraw.Image = new Bitmap(this.Width, this.Height);
             mouseStartX = Cursor.Position.X;
@@ -303,9 +300,6 @@ namespace ScreenShotTool
 
         private void pictureBoxDraw_MouseMove(object sender, MouseEventArgs e)
         {
-            //test
-            //SetForegroundWindow(Handle);
-
             updateOverlay();
         }
 
@@ -328,7 +322,6 @@ namespace ScreenShotTool
             {
                 pictureBoxDraw.Image =
                     DrawOverlay(pictureBoxDraw.Image, true, true);
-                //Debug.WriteLine(skippedFrames);
                 LastFrame = DateTime.Now;
                 skippedFrames = 0;
             }
@@ -373,7 +366,7 @@ namespace ScreenShotTool
                 DrawSelectionBox(graphic, linePen);
                 if (Settings.Default.MaskRegion)
                 {
-                    MaskRectangle(graphic, new Rectangle(0, 0, screen.Bounds.Width, screen.Bounds.Height), regionRect);
+                    MaskRectangle(graphic, new Rectangle(0, 0, screen.Bounds.Width, screen.Bounds.Height), regionRect, brushFill);
                 }
             }
 
@@ -473,9 +466,6 @@ namespace ScreenShotTool
                     zoomBorder.X + zoomBorder.Width,
                     zoomBorder.Y + (zoomBorder.Height / 2) - (zoomLevel / 4));
 
-                // test masking out unselected area
-                //Rectangle testActualRect = regionRect;
-
                 Rectangle testDisplayRect = new Rectangle(
                     (int)(-(cursorX * 4f)), 
                     (int)(-(cursorY * 4f)),
@@ -483,8 +473,8 @@ namespace ScreenShotTool
                     regionRect.Height
                 );
 
-                testDisplayRect.X += (int)(regionRect.X * 5f) + zoomPositionH;//(int)(distanceFromCursor * zoomPositionH);
-                testDisplayRect.Y += (int)(regionRect.Y * 5f) + zoomPositionV;//(int)(distanceFromCursor * zoomPositionV);
+                testDisplayRect.X += (int)(regionRect.X * 5f) + zoomPositionH;
+                testDisplayRect.Y += (int)(regionRect.Y * 5f) + zoomPositionV;
 
                 Rectangle ActiveRegionRect = new Rectangle(
                     testDisplayRect.X + (zoomBorder.Height / 2) - 3,
@@ -542,14 +532,8 @@ namespace ScreenShotTool
                 {
                     graphic.DrawRectangle(zoomRegionPen, ActiveRegionRect);
                 }
-                //----
 
-                // draw masking
-
-                MaskRectangle(graphic, zoomBorder, ActiveRegionRect);
-                
-
-                //----
+                MaskRectangle(graphic, zoomBorder, ActiveRegionRect, brushFill);
 
                 screenshot.Dispose();
                 zoomImage.Dispose();
@@ -560,7 +544,7 @@ namespace ScreenShotTool
             }
         }
 
-        private void MaskRectangle(Graphics graphic, Rectangle ContainerRegion, Rectangle ActiveRegion)
+        private void MaskRectangle(Graphics graphic, Rectangle ContainerRegion, Rectangle ActiveRegion, Brush maskingBrush)
         {
             int LeftSide = Math.Clamp(ActiveRegion.Left, ContainerRegion.Left, ContainerRegion.Right);
             int RightSide = Math.Clamp(ActiveRegion.Right, ContainerRegion.Left, ContainerRegion.Right);
@@ -575,22 +559,22 @@ namespace ScreenShotTool
 
             if (ActiveRegion.Left > ContainerRegion.Left)
             {
-                graphic.FillRectangle(brushFill, new Rectangle(ContainerRegion.Left, ContainerRegion.Top, LeftSpace, ContainerRegion.Height));
+                graphic.FillRectangle(maskingBrush, new Rectangle(ContainerRegion.Left, ContainerRegion.Top, LeftSpace, ContainerRegion.Height));
             }
             if (ActiveRegion.Right < ContainerRegion.Right)
             {
-                graphic.FillRectangle(brushFill, new Rectangle(RightSide, ContainerRegion.Top, RightSpace, ContainerRegion.Height));
+                graphic.FillRectangle(maskingBrush, new Rectangle(RightSide, ContainerRegion.Top, RightSpace, ContainerRegion.Height));
             }
 
 
             if (ActiveRegion.Top > ContainerRegion.Top)
             {
-                graphic.FillRectangle(brushFill, new Rectangle(LeftSide, ContainerRegion.Top, width, TopSpace));
+                graphic.FillRectangle(maskingBrush, new Rectangle(LeftSide, ContainerRegion.Top, width, TopSpace));
             }
 
             if (ActiveRegion.Bottom < ContainerRegion.Bottom)
             {
-                graphic.FillRectangle(brushFill, new Rectangle(LeftSide, BottomSide, width, BottomSpace));
+                graphic.FillRectangle(maskingBrush, new Rectangle(LeftSide, BottomSide, width, BottomSpace));
             }
         }
 

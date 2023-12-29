@@ -201,27 +201,28 @@ namespace ScreenShotTool
             if (mode == CaptureMode.Window)
             {
                 savedToFile = CaptureWindow(DestinationFolder, DestinationFileName + DestinationFileExtension, DestinationFormat);
-                IncrementCounter();
             }
             else if (mode == CaptureMode.SingleScreen)
             {
                 DestinationFolder = ComposeFileName(settings.Foldername, "Screen");
                 DestinationFileName = ComposeFileName(settings.Filename, "Screen");
                 savedToFile = CaptureSingleScreen(DestinationFolder, DestinationFileName + DestinationFileExtension, DestinationFormat);
-                IncrementCounter();
             }
             else if (mode == CaptureMode.AllScreens)
             {
                 DestinationFolder = ComposeFileName(settings.Foldername, "Screen");
                 DestinationFileName = ComposeFileName(settings.Filename, "Screen");
                 savedToFile = CaptureAllScreens(DestinationFolder, DestinationFileName + DestinationFileExtension, DestinationFormat);
-                IncrementCounter();
             }
             else if (mode == CaptureMode.Region)
             {
                 DestinationFolder = ComposeFileName(settings.Foldername, "Region");
                 DestinationFileName = ComposeFileName(settings.Filename, "Region");
                 savedToFile = CaptureRegion(DestinationFolder, DestinationFileName + DestinationFileExtension, DestinationFormat);
+            }
+
+            if (settings.Filename.Contains("$c") && savedToFile)
+            {
                 IncrementCounter();
             }
 
@@ -289,6 +290,7 @@ namespace ScreenShotTool
             text = text.Replace("$ms", millisecond);
             text = text.Replace("$w", windowTitle);
             text = text.Replace("$c", numericUpDownCounter.Value.ToString().PadLeft(3, '0'));
+            // incrementing the counter happens in CaptureAction if the file is actually saved
 
             return text;
         }
@@ -437,7 +439,6 @@ namespace ScreenShotTool
         private void SetImageFormat()
         {
             string DestinationFileExtension = settings.FileExtension;
-            //Debug.WriteLine("Set imageformat " + DestinationFileExtension);
             switch (DestinationFileExtension)
             {
                 case ".jpg":
@@ -831,7 +832,6 @@ namespace ScreenShotTool
                 if (item != null)
                 {
                     string itemFile = item.Tag.ToString() + "";
-                    //MessageBox.Show(item.Tag.ToString());
                     if (itemFile.Length > 0)
                     {
                         OpenFileExternal(itemFile);
@@ -878,7 +878,6 @@ namespace ScreenShotTool
             }
             else
             {
-                //MessageBox.Show("pressed" + e.KeyCode.ToString());
                 e.Handled = false;
             }
 
@@ -1174,31 +1173,6 @@ namespace ScreenShotTool
                     contextMenuListView.Show(Cursor.Position);
                 }
             }
-
-            //bool match = false;
-
-            //if (e.Button == System.Windows.Forms.MouseButtons.Right)
-            //{
-            //    foreach (ListViewItem item in listViewThumbnails.Items)
-            //    {
-            //        if (item.Bounds.Contains(new Point(e.X, e.Y)))
-            //        {
-            //            MenuItem[] mi = new MenuItem[] { new MenuItem("Hello"), new MenuItem("World"), new MenuItem(item.Name) };
-            //            listViewThumbnails.ContextMenu = new ContextMenu(mi);
-            //            match = true;
-            //            break;
-            //        }
-            //    }
-            //    if (match)
-            //    {
-            //        listViewThumbnails.ContextMenu.Show(listView1, new Point(e.X, e.Y));
-            //    }
-            //    else
-            //    {
-            //        //Show listViews context menu
-            //    }
-
-            //}
         }
     }
 }
