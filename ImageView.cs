@@ -273,6 +273,7 @@ namespace ScreenShotTool
         }
 
         public SolidBrush brush = new SolidBrush(Color.Gray);
+        public SolidBrush brushZoomRegion = new SolidBrush(Color.Red);
         public SolidBrush brushFill = new SolidBrush(Color.Gray);
         Pen pen = new Pen(Color.Gray);
         Pen arrowPen = new Pen(Color.Yellow);
@@ -319,7 +320,8 @@ namespace ScreenShotTool
             graphic.TextRenderingHint = TextRenderingHint.AntiAliasGridFit; // fixes ugly aliasing on text
 
             brush = new SolidBrush(drawColor);
-            brushFill = new SolidBrush(Color.FromArgb(100, drawColor.R, drawColor.G, drawColor.B));
+            brushZoomRegion = new SolidBrush(drawColor);
+            brushFill = new SolidBrush(Color.FromArgb(20, drawColor.R, drawColor.G, drawColor.B));
             Pen pen = new Pen(brush);
 
             int rectX = mouseStartX - screen.Bounds.X;
@@ -420,33 +422,98 @@ namespace ScreenShotTool
                     zoomBorder.Y + (zoomBorder.Height / 2) - (zoomLevel / 4));
 
                 // test masking out unselected area
-                //Rectangle testActualRect = new Rectangle(400, 400, 100, 100);
-                Rectangle testActualRect = regionRect;
+                //Rectangle testActualRect = regionRect;
 
+                Rectangle testDisplayRect = new Rectangle((int)(-(cursorX * 4f)), (int)(-(cursorY * 4f)), regionRect.Width, regionRect.Height);
+                testDisplayRect.X += (int)(regionRect.X * 5f);// + distanceFromCursor;
+                testDisplayRect.Y += (int)(regionRect.Y * 5f) + distanceFromCursor;
 
-                Rectangle testDisplayRect = new Rectangle((int)(-(cursorX * 4f)), (int)(-(cursorY * 4f)), testActualRect.Width, testActualRect.Height);
-                testDisplayRect.X += (int)(testActualRect.X * 5f);// + distanceFromCursor;
-                testDisplayRect.Y += (int)(testActualRect.Y * 5f) + distanceFromCursor;
-                
                 Rectangle ActiveRegionRect = new Rectangle(testDisplayRect.X + (zoomBorder.Height / 2) - 3, testDisplayRect.Y + (zoomBorder.Width / 2) - 3, (int)(testDisplayRect.Width * 5f), (int)(testDisplayRect.Height * 5f));
-                graphic.DrawRectangle(new Pen(new SolidBrush(Color.AliceBlue)), testActualRect);
 
-                //int leftCorrection = ActiveRegionRect.X - zoomBorder.X;
-                //if (leftCorrection < 0)
-                //{
-                //    Debug.WriteLine("Left correction: " + leftCorrection);
-                //    ActiveRegionRect.X = zoomBorder.X;
-                //    ActiveRegionRect.Width += leftCorrection;
-                //}
-                //int rigthCorrection = ActiveRegionRect.
-                //if 
-                //{
+                // crop region marker rectangle if it's outside the zoom rectangle
+                bool drawActiveRegion = true;
 
-                //}
-                //if (ActiveRegionRect.Y < zoomBorder.Y) ActiveRegionRect.Y = zoomBorder.Y;
+                int leftCorrection = ActiveRegionRect.Left - zoomBorder.Left;
+                if (ActiveRegionRect.Right < zoomBorder.Left)
+                {
+                    drawActiveRegion = false;
+                }
+                else if (leftCorrection < 0)
+                {
+                    ActiveRegionRect.X = zoomBorder.X;
+                    ActiveRegionRect.Width += leftCorrection;
+                }
 
+                int rightCorrection = ActiveRegionRect.Right - zoomBorder.Right;
+                if (ActiveRegionRect.Left > zoomBorder.Right)
+                {
+                    drawActiveRegion = false;
+                }
+                else if (ActiveRegionRect.Right > zoomBorder.Right)
+                {
+                    ActiveRegionRect.Width -= rightCorrection;
+                }
 
-                graphic.DrawRectangle(pen, ActiveRegionRect);
+                int topCorrection = ActiveRegionRect.Top - zoomBorder.Top;
+                if (ActiveRegionRect.Top > zoomBorder.Bottom)
+                {
+                    drawActiveRegion = false;
+                }
+                else if (topCorrection < 0)
+                {
+                    ActiveRegionRect.Y = zoomBorder.Y;
+                    ActiveRegionRect.Height += topCorrection;
+                }
+
+                int bottomCorrection = ActiveRegionRect.Bottom - zoomBorder.Bottom;
+                if (ActiveRegionRect.Top > zoomBorder.Bottom)
+                {
+                    drawActiveRegion = false;
+                }
+                else if (ActiveRegionRect.Bottom > zoomBorder.Bottom)
+                {
+                    ActiveRegionRect.Height -= bottomCorrection;
+                }
+
+                if (drawActiveRegion)
+                {
+                    graphic.DrawRectangle(new Pen(brushZoomRegion), ActiveRegionRect);
+                }
+                //----
+
+                // draw masking
+
+                int LeftSide = Math.Clamp(ActiveRegionRect.Left, zoomBorder.Left, zoomBorder.Right);
+                int RightSide = Math.Clamp(ActiveRegionRect.Right, zoomBorder.Left, zoomBorder.Right);
+                int TopSide = Math.Clamp(ActiveRegionRect.Top, zoomBorder.Top, zoomBorder.Bottom);
+                int BottomSide = Math.Clamp(ActiveRegionRect.Bottom, zoomBorder.Top, zoomBorder.Bottom);
+                int LeftSpace = LeftSide - zoomBorder.Left;
+                int RightSpace = zoomBorder.Right - RightSide;
+                int TopSpace = TopSide - zoomBorder.Top;
+                int BottomSpace = zoomBorder.Bottom - BottomSide;
+                int width = RightSide - LeftSide;
+                int height = BottomSide - TopSide;
+
+                if (ActiveRegionRect.Left > zoomBorder.Left)
+                {
+                    graphic.FillRectangle(brushFill, new Rectangle(zoomBorder.Left, zoomBorder.Top, LeftSpace, zoomBorder.Height));
+                }
+                if (ActiveRegionRect.Right < zoomBorder.Right)
+                {   
+                    graphic.FillRectangle(brushFill, new Rectangle(RightSide, zoomBorder.Top, RightSpace, zoomBorder.Height));
+                }
+
+                
+                if (ActiveRegionRect.Top > zoomBorder.Top)
+                {
+                    graphic.FillRectangle(brushFill, new Rectangle(LeftSide, zoomBorder.Top, width, TopSpace));
+                }
+
+                if (ActiveRegionRect.Bottom < zoomBorder.Bottom)
+                {
+                    graphic.FillRectangle(brushFill, new Rectangle(LeftSide, BottomSide, width, BottomSpace));
+                }
+
                 //----
 
                 screenshot.Dispose();
