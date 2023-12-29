@@ -40,7 +40,6 @@
             // 
             pictureBoxScreenshot.BackgroundImageLayout = ImageLayout.None;
             pictureBoxScreenshot.Location = new Point(0, 0);
-            pictureBoxScreenshot.Margin = new Padding(3, 4, 3, 4);
             pictureBoxScreenshot.Name = "pictureBoxScreenshot";
             pictureBoxScreenshot.Size = new Size(800, 450);
             pictureBoxScreenshot.SizeMode = PictureBoxSizeMode.AutoSize;
@@ -54,17 +53,15 @@
             panel1.Controls.Add(pictureBoxScreenshot);
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(0, 0);
-            panel1.Margin = new Padding(3, 4, 3, 4);
             panel1.Name = "panel1";
-            panel1.Size = new Size(914, 600);
+            panel1.Size = new Size(800, 510);
             panel1.TabIndex = 1;
             // 
             // pictureBoxDraw
             // 
-            pictureBoxDraw.Location = new Point(163, 168);
-            pictureBoxDraw.Margin = new Padding(3, 4, 3, 4);
+            pictureBoxDraw.Location = new Point(143, 143);
             pictureBoxDraw.Name = "pictureBoxDraw";
-            pictureBoxDraw.Size = new Size(114, 67);
+            pictureBoxDraw.Size = new Size(100, 57);
             pictureBoxDraw.TabIndex = 1;
             pictureBoxDraw.TabStop = false;
             pictureBoxDraw.Click += pictureBoxDraw_Click;
@@ -75,15 +72,14 @@
             // 
             // ImageView
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
-            ClientSize = new Size(914, 600);
+            ClientSize = new Size(800, 510);
             Controls.Add(panel1);
-            Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             FormBorderStyle = FormBorderStyle.None;
             KeyPreview = true;
-            Margin = new Padding(3, 4, 3, 4);
             Name = "ImageView";
             StartPosition = FormStartPosition.Manual;
             Text = "ImageView";

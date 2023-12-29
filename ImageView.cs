@@ -28,12 +28,14 @@ namespace ScreenShotTool
         readonly SolidBrush brushFill;
         readonly SolidBrush brushHelpBG;
         readonly SolidBrush blackBrush;
+        readonly SolidBrush brushText;
         readonly Pen linePen;
         readonly Pen arrowPen;
         readonly Pen zoomRegionPen;
         public Color lineColor = Color.Green;
         public Color arrowColor = Color.Yellow;
         public Color maskColor = Color.FromArgb(50, 0, 0 , 0);
+        public Color textColor = Color.LightGreen;
         Rectangle regionRect = new Rectangle();
 
         private enum AdjustMode
@@ -56,6 +58,7 @@ namespace ScreenShotTool
             brushZoomRegion = new SolidBrush(lineColor);
             brushFill = new SolidBrush(maskColor);
             brushHelpBG = new SolidBrush(Color.FromArgb(200, 0, 0, 0));
+            brushText = new SolidBrush(textColor);
             blackBrush = new SolidBrush(Color.Black);
             linePen = new Pen(lineColor);
             arrowPen = new Pen(arrowColor);
@@ -374,11 +377,6 @@ namespace ScreenShotTool
                 }
             }
 
-            if (drawText)
-            {
-                DrawInfoText(graphic);
-            }
-
             if (ShowAdjustmentArrows)
             {
                 DrawAdjustmentArrows(graphic);
@@ -387,6 +385,11 @@ namespace ScreenShotTool
             if (drawZoom)
             {
                 DrawZoomView(graphic, pictureBoxScreenshot.Image);
+            }
+
+            if (drawText)
+            {
+                DrawInfoText(graphic);
             }
 
             if (rectWidth > 0 && rectHeight > 0)
@@ -595,11 +598,12 @@ namespace ScreenShotTool
         {
             int textX = Cursor.Position.X + zoomPositionH - screen.Bounds.X;
             int textY = Cursor.Position.Y + zoomPositionV + zoomSize + 3 - screen.Bounds.Y;
-            graphic.DrawString($"W:{regionRect.Width} H:{regionRect.Height}    Esc: Exit, H: Help\nEnter: Save, C: Clipboard", this.Font, brush, textX, textY);
+            graphic.FillRectangle(brushHelpBG, new Rectangle(textX, textY, zoomSize, 40));
+            graphic.DrawString($"W:{regionRect.Width.ToString().PadLeft(4)} H:{regionRect.Height.ToString().PadLeft(4)} Esc: Exit, H: Help\nEnter: Save, C: Clipboard", this.Font, brushText, textX, textY);
             if (showHelp)
             {
                 graphic.FillRectangle(brushHelpBG, new Rectangle(screen.Bounds.X + 10, screen.Bounds.Y + 10, 250, 200));
-                graphic.DrawString($"Enter: Save\nC: Copy\nEsc: Cancel\nS: Size\nP: Position\nArrows: Move\nCtrl+Arrows: Select adjust side\nShift+Arrows: Fast adjust", this.Font, brush, screen.Bounds.X + 20, screen.Bounds.Y + 20);
+                graphic.DrawString($"Enter: Save\nC: Copy\nEsc: Cancel\nS: Size\nP: Position\nArrows: Move\nCtrl+Arrows: Select adjust side\nShift+Arrows: Fast adjust\nH: Toggle help", this.Font, brushText, screen.Bounds.X + 20, screen.Bounds.Y + 20);
             }
         }
 
