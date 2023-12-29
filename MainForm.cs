@@ -5,6 +5,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Forms;
 
 namespace ScreenShotTool
 {
@@ -17,6 +18,7 @@ namespace ScreenShotTool
         string lastFolder = ".";
         string lastSavedFile = "";
         Options? options;
+        bool showLog = false;
 
         public string helpText =
             "Default filename values:\r" +
@@ -78,6 +80,8 @@ namespace ScreenShotTool
             {
                 ShowApplication();
             }
+
+            UpdateLogVisible();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -86,7 +90,7 @@ namespace ScreenShotTool
             if (settings.ThumbnailHeight > 256) settings.ThumbnailHeight = 256;
             imageList.ImageSize = new Size(settings.ThumbnailWidth, settings.ThumbnailHeight);
             imageList.ColorDepth = ColorDepth.Depth32Bit;
-            listView1.LargeImageList = imageList;
+            listViewThumbnails.LargeImageList = imageList;
         }
 
         private void HideApplication()
@@ -131,11 +135,9 @@ namespace ScreenShotTool
 
         private void HandleHotkey(int id)
         {
-            //Debug.WriteLine("Handle hotkey: " + id);
-            //textBoxLog.Text += Environment.NewLine + "hotkey pressed: " + id + " at " + DateTime.Now.TimeOfDay;
             if (!HotkeyList.ContainsKey("CaptureWindow") || !HotkeyList.ContainsKey("BrowseFolder"))
             {
-                textBoxLog.Text += Environment.NewLine + "hotkey invalid: " + id;
+                writeMessage("hotkey invalid: " + id);
                 return;
             }
 
@@ -283,7 +285,7 @@ namespace ScreenShotTool
             Image thumbImg = ResizeImage(bitmap, settings.ThumbnailWidth, settings.ThumbnailHeight, Settings.Default.CropThumbnails);
             imageList.Images.Add(thumbImg);
             thumbImg.Dispose();
-            ListViewItem thumb = listView1.Items.Add(DestinationFileName);
+            ListViewItem thumb = listViewThumbnails.Items.Add(DestinationFileName);
             thumb.Text = DestinationFileName;
             thumb.Tag = lastSavedFile;
             thumb.ImageIndex = imageList.Images.Count - 1;
@@ -746,15 +748,6 @@ namespace ScreenShotTool
         }
         #endregion
 
-        private void buttonHelp_Click(object sender, EventArgs e)
-        {
-            textBoxLog.Text = "Default filename values:" + Environment.NewLine +
-                "$w - $d $t $ms ($c)" + Environment.NewLine +
-                "$w: Active Window Title" + Environment.NewLine +
-                "$d/t/ms: Date, Time, Milliseconds" + Environment.NewLine +
-                "$c: Counter number (auto increments)";
-        }
-
         public string BrowseFolderInExplorer(string folder)
         {
             if (folder.Length < 1)
@@ -804,9 +797,9 @@ namespace ScreenShotTool
 
         private void OpenSelectedImageExternal()
         {
-            if (listView1.SelectedItems.Count > 0)
+            if (listViewThumbnails.SelectedItems.Count > 0)
             {
-                ListViewItem item = listView1.SelectedItems[0];
+                ListViewItem item = listViewThumbnails.SelectedItems[0];
                 if (item != null)
                 {
                     string itemFile = item.Tag.ToString() + "";
@@ -822,7 +815,13 @@ namespace ScreenShotTool
         private void OpenFileExternal(string file)
         {
             if (File.Exists(file))
+            {
                 Process.Start(new ProcessStartInfo() { FileName = file, UseShellExecute = true });
+            }
+            else
+            {
+                writeMessage("Can't open file, it no longer exists: " + file);
+            }
         }
 
         #region click events --------------------------------------------------------
@@ -841,27 +840,7 @@ namespace ScreenShotTool
         {
             if (e.KeyCode == Keys.Delete)
             {
-                if (listView1.SelectedItems.Count > 0)
-                {
-                    Debug.WriteLine("deleting " + listView1.SelectedItems[0].Text);
-                    foreach (ListViewItem item in listView1.SelectedItems)
-                    {
-                        try
-                        {
-                            string deleteFile = item.Tag.ToString() + "";
-                            if (File.Exists(deleteFile))
-                            {
-                                File.Delete(deleteFile);
-                            }
-                            item.Remove();
-                        }
-                        catch
-                        {
-                            Debug.WriteLine("No file to delete: " + item.Tag.ToString());
-                        }
-                    }
-
-                }
+                DeleteSelectedFiles();
                 e.Handled = true;
             }
             if (e.KeyCode == Keys.Enter)
@@ -877,6 +856,37 @@ namespace ScreenShotTool
 
         }
 
+        private void DeleteSelectedFiles()
+        {
+            if (listViewThumbnails.SelectedItems.Count > 0)
+            {
+                Debug.WriteLine("deleting " + listViewThumbnails.SelectedItems[0].Text);
+                foreach (ListViewItem item in listViewThumbnails.SelectedItems)
+                {
+                    try
+                    {
+                        string deleteFile = item.Tag.ToString() + "";
+                        if (File.Exists(deleteFile))
+                        {
+                            File.Delete(deleteFile);
+                            writeMessage("Deleted file " + deleteFile);
+                            
+                        }
+                        else
+                        {
+                            writeMessage("File no longer exists, removing from list: " + deleteFile);
+                        }
+                        item.Remove();
+                    }
+                    catch
+                    {
+                        Debug.WriteLine("No file to delete: " + item.Tag.ToString());
+                    }
+                }
+
+            }
+        }
+
         private void buttonClearList_Click(object sender, EventArgs e)
         {
 
@@ -888,7 +898,7 @@ namespace ScreenShotTool
                 }
             }
             imageList.Images.Clear();
-            listView1.Clear();
+            listViewThumbnails.Clear();
         }
 
 
@@ -919,7 +929,7 @@ namespace ScreenShotTool
             Close();
         }
 
-        private void pToolStripMenuItem_Click(object sender, EventArgs e)
+        private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileExternal(lastSavedFile);
         }
@@ -1028,5 +1038,142 @@ namespace ScreenShotTool
         }
 
         #endregion
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+            showLog = !showLog;
+            UpdateLogVisible();
+        }
+
+        private void UpdateLogVisible()
+        {
+            int logHeight = 100;
+            int logMargin = 10;
+            int internalWidth = this.ClientSize.Width;
+            int internalCenter = internalWidth / 2;
+            int internalHeight = this.ClientSize.Height;
+            //listViewThumbnails.Visible = false;
+            Debug.WriteLine("log label location pre: " + labelShowLog.Location.ToString());
+            Debug.WriteLine("form size: " + this.Size.ToString());
+
+            if (showLog)
+            {
+                labelShowLog.Text = "Hide log";
+                labelShowLog.Location = new Point((internalCenter) - (labelShowLog.Width / 2), internalHeight - logHeight - labelShowLog.Height - 5);
+                textBoxLog.Visible = true;
+                textBoxLog.Location = new Point(logMargin, internalHeight - logHeight);
+                textBoxLog.Size = new Size(internalWidth - (logMargin * 2), logHeight - 5);
+                listViewThumbnails.Size = new Size(internalWidth - (logMargin * 2), internalHeight - logHeight - labelShowLog.Height - 40);
+            }
+            else
+            {
+                labelShowLog.Text = "Show log";
+                labelShowLog.Location = new Point((internalCenter) - (labelShowLog.Width / 2), internalHeight - labelShowLog.Height - 5);
+                textBoxLog.Visible = false;
+                listViewThumbnails.Size = new Size(internalWidth - (logMargin * 2), internalHeight - labelShowLog.Height - 40);
+            }
+            Debug.WriteLine("log label location post: " + labelShowLog.Location.ToString());
+        }
+
+        private void itemOpenImage_Click(object sender, EventArgs e)
+        {
+            // open first selected image in external viewer
+            if (listViewThumbnails.SelectedItems.Count > 0)
+            {
+                OpenFileExternal(listViewThumbnails.SelectedItems[0].Tag.ToString() + "");
+            }
+        }
+
+        private void itemRemove_Click(object sender, EventArgs e)
+        {
+            // remove all selected items from list, without deleting the file
+            foreach (ListViewItem item in listViewThumbnails.SelectedItems)
+            {
+                item.Remove();
+            }
+        }
+
+        private void itemDeleteFile_Click(object sender, EventArgs e)
+        {
+            // delete selected files
+            DeleteSelectedFiles();
+        }
+
+        private void itemOpenFolder_Click(object sender, EventArgs e)
+        {
+            // open folder of first selected file
+            if (listViewThumbnails.SelectedItems.Count > 0)
+            {
+                string? file = listViewThumbnails.SelectedItems[0].Tag.ToString();
+                if (file == null) return;
+                string? folder = Path.GetDirectoryName(file);
+                if (folder == null) return;
+                BrowseFolderInExplorer(folder);
+            }
+        }
+
+        private void copyToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listViewThumbnails.SelectedItems.Count > 0)
+            {
+                string? file = listViewThumbnails.SelectedItems[0].Tag.ToString();
+                if (file == null) return;
+                if (File.Exists(file))
+                {
+                    try
+                    {
+                        Image toClipboard = Image.FromFile(file);
+                        Clipboard.SetImage(toClipboard);
+                        toClipboard.Dispose();
+                    }
+                    catch
+                    {
+                        writeMessage("Copy to clipboard failed, error while opening file " + file);
+                    }
+                }
+                else
+                {
+                    writeMessage("Copy to clipboard failed, file no longer exists " + file);
+                }
+            }
+        }
+
+        private void listViewThumbnails_MouseDown(object sender, MouseEventArgs e)
+        {
+
+            if (e.Button == MouseButtons.Right)
+            {
+                var focusedItem = listViewThumbnails.FocusedItem;
+                if (focusedItem != null && focusedItem.Bounds.Contains(e.Location))
+                {
+                    contextMenuListView.Show(Cursor.Position);
+                }
+            }
+
+            //bool match = false;
+
+            //if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            //{
+            //    foreach (ListViewItem item in listViewThumbnails.Items)
+            //    {
+            //        if (item.Bounds.Contains(new Point(e.X, e.Y)))
+            //        {
+            //            MenuItem[] mi = new MenuItem[] { new MenuItem("Hello"), new MenuItem("World"), new MenuItem(item.Name) };
+            //            listViewThumbnails.ContextMenu = new ContextMenu(mi);
+            //            match = true;
+            //            break;
+            //        }
+            //    }
+            //    if (match)
+            //    {
+            //        listViewThumbnails.ContextMenu.Show(listView1, new Point(e.X, e.Y));
+            //    }
+            //    else
+            //    {
+            //        //Show listViews context menu
+            //    }
+
+            //}
+        }
     }
 }

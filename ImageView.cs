@@ -245,14 +245,14 @@ namespace ScreenShotTool
 
         }
 
-        bool squareCreated = false;
+        //bool squareCreated = false;
         bool mouseDrag = false;
         int mouseStartX = 0;
         int mouseStartY = 0;
 
         private void pictureBoxDraw_MouseDown(object sender, MouseEventArgs e)
         {
-            squareCreated = false;
+            //squareCreated = false;
             regionRect = new Rectangle();
             pictureBoxDraw.Image = new Bitmap(this.Width, this.Height);
             mouseStartX = Cursor.Position.X;
@@ -394,7 +394,7 @@ namespace ScreenShotTool
 
             if (rectWidth > 0 && rectHeight > 0)
             {
-                squareCreated = true;
+                //squareCreated = true;
             }
             return outputImage;
         }

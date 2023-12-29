@@ -36,7 +36,12 @@
             label2 = new Label();
             numericUpDownCounter = new NumericUpDown();
             buttonOptions = new Button();
-            listView1 = new ListView();
+            listViewThumbnails = new ListView();
+            contextMenuListView = new ContextMenuStrip(components);
+            itemOpenImage = new ToolStripMenuItem();
+            itemOpenFolder = new ToolStripMenuItem();
+            itemDeleteFile = new ToolStripMenuItem();
+            itemRemove = new ToolStripMenuItem();
             buttonClearList = new Button();
             notifyIcon1 = new NotifyIcon(components);
             contextMenuSysTray = new ContextMenuStrip(components);
@@ -48,18 +53,21 @@
             exitApplicationToolStripMenuItem = new ToolStripMenuItem();
             buttonHide = new Button();
             timerHide = new System.Windows.Forms.Timer(components);
+            labelShowLog = new Label();
+            copyToClipboardToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)numericUpDownCounter).BeginInit();
+            contextMenuListView.SuspendLayout();
             contextMenuSysTray.SuspendLayout();
             SuspendLayout();
             // 
             // textBoxLog
             // 
             textBoxLog.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            textBoxLog.Location = new Point(12, 288);
+            textBoxLog.Location = new Point(12, 299);
             textBoxLog.Multiline = true;
             textBoxLog.Name = "textBoxLog";
             textBoxLog.ScrollBars = ScrollBars.Vertical;
-            textBoxLog.Size = new Size(519, 119);
+            textBoxLog.Size = new Size(519, 108);
             textBoxLog.TabIndex = 5;
             // 
             // buttonOpenLastFolder
@@ -99,16 +107,52 @@
             buttonOptions.UseVisualStyleBackColor = true;
             buttonOptions.Click += buttonOptions_Click;
             // 
-            // listView1
+            // listViewThumbnails
             // 
-            listView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            listView1.Location = new Point(12, 32);
-            listView1.Name = "listView1";
-            listView1.Size = new Size(520, 249);
-            listView1.TabIndex = 0;
-            listView1.UseCompatibleStateImageBehavior = false;
-            listView1.DoubleClick += listView1_DoubleClick;
-            listView1.KeyDown += listView1_KeyDown;
+            listViewThumbnails.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            listViewThumbnails.ContextMenuStrip = contextMenuListView;
+            listViewThumbnails.Location = new Point(12, 32);
+            listViewThumbnails.Name = "listViewThumbnails";
+            listViewThumbnails.Size = new Size(520, 249);
+            listViewThumbnails.TabIndex = 0;
+            listViewThumbnails.UseCompatibleStateImageBehavior = false;
+            listViewThumbnails.DoubleClick += listView1_DoubleClick;
+            listViewThumbnails.KeyDown += listView1_KeyDown;
+            listViewThumbnails.MouseDown += listViewThumbnails_MouseDown;
+            // 
+            // contextMenuListView
+            // 
+            contextMenuListView.Items.AddRange(new ToolStripItem[] { itemOpenImage, itemOpenFolder, itemDeleteFile, itemRemove, copyToClipboardToolStripMenuItem });
+            contextMenuListView.Name = "contextMenuListView";
+            contextMenuListView.Size = new Size(199, 136);
+            // 
+            // itemOpenImage
+            // 
+            itemOpenImage.Name = "itemOpenImage";
+            itemOpenImage.Size = new Size(198, 22);
+            itemOpenImage.Text = "&Open Image";
+            itemOpenImage.Click += itemOpenImage_Click;
+            // 
+            // itemOpenFolder
+            // 
+            itemOpenFolder.Name = "itemOpenFolder";
+            itemOpenFolder.Size = new Size(198, 22);
+            itemOpenFolder.Text = "Open &Folder in Explorer";
+            itemOpenFolder.Click += itemOpenFolder_Click;
+            // 
+            // itemDeleteFile
+            // 
+            itemDeleteFile.Name = "itemDeleteFile";
+            itemDeleteFile.Size = new Size(198, 22);
+            itemDeleteFile.Text = "&Delete File";
+            itemDeleteFile.Click += itemDeleteFile_Click;
+            // 
+            // itemRemove
+            // 
+            itemRemove.Name = "itemRemove";
+            itemRemove.Size = new Size(198, 22);
+            itemRemove.Text = "&Remove (don't delete)";
+            itemRemove.Click += itemRemove_Click;
             // 
             // buttonClearList
             // 
@@ -173,7 +217,7 @@
             pToolStripMenuItem.Name = "pToolStripMenuItem";
             pToolStripMenuItem.Size = new Size(163, 22);
             pToolStripMenuItem.Text = "Open last &Screenshot";
-            pToolStripMenuItem.Click += pToolStripMenuItem_Click;
+            pToolStripMenuItem.Click += openFileToolStripMenuItem_Click;
             // 
             // exitApplicationToolStripMenuItem
             // 
@@ -196,14 +240,33 @@
             // 
             timerHide.Tick += timerHide_Tick;
             // 
+            // labelShowLog
+            // 
+            labelShowLog.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            labelShowLog.AutoSize = true;
+            labelShowLog.Location = new Point(239, 281);
+            labelShowLog.Name = "labelShowLog";
+            labelShowLog.Size = new Size(52, 15);
+            labelShowLog.TabIndex = 35;
+            labelShowLog.Text = "Hide log";
+            labelShowLog.Click += label1_Click;
+            // 
+            // copyToClipboardToolStripMenuItem
+            // 
+            copyToClipboardToolStripMenuItem.Name = "copyToClipboardToolStripMenuItem";
+            copyToClipboardToolStripMenuItem.Size = new Size(198, 22);
+            copyToClipboardToolStripMenuItem.Text = "&Copy to Clipboard";
+            copyToClipboardToolStripMenuItem.Click += copyToClipboardToolStripMenuItem_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(543, 419);
+            Controls.Add(labelShowLog);
             Controls.Add(buttonHide);
             Controls.Add(buttonClearList);
-            Controls.Add(listView1);
+            Controls.Add(listViewThumbnails);
             Controls.Add(buttonOptions);
             Controls.Add(label2);
             Controls.Add(numericUpDownCounter);
@@ -216,6 +279,7 @@
             Load += MainForm_Load;
             SizeChanged += MainForm_SizeChanged;
             ((System.ComponentModel.ISupportInitialize)numericUpDownCounter).EndInit();
+            contextMenuListView.ResumeLayout(false);
             contextMenuSysTray.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
@@ -229,7 +293,7 @@
         private Label label2;
         private NumericUpDown numericUpDownCounter;
         private Button buttonOptions;
-        private ListView listView1;
+        private ListView listViewThumbnails;
         private Button buttonClearList;
         private NotifyIcon notifyIcon1;
         private Button buttonHide;
@@ -241,5 +305,12 @@
         private ToolStripMenuItem pToolStripMenuItem;
         private ToolStripMenuItem exitApplicationToolStripMenuItem;
         private ToolStripMenuItem enableCroppingToolStripMenuItem;
+        private Label labelShowLog;
+        private ContextMenuStrip contextMenuListView;
+        private ToolStripMenuItem itemOpenImage;
+        private ToolStripMenuItem itemOpenFolder;
+        private ToolStripMenuItem itemDeleteFile;
+        private ToolStripMenuItem itemRemove;
+        private ToolStripMenuItem copyToClipboardToolStripMenuItem;
     }
 }
