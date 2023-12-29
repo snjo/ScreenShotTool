@@ -42,6 +42,7 @@
             itemOpenFolder = new ToolStripMenuItem();
             itemDeleteFile = new ToolStripMenuItem();
             itemRemove = new ToolStripMenuItem();
+            copyToClipboardToolStripMenuItem = new ToolStripMenuItem();
             buttonClearList = new Button();
             notifyIcon1 = new NotifyIcon(components);
             contextMenuSysTray = new ContextMenuStrip(components);
@@ -54,7 +55,6 @@
             buttonHide = new Button();
             timerHide = new System.Windows.Forms.Timer(components);
             labelShowLog = new Label();
-            copyToClipboardToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)numericUpDownCounter).BeginInit();
             contextMenuListView.SuspendLayout();
             contextMenuSysTray.SuspendLayout();
@@ -96,6 +96,7 @@
             numericUpDownCounter.Name = "numericUpDownCounter";
             numericUpDownCounter.Size = new Size(50, 23);
             numericUpDownCounter.TabIndex = 1;
+            numericUpDownCounter.ValueChanged += numericUpDownCounter_ValueChanged;
             // 
             // buttonOptions
             // 
@@ -124,7 +125,7 @@
             // 
             contextMenuListView.Items.AddRange(new ToolStripItem[] { itemOpenImage, itemOpenFolder, itemDeleteFile, itemRemove, copyToClipboardToolStripMenuItem });
             contextMenuListView.Name = "contextMenuListView";
-            contextMenuListView.Size = new Size(199, 136);
+            contextMenuListView.Size = new Size(199, 114);
             // 
             // itemOpenImage
             // 
@@ -153,6 +154,13 @@
             itemRemove.Size = new Size(198, 22);
             itemRemove.Text = "&Remove (don't delete)";
             itemRemove.Click += itemRemove_Click;
+            // 
+            // copyToClipboardToolStripMenuItem
+            // 
+            copyToClipboardToolStripMenuItem.Name = "copyToClipboardToolStripMenuItem";
+            copyToClipboardToolStripMenuItem.Size = new Size(198, 22);
+            copyToClipboardToolStripMenuItem.Text = "&Copy to Clipboard";
+            copyToClipboardToolStripMenuItem.Click += copyToClipboardToolStripMenuItem_Click;
             // 
             // buttonClearList
             // 
@@ -250,13 +258,6 @@
             labelShowLog.TabIndex = 35;
             labelShowLog.Text = "Hide log";
             labelShowLog.Click += label1_Click;
-            // 
-            // copyToClipboardToolStripMenuItem
-            // 
-            copyToClipboardToolStripMenuItem.Name = "copyToClipboardToolStripMenuItem";
-            copyToClipboardToolStripMenuItem.Size = new Size(198, 22);
-            copyToClipboardToolStripMenuItem.Text = "&Copy to Clipboard";
-            copyToClipboardToolStripMenuItem.Click += copyToClipboardToolStripMenuItem_Click;
             // 
             // MainForm
             // 

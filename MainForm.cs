@@ -3,6 +3,7 @@ using ScreenShotTool.Properties;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Drawing.Printing;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
@@ -95,6 +96,7 @@ namespace ScreenShotTool
             imageList.ImageSize = new Size(settings.ThumbnailWidth, settings.ThumbnailHeight);
             imageList.ColorDepth = ColorDepth.Depth32Bit;
             listViewThumbnails.LargeImageList = imageList;
+            SetCounter(settings.Counter);
         }
 
         private void HideApplication()
@@ -199,30 +201,52 @@ namespace ScreenShotTool
             if (mode == CaptureMode.Window)
             {
                 savedToFile = CaptureWindow(DestinationFolder, DestinationFileName + DestinationFileExtension, DestinationFormat);
-                numericUpDownCounter.Value++;
+                IncrementCounter();
             }
             else if (mode == CaptureMode.SingleScreen)
             {
-                savedToFile = CaptureSingleScreen(ComposeFileName(settings.Foldername, "Screen"), ComposeFileName("Capture $c") + DestinationFileExtension, DestinationFormat);
-                numericUpDownCounter.Value++;
+                DestinationFolder = ComposeFileName(settings.Foldername, "Screen");
+                DestinationFileName = ComposeFileName(settings.Filename, "Screen");
+                savedToFile = CaptureSingleScreen(DestinationFolder, DestinationFileName + DestinationFileExtension, DestinationFormat);
+                IncrementCounter();
             }
             else if (mode == CaptureMode.AllScreens)
             {
-                savedToFile = CaptureAllScreens(ComposeFileName(settings.Foldername, "Screen"), ComposeFileName("Capture $c") + DestinationFileExtension, DestinationFormat);
-                numericUpDownCounter.Value++;
+                DestinationFolder = ComposeFileName(settings.Foldername, "Screen");
+                DestinationFileName = ComposeFileName(settings.Filename, "Screen");
+                savedToFile = CaptureAllScreens(DestinationFolder, DestinationFileName + DestinationFileExtension, DestinationFormat);
+                IncrementCounter();
             }
             else if (mode == CaptureMode.Region)
             {
-                savedToFile = CaptureRegion(ComposeFileName(settings.Foldername, "Region"), ComposeFileName("Capture $d $t $c") + DestinationFileExtension, DestinationFormat);
-                numericUpDownCounter.Value++;
+                DestinationFolder = ComposeFileName(settings.Foldername, "Region");
+                DestinationFileName = ComposeFileName(settings.Filename, "Region");
+                savedToFile = CaptureRegion(DestinationFolder, DestinationFileName + DestinationFileExtension, DestinationFormat);
+                IncrementCounter();
             }
 
             if (showThumbnails && savedToFile)
             {
-                AddThumbnail(DestinationFileName);
+                AddThumbnail(DestinationFileName + DestinationFileExtension);
             }
 
             if (bitmap != null) bitmap.Dispose();
+        }
+
+        public void SetCounter(int num)
+        {
+            numericUpDownCounter.Value = num;
+        }
+
+        private void IncrementCounter()
+        {
+            numericUpDownCounter.Value += 1;
+        }
+
+        private void numericUpDownCounter_ValueChanged(object sender, EventArgs e)
+        {
+            settings.Counter = (int)numericUpDownCounter.Value;
+            settings.Save();
         }
 
         private string ComposeFileName(string text, string overrideTitle = "")
@@ -874,7 +898,7 @@ namespace ScreenShotTool
                         {
                             File.Delete(deleteFile);
                             writeMessage("Deleted file " + deleteFile);
-                            
+
                         }
                         else
                         {
@@ -977,6 +1001,7 @@ namespace ScreenShotTool
                     HideApplication();
                 }
             }
+            UpdateLogVisible();
         }
 
         #region Balloon Tip ----------------------------------------------------------------
@@ -1056,9 +1081,6 @@ namespace ScreenShotTool
             int internalWidth = this.ClientSize.Width;
             int internalCenter = internalWidth / 2;
             int internalHeight = this.ClientSize.Height;
-            //listViewThumbnails.Visible = false;
-            Debug.WriteLine("log label location pre: " + labelShowLog.Location.ToString());
-            Debug.WriteLine("form size: " + this.Size.ToString());
 
             if (showLog)
             {
@@ -1076,7 +1098,6 @@ namespace ScreenShotTool
                 textBoxLog.Visible = false;
                 listViewThumbnails.Size = new Size(internalWidth - (logMargin * 2), internalHeight - labelShowLog.Height - 40);
             }
-            Debug.WriteLine("log label location post: " + labelShowLog.Location.ToString());
         }
 
         private void itemOpenImage_Click(object sender, EventArgs e)

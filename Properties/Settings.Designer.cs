@@ -706,5 +706,17 @@ namespace ScreenShotTool.Properties {
                 this["MaskRegion"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Counter {
+            get {
+                return ((int)(this["Counter"]));
+            }
+            set {
+                this["Counter"] = value;
+            }
+        }
     }
 }

@@ -97,6 +97,7 @@
             ColumnShift = new DataGridViewCheckBoxColumn();
             ColumnWin = new DataGridViewCheckBoxColumn();
             buttonResetOptions = new Button();
+            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
@@ -138,7 +139,7 @@
             // buttonHelp
             // 
             buttonHelp.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            buttonHelp.Location = new Point(13, 494);
+            buttonHelp.Location = new Point(13, 530);
             buttonHelp.Name = "buttonHelp";
             buttonHelp.Size = new Size(54, 23);
             buttonHelp.TabIndex = 32;
@@ -238,7 +239,7 @@
             // buttonOK
             // 
             buttonOK.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonOK.Location = new Point(410, 494);
+            buttonOK.Location = new Point(410, 530);
             buttonOK.Name = "buttonOK";
             buttonOK.Size = new Size(75, 23);
             buttonOK.TabIndex = 35;
@@ -249,7 +250,7 @@
             // buttonApply
             // 
             buttonApply.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonApply.Location = new Point(329, 494);
+            buttonApply.Location = new Point(329, 530);
             buttonApply.Name = "buttonApply";
             buttonApply.Size = new Size(75, 23);
             buttonApply.TabIndex = 36;
@@ -260,7 +261,7 @@
             // buttonCancel
             // 
             buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonCancel.Location = new Point(248, 494);
+            buttonCancel.Location = new Point(248, 530);
             buttonCancel.Name = "buttonCancel";
             buttonCancel.Size = new Size(75, 23);
             buttonCancel.TabIndex = 37;
@@ -438,11 +439,12 @@
             tabControl1.Location = new Point(3, 5);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(490, 483);
+            tabControl1.Size = new Size(490, 519);
             tabControl1.TabIndex = 57;
             // 
             // tabPageOutput
             // 
+            tabPageOutput.Controls.Add(button1);
             tabPageOutput.Controls.Add(textBoxFolder);
             tabPageOutput.Controls.Add(textBoxSplitString);
             tabPageOutput.Controls.Add(numericUpDownJpegQuality);
@@ -468,7 +470,7 @@
             tabPageOutput.Location = new Point(4, 24);
             tabPageOutput.Name = "tabPageOutput";
             tabPageOutput.Padding = new Padding(3);
-            tabPageOutput.Size = new Size(482, 455);
+            tabPageOutput.Size = new Size(482, 491);
             tabPageOutput.TabIndex = 0;
             tabPageOutput.Text = "Capture Output";
             tabPageOutput.UseVisualStyleBackColor = true;
@@ -805,7 +807,8 @@
             // 
             // buttonResetOptions
             // 
-            buttonResetOptions.Location = new Point(73, 494);
+            buttonResetOptions.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            buttonResetOptions.Location = new Point(73, 530);
             buttonResetOptions.Name = "buttonResetOptions";
             buttonResetOptions.Size = new Size(97, 23);
             buttonResetOptions.TabIndex = 58;
@@ -813,11 +816,21 @@
             buttonResetOptions.UseVisualStyleBackColor = true;
             buttonResetOptions.Click += buttonResetOptions_Click;
             // 
+            // button1
+            // 
+            button1.Location = new Point(6, 450);
+            button1.Name = "button1";
+            button1.Size = new Size(126, 23);
+            button1.TabIndex = 49;
+            button1.Text = "Reset Counter to 0";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // Options
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(495, 525);
+            ClientSize = new Size(495, 561);
             Controls.Add(buttonResetOptions);
             Controls.Add(tabControl1);
             Controls.Add(buttonCancel);
@@ -919,5 +932,6 @@
         private Label label17;
         private CheckBox checkBoxMaskRegion;
         private Button buttonResetOptions;
+        private Button button1;
     }
 }
