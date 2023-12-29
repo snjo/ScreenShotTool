@@ -65,6 +65,10 @@
             tabControl1 = new TabControl();
             tabPageOutput = new TabPage();
             tabPageModes = new TabPage();
+            label17 = new Label();
+            label13 = new Label();
+            label12 = new Label();
+            numericUpDownFramerate = new NumericUpDown();
             checkBoxRegionComplete = new CheckBox();
             checkBoxAllScreensToClipboard = new CheckBox();
             checkBoxAllScreensToFile = new CheckBox();
@@ -79,6 +83,9 @@
             checkBoxWindowToFile = new CheckBox();
             labelWindow = new Label();
             tabPageApplication = new TabPage();
+            label16 = new Label();
+            label15 = new Label();
+            label14 = new Label();
             checkBoxTrayTooltipInfoFolder = new CheckBox();
             tabPageHotkeys = new TabPage();
             HotkeyGrid = new DataGridView();
@@ -88,13 +95,7 @@
             ColumnAlt = new DataGridViewCheckBoxColumn();
             ColumnShift = new DataGridViewCheckBoxColumn();
             ColumnWin = new DataGridViewCheckBoxColumn();
-            label14 = new Label();
-            label15 = new Label();
-            label16 = new Label();
-            label13 = new Label();
-            label12 = new Label();
-            numericUpDownFramerate = new NumericUpDown();
-            label17 = new Label();
+            checkBoxMaskRegion = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
@@ -107,10 +108,10 @@
             tabControl1.SuspendLayout();
             tabPageOutput.SuspendLayout();
             tabPageModes.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownFramerate).BeginInit();
             tabPageApplication.SuspendLayout();
             tabPageHotkeys.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)HotkeyGrid).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDownFramerate).BeginInit();
             SuspendLayout();
             // 
             // checkBoxTrim
@@ -473,6 +474,7 @@
             // 
             // tabPageModes
             // 
+            tabPageModes.Controls.Add(checkBoxMaskRegion);
             tabPageModes.Controls.Add(label17);
             tabPageModes.Controls.Add(label13);
             tabPageModes.Controls.Add(label12);
@@ -497,6 +499,45 @@
             tabPageModes.Text = "Modes";
             tabPageModes.UseVisualStyleBackColor = true;
             // 
+            // label17
+            // 
+            label17.AutoSize = true;
+            label17.Location = new Point(241, 104);
+            label17.Name = "label17";
+            label17.Size = new Size(23, 15);
+            label17.TabIndex = 68;
+            label17.Text = "fps";
+            // 
+            // label13
+            // 
+            label13.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            label13.Location = new Point(24, 128);
+            label13.Name = "label13";
+            label13.Size = new Size(435, 40);
+            label13.TabIndex = 67;
+            label13.Text = "If the framerate is higher than your sytem can handle, there will be additional lag to catch up.";
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(24, 104);
+            label12.Name = "label12";
+            label12.Size = new Size(157, 15);
+            label12.TabIndex = 66;
+            label12.Text = "Region select max framerate";
+            label12.Click += label12_Click;
+            // 
+            // numericUpDownFramerate
+            // 
+            numericUpDownFramerate.Increment = new decimal(new int[] { 5, 0, 0, 0 });
+            numericUpDownFramerate.Location = new Point(186, 102);
+            numericUpDownFramerate.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
+            numericUpDownFramerate.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
+            numericUpDownFramerate.Name = "numericUpDownFramerate";
+            numericUpDownFramerate.Size = new Size(54, 23);
+            numericUpDownFramerate.TabIndex = 65;
+            numericUpDownFramerate.Value = new decimal(new int[] { 30, 0, 0, 0 });
+            // 
             // checkBoxRegionComplete
             // 
             checkBoxRegionComplete.AutoSize = true;
@@ -511,7 +552,7 @@
             // checkBoxAllScreensToClipboard
             // 
             checkBoxAllScreensToClipboard.AutoSize = true;
-            checkBoxAllScreensToClipboard.Location = new Point(24, 353);
+            checkBoxAllScreensToClipboard.Location = new Point(24, 368);
             checkBoxAllScreensToClipboard.Name = "checkBoxAllScreensToClipboard";
             checkBoxAllScreensToClipboard.Size = new Size(123, 19);
             checkBoxAllScreensToClipboard.TabIndex = 11;
@@ -521,7 +562,7 @@
             // checkBoxAllScreensToFile
             // 
             checkBoxAllScreensToFile.AutoSize = true;
-            checkBoxAllScreensToFile.Location = new Point(24, 328);
+            checkBoxAllScreensToFile.Location = new Point(24, 343);
             checkBoxAllScreensToFile.Name = "checkBoxAllScreensToFile";
             checkBoxAllScreensToFile.Size = new Size(85, 19);
             checkBoxAllScreensToFile.TabIndex = 10;
@@ -532,7 +573,7 @@
             // 
             label10.AutoSize = true;
             label10.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            label10.Location = new Point(6, 310);
+            label10.Location = new Point(6, 325);
             label10.Name = "label10";
             label10.Size = new Size(106, 15);
             label10.TabIndex = 9;
@@ -541,7 +582,7 @@
             // checkBoxScreenToClipboard
             // 
             checkBoxScreenToClipboard.AutoSize = true;
-            checkBoxScreenToClipboard.Location = new Point(24, 288);
+            checkBoxScreenToClipboard.Location = new Point(24, 303);
             checkBoxScreenToClipboard.Name = "checkBoxScreenToClipboard";
             checkBoxScreenToClipboard.Size = new Size(123, 19);
             checkBoxScreenToClipboard.TabIndex = 8;
@@ -551,7 +592,7 @@
             // checkBoxScreenToFile
             // 
             checkBoxScreenToFile.AutoSize = true;
-            checkBoxScreenToFile.Location = new Point(24, 263);
+            checkBoxScreenToFile.Location = new Point(24, 278);
             checkBoxScreenToFile.Name = "checkBoxScreenToFile";
             checkBoxScreenToFile.Size = new Size(85, 19);
             checkBoxScreenToFile.TabIndex = 7;
@@ -562,7 +603,7 @@
             // 
             label11.AutoSize = true;
             label11.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            label11.Location = new Point(6, 245);
+            label11.Location = new Point(6, 260);
             label11.Name = "label11";
             label11.Size = new Size(130, 15);
             label11.TabIndex = 6;
@@ -601,7 +642,7 @@
             // checkBoxWindowToClipboard
             // 
             checkBoxWindowToClipboard.AutoSize = true;
-            checkBoxWindowToClipboard.Location = new Point(24, 223);
+            checkBoxWindowToClipboard.Location = new Point(24, 238);
             checkBoxWindowToClipboard.Name = "checkBoxWindowToClipboard";
             checkBoxWindowToClipboard.Size = new Size(123, 19);
             checkBoxWindowToClipboard.TabIndex = 2;
@@ -611,7 +652,7 @@
             // checkBoxWindowToFile
             // 
             checkBoxWindowToFile.AutoSize = true;
-            checkBoxWindowToFile.Location = new Point(24, 198);
+            checkBoxWindowToFile.Location = new Point(24, 213);
             checkBoxWindowToFile.Name = "checkBoxWindowToFile";
             checkBoxWindowToFile.Size = new Size(85, 19);
             checkBoxWindowToFile.TabIndex = 1;
@@ -622,7 +663,7 @@
             // 
             labelWindow.AutoSize = true;
             labelWindow.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            labelWindow.Location = new Point(6, 178);
+            labelWindow.Location = new Point(6, 193);
             labelWindow.Name = "labelWindow";
             labelWindow.Size = new Size(91, 15);
             labelWindow.TabIndex = 0;
@@ -649,6 +690,36 @@
             tabPageApplication.TabIndex = 1;
             tabPageApplication.Text = "Application";
             tabPageApplication.UseVisualStyleBackColor = true;
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label16.Location = new Point(5, 137);
+            label16.Name = "label16";
+            label16.Size = new Size(70, 15);
+            label16.TabIndex = 63;
+            label16.Text = "Thumbnails";
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label15.Location = new Point(5, 47);
+            label15.Name = "label15";
+            label15.Size = new Size(73, 15);
+            label15.TabIndex = 62;
+            label15.Text = "System tray";
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label14.Location = new Point(5, 7);
+            label14.Name = "label14";
+            label14.Size = new Size(49, 15);
+            label14.TabIndex = 61;
+            label14.Text = "Startup";
             // 
             // checkBoxTrayTooltipInfoFolder
             // 
@@ -721,74 +792,15 @@
             ColumnWin.Name = "ColumnWin";
             ColumnWin.Width = 50;
             // 
-            // label14
+            // checkBoxMaskRegion
             // 
-            label14.AutoSize = true;
-            label14.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            label14.Location = new Point(5, 7);
-            label14.Name = "label14";
-            label14.Size = new Size(49, 15);
-            label14.TabIndex = 61;
-            label14.Text = "Startup";
-            // 
-            // label15
-            // 
-            label15.AutoSize = true;
-            label15.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            label15.Location = new Point(5, 47);
-            label15.Name = "label15";
-            label15.Size = new Size(73, 15);
-            label15.TabIndex = 62;
-            label15.Text = "System tray";
-            // 
-            // label16
-            // 
-            label16.AutoSize = true;
-            label16.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            label16.Location = new Point(5, 137);
-            label16.Name = "label16";
-            label16.Size = new Size(70, 15);
-            label16.TabIndex = 63;
-            label16.Text = "Thumbnails";
-            // 
-            // label13
-            // 
-            label13.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
-            label13.Location = new Point(24, 128);
-            label13.Name = "label13";
-            label13.Size = new Size(435, 40);
-            label13.TabIndex = 67;
-            label13.Text = "If the framerate is higher than your sytem can handle, there will be additional lag to catch up.";
-            // 
-            // label12
-            // 
-            label12.AutoSize = true;
-            label12.Location = new Point(24, 104);
-            label12.Name = "label12";
-            label12.Size = new Size(157, 15);
-            label12.TabIndex = 66;
-            label12.Text = "Region select max framerate";
-            label12.Click += label12_Click;
-            // 
-            // numericUpDownFramerate
-            // 
-            numericUpDownFramerate.Increment = new decimal(new int[] { 5, 0, 0, 0 });
-            numericUpDownFramerate.Location = new Point(186, 102);
-            numericUpDownFramerate.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
-            numericUpDownFramerate.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
-            numericUpDownFramerate.Name = "numericUpDownFramerate";
-            numericUpDownFramerate.Size = new Size(54, 23);
-            numericUpDownFramerate.TabIndex = 65;
-            numericUpDownFramerate.Value = new decimal(new int[] { 30, 0, 0, 0 });
-            // 
-            // label17
-            // 
-            label17.AutoSize = true;
-            label17.Location = new Point(241, 104);
-            label17.Name = "label17";
-            label17.Size = new Size(23, 15);
-            label17.TabIndex = 68;
-            label17.Text = "fps";
+            checkBoxMaskRegion.AutoSize = true;
+            checkBoxMaskRegion.Location = new Point(36, 164);
+            checkBoxMaskRegion.Name = "checkBoxMaskRegion";
+            checkBoxMaskRegion.Size = new Size(219, 19);
+            checkBoxMaskRegion.TabIndex = 69;
+            checkBoxMaskRegion.Text = "Mask areas outside region with color";
+            checkBoxMaskRegion.UseVisualStyleBackColor = true;
             // 
             // Options
             // 
@@ -816,11 +828,11 @@
             tabPageOutput.PerformLayout();
             tabPageModes.ResumeLayout(false);
             tabPageModes.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownFramerate).EndInit();
             tabPageApplication.ResumeLayout(false);
             tabPageApplication.PerformLayout();
             tabPageHotkeys.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)HotkeyGrid).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDownFramerate).EndInit();
             ResumeLayout(false);
         }
 
@@ -893,5 +905,6 @@
         private Label label15;
         private Label label14;
         private Label label17;
+        private CheckBox checkBoxMaskRegion;
     }
 }

@@ -694,5 +694,17 @@ namespace ScreenShotTool.Properties {
                 this["MaxFramerate"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool MaskRegion {
+            get {
+                return ((bool)(this["MaskRegion"]));
+            }
+            set {
+                this["MaskRegion"] = value;
+            }
+        }
     }
 }

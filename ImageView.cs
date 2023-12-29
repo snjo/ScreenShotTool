@@ -347,7 +347,10 @@ namespace ScreenShotTool
             if (drawSquare)
             {
                 DrawSelectionBox(graphic, pen);
-                MaskRectangle(graphic, screen.Bounds, regionRect);
+                if (Settings.Default.MaskRegion)
+                {
+                    MaskRectangle(graphic, new Rectangle(0, 0, screen.Bounds.Width, screen.Bounds.Height), regionRect);
+                }
             }
 
             if (drawText)
