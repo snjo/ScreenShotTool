@@ -49,7 +49,7 @@ namespace ScreenShotTool.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool hkCaptureWindowAlt {
             get {
                 return ((bool)(this["hkCaptureWindowAlt"]));
@@ -121,7 +121,7 @@ namespace ScreenShotTool.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool hkCaptureRegionAlt {
             get {
                 return ((bool)(this["hkCaptureRegionAlt"]));
@@ -157,7 +157,7 @@ namespace ScreenShotTool.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("PrintScreen")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string hkBrowseFolderKey {
             get {
                 return ((string)(this["hkBrowseFolderKey"]));
@@ -169,7 +169,7 @@ namespace ScreenShotTool.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool hkBrowseFolderCtrl {
             get {
                 return ((bool)(this["hkBrowseFolderCtrl"]));
@@ -217,7 +217,7 @@ namespace ScreenShotTool.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("$w $c")]
+        [global::System.Configuration.DefaultSettingValueAttribute("$w $d $t $c")]
         public string Filename {
             get {
                 return ((string)(this["Filename"]));
@@ -325,7 +325,7 @@ namespace ScreenShotTool.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
         public int TitleMaxLength {
             get {
                 return ((int)(this["TitleMaxLength"]));
@@ -637,7 +637,7 @@ namespace ScreenShotTool.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool hkCaptureCurrentScreenCtrl {
             get {
                 return ((bool)(this["hkCaptureCurrentScreenCtrl"]));
@@ -661,7 +661,7 @@ namespace ScreenShotTool.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool hkCaptureCurrentScreenShift {
             get {
                 return ((bool)(this["hkCaptureCurrentScreenShift"]));

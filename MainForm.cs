@@ -49,7 +49,24 @@ namespace ScreenShotTool
         public MainForm()
         {
             InitializeComponent();
+            LoadHotkeysFromSettings();
 
+            updateTrimStatus();
+
+            if (Settings.Default.StartHidden)
+            {
+                HideApplication();
+            }
+            else
+            {
+                ShowApplication();
+            }
+
+            UpdateLogVisible();
+        }
+
+        public void LoadHotkeysFromSettings()
+        {
             HotkeyList = HotkeyTools.LoadHotkeys(HotkeyList, HotkeyNames, this);
 
             if (settings.RegisterHotkeys)
@@ -69,19 +86,6 @@ namespace ScreenShotTool
                     ShowBalloonToolTip("Could not register hotkeys", warningText, ToolTipIcon.Warning, BalloonTipType.HotkeyError);
                 }
             }
-
-            updateTrimStatus();
-
-            if (Settings.Default.StartHidden)
-            {
-                HideApplication();
-            }
-            else
-            {
-                ShowApplication();
-            }
-
-            UpdateLogVisible();
         }
 
         private void MainForm_Load(object sender, EventArgs e)

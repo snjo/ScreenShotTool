@@ -265,5 +265,13 @@ namespace ScreenShotTool
         {
 
         }
+
+        private void buttonResetOptions_Click(object sender, EventArgs e)
+        {
+            settings.Reset();
+            HotkeyTools.ReleaseHotkeys(mainForm.HotkeyList);
+            mainForm.LoadHotkeysFromSettings();
+            FillSettings();
+        }
     }
 }

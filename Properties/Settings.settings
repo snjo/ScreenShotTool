@@ -9,7 +9,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="hkCaptureWindowAlt" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="hkCaptureWindowShift" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -27,7 +27,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="hkCaptureRegionAlt" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="hkCaptureRegionShift" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -36,10 +36,10 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="hkBrowseFolderKey" Type="System.String" Scope="User">
-      <Value Profile="(Default)">PrintScreen</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="hkBrowseFolderCtrl" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="hkBrowseFolderAlt" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -51,7 +51,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="Filename" Type="System.String" Scope="User">
-      <Value Profile="(Default)">$w $c</Value>
+      <Value Profile="(Default)">$w $d $t $c</Value>
     </Setting>
     <Setting Name="Foldername" Type="System.String" Scope="User">
       <Value Profile="(Default)">.\$w</Value>
@@ -78,7 +78,7 @@
       <Value Profile="(Default)">Capture</Value>
     </Setting>
     <Setting Name="TitleMaxLength" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">30</Value>
+      <Value Profile="(Default)">50</Value>
     </Setting>
     <Setting Name="SplitTitleString" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -156,13 +156,13 @@
       <Value Profile="(Default)">PrintScreen</Value>
     </Setting>
     <Setting Name="hkCaptureCurrentScreenCtrl" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="hkCaptureCurrentScreenAlt" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="hkCaptureCurrentScreenShift" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="hkCaptureCurrentScreenWin" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>

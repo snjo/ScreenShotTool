@@ -65,6 +65,7 @@
             tabControl1 = new TabControl();
             tabPageOutput = new TabPage();
             tabPageModes = new TabPage();
+            checkBoxMaskRegion = new CheckBox();
             label17 = new Label();
             label13 = new Label();
             label12 = new Label();
@@ -95,7 +96,7 @@
             ColumnAlt = new DataGridViewCheckBoxColumn();
             ColumnShift = new DataGridViewCheckBoxColumn();
             ColumnWin = new DataGridViewCheckBoxColumn();
-            checkBoxMaskRegion = new CheckBox();
+            buttonResetOptions = new Button();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
@@ -499,6 +500,16 @@
             tabPageModes.Text = "Modes";
             tabPageModes.UseVisualStyleBackColor = true;
             // 
+            // checkBoxMaskRegion
+            // 
+            checkBoxMaskRegion.AutoSize = true;
+            checkBoxMaskRegion.Location = new Point(36, 164);
+            checkBoxMaskRegion.Name = "checkBoxMaskRegion";
+            checkBoxMaskRegion.Size = new Size(219, 19);
+            checkBoxMaskRegion.TabIndex = 69;
+            checkBoxMaskRegion.Text = "Mask areas outside region with color";
+            checkBoxMaskRegion.UseVisualStyleBackColor = true;
+            // 
             // label17
             // 
             label17.AutoSize = true;
@@ -792,21 +803,22 @@
             ColumnWin.Name = "ColumnWin";
             ColumnWin.Width = 50;
             // 
-            // checkBoxMaskRegion
+            // buttonResetOptions
             // 
-            checkBoxMaskRegion.AutoSize = true;
-            checkBoxMaskRegion.Location = new Point(36, 164);
-            checkBoxMaskRegion.Name = "checkBoxMaskRegion";
-            checkBoxMaskRegion.Size = new Size(219, 19);
-            checkBoxMaskRegion.TabIndex = 69;
-            checkBoxMaskRegion.Text = "Mask areas outside region with color";
-            checkBoxMaskRegion.UseVisualStyleBackColor = true;
+            buttonResetOptions.Location = new Point(73, 494);
+            buttonResetOptions.Name = "buttonResetOptions";
+            buttonResetOptions.Size = new Size(97, 23);
+            buttonResetOptions.TabIndex = 58;
+            buttonResetOptions.Text = "Reset options";
+            buttonResetOptions.UseVisualStyleBackColor = true;
+            buttonResetOptions.Click += buttonResetOptions_Click;
             // 
             // Options
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(495, 525);
+            Controls.Add(buttonResetOptions);
             Controls.Add(tabControl1);
             Controls.Add(buttonCancel);
             Controls.Add(buttonApply);
@@ -906,5 +918,6 @@
         private Label label14;
         private Label label17;
         private CheckBox checkBoxMaskRegion;
+        private Button buttonResetOptions;
     }
 }
