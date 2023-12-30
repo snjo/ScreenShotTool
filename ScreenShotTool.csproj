@@ -6,13 +6,13 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <ApplicationIcon>img\sst.ico</ApplicationIcon>
+    <ApplicationIcon>img\monitor.ico</ApplicationIcon>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>D:\Github\cert\keypair.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="img\sst.ico" />
+    <Content Include="img\monitor.ico" />
   </ItemGroup>
 
   <ItemGroup>

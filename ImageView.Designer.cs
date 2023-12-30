@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ImageView));
             pictureBoxScreenshot = new PictureBox();
             panel1 = new Panel();
             pictureBoxDraw = new PictureBox();
@@ -79,6 +80,7 @@
             Controls.Add(panel1);
             Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             FormBorderStyle = FormBorderStyle.None;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             KeyPreview = true;
             Name = "ImageView";
             StartPosition = FormStartPosition.Manual;

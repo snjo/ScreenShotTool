@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Options));
             checkBoxTrim = new CheckBox();
             buttonBrowseFolder = new Button();
             buttonHelp = new Button();
@@ -64,6 +65,7 @@
             checkBoxTrayTooltipWarning = new CheckBox();
             tabControl1 = new TabControl();
             tabPageOutput = new TabPage();
+            button1 = new Button();
             tabPageModes = new TabPage();
             checkBoxMaskRegion = new CheckBox();
             label17 = new Label();
@@ -97,7 +99,6 @@
             ColumnShift = new DataGridViewCheckBoxColumn();
             ColumnWin = new DataGridViewCheckBoxColumn();
             buttonResetOptions = new Button();
-            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
@@ -475,6 +476,16 @@
             tabPageOutput.Text = "Capture Output";
             tabPageOutput.UseVisualStyleBackColor = true;
             // 
+            // button1
+            // 
+            button1.Location = new Point(6, 450);
+            button1.Name = "button1";
+            button1.Size = new Size(126, 23);
+            button1.TabIndex = 49;
+            button1.Text = "Reset Counter to 0";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // tabPageModes
             // 
             tabPageModes.Controls.Add(checkBoxMaskRegion);
@@ -497,7 +508,7 @@
             tabPageModes.Controls.Add(labelWindow);
             tabPageModes.Location = new Point(4, 24);
             tabPageModes.Name = "tabPageModes";
-            tabPageModes.Size = new Size(482, 455);
+            tabPageModes.Size = new Size(482, 491);
             tabPageModes.TabIndex = 3;
             tabPageModes.Text = "Modes";
             tabPageModes.UseVisualStyleBackColor = true;
@@ -699,7 +710,7 @@
             tabPageApplication.Location = new Point(4, 24);
             tabPageApplication.Name = "tabPageApplication";
             tabPageApplication.Padding = new Padding(3);
-            tabPageApplication.Size = new Size(482, 455);
+            tabPageApplication.Size = new Size(482, 491);
             tabPageApplication.TabIndex = 1;
             tabPageApplication.Text = "Application";
             tabPageApplication.UseVisualStyleBackColor = true;
@@ -750,7 +761,7 @@
             tabPageHotkeys.Location = new Point(4, 24);
             tabPageHotkeys.Name = "tabPageHotkeys";
             tabPageHotkeys.Padding = new Padding(3);
-            tabPageHotkeys.Size = new Size(482, 455);
+            tabPageHotkeys.Size = new Size(482, 491);
             tabPageHotkeys.TabIndex = 2;
             tabPageHotkeys.Text = "Hotkeys";
             tabPageHotkeys.UseVisualStyleBackColor = true;
@@ -816,16 +827,6 @@
             buttonResetOptions.UseVisualStyleBackColor = true;
             buttonResetOptions.Click += buttonResetOptions_Click;
             // 
-            // button1
-            // 
-            button1.Location = new Point(6, 450);
-            button1.Name = "button1";
-            button1.Size = new Size(126, 23);
-            button1.TabIndex = 49;
-            button1.Text = "Reset Counter to 0";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
-            // 
             // Options
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -837,6 +838,7 @@
             Controls.Add(buttonApply);
             Controls.Add(buttonOK);
             Controls.Add(buttonHelp);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Options";
             Text = "Settings";
             ((System.ComponentModel.ISupportInitialize)trimTop).EndInit();

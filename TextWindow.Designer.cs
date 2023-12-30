@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TextWindow));
             textBox1 = new TextBox();
             buttonClose = new Button();
             SuspendLayout();
@@ -60,6 +61,7 @@
             ClientSize = new Size(473, 294);
             Controls.Add(buttonClose);
             Controls.Add(textBox1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "TextWindow";
             Text = "TextWindow";
             ResumeLayout(false);
