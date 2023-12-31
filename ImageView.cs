@@ -3,11 +3,13 @@ using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using ScreenShotTool.Properties;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ScreenShotTool
 {
+    [SupportedOSPlatform("windows")]
     public partial class ImageView : Form
     {
         public bool StartInCropMode = false;

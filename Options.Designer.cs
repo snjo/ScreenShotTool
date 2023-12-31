@@ -65,7 +65,15 @@
             checkBoxTrayTooltipWarning = new CheckBox();
             tabControl1 = new TabControl();
             tabPageOutput = new TabPage();
-            button1 = new Button();
+            labelFileNameResult = new Label();
+            label23 = new Label();
+            label22 = new Label();
+            label21 = new Label();
+            label20 = new Label();
+            label19 = new Label();
+            label18 = new Label();
+            numericUpDownCounter = new NumericUpDown();
+            buttonResetCounter = new Button();
             tabPageModes = new TabPage();
             checkBoxMaskRegion = new CheckBox();
             label17 = new Label();
@@ -110,6 +118,7 @@
             ((System.ComponentModel.ISupportInitialize)numericThumbHeight).BeginInit();
             tabControl1.SuspendLayout();
             tabPageOutput.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownCounter).BeginInit();
             tabPageModes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDownFramerate).BeginInit();
             tabPageApplication.SuspendLayout();
@@ -120,11 +129,11 @@
             // checkBoxTrim
             // 
             checkBoxTrim.AutoSize = true;
-            checkBoxTrim.Location = new Point(6, 328);
+            checkBoxTrim.Location = new Point(6, 360);
             checkBoxTrim.Name = "checkBoxTrim";
-            checkBoxTrim.Size = new Size(142, 19);
-            checkBoxTrim.TabIndex = 34;
-            checkBoxTrim.Text = "Crop Window capture";
+            checkBoxTrim.Size = new Size(281, 19);
+            checkBoxTrim.TabIndex = 20;
+            checkBoxTrim.Text = "Crop Window capture (remove window borders)";
             checkBoxTrim.UseVisualStyleBackColor = true;
             // 
             // buttonBrowseFolder
@@ -132,7 +141,7 @@
             buttonBrowseFolder.Location = new Point(378, 26);
             buttonBrowseFolder.Name = "buttonBrowseFolder";
             buttonBrowseFolder.Size = new Size(57, 23);
-            buttonBrowseFolder.TabIndex = 33;
+            buttonBrowseFolder.TabIndex = 12;
             buttonBrowseFolder.Text = "Browse";
             buttonBrowseFolder.UseVisualStyleBackColor = true;
             buttonBrowseFolder.Click += buttonBrowseFolder_Click;
@@ -140,10 +149,10 @@
             // buttonHelp
             // 
             buttonHelp.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            buttonHelp.Location = new Point(13, 530);
+            buttonHelp.Location = new Point(13, 608);
             buttonHelp.Name = "buttonHelp";
             buttonHelp.Size = new Size(54, 23);
-            buttonHelp.TabIndex = 32;
+            buttonHelp.TabIndex = 90;
             buttonHelp.Text = "Help";
             buttonHelp.UseVisualStyleBackColor = true;
             buttonHelp.Click += buttonHelp_Click;
@@ -164,7 +173,7 @@
             comboBoxFileExtension.Location = new Point(304, 77);
             comboBoxFileExtension.Name = "comboBoxFileExtension";
             comboBoxFileExtension.Size = new Size(53, 23);
-            comboBoxFileExtension.TabIndex = 28;
+            comboBoxFileExtension.TabIndex = 14;
             comboBoxFileExtension.Text = ".png";
             // 
             // textBoxFilename
@@ -172,31 +181,32 @@
             textBoxFilename.Location = new Point(6, 78);
             textBoxFilename.Name = "textBoxFilename";
             textBoxFilename.Size = new Size(291, 23);
-            textBoxFilename.TabIndex = 27;
+            textBoxFilename.TabIndex = 13;
             textBoxFilename.Text = "$w - $c";
+            textBoxFilename.TextChanged += textBoxFilename_TextChanged;
             // 
             // buttonSelectFolder
             // 
             buttonSelectFolder.Location = new Point(304, 26);
             buttonSelectFolder.Name = "buttonSelectFolder";
             buttonSelectFolder.Size = new Size(68, 23);
-            buttonSelectFolder.TabIndex = 26;
+            buttonSelectFolder.TabIndex = 11;
             buttonSelectFolder.Text = "Select";
             buttonSelectFolder.UseVisualStyleBackColor = true;
             buttonSelectFolder.Click += buttonSelectFolder_Click;
             // 
             // trimTop
             // 
-            trimTop.Location = new Point(64, 353);
+            trimTop.Location = new Point(78, 400);
             trimTop.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             trimTop.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
             trimTop.Name = "trimTop";
             trimTop.Size = new Size(70, 23);
-            trimTop.TabIndex = 25;
+            trimTop.TabIndex = 21;
             // 
             // trimBottom
             // 
-            trimBottom.Location = new Point(64, 407);
+            trimBottom.Location = new Point(78, 454);
             trimBottom.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             trimBottom.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
             trimBottom.Name = "trimBottom";
@@ -205,7 +215,7 @@
             // 
             // trimRight
             // 
-            trimRight.Location = new Point(128, 378);
+            trimRight.Location = new Point(146, 425);
             trimRight.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             trimRight.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
             trimRight.Name = "trimRight";
@@ -214,7 +224,7 @@
             // 
             // trimLeft
             // 
-            trimLeft.Location = new Point(6, 378);
+            trimLeft.Location = new Point(8, 429);
             trimLeft.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             trimLeft.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
             trimLeft.Name = "trimLeft";
@@ -235,15 +245,15 @@
             textBoxFolder.Location = new Point(6, 27);
             textBoxFolder.Name = "textBoxFolder";
             textBoxFolder.Size = new Size(292, 23);
-            textBoxFolder.TabIndex = 20;
+            textBoxFolder.TabIndex = 10;
             // 
             // buttonOK
             // 
             buttonOK.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonOK.Location = new Point(410, 530);
+            buttonOK.Location = new Point(410, 608);
             buttonOK.Name = "buttonOK";
             buttonOK.Size = new Size(75, 23);
-            buttonOK.TabIndex = 35;
+            buttonOK.TabIndex = 94;
             buttonOK.Text = "OK";
             buttonOK.UseVisualStyleBackColor = true;
             buttonOK.Click += buttonOK_Click;
@@ -251,10 +261,10 @@
             // buttonApply
             // 
             buttonApply.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonApply.Location = new Point(329, 530);
+            buttonApply.Location = new Point(329, 608);
             buttonApply.Name = "buttonApply";
             buttonApply.Size = new Size(75, 23);
-            buttonApply.TabIndex = 36;
+            buttonApply.TabIndex = 93;
             buttonApply.Text = "Apply";
             buttonApply.UseVisualStyleBackColor = true;
             buttonApply.Click += buttonApply_Click;
@@ -262,25 +272,25 @@
             // buttonCancel
             // 
             buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonCancel.Location = new Point(248, 530);
+            buttonCancel.Location = new Point(248, 608);
             buttonCancel.Name = "buttonCancel";
             buttonCancel.Size = new Size(75, 23);
-            buttonCancel.TabIndex = 37;
+            buttonCancel.TabIndex = 92;
             buttonCancel.Text = "Cancel";
             buttonCancel.UseVisualStyleBackColor = true;
             buttonCancel.Click += buttonCancel_Click;
             // 
             // textBoxAlternateTitle
             // 
-            textBoxAlternateTitle.Location = new Point(6, 130);
+            textBoxAlternateTitle.Location = new Point(6, 162);
             textBoxAlternateTitle.Name = "textBoxAlternateTitle";
             textBoxAlternateTitle.Size = new Size(292, 23);
-            textBoxAlternateTitle.TabIndex = 38;
+            textBoxAlternateTitle.TabIndex = 16;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(6, 112);
+            label2.Location = new Point(6, 144);
             label2.Name = "label2";
             label2.Size = new Size(206, 15);
             label2.TabIndex = 39;
@@ -289,7 +299,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(6, 163);
+            label4.Location = new Point(6, 195);
             label4.Name = "label4";
             label4.Size = new Size(137, 15);
             label4.TabIndex = 40;
@@ -297,16 +307,16 @@
             // 
             // numericUpDownTitleMaxLength
             // 
-            numericUpDownTitleMaxLength.Location = new Point(6, 181);
+            numericUpDownTitleMaxLength.Location = new Point(6, 213);
             numericUpDownTitleMaxLength.Name = "numericUpDownTitleMaxLength";
             numericUpDownTitleMaxLength.Size = new Size(70, 23);
-            numericUpDownTitleMaxLength.TabIndex = 41;
+            numericUpDownTitleMaxLength.TabIndex = 17;
             numericUpDownTitleMaxLength.Value = new decimal(new int[] { 30, 0, 0, 0 });
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(6, 215);
+            label5.Location = new Point(6, 247);
             label5.Name = "label5";
             label5.Size = new Size(165, 15);
             label5.TabIndex = 42;
@@ -314,33 +324,33 @@
             // 
             // numericUpDownSplitIndex
             // 
-            numericUpDownSplitIndex.Location = new Point(6, 283);
+            numericUpDownSplitIndex.Location = new Point(6, 315);
             numericUpDownSplitIndex.Name = "numericUpDownSplitIndex";
             numericUpDownSplitIndex.Size = new Size(70, 23);
-            numericUpDownSplitIndex.TabIndex = 45;
+            numericUpDownSplitIndex.TabIndex = 19;
             // 
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(6, 265);
+            label6.Location = new Point(6, 297);
             label6.Name = "label6";
-            label6.Size = new Size(126, 15);
+            label6.Size = new Size(201, 15);
             label6.TabIndex = 44;
-            label6.Text = "Keep split text in index";
+            label6.Text = "Keep split text from position number";
             // 
             // textBoxSplitString
             // 
-            textBoxSplitString.Location = new Point(6, 233);
+            textBoxSplitString.Location = new Point(6, 265);
             textBoxSplitString.Name = "textBoxSplitString";
             textBoxSplitString.Size = new Size(70, 23);
-            textBoxSplitString.TabIndex = 46;
+            textBoxSplitString.TabIndex = 18;
             // 
             // numericUpDownJpegQuality
             // 
             numericUpDownJpegQuality.Location = new Point(363, 77);
             numericUpDownJpegQuality.Name = "numericUpDownJpegQuality";
             numericUpDownJpegQuality.Size = new Size(70, 23);
-            numericUpDownJpegQuality.TabIndex = 48;
+            numericUpDownJpegQuality.TabIndex = 15;
             numericUpDownJpegQuality.Value = new decimal(new int[] { 95, 0, 0, 0 });
             // 
             // label7
@@ -358,7 +368,7 @@
             checkBoxStartHidden.Location = new Point(16, 25);
             checkBoxStartHidden.Name = "checkBoxStartHidden";
             checkBoxStartHidden.Size = new Size(92, 19);
-            checkBoxStartHidden.TabIndex = 49;
+            checkBoxStartHidden.TabIndex = 20;
             checkBoxStartHidden.Text = "Start Hidden";
             checkBoxStartHidden.UseVisualStyleBackColor = true;
             // 
@@ -368,7 +378,7 @@
             checkBoxCropThumbnails.Location = new Point(16, 155);
             checkBoxCropThumbnails.Name = "checkBoxCropThumbnails";
             checkBoxCropThumbnails.Size = new Size(234, 19);
-            checkBoxCropThumbnails.TabIndex = 50;
+            checkBoxCropThumbnails.TabIndex = 24;
             checkBoxCropThumbnails.Text = "Crop thumbnails (instead of stretching)";
             checkBoxCropThumbnails.UseVisualStyleBackColor = true;
             // 
@@ -379,7 +389,7 @@
             numericThumbWidth.Minimum = new decimal(new int[] { 20, 0, 0, 0 });
             numericThumbWidth.Name = "numericThumbWidth";
             numericThumbWidth.Size = new Size(55, 23);
-            numericThumbWidth.TabIndex = 51;
+            numericThumbWidth.TabIndex = 25;
             numericThumbWidth.Value = new decimal(new int[] { 100, 0, 0, 0 });
             // 
             // numericThumbHeight
@@ -389,7 +399,7 @@
             numericThumbHeight.Minimum = new decimal(new int[] { 20, 0, 0, 0 });
             numericThumbHeight.Name = "numericThumbHeight";
             numericThumbHeight.Size = new Size(54, 23);
-            numericThumbHeight.TabIndex = 52;
+            numericThumbHeight.TabIndex = 26;
             numericThumbHeight.Value = new decimal(new int[] { 100, 0, 0, 0 });
             // 
             // label8
@@ -416,7 +426,7 @@
             checkBoxTrayTooltipInfoCapture.Location = new Point(16, 65);
             checkBoxTrayTooltipInfoCapture.Name = "checkBoxTrayTooltipInfoCapture";
             checkBoxTrayTooltipInfoCapture.Size = new Size(211, 19);
-            checkBoxTrayTooltipInfoCapture.TabIndex = 55;
+            checkBoxTrayTooltipInfoCapture.TabIndex = 21;
             checkBoxTrayTooltipInfoCapture.Text = "System tray tooltip when capturing";
             checkBoxTrayTooltipInfoCapture.UseVisualStyleBackColor = true;
             // 
@@ -426,7 +436,7 @@
             checkBoxTrayTooltipWarning.Location = new Point(16, 115);
             checkBoxTrayTooltipWarning.Name = "checkBoxTrayTooltipWarning";
             checkBoxTrayTooltipWarning.Size = new Size(176, 19);
-            checkBoxTrayTooltipWarning.TabIndex = 56;
+            checkBoxTrayTooltipWarning.TabIndex = 23;
             checkBoxTrayTooltipWarning.Text = "System tray tooltip warnings";
             checkBoxTrayTooltipWarning.UseVisualStyleBackColor = true;
             // 
@@ -440,12 +450,20 @@
             tabControl1.Location = new Point(3, 5);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(490, 519);
-            tabControl1.TabIndex = 57;
+            tabControl1.Size = new Size(490, 597);
+            tabControl1.TabIndex = 1;
             // 
             // tabPageOutput
             // 
-            tabPageOutput.Controls.Add(button1);
+            tabPageOutput.Controls.Add(labelFileNameResult);
+            tabPageOutput.Controls.Add(label23);
+            tabPageOutput.Controls.Add(label22);
+            tabPageOutput.Controls.Add(label21);
+            tabPageOutput.Controls.Add(label20);
+            tabPageOutput.Controls.Add(label19);
+            tabPageOutput.Controls.Add(label18);
+            tabPageOutput.Controls.Add(numericUpDownCounter);
+            tabPageOutput.Controls.Add(buttonResetCounter);
             tabPageOutput.Controls.Add(textBoxFolder);
             tabPageOutput.Controls.Add(textBoxSplitString);
             tabPageOutput.Controls.Add(numericUpDownJpegQuality);
@@ -471,20 +489,96 @@
             tabPageOutput.Location = new Point(4, 24);
             tabPageOutput.Name = "tabPageOutput";
             tabPageOutput.Padding = new Padding(3);
-            tabPageOutput.Size = new Size(482, 491);
+            tabPageOutput.Size = new Size(482, 569);
             tabPageOutput.TabIndex = 0;
             tabPageOutput.Text = "Capture Output";
             tabPageOutput.UseVisualStyleBackColor = true;
             // 
-            // button1
+            // labelFileNameResult
             // 
-            button1.Location = new Point(6, 450);
-            button1.Name = "button1";
-            button1.Size = new Size(142, 23);
-            button1.TabIndex = 49;
-            button1.Text = "Reset Counter number";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            labelFileNameResult.AutoSize = true;
+            labelFileNameResult.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            labelFileNameResult.Location = new Point(18, 109);
+            labelFileNameResult.Name = "labelFileNameResult";
+            labelFileNameResult.Size = new Size(90, 15);
+            labelFileNameResult.TabIndex = 57;
+            labelFileNameResult.Text = "File name result";
+            // 
+            // label23
+            // 
+            label23.AutoSize = true;
+            label23.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            label23.Location = new Point(88, 317);
+            label23.Name = "label23";
+            label23.Size = new Size(120, 15);
+            label23.TabIndex = 56;
+            label23.Text = "(0 is the first element)";
+            // 
+            // label22
+            // 
+            label22.AutoSize = true;
+            label22.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            label22.Location = new Point(156, 407);
+            label22.Name = "label22";
+            label22.Size = new Size(35, 15);
+            label22.TabIndex = 55;
+            label22.Text = "Right";
+            // 
+            // label21
+            // 
+            label21.AutoSize = true;
+            label21.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            label21.Location = new Point(18, 411);
+            label21.Name = "label21";
+            label21.Size = new Size(27, 15);
+            label21.TabIndex = 54;
+            label21.Text = "Left";
+            // 
+            // label20
+            // 
+            label20.AutoSize = true;
+            label20.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            label20.Location = new Point(88, 436);
+            label20.Name = "label20";
+            label20.Size = new Size(44, 15);
+            label20.TabIndex = 53;
+            label20.Text = "Bottom";
+            // 
+            // label19
+            // 
+            label19.AutoSize = true;
+            label19.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            label19.Location = new Point(88, 382);
+            label19.Name = "label19";
+            label19.Size = new Size(26, 15);
+            label19.TabIndex = 52;
+            label19.Text = "Top";
+            // 
+            // label18
+            // 
+            label18.AutoSize = true;
+            label18.Location = new Point(6, 496);
+            label18.Name = "label18";
+            label18.Size = new Size(204, 15);
+            label18.TabIndex = 51;
+            label18.Text = "Counter number used by $c / ${num}";
+            // 
+            // numericUpDownCounter
+            // 
+            numericUpDownCounter.Location = new Point(6, 514);
+            numericUpDownCounter.Name = "numericUpDownCounter";
+            numericUpDownCounter.Size = new Size(70, 23);
+            numericUpDownCounter.TabIndex = 25;
+            // 
+            // buttonResetCounter
+            // 
+            buttonResetCounter.Location = new Point(82, 514);
+            buttonResetCounter.Name = "buttonResetCounter";
+            buttonResetCounter.Size = new Size(142, 23);
+            buttonResetCounter.TabIndex = 26;
+            buttonResetCounter.Text = "Reset Counter number";
+            buttonResetCounter.UseVisualStyleBackColor = true;
+            buttonResetCounter.Click += buttonResetCounter_Click;
             // 
             // tabPageModes
             // 
@@ -508,7 +602,7 @@
             tabPageModes.Controls.Add(labelWindow);
             tabPageModes.Location = new Point(4, 24);
             tabPageModes.Name = "tabPageModes";
-            tabPageModes.Size = new Size(482, 491);
+            tabPageModes.Size = new Size(482, 569);
             tabPageModes.TabIndex = 3;
             tabPageModes.Text = "Modes";
             tabPageModes.UseVisualStyleBackColor = true;
@@ -519,7 +613,7 @@
             checkBoxMaskRegion.Location = new Point(36, 164);
             checkBoxMaskRegion.Name = "checkBoxMaskRegion";
             checkBoxMaskRegion.Size = new Size(219, 19);
-            checkBoxMaskRegion.TabIndex = 69;
+            checkBoxMaskRegion.TabIndex = 24;
             checkBoxMaskRegion.Text = "Mask areas outside region with color";
             checkBoxMaskRegion.UseVisualStyleBackColor = true;
             // 
@@ -559,7 +653,7 @@
             numericUpDownFramerate.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
             numericUpDownFramerate.Name = "numericUpDownFramerate";
             numericUpDownFramerate.Size = new Size(54, 23);
-            numericUpDownFramerate.TabIndex = 65;
+            numericUpDownFramerate.TabIndex = 23;
             numericUpDownFramerate.Value = new decimal(new int[] { 30, 0, 0, 0 });
             // 
             // checkBoxRegionComplete
@@ -568,7 +662,7 @@
             checkBoxRegionComplete.Location = new Point(24, 30);
             checkBoxRegionComplete.Name = "checkBoxRegionComplete";
             checkBoxRegionComplete.Size = new Size(242, 19);
-            checkBoxRegionComplete.TabIndex = 12;
+            checkBoxRegionComplete.TabIndex = 20;
             checkBoxRegionComplete.Text = "Complete capture when releasing mouse";
             checkBoxRegionComplete.UseVisualStyleBackColor = true;
             checkBoxRegionComplete.CheckedChanged += checkBoxRegionComplete_CheckedChanged;
@@ -579,7 +673,7 @@
             checkBoxAllScreensToClipboard.Location = new Point(24, 368);
             checkBoxAllScreensToClipboard.Name = "checkBoxAllScreensToClipboard";
             checkBoxAllScreensToClipboard.Size = new Size(123, 19);
-            checkBoxAllScreensToClipboard.TabIndex = 11;
+            checkBoxAllScreensToClipboard.TabIndex = 30;
             checkBoxAllScreensToClipboard.Text = "Copy to Clipboard";
             checkBoxAllScreensToClipboard.UseVisualStyleBackColor = true;
             // 
@@ -589,7 +683,7 @@
             checkBoxAllScreensToFile.Location = new Point(24, 343);
             checkBoxAllScreensToFile.Name = "checkBoxAllScreensToFile";
             checkBoxAllScreensToFile.Size = new Size(85, 19);
-            checkBoxAllScreensToFile.TabIndex = 10;
+            checkBoxAllScreensToFile.TabIndex = 29;
             checkBoxAllScreensToFile.Text = "Save to File";
             checkBoxAllScreensToFile.UseVisualStyleBackColor = true;
             // 
@@ -609,7 +703,7 @@
             checkBoxScreenToClipboard.Location = new Point(24, 303);
             checkBoxScreenToClipboard.Name = "checkBoxScreenToClipboard";
             checkBoxScreenToClipboard.Size = new Size(123, 19);
-            checkBoxScreenToClipboard.TabIndex = 8;
+            checkBoxScreenToClipboard.TabIndex = 28;
             checkBoxScreenToClipboard.Text = "Copy to Clipboard";
             checkBoxScreenToClipboard.UseVisualStyleBackColor = true;
             // 
@@ -619,7 +713,7 @@
             checkBoxScreenToFile.Location = new Point(24, 278);
             checkBoxScreenToFile.Name = "checkBoxScreenToFile";
             checkBoxScreenToFile.Size = new Size(85, 19);
-            checkBoxScreenToFile.TabIndex = 7;
+            checkBoxScreenToFile.TabIndex = 27;
             checkBoxScreenToFile.Text = "Save to File";
             checkBoxScreenToFile.UseVisualStyleBackColor = true;
             // 
@@ -639,7 +733,7 @@
             checkBoxRegionToClipboard.Location = new Point(36, 80);
             checkBoxRegionToClipboard.Name = "checkBoxRegionToClipboard";
             checkBoxRegionToClipboard.Size = new Size(123, 19);
-            checkBoxRegionToClipboard.TabIndex = 5;
+            checkBoxRegionToClipboard.TabIndex = 22;
             checkBoxRegionToClipboard.Text = "Copy to Clipboard";
             checkBoxRegionToClipboard.UseVisualStyleBackColor = true;
             // 
@@ -649,7 +743,7 @@
             checkBoxRegionToFile.Location = new Point(36, 55);
             checkBoxRegionToFile.Name = "checkBoxRegionToFile";
             checkBoxRegionToFile.Size = new Size(85, 19);
-            checkBoxRegionToFile.TabIndex = 4;
+            checkBoxRegionToFile.TabIndex = 21;
             checkBoxRegionToFile.Text = "Save to File";
             checkBoxRegionToFile.UseVisualStyleBackColor = true;
             // 
@@ -669,7 +763,7 @@
             checkBoxWindowToClipboard.Location = new Point(24, 238);
             checkBoxWindowToClipboard.Name = "checkBoxWindowToClipboard";
             checkBoxWindowToClipboard.Size = new Size(123, 19);
-            checkBoxWindowToClipboard.TabIndex = 2;
+            checkBoxWindowToClipboard.TabIndex = 26;
             checkBoxWindowToClipboard.Text = "Copy to Clipboard";
             checkBoxWindowToClipboard.UseVisualStyleBackColor = true;
             // 
@@ -679,7 +773,7 @@
             checkBoxWindowToFile.Location = new Point(24, 213);
             checkBoxWindowToFile.Name = "checkBoxWindowToFile";
             checkBoxWindowToFile.Size = new Size(85, 19);
-            checkBoxWindowToFile.TabIndex = 1;
+            checkBoxWindowToFile.TabIndex = 25;
             checkBoxWindowToFile.Text = "Save to File";
             checkBoxWindowToFile.UseVisualStyleBackColor = true;
             // 
@@ -710,7 +804,7 @@
             tabPageApplication.Location = new Point(4, 24);
             tabPageApplication.Name = "tabPageApplication";
             tabPageApplication.Padding = new Padding(3);
-            tabPageApplication.Size = new Size(482, 491);
+            tabPageApplication.Size = new Size(482, 569);
             tabPageApplication.TabIndex = 1;
             tabPageApplication.Text = "Application";
             tabPageApplication.UseVisualStyleBackColor = true;
@@ -751,7 +845,7 @@
             checkBoxTrayTooltipInfoFolder.Location = new Point(16, 90);
             checkBoxTrayTooltipInfoFolder.Name = "checkBoxTrayTooltipInfoFolder";
             checkBoxTrayTooltipInfoFolder.Size = new Size(237, 19);
-            checkBoxTrayTooltipInfoFolder.TabIndex = 57;
+            checkBoxTrayTooltipInfoFolder.TabIndex = 22;
             checkBoxTrayTooltipInfoFolder.Text = "System tray tooltip when creating folder";
             checkBoxTrayTooltipInfoFolder.UseVisualStyleBackColor = true;
             // 
@@ -761,7 +855,7 @@
             tabPageHotkeys.Location = new Point(4, 24);
             tabPageHotkeys.Name = "tabPageHotkeys";
             tabPageHotkeys.Padding = new Padding(3);
-            tabPageHotkeys.Size = new Size(482, 491);
+            tabPageHotkeys.Size = new Size(482, 569);
             tabPageHotkeys.TabIndex = 2;
             tabPageHotkeys.Text = "Hotkeys";
             tabPageHotkeys.UseVisualStyleBackColor = true;
@@ -777,7 +871,7 @@
             HotkeyGrid.RowHeadersVisible = false;
             HotkeyGrid.RowTemplate.Height = 25;
             HotkeyGrid.Size = new Size(470, 443);
-            HotkeyGrid.TabIndex = 0;
+            HotkeyGrid.TabIndex = 20;
             // 
             // ColumnFunction
             // 
@@ -819,10 +913,10 @@
             // buttonResetOptions
             // 
             buttonResetOptions.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            buttonResetOptions.Location = new Point(73, 530);
+            buttonResetOptions.Location = new Point(73, 608);
             buttonResetOptions.Name = "buttonResetOptions";
             buttonResetOptions.Size = new Size(97, 23);
-            buttonResetOptions.TabIndex = 58;
+            buttonResetOptions.TabIndex = 91;
             buttonResetOptions.Text = "Reset options";
             buttonResetOptions.UseVisualStyleBackColor = true;
             buttonResetOptions.Click += buttonResetOptions_Click;
@@ -831,7 +925,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(495, 561);
+            ClientSize = new Size(495, 639);
             Controls.Add(buttonResetOptions);
             Controls.Add(tabControl1);
             Controls.Add(buttonCancel);
@@ -853,6 +947,7 @@
             tabControl1.ResumeLayout(false);
             tabPageOutput.ResumeLayout(false);
             tabPageOutput.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownCounter).EndInit();
             tabPageModes.ResumeLayout(false);
             tabPageModes.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDownFramerate).EndInit();
@@ -934,6 +1029,14 @@
         private Label label17;
         private CheckBox checkBoxMaskRegion;
         private Button buttonResetOptions;
-        private Button button1;
+        private Button buttonResetCounter;
+        private Label label18;
+        private NumericUpDown numericUpDownCounter;
+        private Label label22;
+        private Label label21;
+        private Label label20;
+        private Label label19;
+        private Label label23;
+        private Label labelFileNameResult;
     }
 }

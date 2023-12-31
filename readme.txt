@@ -78,11 +78,27 @@ File name variables
 When saving to file, the name of the active application, time or incrementing numbers can be included in the file or folder name.
 The default file name is "$w $d $t $c", which will output something like "MyWindow 2023-12-31 16:02 003"
 
-	$w	Active Window Title
-	$d	Date
+	$w	Active Window title ("Region" or "Screen" is used in those modes)
+	$d	Date in ISO format (2023-12-31)
 	$t	Time
 	$ms	Milliseconds
 	$c	Counter number (auto increments)
+
+You can also use longer form variables, these are identical to Greenshot's variable format.
+
+	${DATE}		Date in ISO format (2023-12-31)
+	${YYYY}	     	Year
+	${MM}	     	Month number
+	${DD}	     	Day number
+	${hh}	     	Hour
+	${mm}	     	Minute
+	${ss}	     	Second
+	${ms}	     	Millisecond
+	${NUM}	     	Counter number (auto increments)
+	${title}     	Active Window title ("Region" or "Screen" is used in those modes)
+	${user}	     	User account name
+	${domain}    	User's domain
+	${hostname}  	PC name
 
 Title tweaks
 

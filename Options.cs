@@ -1,9 +1,11 @@
 ﻿using Hotkeys;
 using ScreenShotTool.Properties;
 using System.Diagnostics;
+using System.Runtime.Versioning;
 
 namespace ScreenShotTool
 {
+    [SupportedOSPlatform("windows")]
     public partial class Options : Form
     {
         MainForm mainForm;
@@ -35,6 +37,8 @@ namespace ScreenShotTool
             trimBottom.Value = settings.TrimBottom;
             trimLeft.Value = settings.TrimLeft;
             trimRight.Value = settings.TrimRight;
+
+            numericUpDownCounter.Value = settings.Counter;
 
             //Tab: Modes
             checkBoxRegionComplete.Checked = settings.RegionCompletesOnMouseRelease;
@@ -103,6 +107,9 @@ namespace ScreenShotTool
             settings.TrimBottom = (int)trimBottom.Value;
             settings.TrimLeft = (int)trimLeft.Value;
             settings.TrimRight = (int)trimRight.Value;
+
+            settings.Counter = (int)numericUpDownCounter.Value;
+            mainForm.SetCounter((int)numericUpDownCounter.Value, false);
 
             //Tab: Modes
             settings.RegionToFile = checkBoxRegionToFile.Checked;
@@ -274,9 +281,15 @@ namespace ScreenShotTool
             FillSettings();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonResetCounter_Click(object sender, EventArgs e)
         {
-            mainForm.SetCounter(1);
+            mainForm.SetCounter(1, true);
+            numericUpDownCounter.Value = 1;
+        }
+
+        private void textBoxFilename_TextChanged(object sender, EventArgs e)
+        {
+            labelFileNameResult.Text = mainForm.ComposeFileName(textBoxFilename.Text, "Title");
         }
     }
 }

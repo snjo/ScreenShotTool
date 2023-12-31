@@ -67,10 +67,30 @@ namespace ScreenShotTool
             "\\par \\par \\b1 \\fs24 File name variables\\fs18 \\b0 " +
             "\\par \\par When saving to file, the name of the active application, time or incrementing numbers can be included in the file or folder name." +
             "\\par The default file name is \"$w $d $t $c\", which will output something like \"MyWindow 2023-12-31 16:02 003\"" +
-            "\\par \\par \t$w\tActive Window Title" +
-            "\\par \t$d\tDate\\par \t$t\tTime" +
-            "\\par \t$ms\tMilliseconds" +
-            "\\par \t$c\tCounter number (auto increments)" +
+
+            "\\par \\par" +
+            "\t$w\tActive Window title (\"Region\" or \"Screen\" is used in those modes)\\par " +
+            "\t$d\tDate in ISO format (2023-12-31)\\par " +
+            "\t$t\tTime\\par " +
+            "\t$ms\tMilliseconds\\par " +
+            "\t$c\tCounter number (auto increments)\\par " +
+            "\\par \\par" +
+
+            "You can also use longer form variables, these are identical to Greenshot's variable format. \\par \\par " +
+            "\t$\\{DATE\\}\t\tDate in ISO format (2023-12-31) \\par " +
+            "\t$\\{YYYY\\}\t\tYear \\par " +
+            "\t$\\{MM\\}\t\tMonth number \\par " +
+            "\t$\\{DD\\}\t\tDay number \\par " +
+            "\t$\\{hh\\}\t\tHour \\par " +
+            "\t$\\{mm\\}\t\tMinute \\par " +
+            "\t$\\{ss\\}\t\tSecond \\par " +
+            "\t$\\{ms\\}\t\tMillisecond \\par " +
+            "\t$\\{NUM\\}\t\tCounter number (auto increments) \\par " +
+            "\t$\\{title\\}\t\tActive Window title (\"Region\" or \"Screen\" is used in those modes) \\par " +
+            "\t$\\{user\\}\t\tUser account name \\par " +
+            "\t$\\{domain\\}\tUser's domain \\par " +
+            "\t$\\{hostname\\}\tPC name \\par " +
+
             "\\par \\par \\b1 \\fs24 Title tweaks\\fs18 \\b0 " +
             "\\par \\par The title of the active window when using $w can be adjusted to make file names nicer." +
             "\\par \\par \\b1 \\fs24 Window title max length\\fs18 \\b0 " +

@@ -58,12 +58,13 @@
             toggleCropToolStripMenuItem = new ToolStripMenuItem();
             toolStripMenuItem2 = new ToolStripSeparator();
             exitToolStripMenuItem = new ToolStripMenuItem();
+            TopMenuOptions = new ToolStripMenuItem();
             TopMenuHelp = new ToolStripMenuItem();
             helpofflineCopyToolStripMenuItem = new ToolStripMenuItem();
             helponGithubToolStripMenuItem = new ToolStripMenuItem();
             websiteToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
-            TopMenuOptions = new ToolStripMenuItem();
+            copyFileToolStripMenuItem = new ToolStripMenuItem();
             contextMenuListView.SuspendLayout();
             contextMenuSysTray.SuspendLayout();
             menuStrip1.SuspendLayout();
@@ -94,9 +95,9 @@
             // 
             // contextMenuListView
             // 
-            contextMenuListView.Items.AddRange(new ToolStripItem[] { itemOpenImage, itemOpenFolder, itemDeleteFile, itemRemove, copyToClipboardToolStripMenuItem });
+            contextMenuListView.Items.AddRange(new ToolStripItem[] { itemOpenImage, itemOpenFolder, itemDeleteFile, itemRemove, copyToClipboardToolStripMenuItem, copyFileToolStripMenuItem });
             contextMenuListView.Name = "contextMenuListView";
-            contextMenuListView.Size = new Size(199, 114);
+            contextMenuListView.Size = new Size(199, 158);
             // 
             // itemOpenImage
             // 
@@ -224,7 +225,7 @@
             TopMenuProgram.DropDownItems.AddRange(new ToolStripItem[] { clearListToolStripMenuItem, openLastUsedFolderToolStripMenuItem1, hideApplicationToolStripMenuItem, resetCounterToolStripMenuItem, toggleCropToolStripMenuItem, toolStripMenuItem2, exitToolStripMenuItem });
             TopMenuProgram.Name = "TopMenuProgram";
             TopMenuProgram.Size = new Size(65, 20);
-            TopMenuProgram.Text = "Program";
+            TopMenuProgram.Text = "&Program";
             // 
             // clearListToolStripMenuItem
             // 
@@ -273,12 +274,19 @@
             exitToolStripMenuItem.Text = "E&xit";
             exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
             // 
+            // TopMenuOptions
+            // 
+            TopMenuOptions.Name = "TopMenuOptions";
+            TopMenuOptions.Size = new Size(61, 20);
+            TopMenuOptions.Text = "&Options";
+            TopMenuOptions.Click += buttonOptions_Click;
+            // 
             // TopMenuHelp
             // 
             TopMenuHelp.DropDownItems.AddRange(new ToolStripItem[] { helpofflineCopyToolStripMenuItem, helponGithubToolStripMenuItem, websiteToolStripMenuItem, aboutToolStripMenuItem });
             TopMenuHelp.Name = "TopMenuHelp";
             TopMenuHelp.Size = new Size(44, 20);
-            TopMenuHelp.Text = "Help";
+            TopMenuHelp.Text = "&Help";
             // 
             // helpofflineCopyToolStripMenuItem
             // 
@@ -308,12 +316,12 @@
             aboutToolStripMenuItem.Text = "&About";
             aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
             // 
-            // TopMenuOptions
+            // copyFileToolStripMenuItem
             // 
-            TopMenuOptions.Name = "TopMenuOptions";
-            TopMenuOptions.Size = new Size(61, 20);
-            TopMenuOptions.Text = "Options";
-            TopMenuOptions.Click += buttonOptions_Click;
+            copyFileToolStripMenuItem.Name = "copyFileToolStripMenuItem";
+            copyFileToolStripMenuItem.Size = new Size(198, 22);
+            copyFileToolStripMenuItem.Text = "Co&py Files";
+            copyFileToolStripMenuItem.Click += copyFileToolStripMenuItem_Click;
             // 
             // MainForm
             // 
@@ -375,5 +383,6 @@
         private ToolStripMenuItem websiteToolStripMenuItem;
         private ToolStripMenuItem aboutToolStripMenuItem;
         private ToolStripMenuItem TopMenuOptions;
+        private ToolStripMenuItem copyFileToolStripMenuItem;
     }
 }

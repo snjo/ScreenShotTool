@@ -57,6 +57,7 @@ namespace ScreenShotTool
         public MainForm()
         {
             InitializeComponent();
+            UpgradeSettings();
             LoadHotkeysFromSettings();
 
             updateTrimStatus();
@@ -71,6 +72,20 @@ namespace ScreenShotTool
             }
 
             UpdateLogVisible();
+        }
+
+        private void UpgradeSettings()
+        {
+            if (Settings.Default.UpgradeSettings)
+            {
+                Debug.WriteLine("Upgrading settings");
+                Settings.Default.Upgrade();
+                Settings.Default.UpgradeSettings = false;
+            }
+            else
+            {
+                Debug.WriteLine("Not upgrading settings");
+            }
         }
 
         public void LoadHotkeysFromSettings()
@@ -241,12 +256,15 @@ namespace ScreenShotTool
             if (bitmap != null) bitmap.Dispose();
         }
 
-        public void SetCounter(int num)
+        public void SetCounter(int num, bool saveSetting = true)
         {
             //numericUpDownCounter.Value = num;
             Counter = num;
-            settings.Counter = Counter;
-            settings.Save();
+            if (saveSetting)
+            {
+                settings.Counter = Counter;
+                settings.Save();
+            }
         }
 
         private void IncrementCounter()
@@ -263,23 +281,29 @@ namespace ScreenShotTool
         //    settings.Save();
         //}
 
-        private string ComposeFileName(string text, string overrideTitle = "")
+        public string ComposeFileName(string text, string overrideTitle = "")
         {
             string windowTitle = string.Empty;
             string splitTitleString = settings.SplitTitleString;
             int titleMaxLength = settings.TitleMaxLength;
             int splitTitleIndex = settings.SplitTitleIndex;
             string alternateTitle = settings.AlternateTitle;
-            string date =
-                DateTime.Now.Year.ToString() + "-" +
-                DateTime.Now.Month.ToString() + "-" +
-                DateTime.Now.Day.ToString();
-            string time =
-                DateTime.Now.Hour.ToString() + "_" +
-                DateTime.Now.Minute.ToString() + "_" +
-                DateTime.Now.Second.ToString();
-            string millisecond =
-                DateTime.Now.Millisecond.ToString();
+            string year = DateTime.Now.Year.ToString();
+            string month = DateTime.Now.Month.ToString();
+            string day = DateTime.Now.Day.ToString();
+            string fullDateISO = $"{year}-{month}-{day}";
+
+            string hour = DateTime.Now.Hour.ToString();
+            string minute = DateTime.Now.Minute.ToString();
+            string second = DateTime.Now.Second.ToString();
+            string millisecond = DateTime.Now.Millisecond.ToString();
+            string time = $"{hour}-{minute}-{second}";
+
+            string counter = Counter.ToString().PadLeft(3, '0');
+
+            string user = System.Environment.UserName;
+            string domain = System.Environment.UserDomainName;
+            string hostname = System.Environment.MachineName;
 
             if (overrideTitle.Length > 0)
             {
@@ -298,12 +322,45 @@ namespace ScreenShotTool
             }
             if (windowTitle.Length == 0) { windowTitle = alternateTitle; }
 
-            text = text.Replace("$d", date);
+            // short replacement strings
+            text = text.Replace("$d", fullDateISO);
             text = text.Replace("$t", time);
             text = text.Replace("$ms", millisecond);
             text = text.Replace("$w", windowTitle);
-            text = text.Replace("$c", Counter.ToString().PadLeft(3, '0'));
+            text = text.Replace("$c", counter);
             // incrementing the counter happens in CaptureAction if the file is actually saved
+
+            // full set of replacement string used by Greenshot
+            /*
+                ${YYYY} year, 4 digits
+                ${MM} month, 2 digits
+                ${DD} day, 2 digits
+                ${hh} hour, 2 digits
+                ${mm} minute, 2 digits
+                ${ss} second, 2 digits
+                ${NUM} incrementing number, 6 digits
+                ${title} Window title
+                ${user} Windows user
+                ${domain} Windows domain
+                ${hostname} PC name
+             */
+
+            if (text.Contains("${")) // do Greenshot style text replacements
+            {
+                text = text.Replace("${DATE}", fullDateISO);
+                text = text.Replace("${YYYY}", year);
+                text = text.Replace("${MM}", month);
+                text = text.Replace("${DD}", day);
+                text = text.Replace("${hh}", hour);
+                text = text.Replace("${mm}", minute);
+                text = text.Replace("${ss}", second);
+                text = text.Replace("${ms}", millisecond);
+                text = text.Replace("${NUM}", counter);
+                text = text.Replace("${title}", windowTitle);
+                text = text.Replace("${user}", user);
+                text = text.Replace("${domain}", domain);
+                text = text.Replace("${hostname}", hostname);
+            }
 
             return text;
         }
@@ -1242,6 +1299,32 @@ namespace ScreenShotTool
             }
             aboutWindow.Show();
             aboutWindow.WindowState = FormWindowState.Normal;
+        }
+
+        private void copyFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listViewThumbnails.SelectedItems.Count > 0)
+            {
+                Debug.WriteLine("Copying files to clipboard");
+
+                List<string> fileList = new List<string>();
+
+                foreach (ListViewItem item in listViewThumbnails.SelectedItems)
+                {
+
+                    string file = item.Tag.ToString() + "";
+                    if (File.Exists(file))
+                    {
+                        fileList.Add(file);
+                    }
+                    else
+                    {
+                        writeMessage("File no longer exists, can't copy: " + file);
+                    }
+                }
+                Clipboard.Clear();
+                Clipboard.SetData(DataFormats.FileDrop, fileList.ToArray());
+            }
         }
     }
 }

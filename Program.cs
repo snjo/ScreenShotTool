@@ -1,7 +1,10 @@
+using System.Runtime.Versioning;
+
 namespace ScreenShotTool
 {
     internal static class Program
     {
+        [SupportedOSPlatform("windows")]
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
