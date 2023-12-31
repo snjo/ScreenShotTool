@@ -36,7 +36,7 @@ namespace ScreenShotTool
         readonly Pen zoomRegionPen;
         public Color lineColor = Color.Green;
         public Color arrowColor = Color.Yellow;
-        public Color maskColor = Color.FromArgb(50, 0, 0 , 0);
+        public Color maskColor = Color.FromArgb(120, 0, 0 , 0);
         public Color textColor = Color.LightGreen;
         Rectangle regionRect = new Rectangle();
 
@@ -366,7 +366,7 @@ namespace ScreenShotTool
             if (drawSquare)
             {
                 DrawSelectionBox(graphic, linePen);
-                if (Settings.Default.MaskRegion)
+                if (Settings.Default.MaskRegion && regionRect.Width > 0 && regionRect.Height > 0)
                 {
                     MaskRectangle(graphic, new Rectangle(0, 0, screen.Bounds.Width, screen.Bounds.Height), regionRect, brushFill);
                 }
@@ -588,8 +588,8 @@ namespace ScreenShotTool
             graphic.DrawString($"W:{regionRect.Width.ToString().PadLeft(4)} H:{regionRect.Height.ToString().PadLeft(4)} Esc: Exit, H: Help\nEnter: Save, C: Clipboard", this.Font, brushText, textX, textY);
             if (showHelp)
             {
-                graphic.FillRectangle(brushHelpBG, new Rectangle(screen.Bounds.X + 10, screen.Bounds.Y + 10, 250, 200));
-                graphic.DrawString($"Enter: Save\nC: Copy\nEsc: Cancel\nS: Size\nP: Position\nArrows: Move\nCtrl+Arrows: Select adjust side\nShift+Arrows: Fast adjust\nH: Toggle help", this.Font, brushText, screen.Bounds.X + 20, screen.Bounds.Y + 20);
+                graphic.FillRectangle(brushHelpBG, new Rectangle(10, 10, 250, 200));
+                graphic.DrawString($"Enter: Save\nC: Copy\nEsc: Cancel\nS: Size\nP: Position\nArrows: Move\nCtrl+Arrows: Select adjust side\nShift+Arrows: Fast adjust\nH: Toggle help", this.Font, brushText, 20, 20);
             }
         }
 
