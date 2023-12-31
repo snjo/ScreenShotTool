@@ -276,7 +276,7 @@ namespace ScreenShotTool
 
         private void button1_Click(object sender, EventArgs e)
         {
-            mainForm.SetCounter(0);
+            mainForm.SetCounter(1);
         }
     }
 }

@@ -840,7 +840,7 @@
             Controls.Add(buttonHelp);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Options";
-            Text = "Settings";
+            Text = "Options";
             ((System.ComponentModel.ISupportInitialize)trimTop).EndInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).EndInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).EndInit();

@@ -4,22 +4,29 @@ using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Printing;
+using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
+using System.Security.Policy;
 using System.Text;
 using System.Windows.Forms;
 
+[assembly: AssemblyVersion("1.1.*")]
+
 namespace ScreenShotTool
 {
+    [SupportedOSPlatform("windows")]
     public partial class MainForm : Form
     {
         Settings settings = Settings.Default;
-        TextWindow? helpWindow;
+        HelpForm? helpWindow;
         ImageFormat DestinationFormat = ImageFormat.Jpeg;
         //int counter = 0;
         string lastFolder = ".";
         string lastSavedFile = "";
         Options? options;
         bool showLog = false;
+        int Counter = 0;
 
         public string helpText =
             "Default filename values:\r" +
@@ -236,19 +243,25 @@ namespace ScreenShotTool
 
         public void SetCounter(int num)
         {
-            numericUpDownCounter.Value = num;
+            //numericUpDownCounter.Value = num;
+            Counter = num;
+            settings.Counter = Counter;
+            settings.Save();
         }
 
         private void IncrementCounter()
         {
-            numericUpDownCounter.Value += 1;
-        }
-
-        private void numericUpDownCounter_ValueChanged(object sender, EventArgs e)
-        {
-            settings.Counter = (int)numericUpDownCounter.Value;
+            //numericUpDownCounter.Value += 1;
+            Counter++;
+            settings.Counter = Counter;
             settings.Save();
         }
+
+        //private void numericUpDownCounter_ValueChanged(object sender, EventArgs e)
+        //{
+        //    settings.Counter = (int)numericUpDownCounter.Value;
+        //    settings.Save();
+        //}
 
         private string ComposeFileName(string text, string overrideTitle = "")
         {
@@ -289,7 +302,7 @@ namespace ScreenShotTool
             text = text.Replace("$t", time);
             text = text.Replace("$ms", millisecond);
             text = text.Replace("$w", windowTitle);
-            text = text.Replace("$c", numericUpDownCounter.Value.ToString().PadLeft(3, '0'));
+            text = text.Replace("$c", Counter.ToString().PadLeft(3, '0'));
             // incrementing the counter happens in CaptureAction if the file is actually saved
 
             return text;
@@ -800,11 +813,11 @@ namespace ScreenShotTool
         {
             if (helpWindow == null)
             {
-                helpWindow = new TextWindow(this, helpText);
+                helpWindow = new HelpForm();
             }
             if (helpWindow.IsDisposed)
             {
-                helpWindow = new TextWindow(this, helpText);
+                helpWindow = new HelpForm();
             }
             helpWindow.Show();
             helpWindow.WindowState = FormWindowState.Normal;
@@ -974,13 +987,19 @@ namespace ScreenShotTool
 
         public void updateTrimStatus()
         {
+            string disableCrop = "Disable &Cropping";
+            string enableCrop = "Enable &Cropping";
             if (settings.TrimChecked)
             {
-                enableCroppingToolStripMenuItem.Text = "Disable &Cropping";
+                enableCroppingToolStripMenuItem.Text = disableCrop;
+                toggleCropToolStripMenuItem.Text = disableCrop;
+
+
             }
             else
             {
-                enableCroppingToolStripMenuItem.Text = "Enable &Cropping";
+                enableCroppingToolStripMenuItem.Text = enableCrop;
+                toggleCropToolStripMenuItem.Text = enableCrop;
             }
             if (options != null)
             {
@@ -1173,6 +1192,56 @@ namespace ScreenShotTool
                     contextMenuListView.Show(Cursor.Position);
                 }
             }
+        }
+
+        private void resetCounterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetCounter(1);
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void helpofflineCopyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenHelp();
+        }
+
+        private void helponGithubToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenLink("https://github.com/snjo/ScreenShotTool/blob/master/README.md");
+        }
+
+        private void websiteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenLink("https://github.com/snjo/ScreenShotTool/");
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenAbout();
+        }
+
+        public static void OpenLink(string url)
+        {
+            Process.Start(new ProcessStartInfo() { FileName = url, UseShellExecute = true });
+        }
+
+        About aboutWindow = new About();
+        public void OpenAbout()
+        {
+            if (aboutWindow == null)
+            {
+                aboutWindow = new About();
+            }
+            if (aboutWindow.IsDisposed)
+            {
+                aboutWindow = new About();
+            }
+            aboutWindow.Show();
+            aboutWindow.WindowState = FormWindowState.Normal;
         }
     }
 }

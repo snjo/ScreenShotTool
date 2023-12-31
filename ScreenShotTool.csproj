@@ -10,9 +10,22 @@
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>D:\Github\cert\keypair.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  
+  <PropertyGroup>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  	<Deterministic>false</Deterministic>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <None Remove="img\icon256.png" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Include="img\monitor.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="img\icon256.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,6 +53,10 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
 
 </Project>
