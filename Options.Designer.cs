@@ -480,9 +480,9 @@
             // 
             button1.Location = new Point(6, 450);
             button1.Name = "button1";
-            button1.Size = new Size(126, 23);
+            button1.Size = new Size(142, 23);
             button1.TabIndex = 49;
-            button1.Text = "Reset Counter to 0";
+            button1.Text = "Reset Counter number";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
