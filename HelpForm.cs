@@ -23,7 +23,7 @@ namespace ScreenShotTool
 
         string helpText =
             "{\\rtf1\\ansi{\\fonttbl\\f0\\fswiss Helvetica;}\\pard" +
-            "\\b1 \\fs32 Capture Modes\\b0 \\fs18 \\par" +
+            "\\b1 \\fs32 Capture Modes\\b0 \\fs18 \\par " +
             "\\par Screenshots are performed using hotkeys defined in Options.\\par " +
             "\\par \\b1 Default hotkeys:\\b0 \\par " +
             "\\par Region\t\tPrintscreen" +
@@ -74,7 +74,7 @@ namespace ScreenShotTool
             "\t$t\tTime\\par " +
             "\t$ms\tMilliseconds\\par " +
             "\t$c\tCounter number (auto increments)\\par " +
-            "\\par \\par" +
+            "\\par \\par " +
 
             "You can also use longer form variables, these are identical to Greenshot's variable format. \\par \\par " +
             "\t$\\{DATE\\}\t\tDate in ISO format (2023-12-31) \\par " +

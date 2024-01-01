@@ -72,6 +72,8 @@ namespace ScreenShotTool
             }
 
             UpdateLogVisible();
+
+            SetInfoText();
         }
 
         private void UpgradeSettings()
@@ -251,9 +253,34 @@ namespace ScreenShotTool
             if (showThumbnails && savedToFile)
             {
                 AddThumbnail(DestinationFileName + DestinationFileExtension);
+                UpdateInfoLabelVisibility();
             }
 
             if (bitmap != null) bitmap.Dispose();
+        }
+
+        private void UpdateInfoLabelVisibility()
+        {
+            if (listViewThumbnails.Items.Count > 0)
+            {
+                labelInfo.Visible = false;
+            }
+            else
+            {
+                labelInfo.Visible = true;
+            }
+        }
+
+        public void SetInfoText()
+        {
+            labelInfo.Text = "To take a screenshot press:\n";
+            //List<string> hotkeyLines = new List<string>();
+            foreach (KeyValuePair<string, Hotkey> entry in HotkeyList)
+            {
+                //hotkeyLines.Add(entry.Key + ": " + entry.Value.ToString());
+                labelInfo.Text += $"{entry.Key.PadRight(30)} :  {entry.Value.ToString()} \n";
+            }
+            labelInfo.Text += "\nChange hotkeys in Options.";
         }
 
         public void SetCounter(int num, bool saveSetting = true)
@@ -982,6 +1009,7 @@ namespace ScreenShotTool
                 }
 
             }
+            UpdateInfoLabelVisibility();
         }
 
         private void buttonClearList_Click(object sender, EventArgs e)
@@ -996,6 +1024,7 @@ namespace ScreenShotTool
             }
             imageList.Images.Clear();
             listViewThumbnails.Clear();
+            UpdateInfoLabelVisibility();
         }
 
 
@@ -1191,6 +1220,7 @@ namespace ScreenShotTool
             {
                 item.Remove();
             }
+            UpdateInfoLabelVisibility();
         }
 
         private void itemDeleteFile_Click(object sender, EventArgs e)

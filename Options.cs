@@ -162,6 +162,7 @@ namespace ScreenShotTool
 
             reloadHotkeys();
             mainForm.updateTrimStatus();
+            mainForm.SetInfoText();
             //mainForm.SaveSettings();
         }
 

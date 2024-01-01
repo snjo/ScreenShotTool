@@ -39,6 +39,7 @@
             itemDeleteFile = new ToolStripMenuItem();
             itemRemove = new ToolStripMenuItem();
             copyToClipboardToolStripMenuItem = new ToolStripMenuItem();
+            copyFileToolStripMenuItem = new ToolStripMenuItem();
             notifyIcon1 = new NotifyIcon(components);
             contextMenuSysTray = new ContextMenuStrip(components);
             openProgramToolStripMenuItem = new ToolStripMenuItem();
@@ -64,7 +65,7 @@
             helponGithubToolStripMenuItem = new ToolStripMenuItem();
             websiteToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
-            copyFileToolStripMenuItem = new ToolStripMenuItem();
+            labelInfo = new Label();
             contextMenuListView.SuspendLayout();
             contextMenuSysTray.SuspendLayout();
             menuStrip1.SuspendLayout();
@@ -97,7 +98,7 @@
             // 
             contextMenuListView.Items.AddRange(new ToolStripItem[] { itemOpenImage, itemOpenFolder, itemDeleteFile, itemRemove, copyToClipboardToolStripMenuItem, copyFileToolStripMenuItem });
             contextMenuListView.Name = "contextMenuListView";
-            contextMenuListView.Size = new Size(199, 158);
+            contextMenuListView.Size = new Size(199, 136);
             // 
             // itemOpenImage
             // 
@@ -133,6 +134,13 @@
             copyToClipboardToolStripMenuItem.Size = new Size(198, 22);
             copyToClipboardToolStripMenuItem.Text = "&Copy to Clipboard";
             copyToClipboardToolStripMenuItem.Click += copyToClipboardToolStripMenuItem_Click;
+            // 
+            // copyFileToolStripMenuItem
+            // 
+            copyFileToolStripMenuItem.Name = "copyFileToolStripMenuItem";
+            copyFileToolStripMenuItem.Size = new Size(198, 22);
+            copyFileToolStripMenuItem.Text = "Co&py Files";
+            copyFileToolStripMenuItem.Click += copyFileToolStripMenuItem_Click;
             // 
             // notifyIcon1
             // 
@@ -316,18 +324,23 @@
             aboutToolStripMenuItem.Text = "&About";
             aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
             // 
-            // copyFileToolStripMenuItem
+            // labelInfo
             // 
-            copyFileToolStripMenuItem.Name = "copyFileToolStripMenuItem";
-            copyFileToolStripMenuItem.Size = new Size(198, 22);
-            copyFileToolStripMenuItem.Text = "Co&py Files";
-            copyFileToolStripMenuItem.Click += copyFileToolStripMenuItem_Click;
+            labelInfo.BackColor = Color.White;
+            labelInfo.Font = new Font("Courier New", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            labelInfo.ForeColor = Color.Gray;
+            labelInfo.Location = new Point(65, 106);
+            labelInfo.Name = "labelInfo";
+            labelInfo.Size = new Size(411, 141);
+            labelInfo.TabIndex = 37;
+            labelInfo.Text = "To take a screenshot use hotkeys";
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(543, 419);
+            Controls.Add(labelInfo);
             Controls.Add(menuStrip1);
             Controls.Add(labelShowLog);
             Controls.Add(listViewThumbnails);
@@ -384,5 +397,6 @@
         private ToolStripMenuItem aboutToolStripMenuItem;
         private ToolStripMenuItem TopMenuOptions;
         private ToolStripMenuItem copyFileToolStripMenuItem;
+        private Label labelInfo;
     }
 }

@@ -33,7 +33,7 @@ namespace Hotkeys
             return result;
         }
 
-        public string Text()
+        public override string ToString()
         {
             string result = "";
             if (Key != "") // != 0   if key is char 
