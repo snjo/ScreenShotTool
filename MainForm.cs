@@ -278,9 +278,24 @@ namespace ScreenShotTool
             foreach (KeyValuePair<string, Hotkey> entry in HotkeyList)
             {
                 //hotkeyLines.Add(entry.Key + ": " + entry.Value.ToString());
-                labelInfo.Text += $"{entry.Key.PadRight(30)} :  {entry.Value.ToString()} \n";
+                string keyName = CamelCaseToSpaces(entry.Key).PadRight(25);
+                labelInfo.Text += $"{keyName} :  {entry.Value.ToString()} \n";
             }
             labelInfo.Text += "\nChange hotkeys in Options.";
+        }
+
+        public static string CamelCaseToSpaces(string text)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < text.Length; i++)
+            {
+                if (char.IsUpper(text[i]) && i > 0)
+                {
+                    sb.Append(' ');
+                }
+                sb.Append(text[i]);
+            }
+            return sb.ToString();
         }
 
         public void SetCounter(int num, bool saveSetting = true)

@@ -2,6 +2,7 @@
 using ScreenShotTool.Properties;
 using System.Diagnostics;
 using System.Runtime.Versioning;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ScreenShotTool
 {
@@ -198,7 +199,7 @@ namespace ScreenShotTool
             int i = 0;
             foreach (KeyValuePair<string, Hotkey> kvp in mainForm.HotkeyList)
             {
-                string keyName = kvp.Key;
+                string keyName = MainForm.CamelCaseToSpaces(kvp.Key);
                 Hotkey hotkey = kvp.Value;
                 HotkeyGrid.Rows[i].Cells[0].Value = keyName;
                 HotkeyGrid.Rows[i].Cells[1].Value = hotkey.Key;
