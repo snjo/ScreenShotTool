@@ -246,6 +246,10 @@ namespace ScreenShotTool.Forms
             if (symbol != null)
             {
                 symbols.Add(symbol);
+                ListViewItem newItem = listViewSymbols.Items.Add(symbol.Name);
+                newItem.Text = symbol.Name;
+                newItem.Tag = symbol;
+                listViewSymbols.Update();
             }
         }
 
@@ -257,7 +261,8 @@ namespace ScreenShotTool.Forms
             Text,
             Arrow,
             Line,
-            Image
+            Image,
+            ImageScaled
         }
         private SymbolType newSymbolType = SymbolType.Rectangle;
 
@@ -305,7 +310,7 @@ namespace ScreenShotTool.Forms
             }
             UpdateOverlay();
             dragStarted = false;
-            if (newSymbolType == SymbolType.Image)
+            if (newSymbolType == SymbolType.Image || newSymbolType == SymbolType.ImageScaled)
             {
                 // don't repeatedly add pasted images
                 newSymbolType = SymbolType.None;
@@ -316,6 +321,7 @@ namespace ScreenShotTool.Forms
         {
             int dragEndX = e.X;
             int dragEndY = e.Y;
+            int lineWeight = (int)numericNewLineWeight.Value; // TODO
 
             //Debug.WriteLine($"Drag positions: sX {dragStartX} sY {dragStartY} eX {dragEndX} eY {dragEndY}");
 
@@ -335,13 +341,15 @@ namespace ScreenShotTool.Forms
                 switch (newSymbolType)
                 {
                     case SymbolType.Rectangle:
-                        return new GsRectangle(linePen, lineBrush, Color.Green, Color.Blue, dragRect.X, dragRect.Y, dragRect.Width, dragRect.Height);
+                        return new GsRectangle(linePen, lineBrush, Color.Green, Color.Blue, dragRect.X, dragRect.Y, dragRect.Width, dragRect.Height, lineWeight);
                     case SymbolType.Circle:
-                        return new GsCircle(linePen, lineBrush, Color.Green, Color.Blue, dragRect.X, dragRect.Y, dragRect.Width, dragRect.Height);
+                        return new GsCircle(linePen, lineBrush, Color.Green, Color.Blue, dragRect.X, dragRect.Y, dragRect.Width, dragRect.Height, lineWeight);
                     case SymbolType.Line:
-                        return new GsLine(linePen, lineBrush, Color.Green, Color.Blue, dragStartX, dragStartY, dragEndX, dragEndY);
+                        return new GsLine(linePen, lineBrush, Color.Green, Color.Blue, dragStartX, dragStartY, dragEndX, dragEndY, lineWeight);
                     case SymbolType.Image:
-                        return new GsImage(linePen, lineBrush, Color.Green, Color.Blue, dragStartX, dragStartY, dragEndX, dragEndY);
+                        return new GsImage(linePen, lineBrush, Color.Green, Color.Blue, dragStartX, dragStartY, dragEndX, dragEndY, lineWeight);
+                    case SymbolType.ImageScaled:
+                        return new GsImageScaled(linePen, lineBrush, Color.Green, Color.Blue, dragLeft, dragTop, dragWidth, dragHeight, lineWeight);
                     default:
                         return null;
                 }
@@ -358,16 +366,12 @@ namespace ScreenShotTool.Forms
 
         private void pictureBoxOverlay_MouseMove(object sender, MouseEventArgs e)
         {
-            //if (dragStarted)
-            //{
             GraphicSymbol? symbol = GetSymbol(sender, e);
             if (symbol != null)
             {
                 UpdateOverlay(symbol);
                 symbol.Dispose();
             }
-            
-            //}
         }
 
         private void pictureBoxOverlay_MouseLeave(object sender, EventArgs e)
@@ -399,139 +403,126 @@ namespace ScreenShotTool.Forms
             UpdateOverlay();
         }
 
+        private void PasteIntoImageScaled()
+        {
+            newSymbolType = SymbolType.ImageScaled;
+            UpdateOverlay();
+        }
+
         private void ScreenshotEditor_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.V && e.Modifiers == Keys.Control)
             {
                 PasteIntoImage();
             }
-        }
-    }
-
-    public class GraphicSymbol
-    {
-        public Pen pen;
-        public Brush brush;
-        public Color foregroundColor;
-        public Color backgroundColor;
-        public int X1;
-        public int Y1;
-        public int X2;
-        public int Y2;
-
-        public GraphicSymbol(Pen pen, Brush brush, Color foregroundColor, Color backgroundColor, int X1, int Y1, int X2 = 0, int Y2 = 0)
-        { 
-            this.brush = brush;
-            this.pen = pen;
-            this.foregroundColor = foregroundColor;
-            this.backgroundColor = backgroundColor;
-            this.X1 = X1; 
-            this.Y1 = Y1;
-            this.X2 = X2;
-            this.Y2 = Y2;
-        }
-
-        public GraphicSymbol(GraphicSymbol clonedSymbol)
-        {
-            this.brush = clonedSymbol.brush;
-            this.pen = clonedSymbol.pen;
-            this.foregroundColor = clonedSymbol.foregroundColor;
-            this.backgroundColor = clonedSymbol.backgroundColor;
-            this.X1 = clonedSymbol.X1; // coordinate 1
-            this.Y1 = clonedSymbol.Y1; // coordinate 1
-            this.X2 = clonedSymbol.X2; // width or coordinate 2
-            this.Y2 = clonedSymbol.Y2; // height or coordinate 2
-        }
-
-        public virtual void DrawSymbol(Graphics graphic)
-        {
-        }
-
-        public virtual void Dispose()
-        {
-        }
-    }
-
-    public class GsRectangle : GraphicSymbol
-    {
-        public GsRectangle(Pen pen, Brush brush, Color foregroundColor, Color backgroundColor, int X1, int Y1, int X2 = 0, int Y2 = 0) : base(pen, brush, foregroundColor, backgroundColor, X1, Y1, X2, Y2)
-        {
-        }
-
-        public override void DrawSymbol(Graphics graphic)
-        {
-            graphic.DrawRectangle(pen, new Rectangle(X1, Y1, X2, Y2));
-        }
-    }
-
-    public class GsCircle : GraphicSymbol
-    {
-        public GsCircle(Pen pen, Brush brush, Color foregroundColor, Color backgroundColor, int X, int Y, int Width = 0, int Height = 0) : base(pen, brush, foregroundColor, backgroundColor, X, Y, Width, Height)
-        {
-        }
-
-        public override void DrawSymbol(Graphics graphic)
-        {
-
-            graphic.DrawEllipse(pen, new Rectangle(X1, Y1, X2, Y2));
-        }
-    }
-    
-    public class GsLine : GraphicSymbol
-    {
-        public GsLine(Pen pen, Brush brush, Color foregroundColor, Color backgroundColor, int X, int Y, int Width = 0, int Height = 0) : base(pen, brush, foregroundColor, backgroundColor, X, Y, Width, Height)
-        {
-        }
-
-        public override void DrawSymbol(Graphics graphic)
-        {
-
-            graphic.DrawLine(pen, new Point(X1, Y1), new Point(X2, Y2));
-        }
-    }
-
-    public class GsArrow : GraphicSymbol
-    {
-        public GsArrow(Pen pen, Brush brush, Color foregroundColor, Color backgroundColor, int X, int Y, int Width = 0, int Height = 0) : base(pen, brush, foregroundColor, backgroundColor, X, Y, Width, Height)
-        {
-        }
-
-        public override void DrawSymbol(Graphics graphic)
-        {
-            //PointF mid = new PointF((X1 + X2) / 2, (Y1 + Y2) / 2);
-            graphic.DrawLine(pen, new Point(X1, Y1), new Point(X2, Y2));
-
-            //graphic.TranslateTransform(mid.X, mid.Y);
-            //graphic.RotateTransform(45f);
-            //graphic.DrawPath(pen, new GraphicsPath());
-        }
-    }
-
-    public class GsImage : GraphicSymbol
-    {
-        Image? image;
-
-        public GsImage(Pen pen, Brush brush, Color foregroundColor, Color backgroundColor, int X, int Y, int Width = 0, int Height = 0) : base(pen, brush, foregroundColor, backgroundColor, X, Y, Width, Height)
-        {
-        }
-        public override void DrawSymbol(Graphics graphic)
-        {
-            if (image == null)
+            if (e.KeyCode == Keys.V && e.Modifiers == (Keys.Control | Keys.Shift))
             {
-                image = Clipboard.GetImage();
-            }
-            if (image != null)
-            {
-                graphic.DrawImage(image, new Point(X2, Y2));
+                PasteIntoImageScaled();
             }
         }
 
-        public override void Dispose()
+        private void itemPasteScaled_Click(object sender, EventArgs e)
         {
-            if (image != null)
+            PasteIntoImageScaled();
+        }
+
+        private void listViewSymbols_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listViewSymbols.SelectedItems.Count > 0)
             {
-                image.Dispose();
+                ListViewItem item = listViewSymbols.SelectedItems[0];
+                GraphicSymbol? graphicSymbol = item.Tag as GraphicSymbol;
+                if (graphicSymbol != null)
+                {
+                    labelSymbolType.Text = "Symbol: " + graphicSymbol.Name;
+                    numericX.Value = graphicSymbol.X1;
+                    numericY.Value = graphicSymbol.Y1;
+                    numericWidth.Value = graphicSymbol.X2;
+                    numericHeight.Value = graphicSymbol.Y2;
+                    buttonColorLine.BackColor = graphicSymbol.foregroundColor;
+                    buttonColorFill.BackColor = graphicSymbol.backgroundColor;
+                    numericPropertiesLineWeight.Value = graphicSymbol.lineWeight;
+                    buttonDeleteSymbol.Tag = graphicSymbol;
+                }
+
             }
+            else
+            {
+                //ClearProperties();
+            }
+        }
+
+        private void buttonDeleteSymbol_Click(object sender, EventArgs e)
+        {
+            if (listViewSymbols.SelectedItems.Count > 0)
+            {
+                ListViewItem item = listViewSymbols.SelectedItems[0];
+                GraphicSymbol? gs = buttonDeleteSymbol.Tag as GraphicSymbol;
+                if (gs != null)
+                {
+                    listViewSymbols.Items.Remove(item);
+                    gs.Dispose();
+                    symbols.Remove(gs);
+                }
+                listViewSymbols.Update();
+                ClearProperties();
+                UpdateOverlay();
+            }
+        }
+
+        private void ClearProperties()
+        {
+            labelSymbolType.Text = "Symbol: ";
+            numericX.Value = 0;
+            numericY.Value = 0;
+            numericWidth.Value = 1;
+            numericHeight.Value = 1;
+            buttonColorLine.BackColor = Color.Gray;
+            buttonColorFill.BackColor = Color.Gray;
+            numericPropertiesLineWeight.Value = 0;
+            buttonDeleteSymbol.Tag = null;
+        }
+
+        private void numeric_ValueChanged(object sender, EventArgs e)
+        {
+            if (listViewSymbols.SelectedItems.Count > 0)
+            {
+                ListViewItem item = listViewSymbols.SelectedItems[0];
+                GraphicSymbol? gs = item.Tag as GraphicSymbol;
+                if (gs == null) return;
+
+                if (sender == numericX)
+                {
+                    gs.X1 = (int)numericX.Value;
+                    Debug.WriteLine("Updating X1");
+                }
+                if (sender == numericY)
+                {
+                    gs.Y1 = (int)numericY.Value;
+                    Debug.WriteLine("Updating Y1");
+                }
+                if (sender == numericWidth)
+                {
+                    gs.X2 = (int)numericWidth.Value;
+                    Debug.WriteLine("Updating Width");
+                }
+                if (sender == numericHeight)
+                {
+                    gs.Y2 = (int)numericHeight.Value;
+                    Debug.WriteLine("Updating Height");
+                }
+                if (sender == numericPropertiesLineWeight)
+                {
+                    gs.lineWeight = (int)numericPropertiesLineWeight.Value;
+                    Debug.WriteLine("Updating LineWeight");
+                }
+            }
+            UpdateOverlay();
+        }
+
+        private void colorChangeClick(object sender, EventArgs e)
+        {
+            // TODO
         }
     }
 }
