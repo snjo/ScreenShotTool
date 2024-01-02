@@ -26,27 +26,57 @@ namespace ScreenShotTool.Forms
         Brush fillBrush = new SolidBrush(Color.Gray);
         List<GraphicSymbol> symbols = new List<GraphicSymbol>();
 
-        public ScreenshotEditor(string? file = null)
+        public ScreenshotEditor(string? file = null, bool fromClipboard = false)
         {
             InitializeComponent();
             pictureBoxOverlay.Parent = pictureBoxOriginal;
             if (file != null)
             {
-                LoadImage(file);
+                LoadImageFromFile(file);
+            }
+            else if (fromClipboard)
+            {
+                LoadImageFromClipboard();
             }
         }
 
+        private void LoadImageFromClipboard()
+        {
+            try
+            {
+                originalImage = Clipboard.GetImage();
+                pictureBoxOriginal.Image = originalImage;
+            }
+            catch
+            {
+                Debug.WriteLine("Could not load from clipboard");
+                return;
+            }
+            DisposeAndNull(overlayGraphics);
+            DisposeAndNull(overlayImage);
+            symbols.Clear();
+        }
 
-
-        public void LoadImage(string filename)
+        public void LoadImageFromFile(string filename)
         {
             if (File.Exists(filename))
             {
                 Debug.WriteLine("Loading file: " + filename);
 
-                CreateOverlay();
-                originalImage = Image.FromFile(filename);
+                //CreateOverlay();
+                try
+                {
+                    originalImage = Image.FromFile(filename);
+                }
+                catch
+                {
+                    Debug.WriteLine("Could not load file");
+
+                }
                 pictureBoxOriginal.Image = originalImage;
+                DisposeAndNull(overlayGraphics);
+                DisposeAndNull(overlayImage);
+                symbols.Clear();
             }
         }
 
@@ -89,7 +119,7 @@ namespace ScreenShotTool.Forms
                 }
                 overlayImage = new Bitmap(originalImage.Width, originalImage.Height);
                 overlayGraphics = Graphics.FromImage(overlayImage);
-                
+
                 //overlayGraphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                 //overlayGraphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
                 //overlayGraphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit; // fixes ugly aliasing on text
@@ -114,7 +144,10 @@ namespace ScreenShotTool.Forms
             }
             if (overlayImage != null && overlayGraphics != null)
             {
-                pictureBoxOverlay.Image = DrawOverlay(pictureBoxOverlay.Image, temporarySymbol);
+                Image? image = DrawOverlay(pictureBoxOverlay.Image, temporarySymbol);
+                pictureBoxOverlay.Image.Dispose();
+                pictureBoxOverlay.Image = image;
+                //DisposeAndNull(image);
             }
             else
             {
@@ -125,7 +158,7 @@ namespace ScreenShotTool.Forms
         private Image DrawOverlay(Image img, GraphicSymbol? temporarySymbol = null)
         {
             img = new Bitmap(this.Width, this.Height);
-            disposeAndNull(overlayGraphics);
+            DisposeAndNull(overlayGraphics);
             overlayGraphics = Graphics.FromImage(img);
 
             DrawElements(overlayGraphics, temporarySymbol);
@@ -145,16 +178,16 @@ namespace ScreenShotTool.Forms
             }
         }
 
-        private void DisposeAndNull(Bitmap? bitmap)
+        private void DisposeAndNull(Image? image)
         {
-            if (bitmap != null)
+            if (image != null)
             {
-                bitmap.Dispose();
-                bitmap = null;
+                image.Dispose();
+                image = null;
             }
         }
 
-        private void disposeAndNull(Graphics? graphics)
+        private void DisposeAndNull(Graphics? graphics)
         {
             if (graphics != null)
             {
@@ -169,7 +202,7 @@ namespace ScreenShotTool.Forms
             DialogResult result = fileDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                LoadImage(fileDialog.FileName);
+                LoadImageFromFile(fileDialog.FileName);
             }
         }
 
@@ -195,6 +228,10 @@ namespace ScreenShotTool.Forms
 
         private void deleteOverlayElementsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            foreach (GraphicSymbol symbol in symbols)
+            {
+                symbol.Dispose();
+            }
             symbols.Clear();
             UpdateOverlay();
         }
@@ -219,7 +256,8 @@ namespace ScreenShotTool.Forms
             Circle,
             Text,
             Arrow,
-            Line
+            Line,
+            Image
         }
         private SymbolType newSymbolType = SymbolType.Rectangle;
 
@@ -252,6 +290,10 @@ namespace ScreenShotTool.Forms
             dragStarted = true;
             dragStartX = e.X;
             dragStartY = e.Y;
+            if (overlayGraphics == null)
+            {
+                CreateOverlay();
+            }
         }
 
         private void pictureBoxOverlay_MouseUp(object sender, MouseEventArgs e)
@@ -263,6 +305,11 @@ namespace ScreenShotTool.Forms
             }
             UpdateOverlay();
             dragStarted = false;
+            if (newSymbolType == SymbolType.Image)
+            {
+                // don't repeatedly add pasted images
+                newSymbolType = SymbolType.None;
+            }
         }
 
         private GraphicSymbol? GetSymbol(object sender, MouseEventArgs e)
@@ -293,6 +340,8 @@ namespace ScreenShotTool.Forms
                         return new GsCircle(linePen, lineBrush, Color.Green, Color.Blue, dragRect.X, dragRect.Y, dragRect.Width, dragRect.Height);
                     case SymbolType.Line:
                         return new GsLine(linePen, lineBrush, Color.Green, Color.Blue, dragStartX, dragStartY, dragEndX, dragEndY);
+                    case SymbolType.Image:
+                        return new GsImage(linePen, lineBrush, Color.Green, Color.Blue, dragStartX, dragStartY, dragEndX, dragEndY);
                     default:
                         return null;
                 }
@@ -315,13 +364,47 @@ namespace ScreenShotTool.Forms
             if (symbol != null)
             {
                 UpdateOverlay(symbol);
+                symbol.Dispose();
             }
+            
             //}
         }
 
         private void pictureBoxOverlay_MouseLeave(object sender, EventArgs e)
         {
             dragStarted = false;
+        }
+
+        private void itemLoadFromClipboard_Click(object sender, EventArgs e)
+        {
+            LoadImageFromClipboard();
+        }
+
+        private void itemExit_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void pasteIntoThisImage_Click(object sender, EventArgs e)
+        {
+            PasteIntoImage();
+        }
+
+        private void PasteIntoImage()
+        {
+            newSymbolType = SymbolType.Image;
+            dragStarted = true;
+            dragStartX = 0;
+            dragStartY = 0;
+            UpdateOverlay();
+        }
+
+        private void ScreenshotEditor_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.V && e.Modifiers == Keys.Control)
+            {
+                PasteIntoImage();
+            }
         }
     }
 
@@ -361,6 +444,10 @@ namespace ScreenShotTool.Forms
         }
 
         public virtual void DrawSymbol(Graphics graphic)
+        {
+        }
+
+        public virtual void Dispose()
         {
         }
     }
@@ -417,6 +504,34 @@ namespace ScreenShotTool.Forms
             //graphic.TranslateTransform(mid.X, mid.Y);
             //graphic.RotateTransform(45f);
             //graphic.DrawPath(pen, new GraphicsPath());
+        }
+    }
+
+    public class GsImage : GraphicSymbol
+    {
+        Image? image;
+
+        public GsImage(Pen pen, Brush brush, Color foregroundColor, Color backgroundColor, int X, int Y, int Width = 0, int Height = 0) : base(pen, brush, foregroundColor, backgroundColor, X, Y, Width, Height)
+        {
+        }
+        public override void DrawSymbol(Graphics graphic)
+        {
+            if (image == null)
+            {
+                image = Clipboard.GetImage();
+            }
+            if (image != null)
+            {
+                graphic.DrawImage(image, new Point(X2, Y2));
+            }
+        }
+
+        public override void Dispose()
+        {
+            if (image != null)
+            {
+                image.Dispose();
+            }
         }
     }
 }

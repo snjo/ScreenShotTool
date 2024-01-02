@@ -30,21 +30,21 @@
         {
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
-            saveToolStripMenuItem = new ToolStripMenuItem();
-            loadToolStripMenuItem = new ToolStripMenuItem();
-            exitToolStripMenuItem = new ToolStripMenuItem();
+            itemSave = new ToolStripMenuItem();
+            itemLoadFromFile = new ToolStripMenuItem();
+            itemLoadFromClipboard = new ToolStripMenuItem();
+            itemExit = new ToolStripMenuItem();
             editToolStripMenuItem = new ToolStripMenuItem();
             copyToolStripMenuItem = new ToolStripMenuItem();
             pasteIntoThisImageToolStripMenuItem = new ToolStripMenuItem();
-            pasteAndReplaceImageToolStripMenuItem = new ToolStripMenuItem();
             deleteOverlayElementsToolStripMenuItem = new ToolStripMenuItem();
             panelButtons = new Panel();
+            buttonLine = new Button();
             button2 = new Button();
             button1 = new Button();
             pictureBoxOriginal = new PictureBox();
             panelImage = new Panel();
             pictureBoxOverlay = new PictureBox();
-            buttonLine = new Button();
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxOriginal).BeginInit();
@@ -63,34 +63,42 @@
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { saveToolStripMenuItem, loadToolStripMenuItem, exitToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { itemSave, itemLoadFromFile, itemLoadFromClipboard, itemExit });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "File";
             // 
-            // saveToolStripMenuItem
+            // itemSave
             // 
-            saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(107, 22);
-            saveToolStripMenuItem.Text = "&Save...";
-            saveToolStripMenuItem.Click += saveToolStripMenuItem_Click;
+            itemSave.Name = "itemSave";
+            itemSave.Size = new Size(182, 22);
+            itemSave.Text = "&Save...";
+            itemSave.Click += saveToolStripMenuItem_Click;
             // 
-            // loadToolStripMenuItem
+            // itemLoadFromFile
             // 
-            loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            loadToolStripMenuItem.Size = new Size(107, 22);
-            loadToolStripMenuItem.Text = "&Load";
-            loadToolStripMenuItem.Click += loadToolStripMenuItem_Click;
+            itemLoadFromFile.Name = "itemLoadFromFile";
+            itemLoadFromFile.Size = new Size(182, 22);
+            itemLoadFromFile.Text = "&Load";
+            itemLoadFromFile.Click += loadToolStripMenuItem_Click;
             // 
-            // exitToolStripMenuItem
+            // itemLoadFromClipboard
             // 
-            exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(107, 22);
-            exitToolStripMenuItem.Text = "E&xit";
+            itemLoadFromClipboard.Name = "itemLoadFromClipboard";
+            itemLoadFromClipboard.Size = new Size(182, 22);
+            itemLoadFromClipboard.Text = "Load from clipboard";
+            itemLoadFromClipboard.Click += itemLoadFromClipboard_Click;
+            // 
+            // itemExit
+            // 
+            itemExit.Name = "itemExit";
+            itemExit.Size = new Size(182, 22);
+            itemExit.Text = "E&xit";
+            itemExit.Click += itemExit_Click;
             // 
             // editToolStripMenuItem
             // 
-            editToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { copyToolStripMenuItem, pasteIntoThisImageToolStripMenuItem, pasteAndReplaceImageToolStripMenuItem, deleteOverlayElementsToolStripMenuItem });
+            editToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { copyToolStripMenuItem, pasteIntoThisImageToolStripMenuItem, deleteOverlayElementsToolStripMenuItem });
             editToolStripMenuItem.Name = "editToolStripMenuItem";
             editToolStripMenuItem.Size = new Size(39, 20);
             editToolStripMenuItem.Text = "Edit";
@@ -98,27 +106,22 @@
             // copyToolStripMenuItem
             // 
             copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            copyToolStripMenuItem.Size = new Size(202, 22);
+            copyToolStripMenuItem.Size = new Size(190, 22);
             copyToolStripMenuItem.Text = "&Copy";
             copyToolStripMenuItem.Click += copyToolStripMenuItem_Click;
             // 
             // pasteIntoThisImageToolStripMenuItem
             // 
             pasteIntoThisImageToolStripMenuItem.Name = "pasteIntoThisImageToolStripMenuItem";
-            pasteIntoThisImageToolStripMenuItem.Size = new Size(202, 22);
-            pasteIntoThisImageToolStripMenuItem.Text = "Paste &into this image";
-            // 
-            // pasteAndReplaceImageToolStripMenuItem
-            // 
-            pasteAndReplaceImageToolStripMenuItem.Name = "pasteAndReplaceImageToolStripMenuItem";
-            pasteAndReplaceImageToolStripMenuItem.Size = new Size(202, 22);
-            pasteAndReplaceImageToolStripMenuItem.Text = "&Paste and replace image";
+            pasteIntoThisImageToolStripMenuItem.Size = new Size(190, 22);
+            pasteIntoThisImageToolStripMenuItem.Text = "&Paste";
+            pasteIntoThisImageToolStripMenuItem.Click += pasteIntoThisImage_Click;
             // 
             // deleteOverlayElementsToolStripMenuItem
             // 
             deleteOverlayElementsToolStripMenuItem.Name = "deleteOverlayElementsToolStripMenuItem";
-            deleteOverlayElementsToolStripMenuItem.Size = new Size(202, 22);
-            deleteOverlayElementsToolStripMenuItem.Text = "Delete overlay elements";
+            deleteOverlayElementsToolStripMenuItem.Size = new Size(190, 22);
+            deleteOverlayElementsToolStripMenuItem.Text = "&Delete added symbols";
             deleteOverlayElementsToolStripMenuItem.Click += deleteOverlayElementsToolStripMenuItem_Click;
             // 
             // panelButtons
@@ -131,6 +134,16 @@
             panelButtons.Name = "panelButtons";
             panelButtons.Size = new Size(72, 422);
             panelButtons.TabIndex = 1;
+            // 
+            // buttonLine
+            // 
+            buttonLine.Location = new Point(3, 74);
+            buttonLine.Name = "buttonLine";
+            buttonLine.Size = new Size(66, 23);
+            buttonLine.TabIndex = 2;
+            buttonLine.Text = "Line";
+            buttonLine.UseVisualStyleBackColor = true;
+            buttonLine.Click += buttonLine_Click;
             // 
             // button2
             // 
@@ -186,16 +199,6 @@
             pictureBoxOverlay.MouseMove += pictureBoxOverlay_MouseMove;
             pictureBoxOverlay.MouseUp += pictureBoxOverlay_MouseUp;
             // 
-            // buttonLine
-            // 
-            buttonLine.Location = new Point(3, 74);
-            buttonLine.Name = "buttonLine";
-            buttonLine.Size = new Size(66, 23);
-            buttonLine.TabIndex = 2;
-            buttonLine.Text = "Line";
-            buttonLine.UseVisualStyleBackColor = true;
-            buttonLine.Click += buttonLine_Click;
-            // 
             // ScreenshotEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -204,9 +207,11 @@
             Controls.Add(panelImage);
             Controls.Add(panelButtons);
             Controls.Add(menuStrip1);
+            KeyPreview = true;
             MainMenuStrip = menuStrip1;
             Name = "ScreenshotEditor";
             Text = "ImageEditor";
+            KeyDown += ScreenshotEditor_KeyDown;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             panelButtons.ResumeLayout(false);
@@ -226,16 +231,16 @@
         private ToolStripMenuItem fileToolStripMenuItem;
         private ToolStripMenuItem editToolStripMenuItem;
         private Panel panelImage;
-        private ToolStripMenuItem saveToolStripMenuItem;
-        private ToolStripMenuItem loadToolStripMenuItem;
-        private ToolStripMenuItem exitToolStripMenuItem;
+        private ToolStripMenuItem itemSave;
+        private ToolStripMenuItem itemLoadFromFile;
+        private ToolStripMenuItem itemExit;
         private ToolStripMenuItem copyToolStripMenuItem;
-        private ToolStripMenuItem pasteIntoThisImageToolStripMenuItem;
         private Button button1;
-        private ToolStripMenuItem pasteAndReplaceImageToolStripMenuItem;
         private PictureBox pictureBoxOverlay;
         private ToolStripMenuItem deleteOverlayElementsToolStripMenuItem;
         private Button button2;
         private Button buttonLine;
+        private ToolStripMenuItem itemLoadFromClipboard;
+        private ToolStripMenuItem pasteIntoThisImageToolStripMenuItem;
     }
 }

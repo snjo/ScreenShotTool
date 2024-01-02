@@ -1374,7 +1374,7 @@ namespace ScreenShotTool
             }
         }
 
-        private void editImageToolStripMenuItem_Click(object sender, EventArgs e)
+        private void editImageFromFile_Click(object sender, EventArgs e)
         {
             if (listViewThumbnails.SelectedItems.Count > 0)
             {
@@ -1385,6 +1385,18 @@ namespace ScreenShotTool
                     imageEditor.Show();
                 }
             }
+        }
+
+        private void editImageNoFile_Click(object sender, EventArgs e)
+        {
+            ScreenshotEditor imageEditor = new ScreenshotEditor();
+            imageEditor.Show();
+        }
+
+        private void editImageFromClipboard_Click(object sender, EventArgs e)
+        {
+            ScreenshotEditor imageEditor = new ScreenshotEditor(null, true);
+            imageEditor.Show();
         }
     }
 }

@@ -40,6 +40,7 @@
             itemRemove = new ToolStripMenuItem();
             copyToClipboardToolStripMenuItem = new ToolStripMenuItem();
             copyFileToolStripMenuItem = new ToolStripMenuItem();
+            editImageToolStripMenuItem = new ToolStripMenuItem();
             notifyIcon1 = new NotifyIcon(components);
             contextMenuSysTray = new ContextMenuStrip(components);
             openProgramToolStripMenuItem = new ToolStripMenuItem();
@@ -60,13 +61,16 @@
             toolStripMenuItem2 = new ToolStripSeparator();
             exitToolStripMenuItem = new ToolStripMenuItem();
             TopMenuOptions = new ToolStripMenuItem();
+            topMenuEdit = new ToolStripMenuItem();
+            editSelectedFileToolStripMenuItem = new ToolStripMenuItem();
+            editFromClipboardToolStripMenuItem = new ToolStripMenuItem();
+            openEditorToolStripMenuItem = new ToolStripMenuItem();
             TopMenuHelp = new ToolStripMenuItem();
             helpofflineCopyToolStripMenuItem = new ToolStripMenuItem();
             helponGithubToolStripMenuItem = new ToolStripMenuItem();
             websiteToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             labelInfo = new Label();
-            editImageToolStripMenuItem = new ToolStripMenuItem();
             contextMenuListView.SuspendLayout();
             contextMenuSysTray.SuspendLayout();
             menuStrip1.SuspendLayout();
@@ -99,7 +103,7 @@
             // 
             contextMenuListView.Items.AddRange(new ToolStripItem[] { itemOpenImage, itemOpenFolder, itemDeleteFile, itemRemove, copyToClipboardToolStripMenuItem, copyFileToolStripMenuItem, editImageToolStripMenuItem });
             contextMenuListView.Name = "contextMenuListView";
-            contextMenuListView.Size = new Size(199, 180);
+            contextMenuListView.Size = new Size(199, 158);
             // 
             // itemOpenImage
             // 
@@ -142,6 +146,13 @@
             copyFileToolStripMenuItem.Size = new Size(198, 22);
             copyFileToolStripMenuItem.Text = "Co&py Files";
             copyFileToolStripMenuItem.Click += copyFileToolStripMenuItem_Click;
+            // 
+            // editImageToolStripMenuItem
+            // 
+            editImageToolStripMenuItem.Name = "editImageToolStripMenuItem";
+            editImageToolStripMenuItem.Size = new Size(198, 22);
+            editImageToolStripMenuItem.Text = "&Edit Image";
+            editImageToolStripMenuItem.Click += editImageFromFile_Click;
             // 
             // notifyIcon1
             // 
@@ -222,7 +233,7 @@
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { TopMenuProgram, TopMenuOptions, TopMenuHelp });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { TopMenuProgram, TopMenuOptions, topMenuEdit, TopMenuHelp });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(543, 24);
@@ -290,6 +301,34 @@
             TopMenuOptions.Text = "&Options";
             TopMenuOptions.Click += buttonOptions_Click;
             // 
+            // topMenuEdit
+            // 
+            topMenuEdit.DropDownItems.AddRange(new ToolStripItem[] { editSelectedFileToolStripMenuItem, editFromClipboardToolStripMenuItem, openEditorToolStripMenuItem });
+            topMenuEdit.Name = "topMenuEdit";
+            topMenuEdit.Size = new Size(39, 20);
+            topMenuEdit.Text = "Edit";
+            // 
+            // editSelectedFileToolStripMenuItem
+            // 
+            editSelectedFileToolStripMenuItem.Name = "editSelectedFileToolStripMenuItem";
+            editSelectedFileToolStripMenuItem.Size = new Size(180, 22);
+            editSelectedFileToolStripMenuItem.Text = "Edit selected file";
+            editSelectedFileToolStripMenuItem.Click += editImageFromFile_Click;
+            // 
+            // editFromClipboardToolStripMenuItem
+            // 
+            editFromClipboardToolStripMenuItem.Name = "editFromClipboardToolStripMenuItem";
+            editFromClipboardToolStripMenuItem.Size = new Size(180, 22);
+            editFromClipboardToolStripMenuItem.Text = "Edit from clipboard";
+            editFromClipboardToolStripMenuItem.Click += editImageFromClipboard_Click;
+            // 
+            // openEditorToolStripMenuItem
+            // 
+            openEditorToolStripMenuItem.Name = "openEditorToolStripMenuItem";
+            openEditorToolStripMenuItem.Size = new Size(180, 22);
+            openEditorToolStripMenuItem.Text = "Open editor";
+            openEditorToolStripMenuItem.Click += editImageNoFile_Click;
+            // 
             // TopMenuHelp
             // 
             TopMenuHelp.DropDownItems.AddRange(new ToolStripItem[] { helpofflineCopyToolStripMenuItem, helponGithubToolStripMenuItem, websiteToolStripMenuItem, aboutToolStripMenuItem });
@@ -335,13 +374,6 @@
             labelInfo.Size = new Size(411, 141);
             labelInfo.TabIndex = 37;
             labelInfo.Text = "To take a screenshot use hotkeys";
-            // 
-            // editImageToolStripMenuItem
-            // 
-            editImageToolStripMenuItem.Name = "editImageToolStripMenuItem";
-            editImageToolStripMenuItem.Size = new Size(198, 22);
-            editImageToolStripMenuItem.Text = "&Edit Image";
-            editImageToolStripMenuItem.Click += this.editImageToolStripMenuItem_Click;
             // 
             // MainForm
             // 
@@ -407,5 +439,9 @@
         private ToolStripMenuItem copyFileToolStripMenuItem;
         private Label labelInfo;
         private ToolStripMenuItem editImageToolStripMenuItem;
+        private ToolStripMenuItem topMenuEdit;
+        private ToolStripMenuItem editSelectedFileToolStripMenuItem;
+        private ToolStripMenuItem editFromClipboardToolStripMenuItem;
+        private ToolStripMenuItem openEditorToolStripMenuItem;
     }
 }
