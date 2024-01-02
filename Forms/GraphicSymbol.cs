@@ -1,26 +1,42 @@
 ﻿using System.Diagnostics;
 using System.Drawing.Drawing2D;
+using System.Numerics;
 
 namespace ScreenShotTool.Forms
 {
 #pragma warning disable CA1416 // Validate platform compatibility
     public class GraphicSymbol
     {
-        public Pen pen;
-        public Brush brush;
+        public Pen pen = new Pen(Color.Gray);
+        public Brush brush = new SolidBrush(Color.Gray);
+        public Brush fillBrush = new SolidBrush(Color.Gray);
         public Color foregroundColor;
         public Color backgroundColor;
-        public int X1;
-        public int Y1;
-        public int X2;
-        public int Y2;
+        public virtual int X1
+        {
+            get; set;
+        }
+        public virtual int Y1
+        {
+            get; set;
+        }
+        public virtual int X2
+        {
+            get; set;
+        }
+        public virtual int Y2
+        {
+            get; set;
+        }
         public int lineWeight;
+        public int fillAlpha;
+        public int lineAlpha;
         public string Name = "Blank";
 
-        public GraphicSymbol(Pen pen, Brush brush, Color foregroundColor, Color backgroundColor, int X1, int Y1, int X2, int Y2, int lineWeight)
+        public bool ValidSymbol = false;
+
+        public GraphicSymbol(Color foregroundColor, Color backgroundColor, int X1, int Y1, int X2, int Y2, int lineWeight = 1, int lineAlpha = 255, int fillAlpha = 255)
         { 
-            this.brush = brush;
-            this.pen = pen;
             this.foregroundColor = foregroundColor;
             this.backgroundColor = backgroundColor;
             this.X1 = X1; 
@@ -28,6 +44,8 @@ namespace ScreenShotTool.Forms
             this.X2 = X2;
             this.Y2 = Y2;
             this.lineWeight = lineWeight;
+            this.lineAlpha = lineAlpha;
+            this.fillAlpha = fillAlpha;
         }
 
         public GraphicSymbol(GraphicSymbol clonedSymbol)
@@ -46,6 +64,21 @@ namespace ScreenShotTool.Forms
         {
         }
 
+        internal void UpdatePen()
+        {
+            brush = new SolidBrush(Color.FromArgb(lineAlpha, foregroundColor.R, foregroundColor.G, foregroundColor.B));
+            pen.Brush = brush;
+            pen.Width = lineWeight;
+
+            fillBrush = new SolidBrush(Color.FromArgb(fillAlpha ,backgroundColor.R, backgroundColor.G, backgroundColor.B));
+        }
+
+        internal void UpdateColors()
+        {
+            foregroundColor = Color.FromArgb(lineAlpha, foregroundColor.R, foregroundColor .G, foregroundColor .B);
+            backgroundColor = Color.FromArgb(lineAlpha, backgroundColor.R, backgroundColor.G, backgroundColor.B);
+        }
+
         public virtual void Dispose()
         {
         }
@@ -53,99 +86,151 @@ namespace ScreenShotTool.Forms
 
     public class GsRectangle : GraphicSymbol
     {
-        public GsRectangle(Pen pen, Brush brush, Color foregroundColor, Color backgroundColor, int X1, int Y1, int X2, int Y2, int lineWeight) : base(pen, brush, foregroundColor, backgroundColor, X1, Y1, X2, Y2, lineWeight)
+        public GsRectangle(Color foregroundColor, Color backgroundColor, int X1, int Y1, int X2, int Y2, int lineWeight, int lineAlpha, int fillAlpha) : base(foregroundColor, backgroundColor, X1, Y1, X2, Y2, lineWeight, lineAlpha, fillAlpha)
         {
             Name = "Rectangle";
+            if (X2 > 0 &&  Y2 > 0)
+            {
+                ValidSymbol = true;
+            }
         }
 
         public override void DrawSymbol(Graphics graphic)
         {
-            pen.Color = foregroundColor;
-            pen.Brush = brush;
-            pen.Width = lineWeight;
-            graphic.DrawRectangle(pen, new Rectangle(X1, Y1, X2, Y2));
+            UpdatePen();
+            UpdateColors();
+            if (fillAlpha > 0)
+            {
+                graphic.FillRectangle(fillBrush, new Rectangle(X1, Y1, X2, Y2));
+            }
+            if (lineAlpha > 0 && lineWeight > 0)
+            {
+                graphic.DrawRectangle(pen, new Rectangle(X1, Y1, X2, Y2));
+            }
         }
     }
 
     public class GsCircle : GraphicSymbol
     {
-        public GsCircle(Pen pen, Brush brush, Color foregroundColor, Color backgroundColor, int X1, int Y1, int X2, int Y2, int lineWeight) : base(pen, brush, foregroundColor, backgroundColor, X1, Y1, X2, Y2, lineWeight)
+        public GsCircle(Color foregroundColor, Color backgroundColor, int X1, int Y1, int X2, int Y2, int lineWeight, int lineAlpha, int fillAlpha) : base(foregroundColor, backgroundColor, X1, Y1, X2, Y2, lineWeight, lineAlpha, fillAlpha)
         {
             Name = "Circle";
+            if (X2 > 0 && Y2 > 0)
+            {
+                ValidSymbol = true;
+            }
         }
 
         public override void DrawSymbol(Graphics graphic)
         {
-            pen.Color = foregroundColor;
-            pen.Brush = brush;
-            pen.Width = lineWeight;
-            graphic.DrawEllipse(pen, new Rectangle(X1, Y1, X2, Y2));
+            UpdatePen();
+            UpdateColors();
+            if (fillAlpha > 0)
+            {
+                graphic.FillEllipse(fillBrush, new Rectangle(X1, Y1, X2, Y2));
+            }
+            if (lineAlpha > 0 && lineWeight > 0)
+            {
+                graphic.DrawEllipse(pen, new Rectangle(X1, Y1, X2, Y2));
+            }
         }
     }
 
     public class GsLine : GraphicSymbol
     {
-        public GsLine(Pen pen, Brush brush, Color foregroundColor, Color backgroundColor, int X1, int Y1, int X2, int Y2, int lineWeight) : base(pen, brush, foregroundColor, backgroundColor, X1, Y1, X2, Y2, lineWeight)
+        public GsLine(Color foregroundColor, Color backgroundColor, int X1, int Y1, int X2, int Y2, int lineWeight, int lineAlpha) : base(foregroundColor, backgroundColor, X1, Y1, X2, Y2, lineWeight, lineAlpha)
         {
             Name = "Line";
+            CheckValid(X1, Y1, X2, Y2);
+        }
+
+        protected void CheckValid(int X1, int Y1, int X2, int Y2)
+        {
+            float lineLength = Vector2.Distance(new Vector2(X1, Y1), new Vector2(X2, Y2));
+            if (lineLength > 1)
+            {
+                ValidSymbol = true;
+            }
         }
 
         public override void DrawSymbol(Graphics graphic)
         {
-            pen.Color = foregroundColor;
-            pen.Brush = brush;
-            pen.Width = lineWeight;
-            //pen.StartCap = System.Drawing.Drawing2D.LineCap.Triangle;
-            //pen.EndCap = System.Drawing.Drawing2D.LineCap.Triangle;
-            //int arrowSize = Math.Max(Math.Min(3, lineWeight), 4);
-            
-            int arrowSize = 5;
-            AdjustableArrowCap bigArrow = new AdjustableArrowCap(arrowSize, arrowSize);
-            pen.CustomEndCap = bigArrow;
-            graphic.DrawLine(pen, new Point(X1, Y1), new Point(X2, Y2));
+            UpdatePen();
+            UpdateColors();
+            if (lineWeight < 1) { lineWeight = 1; }
+            if (lineAlpha > 0)
+            {
+                graphic.DrawLine(pen, new Point(X1, Y1), new Point(X2, Y2));
+            }
         }
     }
 
-    public class GsArrow : GraphicSymbol
+    public class GsArrow : GsLine
     {
-        public GsArrow(Pen pen, Brush brush, Color foregroundColor, Color backgroundColor, int X1, int Y1, int X2, int Y2, int lineWeight) : base(pen, brush, foregroundColor, backgroundColor, X1, Y1, X2, Y2, lineWeight)
+        public GsArrow(Color foregroundColor, Color backgroundColor, int X1, int Y1, int X2, int Y2, int lineWeight, int lineAlpha) : base(foregroundColor, backgroundColor, X1, Y1, X2, Y2, lineWeight, lineAlpha)
         {
             Name = "Arrow";
-        }
-
-        public override void DrawSymbol(Graphics graphic)
-        {
-            AdjustableArrowCap bigArrow = new AdjustableArrowCap(lineWeight - 3, lineWeight * 3);
-            //PointF mid = new PointF((X1 + X2) / 2, (Y1 + Y2) / 2);
-            pen.Color = foregroundColor;
-            pen.Brush = brush;
-            pen.Width = lineWeight;
+            int arrowSize = 5;
+            AdjustableArrowCap bigArrow = new AdjustableArrowCap(arrowSize, arrowSize);
             pen.CustomEndCap = bigArrow;
-            graphic.DrawLine(pen, new Point(X1, Y1), new Point(X2, Y2));
-
-            //graphic.TranslateTransform(mid.X, mid.Y);
-            //graphic.RotateTransform(45f);
-            //graphic.DrawPath(pen, new GraphicsPath());
+            CheckValid(X1, Y1, X2, Y2);
         }
     }
 
     public class GsImage : GraphicSymbol
     {
         Image? image;
+        int posX;
+        int posY;
 
-        public GsImage(Pen pen, Brush brush, Color foregroundColor, Color backgroundColor, int X1, int Y1, int X2, int Y2, int lineWeight) : base(pen, brush, foregroundColor, backgroundColor, X1, Y1, X2, Y2, lineWeight)
+        // X2 and Y2 are used for position when placing the image (drag end). Update X1 and Y1 with this drag end position.
+        public override int X1
         {
+            get { return posX; }
+            set { posX = value; }
+        }
+
+        public override int Y1
+        {
+            get { return posY; }
+            set { posY = value; }
+        }
+
+        public override int X2
+        {
+            get { return 1; }
+            set { }
+        }
+        public override int Y2
+        {
+            get { return 1; }
+            set { }
+        }
+
+        public GsImage(Color foregroundColor, Color backgroundColor, int X1, int Y1, int X2, int Y2) : base(foregroundColor, backgroundColor, X1, Y1, X2, Y2)
+        {
+            posX = X2;
+            posY = Y2;
             Name = "Image";
             if (image == null)
             {
                 image = Clipboard.GetImage();
+            }
+            if (image != null)
+            {
+                ValidSymbol = true;
+            }
+            else
+            {
+                ValidSymbol = false;
+                //Debug.WriteLine("Image load from clipboard failed, not a valid symbol");
             }
         }
         public override void DrawSymbol(Graphics graphic)
         {
             if (image != null)
             {
-                graphic.DrawImageUnscaled(image, X2, Y2);
+                graphic.DrawImageUnscaled(image, posX, posY);
             }
         }
 
@@ -162,19 +247,31 @@ namespace ScreenShotTool.Forms
     {
         Image? image;
 
-        public GsImageScaled(Pen pen, Brush brush, Color foregroundColor, Color backgroundColor, int X1, int Y1, int X2, int Y2, int lineWeight) : base(pen, brush, foregroundColor, backgroundColor, X1, Y1, X2, Y2, lineWeight)
+        public GsImageScaled(Color foregroundColor, Color backgroundColor, int X1, int Y1, int X2, int Y2) : base(foregroundColor, backgroundColor, X1, Y1, X2, Y2)
         {
             Name = "Scaled Image";
             if (image == null)
             {
                 image = Clipboard.GetImage();
             }
+            if (image == null)
+            {
+                ValidSymbol = false;
+                //Debug.WriteLine("Image load from clipboard failed, not a valid symbol");
+            }
+            else if (X2 < 1 || Y2 < 1)
+            {
+                ValidSymbol = false;
+                //Debug.WriteLine("Size is 0, not a valid symbol");
+            }
+            else
+            {
+                ValidSymbol = true;
+            }
         }
 
         public override void DrawSymbol(Graphics graphic)
         {
-            Debug.WriteLine($"Draw scaled image x1:{X1} y1:{Y1} x2:{X2} y2:{Y2}");
-
             if (image != null)
             {
                 graphic.DrawImage(image, X1, Y1, X2, Y2);

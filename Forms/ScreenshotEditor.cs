@@ -21,9 +21,12 @@ namespace ScreenShotTool.Forms
         Image? originalImage;
         Image? overlayImage;
         Graphics? overlayGraphics;
-        Pen linePen = new Pen(new SolidBrush(Color.Green), 2);
-        Brush lineBrush = new SolidBrush(Color.Black);
-        Brush fillBrush = new SolidBrush(Color.Gray);
+        //Pen linePen = new Pen(new SolidBrush(Color.Green), 2);
+        //Pen arrowPen = new Pen(new SolidBrush(Color.Green), 2);
+        //Brush lineBrush = new SolidBrush(Color.Black);
+        //Brush fillBrush = new SolidBrush(Color.Gray);
+        int arrowWeight = 5;
+        int lineWeight = 2;
         List<GraphicSymbol> symbols = new List<GraphicSymbol>();
 
         public ScreenshotEditor(string? file = null, bool fromClipboard = false)
@@ -130,7 +133,7 @@ namespace ScreenShotTool.Forms
             }
             else
             {
-                Debug.WriteLine("Create overlay failed, original image is null");
+                //Debug.WriteLine("Create overlay failed, original image is null");
                 //DisposeAndNull(overlayImage);
                 //disposeAndNull(overlayGraphics);
             }
@@ -151,7 +154,7 @@ namespace ScreenShotTool.Forms
             }
             else
             {
-                Debug.WriteLine($"Error, overlay exists: image {overlayImage != null} / graphics {overlayGraphics != null}");
+                //Debug.WriteLine($"Error, overlay exists: image {overlayImage != null} / graphics {overlayGraphics != null}");
             }
         }
 
@@ -269,19 +272,28 @@ namespace ScreenShotTool.Forms
         private void buttonRectangle_Click(object sender, EventArgs e)
         {
             newSymbolType = SymbolType.Rectangle;
+            numericNewLineWeight.Value = lineWeight;
             UpdateOverlay();
         }
 
         private void buttonCircle_Click(object sender, EventArgs e)
         {
-            //newSymbol = new GsCircle(linePen, lineBrush, Color.Green, Color.Blue, symbols.Count * 4, symbols.Count * 4, 50, 50);
             newSymbolType = SymbolType.Circle;
+            numericNewLineWeight.Value = lineWeight;
             UpdateOverlay();
         }
 
         private void buttonLine_Click(object sender, EventArgs e)
         {
             newSymbolType = SymbolType.Line;
+            numericNewLineWeight.Value = lineWeight;
+            UpdateOverlay();
+        }
+
+        private void buttonArrow_Click(object sender, EventArgs e)
+        {
+            newSymbolType = SymbolType.Arrow;
+            numericNewLineWeight.Value = arrowWeight;
             UpdateOverlay();
         }
 
@@ -292,6 +304,7 @@ namespace ScreenShotTool.Forms
 
         private void pictureBoxOverlay_MouseDown(object sender, MouseEventArgs e)
         {
+            if (originalImage == null) return;
             dragStarted = true;
             dragStartX = e.X;
             dragStartY = e.Y;
@@ -303,10 +316,14 @@ namespace ScreenShotTool.Forms
 
         private void pictureBoxOverlay_MouseUp(object sender, MouseEventArgs e)
         {
+            if (originalImage == null) return;
             GraphicSymbol? symbol = GetSymbol(sender, e);
             if (symbol != null)
             {
-                addNewSymbolToList(symbol);
+                if (symbol.ValidSymbol)
+                {
+                    addNewSymbolToList(symbol);
+                }
             }
             UpdateOverlay();
             dragStarted = false;
@@ -321,7 +338,9 @@ namespace ScreenShotTool.Forms
         {
             int dragEndX = e.X;
             int dragEndY = e.Y;
-            int lineWeight = (int)numericNewLineWeight.Value; // TODO
+            int lineWeight = (int)numericNewLineWeight.Value;
+            int lineAlpha = (int)numericNewLineAlpha.Value;
+            int fillAlpha = (int)numericNewFillAlpha.Value;
 
             //Debug.WriteLine($"Drag positions: sX {dragStartX} sY {dragStartY} eX {dragEndX} eY {dragEndY}");
 
@@ -337,19 +356,25 @@ namespace ScreenShotTool.Forms
                 dragRect = new Rectangle(dragLeft, dragTop, dragWidth, dragHeight);
 
                 //Debug.WriteLine("Drag rectangle: " + dragRect.ToString());
+                //lineBrush = new SolidBrush(Color.Red);
+
+                Color lineColor = buttonNewColorLine.BackColor;
+                Color fillColor = buttonNewColorFill.BackColor;
 
                 switch (newSymbolType)
                 {
                     case SymbolType.Rectangle:
-                        return new GsRectangle(linePen, lineBrush, Color.Green, Color.Blue, dragRect.X, dragRect.Y, dragRect.Width, dragRect.Height, lineWeight);
+                        return new GsRectangle(lineColor, fillColor, dragRect.X, dragRect.Y, dragRect.Width, dragRect.Height, lineWeight, lineAlpha, fillAlpha);
                     case SymbolType.Circle:
-                        return new GsCircle(linePen, lineBrush, Color.Green, Color.Blue, dragRect.X, dragRect.Y, dragRect.Width, dragRect.Height, lineWeight);
+                        return new GsCircle(lineColor, fillColor, dragRect.X, dragRect.Y, dragRect.Width, dragRect.Height, lineWeight, lineAlpha, fillAlpha);
                     case SymbolType.Line:
-                        return new GsLine(linePen, lineBrush, Color.Green, Color.Blue, dragStartX, dragStartY, dragEndX, dragEndY, lineWeight);
+                        return new GsLine(lineColor, fillColor, dragStartX, dragStartY, dragEndX, dragEndY, lineWeight, lineAlpha);
+                    case SymbolType.Arrow:
+                        return new GsArrow(lineColor, fillColor, dragStartX, dragStartY, dragEndX, dragEndY, lineWeight, lineAlpha);
                     case SymbolType.Image:
-                        return new GsImage(linePen, lineBrush, Color.Green, Color.Blue, dragStartX, dragStartY, dragEndX, dragEndY, lineWeight);
+                        return new GsImage(lineColor, fillColor, dragStartX, dragStartY, dragEndX, dragEndY);
                     case SymbolType.ImageScaled:
-                        return new GsImageScaled(linePen, lineBrush, Color.Green, Color.Blue, dragLeft, dragTop, dragWidth, dragHeight, lineWeight);
+                        return new GsImageScaled(lineColor, fillColor, dragLeft, dragTop, dragWidth, dragHeight);
                     default:
                         return null;
                 }
@@ -366,11 +391,12 @@ namespace ScreenShotTool.Forms
 
         private void pictureBoxOverlay_MouseMove(object sender, MouseEventArgs e)
         {
-            GraphicSymbol? symbol = GetSymbol(sender, e);
-            if (symbol != null)
+            if (originalImage == null) return;
+            GraphicSymbol? tempSymbol = GetSymbol(sender, e);
+            if (tempSymbol != null)
             {
-                UpdateOverlay(symbol);
-                symbol.Dispose();
+                UpdateOverlay(tempSymbol);
+                tempSymbol.Dispose();
             }
         }
 
@@ -439,10 +465,24 @@ namespace ScreenShotTool.Forms
                     numericY.Value = graphicSymbol.Y1;
                     numericWidth.Value = graphicSymbol.X2;
                     numericHeight.Value = graphicSymbol.Y2;
-                    buttonColorLine.BackColor = graphicSymbol.foregroundColor;
-                    buttonColorFill.BackColor = graphicSymbol.backgroundColor;
+                    buttonPropertiesColorLine.BackColor = graphicSymbol.foregroundColor;
+                    buttonPropertiesColorFill.BackColor = graphicSymbol.backgroundColor;
                     numericPropertiesLineWeight.Value = graphicSymbol.lineWeight;
                     buttonDeleteSymbol.Tag = graphicSymbol;
+
+                    if (graphicSymbol.Name == "Image")
+                    {
+                        numericWidth.Enabled = false;
+                        numericHeight.Enabled = false;
+                    }
+                    else
+                    {
+                        numericWidth.Enabled = true;
+                        numericHeight.Enabled = true;
+                    }
+
+                    numericPropertiesLineAlpha.Value = graphicSymbol.lineAlpha;
+                    numericPropertiesFillAlpha.Value = graphicSymbol.fillAlpha;
                 }
 
             }
@@ -477,9 +517,11 @@ namespace ScreenShotTool.Forms
             numericY.Value = 0;
             numericWidth.Value = 1;
             numericHeight.Value = 1;
-            buttonColorLine.BackColor = Color.Gray;
-            buttonColorFill.BackColor = Color.Gray;
-            numericPropertiesLineWeight.Value = 0;
+            buttonPropertiesColorLine.BackColor = Color.Gray;
+            buttonPropertiesColorFill.BackColor = Color.Gray;
+            numericPropertiesLineAlpha.Value = 255;
+            numericPropertiesFillAlpha.Value = 255;
+            numericPropertiesLineWeight.Value = 1;
             buttonDeleteSymbol.Tag = null;
         }
 
@@ -494,27 +536,34 @@ namespace ScreenShotTool.Forms
                 if (sender == numericX)
                 {
                     gs.X1 = (int)numericX.Value;
-                    Debug.WriteLine("Updating X1");
                 }
                 if (sender == numericY)
                 {
                     gs.Y1 = (int)numericY.Value;
-                    Debug.WriteLine("Updating Y1");
                 }
                 if (sender == numericWidth)
                 {
                     gs.X2 = (int)numericWidth.Value;
-                    Debug.WriteLine("Updating Width");
                 }
                 if (sender == numericHeight)
                 {
                     gs.Y2 = (int)numericHeight.Value;
-                    Debug.WriteLine("Updating Height");
                 }
                 if (sender == numericPropertiesLineWeight)
                 {
                     gs.lineWeight = (int)numericPropertiesLineWeight.Value;
-                    Debug.WriteLine("Updating LineWeight");
+                }
+                if (sender == numericPropertiesLineAlpha)
+                {
+                    gs.lineAlpha = (int)numericPropertiesLineAlpha.Value;
+                    gs.UpdateColors();
+                    buttonPropertiesColorLine.BackColor = gs.foregroundColor;
+                }
+                if (sender == numericPropertiesFillAlpha)
+                {
+                    gs.fillAlpha = (int)numericPropertiesFillAlpha.Value;
+                    gs.UpdateColors();
+                    buttonPropertiesColorFill.BackColor = gs.backgroundColor;
                 }
             }
             UpdateOverlay();
@@ -522,7 +571,60 @@ namespace ScreenShotTool.Forms
 
         private void colorChangeClick(object sender, EventArgs e)
         {
-            // TODO
+            if (listViewSymbols.SelectedItems.Count > 0)
+            {
+                ListViewItem item = listViewSymbols.SelectedItems[0];
+                GraphicSymbol? gs = item.Tag as GraphicSymbol;
+                if (gs == null) return;
+
+
+                DialogResult result = colorDialog1.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    if (sender == buttonPropertiesColorLine)
+                    {
+                        buttonPropertiesColorLine.BackColor = colorDialog1.Color;
+                        gs.foregroundColor = colorDialog1.Color;
+
+                    }
+                    if (sender == buttonPropertiesColorFill)
+                    {
+                        buttonPropertiesColorFill.BackColor = colorDialog1.Color;
+                        gs.backgroundColor = colorDialog1.Color;
+                    }
+                }
+            }
+            UpdateOverlay();
+        }
+
+        private void numericNewLineWeight_ValueChanged(object sender, EventArgs e)
+        {
+            if (newSymbolType == SymbolType.Arrow)
+            {
+                arrowWeight = (int)numericNewLineWeight.Value;
+            }
+            else
+            {
+                lineWeight = (int)numericNewLineWeight.Value;
+            }
+        }
+
+        private void newColorLine_Click(object sender, EventArgs e)
+        {
+            DialogResult result = colorDialog1.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                buttonNewColorLine.BackColor = colorDialog1.Color;
+            }
+        }
+
+        private void newColorFill_Click(object sender, EventArgs e)
+        {
+            DialogResult result = colorDialog1.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                buttonNewColorFill.BackColor = colorDialog1.Color;
+            }
         }
     }
 }

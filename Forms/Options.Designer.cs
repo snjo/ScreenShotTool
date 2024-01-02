@@ -566,6 +566,7 @@
             // numericUpDownCounter
             // 
             numericUpDownCounter.Location = new Point(6, 514);
+            numericUpDownCounter.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             numericUpDownCounter.Name = "numericUpDownCounter";
             numericUpDownCounter.Size = new Size(70, 23);
             numericUpDownCounter.TabIndex = 25;

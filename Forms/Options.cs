@@ -109,8 +109,9 @@ namespace ScreenShotTool
             settings.TrimLeft = (int)trimLeft.Value;
             settings.TrimRight = (int)trimRight.Value;
 
-            settings.Counter = (int)numericUpDownCounter.Value;
+            
             mainForm.SetCounter((int)numericUpDownCounter.Value, false);
+            settings.Counter = mainForm.GetCounter();
 
             //Tab: Modes
             settings.RegionToFile = checkBoxRegionToFile.Checked;

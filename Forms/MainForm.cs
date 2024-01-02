@@ -28,7 +28,8 @@ namespace ScreenShotTool
         string lastSavedFile = "";
         Options? options;
         bool showLog = false;
-        int Counter = 0;
+        private int Counter = 0;
+        private int CounterMax = 9999;
 
         public string helpText =
             "Default filename values:\r" +
@@ -302,8 +303,12 @@ namespace ScreenShotTool
 
         public void SetCounter(int num, bool saveSetting = true)
         {
-            //numericUpDownCounter.Value = num;
+            if (num > CounterMax)
+            {
+                num = 1;
+            }
             Counter = num;
+            
             if (saveSetting)
             {
                 settings.Counter = Counter;
@@ -311,12 +316,14 @@ namespace ScreenShotTool
             }
         }
 
+        public int GetCounter()
+        {
+            return Counter;
+        }
+
         private void IncrementCounter()
         {
-            //numericUpDownCounter.Value += 1;
-            Counter++;
-            settings.Counter = Counter;
-            settings.Save();
+            SetCounter (Counter + 1);
         }
 
         //private void numericUpDownCounter_ValueChanged(object sender, EventArgs e)
