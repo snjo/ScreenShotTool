@@ -1,6 +1,8 @@
 using Hotkeys;
+using ScreenShotTool.Forms;
 using ScreenShotTool.Properties;
 using System.Diagnostics;
+using System.Drawing.Design;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Printing;
@@ -1369,6 +1371,19 @@ namespace ScreenShotTool
                 }
                 Clipboard.Clear();
                 Clipboard.SetData(DataFormats.FileDrop, fileList.ToArray());
+            }
+        }
+
+        private void editImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listViewThumbnails.SelectedItems.Count > 0)
+            {
+                string? file = listViewThumbnails.SelectedItems[0].Tag.ToString();
+                if (File.Exists(file))
+                {
+                    ScreenshotEditor imageEditor = new ScreenshotEditor(file);
+                    imageEditor.Show();
+                }
             }
         }
     }

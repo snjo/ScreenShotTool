@@ -66,6 +66,7 @@
             websiteToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             labelInfo = new Label();
+            editImageToolStripMenuItem = new ToolStripMenuItem();
             contextMenuListView.SuspendLayout();
             contextMenuSysTray.SuspendLayout();
             menuStrip1.SuspendLayout();
@@ -96,9 +97,9 @@
             // 
             // contextMenuListView
             // 
-            contextMenuListView.Items.AddRange(new ToolStripItem[] { itemOpenImage, itemOpenFolder, itemDeleteFile, itemRemove, copyToClipboardToolStripMenuItem, copyFileToolStripMenuItem });
+            contextMenuListView.Items.AddRange(new ToolStripItem[] { itemOpenImage, itemOpenFolder, itemDeleteFile, itemRemove, copyToClipboardToolStripMenuItem, copyFileToolStripMenuItem, editImageToolStripMenuItem });
             contextMenuListView.Name = "contextMenuListView";
-            contextMenuListView.Size = new Size(199, 136);
+            contextMenuListView.Size = new Size(199, 180);
             // 
             // itemOpenImage
             // 
@@ -335,6 +336,13 @@
             labelInfo.TabIndex = 37;
             labelInfo.Text = "To take a screenshot use hotkeys";
             // 
+            // editImageToolStripMenuItem
+            // 
+            editImageToolStripMenuItem.Name = "editImageToolStripMenuItem";
+            editImageToolStripMenuItem.Size = new Size(198, 22);
+            editImageToolStripMenuItem.Text = "&Edit Image";
+            editImageToolStripMenuItem.Click += this.editImageToolStripMenuItem_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -398,5 +406,6 @@
         private ToolStripMenuItem TopMenuOptions;
         private ToolStripMenuItem copyFileToolStripMenuItem;
         private Label labelInfo;
+        private ToolStripMenuItem editImageToolStripMenuItem;
     }
 }
