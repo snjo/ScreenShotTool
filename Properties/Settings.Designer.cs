@@ -730,5 +730,53 @@ namespace ScreenShotTool.Properties {
                 this["UpgradeSettings"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool RegionToEditor {
+            get {
+                return ((bool)(this["RegionToEditor"]));
+            }
+            set {
+                this["RegionToEditor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool WindowToEditor {
+            get {
+                return ((bool)(this["WindowToEditor"]));
+            }
+            set {
+                this["WindowToEditor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ScreenToEditor {
+            get {
+                return ((bool)(this["ScreenToEditor"]));
+            }
+            set {
+                this["ScreenToEditor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AllScreensToEditor {
+            get {
+                return ((bool)(this["AllScreensToEditor"]));
+            }
+            set {
+                this["AllScreensToEditor"] = value;
+            }
+        }
     }
 }

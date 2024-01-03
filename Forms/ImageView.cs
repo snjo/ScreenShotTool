@@ -102,6 +102,15 @@ namespace ScreenShotTool
 
         private void ImageView_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.Modifiers == Keys.Shift)
+            {
+                boostMultiplier = 10;
+            }
+            else
+            {
+                boostMultiplier = 1;
+            }
+
             if (e.KeyCode == Keys.Escape)
             {
                 Debug.WriteLine("Exiting ImageView");
@@ -119,7 +128,6 @@ namespace ScreenShotTool
                 if (ImageResult != null)
                 {
                     Clipboard.SetImage(ImageResult);
-                    //DisposeSourceImage();
                     isClosing = true;
                     DisposeAllImages();
                     DialogResult = DialogResult.No;
@@ -127,8 +135,9 @@ namespace ScreenShotTool
             }
             else if (e.KeyCode == Keys.E)
             {
-                if (OpenImageInEditor())
+                if (ImageResult != null)
                 {
+                    OpenImageInEditor();
                     isClosing = true;
                     DisposeSourceImage();
                     DialogResult = DialogResult.No;
@@ -147,16 +156,7 @@ namespace ScreenShotTool
                 showHelp = !showHelp;
             }
 
-            if (e.Modifiers == Keys.Shift)
-            {
-                boostMultiplier = 10;
-            }
-            else
-            {
-                boostMultiplier = 1;
-            }
-
-            if (e.KeyCode == Keys.Left)
+            else if (e.KeyCode == Keys.Left)
             {
                 if (e.Modifiers == Keys.Control)
                 {
@@ -180,8 +180,7 @@ namespace ScreenShotTool
                     AdjustRegion(1, 0);
                 }
             }
-
-            if (e.KeyCode == Keys.Up)
+            else if (e.KeyCode == Keys.Up)
             {
                 if (e.Modifiers == Keys.Control)
                 {
@@ -209,15 +208,10 @@ namespace ScreenShotTool
             updateOverlay();
         }
 
-        private bool OpenImageInEditor()
+        private void OpenImageInEditor()
         {
-            if (ImageResult != null)
-            {
-                ScreenshotEditor imageEditor = new ScreenshotEditor(ImageResult);
-                imageEditor.Show();
-                return true;
-            }
-            return false;
+            ScreenshotEditor imageEditor = new ScreenshotEditor(ImageResult);
+            imageEditor.Show();
         }
 
         #region Adjust Region bounds -------------------
