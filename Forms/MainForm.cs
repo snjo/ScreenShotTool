@@ -985,25 +985,28 @@ namespace ScreenShotTool
                 Debug.WriteLine("deleting " + listViewThumbnails.SelectedItems[0].Text);
                 foreach (ListViewItem item in listViewThumbnails.SelectedItems)
                 {
-                    try
-                    {
+                    
                         string deleteFile = item.Tag.ToString() + "";
                         if (File.Exists(deleteFile))
                         {
-                            File.Delete(deleteFile);
-                            WriteMessage("Deleted file " + deleteFile);
-
+                            try
+                            {
+                                File.Delete(deleteFile);
+                                item.Remove();
+                                WriteMessage("Deleted file " + deleteFile);
+                            }
+                            catch (Exception ex)
+                            {
+                                Debug.WriteLine("Couldn't delete file: " + item.Tag.ToString());
+                                Debug.WriteLine(ex.ToString());
+                            }  
                         }
                         else
                         {
                             WriteMessage("File no longer exists, removing from list: " + deleteFile);
                         }
-                        item.Remove();
-                    }
-                    catch
-                    {
-                        Debug.WriteLine("No file to delete: " + item.Tag.ToString());
-                    }
+                        //item.Remove();
+                    
                 }
 
             }

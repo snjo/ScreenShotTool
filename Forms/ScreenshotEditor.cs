@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
+using System.Reflection.PortableExecutable;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+using System.Windows.Forms;
 
 namespace ScreenShotTool.Forms
 {
@@ -106,10 +108,17 @@ namespace ScreenShotTool.Forms
             {
                 Debug.WriteLine("Loading file: " + filename);
 
-                //CreateOverlay();
                 try
                 {
-                    originalImage = Image.FromFile(filename);
+                    // Using and closing filestream, so the file isn't reserved by the process
+
+                    Image? tempImage = null;
+                    using (FileStream stream = new FileStream(filename, FileMode.Open))
+                    {
+                        tempImage = Image.FromStream(stream);
+                    }
+                    DisposeAndNull(originalImage);
+                    originalImage = tempImage;
                 }
                 catch
                 {
