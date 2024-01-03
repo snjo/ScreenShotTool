@@ -11,22 +11,42 @@ namespace ScreenShotTool.Forms
         public Brush fillBrush = new SolidBrush(Color.Gray);
         public Color foregroundColor;
         public Color backgroundColor;
-        public virtual int X1
-        {
-            get; set;
+        public virtual int X1 { get; set; }
+        public virtual int Y1 { get; set; }
+        public virtual int X2 { get; set; }
+        public virtual int Y2 { get; set; }
+        public virtual int Width { 
+            get { return X2; }
+            set { X2 = value; }
         }
-        public virtual int Y1
+        public virtual int Height 
         {
-            get; set;
+            get { return Y2; }
+            set { Y2 = value; }
         }
-        public virtual int X2
+        public virtual Vector2 StartPoint
         {
-            get; set;
+            get { return new Vector2(X1, Y1); }
+            set
+            {
+                X1 = (int)value.X;
+                Y1 = (int)value.Y;
+            }
         }
-        public virtual int Y2
+        public virtual Vector2 EndPoint 
         {
-            get; set;
+            get { return new Vector2(X2, Y2); }
+            set
+            {
+                X2 = (int)value.X;
+                Y2 = (int)value.Y;
+            }
         }
+        public virtual int Top { get { return Y1; } set { Y1 = value; } }
+        public virtual int Bottom { get { return Y2; } set { Y2 = value; } }
+        public virtual int Left { get { return X1; } set { X1 = value; } }
+        public virtual int Right { get { return X2; } set { X2 = value; } }
+
         public int lineWeight;
         public int fillAlpha;
         public int lineAlpha;
@@ -100,6 +120,7 @@ namespace ScreenShotTool.Forms
             UpdateColors();
             if (fillAlpha > 0)
             {
+                //graphic.FillRectangle(fillBrush, new Rectangle(X1, Y1, X2, Y2));
                 graphic.FillRectangle(fillBrush, new Rectangle(X1, Y1, X2, Y2));
             }
             if (lineAlpha > 0 && lineWeight > 0)

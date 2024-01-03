@@ -1,5 +1,6 @@
 ﻿using ScreenShotTool.Properties;
 using System.Diagnostics;
+using System.Numerics;
 using System.Reflection.PortableExecutable;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
@@ -479,6 +480,14 @@ namespace ScreenShotTool.Forms
 
         int oldMouseX = 0;
         int oldMouseY = 0;
+        
+        enum MoveType
+        {
+            None,
+            Start,
+            End,
+        }
+        MoveType moveType = MoveType.None;
 
         private void PictureBoxOverlay_MouseMove(object sender, MouseEventArgs e)
         {
@@ -499,20 +508,58 @@ namespace ScreenShotTool.Forms
                     //Debug.WriteLine($"Mouse delta {mouseDeltaX} {mouseDeltaY}");
                     if (dragStarted)
                     {
-                        int newX = ((GraphicSymbol)item.Tag).X1 + mouseDeltaX;
-                        int newY = Math.Max(0, ((GraphicSymbol)item.Tag).Y1 + mouseDeltaY);
-                        newX = Math.Max(0, newX);
-                        newY = Math.Max(0, newY);
-                        newX = Math.Min(newX, originalImage.Width);
-                        newY = Math.Min(newY, originalImage.Height);
-                        ((GraphicSymbol)item.Tag).X1 = newX;
-                        ((GraphicSymbol)item.Tag).Y1 = newY;
+                        GraphicSymbol symbol = (GraphicSymbol)item.Tag;
+                        
+
+                        if (moveType == MoveType.None)
+                        {
+                            Vector2 cursorPosInternal = new Vector2(e.X, e.Y);
+                            Vector2 upperLeft = new Vector2(symbol.X1, symbol.Y1);
+                            Vector2 lowerRight = new Vector2(symbol.X1 + symbol.X2, symbol.Y1 + symbol.Y2);
+                            float distanceToStart = Vector2.Distance(cursorPosInternal, upperLeft);
+                            float distanceToEnd = Vector2.Distance(cursorPosInternal, lowerRight);
+                            Debug.WriteLine($"symbol 1: {symbol.X1},{symbol.Y1}   2: {symbol.X2},{symbol.Y2}");
+                            Debug.WriteLine($"Distance {e.X}   {e.Y}   {distanceToStart}   {distanceToEnd}");
+                            if (distanceToStart <= distanceToEnd)
+                            {
+                                moveType = MoveType.Start;
+                            }
+                            else
+                            {
+                                moveType = MoveType.End;
+                            }
+                        }
+                        if (moveType == MoveType.Start)
+                        {
+                            int newX = symbol.X1 + mouseDeltaX;
+                            int newY = Math.Max(0, symbol.Y1 + mouseDeltaY);
+                            newX = Math.Max(0, newX);
+                            newY = Math.Max(0, newY);
+                            newX = Math.Min(newX, originalImage.Width);
+                            newY = Math.Min(newY, originalImage.Height);
+
+                            symbol.X1 = newX;
+                            symbol.Y1 = newY;
+                        }
+                        else if (moveType == MoveType.End)
+                        {
+                            int newX = symbol.X2 + mouseDeltaX;
+                            int newY = Math.Max(0, symbol.Y2 + mouseDeltaY);
+                            newX = Math.Max(0, newX);
+                            newY = Math.Max(0, newY);
+                            newX = Math.Min(newX, originalImage.Width);
+                            newY = Math.Min(newY, originalImage.Height);
+
+                            symbol.X2 = newX;
+                            symbol.Y2 = newY;
+                        }
                         UpdateOverlay(null, false);
                         oldMouseX = Cursor.Position.X;
                         oldMouseY = Cursor.Position.Y;
                     }
                     else
                     {
+                        moveType = MoveType.None;
                         oldMouseX = Cursor.Position.X;
                         oldMouseY = Cursor.Position.Y;
                     }
@@ -587,6 +634,9 @@ namespace ScreenShotTool.Forms
                 ListViewItem item = listViewSymbols.SelectedItems[0];
                 if (item.Tag is GraphicSymbol graphicSymbol)
                 {
+                    panelSymbolGeneral.Enabled = true;
+                    panelSymbolShape.Enabled = true;
+
                     labelSymbolType.Text = "Symbol: " + graphicSymbol.Name;
                     numericX.Value = graphicSymbol.X1;
                     numericY.Value = graphicSymbol.Y1;
@@ -601,6 +651,7 @@ namespace ScreenShotTool.Forms
                     {
                         numericWidth.Enabled = false;
                         numericHeight.Enabled = false;
+                        panelSymbolShape.Enabled = false;
                     }
                     else
                     {
@@ -610,13 +661,16 @@ namespace ScreenShotTool.Forms
 
 
                     if (graphicSymbol is GsText)
-                    { 
-                        textBoxSymbolText.Enabled = true;
+                    {
+                        panelSymbolText.Enabled = true;
+                        panelSymbolShape.Enabled = false;
                         textBoxSymbolText.Text = ((GsText)graphicSymbol).text;
                     }
                     else
                     {
+                        panelSymbolText.Enabled = false;
                         textBoxSymbolText.Enabled = false;
+                        textBoxSymbolText.Text = "";
                     }
 
                     numericPropertiesLineAlpha.Value = graphicSymbol.lineAlpha;
@@ -630,6 +684,9 @@ namespace ScreenShotTool.Forms
                 {
                     newSymbolType = SymbolType.None;
                 }
+                panelSymbolGeneral.Enabled = false;
+                panelSymbolShape.Enabled = false;
+                panelSymbolText.Enabled = false;
                 ClearPropertyPanelValues();
             }
         }
