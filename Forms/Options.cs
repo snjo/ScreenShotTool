@@ -51,7 +51,6 @@ namespace ScreenShotTool
                 checkBoxRegionToClipboard.Enabled = false;
                 checkBoxRegionToEditor.Enabled = false;
             }
-            numericUpDownFramerate.Value = settings.MaxFramerate;
             checkBoxMaskRegion.Checked = settings.MaskRegion;
 
             checkBoxWindowToFile.Checked = settings.WindowToFile;
@@ -75,6 +74,8 @@ namespace ScreenShotTool
             checkBoxCropThumbnails.Checked = settings.CropThumbnails;
             numericThumbWidth.Value = settings.ThumbnailWidth;
             numericThumbHeight.Value = settings.ThumbnailHeight;
+
+            numericUpDownFramerate.Value = settings.MaxFramerate;
 
             //Tab: Hotkeys
 
@@ -122,7 +123,6 @@ namespace ScreenShotTool
             settings.RegionToClipboard = checkBoxRegionToClipboard.Checked;
             settings.RegionToEditor = checkBoxRegionToEditor.Checked;
             settings.RegionCompletesOnMouseRelease = checkBoxRegionComplete.Checked;
-            settings.MaxFramerate = (int)numericUpDownFramerate.Value;
             settings.MaskRegion = checkBoxMaskRegion.Checked;
 
             settings.WindowToFile = checkBoxWindowToFile.Checked;
@@ -145,6 +145,8 @@ namespace ScreenShotTool
             settings.AllowTrayTooltipInfoCapture = checkBoxTrayTooltipInfoCapture.Checked;
             settings.AllowTrayTooltipInfoFolder = checkBoxTrayTooltipInfoFolder.Checked;
             settings.AllowTrayTooltipWarning = checkBoxTrayTooltipWarning.Checked;
+
+            settings.MaxFramerate = (int)numericUpDownFramerate.Value;
 
             //Tab: Hotkeys
             int i = 0;

@@ -75,11 +75,11 @@
             numericUpDownCounter = new NumericUpDown();
             buttonResetCounter = new Button();
             tabPageModes = new TabPage();
+            checkBoxAllScreensToEditor = new CheckBox();
+            checkBoxScreenToEditor = new CheckBox();
+            checkBoxWindowToEditor = new CheckBox();
+            checkBoxRegionToEditor = new CheckBox();
             checkBoxMaskRegion = new CheckBox();
-            label17 = new Label();
-            label13 = new Label();
-            label12 = new Label();
-            numericUpDownFramerate = new NumericUpDown();
             checkBoxRegionComplete = new CheckBox();
             checkBoxAllScreensToClipboard = new CheckBox();
             checkBoxAllScreensToFile = new CheckBox();
@@ -94,6 +94,11 @@
             checkBoxWindowToFile = new CheckBox();
             labelWindow = new Label();
             tabPageApplication = new TabPage();
+            label24 = new Label();
+            label13 = new Label();
+            label17 = new Label();
+            label12 = new Label();
+            numericUpDownFramerate = new NumericUpDown();
             label16 = new Label();
             label15 = new Label();
             label14 = new Label();
@@ -107,10 +112,6 @@
             ColumnShift = new DataGridViewCheckBoxColumn();
             ColumnWin = new DataGridViewCheckBoxColumn();
             buttonResetOptions = new Button();
-            checkBoxRegionToEditor = new CheckBox();
-            checkBoxWindowToEditor = new CheckBox();
-            checkBoxScreenToEditor = new CheckBox();
-            checkBoxAllScreensToEditor = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
@@ -124,8 +125,8 @@
             tabPageOutput.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDownCounter).BeginInit();
             tabPageModes.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDownFramerate).BeginInit();
             tabPageApplication.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownFramerate).BeginInit();
             tabPageHotkeys.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)HotkeyGrid).BeginInit();
             SuspendLayout();
@@ -379,7 +380,7 @@
             // checkBoxCropThumbnails
             // 
             checkBoxCropThumbnails.AutoSize = true;
-            checkBoxCropThumbnails.Location = new Point(16, 155);
+            checkBoxCropThumbnails.Location = new Point(16, 176);
             checkBoxCropThumbnails.Name = "checkBoxCropThumbnails";
             checkBoxCropThumbnails.Size = new Size(234, 19);
             checkBoxCropThumbnails.TabIndex = 24;
@@ -388,7 +389,7 @@
             // 
             // numericThumbWidth
             // 
-            numericThumbWidth.Location = new Point(122, 175);
+            numericThumbWidth.Location = new Point(122, 196);
             numericThumbWidth.Maximum = new decimal(new int[] { 256, 0, 0, 0 });
             numericThumbWidth.Minimum = new decimal(new int[] { 20, 0, 0, 0 });
             numericThumbWidth.Name = "numericThumbWidth";
@@ -398,7 +399,7 @@
             // 
             // numericThumbHeight
             // 
-            numericThumbHeight.Location = new Point(122, 203);
+            numericThumbHeight.Location = new Point(122, 224);
             numericThumbHeight.Maximum = new decimal(new int[] { 256, 0, 0, 0 });
             numericThumbHeight.Minimum = new decimal(new int[] { 20, 0, 0, 0 });
             numericThumbHeight.Name = "numericThumbHeight";
@@ -409,7 +410,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(16, 177);
+            label8.Location = new Point(16, 198);
             label8.Name = "label8";
             label8.Size = new Size(99, 15);
             label8.TabIndex = 53;
@@ -418,7 +419,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(16, 205);
+            label9.Location = new Point(16, 226);
             label9.Name = "label9";
             label9.Size = new Size(103, 15);
             label9.TabIndex = 54;
@@ -427,7 +428,7 @@
             // checkBoxTrayTooltipInfoCapture
             // 
             checkBoxTrayTooltipInfoCapture.AutoSize = true;
-            checkBoxTrayTooltipInfoCapture.Location = new Point(16, 65);
+            checkBoxTrayTooltipInfoCapture.Location = new Point(16, 75);
             checkBoxTrayTooltipInfoCapture.Name = "checkBoxTrayTooltipInfoCapture";
             checkBoxTrayTooltipInfoCapture.Size = new Size(211, 19);
             checkBoxTrayTooltipInfoCapture.TabIndex = 21;
@@ -437,7 +438,7 @@
             // checkBoxTrayTooltipWarning
             // 
             checkBoxTrayTooltipWarning.AutoSize = true;
-            checkBoxTrayTooltipWarning.Location = new Point(16, 115);
+            checkBoxTrayTooltipWarning.Location = new Point(16, 125);
             checkBoxTrayTooltipWarning.Name = "checkBoxTrayTooltipWarning";
             checkBoxTrayTooltipWarning.Size = new Size(176, 19);
             checkBoxTrayTooltipWarning.TabIndex = 23;
@@ -592,10 +593,6 @@
             tabPageModes.Controls.Add(checkBoxWindowToEditor);
             tabPageModes.Controls.Add(checkBoxRegionToEditor);
             tabPageModes.Controls.Add(checkBoxMaskRegion);
-            tabPageModes.Controls.Add(label17);
-            tabPageModes.Controls.Add(label13);
-            tabPageModes.Controls.Add(label12);
-            tabPageModes.Controls.Add(numericUpDownFramerate);
             tabPageModes.Controls.Add(checkBoxRegionComplete);
             tabPageModes.Controls.Add(checkBoxAllScreensToClipboard);
             tabPageModes.Controls.Add(checkBoxAllScreensToFile);
@@ -616,54 +613,55 @@
             tabPageModes.Text = "Modes";
             tabPageModes.UseVisualStyleBackColor = true;
             // 
+            // checkBoxAllScreensToEditor
+            // 
+            checkBoxAllScreensToEditor.AutoSize = true;
+            checkBoxAllScreensToEditor.Location = new Point(24, 431);
+            checkBoxAllScreensToEditor.Name = "checkBoxAllScreensToEditor";
+            checkBoxAllScreensToEditor.Size = new Size(102, 19);
+            checkBoxAllScreensToEditor.TabIndex = 72;
+            checkBoxAllScreensToEditor.Text = "Open in Editor";
+            checkBoxAllScreensToEditor.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxScreenToEditor
+            // 
+            checkBoxScreenToEditor.AutoSize = true;
+            checkBoxScreenToEditor.Location = new Point(24, 331);
+            checkBoxScreenToEditor.Name = "checkBoxScreenToEditor";
+            checkBoxScreenToEditor.Size = new Size(102, 19);
+            checkBoxScreenToEditor.TabIndex = 71;
+            checkBoxScreenToEditor.Text = "Open in Editor";
+            checkBoxScreenToEditor.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxWindowToEditor
+            // 
+            checkBoxWindowToEditor.AutoSize = true;
+            checkBoxWindowToEditor.Location = new Point(24, 231);
+            checkBoxWindowToEditor.Name = "checkBoxWindowToEditor";
+            checkBoxWindowToEditor.Size = new Size(102, 19);
+            checkBoxWindowToEditor.TabIndex = 70;
+            checkBoxWindowToEditor.Text = "Open in Editor";
+            checkBoxWindowToEditor.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxRegionToEditor
+            // 
+            checkBoxRegionToEditor.AutoSize = true;
+            checkBoxRegionToEditor.Location = new Point(36, 105);
+            checkBoxRegionToEditor.Name = "checkBoxRegionToEditor";
+            checkBoxRegionToEditor.Size = new Size(102, 19);
+            checkBoxRegionToEditor.TabIndex = 69;
+            checkBoxRegionToEditor.Text = "Open in Editor";
+            checkBoxRegionToEditor.UseVisualStyleBackColor = true;
+            // 
             // checkBoxMaskRegion
             // 
             checkBoxMaskRegion.AutoSize = true;
-            checkBoxMaskRegion.Location = new Point(24, 189);
+            checkBoxMaskRegion.Location = new Point(24, 130);
             checkBoxMaskRegion.Name = "checkBoxMaskRegion";
             checkBoxMaskRegion.Size = new Size(219, 19);
             checkBoxMaskRegion.TabIndex = 24;
             checkBoxMaskRegion.Text = "Mask areas outside region with color";
             checkBoxMaskRegion.UseVisualStyleBackColor = true;
-            // 
-            // label17
-            // 
-            label17.AutoSize = true;
-            label17.Location = new Point(243, 131);
-            label17.Name = "label17";
-            label17.Size = new Size(23, 15);
-            label17.TabIndex = 68;
-            label17.Text = "fps";
-            // 
-            // label13
-            // 
-            label13.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
-            label13.Location = new Point(24, 155);
-            label13.Name = "label13";
-            label13.Size = new Size(435, 40);
-            label13.TabIndex = 67;
-            label13.Text = "If the framerate is higher than your sytem can handle, there will be additional lag to catch up.";
-            // 
-            // label12
-            // 
-            label12.AutoSize = true;
-            label12.Location = new Point(24, 131);
-            label12.Name = "label12";
-            label12.Size = new Size(157, 15);
-            label12.TabIndex = 66;
-            label12.Text = "Region select max framerate";
-            label12.Click += Label12_Click;
-            // 
-            // numericUpDownFramerate
-            // 
-            numericUpDownFramerate.Increment = new decimal(new int[] { 5, 0, 0, 0 });
-            numericUpDownFramerate.Location = new Point(187, 129);
-            numericUpDownFramerate.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
-            numericUpDownFramerate.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
-            numericUpDownFramerate.Name = "numericUpDownFramerate";
-            numericUpDownFramerate.Size = new Size(54, 23);
-            numericUpDownFramerate.TabIndex = 23;
-            numericUpDownFramerate.Value = new decimal(new int[] { 30, 0, 0, 0 });
             // 
             // checkBoxRegionComplete
             // 
@@ -679,7 +677,7 @@
             // checkBoxAllScreensToClipboard
             // 
             checkBoxAllScreensToClipboard.AutoSize = true;
-            checkBoxAllScreensToClipboard.Location = new Point(24, 467);
+            checkBoxAllScreensToClipboard.Location = new Point(24, 406);
             checkBoxAllScreensToClipboard.Name = "checkBoxAllScreensToClipboard";
             checkBoxAllScreensToClipboard.Size = new Size(123, 19);
             checkBoxAllScreensToClipboard.TabIndex = 30;
@@ -689,7 +687,7 @@
             // checkBoxAllScreensToFile
             // 
             checkBoxAllScreensToFile.AutoSize = true;
-            checkBoxAllScreensToFile.Location = new Point(24, 442);
+            checkBoxAllScreensToFile.Location = new Point(24, 381);
             checkBoxAllScreensToFile.Name = "checkBoxAllScreensToFile";
             checkBoxAllScreensToFile.Size = new Size(85, 19);
             checkBoxAllScreensToFile.TabIndex = 29;
@@ -700,7 +698,7 @@
             // 
             label10.AutoSize = true;
             label10.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            label10.Location = new Point(6, 424);
+            label10.Location = new Point(6, 363);
             label10.Name = "label10";
             label10.Size = new Size(106, 15);
             label10.TabIndex = 9;
@@ -709,7 +707,7 @@
             // checkBoxScreenToClipboard
             // 
             checkBoxScreenToClipboard.AutoSize = true;
-            checkBoxScreenToClipboard.Location = new Point(24, 367);
+            checkBoxScreenToClipboard.Location = new Point(24, 306);
             checkBoxScreenToClipboard.Name = "checkBoxScreenToClipboard";
             checkBoxScreenToClipboard.Size = new Size(123, 19);
             checkBoxScreenToClipboard.TabIndex = 28;
@@ -719,7 +717,7 @@
             // checkBoxScreenToFile
             // 
             checkBoxScreenToFile.AutoSize = true;
-            checkBoxScreenToFile.Location = new Point(24, 342);
+            checkBoxScreenToFile.Location = new Point(24, 281);
             checkBoxScreenToFile.Name = "checkBoxScreenToFile";
             checkBoxScreenToFile.Size = new Size(85, 19);
             checkBoxScreenToFile.TabIndex = 27;
@@ -730,7 +728,7 @@
             // 
             label11.AutoSize = true;
             label11.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            label11.Location = new Point(6, 324);
+            label11.Location = new Point(6, 263);
             label11.Name = "label11";
             label11.Size = new Size(130, 15);
             label11.TabIndex = 6;
@@ -769,7 +767,7 @@
             // checkBoxWindowToClipboard
             // 
             checkBoxWindowToClipboard.AutoSize = true;
-            checkBoxWindowToClipboard.Location = new Point(24, 267);
+            checkBoxWindowToClipboard.Location = new Point(24, 206);
             checkBoxWindowToClipboard.Name = "checkBoxWindowToClipboard";
             checkBoxWindowToClipboard.Size = new Size(123, 19);
             checkBoxWindowToClipboard.TabIndex = 26;
@@ -779,7 +777,7 @@
             // checkBoxWindowToFile
             // 
             checkBoxWindowToFile.AutoSize = true;
-            checkBoxWindowToFile.Location = new Point(24, 242);
+            checkBoxWindowToFile.Location = new Point(24, 181);
             checkBoxWindowToFile.Name = "checkBoxWindowToFile";
             checkBoxWindowToFile.Size = new Size(85, 19);
             checkBoxWindowToFile.TabIndex = 25;
@@ -790,7 +788,7 @@
             // 
             labelWindow.AutoSize = true;
             labelWindow.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            labelWindow.Location = new Point(6, 222);
+            labelWindow.Location = new Point(6, 161);
             labelWindow.Name = "labelWindow";
             labelWindow.Size = new Size(91, 15);
             labelWindow.TabIndex = 0;
@@ -798,6 +796,11 @@
             // 
             // tabPageApplication
             // 
+            tabPageApplication.Controls.Add(label24);
+            tabPageApplication.Controls.Add(label13);
+            tabPageApplication.Controls.Add(label17);
+            tabPageApplication.Controls.Add(label12);
+            tabPageApplication.Controls.Add(numericUpDownFramerate);
             tabPageApplication.Controls.Add(label16);
             tabPageApplication.Controls.Add(label15);
             tabPageApplication.Controls.Add(label14);
@@ -818,11 +821,59 @@
             tabPageApplication.Text = "Application";
             tabPageApplication.UseVisualStyleBackColor = true;
             // 
+            // label24
+            // 
+            label24.AutoSize = true;
+            label24.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label24.Location = new Point(5, 262);
+            label24.Name = "label24";
+            label24.Size = new Size(80, 15);
+            label24.TabIndex = 73;
+            label24.Text = "Performance";
+            // 
+            // label13
+            // 
+            label13.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            label13.Location = new Point(16, 310);
+            label13.Name = "label13";
+            label13.Size = new Size(435, 40);
+            label13.TabIndex = 72;
+            label13.Text = "Used in Region capture and Editor. If the framerate is higher than your sytem can handle, there will be additional lag to catch up.";
+            // 
+            // label17
+            // 
+            label17.AutoSize = true;
+            label17.Location = new Point(182, 286);
+            label17.Name = "label17";
+            label17.Size = new Size(23, 15);
+            label17.TabIndex = 71;
+            label17.Text = "fps";
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(16, 286);
+            label12.Name = "label12";
+            label12.Size = new Size(84, 15);
+            label12.TabIndex = 70;
+            label12.Text = "Max framerate";
+            // 
+            // numericUpDownFramerate
+            // 
+            numericUpDownFramerate.Increment = new decimal(new int[] { 5, 0, 0, 0 });
+            numericUpDownFramerate.Location = new Point(122, 284);
+            numericUpDownFramerate.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
+            numericUpDownFramerate.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
+            numericUpDownFramerate.Name = "numericUpDownFramerate";
+            numericUpDownFramerate.Size = new Size(54, 23);
+            numericUpDownFramerate.TabIndex = 69;
+            numericUpDownFramerate.Value = new decimal(new int[] { 30, 0, 0, 0 });
+            // 
             // label16
             // 
             label16.AutoSize = true;
             label16.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            label16.Location = new Point(5, 137);
+            label16.Location = new Point(5, 158);
             label16.Name = "label16";
             label16.Size = new Size(70, 15);
             label16.TabIndex = 63;
@@ -832,7 +883,7 @@
             // 
             label15.AutoSize = true;
             label15.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            label15.Location = new Point(5, 47);
+            label15.Location = new Point(5, 57);
             label15.Name = "label15";
             label15.Size = new Size(73, 15);
             label15.TabIndex = 62;
@@ -851,7 +902,7 @@
             // checkBoxTrayTooltipInfoFolder
             // 
             checkBoxTrayTooltipInfoFolder.AutoSize = true;
-            checkBoxTrayTooltipInfoFolder.Location = new Point(16, 90);
+            checkBoxTrayTooltipInfoFolder.Location = new Point(16, 100);
             checkBoxTrayTooltipInfoFolder.Name = "checkBoxTrayTooltipInfoFolder";
             checkBoxTrayTooltipInfoFolder.Size = new Size(237, 19);
             checkBoxTrayTooltipInfoFolder.TabIndex = 22;
@@ -930,46 +981,6 @@
             buttonResetOptions.UseVisualStyleBackColor = true;
             buttonResetOptions.Click += ButtonResetOptions_Click;
             // 
-            // checkBoxRegionToEditor
-            // 
-            checkBoxRegionToEditor.AutoSize = true;
-            checkBoxRegionToEditor.Location = new Point(36, 105);
-            checkBoxRegionToEditor.Name = "checkBoxRegionToEditor";
-            checkBoxRegionToEditor.Size = new Size(102, 19);
-            checkBoxRegionToEditor.TabIndex = 69;
-            checkBoxRegionToEditor.Text = "Open in Editor";
-            checkBoxRegionToEditor.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxWindowToEditor
-            // 
-            checkBoxWindowToEditor.AutoSize = true;
-            checkBoxWindowToEditor.Location = new Point(24, 292);
-            checkBoxWindowToEditor.Name = "checkBoxWindowToEditor";
-            checkBoxWindowToEditor.Size = new Size(102, 19);
-            checkBoxWindowToEditor.TabIndex = 70;
-            checkBoxWindowToEditor.Text = "Open in Editor";
-            checkBoxWindowToEditor.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxScreenToEditor
-            // 
-            checkBoxScreenToEditor.AutoSize = true;
-            checkBoxScreenToEditor.Location = new Point(24, 392);
-            checkBoxScreenToEditor.Name = "checkBoxScreenToEditor";
-            checkBoxScreenToEditor.Size = new Size(102, 19);
-            checkBoxScreenToEditor.TabIndex = 71;
-            checkBoxScreenToEditor.Text = "Open in Editor";
-            checkBoxScreenToEditor.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxAllScreensToEditor
-            // 
-            checkBoxAllScreensToEditor.AutoSize = true;
-            checkBoxAllScreensToEditor.Location = new Point(24, 492);
-            checkBoxAllScreensToEditor.Name = "checkBoxAllScreensToEditor";
-            checkBoxAllScreensToEditor.Size = new Size(102, 19);
-            checkBoxAllScreensToEditor.TabIndex = 72;
-            checkBoxAllScreensToEditor.Text = "Open in Editor";
-            checkBoxAllScreensToEditor.UseVisualStyleBackColor = true;
-            // 
             // Options
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -999,9 +1010,9 @@
             ((System.ComponentModel.ISupportInitialize)numericUpDownCounter).EndInit();
             tabPageModes.ResumeLayout(false);
             tabPageModes.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDownFramerate).EndInit();
             tabPageApplication.ResumeLayout(false);
             tabPageApplication.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownFramerate).EndInit();
             tabPageHotkeys.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)HotkeyGrid).EndInit();
             ResumeLayout(false);
@@ -1069,13 +1080,9 @@
         private CheckBox checkBoxRegionToClipboard;
         private CheckBox checkBoxRegionToFile;
         private Label labelRegion;
-        private Label label13;
-        private Label label12;
-        private NumericUpDown numericUpDownFramerate;
         private Label label16;
         private Label label15;
         private Label label14;
-        private Label label17;
         private CheckBox checkBoxMaskRegion;
         private Button buttonResetOptions;
         private Button buttonResetCounter;
@@ -1091,5 +1098,10 @@
         private CheckBox checkBoxScreenToEditor;
         private CheckBox checkBoxWindowToEditor;
         private CheckBox checkBoxRegionToEditor;
+        private Label label24;
+        private Label label13;
+        private Label label17;
+        private Label label12;
+        private NumericUpDown numericUpDownFramerate;
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using ScreenShotTool.Properties;
+using System.Diagnostics;
 using System.Reflection.PortableExecutable;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
@@ -18,6 +19,7 @@ namespace ScreenShotTool.Forms
         Graphics? overlayGraphics;
         int arrowWeight = 5;
         int lineWeight = 2;
+        int frameRate = Settings.Default.MaxFramerate;
         List<GraphicSymbol> symbols = new();
 
         public ScreenshotEditor()
@@ -174,8 +176,17 @@ namespace ScreenShotTool.Forms
             }
         }
 
-        private void UpdateOverlay(GraphicSymbol? temporarySymbol = null)
+        DateTime LastFrame = DateTime.Now;
+
+        private bool UpdateOverlay(GraphicSymbol? temporarySymbol = null, bool forceUpdate = true)
         {
+            float MilliSecondsPerFrame = (1f / frameRate) * 1000;
+            TimeSpan ts = DateTime.Now - LastFrame;
+            if (ts.Milliseconds < MilliSecondsPerFrame && forceUpdate == false)
+            {
+                return false;
+            }
+
             if (overlayImage == null || overlayGraphics == null)
             {
                 CreateOverlay();
@@ -185,6 +196,9 @@ namespace ScreenShotTool.Forms
                 pictureBoxOverlay.Image.Dispose();
                 pictureBoxOverlay.Image = DrawOverlay(temporarySymbol); ;
             }
+
+            LastFrame = DateTime.Now;
+            return true;
         }
 
         private Image DrawOverlay(GraphicSymbol? temporarySymbol = null)
@@ -296,6 +310,7 @@ namespace ScreenShotTool.Forms
         public enum SymbolType
         {
             None,
+            MoveSymbol,
             Rectangle,
             Circle,
             Text,
@@ -370,6 +385,7 @@ namespace ScreenShotTool.Forms
                     SymbolType.Arrow => new GsArrow(lineColor, fillColor, dragStartX, dragStartY, dragEndX, dragEndY, lineWeight, lineAlpha),
                     SymbolType.Image => new GsImage(lineColor, fillColor, dragStartX, dragStartY, dragEndX, dragEndY),
                     SymbolType.ImageScaled => new GsImageScaled(lineColor, fillColor, dragLeft, dragTop, dragWidth, dragHeight),
+                    SymbolType.Text => new GsText(lineColor, fillColor, dragStartX, dragStartY, dragRect.Width, dragRect.Height, lineWeight, lineAlpha),
                     _ => null,
                 };
             }
@@ -411,6 +427,13 @@ namespace ScreenShotTool.Forms
             UpdateOverlay();
         }
 
+
+        private void ButtonNewText_Click(object sender, EventArgs e)
+        {
+            newSymbolType = SymbolType.Text;
+            numericNewLineWeight.Value = lineWeight;
+            UpdateOverlay();
+        }
 
 
         #endregion
@@ -454,14 +477,46 @@ namespace ScreenShotTool.Forms
             }
         }
 
+        int oldMouseX = 0;
+        int oldMouseY = 0;
+
         private void PictureBoxOverlay_MouseMove(object sender, MouseEventArgs e)
         {
             if (originalImage == null) return;
             GraphicSymbol? tempSymbol = GetSymbol(sender, e);
             if (tempSymbol != null)
             {
-                UpdateOverlay(tempSymbol);
+                UpdateOverlay(tempSymbol, false);
                 tempSymbol.Dispose();
+            }
+            else if (newSymbolType == SymbolType.MoveSymbol)
+            {
+                int mouseDeltaX = Cursor.Position.X - oldMouseX;
+                int mouseDeltaY = Cursor.Position.Y - oldMouseY;
+                if (listViewSymbols.SelectedItems.Count > 0)
+                {
+                    ListViewItem item = listViewSymbols.SelectedItems[0];
+                    //Debug.WriteLine($"Mouse delta {mouseDeltaX} {mouseDeltaY}");
+                    if (dragStarted)
+                    {
+                        int newX = ((GraphicSymbol)item.Tag).X1 + mouseDeltaX;
+                        int newY = Math.Max(0, ((GraphicSymbol)item.Tag).Y1 + mouseDeltaY);
+                        newX = Math.Max(0, newX);
+                        newY = Math.Max(0, newY);
+                        newX = Math.Min(newX, originalImage.Width);
+                        newY = Math.Min(newY, originalImage.Height);
+                        ((GraphicSymbol)item.Tag).X1 = newX;
+                        ((GraphicSymbol)item.Tag).Y1 = newY;
+                        UpdateOverlay(null, false);
+                        oldMouseX = Cursor.Position.X;
+                        oldMouseY = Cursor.Position.Y;
+                    }
+                    else
+                    {
+                        oldMouseX = Cursor.Position.X;
+                        oldMouseY = Cursor.Position.Y;
+                    }
+                }
             }
         }
 
@@ -528,6 +583,7 @@ namespace ScreenShotTool.Forms
         {
             if (listViewSymbols.SelectedItems.Count > 0)
             {
+                newSymbolType = SymbolType.MoveSymbol;
                 ListViewItem item = listViewSymbols.SelectedItems[0];
                 if (item.Tag is GraphicSymbol graphicSymbol)
                 {
@@ -541,7 +597,7 @@ namespace ScreenShotTool.Forms
                     numericPropertiesLineWeight.Value = graphicSymbol.lineWeight;
                     buttonDeleteSymbol.Tag = graphicSymbol;
 
-                    if (graphicSymbol.Name == "Image")
+                    if (graphicSymbol is GsImage)
                     {
                         numericWidth.Enabled = false;
                         numericHeight.Enabled = false;
@@ -552,6 +608,17 @@ namespace ScreenShotTool.Forms
                         numericHeight.Enabled = true;
                     }
 
+
+                    if (graphicSymbol is GsText)
+                    { 
+                        textBoxSymbolText.Enabled = true;
+                        textBoxSymbolText.Text = ((GsText)graphicSymbol).text;
+                    }
+                    else
+                    {
+                        textBoxSymbolText.Enabled = false;
+                    }
+
                     numericPropertiesLineAlpha.Value = graphicSymbol.lineAlpha;
                     numericPropertiesFillAlpha.Value = graphicSymbol.fillAlpha;
                 }
@@ -559,6 +626,10 @@ namespace ScreenShotTool.Forms
             }
             else
             {
+                if (newSymbolType == SymbolType.MoveSymbol)
+                {
+                    newSymbolType = SymbolType.None;
+                }
                 ClearPropertyPanelValues();
             }
         }
@@ -660,6 +731,18 @@ namespace ScreenShotTool.Forms
                         gs.backgroundColor = colorDialog1.Color;
                     }
                 }
+            }
+            UpdateOverlay();
+        }
+
+        private void textBoxSymbolText_TextChanged(object sender, EventArgs e)
+        {
+            if (listViewSymbols.SelectedItems.Count > 0)
+            {
+                ListViewItem item = listViewSymbols.SelectedItems[0];
+                if (item.Tag is not GsText gs) return;
+
+                gs.text = textBoxSymbolText.Text;
             }
             UpdateOverlay();
         }

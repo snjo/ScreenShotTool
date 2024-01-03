@@ -30,6 +30,7 @@
         {
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
+            itemNewImage = new ToolStripMenuItem();
             itemSave = new ToolStripMenuItem();
             itemLoadFromFile = new ToolStripMenuItem();
             itemLoadFromClipboard = new ToolStripMenuItem();
@@ -40,6 +41,7 @@
             itemPasteScaled = new ToolStripMenuItem();
             deleteOverlayElementsToolStripMenuItem = new ToolStripMenuItem();
             panelButtons = new Panel();
+            button3 = new Button();
             buttonArrow = new Button();
             buttonLine = new Button();
             button2 = new Button();
@@ -54,6 +56,7 @@
             columnHeaderY = new ColumnHeader();
             columnHeaderColor = new ColumnHeader();
             panel1 = new Panel();
+            textBoxSymbolText = new TextBox();
             label14 = new Label();
             numericPropertiesFillAlpha = new NumericUpDown();
             label13 = new Label();
@@ -84,7 +87,6 @@
             label11 = new Label();
             label12 = new Label();
             numericNewFillAlpha = new NumericUpDown();
-            itemNewImage = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
@@ -118,6 +120,13 @@
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "File";
+            // 
+            // itemNewImage
+            // 
+            itemNewImage.Name = "itemNewImage";
+            itemNewImage.Size = new Size(184, 22);
+            itemNewImage.Text = "&New";
+            itemNewImage.Click += ItemNewImage_Click;
             // 
             // itemSave
             // 
@@ -184,6 +193,7 @@
             // 
             // panelButtons
             // 
+            panelButtons.Controls.Add(button3);
             panelButtons.Controls.Add(buttonArrow);
             panelButtons.Controls.Add(buttonLine);
             panelButtons.Controls.Add(button2);
@@ -192,6 +202,16 @@
             panelButtons.Name = "panelButtons";
             panelButtons.Size = new Size(72, 403);
             panelButtons.TabIndex = 1;
+            // 
+            // button3
+            // 
+            button3.Location = new Point(3, 132);
+            button3.Name = "button3";
+            button3.Size = new Size(66, 23);
+            button3.TabIndex = 5;
+            button3.Text = "Text";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += ButtonNewText_Click;
             // 
             // buttonArrow
             // 
@@ -285,7 +305,7 @@
             listViewSymbols.Location = new Point(806, 56);
             listViewSymbols.MultiSelect = false;
             listViewSymbols.Name = "listViewSymbols";
-            listViewSymbols.Size = new Size(148, 319);
+            listViewSymbols.Size = new Size(148, 303);
             listViewSymbols.TabIndex = 0;
             listViewSymbols.UseCompatibleStateImageBehavior = false;
             listViewSymbols.View = View.Details;
@@ -298,6 +318,7 @@
             // panel1
             // 
             panel1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            panel1.Controls.Add(textBoxSymbolText);
             panel1.Controls.Add(label14);
             panel1.Controls.Add(numericPropertiesFillAlpha);
             panel1.Controls.Add(label13);
@@ -318,10 +339,20 @@
             panel1.Controls.Add(label2);
             panel1.Controls.Add(labelSymbolType);
             panel1.Controls.Add(buttonDeleteSymbol);
-            panel1.Location = new Point(806, 381);
+            panel1.Location = new Point(806, 365);
             panel1.Name = "panel1";
-            panel1.Size = new Size(148, 251);
+            panel1.Size = new Size(148, 267);
             panel1.TabIndex = 4;
+            // 
+            // textBoxSymbolText
+            // 
+            textBoxSymbolText.Enabled = false;
+            textBoxSymbolText.Location = new Point(3, 205);
+            textBoxSymbolText.Name = "textBoxSymbolText";
+            textBoxSymbolText.Size = new Size(135, 23);
+            textBoxSymbolText.TabIndex = 26;
+            textBoxSymbolText.Text = "text";
+            textBoxSymbolText.TextChanged += textBoxSymbolText_TextChanged;
             // 
             // label14
             // 
@@ -514,7 +545,7 @@
             // 
             // buttonDeleteSymbol
             // 
-            buttonDeleteSymbol.Location = new Point(3, 216);
+            buttonDeleteSymbol.Location = new Point(3, 238);
             buttonDeleteSymbol.Name = "buttonDeleteSymbol";
             buttonDeleteSymbol.Size = new Size(48, 23);
             buttonDeleteSymbol.TabIndex = 0;
@@ -613,13 +644,6 @@
             numericNewFillAlpha.Size = new Size(44, 23);
             numericNewFillAlpha.TabIndex = 22;
             numericNewFillAlpha.Value = new decimal(new int[] { 255, 0, 0, 0 });
-            // 
-            // itemNewImage
-            // 
-            itemNewImage.Name = "itemNewImage";
-            itemNewImage.Size = new Size(184, 22);
-            itemNewImage.Text = "&New";
-            itemNewImage.Click += ItemNewImage_Click;
             // 
             // ScreenshotEditor
             // 
@@ -728,5 +752,7 @@
         private Label label13;
         private NumericUpDown numericPropertiesLineAlpha;
         private ToolStripMenuItem itemNewImage;
+        private TextBox textBoxSymbolText;
+        private Button button3;
     }
 }

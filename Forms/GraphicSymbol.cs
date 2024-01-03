@@ -135,6 +135,43 @@ namespace ScreenShotTool.Forms
         }
     }
 
+    public class GsText : GraphicSymbol
+    {
+        public FontFamily fontFamily = FontFamily.GenericSansSerif;
+        public float fontEmSize = 10f;
+        //public float fontSize = 10f;
+        public FontStyle fontStyle = FontStyle.Regular;
+        Font font;
+        public string text = "Text";
+
+        public GsText(Color foregroundColor, Color backgroundColor, int X1, int Y1, int X2, int Y2, int lineWeight, int lineAlpha) : base(foregroundColor, backgroundColor, X1, Y1, X2, Y2, lineWeight, lineAlpha)
+        {
+            Name = "Text";
+            if (X2 > 0 && Y2 > 0)
+            {
+                ValidSymbol = true;
+            }
+            font = UpdateFont();
+        }
+
+        public Font UpdateFont()
+        {
+            return new Font(fontFamily, fontEmSize, fontStyle);
+        }
+
+        public override void DrawSymbol(Graphics graphic)
+        {
+            UpdatePen();
+            UpdateColors();
+            if (lineAlpha > 0)
+            {
+                fontEmSize = Math.Max(5f, (Math.Abs(Y2) + Math.Abs(X2)) / 2f) / 2f;
+                font = UpdateFont();
+                graphic.DrawString(text, font, brush, new PointF(X1, Y1));
+            }
+        }
+    }
+
     public class GsLine : GraphicSymbol
     {
         public GsLine(Color foregroundColor, Color backgroundColor, int X1, int Y1, int X2, int Y2, int lineWeight, int lineAlpha) : base(foregroundColor, backgroundColor, X1, Y1, X2, Y2, lineWeight, lineAlpha)
