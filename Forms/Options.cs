@@ -2,15 +2,14 @@
 using ScreenShotTool.Properties;
 using System.Diagnostics;
 using System.Runtime.Versioning;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace ScreenShotTool
 {
     [SupportedOSPlatform("windows")]
     public partial class Options : Form
     {
-        MainForm mainForm;
-        Settings settings = Settings.Default;
+        readonly MainForm mainForm;
+        readonly Settings settings = Settings.Default;
 
         public Options(MainForm parent)
         {
@@ -44,6 +43,7 @@ namespace ScreenShotTool
             //Tab: Modes
             checkBoxRegionComplete.Checked = settings.RegionCompletesOnMouseRelease;
             checkBoxRegionToFile.Checked = settings.RegionToFile;
+            checkBoxRegionToEditor.Checked = settings.RegionToEditor;
             checkBoxRegionToClipboard.Checked = settings.RegionToClipboard;
             if (settings.RegionCompletesOnMouseRelease == false)
             {
@@ -55,12 +55,15 @@ namespace ScreenShotTool
 
             checkBoxWindowToFile.Checked = settings.WindowToFile;
             checkBoxWindowToClipboard.Checked = settings.WindowToClipboard;
+            checkBoxWindowToEditor.Checked = settings.WindowToEditor;
 
             checkBoxScreenToFile.Checked = settings.ScreenToFile;
             checkBoxScreenToClipboard.Checked = settings.ScreenToClipboard;
+            checkBoxScreenToEditor.Checked = settings.ScreenToEditor;
 
             checkBoxAllScreensToFile.Checked = settings.AllScreensToFile;
             checkBoxAllScreensToClipboard.Checked = settings.AllScreensToClipboard;
+            checkBoxAllScreensToEditor.Checked = settings.AllScreensToEditor;
 
             //Tab: Application
             checkBoxStartHidden.Checked = settings.StartHidden;
@@ -74,17 +77,17 @@ namespace ScreenShotTool
 
             //Tab: Hotkeys
 
-            fillHotkeyGrid();
+            FillHotkeyGrid();
         }
 
-        private void buttonSelectFolder_Click(object sender, EventArgs e)
+        private void ButtonSelectFolder_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog dialog = new FolderBrowserDialog();
+            FolderBrowserDialog dialog = new();
             dialog.ShowDialog();
             textBoxFolder.Text = dialog.SelectedPath;
         }
 
-        private void buttonOK_Click(object sender, EventArgs e)
+        private void ButtonOK_Click(object sender, EventArgs e)
         {
             ApplySettings();
             Close();
@@ -109,25 +112,29 @@ namespace ScreenShotTool
             settings.TrimLeft = (int)trimLeft.Value;
             settings.TrimRight = (int)trimRight.Value;
 
-            
+
             mainForm.SetCounter((int)numericUpDownCounter.Value, false);
             settings.Counter = mainForm.GetCounter();
 
             //Tab: Modes
             settings.RegionToFile = checkBoxRegionToFile.Checked;
             settings.RegionToClipboard = checkBoxRegionToClipboard.Checked;
+            settings.RegionToEditor = checkBoxRegionToEditor.Checked;
             settings.RegionCompletesOnMouseRelease = checkBoxRegionComplete.Checked;
             settings.MaxFramerate = (int)numericUpDownFramerate.Value;
             settings.MaskRegion = checkBoxMaskRegion.Checked;
 
             settings.WindowToFile = checkBoxWindowToFile.Checked;
             settings.WindowToClipboard = checkBoxWindowToClipboard.Checked;
+            settings.WindowToEditor = checkBoxWindowToEditor.Checked;
 
             settings.ScreenToFile = checkBoxScreenToFile.Checked;
             settings.ScreenToClipboard = checkBoxScreenToClipboard.Checked;
+            settings.ScreenToEditor = checkBoxScreenToEditor.Checked;
 
             settings.AllScreensToFile = checkBoxAllScreensToFile.Checked;
             settings.AllScreensToClipboard = checkBoxAllScreensToClipboard.Checked;
+            settings.AllScreensToEditor = checkBoxAllScreensToEditor.Checked;
 
             //Tab: Application
             settings.StartHidden = checkBoxStartHidden.Checked;
@@ -162,13 +169,13 @@ namespace ScreenShotTool
 
             Settings.Default.Save();
 
-            reloadHotkeys();
-            mainForm.updateTrimStatus();
+            ReloadHotkeys();
+            mainForm.UpdateTrimStatus();
             mainForm.SetInfoText();
             //mainForm.SaveSettings();
         }
 
-        private Hotkey GetHotkeyFromGrid(Hotkey hotkey, DataGridViewCellCollection settingRow)
+        private static Hotkey GetHotkeyFromGrid(Hotkey hotkey, DataGridViewCellCollection settingRow)
         {
             string settingKey = string.Empty;
             DataGridViewCell cell = settingRow[1];
@@ -192,7 +199,7 @@ namespace ScreenShotTool
             return hotkey;
         }
 
-        private void fillHotkeyGrid()
+        private void FillHotkeyGrid()
         {
             HotkeyGrid.Rows.Clear();
             HotkeyGrid.Rows.Add(mainForm.HotkeyList.Count);
@@ -212,22 +219,22 @@ namespace ScreenShotTool
             }
         }
 
-        private void buttonApply_Click(object sender, EventArgs e)
+        private void ButtonApply_Click(object sender, EventArgs e)
         {
             ApplySettings();
         }
 
-        private void buttonCancel_Click(object sender, EventArgs e)
+        private void ButtonCancel_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void buttonHelp_Click(object sender, EventArgs e)
+        private void ButtonHelp_Click(object sender, EventArgs e)
         {
             mainForm.OpenHelp();
         }
 
-        private void buttonBrowseFolder_Click(object sender, EventArgs e)
+        private void ButtonBrowseFolder_Click(object sender, EventArgs e)
         {
             string folder = textBoxFolder.Text;
             if (Directory.Exists(folder))
@@ -242,22 +249,22 @@ namespace ScreenShotTool
             }
         }
 
-        private void buttonRegisterHotkeys_Click(object sender, EventArgs e)
+        private void ButtonRegisterHotkeys_Click(object sender, EventArgs e)
         {
         }
 
-        private void reloadHotkeys()
+        private void ReloadHotkeys()
         {
             HotkeyTools.UpdateHotkeys(mainForm.HotkeyList, mainForm.HotkeyNames, mainForm);
             Debug.WriteLine("Released and re-registered hotkeys");
         }
 
-        public void updateTrimCheck()
+        public void UpdateTrimCheck()
         {
             checkBoxTrim.Checked = settings.TrimChecked;
         }
 
-        private void checkBoxRegionComplete_CheckedChanged(object sender, EventArgs e)
+        private void CheckBoxRegionComplete_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBoxRegionComplete.Checked)
             {
@@ -271,12 +278,12 @@ namespace ScreenShotTool
             }
         }
 
-        private void label12_Click(object sender, EventArgs e)
+        private void Label12_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void buttonResetOptions_Click(object sender, EventArgs e)
+        private void ButtonResetOptions_Click(object sender, EventArgs e)
         {
             settings.Reset();
             HotkeyTools.ReleaseHotkeys(mainForm.HotkeyList);
@@ -284,13 +291,13 @@ namespace ScreenShotTool
             FillSettings();
         }
 
-        private void buttonResetCounter_Click(object sender, EventArgs e)
+        private void ButtonResetCounter_Click(object sender, EventArgs e)
         {
             mainForm.SetCounter(1, true);
             numericUpDownCounter.Value = 1;
         }
 
-        private void textBoxFilename_TextChanged(object sender, EventArgs e)
+        private void TextBoxFilename_TextChanged(object sender, EventArgs e)
         {
             labelFileNameResult.Text = mainForm.ComposeFileName(textBoxFilename.Text, "Title");
         }

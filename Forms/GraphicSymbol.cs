@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Drawing.Drawing2D;
+﻿using System.Drawing.Drawing2D;
 using System.Numerics;
 
 namespace ScreenShotTool.Forms
@@ -36,10 +35,10 @@ namespace ScreenShotTool.Forms
         public bool ValidSymbol = false;
 
         public GraphicSymbol(Color foregroundColor, Color backgroundColor, int X1, int Y1, int X2, int Y2, int lineWeight = 1, int lineAlpha = 255, int fillAlpha = 255)
-        { 
+        {
             this.foregroundColor = foregroundColor;
             this.backgroundColor = backgroundColor;
-            this.X1 = X1; 
+            this.X1 = X1;
             this.Y1 = Y1;
             this.X2 = X2;
             this.Y2 = Y2;
@@ -70,12 +69,12 @@ namespace ScreenShotTool.Forms
             pen.Brush = brush;
             pen.Width = lineWeight;
 
-            fillBrush = new SolidBrush(Color.FromArgb(fillAlpha ,backgroundColor.R, backgroundColor.G, backgroundColor.B));
+            fillBrush = new SolidBrush(Color.FromArgb(fillAlpha, backgroundColor.R, backgroundColor.G, backgroundColor.B));
         }
 
         internal void UpdateColors()
         {
-            foregroundColor = Color.FromArgb(lineAlpha, foregroundColor.R, foregroundColor .G, foregroundColor .B);
+            foregroundColor = Color.FromArgb(lineAlpha, foregroundColor.R, foregroundColor.G, foregroundColor.B);
             backgroundColor = Color.FromArgb(lineAlpha, backgroundColor.R, backgroundColor.G, backgroundColor.B);
         }
 
@@ -89,7 +88,7 @@ namespace ScreenShotTool.Forms
         public GsRectangle(Color foregroundColor, Color backgroundColor, int X1, int Y1, int X2, int Y2, int lineWeight, int lineAlpha, int fillAlpha) : base(foregroundColor, backgroundColor, X1, Y1, X2, Y2, lineWeight, lineAlpha, fillAlpha)
         {
             Name = "Rectangle";
-            if (X2 > 0 &&  Y2 > 0)
+            if (X2 > 0 && Y2 > 0)
             {
                 ValidSymbol = true;
             }

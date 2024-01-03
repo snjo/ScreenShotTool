@@ -1,30 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Text;
-using System.Linq;
-using System.Numerics;
+﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace ScreenShotTool.Forms
 {
     [SupportedOSPlatform("windows")]
-#pragma warning disable CA1416 // Validate platform compatibility
     public partial class ScreenshotEditor : Form
     {
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
+
         #region Constructor ---------------------------------------------------------------------------------
         Image? originalImage;
         Image? overlayImage;
         Graphics? overlayGraphics;
         int arrowWeight = 5;
         int lineWeight = 2;
-        List<GraphicSymbol> symbols = new List<GraphicSymbol>();
+        List<GraphicSymbol> symbols = new();
 
         public ScreenshotEditor()
         {
@@ -32,6 +24,7 @@ namespace ScreenShotTool.Forms
             pictureBoxOverlay.Parent = pictureBoxOriginal;
 
             CreateNewImage(640, 480, Color.White);
+            SetForegroundWindow(this.Handle);
         }
 
         public ScreenshotEditor(string file)
@@ -40,7 +33,7 @@ namespace ScreenShotTool.Forms
             pictureBoxOverlay.Parent = pictureBoxOriginal;
 
             LoadImageFromFile(file);
-            
+            SetForegroundWindow(this.Handle);
         }
 
         public ScreenshotEditor(bool fromClipboard)
@@ -52,6 +45,7 @@ namespace ScreenShotTool.Forms
             {
                 LoadImageFromClipboard();
             }
+            SetForegroundWindow(this.Handle);
         }
 
         public ScreenshotEditor(Image loadImage)
@@ -59,6 +53,7 @@ namespace ScreenShotTool.Forms
             InitializeComponent();
             pictureBoxOverlay.Parent = pictureBoxOriginal;
             LoadImageFromImage(loadImage);
+            SetForegroundWindow(this.Handle);
         }
 
         #endregion
@@ -138,7 +133,7 @@ namespace ScreenShotTool.Forms
             }
         }
 
-        private void pictureBoxOriginal_LoadCompleted(object sender, EventArgs e)
+        private void PictureBoxOriginal_LoadCompleted(object sender, EventArgs e)
         {
             CreateOverlay();
         }
@@ -151,14 +146,8 @@ namespace ScreenShotTool.Forms
             if (originalImage != null)
             {
                 Debug.WriteLine("Creating overlay");
-                if (overlayImage != null)
-                {
-                    overlayImage.Dispose();
-                }
-                if (overlayGraphics != null)
-                {
-                    overlayGraphics.Dispose();
-                }
+                overlayImage?.Dispose();
+                overlayGraphics?.Dispose();
                 overlayImage = new Bitmap(originalImage.Width, originalImage.Height);
                 overlayGraphics = Graphics.FromImage(overlayImage);
 
@@ -184,15 +173,14 @@ namespace ScreenShotTool.Forms
             }
             if (overlayImage != null && overlayGraphics != null)
             {
-                Image? image = DrawOverlay(pictureBoxOverlay.Image, temporarySymbol);
                 pictureBoxOverlay.Image.Dispose();
-                pictureBoxOverlay.Image = image;
+                pictureBoxOverlay.Image = DrawOverlay(temporarySymbol); ;
             }
         }
 
-        private Image DrawOverlay(Image img, GraphicSymbol? temporarySymbol = null)
+        private Image DrawOverlay(GraphicSymbol? temporarySymbol = null)
         {
-            img = new Bitmap(this.Width, this.Height);
+            Image img = new Bitmap(this.Width, this.Height);
             DisposeAndNull(overlayGraphics);
             overlayGraphics = Graphics.FromImage(img);
 
@@ -207,39 +195,40 @@ namespace ScreenShotTool.Forms
             {
                 symbol.DrawSymbol(graphic);
             }
-            if (temporarySymbol != null)
-            {
-                temporarySymbol.DrawSymbol(graphic);
-            }
+            temporarySymbol?.DrawSymbol(graphic);
         }
 
-        private void DisposeAndNull(Image? image)
+        private static void DisposeAndNull(Image? image)
         {
             if (image != null)
             {
                 image.Dispose();
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
                 image = null;
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
             }
         }
 
-        private void DisposeAndNull(Graphics? graphics)
+        private static void DisposeAndNull(Graphics? graphics)
         {
             if (graphics != null)
             {
                 graphics.Dispose();
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
                 graphics = null;
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
             }
         }
         #endregion
 
         #region Menu items ----------------------------------------------------------------------------------
 
-        private void itemExit_Click(object sender, EventArgs e)
+        private void ItemExit_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void loadToolStripMenuItem_Click(object sender, EventArgs e)
+        private void LoadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FileDialog fileDialog = new OpenFileDialog();
             DialogResult result = fileDialog.ShowDialog();
@@ -249,7 +238,7 @@ namespace ScreenShotTool.Forms
             }
         }
 
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FileDialog fileDialog = new SaveFileDialog();
             DialogResult result = fileDialog.ShowDialog();
@@ -259,32 +248,34 @@ namespace ScreenShotTool.Forms
             }
         }
 
-        private void deleteOverlayElementsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void DeleteOverlayElementsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach (GraphicSymbol symbol in symbols)
             {
+                listViewSymbols.Items.Clear();
+                ClearPropertyPanelValues();
                 symbol.Dispose();
             }
             symbols.Clear();
             UpdateOverlay();
         }
 
-        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CopyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CopyToClipboard();
         }
 
-        private void itemLoadFromClipboard_Click(object sender, EventArgs e)
+        private void ItemLoadFromClipboard_Click(object sender, EventArgs e)
         {
             LoadImageFromClipboard();
         }
 
-        private void pasteIntoThisImage_Click(object sender, EventArgs e)
+        private void PasteIntoThisImage_Click(object sender, EventArgs e)
         {
             PasteIntoImage();
         }
 
-        private void itemPasteScaled_Click(object sender, EventArgs e)
+        private void ItemPasteScaled_Click(object sender, EventArgs e)
         {
             PasteIntoImageScaled();
         }
@@ -308,7 +299,7 @@ namespace ScreenShotTool.Forms
 
         private SymbolType newSymbolType = SymbolType.Rectangle;
 
-        private void addNewSymbolToList(GraphicSymbol symbol)
+        private void AddNewSymbolToList(GraphicSymbol symbol)
         {
             if (symbol != null)
             {
@@ -343,7 +334,7 @@ namespace ScreenShotTool.Forms
                 Color lineColor = buttonNewColorLine.BackColor;
                 Color fillColor = buttonNewColorFill.BackColor;
 
-                switch (newSymbolType)
+                /* switch (newSymbolType)
                 {
                     case SymbolType.Rectangle:
                         return new GsRectangle(lineColor, fillColor, dragRect.X, dragRect.Y, dragRect.Width, dragRect.Height, lineWeight, lineAlpha, fillAlpha);
@@ -360,6 +351,18 @@ namespace ScreenShotTool.Forms
                     default:
                         return null;
                 }
+                */
+
+                return newSymbolType switch
+                {
+                    SymbolType.Rectangle => new GsRectangle(lineColor, fillColor, dragRect.X, dragRect.Y, dragRect.Width, dragRect.Height, lineWeight, lineAlpha, fillAlpha),
+                    SymbolType.Circle => new GsCircle(lineColor, fillColor, dragRect.X, dragRect.Y, dragRect.Width, dragRect.Height, lineWeight, lineAlpha, fillAlpha),
+                    SymbolType.Line => new GsLine(lineColor, fillColor, dragStartX, dragStartY, dragEndX, dragEndY, lineWeight, lineAlpha),
+                    SymbolType.Arrow => new GsArrow(lineColor, fillColor, dragStartX, dragStartY, dragEndX, dragEndY, lineWeight, lineAlpha),
+                    SymbolType.Image => new GsImage(lineColor, fillColor, dragStartX, dragStartY, dragEndX, dragEndY),
+                    SymbolType.ImageScaled => new GsImageScaled(lineColor, fillColor, dragLeft, dragTop, dragWidth, dragHeight),
+                    _ => null,
+                };
             }
             else
             {
@@ -371,28 +374,28 @@ namespace ScreenShotTool.Forms
 
         #region Symbol toolbar buttons ----------------------------------------------------------------------
 
-        private void buttonRectangle_Click(object sender, EventArgs e)
+        private void ButtonRectangle_Click(object sender, EventArgs e)
         {
             newSymbolType = SymbolType.Rectangle;
             numericNewLineWeight.Value = lineWeight;
             UpdateOverlay();
         }
 
-        private void buttonCircle_Click(object sender, EventArgs e)
+        private void ButtonCircle_Click(object sender, EventArgs e)
         {
             newSymbolType = SymbolType.Circle;
             numericNewLineWeight.Value = lineWeight;
             UpdateOverlay();
         }
 
-        private void buttonLine_Click(object sender, EventArgs e)
+        private void ButtonLine_Click(object sender, EventArgs e)
         {
             newSymbolType = SymbolType.Line;
             numericNewLineWeight.Value = lineWeight;
             UpdateOverlay();
         }
 
-        private void buttonArrow_Click(object sender, EventArgs e)
+        private void ButtonArrow_Click(object sender, EventArgs e)
         {
             newSymbolType = SymbolType.Arrow;
             numericNewLineWeight.Value = arrowWeight;
@@ -408,9 +411,9 @@ namespace ScreenShotTool.Forms
         bool dragStarted = false;
         int dragStartX = 0;
         int dragStartY = 0;
-        Rectangle dragRect = new Rectangle();
+        Rectangle dragRect = new();
 
-        private void pictureBoxOverlay_MouseDown(object sender, MouseEventArgs e)
+        private void PictureBoxOverlay_MouseDown(object sender, MouseEventArgs e)
         {
             if (originalImage == null) return;
             dragStarted = true;
@@ -422,7 +425,7 @@ namespace ScreenShotTool.Forms
             }
         }
 
-        private void pictureBoxOverlay_MouseUp(object sender, MouseEventArgs e)
+        private void PictureBoxOverlay_MouseUp(object sender, MouseEventArgs e)
         {
             if (originalImage == null) return;
             GraphicSymbol? symbol = GetSymbol(sender, e);
@@ -430,7 +433,7 @@ namespace ScreenShotTool.Forms
             {
                 if (symbol.ValidSymbol)
                 {
-                    addNewSymbolToList(symbol);
+                    AddNewSymbolToList(symbol);
                 }
             }
             UpdateOverlay();
@@ -442,7 +445,7 @@ namespace ScreenShotTool.Forms
             }
         }
 
-        private void pictureBoxOverlay_MouseMove(object sender, MouseEventArgs e)
+        private void PictureBoxOverlay_MouseMove(object sender, MouseEventArgs e)
         {
             if (originalImage == null) return;
             GraphicSymbol? tempSymbol = GetSymbol(sender, e);
@@ -453,7 +456,7 @@ namespace ScreenShotTool.Forms
             }
         }
 
-        private void pictureBoxOverlay_MouseLeave(object sender, EventArgs e)
+        private void PictureBoxOverlay_MouseLeave(object sender, EventArgs e)
         {
             //dragStarted = false;
         }
@@ -512,13 +515,12 @@ namespace ScreenShotTool.Forms
 
         #region Selected symbol Properties panel ------------------------------------------------------------
 
-        private void listViewSymbols_SelectedIndexChanged(object sender, EventArgs e)
+        private void ListViewSymbols_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listViewSymbols.SelectedItems.Count > 0)
             {
                 ListViewItem item = listViewSymbols.SelectedItems[0];
-                GraphicSymbol? graphicSymbol = item.Tag as GraphicSymbol;
-                if (graphicSymbol != null)
+                if (item.Tag is GraphicSymbol graphicSymbol)
                 {
                     labelSymbolType.Text = "Symbol: " + graphicSymbol.Name;
                     numericX.Value = graphicSymbol.X1;
@@ -548,29 +550,28 @@ namespace ScreenShotTool.Forms
             }
             else
             {
-                ClearProperties();
+                ClearPropertyPanelValues();
             }
         }
 
-        private void buttonDeleteSymbol_Click(object sender, EventArgs e)
+        private void ButtonDeleteSymbol_Click(object sender, EventArgs e)
         {
             if (listViewSymbols.SelectedItems.Count > 0)
             {
                 ListViewItem item = listViewSymbols.SelectedItems[0];
-                GraphicSymbol? gs = buttonDeleteSymbol.Tag as GraphicSymbol;
-                if (gs != null)
+                if (buttonDeleteSymbol.Tag is GraphicSymbol gs)
                 {
                     listViewSymbols.Items.Remove(item);
                     gs.Dispose();
                     symbols.Remove(gs);
                 }
                 listViewSymbols.Update();
-                ClearProperties();
+                ClearPropertyPanelValues();
                 UpdateOverlay();
             }
         }
 
-        private void ClearProperties()
+        private void ClearPropertyPanelValues()
         {
             labelSymbolType.Text = "Symbol: ";
             numericX.Value = 0;
@@ -585,13 +586,12 @@ namespace ScreenShotTool.Forms
             buttonDeleteSymbol.Tag = null;
         }
 
-        private void numeric_ValueChanged(object sender, EventArgs e)
+        private void Numeric_ValueChanged(object sender, EventArgs e)
         {
             if (listViewSymbols.SelectedItems.Count > 0)
             {
                 ListViewItem item = listViewSymbols.SelectedItems[0];
-                GraphicSymbol? gs = item.Tag as GraphicSymbol;
-                if (gs == null) return;
+                if (item.Tag is not GraphicSymbol gs) return;
 
                 if (sender == numericX)
                 {
@@ -629,14 +629,12 @@ namespace ScreenShotTool.Forms
             UpdateOverlay();
         }
 
-        private void colorChangeClick(object sender, EventArgs e)
+        private void ColorChangeClick(object sender, EventArgs e)
         {
             if (listViewSymbols.SelectedItems.Count > 0)
             {
                 ListViewItem item = listViewSymbols.SelectedItems[0];
-                GraphicSymbol? gs = item.Tag as GraphicSymbol;
-                if (gs == null) return;
-
+                if (item.Tag is not GraphicSymbol gs) return;
 
                 DialogResult result = colorDialog1.ShowDialog();
                 if (result == DialogResult.OK)
@@ -661,7 +659,7 @@ namespace ScreenShotTool.Forms
 
         #region Top toolbar, new Symbol settings ------------------------------------------------------------
 
-        private void numericNewLineWeight_ValueChanged(object sender, EventArgs e)
+        private void NumericNewLineWeight_ValueChanged(object sender, EventArgs e)
         {
             if (newSymbolType == SymbolType.Arrow)
             {
@@ -673,7 +671,7 @@ namespace ScreenShotTool.Forms
             }
         }
 
-        private void newColorLine_Click(object sender, EventArgs e)
+        private void NewColorLine_Click(object sender, EventArgs e)
         {
             DialogResult result = colorDialog1.ShowDialog();
             if (result == DialogResult.OK)
@@ -682,7 +680,7 @@ namespace ScreenShotTool.Forms
             }
         }
 
-        private void newColorFill_Click(object sender, EventArgs e)
+        private void NewColorFill_Click(object sender, EventArgs e)
         {
             DialogResult result = colorDialog1.ShowDialog();
             if (result == DialogResult.OK)
@@ -691,9 +689,9 @@ namespace ScreenShotTool.Forms
             }
         }
 
-        private void itemNewImage_Click(object sender, EventArgs e)
+        private void ItemNewImage_Click(object sender, EventArgs e)
         {
-            NewImagePrompt imagePrompt = new NewImagePrompt();
+            NewImagePrompt imagePrompt = new();
             DialogResult result = imagePrompt.ShowDialog();
             if (result == DialogResult.OK)
             {

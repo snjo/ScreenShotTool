@@ -65,11 +65,11 @@
             pictureBoxDraw.Size = new Size(100, 57);
             pictureBoxDraw.TabIndex = 1;
             pictureBoxDraw.TabStop = false;
-            pictureBoxDraw.Click += pictureBoxDraw_Click;
-            pictureBoxDraw.MouseDown += pictureBoxDraw_MouseDown;
-            pictureBoxDraw.MouseLeave += pictureBoxDraw_MouseLeave;
-            pictureBoxDraw.MouseMove += pictureBoxDraw_MouseMove;
-            pictureBoxDraw.MouseUp += pictureBoxDraw_MouseUp;
+            pictureBoxDraw.Click += PictureBoxDraw_Click;
+            pictureBoxDraw.MouseDown += PictureBoxDraw_MouseDown;
+            pictureBoxDraw.MouseLeave += PictureBoxDraw_MouseLeave;
+            pictureBoxDraw.MouseMove += PictureBoxDraw_MouseMove;
+            pictureBoxDraw.MouseUp += PictureBoxDraw_MouseUp;
             // 
             // ImageView
             // 

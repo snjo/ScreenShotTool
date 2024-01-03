@@ -124,28 +124,28 @@
             itemSave.Name = "itemSave";
             itemSave.Size = new Size(184, 22);
             itemSave.Text = "&Save...";
-            itemSave.Click += saveToolStripMenuItem_Click;
+            itemSave.Click += SaveToolStripMenuItem_Click;
             // 
             // itemLoadFromFile
             // 
             itemLoadFromFile.Name = "itemLoadFromFile";
             itemLoadFromFile.Size = new Size(184, 22);
             itemLoadFromFile.Text = "&Load";
-            itemLoadFromFile.Click += loadToolStripMenuItem_Click;
+            itemLoadFromFile.Click += LoadToolStripMenuItem_Click;
             // 
             // itemLoadFromClipboard
             // 
             itemLoadFromClipboard.Name = "itemLoadFromClipboard";
             itemLoadFromClipboard.Size = new Size(184, 22);
             itemLoadFromClipboard.Text = "Load from &Clipboard";
-            itemLoadFromClipboard.Click += itemLoadFromClipboard_Click;
+            itemLoadFromClipboard.Click += ItemLoadFromClipboard_Click;
             // 
             // itemExit
             // 
             itemExit.Name = "itemExit";
             itemExit.Size = new Size(184, 22);
             itemExit.Text = "E&xit";
-            itemExit.Click += itemExit_Click;
+            itemExit.Click += ItemExit_Click;
             // 
             // editToolStripMenuItem
             // 
@@ -159,28 +159,28 @@
             copyToolStripMenuItem.Name = "copyToolStripMenuItem";
             copyToolStripMenuItem.Size = new Size(190, 22);
             copyToolStripMenuItem.Text = "&Copy";
-            copyToolStripMenuItem.Click += copyToolStripMenuItem_Click;
+            copyToolStripMenuItem.Click += CopyToolStripMenuItem_Click;
             // 
             // pasteIntoThisImageToolStripMenuItem
             // 
             pasteIntoThisImageToolStripMenuItem.Name = "pasteIntoThisImageToolStripMenuItem";
             pasteIntoThisImageToolStripMenuItem.Size = new Size(190, 22);
             pasteIntoThisImageToolStripMenuItem.Text = "&Paste (Real size)";
-            pasteIntoThisImageToolStripMenuItem.Click += pasteIntoThisImage_Click;
+            pasteIntoThisImageToolStripMenuItem.Click += PasteIntoThisImage_Click;
             // 
             // itemPasteScaled
             // 
             itemPasteScaled.Name = "itemPasteScaled";
             itemPasteScaled.Size = new Size(190, 22);
             itemPasteScaled.Text = "Paste (&Scaled)";
-            itemPasteScaled.Click += itemPasteScaled_Click;
+            itemPasteScaled.Click += ItemPasteScaled_Click;
             // 
             // deleteOverlayElementsToolStripMenuItem
             // 
             deleteOverlayElementsToolStripMenuItem.Name = "deleteOverlayElementsToolStripMenuItem";
             deleteOverlayElementsToolStripMenuItem.Size = new Size(190, 22);
             deleteOverlayElementsToolStripMenuItem.Text = "&Delete added symbols";
-            deleteOverlayElementsToolStripMenuItem.Click += deleteOverlayElementsToolStripMenuItem_Click;
+            deleteOverlayElementsToolStripMenuItem.Click += DeleteOverlayElementsToolStripMenuItem_Click;
             // 
             // panelButtons
             // 
@@ -201,7 +201,7 @@
             buttonArrow.TabIndex = 4;
             buttonArrow.Text = "Arrow";
             buttonArrow.UseVisualStyleBackColor = true;
-            buttonArrow.Click += buttonArrow_Click;
+            buttonArrow.Click += ButtonArrow_Click;
             // 
             // buttonLine
             // 
@@ -211,7 +211,7 @@
             buttonLine.TabIndex = 2;
             buttonLine.Text = "Line";
             buttonLine.UseVisualStyleBackColor = true;
-            buttonLine.Click += buttonLine_Click;
+            buttonLine.Click += ButtonLine_Click;
             // 
             // button2
             // 
@@ -221,7 +221,7 @@
             button2.TabIndex = 1;
             button2.Text = "Circle";
             button2.UseVisualStyleBackColor = true;
-            button2.Click += buttonCircle_Click;
+            button2.Click += ButtonCircle_Click;
             // 
             // button1
             // 
@@ -231,7 +231,7 @@
             button1.TabIndex = 0;
             button1.Text = "Rectangle";
             button1.UseVisualStyleBackColor = true;
-            button1.Click += buttonRectangle_Click;
+            button1.Click += ButtonRectangle_Click;
             // 
             // numericNewLineWeight
             // 
@@ -241,7 +241,7 @@
             numericNewLineWeight.Size = new Size(66, 23);
             numericNewLineWeight.TabIndex = 3;
             numericNewLineWeight.Value = new decimal(new int[] { 2, 0, 0, 0 });
-            numericNewLineWeight.ValueChanged += numericNewLineWeight_ValueChanged;
+            numericNewLineWeight.ValueChanged += NumericNewLineWeight_ValueChanged;
             // 
             // pictureBoxOriginal
             // 
@@ -251,7 +251,7 @@
             pictureBoxOriginal.SizeMode = PictureBoxSizeMode.AutoSize;
             pictureBoxOriginal.TabIndex = 2;
             pictureBoxOriginal.TabStop = false;
-            pictureBoxOriginal.LoadCompleted += pictureBoxOriginal_LoadCompleted;
+            pictureBoxOriginal.LoadCompleted += PictureBoxOriginal_LoadCompleted;
             // 
             // panelImage
             // 
@@ -273,10 +273,10 @@
             pictureBoxOverlay.Size = new Size(558, 375);
             pictureBoxOverlay.TabIndex = 1;
             pictureBoxOverlay.TabStop = false;
-            pictureBoxOverlay.MouseDown += pictureBoxOverlay_MouseDown;
-            pictureBoxOverlay.MouseLeave += pictureBoxOverlay_MouseLeave;
-            pictureBoxOverlay.MouseMove += pictureBoxOverlay_MouseMove;
-            pictureBoxOverlay.MouseUp += pictureBoxOverlay_MouseUp;
+            pictureBoxOverlay.MouseDown += PictureBoxOverlay_MouseDown;
+            pictureBoxOverlay.MouseLeave += PictureBoxOverlay_MouseLeave;
+            pictureBoxOverlay.MouseMove += PictureBoxOverlay_MouseMove;
+            pictureBoxOverlay.MouseUp += PictureBoxOverlay_MouseUp;
             // 
             // listViewSymbols
             // 
@@ -289,7 +289,7 @@
             listViewSymbols.TabIndex = 0;
             listViewSymbols.UseCompatibleStateImageBehavior = false;
             listViewSymbols.View = View.Details;
-            listViewSymbols.SelectedIndexChanged += listViewSymbols_SelectedIndexChanged;
+            listViewSymbols.SelectedIndexChanged += ListViewSymbols_SelectedIndexChanged;
             // 
             // columnHeaderType
             // 
@@ -340,7 +340,7 @@
             numericPropertiesFillAlpha.Size = new Size(44, 23);
             numericPropertiesFillAlpha.TabIndex = 24;
             numericPropertiesFillAlpha.Value = new decimal(new int[] { 255, 0, 0, 0 });
-            numericPropertiesFillAlpha.ValueChanged += numeric_ValueChanged;
+            numericPropertiesFillAlpha.ValueChanged += Numeric_ValueChanged;
             // 
             // label13
             // 
@@ -359,7 +359,7 @@
             numericPropertiesLineAlpha.Size = new Size(44, 23);
             numericPropertiesLineAlpha.TabIndex = 22;
             numericPropertiesLineAlpha.Value = new decimal(new int[] { 255, 0, 0, 0 });
-            numericPropertiesLineAlpha.ValueChanged += numeric_ValueChanged;
+            numericPropertiesLineAlpha.ValueChanged += Numeric_ValueChanged;
             // 
             // numericPropertiesLineWeight
             // 
@@ -370,7 +370,7 @@
             numericPropertiesLineWeight.TabIndex = 15;
             numericPropertiesLineWeight.Tag = "LineWeight";
             numericPropertiesLineWeight.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            numericPropertiesLineWeight.ValueChanged += numeric_ValueChanged;
+            numericPropertiesLineWeight.ValueChanged += Numeric_ValueChanged;
             // 
             // buttonPropertiesColorFill
             // 
@@ -382,7 +382,7 @@
             buttonPropertiesColorFill.TabIndex = 14;
             buttonPropertiesColorFill.Tag = "FillColor";
             buttonPropertiesColorFill.UseVisualStyleBackColor = false;
-            buttonPropertiesColorFill.Click += colorChangeClick;
+            buttonPropertiesColorFill.Click += ColorChangeClick;
             // 
             // buttonPropertiesColorLine
             // 
@@ -394,7 +394,7 @@
             buttonPropertiesColorLine.TabIndex = 13;
             buttonPropertiesColorLine.Tag = "LineColor";
             buttonPropertiesColorLine.UseVisualStyleBackColor = false;
-            buttonPropertiesColorLine.Click += colorChangeClick;
+            buttonPropertiesColorLine.Click += ColorChangeClick;
             // 
             // numericHeight
             // 
@@ -406,7 +406,7 @@
             numericHeight.TabIndex = 12;
             numericHeight.Tag = "Height";
             numericHeight.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            numericHeight.ValueChanged += numeric_ValueChanged;
+            numericHeight.ValueChanged += Numeric_ValueChanged;
             // 
             // numericY
             // 
@@ -416,7 +416,7 @@
             numericY.Size = new Size(43, 23);
             numericY.TabIndex = 11;
             numericY.Tag = "Y";
-            numericY.ValueChanged += numeric_ValueChanged;
+            numericY.ValueChanged += Numeric_ValueChanged;
             // 
             // numericWidth
             // 
@@ -428,7 +428,7 @@
             numericWidth.TabIndex = 10;
             numericWidth.Tag = "Width";
             numericWidth.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            numericWidth.ValueChanged += numeric_ValueChanged;
+            numericWidth.ValueChanged += Numeric_ValueChanged;
             // 
             // numericX
             // 
@@ -438,7 +438,7 @@
             numericX.Size = new Size(43, 23);
             numericX.TabIndex = 9;
             numericX.Tag = "X";
-            numericX.ValueChanged += numeric_ValueChanged;
+            numericX.ValueChanged += Numeric_ValueChanged;
             // 
             // label8
             // 
@@ -520,7 +520,7 @@
             buttonDeleteSymbol.TabIndex = 0;
             buttonDeleteSymbol.Text = "Delete";
             buttonDeleteSymbol.UseVisualStyleBackColor = true;
-            buttonDeleteSymbol.Click += buttonDeleteSymbol_Click;
+            buttonDeleteSymbol.Click += ButtonDeleteSymbol_Click;
             // 
             // colorDialog1
             // 
@@ -537,7 +537,7 @@
             buttonNewColorFill.TabIndex = 18;
             buttonNewColorFill.Tag = "FillColor";
             buttonNewColorFill.UseVisualStyleBackColor = false;
-            buttonNewColorFill.Click += newColorFill_Click;
+            buttonNewColorFill.Click += NewColorFill_Click;
             // 
             // buttonNewColorLine
             // 
@@ -549,7 +549,7 @@
             buttonNewColorLine.TabIndex = 17;
             buttonNewColorLine.Tag = "LineColor";
             buttonNewColorLine.UseVisualStyleBackColor = false;
-            buttonNewColorLine.Click += newColorLine_Click;
+            buttonNewColorLine.Click += NewColorLine_Click;
             // 
             // label1
             // 
@@ -619,7 +619,7 @@
             itemNewImage.Name = "itemNewImage";
             itemNewImage.Size = new Size(184, 22);
             itemNewImage.Text = "&New";
-            itemNewImage.Click += itemNewImage_Click;
+            itemNewImage.Click += ItemNewImage_Click;
             // 
             // ScreenshotEditor
             // 

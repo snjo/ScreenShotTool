@@ -1,47 +1,46 @@
-﻿using System;
+﻿using ScreenShotTool.Forms;
+using ScreenShotTool.Properties;
 using System.Diagnostics;
-using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using ScreenShotTool.Forms;
-using ScreenShotTool.Properties;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ScreenShotTool
 {
+#pragma warning disable IDE0090 // Use 'new(...)'
+
     [SupportedOSPlatform("windows")]
     public partial class ImageView : Form
     {
         public bool StartInCropMode = false;
-        private Bitmap? ImageSource;
+        private readonly Bitmap? ImageSource;
         private Bitmap? ImageResult;
         public int X = 0;
         public int Y = 0;
-        Screen screen;
+        private readonly Screen screen;
         public bool CompleteCaptureOnMoureRelease = false;
         public bool SaveToFile = false;
         public bool SendToClipboard = false;
+        public bool SendToEditor = false;
         public bool ShowAdjustmentArrows = true;
         private bool showHelp = false;
         public float frameRate = 60f;
 
-        readonly SolidBrush brush;
-        readonly SolidBrush brushZoomRegion;
-        readonly SolidBrush brushFill;
-        readonly SolidBrush brushHelpBG;
-        readonly SolidBrush blackBrush;
-        readonly SolidBrush brushText;
-        readonly Pen linePen;
-        readonly Pen arrowPen;
-        readonly Pen zoomRegionPen;
+        private readonly SolidBrush brushZoomRegion;
+        private readonly SolidBrush brushFill;
+        private readonly SolidBrush brushHelpBG;
+        private readonly SolidBrush blackBrush;
+        private readonly SolidBrush brushText;
+        private readonly Pen linePen;
+        private readonly Pen arrowPen;
+        private readonly Pen zoomRegionPen;
         public Color lineColor = Color.Green;
         public Color arrowColor = Color.Yellow;
         public Color maskColor = Color.FromArgb(120, 0, 0, 0);
         public Color textColor = Color.LightGreen;
-        Rectangle regionRect = new Rectangle();
+        Rectangle regionRect = new();
 
-        bool isClosing = false;
+        bool isClosing = false; // if true, don't update the view, prevent referencing disposed images.
 
         private enum AdjustMode
         {
@@ -59,7 +58,6 @@ namespace ScreenShotTool
             frameRate = Settings.Default.MaxFramerate;
             InitializeComponent();
 
-            brush = new SolidBrush(lineColor);
             brushZoomRegion = new SolidBrush(lineColor);
             brushFill = new SolidBrush(maskColor);
             brushHelpBG = new SolidBrush(Color.FromArgb(200, 0, 0, 0));
@@ -121,6 +119,7 @@ namespace ScreenShotTool
             else if (e.KeyCode == Keys.Return)
             {
                 DisposeSourceImage();
+                isClosing = true;
                 DialogResult = DialogResult.Yes;
             }
             else if (e.KeyCode == Keys.C)
@@ -137,7 +136,7 @@ namespace ScreenShotTool
             {
                 if (ImageResult != null)
                 {
-                    OpenImageInEditor();
+                    OpenImageInEditor(ImageResult);
                     isClosing = true;
                     DisposeSourceImage();
                     DialogResult = DialogResult.No;
@@ -205,12 +204,12 @@ namespace ScreenShotTool
                 }
             }
 
-            updateOverlay();
+            UpdateOverlay();
         }
 
-        private void OpenImageInEditor()
+        private static void OpenImageInEditor(Image img)
         {
-            ScreenshotEditor imageEditor = new ScreenshotEditor(ImageResult);
+            ScreenshotEditor imageEditor = new ScreenshotEditor(img);
             imageEditor.Show();
         }
 
@@ -251,18 +250,15 @@ namespace ScreenShotTool
 
         private void DisposeAllImages()
         {
-            if (ImageResult != null)
-                ImageResult.Dispose();
-            if (ImageSource != null)
-                ImageSource.Dispose();
+            ImageResult?.Dispose();
+            ImageSource?.Dispose();
         }
         private void DisposeSourceImage()
         {
-            if (ImageSource != null)
-                ImageSource.Dispose();
+            ImageSource?.Dispose();
         }
 
-        private void pictureBoxDraw_Click(object sender, EventArgs e)
+        private void PictureBoxDraw_Click(object sender, EventArgs e)
         {
 
         }
@@ -273,7 +269,7 @@ namespace ScreenShotTool
 
         Bitmap? screenSizedBitmap;
 
-        private void pictureBoxDraw_MouseDown(object sender, MouseEventArgs e)
+        private void PictureBoxDraw_MouseDown(object sender, MouseEventArgs e)
         {
             regionRect = new Rectangle();
             DisposeAndNull(screenSizedBitmap);
@@ -284,7 +280,7 @@ namespace ScreenShotTool
             mouseDrag = true;
         }
 
-        private void pictureBoxDraw_MouseUp(object sender, MouseEventArgs e)
+        private void PictureBoxDraw_MouseUp(object sender, MouseEventArgs e)
         {
             mouseDrag = false;
 
@@ -292,6 +288,9 @@ namespace ScreenShotTool
 
             if (CompleteCaptureOnMoureRelease)
             {
+                bool disposeAll = true;
+                isClosing = true;
+
                 if (SendToClipboard)
                 {
                     if (ImageResult != null)
@@ -299,6 +298,17 @@ namespace ScreenShotTool
                         Clipboard.SetImage(ImageResult);
                     }
                 }
+
+                if (SendToEditor)
+                {
+                    if (ImageResult != null)
+                    {
+                        Bitmap clonedForEditor = ImageResult.Clone(new Rectangle(0, 0, ImageResult.Width, ImageResult.Height), System.Drawing.Imaging.PixelFormat.Format32bppArgb); //(regionRect, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                        OpenImageInEditor(clonedForEditor);
+                    }
+                    disposeAll = false;
+                }
+
                 if (SaveToFile)
                 {
                     DisposeSourceImage();
@@ -306,7 +316,14 @@ namespace ScreenShotTool
                 }
                 else
                 {
-                    DisposeAllImages();
+                    if (disposeAll)
+                    {
+                        DisposeAllImages();
+                    }
+                    else
+                    {
+                        DisposeSourceImage();
+                    }
                     DialogResult = DialogResult.No;
                 }
             }
@@ -325,24 +342,23 @@ namespace ScreenShotTool
 
 
 
-        private void pictureBoxDraw_MouseMove(object sender, MouseEventArgs e)
+        private void PictureBoxDraw_MouseMove(object sender, MouseEventArgs e)
         {
-            updateOverlay();
+            UpdateOverlay();
         }
 
 
-        private void pictureBoxDraw_MouseLeave(object sender, EventArgs e)
+        private void PictureBoxDraw_MouseLeave(object sender, EventArgs e)
         {
             mouseDrag = false;
         }
 
         #region draw Overlay -------------------------------------------------
 
-        int skippedFrames = 0; // used for checking how many calls to updateOverlay happened since last draw update.
         DateTime LastFrame = DateTime.Now;
 
         Image? tempImage;
-        private void updateOverlay()
+        private void UpdateOverlay()
         {
             float MilliSecondsPerFrame = (1f / frameRate) * 1000;
             TimeSpan ts = DateTime.Now - LastFrame;
@@ -353,29 +369,28 @@ namespace ScreenShotTool
                 tempImage = DrawOverlay(true, true);
                 pictureBoxDraw.Image = tempImage;
                 LastFrame = DateTime.Now;
-                skippedFrames = 0;
-            }
-            else
-            {
-                skippedFrames++;
             }
         }
 
-        private void DisposeAndNull(Image? image)
+        private static void DisposeAndNull(Image? image)
         {
             if (image != null)
             {
                 image.Dispose();
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
                 image = null;
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
             }
         }
 
-        private void DisposeAndNull(Graphics? graphic)
+        private static void DisposeAndNull(Graphics? graphic)
         {
             if (graphic != null)
             {
                 graphic.Dispose();
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
                 graphic = null;
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
             }
         }
 
@@ -399,13 +414,13 @@ namespace ScreenShotTool
             int rectHeight = Cursor.Position.Y - mouseStartY;
             if (rectWidth < 0)
             {
-                rectX = rectX + rectWidth;
-                rectWidth = rectWidth * -1;
+                rectX += rectWidth;
+                rectWidth *= -1;
             }
             if (rectHeight < 0)
             {
-                rectY = rectY + rectHeight;
-                rectHeight = rectHeight * -1;
+                rectY += rectHeight;
+                rectHeight *= -1;
             }
 
             if (mouseDrag)
@@ -446,12 +461,12 @@ namespace ScreenShotTool
 
         int zoomPositionH = 30; // move the zoom box around the cursor to avoid the edges of the screen
         int zoomPositionV = 70;
-        int zoomRadius = 20;
-        float zoomLevel = 10;
+        readonly int zoomRadius = 20;
+        readonly float zoomLevel = 10;
         int zoomSize = 30;
-        Color testColor = Color.Fuchsia;
+        //Color testColor = Color.Fuchsia;
 
-        Bitmap cropImage(Bitmap img, Rectangle cropArea)
+        Bitmap CropImage(Bitmap img, Rectangle cropArea)
         {
             //https://www.codingdefined.com/2015/04/solved-bitmapclone-out-of-memory.html
             Bitmap bmp = new Bitmap(cropArea.Width, cropArea.Height);
@@ -467,19 +482,19 @@ namespace ScreenShotTool
         Bitmap? screenshotBmp;
         private void DrawZoomView(Graphics graphic, Image screenshotInput)
         {
-            
             if (isClosing) { return; }
+
             try
             {
                 DisposeAndNull(screenshotBmp);
                 screenshotBmp = new Bitmap(screenshotInput);
             }
-            catch (Exception ex)
+            catch
             {
                 Debug.WriteLine("Error updating Zoom view. Possibly when Disposing and closing form.");
             }
 
-            if (screenshotBmp == null ) { return; }
+            if (screenshotBmp == null) { return; }
 
             zoomSize = (int)(zoomRadius * zoomLevel);
             float cursorX = Cursor.Position.X - screen.Bounds.X;
@@ -487,7 +502,7 @@ namespace ScreenShotTool
 
             Rectangle zoomRect = new Rectangle((int)cursorX - zoomRadius, (int)cursorY - zoomRadius, zoomRadius * 2, zoomRadius * 2);
 
-            Bitmap zoomImage = cropImage(screenshotBmp, zoomRect);
+            Bitmap zoomImage = CropImage(screenshotBmp, zoomRect);
 
             //move zoom viewer around the cursor
             if (Cursor.Position.X + zoomSize + zoomPositionH > screen.Bounds.Right)
@@ -603,7 +618,7 @@ namespace ScreenShotTool
             zoomImage.Dispose();
         }
 
-        private void MaskRectangle(Graphics graphic, Rectangle ContainerRegion, Rectangle ActiveRegion, Brush maskingBrush)
+        private static void MaskRectangle(Graphics graphic, Rectangle ContainerRegion, Rectangle ActiveRegion, Brush maskingBrush)
         {
             int LeftSide = Math.Clamp(ActiveRegion.Left, ContainerRegion.Left, ContainerRegion.Right);
             int RightSide = Math.Clamp(ActiveRegion.Right, ContainerRegion.Left, ContainerRegion.Right);
@@ -614,7 +629,7 @@ namespace ScreenShotTool
             int TopSpace = TopSide - ContainerRegion.Top;
             int BottomSpace = ContainerRegion.Bottom - BottomSide;
             int width = RightSide - LeftSide;
-            int height = BottomSide - TopSide;
+            //int height = BottomSide - TopSide;
 
             if (ActiveRegion.Left > ContainerRegion.Left)
             {
@@ -642,7 +657,7 @@ namespace ScreenShotTool
             int textX = Cursor.Position.X + zoomPositionH - screen.Bounds.X;
             int textY = Cursor.Position.Y + zoomPositionV + zoomSize + 3 - screen.Bounds.Y;
             graphic.FillRectangle(brushHelpBG, new Rectangle(textX, textY, zoomSize, 40));
-            graphic.DrawString($"W:{regionRect.Width.ToString().PadLeft(4)} H:{regionRect.Height.ToString().PadLeft(4)} Esc: Exit, H: Help\nEnter: Save, C: Clipboard", this.Font, brushText, textX, textY);
+            graphic.DrawString($"W:{regionRect.Width,4} H:{regionRect.Height,4} Esc: Exit, H: Help\nEnter: Save, C: Clipboard", this.Font, brushText, textX, textY);
             if (showHelp)
             {
                 graphic.FillRectangle(brushHelpBG, new Rectangle(10, 10, 250, 200));

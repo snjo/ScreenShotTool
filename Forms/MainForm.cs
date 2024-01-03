@@ -2,25 +2,23 @@ using Hotkeys;
 using ScreenShotTool.Forms;
 using ScreenShotTool.Properties;
 using System.Diagnostics;
-using System.Drawing.Design;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Drawing.Printing;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using System.Security.Policy;
 using System.Text;
-using System.Windows.Forms;
 
 [assembly: AssemblyVersion("1.1.*")]
+
+#pragma warning disable IDE0090 // Use 'new(...)'
 
 namespace ScreenShotTool
 {
     [SupportedOSPlatform("windows")]
     public partial class MainForm : Form
     {
-        Settings settings = Settings.Default;
+        readonly Settings settings = Settings.Default;
         HelpForm? helpWindow;
         ImageFormat DestinationFormat = ImageFormat.Jpeg;
         //int counter = 0;
@@ -29,7 +27,7 @@ namespace ScreenShotTool
         Options? options;
         bool showLog = false;
         private int Counter = 0;
-        private int CounterMax = 9999;
+        private readonly int CounterMax = 9999;
 
         public string helpText =
             "Default filename values:\r" +
@@ -63,7 +61,7 @@ namespace ScreenShotTool
             UpgradeSettings();
             LoadHotkeysFromSettings();
 
-            updateTrimStatus();
+            UpdateTrimStatus();
 
             if (Settings.Default.StartHidden)
             {
@@ -79,7 +77,7 @@ namespace ScreenShotTool
             SetInfoText();
         }
 
-        private void UpgradeSettings()
+        private static void UpgradeSettings()
         {
             if (Settings.Default.UpgradeSettings)
             {
@@ -159,20 +157,22 @@ namespace ScreenShotTool
             base.WndProc(ref m);
             if (m.Msg == Hotkeys.Constants.WM_HOTKEY_MSG_ID)
             {
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
                 Keys key = (Keys)(((int)m.LParam >> 16) & 0xFFFF);                  // The key of the hotkey that was pressed.
                 KeyModifier modifier = (KeyModifier)((int)m.LParam & 0xFFFF);       // The modifier of the hotkey that was pressed.
                 int id = m.WParam.ToInt32();                                        // The id of the hotkey that was pressed.
                 HandleHotkey(id);
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
             }
         }
 
         private void HandleHotkey(int id)
         {
-            if (!HotkeyList.ContainsKey("CaptureWindow") || !HotkeyList.ContainsKey("BrowseFolder"))
-            {
-                writeMessage("hotkey invalid: " + id);
-                return;
-            }
+            //if (!HotkeyList.ContainsKey("CaptureWindow") || !HotkeyList.ContainsKey("BrowseFolder"))
+            //{
+            //    writeMessage("hotkey invalid: " + id);
+            //    return;
+            //}
 
             if (id == HotkeyList["CaptureWindow"].ghk.id)
             {
@@ -199,12 +199,12 @@ namespace ScreenShotTool
         #endregion
 
         #region capture
-        private void writeMessage(string text)
+        private void WriteMessage(string text)
         {
             textBoxLog.Text = text + Environment.NewLine + textBoxLog.Text;
         }
 
-        private void buttonScreenshot_Click(object sender, EventArgs e)
+        private void ButtonScreenshot_Click(object sender, EventArgs e)
         {
             CaptureAction(CaptureMode.Window);
         }
@@ -259,7 +259,7 @@ namespace ScreenShotTool
                 UpdateInfoLabelVisibility();
             }
 
-            if (bitmap != null) bitmap.Dispose();
+            bitmap?.Dispose();
         }
 
         private void UpdateInfoLabelVisibility()
@@ -282,7 +282,7 @@ namespace ScreenShotTool
             {
                 //hotkeyLines.Add(entry.Key + ": " + entry.Value.ToString());
                 string keyName = CamelCaseToSpaces(entry.Key).PadRight(25);
-                labelInfo.Text += $"{keyName} :  {entry.Value.ToString()} \n";
+                labelInfo.Text += $"{keyName} :  {entry.Value} \n";
             }
             labelInfo.Text += "\nChange hotkeys in Options.";
         }
@@ -308,7 +308,7 @@ namespace ScreenShotTool
                 num = 1;
             }
             Counter = num;
-            
+
             if (saveSetting)
             {
                 settings.Counter = Counter;
@@ -323,7 +323,7 @@ namespace ScreenShotTool
 
         private void IncrementCounter()
         {
-            SetCounter (Counter + 1);
+            SetCounter(Counter + 1);
         }
 
         //private void numericUpDownCounter_ValueChanged(object sender, EventArgs e)
@@ -334,7 +334,6 @@ namespace ScreenShotTool
 
         public string ComposeFileName(string text, string overrideTitle = "")
         {
-            string windowTitle = string.Empty;
             string splitTitleString = settings.SplitTitleString;
             int titleMaxLength = settings.TitleMaxLength;
             int splitTitleIndex = settings.SplitTitleIndex;
@@ -356,6 +355,7 @@ namespace ScreenShotTool
             string domain = System.Environment.UserDomainName;
             string hostname = System.Environment.MachineName;
 
+            string windowTitle;
             if (overrideTitle.Length > 0)
             {
                 windowTitle = overrideTitle;
@@ -431,7 +431,7 @@ namespace ScreenShotTool
             }
 
 
-            int width = imageList.ImageSize.Width;
+            //int width = imageList.ImageSize.Width;
 
             Image thumbImg = ResizeImage(bitmap, settings.ThumbnailWidth, settings.ThumbnailHeight, Settings.Default.CropThumbnails);
             imageList.Images.Add(thumbImg);
@@ -461,7 +461,7 @@ namespace ScreenShotTool
             if (crop)
             {
                 //cropped = cropImageSquare(image);
-                cropped = cropImageToAspectRatio(image, Settings.Default.ThumbnailWidth, Settings.Default.ThumbnailHeight);
+                cropped = CropImageToAspectRatio(image, Settings.Default.ThumbnailWidth, Settings.Default.ThumbnailHeight);
                 Debug.WriteLine("Crop to square: " + image.Width + "x" + image.Height + " to" + cropped.Width + "x" + cropped.Height);
             }
             else
@@ -479,18 +479,16 @@ namespace ScreenShotTool
                 graphics.SmoothingMode = SmoothingMode.HighQuality;
                 graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-                using (var wrapMode = new ImageAttributes())
-                {
-                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    graphics.DrawImage(cropped, destRect, 0, 0, cropped.Width, cropped.Height, GraphicsUnit.Pixel, wrapMode);
-                }
+                using var wrapMode = new ImageAttributes();
+                wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                graphics.DrawImage(cropped, destRect, 0, 0, cropped.Width, cropped.Height, GraphicsUnit.Pixel, wrapMode);
             }
 
             Debug.WriteLine("Resize image returns:" + destImage.Width + "x" + destImage.Height);
             return destImage;
         }
 
-        private static Image cropImageToAspectRatio(Image img, int aspectRatioWidth, int aspectRatioHeight)
+        private static Image CropImageToAspectRatio(Image img, int aspectRatioWidth, int aspectRatioHeight)
         {
             int width = img.Width;
             int height = img.Height;
@@ -530,7 +528,8 @@ namespace ScreenShotTool
             return bmpImage.Clone(cropArea, bmpImage.PixelFormat);
         }
 
-        private static Image cropImageSquare(Image img)
+        /*
+        private static Image CropImageSquare(Image img)
         {
             int width = img.Width;
             int height = img.Height;
@@ -543,47 +542,35 @@ namespace ScreenShotTool
             {
                 int overflow = img.Width - img.Height;
                 int overflowLeft = overflow / 2;
-                int overflowRight = overflow - overflowLeft;
+                //int overflowRight = overflow - overflowLeft;
                 cropArea = new Rectangle(overflowLeft, 0, width - overflow, height);
             }
             else
             {
                 int overflow = img.Height - img.Width;
                 int overflowTop = overflow / 2;
-                int overflowBottom = overflow - overflowTop;
+                //int overflowBottom = overflow - overflowTop;
                 cropArea = new Rectangle(0, overflowTop, width, height - overflow);
             }
             Bitmap bmpImage = new Bitmap(img);
             return bmpImage.Clone(cropArea, bmpImage.PixelFormat);
-        }
+        }*/
 
         private void SetImageFormat()
         {
             string DestinationFileExtension = settings.FileExtension;
-            switch (DestinationFileExtension)
+            DestinationFormat = DestinationFileExtension switch
             {
-                case ".jpg":
-                    DestinationFormat = ImageFormat.Jpeg;
-                    break;
-                case ".png":
-                    DestinationFormat = ImageFormat.Png;
-                    break;
-                case ".gif":
-                    DestinationFormat = ImageFormat.Gif;
-                    break;
-                case ".bmp":
-                    DestinationFormat = ImageFormat.Bmp;
-                    break;
-                case ".tiff":
-                    DestinationFormat = ImageFormat.Tiff;
-                    break;
-                default:
-                    DestinationFormat = ImageFormat.Jpeg;
-                    break;
-            }
+                ".jpg" => ImageFormat.Jpeg,
+                ".png" => ImageFormat.Png,
+                ".gif" => ImageFormat.Gif,
+                ".bmp" => ImageFormat.Bmp,
+                ".tiff" => ImageFormat.Tiff,
+                _ => ImageFormat.Jpeg,
+            };
         }
 
-        private string ShortenString(string input, int maxLength)
+        private static string ShortenString(string input, int maxLength)
         {
             return input.Substring(0, Math.Min(maxLength, input.Length)).Trim();
         }
@@ -601,10 +588,7 @@ namespace ScreenShotTool
             }
             if (windowRect.Width > 0 && windowRect.Height > 0)
             {
-                if (bitmap != null)
-                {
-                    bitmap.Dispose();
-                }
+                bitmap?.Dispose();
                 bitmap = CaptureBitmap(windowRect.Left, windowRect.Top, windowRect.Width, windowRect.Height);
                 if (settings.WindowToFile)
                 {
@@ -635,6 +619,7 @@ namespace ScreenShotTool
             imgView.SetImage();
             imgView.CompleteCaptureOnMoureRelease = settings.RegionCompletesOnMouseRelease;
             imgView.SaveToFile = settings.RegionToFile;
+            imgView.SendToEditor = settings.RegionToEditor;
             imgView.SendToClipboard = settings.RegionToClipboard;
             DialogResult result = imgView.ShowDialog();
             if (result == DialogResult.Yes) // Yes means save to file
@@ -645,10 +630,7 @@ namespace ScreenShotTool
                     //save to file or copy to clipboard is handled inside the viewer
                     saved = SaveBitmap(folder, filename, format, bmpResult);
 
-                    if (bitmap != null)
-                    {
-                        bitmap.Dispose();
-                    }
+                    bitmap?.Dispose();
                     bitmap = bmpResult;
                 }
                 else
@@ -664,10 +646,7 @@ namespace ScreenShotTool
         {
             bool saved = false;
             Screen screen = Screen.FromPoint(Cursor.Position);
-            if (bitmap != null)
-            {
-                bitmap.Dispose();
-            }
+            bitmap?.Dispose();
             bitmap = GetScreenImage(screen);
 
             if (settings.ScreenToFile)
@@ -684,10 +663,7 @@ namespace ScreenShotTool
         public bool CaptureAllScreens(string folder, string filename, ImageFormat format)
         {
             bool saved = false;
-            if (bitmap != null)
-            {
-                bitmap.Dispose();
-            }
+            bitmap?.Dispose();
             bitmap = GetAllScreensImage();
 
             if (settings.ScreenToFile)
@@ -751,7 +727,7 @@ namespace ScreenShotTool
                 }
                 catch
                 {
-                    writeMessage("Couldn't find or create folder " + folder);
+                    WriteMessage("Couldn't find or create folder " + folder);
 
                     ShowBalloonToolTip("Capture error", "Couldn't find or create folder." + folder, ToolTipIcon.Warning, BalloonTipType.FolderError);
 
@@ -772,7 +748,7 @@ namespace ScreenShotTool
                         Debug.WriteLine("Saving image with format " + format.ToString() + " to " + folder + "\\" + filename);
                         capture.Save(folder + "\\" + filename, format);
                     }
-                    writeMessage("Saved " + folder + "\\" + filename);
+                    WriteMessage("Saved " + folder + "\\" + filename);
 
                     ShowBalloonToolTip("Capture saved", folder + Environment.NewLine + filename, ToolTipIcon.Info, BalloonTipType.ScreenshotSaved);
 
@@ -781,7 +757,7 @@ namespace ScreenShotTool
                 }
                 catch (Exception ex)
                 {
-                    writeMessage("Could not save file to:\n"
+                    WriteMessage("Could not save file to:\n"
                         + folder + "\\" + filename + "\n"
                         + "Check that you have write permission for this folder\n"
                         + "\n"
@@ -795,7 +771,7 @@ namespace ScreenShotTool
             else
             {
                 //this shouldn't be reachable
-                writeMessage("Folder not found: " + folder);
+                WriteMessage("Folder not found: " + folder);
 
                 ShowBalloonToolTip("Capture error", "Folder not found: " + folder, ToolTipIcon.Warning, BalloonTipType.FolderError);
 
@@ -808,16 +784,14 @@ namespace ScreenShotTool
         public static void SaveJpeg(string path, Bitmap image, long quality = 95L)
         {
             Debug.WriteLine("Saving JPEG with quality " + quality);
-            using (EncoderParameters encoderParameters = new EncoderParameters(1))
-            using (EncoderParameter encoderParameter = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, quality))
-            {
-                ImageCodecInfo codecInfo = ImageCodecInfo.GetImageDecoders().First(codec => codec.FormatID == ImageFormat.Jpeg.Guid);
-                encoderParameters.Param[0] = encoderParameter;
-                image.Save(path, codecInfo, encoderParameters);
-            }
+            using EncoderParameters encoderParameters = new EncoderParameters(1);
+            using EncoderParameter encoderParameter = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, quality);
+            ImageCodecInfo codecInfo = ImageCodecInfo.GetImageDecoders().First(codec => codec.FormatID == ImageFormat.Jpeg.Guid);
+            encoderParameters.Param[0] = encoderParameter;
+            image.Save(path, codecInfo, encoderParameters);
         }
 
-        public Bitmap CaptureBitmap(int x, int y, int width, int height)
+        public static Bitmap CaptureBitmap(int x, int y, int width, int height)
         {
             Bitmap captureBitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb);
             Graphics captureGraphics = Graphics.FromImage(captureBitmap);
@@ -850,7 +824,7 @@ namespace ScreenShotTool
         [DllImport("user32.dll")]
         static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
 
-        private IntPtr GetActiveWindow()
+        private static IntPtr GetActiveWindow()
         {
             IntPtr handle = IntPtr.Zero;
             Debug.WriteLine("ForeGround Window:" + GetForegroundWindow());
@@ -911,7 +885,7 @@ namespace ScreenShotTool
             }
             else
             {
-                writeMessage("Can't open folder " + folder);
+                WriteMessage("Can't open folder " + folder);
             }
 
             return folder;
@@ -940,7 +914,7 @@ namespace ScreenShotTool
             SetForegroundWindow(options.Handle);
         }
 
-        private void listView1_DoubleClick(object sender, EventArgs e)
+        private void ListView1_DoubleClick(object sender, EventArgs e)
         {
             OpenSelectedImageExternal();
         }
@@ -969,23 +943,23 @@ namespace ScreenShotTool
             }
             else
             {
-                writeMessage("Can't open file, it no longer exists: " + file);
+                WriteMessage("Can't open file, it no longer exists: " + file);
             }
         }
 
         #region click events --------------------------------------------------------
-        private void buttonOpenLastFolder_Click(object sender, EventArgs e)
+        private void ButtonOpenLastFolder_Click(object sender, EventArgs e)
         {
             BrowseFolderInExplorer(lastFolder);
         }
 
-        private void buttonOptions_Click(object sender, EventArgs e)
+        private void ButtonOptions_Click(object sender, EventArgs e)
         {
             OpenOptions();
         }
 
 
-        private void listView1_KeyDown(object sender, KeyEventArgs e)
+        private void ListView1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete)
             {
@@ -1017,12 +991,12 @@ namespace ScreenShotTool
                         if (File.Exists(deleteFile))
                         {
                             File.Delete(deleteFile);
-                            writeMessage("Deleted file " + deleteFile);
+                            WriteMessage("Deleted file " + deleteFile);
 
                         }
                         else
                         {
-                            writeMessage("File no longer exists, removing from list: " + deleteFile);
+                            WriteMessage("File no longer exists, removing from list: " + deleteFile);
                         }
                         item.Remove();
                     }
@@ -1036,15 +1010,12 @@ namespace ScreenShotTool
             UpdateInfoLabelVisibility();
         }
 
-        private void buttonClearList_Click(object sender, EventArgs e)
+        private void ButtonClearList_Click(object sender, EventArgs e)
         {
 
             foreach (Image img in imageList.Images)
             {
-                if (img != null)
-                {
-                    img.Dispose();
-                }
+                img?.Dispose();
             }
             imageList.Images.Clear();
             listViewThumbnails.Clear();
@@ -1053,49 +1024,49 @@ namespace ScreenShotTool
 
 
 
-        private void notifyIcon1_DoubleClick(object sender, EventArgs e)
+        private void NotifyIcon1_DoubleClick(object sender, EventArgs e)
         {
             ShowApplication();
         }
 
-        private void buttonHide_Click(object sender, EventArgs e)
+        private void ButtonHide_Click(object sender, EventArgs e)
         {
             Hide();
         }
 
-        private void timerHide_Tick(object sender, EventArgs e)
+        private void TimerHide_Tick(object sender, EventArgs e)
         {
             Hide();
             timerHide.Stop();
         }
 
-        private void openProgramToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OpenProgramToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowApplication();
         }
 
-        private void exitApplicationToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ExitApplicationToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OpenFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileExternal(lastSavedFile);
         }
 
-        private void enableCroppingToolStripMenuItem_Click(object sender, EventArgs e)
+        private void EnableCroppingToolStripMenuItem_Click(object sender, EventArgs e)
         {
             settings.TrimChecked = !settings.TrimChecked;
             settings.Save();
-            updateTrimStatus();
+            UpdateTrimStatus();
         }
 
         #endregion
 
 
 
-        public void updateTrimStatus()
+        public void UpdateTrimStatus()
         {
             string disableCrop = "Disable &Cropping";
             string enableCrop = "Enable &Cropping";
@@ -1115,7 +1086,7 @@ namespace ScreenShotTool
             {
                 if (!options.IsDisposed)
                 {
-                    options.updateTrimCheck();
+                    options.UpdateTrimCheck();
                 }
             }
         }
@@ -1174,7 +1145,7 @@ namespace ScreenShotTool
             HotkeyError
         }
 
-        private void notifyIcon1_BalloonTipClicked(object sender, EventArgs e)
+        private void NotifyIcon1_BalloonTipClicked(object sender, EventArgs e)
         {
             Debug.WriteLine("Balloon clicked, last type: " + lastBallonTip.ToString());
             if (lastBallonTip == BalloonTipType.FolderCreated)
@@ -1196,7 +1167,7 @@ namespace ScreenShotTool
 
         #endregion
 
-        private void label1_Click(object sender, EventArgs e)
+        private void Label1_Click(object sender, EventArgs e)
         {
             showLog = !showLog;
             UpdateLogVisible();
@@ -1228,7 +1199,7 @@ namespace ScreenShotTool
             }
         }
 
-        private void itemOpenImage_Click(object sender, EventArgs e)
+        private void ItemOpenImage_Click(object sender, EventArgs e)
         {
             // open first selected image in external viewer
             if (listViewThumbnails.SelectedItems.Count > 0)
@@ -1237,7 +1208,7 @@ namespace ScreenShotTool
             }
         }
 
-        private void itemRemove_Click(object sender, EventArgs e)
+        private void ItemRemove_Click(object sender, EventArgs e)
         {
             // remove all selected items from list, without deleting the file
             foreach (ListViewItem item in listViewThumbnails.SelectedItems)
@@ -1247,13 +1218,13 @@ namespace ScreenShotTool
             UpdateInfoLabelVisibility();
         }
 
-        private void itemDeleteFile_Click(object sender, EventArgs e)
+        private void ItemDeleteFile_Click(object sender, EventArgs e)
         {
             // delete selected files
             DeleteSelectedFiles();
         }
 
-        private void itemOpenFolder_Click(object sender, EventArgs e)
+        private void ItemOpenFolder_Click(object sender, EventArgs e)
         {
             // open folder of first selected file
             if (listViewThumbnails.SelectedItems.Count > 0)
@@ -1266,7 +1237,7 @@ namespace ScreenShotTool
             }
         }
 
-        private void copyToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CopyToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (listViewThumbnails.SelectedItems.Count > 0)
             {
@@ -1282,17 +1253,17 @@ namespace ScreenShotTool
                     }
                     catch
                     {
-                        writeMessage("Copy to clipboard failed, error while opening file " + file);
+                        WriteMessage("Copy to clipboard failed, error while opening file " + file);
                     }
                 }
                 else
                 {
-                    writeMessage("Copy to clipboard failed, file no longer exists " + file);
+                    WriteMessage("Copy to clipboard failed, file no longer exists " + file);
                 }
             }
         }
 
-        private void listViewThumbnails_MouseDown(object sender, MouseEventArgs e)
+        private void ListViewThumbnails_MouseDown(object sender, MouseEventArgs e)
         {
 
             if (e.Button == MouseButtons.Right)
@@ -1305,32 +1276,32 @@ namespace ScreenShotTool
             }
         }
 
-        private void resetCounterToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ResetCounterToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SetCounter(1);
         }
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void helpofflineCopyToolStripMenuItem_Click(object sender, EventArgs e)
+        private void HelpofflineCopyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenHelp();
         }
 
-        private void helponGithubToolStripMenuItem_Click(object sender, EventArgs e)
+        private void HelponGithubToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenLink("https://github.com/snjo/ScreenShotTool/blob/master/README.md");
         }
 
-        private void websiteToolStripMenuItem_Click(object sender, EventArgs e)
+        private void WebsiteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenLink("https://github.com/snjo/ScreenShotTool/");
         }
 
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenAbout();
         }
@@ -1355,7 +1326,7 @@ namespace ScreenShotTool
             aboutWindow.WindowState = FormWindowState.Normal;
         }
 
-        private void copyFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CopyFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (listViewThumbnails.SelectedItems.Count > 0)
             {
@@ -1373,7 +1344,7 @@ namespace ScreenShotTool
                     }
                     else
                     {
-                        writeMessage("File no longer exists, can't copy: " + file);
+                        WriteMessage("File no longer exists, can't copy: " + file);
                     }
                 }
                 Clipboard.Clear();
@@ -1381,7 +1352,7 @@ namespace ScreenShotTool
             }
         }
 
-        private void editImageFromFile_Click(object sender, EventArgs e)
+        private void EditImageFromFile_Click(object sender, EventArgs e)
         {
             if (listViewThumbnails.SelectedItems.Count > 0)
             {
@@ -1394,13 +1365,13 @@ namespace ScreenShotTool
             }
         }
 
-        private void editImageNoFile_Click(object sender, EventArgs e)
+        private void EditImageNoFile_Click(object sender, EventArgs e)
         {
             ScreenshotEditor imageEditor = new ScreenshotEditor();
             imageEditor.Show();
         }
 
-        private void editImageFromClipboard_Click(object sender, EventArgs e)
+        private void EditImageFromClipboard_Click(object sender, EventArgs e)
         {
             ScreenshotEditor imageEditor = new ScreenshotEditor(true);
             imageEditor.Show();
