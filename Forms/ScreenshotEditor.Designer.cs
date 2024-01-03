@@ -56,26 +56,26 @@
             columnHeaderY = new ColumnHeader();
             columnHeaderColor = new ColumnHeader();
             panelSymbolGeneral = new Panel();
-            textBoxSymbolText = new TextBox();
-            label14 = new Label();
-            numericPropertiesFillAlpha = new NumericUpDown();
             label13 = new Label();
             numericPropertiesLineAlpha = new NumericUpDown();
-            numericPropertiesLineWeight = new NumericUpDown();
-            buttonPropertiesColorFill = new Button();
             buttonPropertiesColorLine = new Button();
             numericHeight = new NumericUpDown();
             numericY = new NumericUpDown();
             numericWidth = new NumericUpDown();
             numericX = new NumericUpDown();
-            label8 = new Label();
-            label7 = new Label();
             label6 = new Label();
             label5 = new Label();
             label4 = new Label();
             label3 = new Label();
             label2 = new Label();
             labelSymbolType = new Label();
+            textBoxSymbolText = new TextBox();
+            label14 = new Label();
+            numericPropertiesFillAlpha = new NumericUpDown();
+            numericPropertiesLineWeight = new NumericUpDown();
+            buttonPropertiesColorFill = new Button();
+            label8 = new Label();
+            label7 = new Label();
             buttonDeleteSymbol = new Button();
             colorDialog1 = new ColorDialog();
             buttonNewColorFill = new Button();
@@ -89,12 +89,12 @@
             numericNewFillAlpha = new NumericUpDown();
             panelSymbolShape = new Panel();
             panelSymbolText = new Panel();
-            comboBoxFontFamily = new ComboBox();
-            numericUpDown1 = new NumericUpDown();
-            label15 = new Label();
-            label16 = new Label();
-            checkBoxFontBold = new CheckBox();
             checkBoxFontItalic = new CheckBox();
+            checkBoxFontBold = new CheckBox();
+            label16 = new Label();
+            label15 = new Label();
+            numericPropertiesFontSize = new NumericUpDown();
+            comboBoxFontFamily = new ComboBox();
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
@@ -102,18 +102,18 @@
             panelImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxOverlay).BeginInit();
             panelSymbolGeneral.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesFillAlpha).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesLineAlpha).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesLineWeight).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericHeight).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericY).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericWidth).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericX).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericPropertiesFillAlpha).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericPropertiesLineWeight).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericNewLineAlpha).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericNewFillAlpha).BeginInit();
             panelSymbolShape.SuspendLayout();
             panelSymbolText.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericPropertiesFontSize).BeginInit();
             SuspendLayout();
             // 
             // menuStrip1
@@ -347,34 +347,6 @@
             panelSymbolGeneral.Size = new Size(148, 130);
             panelSymbolGeneral.TabIndex = 4;
             // 
-            // textBoxSymbolText
-            // 
-            textBoxSymbolText.Enabled = false;
-            textBoxSymbolText.Location = new Point(4, 24);
-            textBoxSymbolText.Name = "textBoxSymbolText";
-            textBoxSymbolText.Size = new Size(135, 23);
-            textBoxSymbolText.TabIndex = 26;
-            textBoxSymbolText.TextChanged += textBoxSymbolText_TextChanged;
-            // 
-            // label14
-            // 
-            label14.AutoSize = true;
-            label14.Location = new Point(4, 57);
-            label14.Name = "label14";
-            label14.Size = new Size(56, 15);
-            label14.TabIndex = 25;
-            label14.Text = "Fill Alpha";
-            // 
-            // numericPropertiesFillAlpha
-            // 
-            numericPropertiesFillAlpha.Location = new Point(95, 53);
-            numericPropertiesFillAlpha.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
-            numericPropertiesFillAlpha.Name = "numericPropertiesFillAlpha";
-            numericPropertiesFillAlpha.Size = new Size(44, 23);
-            numericPropertiesFillAlpha.TabIndex = 24;
-            numericPropertiesFillAlpha.Value = new decimal(new int[] { 255, 0, 0, 0 });
-            numericPropertiesFillAlpha.ValueChanged += Numeric_ValueChanged;
-            // 
             // label13
             // 
             label13.AutoSize = true;
@@ -393,29 +365,6 @@
             numericPropertiesLineAlpha.TabIndex = 22;
             numericPropertiesLineAlpha.Value = new decimal(new int[] { 255, 0, 0, 0 });
             numericPropertiesLineAlpha.ValueChanged += Numeric_ValueChanged;
-            // 
-            // numericPropertiesLineWeight
-            // 
-            numericPropertiesLineWeight.Location = new Point(94, 3);
-            numericPropertiesLineWeight.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
-            numericPropertiesLineWeight.Name = "numericPropertiesLineWeight";
-            numericPropertiesLineWeight.Size = new Size(43, 23);
-            numericPropertiesLineWeight.TabIndex = 15;
-            numericPropertiesLineWeight.Tag = "LineWeight";
-            numericPropertiesLineWeight.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            numericPropertiesLineWeight.ValueChanged += Numeric_ValueChanged;
-            // 
-            // buttonPropertiesColorFill
-            // 
-            buttonPropertiesColorFill.BackColor = Color.FromArgb(0, 192, 0);
-            buttonPropertiesColorFill.FlatStyle = FlatStyle.Flat;
-            buttonPropertiesColorFill.Location = new Point(95, 32);
-            buttonPropertiesColorFill.Name = "buttonPropertiesColorFill";
-            buttonPropertiesColorFill.Size = new Size(43, 19);
-            buttonPropertiesColorFill.TabIndex = 14;
-            buttonPropertiesColorFill.Tag = "FillColor";
-            buttonPropertiesColorFill.UseVisualStyleBackColor = false;
-            buttonPropertiesColorFill.Click += ColorChangeClick;
             // 
             // buttonPropertiesColorLine
             // 
@@ -445,6 +394,7 @@
             // 
             numericY.Location = new Point(94, 24);
             numericY.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            numericY.Minimum = new decimal(new int[] { 100, 0, 0, int.MinValue });
             numericY.Name = "numericY";
             numericY.Size = new Size(43, 23);
             numericY.TabIndex = 11;
@@ -467,29 +417,12 @@
             // 
             numericX.Location = new Point(21, 24);
             numericX.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            numericX.Minimum = new decimal(new int[] { 100, 0, 0, int.MinValue });
             numericX.Name = "numericX";
             numericX.Size = new Size(43, 23);
             numericX.TabIndex = 9;
             numericX.Tag = "X";
             numericX.ValueChanged += Numeric_ValueChanged;
-            // 
-            // label8
-            // 
-            label8.AutoSize = true;
-            label8.Location = new Point(3, 7);
-            label8.Name = "label8";
-            label8.Size = new Size(70, 15);
-            label8.TabIndex = 8;
-            label8.Text = "Line Weigth";
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Location = new Point(3, 34);
-            label7.Name = "label7";
-            label7.Size = new Size(54, 15);
-            label7.TabIndex = 7;
-            label7.Text = "Fill Color";
             // 
             // label6
             // 
@@ -544,6 +477,74 @@
             labelSymbolType.Size = new Size(53, 15);
             labelSymbolType.TabIndex = 1;
             labelSymbolType.Text = "Symbol: ";
+            // 
+            // textBoxSymbolText
+            // 
+            textBoxSymbolText.Location = new Point(4, 24);
+            textBoxSymbolText.Name = "textBoxSymbolText";
+            textBoxSymbolText.Size = new Size(135, 23);
+            textBoxSymbolText.TabIndex = 26;
+            textBoxSymbolText.TextChanged += textBoxSymbolText_TextChanged;
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(4, 57);
+            label14.Name = "label14";
+            label14.Size = new Size(56, 15);
+            label14.TabIndex = 25;
+            label14.Text = "Fill Alpha";
+            // 
+            // numericPropertiesFillAlpha
+            // 
+            numericPropertiesFillAlpha.Location = new Point(95, 53);
+            numericPropertiesFillAlpha.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numericPropertiesFillAlpha.Name = "numericPropertiesFillAlpha";
+            numericPropertiesFillAlpha.Size = new Size(44, 23);
+            numericPropertiesFillAlpha.TabIndex = 24;
+            numericPropertiesFillAlpha.Value = new decimal(new int[] { 255, 0, 0, 0 });
+            numericPropertiesFillAlpha.ValueChanged += Numeric_ValueChanged;
+            // 
+            // numericPropertiesLineWeight
+            // 
+            numericPropertiesLineWeight.Location = new Point(94, 3);
+            numericPropertiesLineWeight.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
+            numericPropertiesLineWeight.Name = "numericPropertiesLineWeight";
+            numericPropertiesLineWeight.Size = new Size(43, 23);
+            numericPropertiesLineWeight.TabIndex = 15;
+            numericPropertiesLineWeight.Tag = "LineWeight";
+            numericPropertiesLineWeight.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            numericPropertiesLineWeight.ValueChanged += Numeric_ValueChanged;
+            // 
+            // buttonPropertiesColorFill
+            // 
+            buttonPropertiesColorFill.BackColor = Color.FromArgb(0, 192, 0);
+            buttonPropertiesColorFill.FlatStyle = FlatStyle.Flat;
+            buttonPropertiesColorFill.Location = new Point(95, 32);
+            buttonPropertiesColorFill.Name = "buttonPropertiesColorFill";
+            buttonPropertiesColorFill.Size = new Size(43, 19);
+            buttonPropertiesColorFill.TabIndex = 14;
+            buttonPropertiesColorFill.Tag = "FillColor";
+            buttonPropertiesColorFill.UseVisualStyleBackColor = false;
+            buttonPropertiesColorFill.Click += ColorChangeClick;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(3, 7);
+            label8.Name = "label8";
+            label8.Size = new Size(70, 15);
+            label8.TabIndex = 8;
+            label8.Text = "Line Weigth";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(3, 34);
+            label7.Name = "label7";
+            label7.Size = new Size(54, 15);
+            label7.TabIndex = 7;
+            label7.Text = "Fill Color";
             // 
             // buttonDeleteSymbol
             // 
@@ -669,56 +670,13 @@
             panelSymbolText.Controls.Add(checkBoxFontBold);
             panelSymbolText.Controls.Add(label16);
             panelSymbolText.Controls.Add(label15);
-            panelSymbolText.Controls.Add(numericUpDown1);
+            panelSymbolText.Controls.Add(numericPropertiesFontSize);
             panelSymbolText.Controls.Add(comboBoxFontFamily);
             panelSymbolText.Controls.Add(textBoxSymbolText);
             panelSymbolText.Location = new Point(801, 521);
             panelSymbolText.Name = "panelSymbolText";
             panelSymbolText.Size = new Size(148, 128);
             panelSymbolText.TabIndex = 28;
-            // 
-            // comboBoxFontFamily
-            // 
-            comboBoxFontFamily.FormattingEnabled = true;
-            comboBoxFontFamily.Location = new Point(3, 77);
-            comboBoxFontFamily.Name = "comboBoxFontFamily";
-            comboBoxFontFamily.Size = new Size(135, 23);
-            comboBoxFontFamily.TabIndex = 27;
-            // 
-            // numericUpDown1
-            // 
-            numericUpDown1.Location = new Point(74, 51);
-            numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new Size(65, 23);
-            numericUpDown1.TabIndex = 28;
-            // 
-            // label15
-            // 
-            label15.AutoSize = true;
-            label15.Location = new Point(4, 53);
-            label15.Name = "label15";
-            label15.Size = new Size(54, 15);
-            label15.TabIndex = 29;
-            label15.Text = "Font Size";
-            // 
-            // label16
-            // 
-            label16.AutoSize = true;
-            label16.Location = new Point(4, 6);
-            label16.Name = "label16";
-            label16.Size = new Size(77, 15);
-            label16.TabIndex = 30;
-            label16.Text = "Text contents";
-            // 
-            // checkBoxFontBold
-            // 
-            checkBoxFontBold.AutoSize = true;
-            checkBoxFontBold.Location = new Point(3, 106);
-            checkBoxFontBold.Name = "checkBoxFontBold";
-            checkBoxFontBold.Size = new Size(50, 19);
-            checkBoxFontBold.TabIndex = 31;
-            checkBoxFontBold.Text = "Bold";
-            checkBoxFontBold.UseVisualStyleBackColor = true;
             // 
             // checkBoxFontItalic
             // 
@@ -729,6 +687,55 @@
             checkBoxFontItalic.TabIndex = 32;
             checkBoxFontItalic.Text = "Italic";
             checkBoxFontItalic.UseVisualStyleBackColor = true;
+            checkBoxFontItalic.CheckedChanged += checkBoxFontItalic_CheckedChanged;
+            // 
+            // checkBoxFontBold
+            // 
+            checkBoxFontBold.AutoSize = true;
+            checkBoxFontBold.Location = new Point(3, 106);
+            checkBoxFontBold.Name = "checkBoxFontBold";
+            checkBoxFontBold.Size = new Size(50, 19);
+            checkBoxFontBold.TabIndex = 31;
+            checkBoxFontBold.Text = "Bold";
+            checkBoxFontBold.UseVisualStyleBackColor = true;
+            checkBoxFontBold.CheckedChanged += checkBoxFontBold_CheckedChanged;
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(4, 6);
+            label16.Name = "label16";
+            label16.Size = new Size(77, 15);
+            label16.TabIndex = 30;
+            label16.Text = "Text contents";
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(4, 53);
+            label15.Name = "label15";
+            label15.Size = new Size(54, 15);
+            label15.TabIndex = 29;
+            label15.Text = "Font Size";
+            // 
+            // numericPropertiesFontSize
+            // 
+            numericPropertiesFontSize.Location = new Point(74, 51);
+            numericPropertiesFontSize.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
+            numericPropertiesFontSize.Name = "numericPropertiesFontSize";
+            numericPropertiesFontSize.Size = new Size(65, 23);
+            numericPropertiesFontSize.TabIndex = 28;
+            numericPropertiesFontSize.Value = new decimal(new int[] { 10, 0, 0, 0 });
+            numericPropertiesFontSize.ValueChanged += numericPropertiesFontSize_ValueChanged;
+            // 
+            // comboBoxFontFamily
+            // 
+            comboBoxFontFamily.FormattingEnabled = true;
+            comboBoxFontFamily.Location = new Point(3, 77);
+            comboBoxFontFamily.Name = "comboBoxFontFamily";
+            comboBoxFontFamily.Size = new Size(135, 23);
+            comboBoxFontFamily.TabIndex = 27;
+            comboBoxFontFamily.TextChanged += comboBoxFontFamily_ValueMemberChanged;
             // 
             // ScreenshotEditor
             // 
@@ -768,20 +775,20 @@
             ((System.ComponentModel.ISupportInitialize)pictureBoxOverlay).EndInit();
             panelSymbolGeneral.ResumeLayout(false);
             panelSymbolGeneral.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesFillAlpha).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesLineAlpha).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesLineWeight).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericHeight).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericY).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericWidth).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericX).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericPropertiesFillAlpha).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericPropertiesLineWeight).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericNewLineAlpha).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericNewFillAlpha).EndInit();
             panelSymbolShape.ResumeLayout(false);
             panelSymbolShape.PerformLayout();
             panelSymbolText.ResumeLayout(false);
             panelSymbolText.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericPropertiesFontSize).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -849,7 +856,7 @@
         private Button button3;
         private Panel panelSymbolShape;
         private Panel panelSymbolText;
-        private NumericUpDown numericUpDown1;
+        private NumericUpDown numericPropertiesFontSize;
         private ComboBox comboBoxFontFamily;
         private CheckBox checkBoxFontItalic;
         private CheckBox checkBoxFontBold;
