@@ -657,11 +657,11 @@ namespace ScreenShotTool
             int textX = Cursor.Position.X + zoomPositionH - screen.Bounds.X;
             int textY = Cursor.Position.Y + zoomPositionV + zoomSize + 3 - screen.Bounds.Y;
             graphic.FillRectangle(brushHelpBG, new Rectangle(textX, textY, zoomSize, 40));
-            graphic.DrawString($"W:{regionRect.Width,4} H:{regionRect.Height,4} Esc: Exit, H: Help\nEnter: Save, C: Clipboard", this.Font, brushText, textX, textY);
+            graphic.DrawString($"W:{regionRect.Width,4} H:{regionRect.Height,4} Esc: Exit, H: Help\nEnter: Save, C: Clipboard, E: Edit", this.Font, brushText, textX, textY);
             if (showHelp)
             {
                 graphic.FillRectangle(brushHelpBG, new Rectangle(10, 10, 250, 200));
-                graphic.DrawString($"Enter: Save\nC: Copy\nEsc: Cancel\nS: Size\nP: Position\nArrows: Move\nCtrl+Arrows: Select adjust side\nShift+Arrows: Fast adjust\nH: Toggle help", this.Font, brushText, 20, 20);
+                graphic.DrawString($"Enter: Save\nC: Copy\n E: Open in Editor\nEsc: Cancel\nS: Size\nP: Position\nArrows: Move\nCtrl+Arrows: Select adjust side\nShift+Arrows: Fast adjust\nH: Toggle help", this.Font, brushText, 20, 20);
             }
         }
 

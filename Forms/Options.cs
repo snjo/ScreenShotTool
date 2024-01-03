@@ -49,6 +49,7 @@ namespace ScreenShotTool
             {
                 checkBoxRegionToFile.Enabled = false;
                 checkBoxRegionToClipboard.Enabled = false;
+                checkBoxRegionToEditor.Enabled = false;
             }
             numericUpDownFramerate.Value = settings.MaxFramerate;
             checkBoxMaskRegion.Checked = settings.MaskRegion;
@@ -270,11 +271,13 @@ namespace ScreenShotTool
             {
                 checkBoxRegionToFile.Enabled = true;
                 checkBoxRegionToClipboard.Enabled = true;
+                checkBoxRegionToEditor.Enabled = true;
             }
             else
             {
                 checkBoxRegionToFile.Enabled = false;
                 checkBoxRegionToClipboard.Enabled = false;
+                checkBoxRegionToEditor.Enabled = false;
             }
         }
 
