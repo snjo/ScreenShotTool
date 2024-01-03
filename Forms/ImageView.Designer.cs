@@ -86,6 +86,7 @@
             StartPosition = FormStartPosition.Manual;
             Text = "ImageView";
             WindowState = FormWindowState.Maximized;
+            FormClosing += ImageView_FormClosing;
             Load += ImageView_Load;
             KeyDown += ImageView_KeyDown;
             ((System.ComponentModel.ISupportInitialize)pictureBoxScreenshot).EndInit();

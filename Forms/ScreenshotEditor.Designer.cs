@@ -54,6 +54,10 @@
             columnHeaderY = new ColumnHeader();
             columnHeaderColor = new ColumnHeader();
             panel1 = new Panel();
+            label14 = new Label();
+            numericPropertiesFillAlpha = new NumericUpDown();
+            label13 = new Label();
+            numericPropertiesLineAlpha = new NumericUpDown();
             numericPropertiesLineWeight = new NumericUpDown();
             buttonPropertiesColorFill = new Button();
             buttonPropertiesColorLine = new Button();
@@ -80,10 +84,7 @@
             label11 = new Label();
             label12 = new Label();
             numericNewFillAlpha = new NumericUpDown();
-            label13 = new Label();
-            numericPropertiesLineAlpha = new NumericUpDown();
-            label14 = new Label();
-            numericPropertiesFillAlpha = new NumericUpDown();
+            itemNewImage = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
@@ -91,6 +92,8 @@
             panelImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxOverlay).BeginInit();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericPropertiesFillAlpha).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericPropertiesLineAlpha).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesLineWeight).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericHeight).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericY).BeginInit();
@@ -98,8 +101,6 @@
             ((System.ComponentModel.ISupportInitialize)numericX).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericNewLineAlpha).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericNewFillAlpha).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesLineAlpha).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesFillAlpha).BeginInit();
             SuspendLayout();
             // 
             // menuStrip1
@@ -113,7 +114,7 @@
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { itemSave, itemLoadFromFile, itemLoadFromClipboard, itemExit });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { itemNewImage, itemSave, itemLoadFromFile, itemLoadFromClipboard, itemExit });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "File";
@@ -121,28 +122,28 @@
             // itemSave
             // 
             itemSave.Name = "itemSave";
-            itemSave.Size = new Size(182, 22);
+            itemSave.Size = new Size(184, 22);
             itemSave.Text = "&Save...";
             itemSave.Click += saveToolStripMenuItem_Click;
             // 
             // itemLoadFromFile
             // 
             itemLoadFromFile.Name = "itemLoadFromFile";
-            itemLoadFromFile.Size = new Size(182, 22);
+            itemLoadFromFile.Size = new Size(184, 22);
             itemLoadFromFile.Text = "&Load";
             itemLoadFromFile.Click += loadToolStripMenuItem_Click;
             // 
             // itemLoadFromClipboard
             // 
             itemLoadFromClipboard.Name = "itemLoadFromClipboard";
-            itemLoadFromClipboard.Size = new Size(182, 22);
-            itemLoadFromClipboard.Text = "Load from clipboard";
+            itemLoadFromClipboard.Size = new Size(184, 22);
+            itemLoadFromClipboard.Text = "Load from &Clipboard";
             itemLoadFromClipboard.Click += itemLoadFromClipboard_Click;
             // 
             // itemExit
             // 
             itemExit.Name = "itemExit";
-            itemExit.Size = new Size(182, 22);
+            itemExit.Size = new Size(184, 22);
             itemExit.Text = "E&xit";
             itemExit.Click += itemExit_Click;
             // 
@@ -321,6 +322,44 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(148, 251);
             panel1.TabIndex = 4;
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(4, 179);
+            label14.Name = "label14";
+            label14.Size = new Size(56, 15);
+            label14.TabIndex = 25;
+            label14.Text = "Fill Alpha";
+            // 
+            // numericPropertiesFillAlpha
+            // 
+            numericPropertiesFillAlpha.Location = new Point(95, 175);
+            numericPropertiesFillAlpha.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numericPropertiesFillAlpha.Name = "numericPropertiesFillAlpha";
+            numericPropertiesFillAlpha.Size = new Size(44, 23);
+            numericPropertiesFillAlpha.TabIndex = 24;
+            numericPropertiesFillAlpha.Value = new decimal(new int[] { 255, 0, 0, 0 });
+            numericPropertiesFillAlpha.ValueChanged += numeric_ValueChanged;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(3, 104);
+            label13.Name = "label13";
+            label13.Size = new Size(63, 15);
+            label13.TabIndex = 23;
+            label13.Text = "Line Alpha";
+            // 
+            // numericPropertiesLineAlpha
+            // 
+            numericPropertiesLineAlpha.Location = new Point(94, 100);
+            numericPropertiesLineAlpha.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numericPropertiesLineAlpha.Name = "numericPropertiesLineAlpha";
+            numericPropertiesLineAlpha.Size = new Size(44, 23);
+            numericPropertiesLineAlpha.TabIndex = 22;
+            numericPropertiesLineAlpha.Value = new decimal(new int[] { 255, 0, 0, 0 });
+            numericPropertiesLineAlpha.ValueChanged += numeric_ValueChanged;
             // 
             // numericPropertiesLineWeight
             // 
@@ -575,43 +614,12 @@
             numericNewFillAlpha.TabIndex = 22;
             numericNewFillAlpha.Value = new decimal(new int[] { 255, 0, 0, 0 });
             // 
-            // label13
+            // itemNewImage
             // 
-            label13.AutoSize = true;
-            label13.Location = new Point(3, 104);
-            label13.Name = "label13";
-            label13.Size = new Size(63, 15);
-            label13.TabIndex = 23;
-            label13.Text = "Line Alpha";
-            // 
-            // numericPropertiesLineAlpha
-            // 
-            numericPropertiesLineAlpha.Location = new Point(94, 100);
-            numericPropertiesLineAlpha.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
-            numericPropertiesLineAlpha.Name = "numericPropertiesLineAlpha";
-            numericPropertiesLineAlpha.Size = new Size(44, 23);
-            numericPropertiesLineAlpha.TabIndex = 22;
-            numericPropertiesLineAlpha.Value = new decimal(new int[] { 255, 0, 0, 0 });
-            numericPropertiesLineAlpha.ValueChanged += numeric_ValueChanged;
-            // 
-            // label14
-            // 
-            label14.AutoSize = true;
-            label14.Location = new Point(4, 179);
-            label14.Name = "label14";
-            label14.Size = new Size(56, 15);
-            label14.TabIndex = 25;
-            label14.Text = "Fill Alpha";
-            // 
-            // numericPropertiesFillAlpha
-            // 
-            numericPropertiesFillAlpha.Location = new Point(95, 175);
-            numericPropertiesFillAlpha.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
-            numericPropertiesFillAlpha.Name = "numericPropertiesFillAlpha";
-            numericPropertiesFillAlpha.Size = new Size(44, 23);
-            numericPropertiesFillAlpha.TabIndex = 24;
-            numericPropertiesFillAlpha.Value = new decimal(new int[] { 255, 0, 0, 0 });
-            numericPropertiesFillAlpha.ValueChanged += numeric_ValueChanged;
+            itemNewImage.Name = "itemNewImage";
+            itemNewImage.Size = new Size(184, 22);
+            itemNewImage.Text = "&New";
+            itemNewImage.Click += itemNewImage_Click;
             // 
             // ScreenshotEditor
             // 
@@ -648,6 +656,8 @@
             ((System.ComponentModel.ISupportInitialize)pictureBoxOverlay).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericPropertiesFillAlpha).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericPropertiesLineAlpha).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesLineWeight).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericHeight).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericY).EndInit();
@@ -655,8 +665,6 @@
             ((System.ComponentModel.ISupportInitialize)numericX).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericNewLineAlpha).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericNewFillAlpha).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesLineAlpha).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesFillAlpha).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -719,5 +727,6 @@
         private NumericUpDown numericPropertiesFillAlpha;
         private Label label13;
         private NumericUpDown numericPropertiesLineAlpha;
+        private ToolStripMenuItem itemNewImage;
     }
 }

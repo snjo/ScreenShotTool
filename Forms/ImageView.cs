@@ -4,6 +4,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+using ScreenShotTool.Forms;
 using ScreenShotTool.Properties;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -36,9 +37,11 @@ namespace ScreenShotTool
         readonly Pen zoomRegionPen;
         public Color lineColor = Color.Green;
         public Color arrowColor = Color.Yellow;
-        public Color maskColor = Color.FromArgb(120, 0, 0 , 0);
+        public Color maskColor = Color.FromArgb(120, 0, 0, 0);
         public Color textColor = Color.LightGreen;
         Rectangle regionRect = new Rectangle();
+
+        bool isClosing = false;
 
         private enum AdjustMode
         {
@@ -75,7 +78,7 @@ namespace ScreenShotTool
             {
                 ImageSource = image;
             }
-            pictureBoxDraw.Image = new Bitmap(1000, 1000);
+            pictureBoxDraw.Image = new Bitmap(10, 10);
         }
 
         private void ImageView_Load(object sender, EventArgs e)
@@ -102,32 +105,44 @@ namespace ScreenShotTool
             if (e.KeyCode == Keys.Escape)
             {
                 Debug.WriteLine("Exiting ImageView");
+                isClosing = true;
                 DisposeAllImages();
                 DialogResult = DialogResult.Cancel;
             }
-            if (e.KeyCode == Keys.Return)
+            else if (e.KeyCode == Keys.Return)
             {
                 DisposeSourceImage();
                 DialogResult = DialogResult.Yes;
             }
-            if (e.KeyCode == Keys.C)
+            else if (e.KeyCode == Keys.C)
             {
                 if (ImageResult != null)
                 {
                     Clipboard.SetImage(ImageResult);
+                    //DisposeSourceImage();
+                    isClosing = true;
+                    DisposeAllImages();
+                    DialogResult = DialogResult.No;
                 }
-                DisposeAllImages();
-                DialogResult = DialogResult.No;
             }
-            if (e.KeyCode == Keys.S)
+            else if (e.KeyCode == Keys.E)
+            {
+                if (OpenImageInEditor())
+                {
+                    isClosing = true;
+                    DisposeSourceImage();
+                    DialogResult = DialogResult.No;
+                }
+            }
+            else if (e.KeyCode == Keys.S)
             {
                 adjustMode = AdjustMode.Size;
             }
-            if (e.KeyCode == Keys.P)
+            else if (e.KeyCode == Keys.P)
             {
                 adjustMode = AdjustMode.Position;
             }
-            if (e.KeyCode == Keys.H)
+            else if (e.KeyCode == Keys.H)
             {
                 showHelp = !showHelp;
             }
@@ -153,7 +168,7 @@ namespace ScreenShotTool
                     AdjustRegion(-1, 0);
                 }
             }
-            if (e.KeyCode == Keys.Right)
+            else if (e.KeyCode == Keys.Right)
             {
                 if (e.Modifiers == Keys.Control)
                 {
@@ -165,6 +180,7 @@ namespace ScreenShotTool
                     AdjustRegion(1, 0);
                 }
             }
+
             if (e.KeyCode == Keys.Up)
             {
                 if (e.Modifiers == Keys.Control)
@@ -177,7 +193,7 @@ namespace ScreenShotTool
                     AdjustRegion(0, -1);
                 }
             }
-            if (e.KeyCode == Keys.Down)
+            else if (e.KeyCode == Keys.Down)
             {
                 if (e.Modifiers == Keys.Control)
                 {
@@ -191,6 +207,17 @@ namespace ScreenShotTool
             }
 
             updateOverlay();
+        }
+
+        private bool OpenImageInEditor()
+        {
+            if (ImageResult != null)
+            {
+                ScreenshotEditor imageEditor = new ScreenshotEditor(ImageResult);
+                imageEditor.Show();
+                return true;
+            }
+            return false;
         }
 
         #region Adjust Region bounds -------------------
@@ -250,10 +277,14 @@ namespace ScreenShotTool
         int mouseStartX = 0;
         int mouseStartY = 0;
 
+        Bitmap? screenSizedBitmap;
+
         private void pictureBoxDraw_MouseDown(object sender, MouseEventArgs e)
         {
             regionRect = new Rectangle();
-            pictureBoxDraw.Image = new Bitmap(this.Width, this.Height);
+            DisposeAndNull(screenSizedBitmap);
+            screenSizedBitmap = new Bitmap(this.Width, this.Height);
+            pictureBoxDraw.Image = screenSizedBitmap;
             mouseStartX = Cursor.Position.X;
             mouseStartY = Cursor.Position.Y;
             mouseDrag = true;
@@ -316,14 +347,17 @@ namespace ScreenShotTool
         int skippedFrames = 0; // used for checking how many calls to updateOverlay happened since last draw update.
         DateTime LastFrame = DateTime.Now;
 
+        Image? tempImage;
         private void updateOverlay()
         {
             float MilliSecondsPerFrame = (1f / frameRate) * 1000;
             TimeSpan ts = DateTime.Now - LastFrame;
             if (ts.Milliseconds >= MilliSecondsPerFrame)
             {
-                pictureBoxDraw.Image =
-                    DrawOverlay(pictureBoxDraw.Image, true, true);
+                DisposeAndNull(tempImage);
+                //tempImage = DrawOverlay(pictureBoxDraw.Image, true, true);
+                tempImage = DrawOverlay(true, true);
+                pictureBoxDraw.Image = tempImage;
                 LastFrame = DateTime.Now;
                 skippedFrames = 0;
             }
@@ -333,15 +367,37 @@ namespace ScreenShotTool
             }
         }
 
-
-
-        private Image DrawOverlay(Image outputImage, bool drawSquare, bool drawText, bool drawZoom = true)
+        private void DisposeAndNull(Image? image)
         {
-            Graphics graphic;
-            outputImage = new Bitmap(this.Width, this.Height);
-            graphic = Graphics.FromImage(outputImage);
-            graphic.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            graphic.TextRenderingHint = TextRenderingHint.AntiAliasGridFit; // fixes ugly aliasing on text
+            if (image != null)
+            {
+                image.Dispose();
+                image = null;
+            }
+        }
+
+        private void DisposeAndNull(Graphics? graphic)
+        {
+            if (graphic != null)
+            {
+                graphic.Dispose();
+                graphic = null;
+            }
+        }
+
+        Graphics? drawGraphic;
+        Bitmap? DrawOutputBmp;
+        //private Image DrawOverlay(Image outputImage, bool drawSquare, bool drawText, bool drawZoom = true)
+        private Image DrawOverlay(bool drawSquare, bool drawText, bool drawZoom = true)
+        {
+            //outputImage.Dispose();
+            DisposeAndNull(DrawOutputBmp);
+            DrawOutputBmp = new Bitmap(this.Width, this.Height);
+
+            DisposeAndNull(this.drawGraphic);
+            drawGraphic = Graphics.FromImage(DrawOutputBmp);
+            drawGraphic.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            drawGraphic.TextRenderingHint = TextRenderingHint.AntiAliasGridFit; // fixes ugly aliasing on text
 
             int rectX = mouseStartX - screen.Bounds.X;
             int rectY = mouseStartY - screen.Bounds.Y;
@@ -365,33 +421,33 @@ namespace ScreenShotTool
 
             if (drawSquare)
             {
-                DrawSelectionBox(graphic, linePen);
+                DrawSelectionBox(drawGraphic, linePen);
                 if (Settings.Default.MaskRegion && regionRect.Width > 0 && regionRect.Height > 0)
                 {
-                    MaskRectangle(graphic, new Rectangle(0, 0, screen.Bounds.Width, screen.Bounds.Height), regionRect, brushFill);
+                    MaskRectangle(drawGraphic, new Rectangle(0, 0, screen.Bounds.Width, screen.Bounds.Height), regionRect, brushFill);
                 }
             }
 
             if (ShowAdjustmentArrows)
             {
-                DrawAdjustmentArrows(graphic);
+                DrawAdjustmentArrows(drawGraphic);
             }
 
             if (drawZoom)
             {
-                DrawZoomView(graphic, pictureBoxScreenshot.Image);
+                DrawZoomView(drawGraphic, pictureBoxScreenshot.Image);
             }
 
             if (drawText)
             {
-                DrawInfoText(graphic);
+                DrawInfoText(drawGraphic);
             }
 
             if (rectWidth > 0 && rectHeight > 0)
             {
                 //squareCreated = true;
             }
-            return outputImage;
+            return DrawOutputBmp;
         }
 
         int zoomPositionH = 30; // move the zoom box around the cursor to avoid the edges of the screen
@@ -405,145 +461,152 @@ namespace ScreenShotTool
         {
             //https://www.codingdefined.com/2015/04/solved-bitmapclone-out-of-memory.html
             Bitmap bmp = new Bitmap(cropArea.Width, cropArea.Height);
-            
+
             using (Graphics gph = Graphics.FromImage(bmp))
             {
-                gph.FillRectangle(blackBrush, new Rectangle(0,0,100,100));
+                gph.FillRectangle(blackBrush, new Rectangle(0, 0, 100, 100));
                 gph.DrawImage(img, new Rectangle(0, 0, bmp.Width, bmp.Height), cropArea, GraphicsUnit.Pixel);
             }
             return bmp;
         }
 
+        Bitmap? screenshotBmp;
         private void DrawZoomView(Graphics graphic, Image screenshotInput)
         {
+            
+            if (isClosing) { return; }
             try
             {
-                Bitmap screenshot = new Bitmap(screenshotInput);
-                zoomSize = (int)(zoomRadius * zoomLevel);
-                float cursorX = Cursor.Position.X - screen.Bounds.X;
-                float cursorY = Cursor.Position.Y - screen.Bounds.Y;
-                
-                Rectangle zoomRect = new Rectangle((int)cursorX - zoomRadius, (int)cursorY - zoomRadius, zoomRadius * 2, zoomRadius * 2);
-
-                Bitmap zoomImage = cropImage(screenshot, zoomRect);
-
-                //move zoom viewer around the cursor
-                if (Cursor.Position.X + zoomSize + zoomPositionH > screen.Bounds.Right)
-                {
-                    zoomPositionH = -zoomSize - 30;
-                }
-                if (Cursor.Position.Y + zoomSize + zoomPositionV > screen.Bounds.Bottom)
-                {
-                    zoomPositionV = -zoomSize - 30;
-                }
-                if (Cursor.Position.X - zoomSize < screen.Bounds.Left)
-                {
-                    zoomPositionH = 30;
-                }
-                if (Cursor.Position.Y - zoomSize  < screen.Bounds.Top)
-                {
-                    zoomPositionV = 70;
-                }
-
-                Rectangle zoomBorder = new Rectangle(
-                    Cursor.Position.X - screen.Bounds.X + zoomPositionH,
-                    Cursor.Position.Y - screen.Bounds.Y + zoomPositionV,
-                    zoomSize,
-                    zoomSize
-                );
-
-
-                graphic.DrawImage(zoomImage, zoomBorder.X, zoomBorder.Y, zoomBorder.Width, zoomBorder.Height);
-
-                graphic.DrawRectangle(linePen, zoomBorder);
-
-                graphic.DrawLine(linePen,
-                    zoomBorder.X + (zoomBorder.Width / 2) - (zoomLevel / 4),
-                    zoomBorder.Y,
-                    zoomBorder.X + (zoomBorder.Width / 2) - (zoomLevel / 4),
-                    zoomBorder.Y + zoomBorder.Height);
-                graphic.DrawLine(linePen,
-                    zoomBorder.X,
-                    zoomBorder.Y + (zoomBorder.Height / 2) - (zoomLevel / 4),
-                    zoomBorder.X + zoomBorder.Width,
-                    zoomBorder.Y + (zoomBorder.Height / 2) - (zoomLevel / 4));
-
-                Rectangle testDisplayRect = new Rectangle(
-                    (int)(-(cursorX * 4f)), 
-                    (int)(-(cursorY * 4f)),
-                    regionRect.Width,
-                    regionRect.Height
-                );
-
-                testDisplayRect.X += (int)(regionRect.X * 5f) + zoomPositionH;
-                testDisplayRect.Y += (int)(regionRect.Y * 5f) + zoomPositionV;
-
-                Rectangle ActiveRegionRect = new Rectangle(
-                    testDisplayRect.X + (zoomBorder.Height / 2) - 3,
-                    testDisplayRect.Y + (zoomBorder.Width / 2) - 3,
-                    testDisplayRect.Width * 5,
-                    testDisplayRect.Height * 5
-                );
-
-                // crop region marker rectangle if it's outside the zoom rectangle
-                bool drawActiveRegion = true;
-
-                int leftCorrection = ActiveRegionRect.Left - zoomBorder.Left;
-                if (ActiveRegionRect.Right < zoomBorder.Left)
-                {
-                    drawActiveRegion = false;
-                }
-                else if (leftCorrection < 0)
-                {
-                    ActiveRegionRect.X = zoomBorder.X;
-                    ActiveRegionRect.Width += leftCorrection;
-                }
-
-                int rightCorrection = ActiveRegionRect.Right - zoomBorder.Right;
-                if (ActiveRegionRect.Left > zoomBorder.Right)
-                {
-                    drawActiveRegion = false;
-                }
-                else if (ActiveRegionRect.Right > zoomBorder.Right)
-                {
-                    ActiveRegionRect.Width -= rightCorrection;
-                }
-
-                int topCorrection = ActiveRegionRect.Top - zoomBorder.Top;
-                if (ActiveRegionRect.Top > zoomBorder.Bottom)
-                {
-                    drawActiveRegion = false;
-                }
-                else if (topCorrection < 0)
-                {
-                    ActiveRegionRect.Y = zoomBorder.Y;
-                    ActiveRegionRect.Height += topCorrection;
-                }
-
-                int bottomCorrection = ActiveRegionRect.Bottom - zoomBorder.Bottom;
-                if (ActiveRegionRect.Top > zoomBorder.Bottom)
-                {
-                    drawActiveRegion = false;
-                }
-                else if (ActiveRegionRect.Bottom > zoomBorder.Bottom)
-                {
-                    ActiveRegionRect.Height -= bottomCorrection;
-                }
-
-                if (drawActiveRegion)
-                {
-                    graphic.DrawRectangle(zoomRegionPen, ActiveRegionRect);
-                }
-
-                MaskRectangle(graphic, zoomBorder, ActiveRegionRect, brushFill);
-
-                screenshot.Dispose();
-                zoomImage.Dispose();
+                DisposeAndNull(screenshotBmp);
+                screenshotBmp = new Bitmap(screenshotInput);
             }
-            catch
+            catch (Exception ex)
             {
                 Debug.WriteLine("Error updating Zoom view. Possibly when Disposing and closing form.");
             }
+
+            if (screenshotBmp == null ) { return; }
+
+            zoomSize = (int)(zoomRadius * zoomLevel);
+            float cursorX = Cursor.Position.X - screen.Bounds.X;
+            float cursorY = Cursor.Position.Y - screen.Bounds.Y;
+
+            Rectangle zoomRect = new Rectangle((int)cursorX - zoomRadius, (int)cursorY - zoomRadius, zoomRadius * 2, zoomRadius * 2);
+
+            Bitmap zoomImage = cropImage(screenshotBmp, zoomRect);
+
+            //move zoom viewer around the cursor
+            if (Cursor.Position.X + zoomSize + zoomPositionH > screen.Bounds.Right)
+            {
+                zoomPositionH = -zoomSize - 30;
+            }
+            if (Cursor.Position.Y + zoomSize + zoomPositionV > screen.Bounds.Bottom)
+            {
+                zoomPositionV = -zoomSize - 30;
+            }
+            if (Cursor.Position.X - zoomSize < screen.Bounds.Left)
+            {
+                zoomPositionH = 30;
+            }
+            if (Cursor.Position.Y - zoomSize < screen.Bounds.Top)
+            {
+                zoomPositionV = 70;
+            }
+
+            Rectangle zoomBorder = new Rectangle(
+                Cursor.Position.X - screen.Bounds.X + zoomPositionH,
+                Cursor.Position.Y - screen.Bounds.Y + zoomPositionV,
+                zoomSize,
+                zoomSize
+            );
+
+
+            graphic.DrawImage(zoomImage, zoomBorder.X, zoomBorder.Y, zoomBorder.Width, zoomBorder.Height);
+
+            graphic.DrawRectangle(linePen, zoomBorder);
+
+            graphic.DrawLine(linePen,
+                zoomBorder.X + (zoomBorder.Width / 2) - (zoomLevel / 4),
+                zoomBorder.Y,
+                zoomBorder.X + (zoomBorder.Width / 2) - (zoomLevel / 4),
+                zoomBorder.Y + zoomBorder.Height);
+            graphic.DrawLine(linePen,
+                zoomBorder.X,
+                zoomBorder.Y + (zoomBorder.Height / 2) - (zoomLevel / 4),
+                zoomBorder.X + zoomBorder.Width,
+                zoomBorder.Y + (zoomBorder.Height / 2) - (zoomLevel / 4));
+
+            Rectangle testDisplayRect = new Rectangle(
+                (int)(-(cursorX * 4f)),
+                (int)(-(cursorY * 4f)),
+                regionRect.Width,
+                regionRect.Height
+            );
+
+            testDisplayRect.X += (int)(regionRect.X * 5f) + zoomPositionH;
+            testDisplayRect.Y += (int)(regionRect.Y * 5f) + zoomPositionV;
+
+            Rectangle ActiveRegionRect = new Rectangle(
+                testDisplayRect.X + (zoomBorder.Height / 2) - 3,
+                testDisplayRect.Y + (zoomBorder.Width / 2) - 3,
+                testDisplayRect.Width * 5,
+                testDisplayRect.Height * 5
+            );
+
+            // crop region marker rectangle if it's outside the zoom rectangle
+            bool drawActiveRegion = true;
+
+            int leftCorrection = ActiveRegionRect.Left - zoomBorder.Left;
+            if (ActiveRegionRect.Right < zoomBorder.Left)
+            {
+                drawActiveRegion = false;
+            }
+            else if (leftCorrection < 0)
+            {
+                ActiveRegionRect.X = zoomBorder.X;
+                ActiveRegionRect.Width += leftCorrection;
+            }
+
+            int rightCorrection = ActiveRegionRect.Right - zoomBorder.Right;
+            if (ActiveRegionRect.Left > zoomBorder.Right)
+            {
+                drawActiveRegion = false;
+            }
+            else if (ActiveRegionRect.Right > zoomBorder.Right)
+            {
+                ActiveRegionRect.Width -= rightCorrection;
+            }
+
+            int topCorrection = ActiveRegionRect.Top - zoomBorder.Top;
+            if (ActiveRegionRect.Top > zoomBorder.Bottom)
+            {
+                drawActiveRegion = false;
+            }
+            else if (topCorrection < 0)
+            {
+                ActiveRegionRect.Y = zoomBorder.Y;
+                ActiveRegionRect.Height += topCorrection;
+            }
+
+            int bottomCorrection = ActiveRegionRect.Bottom - zoomBorder.Bottom;
+            if (ActiveRegionRect.Top > zoomBorder.Bottom)
+            {
+                drawActiveRegion = false;
+            }
+            else if (ActiveRegionRect.Bottom > zoomBorder.Bottom)
+            {
+                ActiveRegionRect.Height -= bottomCorrection;
+            }
+
+            if (drawActiveRegion)
+            {
+                graphic.DrawRectangle(zoomRegionPen, ActiveRegionRect);
+            }
+
+            MaskRectangle(graphic, zoomBorder, ActiveRegionRect, brushFill);
+
+            screenshotBmp.Dispose();
+            zoomImage.Dispose();
         }
 
         private void MaskRectangle(Graphics graphic, Rectangle ContainerRegion, Rectangle ActiveRegion, Brush maskingBrush)
@@ -632,5 +695,10 @@ namespace ScreenShotTool
         }
 
         #endregion
+
+        private void ImageView_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            isClosing = true;
+        }
     }
 }

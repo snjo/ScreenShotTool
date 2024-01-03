@@ -1402,7 +1402,7 @@ namespace ScreenShotTool
 
         private void editImageFromClipboard_Click(object sender, EventArgs e)
         {
-            ScreenshotEditor imageEditor = new ScreenshotEditor(null, true);
+            ScreenshotEditor imageEditor = new ScreenshotEditor(true);
             imageEditor.Show();
         }
     }

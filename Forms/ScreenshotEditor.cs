@@ -18,29 +18,69 @@ namespace ScreenShotTool.Forms
 #pragma warning disable CA1416 // Validate platform compatibility
     public partial class ScreenshotEditor : Form
     {
+        #region Constructor ---------------------------------------------------------------------------------
         Image? originalImage;
         Image? overlayImage;
         Graphics? overlayGraphics;
-        //Pen linePen = new Pen(new SolidBrush(Color.Green), 2);
-        //Pen arrowPen = new Pen(new SolidBrush(Color.Green), 2);
-        //Brush lineBrush = new SolidBrush(Color.Black);
-        //Brush fillBrush = new SolidBrush(Color.Gray);
         int arrowWeight = 5;
         int lineWeight = 2;
         List<GraphicSymbol> symbols = new List<GraphicSymbol>();
 
-        public ScreenshotEditor(string? file = null, bool fromClipboard = false)
+        public ScreenshotEditor()
         {
             InitializeComponent();
             pictureBoxOverlay.Parent = pictureBoxOriginal;
-            if (file != null)
-            {
-                LoadImageFromFile(file);
-            }
-            else if (fromClipboard)
+
+            CreateNewImage(640, 480, Color.White);
+        }
+
+        public ScreenshotEditor(string file)
+        {
+            InitializeComponent();
+            pictureBoxOverlay.Parent = pictureBoxOriginal;
+
+            LoadImageFromFile(file);
+            
+        }
+
+        public ScreenshotEditor(bool fromClipboard)
+        {
+            InitializeComponent();
+            pictureBoxOverlay.Parent = pictureBoxOriginal;
+
+            if (fromClipboard)
             {
                 LoadImageFromClipboard();
             }
+        }
+
+        public ScreenshotEditor(Image loadImage)
+        {
+            InitializeComponent();
+            pictureBoxOverlay.Parent = pictureBoxOriginal;
+            LoadImageFromImage(loadImage);
+        }
+
+        #endregion
+
+        #region Load and Save -------------------------------------------------------------------------------
+
+        private void SetOriginalImage()
+        {
+            // used at the end of each Load/Create image
+            pictureBoxOriginal.Image = originalImage;
+            DisposeAndNull(overlayGraphics);
+            DisposeAndNull(overlayImage);
+            symbols.Clear();
+        }
+
+        private void CreateNewImage(int Width, int Height, Color color)
+        {
+            DisposeAndNull(originalImage);
+            originalImage = new Bitmap(Width, Height);
+            Graphics g = Graphics.FromImage(originalImage);
+            g.FillRectangle(new SolidBrush(color), 0, 0, Width, Height);
+            SetOriginalImage();
         }
 
         private void LoadImageFromClipboard()
@@ -48,16 +88,21 @@ namespace ScreenShotTool.Forms
             try
             {
                 originalImage = Clipboard.GetImage();
-                pictureBoxOriginal.Image = originalImage;
             }
             catch
             {
                 Debug.WriteLine("Could not load from clipboard");
                 return;
             }
-            DisposeAndNull(overlayGraphics);
-            DisposeAndNull(overlayImage);
-            symbols.Clear();
+            DisposeAndNull(pictureBoxOriginal.Image);
+            SetOriginalImage();
+        }
+
+        private void LoadImageFromImage(Image image)
+        {
+            DisposeAndNull(originalImage);
+            originalImage = image;
+            SetOriginalImage();
         }
 
         public void LoadImageFromFile(string filename)
@@ -76,10 +121,8 @@ namespace ScreenShotTool.Forms
                     Debug.WriteLine("Could not load file");
 
                 }
-                pictureBoxOriginal.Image = originalImage;
-                DisposeAndNull(overlayGraphics);
-                DisposeAndNull(overlayImage);
-                symbols.Clear();
+                DisposeAndNull(pictureBoxOriginal.Image);
+                SetOriginalImage();
             }
         }
 
@@ -95,18 +138,14 @@ namespace ScreenShotTool.Forms
             }
         }
 
-        public void CopyToClipboard()
+        private void pictureBoxOriginal_LoadCompleted(object sender, EventArgs e)
         {
-            if (originalImage != null)
-            {
-                Bitmap outImage = new Bitmap(originalImage);
-                Graphics saveGraphic = Graphics.FromImage(outImage);
-                DrawElements(saveGraphic);
-                Clipboard.SetImage(outImage);
-                saveGraphic.Dispose();
-            }
+            CreateOverlay();
         }
 
+        #endregion
+
+        #region Create and Update overlay -------------------------------------------------------------------
         private void CreateOverlay()
         {
             if (originalImage != null)
@@ -134,8 +173,6 @@ namespace ScreenShotTool.Forms
             else
             {
                 //Debug.WriteLine("Create overlay failed, original image is null");
-                //DisposeAndNull(overlayImage);
-                //disposeAndNull(overlayGraphics);
             }
         }
 
@@ -150,11 +187,6 @@ namespace ScreenShotTool.Forms
                 Image? image = DrawOverlay(pictureBoxOverlay.Image, temporarySymbol);
                 pictureBoxOverlay.Image.Dispose();
                 pictureBoxOverlay.Image = image;
-                //DisposeAndNull(image);
-            }
-            else
-            {
-                //Debug.WriteLine($"Error, overlay exists: image {overlayImage != null} / graphics {overlayGraphics != null}");
             }
         }
 
@@ -198,6 +230,14 @@ namespace ScreenShotTool.Forms
                 graphics = null;
             }
         }
+        #endregion
+
+        #region Menu items ----------------------------------------------------------------------------------
+
+        private void itemExit_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -219,16 +259,6 @@ namespace ScreenShotTool.Forms
             }
         }
 
-        //Brush lineBrush = new SolidBrush(Color.Green);
-        //List<Rectangle> drawRectangles = new List<Rectangle>();
-
-
-
-        private void pictureBoxOriginal_LoadCompleted(object sender, EventArgs e)
-        {
-            CreateOverlay();
-        }
-
         private void deleteOverlayElementsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach (GraphicSymbol symbol in symbols)
@@ -244,17 +274,24 @@ namespace ScreenShotTool.Forms
             CopyToClipboard();
         }
 
-        private void addNewSymbolToList(GraphicSymbol symbol)
+        private void itemLoadFromClipboard_Click(object sender, EventArgs e)
         {
-            if (symbol != null)
-            {
-                symbols.Add(symbol);
-                ListViewItem newItem = listViewSymbols.Items.Add(symbol.Name);
-                newItem.Text = symbol.Name;
-                newItem.Tag = symbol;
-                listViewSymbols.Update();
-            }
+            LoadImageFromClipboard();
         }
+
+        private void pasteIntoThisImage_Click(object sender, EventArgs e)
+        {
+            PasteIntoImage();
+        }
+
+        private void itemPasteScaled_Click(object sender, EventArgs e)
+        {
+            PasteIntoImageScaled();
+        }
+
+        #endregion
+
+        #region Symbols -------------------------------------------------------------------------------------
 
         public enum SymbolType
         {
@@ -267,7 +304,72 @@ namespace ScreenShotTool.Forms
             Image,
             ImageScaled
         }
+
+
         private SymbolType newSymbolType = SymbolType.Rectangle;
+
+        private void addNewSymbolToList(GraphicSymbol symbol)
+        {
+            if (symbol != null)
+            {
+                symbols.Add(symbol);
+                ListViewItem newItem = listViewSymbols.Items.Add(symbol.Name);
+                newItem.Text = symbol.Name;
+                newItem.Tag = symbol;
+                listViewSymbols.Update();
+            }
+        }
+
+        private GraphicSymbol? GetSymbol(object sender, MouseEventArgs e)
+        {
+            int dragEndX = e.X;
+            int dragEndY = e.Y;
+            int lineWeight = (int)numericNewLineWeight.Value;
+            int lineAlpha = (int)numericNewLineAlpha.Value;
+            int fillAlpha = (int)numericNewFillAlpha.Value;
+
+            if (dragStarted)
+            {
+                int dragLeft = Math.Min(dragStartX, dragEndX);
+                int dragRight = Math.Max(dragStartX, dragEndX);
+                int dragTop = Math.Min(dragStartY, dragEndY);
+                int dragBottom = Math.Max(dragStartY, dragEndY);
+                int dragWidth = dragRight - dragLeft;
+                int dragHeight = dragBottom - dragTop;
+
+                dragRect = new Rectangle(dragLeft, dragTop, dragWidth, dragHeight);
+
+
+                Color lineColor = buttonNewColorLine.BackColor;
+                Color fillColor = buttonNewColorFill.BackColor;
+
+                switch (newSymbolType)
+                {
+                    case SymbolType.Rectangle:
+                        return new GsRectangle(lineColor, fillColor, dragRect.X, dragRect.Y, dragRect.Width, dragRect.Height, lineWeight, lineAlpha, fillAlpha);
+                    case SymbolType.Circle:
+                        return new GsCircle(lineColor, fillColor, dragRect.X, dragRect.Y, dragRect.Width, dragRect.Height, lineWeight, lineAlpha, fillAlpha);
+                    case SymbolType.Line:
+                        return new GsLine(lineColor, fillColor, dragStartX, dragStartY, dragEndX, dragEndY, lineWeight, lineAlpha);
+                    case SymbolType.Arrow:
+                        return new GsArrow(lineColor, fillColor, dragStartX, dragStartY, dragEndX, dragEndY, lineWeight, lineAlpha);
+                    case SymbolType.Image:
+                        return new GsImage(lineColor, fillColor, dragStartX, dragStartY, dragEndX, dragEndY);
+                    case SymbolType.ImageScaled:
+                        return new GsImageScaled(lineColor, fillColor, dragLeft, dragTop, dragWidth, dragHeight);
+                    default:
+                        return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        #endregion
+
+        #region Symbol toolbar buttons ----------------------------------------------------------------------
 
         private void buttonRectangle_Click(object sender, EventArgs e)
         {
@@ -296,6 +398,12 @@ namespace ScreenShotTool.Forms
             numericNewLineWeight.Value = arrowWeight;
             UpdateOverlay();
         }
+
+
+
+        #endregion
+
+        #region Mouse input ---------------------------------------------------------------------------------
 
         bool dragStarted = false;
         int dragStartX = 0;
@@ -334,61 +442,6 @@ namespace ScreenShotTool.Forms
             }
         }
 
-        private GraphicSymbol? GetSymbol(object sender, MouseEventArgs e)
-        {
-            int dragEndX = e.X;
-            int dragEndY = e.Y;
-            int lineWeight = (int)numericNewLineWeight.Value;
-            int lineAlpha = (int)numericNewLineAlpha.Value;
-            int fillAlpha = (int)numericNewFillAlpha.Value;
-
-            //Debug.WriteLine($"Drag positions: sX {dragStartX} sY {dragStartY} eX {dragEndX} eY {dragEndY}");
-
-            if (dragStarted)
-            {
-                int dragLeft = Math.Min(dragStartX, dragEndX);
-                int dragRight = Math.Max(dragStartX, dragEndX);
-                int dragTop = Math.Min(dragStartY, dragEndY);
-                int dragBottom = Math.Max(dragStartY, dragEndY);
-                int dragWidth = dragRight - dragLeft;
-                int dragHeight = dragBottom - dragTop;
-
-                dragRect = new Rectangle(dragLeft, dragTop, dragWidth, dragHeight);
-
-                //Debug.WriteLine("Drag rectangle: " + dragRect.ToString());
-                //lineBrush = new SolidBrush(Color.Red);
-
-                Color lineColor = buttonNewColorLine.BackColor;
-                Color fillColor = buttonNewColorFill.BackColor;
-
-                switch (newSymbolType)
-                {
-                    case SymbolType.Rectangle:
-                        return new GsRectangle(lineColor, fillColor, dragRect.X, dragRect.Y, dragRect.Width, dragRect.Height, lineWeight, lineAlpha, fillAlpha);
-                    case SymbolType.Circle:
-                        return new GsCircle(lineColor, fillColor, dragRect.X, dragRect.Y, dragRect.Width, dragRect.Height, lineWeight, lineAlpha, fillAlpha);
-                    case SymbolType.Line:
-                        return new GsLine(lineColor, fillColor, dragStartX, dragStartY, dragEndX, dragEndY, lineWeight, lineAlpha);
-                    case SymbolType.Arrow:
-                        return new GsArrow(lineColor, fillColor, dragStartX, dragStartY, dragEndX, dragEndY, lineWeight, lineAlpha);
-                    case SymbolType.Image:
-                        return new GsImage(lineColor, fillColor, dragStartX, dragStartY, dragEndX, dragEndY);
-                    case SymbolType.ImageScaled:
-                        return new GsImageScaled(lineColor, fillColor, dragLeft, dragTop, dragWidth, dragHeight);
-                    default:
-                        return null;
-                }
-
-                //newSymbol = new GsRectangle(linePen, lineBrush, Color.Green, Color.Blue, dragRect.X, dragRect.Y, dragRect.Width, dragRect.Height);
-                //addNewSymbolToList(newSymbol);
-                //UpdateOverlay();
-            }
-            else
-            {
-                return null;
-            }
-        }
-
         private void pictureBoxOverlay_MouseMove(object sender, MouseEventArgs e)
         {
             if (originalImage == null) return;
@@ -402,22 +455,42 @@ namespace ScreenShotTool.Forms
 
         private void pictureBoxOverlay_MouseLeave(object sender, EventArgs e)
         {
-            dragStarted = false;
+            //dragStarted = false;
         }
 
-        private void itemLoadFromClipboard_Click(object sender, EventArgs e)
-        {
-            LoadImageFromClipboard();
-        }
 
-        private void itemExit_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
+        #endregion
 
-        private void pasteIntoThisImage_Click(object sender, EventArgs e)
+        #region Key input -----------------------------------------------------------------------------------
+        private void ScreenshotEditor_KeyDown(object sender, KeyEventArgs e)
         {
-            PasteIntoImage();
+            if (e.KeyCode == Keys.V && e.Modifiers == Keys.Control)
+            {
+                PasteIntoImage();
+            }
+            if (e.KeyCode == Keys.V && e.Modifiers == (Keys.Control | Keys.Shift))
+            {
+                PasteIntoImageScaled();
+            }
+            if ((e.KeyCode == Keys.C && e.Modifiers == Keys.Control))
+            {
+                CopyToClipboard();
+            }
+        }
+        #endregion
+
+        #region Copy and Paste ------------------------------------------------------------------------------
+
+        public void CopyToClipboard()
+        {
+            if (originalImage != null)
+            {
+                Bitmap outImage = new Bitmap(originalImage);
+                Graphics saveGraphic = Graphics.FromImage(outImage);
+                DrawElements(saveGraphic);
+                Clipboard.SetImage(outImage);
+                saveGraphic.Dispose();
+            }
         }
 
         private void PasteIntoImage()
@@ -435,22 +508,9 @@ namespace ScreenShotTool.Forms
             UpdateOverlay();
         }
 
-        private void ScreenshotEditor_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.V && e.Modifiers == Keys.Control)
-            {
-                PasteIntoImage();
-            }
-            if (e.KeyCode == Keys.V && e.Modifiers == (Keys.Control | Keys.Shift))
-            {
-                PasteIntoImageScaled();
-            }
-        }
+        #endregion
 
-        private void itemPasteScaled_Click(object sender, EventArgs e)
-        {
-            PasteIntoImageScaled();
-        }
+        #region Selected symbol Properties panel ------------------------------------------------------------
 
         private void listViewSymbols_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -488,7 +548,7 @@ namespace ScreenShotTool.Forms
             }
             else
             {
-                //ClearProperties();
+                ClearProperties();
             }
         }
 
@@ -597,6 +657,10 @@ namespace ScreenShotTool.Forms
             UpdateOverlay();
         }
 
+        #endregion
+
+        #region Top toolbar, new Symbol settings ------------------------------------------------------------
+
         private void numericNewLineWeight_ValueChanged(object sender, EventArgs e)
         {
             if (newSymbolType == SymbolType.Arrow)
@@ -626,5 +690,18 @@ namespace ScreenShotTool.Forms
                 buttonNewColorFill.BackColor = colorDialog1.Color;
             }
         }
+
+        private void itemNewImage_Click(object sender, EventArgs e)
+        {
+            NewImagePrompt imagePrompt = new NewImagePrompt();
+            DialogResult result = imagePrompt.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                CreateNewImage(imagePrompt.imageWidth, imagePrompt.imageHeight, imagePrompt.color);
+            }
+            imagePrompt.Dispose();
+        }
+
+        #endregion
     }
 }
