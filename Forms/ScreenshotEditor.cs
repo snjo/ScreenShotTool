@@ -35,6 +35,9 @@ namespace ScreenShotTool.Forms
             numericPropertiesFontSize.Maximum = maxFontSize;
             numericPropertiesFontSize.Minimum = minimumFontSize;
             numericPropertiesFontSize.Value = startingFontSize;
+            panelSymbolGeneral.Enabled = false;
+            panelSymbolShape.Visible = false;
+            panelSymbolText.Visible = false;
         }
 
         public ScreenshotEditor()
@@ -67,6 +70,7 @@ namespace ScreenShotTool.Forms
         public ScreenshotEditor(Image loadImage)
         {
             InitializeComponent();
+            SetupEditor();
             pictureBoxOverlay.Parent = pictureBoxOriginal;
             LoadImageFromImage(loadImage);
             SetForegroundWindow(this.Handle);

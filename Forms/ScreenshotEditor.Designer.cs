@@ -214,56 +214,71 @@
             panelButtons.Controls.Add(button1);
             panelButtons.Location = new Point(0, 56);
             panelButtons.Name = "panelButtons";
-            panelButtons.Size = new Size(72, 403);
+            panelButtons.Size = new Size(45, 403);
             panelButtons.TabIndex = 1;
             // 
             // button3
             // 
-            button3.Location = new Point(3, 132);
+            button3.FlatAppearance.BorderSize = 0;
+            button3.FlatStyle = FlatStyle.Flat;
+            button3.Image = Properties.Resources.toolText;
+            button3.Location = new Point(3, 163);
+            button3.Margin = new Padding(1);
             button3.Name = "button3";
-            button3.Size = new Size(66, 23);
+            button3.Size = new Size(36, 36);
             button3.TabIndex = 5;
-            button3.Text = "Text";
             button3.UseVisualStyleBackColor = true;
             button3.Click += ButtonNewText_Click;
             // 
             // buttonArrow
             // 
-            buttonArrow.Location = new Point(3, 103);
+            buttonArrow.FlatAppearance.BorderSize = 0;
+            buttonArrow.FlatStyle = FlatStyle.Flat;
+            buttonArrow.Image = Properties.Resources.toolArrow;
+            buttonArrow.Location = new Point(3, 123);
+            buttonArrow.Margin = new Padding(1);
             buttonArrow.Name = "buttonArrow";
-            buttonArrow.Size = new Size(66, 23);
+            buttonArrow.Size = new Size(36, 36);
             buttonArrow.TabIndex = 4;
-            buttonArrow.Text = "Arrow";
             buttonArrow.UseVisualStyleBackColor = true;
             buttonArrow.Click += ButtonArrow_Click;
             // 
             // buttonLine
             // 
-            buttonLine.Location = new Point(3, 74);
+            buttonLine.FlatAppearance.BorderSize = 0;
+            buttonLine.FlatStyle = FlatStyle.Flat;
+            buttonLine.Image = Properties.Resources.toolLine;
+            buttonLine.Location = new Point(3, 83);
+            buttonLine.Margin = new Padding(1);
             buttonLine.Name = "buttonLine";
-            buttonLine.Size = new Size(66, 23);
+            buttonLine.Size = new Size(36, 36);
             buttonLine.TabIndex = 2;
-            buttonLine.Text = "Line";
             buttonLine.UseVisualStyleBackColor = true;
             buttonLine.Click += ButtonLine_Click;
             // 
             // button2
             // 
-            button2.Location = new Point(3, 45);
+            button2.FlatAppearance.BorderSize = 0;
+            button2.FlatStyle = FlatStyle.Flat;
+            button2.Image = Properties.Resources.toolEllipse;
+            button2.Location = new Point(3, 43);
+            button2.Margin = new Padding(1);
             button2.Name = "button2";
-            button2.Size = new Size(66, 23);
+            button2.Size = new Size(36, 36);
             button2.TabIndex = 1;
-            button2.Text = "Circle";
             button2.UseVisualStyleBackColor = true;
             button2.Click += ButtonCircle_Click;
             // 
             // button1
             // 
+            button1.FlatAppearance.BorderSize = 0;
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.Image = Properties.Resources.toolRectangle2;
             button1.Location = new Point(3, 3);
+            button1.Margin = new Padding(1);
             button1.Name = "button1";
-            button1.Size = new Size(66, 36);
+            button1.Size = new Size(36, 36);
             button1.TabIndex = 0;
-            button1.Text = "Rectangle";
             button1.UseVisualStyleBackColor = true;
             button1.Click += ButtonRectangle_Click;
             // 
@@ -294,9 +309,9 @@
             panelImage.BackColor = SystemColors.ControlDark;
             panelImage.Controls.Add(pictureBoxOverlay);
             panelImage.Controls.Add(pictureBoxOriginal);
-            panelImage.Location = new Point(72, 56);
+            panelImage.Location = new Point(43, 56);
             panelImage.Name = "panelImage";
-            panelImage.Size = new Size(723, 626);
+            panelImage.Size = new Size(752, 626);
             panelImage.TabIndex = 3;
             // 
             // pictureBoxOverlay
