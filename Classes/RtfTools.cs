@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Windows.Forms.LinkLabel;
 
 namespace ScreenShotTool
 {
@@ -12,9 +13,10 @@ namespace ScreenShotTool
         public static string CreateRtfText(List<string> lines, int defaultPointSize = 10, string font = "fswiss Helvetica")
         {
             int[] textSizes = { defaultPointSize * 2, 56, 48, 40, 32, 26, 20, 20 };
+            List<int> columnSizes = new List<int>();
             var text = new StringBuilder();
 
-            text.AppendLine("{\\rtf1\\ansi{\\fonttbl\\f0\\" + font + ";}\\pard");
+            text.AppendLine("{\\rtf1\\ansi\\deff0 {\\fonttbl\\f0\\" + font + ";}\\pard");
 
             //foreach (var originalLine in lines)
             for (int i = 0; i < lines.Count(); i++)
@@ -24,13 +26,23 @@ namespace ScreenShotTool
                 line = SetHeading(textSizes, line);
 
                 line = SetStyle(line, "**", "b"); // bold
+                line = SetStyle(line, "__", "b"); // bold
                 line = SetStyle(line, "*", "i"); // italic
+                line = SetStyle(line, "_", "i"); // italic
 
                 line = SetImage(line);
 
+                var newColumnSizes = SetColumnWidths(line);
+                if (newColumnSizes.Count > 0)
+                {
+                    Debug.WriteLine("New Column sizes: " + newColumnSizes.Count);
+                    columnSizes = newColumnSizes;
+                    continue; // skip this line, it's a "<!--" comment for Column Widths
+                }
+
                 if (line.TrimStart().StartsWith('|'))
                 {
-                    (line, i) = CreateTable(i, lines);
+                    (line, i) = CreateTable(i, lines, columnSizes);
                 }
 
                 text.AppendLine(line);
@@ -41,12 +53,31 @@ namespace ScreenShotTool
             return text.ToString();
         }
 
-        private static (string line, int i) CreateTable(int i, List<string> lines)
+        private static List<int> SetColumnWidths(string line)
+        {
+            List<int> result = new();
+            // line is e.g.: <!---CW:2000:4000:1000:-->
+            if (line.Contains("<!---CW:"))
+            {
+                string[] columnWidths = line.Split(':');
+                foreach (string cw in columnWidths)
+                {
+                    if (int.TryParse(cw, out int width))
+                    {
+                        result.Add(width);
+                    }
+                }
+            }
+            return result;
+        }
+
+        private static (string line, int i) CreateTable(int i, List<string> lines, List<int> columSizes)
         {
             StringBuilder result = new StringBuilder();
             int tableRows = 0;
             bool foundRow = true;
             int columns = lines[i].AllIndexesOf("|").Count() -1;
+            int lastColumnWidth = 0;
             
             for (int j = i; foundRow && j < lines.Count(); j++)
             {
@@ -66,34 +97,45 @@ namespace ScreenShotTool
 
             if (tableRows > 2)
             {
-                result.Append("\\trowd ");
+                
                 for (int r = i; r < i + tableRows; r++)// string line in lines)
                 {
-                    
+                    lastColumnWidth = 0;
                     if (r == i+1) continue; // skip row with dashes that separates headings from rows
-                    
+                    result.AppendLine("\\trowd\\trgaph150");
                     for (int c = 0; c < columns; c++)
                     {
                         //cellx crashes the rtf load
-                        //result.Append("\\cellx1000 ");
+                        //int newWidth = (c + 1) * 3000;
+                        if (columSizes.Count >= columns)
+                        {
+                            int newWidth = lastColumnWidth + columSizes[c];
+                            result.AppendLine($"\\cellx{newWidth}");
+                            Debug.WriteLine("Using new column width " + newWidth);
+                            lastColumnWidth = newWidth;
+                        }
+                        else
+                        {
+                            Debug.WriteLine("Using default column widths");
+                            int newWidth = (c + 1) * 2000;
+                            result.AppendLine($"\\cellx{newWidth}");
+                        }
                     }
-                    result.AppendLine();
-
-                    if (r == i) result.Append("\\b ");
 
                     string[] split = lines[r].Trim().Split('|');
                     for (int c = 1; c < split.Length - 1; c++) // string column in split)
                     {
-                        result.Append(split[c]);
-                        result.Append("\\intbl \\cell");
+                        string colWord = split[c].Trim();
+                        colWord = SetStyle(colWord, "**", "b"); // bold
+                        colWord = SetStyle(colWord, "__", "b"); // bold
+                        colWord = SetStyle(colWord, "*", "i"); // italic
+                        colWord = SetStyle(colWord, "_", "i"); // italic
+                        result.Append(colWord);
+                        result.AppendLine("\\intbl\\cell");
                     }
-                    if (r == i) result.Append("\\b0 ");
                     result.AppendLine("\\row ");
                 }
-                //result.Append("\\row ");
                 result.AppendLine("\\pard");
-
-                Debug.WriteLine(result.ToString());
 
                 return (result.ToString(), i + tableRows);
             }

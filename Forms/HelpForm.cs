@@ -1,4 +1,6 @@
-﻿namespace ScreenShotTool
+﻿using System.Diagnostics;
+
+namespace ScreenShotTool
 {
     public partial class HelpForm : Form
     {
@@ -9,11 +11,19 @@
             //richTextBox1.Rtf = helpText;
             List<string> lines = File.ReadAllLines("readme.MD").ToList();
 
-            richTextBox1.Rtf = RtfTools.CreateRtfText(lines);
+            string rtfText = RtfTools.CreateRtfText(lines);
+            Debug.WriteLine(rtfText);
+            richTextBox1.Rtf = rtfText;
         }
 
+        string t1 = "{\\rtf1\\ansi\\deff0 {\\fonttbl\\f0\\fswiss Helvetica;}\\pard\r\n\\fs48  ScreenShotTool\\fs20\r\n\\par \r\n\\par \r\n\\i A minimalist screenshot program.\\i0 \r\n\\par \r\nEach capture method can have individual settings for saving to file or clipboard.\r\n\\par \r\n\\par \r\n\\par \r\n\\par \r\n--------------------------------------------------------------------------------------\r\n\\par \r\n\\par \r\n\\par \r\n\\fs40 Hotkeys\\fs20\r\n\\par \r\n\\par \r\nHotkeys can be changed in \\b Options\\b0 \r\n\\par \r\n\\par \r\n\r\n\\trowd\r\n\\cellx1000\r\n\\cellx2000\r\n\\b Funcion \\intbl \\cell _Default Hotkey_ \\intbl \\cell\\b0 \\row \r\n\\cellx1000\r\n\\cellx2000\r\n\\trowd\r\nRegion \\intbl \\cell *Printscreen* \\intbl \\cell\\row \r\n\r\n\\pard\r\n\\par \r\n--------------------------------------------------------------------------------------\r\n\\par \r\n}";
+        string t2 = "{\\rtf1\\ansi\\deff0\r\n\\trowd\\trgaph144\r\n\\clbrdrt\\brdrs\\clbrdrl\\brdrs\\clbrdrb\\brdrs\\clbrdrr\\brdrs\r\n\\cellx1000\r\n\\clbrdrt\\brdrs\\clbrdrl\\brdrs\\clbrdrb\\brdrs\\clbrdrr\\brdrs\r\n\\cellx2000\r\n\\clbrdrt\\brdrs\\clbrdrl\\brdrs\\clbrdrb\\brdrs\\clbrdrr\\brdrs\r\n\\cellx3000\r\ncell 1\\intbl\\cell\r\nlots of text in cell two\\intbl\\cell\r\ncell 3\\intbl\\cell\r\n\\row\r\n\\trowd\\trgaph144\r\n\\clbrdrt\\brdrs\\clbrdrl\\brdrs\\clbrdrb\\brdrs\\clbrdrr\\brdrs\r\n\\cellx1000\r\n\\clbrdrt\\brdrs\\clbrdrl\\brdrs\\clbrdrb\\brdrs\\clbrdrr\\brdrs\r\n\\cellx2000\r\n\\clbrdrt\\brdrs\\clbrdrl\\brdrs\\clbrdrb\\brdrs\\clbrdrr\\brdrs\r\n\\cellx3000\r\nrow 2 cell 1\\intbl\\cell\r\nlots of text in row 2 cell two\\intbl\\cell\r\nrow 2 cell 3\\intbl\\cell\r\n\\row\r\n}";
+        string t3 = "{\\rtf1\\ansi\\deff0\r\n\\trowd\\trgaph144\r\n\\cellx1000\r\n\\cellx2000\r\n\\cellx3000\r\ncell 1\\intbl\\cell\r\nlots of text in cell two\\intbl\\cell\r\ncell 3\\intbl\\cell\r\n\\row\r\n\\trowd\\trgaph144\r\n\\cellx1000\r\n\\cellx2000\r\n\\cellx3000\r\nrow 2 cell 1\\intbl\\cell\r\nlots of text in row 2 cell two\\intbl\\cell\r\nrow 2 cell 3\\intbl\\cell\r\n\\row\r\n}";
+
+        string t4 = "{\\rtf1\\ansi\\deff0 {\\fonttbl\\f0\\fswiss Helvetica;}\\pard\r\n\\fs48  ScreenShotTool\\fs20\r\n\\par \r\n\\par \r\n\\i A minimalist screenshot program.\\i0 \r\n\\par \r\nEach capture method can have individual settings for saving to file or clipboard.\r\n\\par \r\n\\par \r\n\\par \r\n\\par \r\n--------------------------------------------------------------------------------------\r\n\\par \r\n\\par \r\n\\par \r\n\\fs40 Hotkeys\\fs20\r\n\\par \r\n\\par \r\nHotkeys can be changed in \\b Options\\b0 \r\n\\par \r\n\\par \r\n\r\n\\trowd\\trgaph144\r\n\\cellx1000\r\n\\cellx2000\r\n\\cellx3000\r\nFuncion\\intbl\\cell\r\nDefault Hotkey\\intbl\\cell\r\nnone\\intbl\\cell\r\n\\row\r\n\\trowd\\trgaph144\r\n\\cellx1000\r\n\\cellx2000\r\n\\cellx3000\r\nRegion\\intbl\\cell\r\nPrintscreen\\intbl\\cell\r\nnone\\intbl\\cell\r\n\\row\r\n\\trowd\\trgaph144\r\n\\cellx1000\r\n\\cellx2000\r\n\\cellx3000\r\nWindow \\intbl\\cell\r\nAlt PrintScreen\\intbl\\cell\r\nnone\\intbl\\cell\r\n\\row\r\n\\trowd\\trgaph144\r\n\\cellx1000\r\n\\cellx2000\r\n\\cellx3000\r\nScreen\\intbl\\cell\r\nCtrl PrintScreen\\intbl\\cell\r\nnone\\intbl\\cell\r\n\\row\r\n\\trowd\\trgaph144\r\n\\cellx1000\r\n\\cellx2000\r\n\\cellx3000\r\nAll screens\\intbl\\cell\r\nNo preset\\intbl\\cell\r\nnone\\intbl\\cell\r\n\\row\r\n\\trowd\\trgaph144\r\n\\cellx1000\r\n\\cellx2000\r\n\\cellx3000\r\nOpen last folder \\intbl\\cell\r\nNo preset\\intbl\\cell\r\nnone\\intbl\\cell\r\n\\row \r\n\\pard\r\n\r\n\\pard\r\n\\par \r\n--------------------------------------------------------------------------------------\r\n\\par \r\n}";
+
         string helpText =
-            "{\\rtf1\\ansi{\\fonttbl\\f0\\fswiss Helvetica;}\\pard" +
+            "{\\rtf1\\ansi{\\fonttbl\\f0\\fswiss Helvetica;\\pard" +
             "\\b1 \\fs32 Capture Modes\\b0 \\fs18 \\par " +
             "\\par Screenshots are performed using hotkeys defined in Options.\\par " +
             "\\par \\b1 Default hotkeys:\\b0 \\par " +

@@ -4,17 +4,16 @@
 Each capture method can have individual settings for saving to file or clipboard.
 
 ![image](img/screenshot.png)
-
 --------------------------------------------------------------------------------------
-
 
 ## Hotkeys
 
 Hotkeys can be changed in **Options**
 
-| *Funcion*        | _Default Hotkey_            |
+<!---CW:2000:4000:-->
+| *Funcion*        | *Default Hotkey*            |
 |------------------|-----------------------------|
-| Region           | *Printscreen*               |
+| Region           | Printscreen                 |
 | Window           | Alt + PrintScreen           |
 | Screen           | Ctrl + PrintScreen          |
 | All screens      | No preset                   |
@@ -166,6 +165,7 @@ Specify the size of the thumbnails used in the application. This does not affect
 
 https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.keys?view=windowsdesktop-7.0
 
+<!---CW:6000:2000:-->
 | Key                              | Keycode             |
 |----------------------------------|---------------------|
 | 0-9                              | 0 to 9              |
