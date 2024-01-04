@@ -89,6 +89,8 @@
             numericNewFillAlpha = new NumericUpDown();
             panelSymbolShape = new Panel();
             panelSymbolText = new Panel();
+            checkBoxUnderline = new CheckBox();
+            checkBoxStrikeout = new CheckBox();
             checkBoxFontItalic = new CheckBox();
             checkBoxFontBold = new CheckBox();
             label16 = new Label();
@@ -343,7 +345,7 @@
             panelSymbolGeneral.Controls.Add(label3);
             panelSymbolGeneral.Controls.Add(label2);
             panelSymbolGeneral.Controls.Add(labelSymbolType);
-            panelSymbolGeneral.Location = new Point(801, 298);
+            panelSymbolGeneral.Location = new Point(801, 294);
             panelSymbolGeneral.Name = "panelSymbolGeneral";
             panelSymbolGeneral.Size = new Size(148, 130);
             panelSymbolGeneral.TabIndex = 4;
@@ -659,7 +661,7 @@
             panelSymbolShape.Controls.Add(label7);
             panelSymbolShape.Controls.Add(label8);
             panelSymbolShape.Controls.Add(buttonPropertiesColorFill);
-            panelSymbolShape.Location = new Point(801, 434);
+            panelSymbolShape.Location = new Point(801, 426);
             panelSymbolShape.Name = "panelSymbolShape";
             panelSymbolShape.Size = new Size(148, 81);
             panelSymbolShape.TabIndex = 27;
@@ -667,6 +669,8 @@
             // panelSymbolText
             // 
             panelSymbolText.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            panelSymbolText.Controls.Add(checkBoxUnderline);
+            panelSymbolText.Controls.Add(checkBoxStrikeout);
             panelSymbolText.Controls.Add(checkBoxFontItalic);
             panelSymbolText.Controls.Add(checkBoxFontBold);
             panelSymbolText.Controls.Add(label16);
@@ -674,32 +678,54 @@
             panelSymbolText.Controls.Add(numericPropertiesFontSize);
             panelSymbolText.Controls.Add(comboBoxFontFamily);
             panelSymbolText.Controls.Add(textBoxSymbolText);
-            panelSymbolText.Location = new Point(801, 521);
+            panelSymbolText.Location = new Point(801, 509);
             panelSymbolText.Name = "panelSymbolText";
-            panelSymbolText.Size = new Size(148, 128);
+            panelSymbolText.Size = new Size(148, 144);
             panelSymbolText.TabIndex = 28;
+            // 
+            // checkBoxUnderline
+            // 
+            checkBoxUnderline.AutoSize = true;
+            checkBoxUnderline.Location = new Point(73, 121);
+            checkBoxUnderline.Name = "checkBoxUnderline";
+            checkBoxUnderline.Size = new Size(77, 19);
+            checkBoxUnderline.TabIndex = 34;
+            checkBoxUnderline.Text = "Underline";
+            checkBoxUnderline.UseVisualStyleBackColor = true;
+            checkBoxUnderline.Click += fontStyle_CheckedChanged;
+            // 
+            // checkBoxStrikeout
+            // 
+            checkBoxStrikeout.AutoSize = true;
+            checkBoxStrikeout.Location = new Point(3, 121);
+            checkBoxStrikeout.Name = "checkBoxStrikeout";
+            checkBoxStrikeout.Size = new Size(73, 19);
+            checkBoxStrikeout.TabIndex = 33;
+            checkBoxStrikeout.Text = "Strikeout";
+            checkBoxStrikeout.UseVisualStyleBackColor = true;
+            checkBoxStrikeout.Click += fontStyle_CheckedChanged;
             // 
             // checkBoxFontItalic
             // 
             checkBoxFontItalic.AutoSize = true;
-            checkBoxFontItalic.Location = new Point(59, 106);
+            checkBoxFontItalic.Location = new Point(73, 102);
             checkBoxFontItalic.Name = "checkBoxFontItalic";
             checkBoxFontItalic.Size = new Size(51, 19);
             checkBoxFontItalic.TabIndex = 32;
             checkBoxFontItalic.Text = "Italic";
             checkBoxFontItalic.UseVisualStyleBackColor = true;
-            checkBoxFontItalic.CheckedChanged += checkBoxFontItalic_CheckedChanged;
+            checkBoxFontItalic.Click += fontStyle_CheckedChanged;
             // 
             // checkBoxFontBold
             // 
             checkBoxFontBold.AutoSize = true;
-            checkBoxFontBold.Location = new Point(3, 106);
+            checkBoxFontBold.Location = new Point(3, 102);
             checkBoxFontBold.Name = "checkBoxFontBold";
             checkBoxFontBold.Size = new Size(50, 19);
             checkBoxFontBold.TabIndex = 31;
             checkBoxFontBold.Text = "Bold";
             checkBoxFontBold.UseVisualStyleBackColor = true;
-            checkBoxFontBold.CheckedChanged += checkBoxFontBold_CheckedChanged;
+            checkBoxFontBold.Click += fontStyle_CheckedChanged;
             // 
             // label16
             // 
@@ -863,5 +889,7 @@
         private CheckBox checkBoxFontBold;
         private Label label16;
         private Label label15;
+        private CheckBox checkBoxUnderline;
+        private CheckBox checkBoxStrikeout;
     }
 }

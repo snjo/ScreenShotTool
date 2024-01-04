@@ -702,10 +702,15 @@ namespace ScreenShotTool.Forms
 
                     if (graphicSymbol is GsText)
                     {
+                        GsText gsText = (GsText)graphicSymbol;
                         panelSymbolText.Enabled = true;
                         panelSymbolShape.Enabled = false;
-                        textBoxSymbolText.Text = ((GsText)graphicSymbol).text;
-                        numericPropertiesFontSize.Value = (int)Math.Clamp(((GsText)graphicSymbol).fontEmSize, minimumFontSize, maxFontSize);
+                        textBoxSymbolText.Text = gsText.text;
+                        numericPropertiesFontSize.Value = (int)Math.Clamp(gsText.fontEmSize, minimumFontSize, maxFontSize);
+                        checkBoxFontBold.Checked = (gsText.fontStyle & FontStyle.Bold) != 0;
+                        checkBoxFontItalic.Checked = (gsText.fontStyle & FontStyle.Italic) != 0;
+                        checkBoxStrikeout.Checked = (gsText.fontStyle & FontStyle.Strikeout) != 0;
+                        checkBoxUnderline.Checked = (gsText.fontStyle & FontStyle.Underline) != 0;
                     }
                     else
                     {
@@ -887,6 +892,42 @@ namespace ScreenShotTool.Forms
             comboBoxFontFamily.DataSource = fontNames;
         }
 
+        private void fontStyle_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateFontStyle();
+        }
+
+        private void UpdateFontStyle()
+        {
+            bool bold = checkBoxFontBold.Checked;
+            bool italic = checkBoxFontItalic.Checked;
+            bool strikeout = checkBoxStrikeout.Checked;
+            bool underline = checkBoxUnderline.Checked;
+            GsText? textSymbol = GetSelectedTextSymbol();
+            if (textSymbol != null)
+            {
+                FontStyle fontStyle = FontStyle.Regular;
+                if (bold)
+                {
+                    fontStyle |= FontStyle.Bold;
+                }
+                if (italic)
+                {
+                    fontStyle |= FontStyle.Italic;
+                }
+                if (strikeout)
+                {
+                    fontStyle |= FontStyle.Strikeout;
+                }
+                if (underline)
+                {
+                    fontStyle |= FontStyle.Underline;
+                }
+                textSymbol.fontStyle = fontStyle;
+            }
+            UpdateOverlay();
+        }
+
         private GraphicSymbol? GetSelectedSymbol()
         {
             if (listViewSymbols.SelectedItems.Count > 0)
@@ -955,15 +996,6 @@ namespace ScreenShotTool.Forms
         #endregion
 
 
-        private void checkBoxFontBold_CheckedChanged(object sender, EventArgs e)
-        {
-            // TODO
-        }
-
-        private void checkBoxFontItalic_CheckedChanged(object sender, EventArgs e)
-        {
-            // TODO
-        }
 
         private void listViewSymbols_KeyDown(object sender, KeyEventArgs e)
         {
@@ -972,5 +1004,6 @@ namespace ScreenShotTool.Forms
                 DeleteSelectedSymbol();
             }
         }
+
     }
 }
