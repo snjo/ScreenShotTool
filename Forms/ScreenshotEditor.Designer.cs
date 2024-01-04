@@ -321,6 +321,7 @@
             listViewSymbols.UseCompatibleStateImageBehavior = false;
             listViewSymbols.View = View.Details;
             listViewSymbols.SelectedIndexChanged += ListViewSymbols_SelectedIndexChanged;
+            listViewSymbols.KeyDown += listViewSymbols_KeyDown;
             // 
             // columnHeaderType
             // 

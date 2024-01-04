@@ -81,7 +81,7 @@ namespace ScreenShotTool.Forms
             pictureBoxOriginal.Image = originalImage;
             DisposeAndNull(overlayGraphics);
             DisposeAndNull(overlayImage);
-            symbols.Clear();
+            DeleteAllSymbols();
         }
 
         private void CreateNewImage(int Width, int Height, Color color)
@@ -91,6 +91,7 @@ namespace ScreenShotTool.Forms
             Graphics g = Graphics.FromImage(originalImage);
             g.FillRectangle(new SolidBrush(color), 0, 0, Width, Height);
             SetOriginalImage();
+            DeleteAllSymbols();
         }
 
         private void LoadImageFromClipboard()
@@ -284,9 +285,14 @@ namespace ScreenShotTool.Forms
 
         private void DeleteOverlayElementsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            DeleteAllSymbols();
+        }
+
+        private void DeleteAllSymbols()
+        {
+            listViewSymbols.Items.Clear();
             foreach (GraphicSymbol symbol in symbols)
             {
-                listViewSymbols.Items.Clear();
                 ClearPropertyPanelValues();
                 symbol.Dispose();
             }
@@ -648,7 +654,7 @@ namespace ScreenShotTool.Forms
             if (listViewSymbols.SelectedItems.Count > 0)
             {
                 newSymbolType = SymbolType.MoveSymbol;
-                
+
             }
             else
             {
@@ -674,8 +680,8 @@ namespace ScreenShotTool.Forms
                     labelSymbolType.Text = "Symbol: " + graphicSymbol.Name;
                     numericX.Value = graphicSymbol.Left;
                     numericY.Value = graphicSymbol.Top;
-                    numericWidth.Value = graphicSymbol.Width;
-                    numericHeight.Value = graphicSymbol.Height;
+                    numericWidth.Value = Math.Clamp(graphicSymbol.Width, numericWidth.Minimum, numericWidth.Maximum);
+                    numericHeight.Value = Math.Clamp(graphicSymbol.Height, numericHeight.Minimum, numericHeight.Maximum);
                     buttonPropertiesColorLine.BackColor = graphicSymbol.foregroundColor;
                     buttonPropertiesColorFill.BackColor = graphicSymbol.backgroundColor;
                     numericPropertiesLineWeight.Value = graphicSymbol.lineWeight;
@@ -723,6 +729,11 @@ namespace ScreenShotTool.Forms
         }
 
         private void ButtonDeleteSymbol_Click(object sender, EventArgs e)
+        {
+            DeleteSelectedSymbol();
+        }
+
+        private void DeleteSelectedSymbol()
         {
             if (listViewSymbols.SelectedItems.Count > 0)
             {
@@ -867,7 +878,7 @@ namespace ScreenShotTool.Forms
         {
             List<FontFamily> fontList = System.Drawing.FontFamily.Families.ToList();
             List<string> fontNames = new List<string>();
-            
+
             foreach (FontFamily font in fontList)
             {
                 fontNames.Add(font.Name);
@@ -952,6 +963,14 @@ namespace ScreenShotTool.Forms
         private void checkBoxFontItalic_CheckedChanged(object sender, EventArgs e)
         {
             // TODO
+        }
+
+        private void listViewSymbols_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                DeleteSelectedSymbol();
+            }
         }
     }
 }
