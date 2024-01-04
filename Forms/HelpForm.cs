@@ -6,7 +6,10 @@
         public HelpForm()
         {
             InitializeComponent();
-            richTextBox1.Rtf = helpText;
+            //richTextBox1.Rtf = helpText;
+            List<string> lines = File.ReadAllLines("readme.MD").ToList();
+
+            richTextBox1.Rtf = RtfTools.CreateRtfText(lines);
         }
 
         string helpText =
@@ -24,11 +27,13 @@
             "\\par " +
             "\\par During region capture, the current screen the mouse cursor is on will display a region selection interface.\\par" +
             "\\par Click and drag the mouse to create a selection. This can be refined with the keys shown below." +
-            "\\par \\par To confirm the region, press Enter to save to file, or C to copy the selection to the clipboard. Press Escape to exit." +
-            "\\par \\par If you select the option \"Complete capture when releasing mouse\", the output is instead decided by the otions for saving to file or clipboard (Options > Modes: Region)" +
+            "\\par \\par To confirm the region, press Enter to save to file, C to copy the selection to the clipboard or E to open the selection in the Editor. Press Escape to exit." +
+            "\\par \\par If you select the option \"Complete capture when releasing mouse\", the output is instead decided by the otions for saving to file, clipboard or open in Editor (Options > Modes: Region)" +
             "\\par \\par When adjusting the size of the region, arrows will indicate what edges are affected by arrow key presses.\\par When adjusting the position of the region, arrows are shown in all directions." +
-            "\\par " +
-            "\\par \\par \tEnter\t\tSave image to file and exit Region capture\\par \tC\t\tCopy image to clipboard and exit Region captrue" +
+            "\\par \\par " +
+            "\\par \tEnter\t\tSave image to file and exit Region capture" +
+            "\\par \tC\t\tCopy image to clipboard and exit Region capture" +
+            "\\par \tE\t\tOpen the selection in the Editor and exit Region captrue" +
             "\\par \tEsc\t\tExit region capture, discard selection" +
             "\\par \tS\t\tSize adjustment mode (Default)" +
             "\\par \tP\t\tPosition adjustment mode" +
@@ -41,15 +46,16 @@
             "\\par (Options > Mode: Region)" +
             "\\par \\par --------------------------------------------------------------------------------------" +
             "\\par \\par \\b1 \\fs28 Window capture\\fs18 \\b0 " +
-            "\\par \\par Captures the active window.\\par Saves to file or copies to clipboard based on options (Options > Modes: Window)" +
+            "\\par \\par Captures the active window." +
+            "\\par Save to file, open in Editor or copy to clipboard based on options (Options > Modes: Window)" +
             "\\par \\par --------------------------------------------------------------------------------------" +
             "\\par \\par \\b1 \\fs28 Screen capture\\fs18 \\b0 " +
             "\\par \\par Captures the screen the mouse cursor is currently in." +
-            "\\par Saves to file or copies to clipboard based on options (Options > Modes: Screen)" +
+            "\\par Save to file, open in Editor or copy to clipboard based on options (Options > Modes: Window)" +
             "\\par \\par --------------------------------------------------------------------------------------" +
             "\\par \\par \\b1 \\fs28 All Screens capture\\fs18 \\b0 " +
             "\\par \\par Captures all screen in a single image." +
-            "\\par Saves to file or copies to clipboard based on options (Options > Modes: All Screens)" +
+            "\\par Save to file, open in Editor or copy to clipboard based on options (Options > Modes: Window)" +
             "\\par \\par --------------------------------------------------------------------------------------" +
             "\\par \\par \\b1 \\fs32 Capture output\\fs18 \\b0 " +
             "\\par \\par \\b1 \\fs24 File name variables\\fs18 \\b0 " +

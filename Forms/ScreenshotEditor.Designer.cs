@@ -98,6 +98,7 @@
             label15 = new Label();
             numericPropertiesFontSize = new NumericUpDown();
             comboBoxFontFamily = new ComboBox();
+            panel1 = new Panel();
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
@@ -117,6 +118,7 @@
             panelSymbolShape.SuspendLayout();
             panelSymbolText.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesFontSize).BeginInit();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
@@ -207,14 +209,16 @@
             // 
             // panelButtons
             // 
+            panelButtons.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            panelButtons.BorderStyle = BorderStyle.FixedSingle;
             panelButtons.Controls.Add(button3);
             panelButtons.Controls.Add(buttonArrow);
             panelButtons.Controls.Add(buttonLine);
             panelButtons.Controls.Add(button2);
             panelButtons.Controls.Add(button1);
-            panelButtons.Location = new Point(0, 56);
+            panelButtons.Location = new Point(0, 61);
             panelButtons.Name = "panelButtons";
-            panelButtons.Size = new Size(45, 403);
+            panelButtons.Size = new Size(46, 617);
             panelButtons.TabIndex = 1;
             // 
             // button3
@@ -284,7 +288,7 @@
             // 
             // numericNewLineWeight
             // 
-            numericNewLineWeight.Location = new Point(330, 27);
+            numericNewLineWeight.Location = new Point(306, 3);
             numericNewLineWeight.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
             numericNewLineWeight.Name = "numericNewLineWeight";
             numericNewLineWeight.Size = new Size(66, 23);
@@ -309,9 +313,9 @@
             panelImage.BackColor = SystemColors.ControlDark;
             panelImage.Controls.Add(pictureBoxOverlay);
             panelImage.Controls.Add(pictureBoxOriginal);
-            panelImage.Location = new Point(43, 56);
+            panelImage.Location = new Point(49, 61);
             panelImage.Name = "panelImage";
-            panelImage.Size = new Size(752, 626);
+            panelImage.Size = new Size(743, 617);
             panelImage.TabIndex = 3;
             // 
             // pictureBoxOverlay
@@ -331,13 +335,13 @@
             // 
             listViewSymbols.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             listViewSymbols.Columns.AddRange(new ColumnHeader[] { columnHeaderType, columnHeaderX, columnHeaderY, columnHeaderColor });
-            listViewSymbols.Location = new Point(801, 56);
+            listViewSymbols.Location = new Point(795, 61);
             listViewSymbols.MultiSelect = false;
             listViewSymbols.Name = "listViewSymbols";
-            listViewSymbols.Size = new Size(148, 236);
+            listViewSymbols.Size = new Size(153, 231);
             listViewSymbols.TabIndex = 0;
             listViewSymbols.UseCompatibleStateImageBehavior = false;
-            listViewSymbols.View = View.Details;
+            listViewSymbols.View = View.List;
             listViewSymbols.SelectedIndexChanged += ListViewSymbols_SelectedIndexChanged;
             listViewSymbols.KeyDown += listViewSymbols_KeyDown;
             // 
@@ -361,9 +365,9 @@
             panelSymbolGeneral.Controls.Add(label3);
             panelSymbolGeneral.Controls.Add(label2);
             panelSymbolGeneral.Controls.Add(labelSymbolType);
-            panelSymbolGeneral.Location = new Point(801, 294);
+            panelSymbolGeneral.Location = new Point(795, 294);
             panelSymbolGeneral.Name = "panelSymbolGeneral";
-            panelSymbolGeneral.Size = new Size(148, 130);
+            panelSymbolGeneral.Size = new Size(153, 130);
             panelSymbolGeneral.TabIndex = 4;
             // 
             // label13
@@ -568,7 +572,7 @@
             // buttonDeleteSymbol
             // 
             buttonDeleteSymbol.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonDeleteSymbol.Location = new Point(804, 655);
+            buttonDeleteSymbol.Location = new Point(795, 655);
             buttonDeleteSymbol.Name = "buttonDeleteSymbol";
             buttonDeleteSymbol.Size = new Size(48, 23);
             buttonDeleteSymbol.TabIndex = 0;
@@ -585,7 +589,7 @@
             // 
             buttonNewColorFill.BackColor = Color.FromArgb(192, 255, 255);
             buttonNewColorFill.FlatStyle = FlatStyle.Flat;
-            buttonNewColorFill.Location = new Point(183, 27);
+            buttonNewColorFill.Location = new Point(181, 5);
             buttonNewColorFill.Name = "buttonNewColorFill";
             buttonNewColorFill.Size = new Size(43, 19);
             buttonNewColorFill.TabIndex = 18;
@@ -597,7 +601,7 @@
             // 
             buttonNewColorLine.BackColor = Color.Blue;
             buttonNewColorLine.FlatStyle = FlatStyle.Flat;
-            buttonNewColorLine.Location = new Point(70, 27);
+            buttonNewColorLine.Location = new Point(72, 5);
             buttonNewColorLine.Name = "buttonNewColorLine";
             buttonNewColorLine.Size = new Size(43, 19);
             buttonNewColorLine.TabIndex = 17;
@@ -608,7 +612,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(123, 29);
+            label1.Location = new Point(121, 5);
             label1.Name = "label1";
             label1.Size = new Size(54, 15);
             label1.TabIndex = 16;
@@ -617,7 +621,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(3, 29);
+            label9.Location = new Point(5, 5);
             label9.Name = "label9";
             label9.Size = new Size(61, 15);
             label9.TabIndex = 15;
@@ -626,7 +630,7 @@
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(254, 29);
+            label10.Location = new Point(230, 5);
             label10.Name = "label10";
             label10.Size = new Size(70, 15);
             label10.TabIndex = 19;
@@ -634,7 +638,7 @@
             // 
             // numericNewLineAlpha
             // 
-            numericNewLineAlpha.Location = new Point(485, 27);
+            numericNewLineAlpha.Location = new Point(447, 3);
             numericNewLineAlpha.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
             numericNewLineAlpha.Name = "numericNewLineAlpha";
             numericNewLineAlpha.Size = new Size(44, 23);
@@ -644,7 +648,7 @@
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(416, 29);
+            label11.Location = new Point(378, 5);
             label11.Name = "label11";
             label11.Size = new Size(63, 15);
             label11.TabIndex = 21;
@@ -653,7 +657,7 @@
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new Point(544, 31);
+            label12.Location = new Point(497, 5);
             label12.Name = "label12";
             label12.Size = new Size(56, 15);
             label12.TabIndex = 23;
@@ -661,7 +665,7 @@
             // 
             // numericNewFillAlpha
             // 
-            numericNewFillAlpha.Location = new Point(606, 29);
+            numericNewFillAlpha.Location = new Point(559, 3);
             numericNewFillAlpha.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
             numericNewFillAlpha.Name = "numericNewFillAlpha";
             numericNewFillAlpha.Size = new Size(44, 23);
@@ -677,9 +681,9 @@
             panelSymbolShape.Controls.Add(label7);
             panelSymbolShape.Controls.Add(label8);
             panelSymbolShape.Controls.Add(buttonPropertiesColorFill);
-            panelSymbolShape.Location = new Point(801, 426);
+            panelSymbolShape.Location = new Point(795, 426);
             panelSymbolShape.Name = "panelSymbolShape";
-            panelSymbolShape.Size = new Size(148, 81);
+            panelSymbolShape.Size = new Size(153, 81);
             panelSymbolShape.TabIndex = 27;
             // 
             // panelSymbolText
@@ -694,9 +698,9 @@
             panelSymbolText.Controls.Add(numericPropertiesFontSize);
             panelSymbolText.Controls.Add(comboBoxFontFamily);
             panelSymbolText.Controls.Add(textBoxSymbolText);
-            panelSymbolText.Location = new Point(801, 509);
+            panelSymbolText.Location = new Point(795, 509);
             panelSymbolText.Name = "panelSymbolText";
-            panelSymbolText.Size = new Size(148, 144);
+            panelSymbolText.Size = new Size(153, 144);
             panelSymbolText.TabIndex = 28;
             // 
             // checkBoxUnderline
@@ -781,27 +785,37 @@
             comboBoxFontFamily.TabIndex = 27;
             comboBoxFontFamily.TextChanged += comboBoxFontFamily_ValueMemberChanged;
             // 
+            // panel1
+            // 
+            panel1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            panel1.BorderStyle = BorderStyle.FixedSingle;
+            panel1.Controls.Add(numericNewFillAlpha);
+            panel1.Controls.Add(label12);
+            panel1.Controls.Add(numericNewLineAlpha);
+            panel1.Controls.Add(buttonNewColorLine);
+            panel1.Controls.Add(label1);
+            panel1.Controls.Add(label9);
+            panel1.Controls.Add(buttonNewColorFill);
+            panel1.Controls.Add(label11);
+            panel1.Controls.Add(label10);
+            panel1.Controls.Add(numericNewLineWeight);
+            panel1.Location = new Point(0, 27);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(949, 31);
+            panel1.TabIndex = 29;
+            // 
             // ScreenshotEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(950, 682);
+            Controls.Add(panel1);
             Controls.Add(panelSymbolText);
             Controls.Add(panelSymbolShape);
-            Controls.Add(label12);
-            Controls.Add(numericNewFillAlpha);
-            Controls.Add(label11);
-            Controls.Add(numericNewLineAlpha);
-            Controls.Add(buttonNewColorFill);
-            Controls.Add(label10);
-            Controls.Add(label1);
-            Controls.Add(buttonNewColorLine);
             Controls.Add(panelSymbolGeneral);
             Controls.Add(listViewSymbols);
-            Controls.Add(label9);
             Controls.Add(panelImage);
             Controls.Add(panelButtons);
-            Controls.Add(numericNewLineWeight);
             Controls.Add(menuStrip1);
             Controls.Add(buttonDeleteSymbol);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -834,6 +848,8 @@
             panelSymbolText.ResumeLayout(false);
             panelSymbolText.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesFontSize).EndInit();
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -909,5 +925,6 @@
         private Label label15;
         private CheckBox checkBoxUnderline;
         private CheckBox checkBoxStrikeout;
+        private Panel panel1;
     }
 }
