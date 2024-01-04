@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ScreenshotEditor));
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             itemNewImage = new ToolStripMenuItem();
@@ -788,6 +789,7 @@
             Controls.Add(numericNewLineWeight);
             Controls.Add(menuStrip1);
             Controls.Add(buttonDeleteSymbol);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             KeyPreview = true;
             MainMenuStrip = menuStrip1;
             Name = "ScreenshotEditor";

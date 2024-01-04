@@ -684,7 +684,15 @@ namespace ScreenShotTool.Forms
                 if (item.Tag is GraphicSymbol graphicSymbol)
                 {
                     panelSymbolGeneral.Enabled = true;
-                    panelSymbolShape.Enabled = true;
+                    panelSymbolShape.Visible = true;
+                    panelSymbolText.Visible = false;
+
+                    numericWidth.Enabled = true;
+                    numericHeight.Enabled = true;
+                    buttonPropertiesColorLine.Enabled = true;
+                    numericPropertiesLineAlpha.Enabled = true;
+
+                    textBoxSymbolText.Text = "";
 
                     labelSymbolType.Text = "Symbol: " + graphicSymbol.Name;
                     numericX.Value = graphicSymbol.Left;
@@ -700,32 +708,40 @@ namespace ScreenShotTool.Forms
                     {
                         numericWidth.Enabled = false;
                         numericHeight.Enabled = false;
-                        panelSymbolShape.Enabled = false;
+
+                        buttonPropertiesColorLine.Enabled = false;
+                        numericPropertiesLineAlpha.Enabled = false;
+
+                        panelSymbolShape.Visible = false;
                     }
-                    else
+
+                    if (graphicSymbol is GsImageScaled)
                     {
-                        numericWidth.Enabled = true;
-                        numericHeight.Enabled = true;
+                        buttonPropertiesColorLine.Enabled = false;
+                        numericPropertiesLineAlpha.Enabled = false;
+
+                        panelSymbolShape.Visible = false;
                     }
 
 
                     if (graphicSymbol is GsText)
                     {
                         GsText gsText = (GsText)graphicSymbol;
-                        panelSymbolText.Enabled = true;
-                        panelSymbolShape.Enabled = false;
+
+                        panelSymbolText.Visible = true;
+                        panelSymbolText.Location = new Point(panelSymbolGeneral.Location.X, panelSymbolGeneral.Bottom + 5);
+
+                        panelSymbolShape.Visible = false;
+
+                        numericWidth.Enabled = false;
+                        numericHeight.Enabled = false;
+
                         textBoxSymbolText.Text = gsText.text;
                         numericPropertiesFontSize.Value = (int)Math.Clamp(gsText.fontEmSize, minimumFontSize, maxFontSize);
                         checkBoxFontBold.Checked = (gsText.fontStyle & FontStyle.Bold) != 0;
                         checkBoxFontItalic.Checked = (gsText.fontStyle & FontStyle.Italic) != 0;
                         checkBoxStrikeout.Checked = (gsText.fontStyle & FontStyle.Strikeout) != 0;
                         checkBoxUnderline.Checked = (gsText.fontStyle & FontStyle.Underline) != 0;
-                    }
-                    else
-                    {
-                        panelSymbolText.Enabled = false;
-                        textBoxSymbolText.Enabled = false;
-                        textBoxSymbolText.Text = "";
                     }
 
                     numericPropertiesLineAlpha.Value = graphicSymbol.lineAlpha;
@@ -736,8 +752,8 @@ namespace ScreenShotTool.Forms
             else
             {
                 panelSymbolGeneral.Enabled = false;
-                panelSymbolShape.Enabled = false;
-                panelSymbolText.Enabled = false;
+                panelSymbolShape.Visible = false;
+                panelSymbolText.Visible = false;
                 ClearPropertyPanelValues();
             }
         }
