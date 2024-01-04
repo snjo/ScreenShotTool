@@ -748,6 +748,7 @@
             // numericPropertiesFontSize
             // 
             numericPropertiesFontSize.Location = new Point(74, 51);
+            numericPropertiesFontSize.Maximum = new decimal(new int[] { 200, 0, 0, 0 });
             numericPropertiesFontSize.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
             numericPropertiesFontSize.Name = "numericPropertiesFontSize";
             numericPropertiesFontSize.Size = new Size(65, 23);

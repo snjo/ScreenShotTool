@@ -1,5 +1,6 @@
 ﻿using ScreenShotTool.Properties;
 using System.Diagnostics;
+using System.Drawing.Text;
 using System.Numerics;
 using System.Reflection.PortableExecutable;
 using System.Runtime.InteropServices;
@@ -150,6 +151,9 @@ namespace ScreenShotTool.Forms
             if (originalImage != null)
             {
                 Graphics saveGraphic = Graphics.FromImage(originalImage);
+                saveGraphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                saveGraphic.TextRenderingHint = TextRenderingHint.AntiAlias;
+                
                 DrawElements(saveGraphic);
                 originalImage.Save(filename);
                 saveGraphic.Dispose();
@@ -174,9 +178,12 @@ namespace ScreenShotTool.Forms
                 overlayImage = new Bitmap(originalImage.Width, originalImage.Height);
                 overlayGraphics = Graphics.FromImage(overlayImage);
 
-                //overlayGraphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
                 //overlayGraphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+
                 //overlayGraphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit; // fixes ugly aliasing on text
+                overlayGraphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                overlayGraphics.TextRenderingHint = TextRenderingHint.AntiAlias; // fixes ugly aliasing on text
 
                 pictureBoxOverlay.Image = overlayImage;
                 pictureBoxOverlay.Width = pictureBoxOriginal.Width;
@@ -625,6 +632,8 @@ namespace ScreenShotTool.Forms
             {
                 Bitmap outImage = new Bitmap(originalImage);
                 Graphics saveGraphic = Graphics.FromImage(outImage);
+                saveGraphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                saveGraphic.TextRenderingHint = TextRenderingHint.AntiAlias;
                 DrawElements(saveGraphic);
                 Clipboard.SetImage(outImage);
                 saveGraphic.Dispose();
