@@ -1,16 +1,7 @@
-# ![image](img/icon32.png) ScreenShotTool
+# ScreenShotTool
 
-*A minimalist screenshot program.*
-Each capture method can have individual settings for saving to file or clipboard.
-
-lb { rb } bs \ dbs \\ no æ ø å Æ Ø Å
-lbe \{ rbe \}
-unicode Ʊ .
-
-	tab lb { rb }
-	bs \
+A simple screenshot program, inspired by Greenshot, but each capture method can have individual settings for saving to file, clipboard or editor.
 	
-
 ![image](img/screenshot.png)
 --------------------------------------------------------------------------------------
 

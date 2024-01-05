@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using static System.Windows.Forms.LinkLabel;
 
 namespace ScreenShotTool
@@ -15,13 +17,16 @@ namespace ScreenShotTool
         //https://manpages.ubuntu.com/manpages/jammy/man3/RTF::Cookbook.3pm.html
         //https://www.oreilly.com/library/view/rtf-pocket-guide/9781449302047/ch04.html   RTF escaped characters
 
-        public static string MarkdownToRtf(List<string> lines, int defaultPointSize = 10, string font = "fswiss Helvetica")
+        public static string MarkdownToRtf(List<string> lines, int defaultPointSize, Color textColor, Color headingColor, string font = "fswiss Helvetica", int H1 = 24, int H2 = 18, int H3 = 15, int H4 = 13, int H5 = 11, int H6 = 10)
         {
-            int[] textSizes = { defaultPointSize * 2, 56, 48, 40, 32, 26, 20, 20 };
+            int H1size = 56;
+            int[] textSizes = new int[7] { defaultPointSize * 2, H1 * 2, H2 * 2, H3 * 2, H4 * 2, H5 * 2, H6 * 2};
             List<int> columnSizes = new List<int>();
             var text = new StringBuilder();
 
-            text.AppendLine("{\\rtf1\\ansi\\deff0 {\\fonttbl\\f0\\" + font + ";}\\pard");
+            string colorTable = @"{\colortbl;" + ColorToTableDef(textColor) + ColorToTableDef(headingColor) + "}";
+
+            text.AppendLine("{\\rtf1\\ansi\\deff0 {\\fonttbl\\f0\\" + font + ";}" + colorTable + "\\pard");
 
             //foreach (var originalLine in lines)
             for (int i = 0; i < lines.Count(); i++)
@@ -58,6 +63,11 @@ namespace ScreenShotTool
 
             text.AppendLine("}");
             return text.ToString();
+        }
+
+        private static string ColorToTableDef(Color color)
+        {
+            return @"\red" + color.R + @"\green" + color.G + @"\blue" + color.B + ";";
         }
 
         public static string SetEscapeCharacters(string line)
@@ -269,17 +279,49 @@ namespace ScreenShotTool
 
         private static string SetHeading(int[] textSizes, string line)
         {
-            if (line.TrimStart().StartsWith("#") && line.Length > 6)
+            if (line.TrimStart().StartsWith("#"))
             {
                 StringBuilder sb = new StringBuilder();
-                string lineStart = line.Substring(0, 6);
-                string lineEnd = line.Substring(6);
-                int headingSize = lineStart.Split('#').Length; // smaller numbers are bigger text
-                sb.Append($"\\fs{textSizes[headingSize]} ");
-                sb.Append(lineStart.Replace("#", "").TrimStart());
-                sb.Append(lineEnd);
-                sb.Append($"\\fs{textSizes[0]}");
-                line = sb.ToString();
+
+                //string lineStart = line.Substring(0, 6);
+                //string lineEnd = line.Substring(6);
+                //int headingSize = lineStart.Split('#').Length - 1; // smaller numbers are bigger text
+                line = line.TrimStart();
+
+                int headingSize = 0;
+
+                foreach (char c in line)
+                {
+                    if (c == '#')
+                    {
+                        headingSize++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                if (headingSize >= textSizes.Length)
+                {
+                    //not a valid heading, too many #
+                    return line;
+                }
+                else
+                {
+                    sb.Append($"\\fs{textSizes[headingSize]} ");
+                    int trimStart = headingSize;
+                    if (line.Substring(headingSize,1) == " ")
+                    {
+                        // remove the first space after heading indicator
+                        trimStart++;
+                    }
+                    sb.Append(line.Substring(trimStart));
+                    //sb.Append(lineEnd);
+                    sb.Append($"\\fs{textSizes[0]}");
+                    line = sb.ToString();
+                    return line;
+                }
             }
             return line;
         }

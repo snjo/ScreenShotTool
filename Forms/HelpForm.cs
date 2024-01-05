@@ -10,7 +10,7 @@ namespace ScreenShotTool
             InitializeComponent();
             //richTextBox1.Rtf = helpText;
             List<string> lines = File.ReadAllLines("readme.MD", System.Text.Encoding.UTF8).ToList();
-            string rtfText = RtfTools.MarkdownToRtf(lines);
+            string rtfText = RtfTools.MarkdownToRtf(lines, 10, Color.Red, Color.Green);
             Debug.WriteLine("Markdown to RTF start ----------------------\n" + rtfText + "\nMarkdown to RTF end ----------------------\n");
             richTextBox1.Rtf = rtfText;
         }
