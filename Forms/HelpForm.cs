@@ -1,10 +1,8 @@
-﻿using System.Diagnostics;
-
-namespace ScreenShotTool
+﻿namespace ScreenShotTool
 {
     public partial class HelpForm : Form
     {
-        string rtfText = string.Empty;
+        readonly string rtfText = string.Empty;
 
         public HelpForm()
         {
@@ -14,7 +12,7 @@ namespace ScreenShotTool
             if (File.Exists(readmeFile))
             {
                 List<string> lines = File.ReadAllLines(readmeFile, System.Text.Encoding.UTF8).ToList();
-                RtfConverter rtfConverter = new RtfConverter();
+                RtfTools.RtfConverter rtfConverter = new();
                 rtfText = rtfConverter.ConvertText(lines);
             }
 
@@ -24,16 +22,17 @@ namespace ScreenShotTool
             }
 
             richTextBox1.Rtf = rtfText;
-            //richTextBox1.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang1033{\\fonttbl{\\f0\\fnil\\fcharset0 Calibri;}}\r\n{\\colortbl ;\\red0\\green255\\blue255;}\r\nf0\\fs22\\lang9 hello\\par\r\n\\highlight1 how\\par\r\nare\\line you\\par\r\n}";
         }
 
         private void Save_Click(object sender, EventArgs e)
         {
             string saveFile = "readme.rtf";
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Rich Text|*.rtf";
-            saveFileDialog.FileName = saveFile;
-            saveFileDialog.OverwritePrompt = true;
+            SaveFileDialog saveFileDialog = new()
+            {
+                Filter = "Rich Text|*.rtf",
+                FileName = saveFile,
+                OverwritePrompt = true
+            };
             DialogResult result = saveFileDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
@@ -47,7 +46,7 @@ namespace ScreenShotTool
             Clipboard.SetText(rtfText, TextDataFormat.Rtf);
         }
 
-        string helpTextFallback =
+        readonly string helpTextFallback =
             "{\\rtf1\\ansi{\\fonttbl\\f0\\fswiss Helvetica;}\\pard" +
             "\\i   Could not load readme.md. This is a hardcoded copy of the help manual, and could be out of date." +
             "\\par   Open \\b Help > Documentation (on github)\\b0  for more info.\\i0 \\fs18 \\par " +
@@ -154,9 +153,9 @@ namespace ScreenShotTool
 
         private void LinkLabelDocumentation_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            #pragma warning disable CA1416 // Validate platform compatibility
+#pragma warning disable CA1416 // Validate platform compatibility
             MainForm.OpenLink("https://github.com/snjo/ScreenShotTool/");
-            #pragma warning restore CA1416 // Validate platform compatibility
+#pragma warning restore CA1416 // Validate platform compatibility
         }
     }
 }

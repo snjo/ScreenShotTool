@@ -2,10 +2,8 @@
 using System.Diagnostics;
 using System.Drawing.Text;
 using System.Numerics;
-using System.Reflection.PortableExecutable;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using System.Windows.Forms;
 
 namespace ScreenShotTool.Forms
 {
@@ -157,7 +155,7 @@ namespace ScreenShotTool.Forms
                 Graphics saveGraphic = Graphics.FromImage(originalImage);
                 saveGraphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                 saveGraphic.TextRenderingHint = TextRenderingHint.AntiAlias;
-                
+
                 DrawElements(saveGraphic);
                 originalImage.Save(filename);
                 saveGraphic.Dispose();
@@ -881,6 +879,16 @@ namespace ScreenShotTool.Forms
             UpdateOverlay();
         }
 
+        private void textBoxSymbolText_KeyDown(object sender, KeyEventArgs e)
+        {
+            GsText? textSymbol = GetSelectedTextSymbol();
+            if (textSymbol != null)
+            {
+                textSymbol.text = textBoxSymbolText.Text;
+            }
+            UpdateOverlay();
+        }
+
         private void numericPropertiesFontSize_ValueChanged(object sender, EventArgs e)
         {
             GsText? textSymbol = GetSelectedTextSymbol();
@@ -1033,6 +1041,5 @@ namespace ScreenShotTool.Forms
                 DeleteSelectedSymbol();
             }
         }
-
     }
 }

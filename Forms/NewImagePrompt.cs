@@ -13,7 +13,7 @@
             numericHeight.Value = imageHeight;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             DialogResult result = colorDialog1.ShowDialog();
             if (result == DialogResult.OK)
@@ -23,12 +23,12 @@
             }
         }
 
-        private void buttonCancel_Click(object sender, EventArgs e)
+        private void ButtonCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
         }
 
-        private void buttonOK_Click(object sender, EventArgs e)
+        private void ButtonOK_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
             imageWidth = (int)numericWidth.Value;

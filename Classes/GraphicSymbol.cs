@@ -1,32 +1,28 @@
-﻿using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Net;
+﻿using System.Drawing.Drawing2D;
 using System.Numerics;
-using System.Security.Cryptography;
-using static ScreenShotTool.MainForm;
 
 namespace ScreenShotTool.Forms
 {
 #pragma warning disable CA1416 // Validate platform compatibility
     public class GraphicSymbol
     {
-        public Pen pen = new Pen(Color.Gray);
+        public Pen pen = new(Color.Gray);
         public Brush brush = new SolidBrush(Color.Gray);
         public Brush fillBrush = new SolidBrush(Color.Gray);
         public Color foregroundColor;
         public Color backgroundColor;
         public bool ScalingAllowed = true;
 
-        private int _x { get; set; }
-        private int _y { get; set; }
-        private int _width { get; set; }
-        private int _height { get; set; }
-        public virtual int Width { 
+        private int _x;
+        private int _y;
+        private int _width;
+        private int _height;
+        public virtual int Width
+        {
             get { return _width; }
             set { _width = value; }
         }
-        public virtual int Height 
+        public virtual int Height
         {
             get { return _height; }
             set { _height = value; }
@@ -40,7 +36,7 @@ namespace ScreenShotTool.Forms
                 _y = (int)value.Y;
             }
         }
-        public virtual Point EndPoint 
+        public virtual Point EndPoint
         {
             get { return new Point(_width, _height); }
             set
@@ -152,9 +148,9 @@ namespace ScreenShotTool.Forms
         }
 
 
-        internal DrawShapeDelegate drawLine = noDrawing;
-        internal DrawShapeDelegate drawFill = noDrawing;
-        public static void noDrawing(Pen pen, Brush b, Rectangle r, Graphics graphic)
+        internal DrawShapeDelegate drawLine = NoDrawing;
+        internal DrawShapeDelegate drawFill = NoDrawing;
+        public static void NoDrawing(Pen pen, Brush b, Rectangle r, Graphics graphic)
         {
         }
     }
@@ -208,8 +204,8 @@ namespace ScreenShotTool.Forms
         public FontStyle fontStyle = FontStyle.Regular;
         Font font;
         public string text = "Text";
-        int maxFontSize;
-        int minFontSize;
+        readonly int maxFontSize;
+        readonly int minFontSize;
 
         public GsText(Color foregroundColor, Color backgroundColor, Point startPoint, Point endPoint, int lineWeight, int lineAlpha) : base(foregroundColor, backgroundColor, startPoint, endPoint, lineWeight, lineAlpha)
         {
@@ -289,13 +285,13 @@ namespace ScreenShotTool.Forms
 
     public class GsArrow : GsLine
     {
-       
+
 
         public GsArrow(Color foregroundColor, Color backgroundColor, Point startPoint, Point endPoint, int lineWeight, int lineAlpha) : base(foregroundColor, backgroundColor, startPoint, endPoint, lineWeight, lineAlpha)
         {
             Name = "Arrow";
             int arrowSize = 5;
-            AdjustableArrowCap bigArrow = new AdjustableArrowCap(arrowSize, arrowSize);
+            AdjustableArrowCap bigArrow = new(arrowSize, arrowSize);
             pen.CustomEndCap = bigArrow;
             CheckValid(StartPointV2, EndPointV2);
         }
@@ -303,7 +299,7 @@ namespace ScreenShotTool.Forms
 
     public class GsImage : GraphicSymbol
     {
-        Image? image;
+        readonly Image? image;
 
         public GsImage(Color foregroundColor, Color backgroundColor, Point startPoint, Point endPoint) : base(foregroundColor, backgroundColor, startPoint, endPoint)
         {
@@ -324,7 +320,7 @@ namespace ScreenShotTool.Forms
         }
 
         public override int Width
-        { 
+        {
             get
             {
                 return image != null ? image.Width : 1;
@@ -349,16 +345,13 @@ namespace ScreenShotTool.Forms
 
         public override void Dispose()
         {
-            if (image != null)
-            {
-                image.Dispose();
-            }
+            image?.Dispose();
         }
     }
 
     public class GsImageScaled : GraphicSymbol
     {
-        Image? image;
+        readonly Image? image;
 
         public GsImageScaled(Color foregroundColor, Color backgroundColor, Point startPoint, Point endPoint) : base(foregroundColor, backgroundColor, startPoint, endPoint)
         {
@@ -399,10 +392,7 @@ namespace ScreenShotTool.Forms
 
         public override void Dispose()
         {
-            if (image != null)
-            {
-                image.Dispose();
-            }
+            image?.Dispose();
         }
     }
 }

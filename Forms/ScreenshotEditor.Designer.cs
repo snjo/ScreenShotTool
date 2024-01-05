@@ -507,7 +507,7 @@
             textBoxSymbolText.Name = "textBoxSymbolText";
             textBoxSymbolText.Size = new Size(135, 23);
             textBoxSymbolText.TabIndex = 26;
-            textBoxSymbolText.TextChanged += textBoxSymbolText_TextChanged;
+            textBoxSymbolText.KeyUp += textBoxSymbolText_KeyDown;
             // 
             // label14
             // 

@@ -97,7 +97,7 @@
             buttonColor.Size = new Size(103, 24);
             buttonColor.TabIndex = 5;
             buttonColor.UseVisualStyleBackColor = false;
-            buttonColor.Click += button1_Click;
+            buttonColor.Click += Button1_Click;
             // 
             // buttonOK
             // 
@@ -107,7 +107,7 @@
             buttonOK.TabIndex = 6;
             buttonOK.Text = "OK";
             buttonOK.UseVisualStyleBackColor = true;
-            buttonOK.Click += buttonOK_Click;
+            buttonOK.Click += ButtonOK_Click;
             // 
             // buttonCancel
             // 
@@ -117,7 +117,7 @@
             buttonCancel.TabIndex = 7;
             buttonCancel.Text = "Cancel";
             buttonCancel.UseVisualStyleBackColor = true;
-            buttonCancel.Click += buttonCancel_Click;
+            buttonCancel.Click += ButtonCancel_Click;
             // 
             // NewImagePrompt
             // 

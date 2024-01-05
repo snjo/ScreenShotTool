@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.Metrics;
-using System.Drawing;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Windows.Forms.LinkLabel;
 
-namespace ScreenShotTool
+namespace RtfTools
 {
     public class RtfConverter
     {
@@ -26,38 +17,41 @@ namespace ScreenShotTool
         // <!---CW:2000:4000:1000:-->
         // Where the widths are listed in Twips, 1/20th of a point or 1/1440th of an inch.
 
-        private List<string> lines;
-        public Color textColor = Color.Black;
-        public Color headingColor = Color.SteelBlue;
-        public Color codeFontColor = Color.DarkSlateGray;
-        public Color codeBlockColor = Color.Lavender;
-        public string font = "fswiss Helvetica";
-        public string codeFont = "fmodern Courier New";
-        public int defaultPointSize = 10;
-        public int H1 = 24;
-        public int H2 = 18;
-        public int H3 = 15;
-        public int H4 = 13;
-        public int H5 = 11;
-        public int H6 = 10;
-        public int codeBlockWidth = 100;
-        
+        public Color TextColor = Color.Black;
+        public Color HeadingColor = Color.SteelBlue;
+        public Color CodeFontColor = Color.DarkSlateGray;
+        public Color CodeBlockColor = Color.Lavender;
+        public string Font = "fswiss Helvetica";
+        public string CodeFont = "fmodern Courier New";
+        public int DefaultPointSize = 10;
+        public int H1PointSize = 24;
+        public int H2PointSize = 18;
+        public int H3PointSize = 15;
+        public int H4PointSize = 13;
+        public int H5PointSize = 11;
+        public int H6PointSize = 10;
+        public int CodeBlockPaddingWidth = 100;
+
         private bool codeBlockActive = false;
 
         public RtfConverter()
         {
-            lines = new List<string>();
+            //lines = new List<string>();
         }
 
         public string ConvertText(string text)
         {
+            List<string> lines = new();
             lines.Clear();
-            using (StringReader sr = new StringReader(text))
+            using (StringReader sr = new(text))
             {
-                string line;
+                string? line;
                 while ((line = sr.ReadLine()) != null)
                 {
-                    lines.Add(line);
+                    if (line != null)
+                    {
+                        lines.Add(line);
+                    }
                 }
             }
             return ConvertText(lines);
@@ -67,17 +61,17 @@ namespace ScreenShotTool
 
         public string ConvertText(List<string> lines)
         {
-            int[] textSizes = new int[7] { defaultPointSize * 2, H1 * 2, H2 * 2, H3 * 2, H4 * 2, H5 * 2, H6 * 2};
-            List<int> columnSizes = new List<int>();
+            int[] textSizes = new int[7] { DefaultPointSize * 2, H1PointSize * 2, H2PointSize * 2, H3PointSize * 2, H4PointSize * 2, H5PointSize * 2, H6PointSize * 2 };
+            List<int> columnSizes = new();
             var text = new StringBuilder();
 
-            string colorTable = @"{\colortbl;" + ColorToTableDef(textColor) + ColorToTableDef(headingColor) + ColorToTableDef(codeFontColor) + ColorToTableDef(codeBlockColor) + "}";
+            string colorTable = @"{\colortbl;" + ColorToTableDef(TextColor) + ColorToTableDef(HeadingColor) + ColorToTableDef(CodeFontColor) + ColorToTableDef(CodeBlockColor) + "}";
 
-            text.AppendLine("{\\rtf1\\ansi\\deff0 {\\fonttbl{\\f0\\" + font + ";}{\\f1\\" + codeFont + ";}}" + colorTable + "\\pard");
+            text.AppendLine("{\\rtf1\\ansi\\deff0 {\\fonttbl{\\f0\\" + Font + ";}{\\f1\\" + CodeFont + ";}}" + colorTable + "\\pard");
             //string fontTable = @"\deff0{\fonttbl{\f0\fnil Default Sans Serif;}{\f1\froman Times New Roman;}{\f2\fswiss Arial;}{\f3\fmodern Courier New;}{\f4\fscript Script MT Bold;}{\f5\fdecor Old English Text MT;}}";
             text.Append(@"\cf1 ");
             //foreach (var originalLine in lines)
-            for (int i = 0; i < lines.Count(); i++)
+            for (int i = 0; i < lines.Count; i++)
             {
                 string line = lines[i];
                 int numReplaced;
@@ -98,19 +92,19 @@ namespace ScreenShotTool
                     if (codeBlockStarting)
                     {
                         //insert a blank line if it's the start of a block
-                        text.Append( CodeblockLine("\t", codeBlockWidth) );
+                        text.Append(CodeblockLine("\t", CodeBlockPaddingWidth));
                     }
 
-                    line = CodeblockLine(line, codeBlockWidth + numReplaced);
+                    line = CodeblockLine(line, CodeBlockPaddingWidth + numReplaced);
                     text.Append(line);
                 }
                 else
                 {
-                    (line, numReplaced) = SetEscapeCharacters(line, true);
+                    line = SetEscapeCharacters(line, true).text;
 
                     if (codeBlockActive == true)
                     {
-                        text.Append(CodeblockLine("\t", codeBlockWidth));
+                        text.Append(CodeblockLine("\t", CodeBlockPaddingWidth));
                         codeBlockActive = false;
                     }
 
@@ -148,7 +142,7 @@ namespace ScreenShotTool
 
         private static string CodeblockLine(string line, int padding)
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new();
             stringBuilder.Append(@"\cf3 ");
             stringBuilder.Append(@"\f1 ");
             stringBuilder.Append("\\highlight4 ");
@@ -165,7 +159,7 @@ namespace ScreenShotTool
             return @"\red" + color.R + @"\green" + color.G + @"\blue" + color.B + ";";
         }
 
-        public static (string text, int numReplaced) SetEscapeCharacters(string line, bool doubleToSingleBackslash = true)
+        private static (string text, int numReplaced) SetEscapeCharacters(string line, bool doubleToSingleBackslash = true)
         {
             //https://www.oreilly.com/library/view/rtf-pocket-guide/9781449302047/ch04.html
             string result = line;
@@ -200,7 +194,7 @@ namespace ScreenShotTool
             // Escape RTF special characters (what remains after escaping the above)
             // replace backslashes not followed by a '
             string regMatchBS = @"\\+(?!')";
-            Regex reg = new Regex(regMatchBS);
+            Regex reg = new (regMatchBS);
             result = ReplaceAndCountRegEx(result, reg, @"\'5c", out numReplaced, numReplaced);
 
             // replace curly braces
@@ -236,7 +230,7 @@ namespace ScreenShotTool
                     sb.Append("\\u" + Convert.ToUInt32(c) + "?");
                     //sb.Append("\\'" + ((int)c).ToString("X"));
                 }
-                    
+
             }
             return sb.ToString();
         }
@@ -261,13 +255,12 @@ namespace ScreenShotTool
 
         private static (string line, int i) CreateTable(int i, List<string> lines, List<int> columSizes)
         {
-            StringBuilder result = new StringBuilder();
+            StringBuilder result = new();
             int tableRows = 0;
             bool foundRow = true;
-            int columns = lines[i].AllIndexesOf("|").Count() -1;
-            int lastColumnWidth = 0;
-            
-            for (int j = i; foundRow && j < lines.Count(); j++)
+            int columns = lines[i].AllIndexesOf("|").Count() - 1;
+
+            for (int j = i; foundRow && j < lines.Count; j++)
             {
                 if (lines[j].TrimStart().StartsWith('|'))
                 {
@@ -282,11 +275,11 @@ namespace ScreenShotTool
 
             if (tableRows > 2)
             {
-                
+
                 for (int r = i; r < i + tableRows; r++)// string line in lines)
                 {
-                    lastColumnWidth = 0;
-                    if (r == i+1) continue; // skip row with dashes that separates headings from rows
+                    int lastColumnWidth = 0;
+                    if (r == i + 1) continue; // skip row with dashes that separates headings from rows
                     result.AppendLine("\\trowd\\trgaph150");
                     for (int c = 0; c < columns; c++)
                     {
@@ -337,7 +330,7 @@ namespace ScreenShotTool
                 if (startTagPos < 0 || endTagPos < 0) return line;
                 if (startTagPos >= line.Length) return line;
                 if (endTagPos >= line.Length) return line.Substring(0, startTagPos); // tag end is at the end of the line, skip the end string
-                return line.Substring(0, startTagPos) + line.Substring(endTagPos);
+                return string.Concat(line.AsSpan(0, startTagPos), line.AsSpan(endTagPos));
             }
             return line;
         }
@@ -346,18 +339,18 @@ namespace ScreenShotTool
         {
             if (line.Contains(tag))
             {
-                StringBuilder sb = new StringBuilder();
+                StringBuilder sb = new();
                 List<int> matches = line.AllIndexesOf(tag).ToList();
                 if (matches.Count > 0)
                 {
-                    sb.Append(line.Substring(0, matches[0]));
+                    sb.Append(line.AsSpan(0, matches[0]));
 
-                    for (int i = 0; i < matches.Count(); i++)
+                    for (int i = 0; i < matches.Count; i++)
                     {
-                        if (matches.Count() >= i)
+                        if (matches.Count >= i)
                         {
                             sb.Append($"\\{rtfTag} ");
-                            if (matches[i] < line.Length && matches[i+1] < line.Length)
+                            if (matches[i] < line.Length && matches[i + 1] < line.Length)
                             {
                                 try
                                 {
@@ -366,17 +359,17 @@ namespace ScreenShotTool
                                 }
                                 catch
                                 {
-                                    Debug.WriteLine($"SetStyle, match index {matches[i]} and {matches[i + 1]}, line length is {line.Length} from:\n{line}");   
+                                    Debug.WriteLine($"SetStyle, match index {matches[i]} and {matches[i + 1]}, line length is {line.Length} from:\n{line}");
                                 }
                             }
-                            
+
                             sb.Append($"\\{rtfTag}0 ");
                             i++;
                         }
                         else
                         {
                             sb.Append($"\\{rtfTag} ");
-                            sb.Append(line.Substring(matches[i]));
+                            sb.Append(line.AsSpan(matches[i]));
                             sb.Append($"\\{rtfTag}0 ");
                         }
                     }
@@ -390,7 +383,7 @@ namespace ScreenShotTool
         {
             if (line.TrimStart().StartsWith("#"))
             {
-                StringBuilder sb = new StringBuilder();
+                StringBuilder sb = new();
 
                 //string lineStart = line.Substring(0, 6);
                 //string lineEnd = line.Substring(6);
@@ -421,12 +414,12 @@ namespace ScreenShotTool
                     sb.Append(@"\cf2 "); // set heading color
                     sb.Append($"\\fs{textSizes[headingSize]} "); // set heading size
                     int trimStart = headingSize;
-                    if (line.Substring(headingSize,1) == " ")
+                    if (line.Substring(headingSize, 1) == " ")
                     {
                         // remove the first space after heading indicator
                         trimStart++;
                     }
-                    sb.Append(line.Substring(trimStart));
+                    sb.Append(line.AsSpan(trimStart));
                     //sb.Append(lineEnd);
                     sb.Append($"\\fs{textSizes[0]}"); // set normal size
                     sb.Append(@"\cf1 "); // set normal color
