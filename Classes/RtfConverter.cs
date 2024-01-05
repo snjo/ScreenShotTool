@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ using static System.Windows.Forms.LinkLabel;
 
 namespace ScreenShotTool
 {
-    internal static class RtfTools
+    public class RtfConverter
     {
 
         // https://manpages.ubuntu.com/manpages/jammy/man3/RTF::Cookbook.3pm.html   RTF cookbook
@@ -25,51 +26,138 @@ namespace ScreenShotTool
         // <!---CW:2000:4000:1000:-->
         // Where the widths are listed in Twips, 1/20th of a point or 1/1440th of an inch.
 
-        public static string MarkdownToRtf(List<string> lines, int defaultPointSize, Color textColor, Color headingColor, string font = "fswiss Helvetica", int H1 = 24, int H2 = 18, int H3 = 15, int H4 = 13, int H5 = 11, int H6 = 10)
+        private List<string> lines;
+        public Color textColor = Color.Black;
+        public Color headingColor = Color.SteelBlue;
+        public Color codeFontColor = Color.DarkSlateGray;
+        public Color codeBlockColor = Color.Lavender;
+        public string font = "fswiss Helvetica";
+        public string codeFont = "fmodern Courier New";
+        public int defaultPointSize = 10;
+        public int H1 = 24;
+        public int H2 = 18;
+        public int H3 = 15;
+        public int H4 = 13;
+        public int H5 = 11;
+        public int H6 = 10;
+        public int codeBlockWidth = 100;
+        
+        private bool codeBlockActive = false;
+
+        public RtfConverter()
+        {
+            lines = new List<string>();
+        }
+
+        public string ConvertText(string text)
+        {
+            lines.Clear();
+            using (StringReader sr = new StringReader(text))
+            {
+                string line;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    lines.Add(line);
+                }
+            }
+            return ConvertText(lines);
+        }
+
+
+
+        public string ConvertText(List<string> lines)
         {
             int[] textSizes = new int[7] { defaultPointSize * 2, H1 * 2, H2 * 2, H3 * 2, H4 * 2, H5 * 2, H6 * 2};
             List<int> columnSizes = new List<int>();
             var text = new StringBuilder();
 
-            string colorTable = @"{\colortbl;" + ColorToTableDef(textColor) + ColorToTableDef(headingColor) + "}";
+            string colorTable = @"{\colortbl;" + ColorToTableDef(textColor) + ColorToTableDef(headingColor) + ColorToTableDef(codeFontColor) + ColorToTableDef(codeBlockColor) + "}";
 
-            text.AppendLine("{\\rtf1\\ansi\\deff0 {\\fonttbl\\f0\\" + font + ";}" + colorTable + "\\pard");
+            text.AppendLine("{\\rtf1\\ansi\\deff0 {\\fonttbl{\\f0\\" + font + ";}{\\f1\\" + codeFont + ";}}" + colorTable + "\\pard");
+            //string fontTable = @"\deff0{\fonttbl{\f0\fnil Default Sans Serif;}{\f1\froman Times New Roman;}{\f2\fswiss Arial;}{\f3\fmodern Courier New;}{\f4\fscript Script MT Bold;}{\f5\fdecor Old English Text MT;}}";
             text.Append(@"\cf1 ");
             //foreach (var originalLine in lines)
             for (int i = 0; i < lines.Count(); i++)
             {
                 string line = lines[i];
+                int numReplaced;
 
-                line = SetEscapeCharacters(line);
+                //(line, numReplaced) = SetEscapeCharacters(line);
 
-                line = SetHeading(textSizes, line);
-
-                line = SetStyle(line, "**", "b"); // bold
-                line = SetStyle(line, "__", "b"); // bold
-                line = SetStyle(line, "*", "i"); // italic
-                line = SetStyle(line, "_", "i"); // italic
-
-                line = SetImage(line);
-
-                var newColumnSizes = SetColumnWidths(line);
-                if (newColumnSizes.Count > 0)
+                if (line.StartsWith('\t')) // code block, skip all other formatting
                 {
-                    Debug.WriteLine("New Column sizes: " + newColumnSizes.Count);
-                    columnSizes = newColumnSizes;
-                    continue; // skip this line, it's a "<!--" comment for Column Widths
-                }
+                    (line, numReplaced) = SetEscapeCharacters(line, false);
 
-                if (line.TrimStart().StartsWith('|'))
+                    bool codeBlockStarting = false;
+                    if (codeBlockActive == false)
+                    {
+
+                        codeBlockStarting = true;
+                    }
+                    codeBlockActive = true;
+                    if (codeBlockStarting)
+                    {
+                        //insert a blank line if it's the start of a block
+                        text.Append( CodeblockLine("\t", codeBlockWidth) );
+                    }
+
+                    line = CodeblockLine(line, codeBlockWidth + numReplaced);
+                    text.Append(line);
+                }
+                else
                 {
-                    (line, i) = CreateTable(i, lines, columnSizes);
-                }
+                    (line, numReplaced) = SetEscapeCharacters(line, true);
 
-                text.AppendLine(line);
-                text.AppendLine("\\par ");
+                    if (codeBlockActive == true)
+                    {
+                        text.Append(CodeblockLine("\t", codeBlockWidth));
+                        codeBlockActive = false;
+                    }
+
+                    line = SetHeading(textSizes, line);
+
+                    line = SetStyle(line, "**", "b"); // bold
+                    line = SetStyle(line, "__", "b"); // bold
+                    line = SetStyle(line, "*", "i"); // italic
+                    line = SetStyle(line, "_", "i"); // italic
+
+                    line = SetImage(line);
+
+
+                    var newColumnSizes = SetColumnWidths(line);
+                    if (newColumnSizes.Count > 0)
+                    {
+                        columnSizes = newColumnSizes;
+                        continue; // skip this line, it's a "<!--" comment for Column Widths
+                    }
+
+                    if (line.TrimStart().StartsWith('|'))
+                    {
+                        (line, i) = CreateTable(i, lines, columnSizes);
+                    }
+
+                    text.AppendLine(line);
+
+                    text.AppendLine("\\par ");
+                }
             }
 
             text.AppendLine("}");
             return text.ToString();
+        }
+
+        private static string CodeblockLine(string line, int padding)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append(@"\cf3 ");
+            stringBuilder.Append(@"\f1 ");
+            stringBuilder.Append("\\highlight4 ");
+            stringBuilder.Append(line.PadRight(padding));
+            stringBuilder.Append("\\highlight0 ");
+            stringBuilder.Append(@"\f0 ");
+            stringBuilder.Append(@"\cf1 ");
+            stringBuilder.AppendLine("\\par ");
+            return stringBuilder.ToString();
         }
 
         private static string ColorToTableDef(Color color)
@@ -77,44 +165,63 @@ namespace ScreenShotTool
             return @"\red" + color.R + @"\green" + color.G + @"\blue" + color.B + ";";
         }
 
-        public static string SetEscapeCharacters(string line)
+        public static (string text, int numReplaced) SetEscapeCharacters(string line, bool doubleToSingleBackslash = true)
         {
             //https://www.oreilly.com/library/view/rtf-pocket-guide/9781449302047/ch04.html
             string result = line;
-
+            int numReplaced = 0;
             // IMPORTANT: \’7d is not the same as \'7d, the ' character matters
 
             // Escaped markdown characters
-            result = result.Replace(@"\\", @"\'5c"); // right curly brace
-            result = result.Replace(@"\#", @"\'23"); // number / hash, to prevent deliberate # from being used as heading
-            result = result.Replace(@"\*", @"\'2a"); // asterisk, not font style
-            result = result.Replace(@"\_", @"\'5f"); // underscore, not font style
-            result = result.Replace(@"\[", @"\'5b"); // left square brace
-            result = result.Replace(@"\]", @"\'5d"); // right square brace
-            result = result.Replace(@"\{", @"\'7b"); // left curly brace
-            result = result.Replace(@"\}", @"\'7d"); // right curly brace
-            result = result.Replace(@"\`", @"\'60"); // grave
-            result = result.Replace(@"\(", @"\'28"); // left parenthesis
-            result = result.Replace(@"\)", @"\'29"); // right parenthesis
-            result = result.Replace(@"\+", @"\'2b"); // plus
-            result = result.Replace(@"\-", @"\'2d"); // minus
-            result = result.Replace(@"\.", @"\'2e"); // period
-            result = result.Replace(@"\!", @"\'21"); // exclamation
-            result = result.Replace(@"\|", @"\'7c"); // pipe / vertical bar
+            if (doubleToSingleBackslash)
+            {
+                result = result.ReplaceAndCount(@"\\", @"\'5c", out numReplaced, numReplaced); // right curly brace
+            }
+            else
+            {
+                result = result.ReplaceAndCount(@"\\", @"\'5c\'5c", out numReplaced, numReplaced);
+            }
+            result = result.ReplaceAndCount(@"\#", @"\'23", out numReplaced, numReplaced); // number / hash, to prevent deliberate # from being used as heading
+            result = result.ReplaceAndCount(@"\*", @"\'2a", out numReplaced, numReplaced); // asterisk, not font style
+            result = result.ReplaceAndCount(@"\_", @"\'5f", out numReplaced, numReplaced); // underscore, not font style
+            result = result.ReplaceAndCount(@"\[", @"\'5b", out numReplaced, numReplaced); // left square brace
+            result = result.ReplaceAndCount(@"\]", @"\'5d", out numReplaced, numReplaced); // right square brace
+            result = result.ReplaceAndCount(@"\{", @"\'7b", out numReplaced, numReplaced); // left curly brace
+            result = result.ReplaceAndCount(@"\}", @"\'7d", out numReplaced, numReplaced); // right curly brace
+            result = result.ReplaceAndCount(@"\`", @"\'60", out numReplaced, numReplaced); // grave
+            result = result.ReplaceAndCount(@"\(", @"\'28", out numReplaced, numReplaced); // left parenthesis
+            result = result.ReplaceAndCount(@"\)", @"\'29", out numReplaced, numReplaced); // right parenthesis
+            result = result.ReplaceAndCount(@"\+", @"\'2b", out numReplaced, numReplaced); // plus
+            result = result.ReplaceAndCount(@"\-", @"\'2d", out numReplaced, numReplaced); // minus
+            result = result.ReplaceAndCount(@"\.", @"\'2e", out numReplaced, numReplaced); // period
+            result = result.ReplaceAndCount(@"\!", @"\'21", out numReplaced, numReplaced); // exclamation
+            result = result.ReplaceAndCount(@"\|", @"\'7c", out numReplaced, numReplaced); // pipe / vertical bar
 
             // Escape RTF special characters (what remains after escaping the above)
             // replace backslashes not followed by a '
             string regMatchBS = @"\\+(?!')";
             Regex reg = new Regex(regMatchBS);
-            result = reg.Replace(result, @"\'5c");
+            result = ReplaceAndCountRegEx(result, reg, @"\'5c", out numReplaced, numReplaced);
+
             // replace curly braces
-            result = result.Replace(@"{", @"\'7b"); // left curly brace
-            result = result.Replace(@"}", @"\'7d"); // right curly brace
+            result = result.ReplaceAndCount(@"{", @"\'7b", out numReplaced, numReplaced); // left curly brace
+            result = result.ReplaceAndCount(@"}", @"\'7d", out numReplaced, numReplaced); // right curly brace
 
             result = GetRtfUnicodeEscapedString(result);
 
+            return (result, numReplaced);
+        }
+
+        private static string ReplaceAndCountRegEx(string text, Regex reg, string newValue, out int count, int addToValue)
+        {
+            int countBefore = text.Length;
+            string result = reg.Replace(text, newValue);
+            int countAfter = result.Length;
+            int change = countAfter - countBefore;
+            count = change + addToValue;
             return result;
         }
+
 
         public static string GetRtfUnicodeEscapedString(string s)
         {
@@ -166,15 +273,12 @@ namespace ScreenShotTool
                 {
                     tableRows++;
                     foundRow = true;
-                    //Debug.WriteLine($"+++   Row: {lines[j]}");
                 }
                 else
                 {
                     foundRow = false;
-                    //Debug.WriteLine($"NOT a Row: {lines[j]}");
                 }
             }
-            Debug.WriteLine($"CreateTable found {tableRows} rows");
 
             if (tableRows > 2)
             {
@@ -192,12 +296,10 @@ namespace ScreenShotTool
                         {
                             int newWidth = lastColumnWidth + columSizes[c];
                             result.AppendLine($"\\cellx{newWidth}");
-                            //Debug.WriteLine("Using new column width " + newWidth);
                             lastColumnWidth = newWidth;
                         }
                         else
                         {
-                            //Debug.WriteLine("Using default column widths");
                             int newWidth = (c + 1) * 2000;
                             result.AppendLine($"\\cellx{newWidth}");
                         }
@@ -334,7 +436,10 @@ namespace ScreenShotTool
             }
             return line;
         }
+    }
 
+    public static class ExtensionMethods
+    {
         public static IEnumerable<int> AllIndexesOf(this string str, string searchstring)
         {
             int minIndex = str.IndexOf(searchstring);
@@ -343,6 +448,13 @@ namespace ScreenShotTool
                 yield return minIndex;
                 minIndex = str.IndexOf(searchstring, minIndex + searchstring.Length);
             }
+        }
+
+        public static string ReplaceAndCount(this string text, string oldValue, string newValue, out int count, int addToCount = 0)
+        {
+            int lenghtDiff = newValue.Length - oldValue.Length;
+            count = addToCount + ((text.Split(oldValue).Length - 1) * lenghtDiff);
+            return text.Replace(oldValue, newValue);
         }
     }
 }

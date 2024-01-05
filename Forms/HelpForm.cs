@@ -14,7 +14,8 @@ namespace ScreenShotTool
             if (File.Exists(readmeFile))
             {
                 List<string> lines = File.ReadAllLines(readmeFile, System.Text.Encoding.UTF8).ToList();
-                rtfText = RtfTools.MarkdownToRtf(lines, 10, Color.Black, Color.SteelBlue);
+                RtfConverter rtfConverter = new RtfConverter();
+                rtfText = rtfConverter.ConvertText(lines);
             }
 
             if (rtfText.Length == 0)
@@ -23,6 +24,7 @@ namespace ScreenShotTool
             }
 
             richTextBox1.Rtf = rtfText;
+            //richTextBox1.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang1033{\\fonttbl{\\f0\\fnil\\fcharset0 Calibri;}}\r\n{\\colortbl ;\\red0\\green255\\blue255;}\r\nf0\\fs22\\lang9 hello\\par\r\n\\highlight1 how\\par\r\nare\\line you\\par\r\n}";
         }
 
         private void Save_Click(object sender, EventArgs e)
@@ -47,7 +49,8 @@ namespace ScreenShotTool
 
         string helpTextFallback =
             "{\\rtf1\\ansi{\\fonttbl\\f0\\fswiss Helvetica;}\\pard" +
-            "\\par \\i Could not load readme.txt. Showing hardcoded info (May be outdated) \\i0 \\par " +
+            "\\i   Could not load readme.md. This is a hardcoded copy of the help manual, and could be out of date." +
+            "\\par   Open \\b Help > Documentation (on github)\\b0  for more info.\\i0 \\fs18 \\par " +
             "\\par\\b1 \\fs32 Capture Modes\\b0 \\fs18 \\par " +
             "\\par Screenshots are performed using hotkeys defined in Options.\\par " +
             "\\par \\b1 Default hotkeys:\\b0 \\par " +
@@ -149,6 +152,11 @@ namespace ScreenShotTool
             "\\par " +
             "}";
 
-
+        private void LinkLabelDocumentation_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            #pragma warning disable CA1416 // Validate platform compatibility
+            MainForm.OpenLink("https://github.com/snjo/ScreenShotTool/");
+            #pragma warning restore CA1416 // Validate platform compatibility
+        }
     }
 }

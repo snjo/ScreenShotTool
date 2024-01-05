@@ -32,6 +32,7 @@
             richTextBox1 = new RichTextBox();
             buttonSave = new Button();
             button1 = new Button();
+            linkLabelDocumentation = new LinkLabel();
             SuspendLayout();
             // 
             // richTextBox1
@@ -48,6 +49,7 @@
             // 
             // buttonSave
             // 
+            buttonSave.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             buttonSave.Location = new Point(943, 7);
             buttonSave.Name = "buttonSave";
             buttonSave.Size = new Size(75, 23);
@@ -58,6 +60,7 @@
             // 
             // button1
             // 
+            button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button1.Location = new Point(816, 7);
             button1.Name = "button1";
             button1.Size = new Size(121, 23);
@@ -66,12 +69,25 @@
             button1.UseVisualStyleBackColor = true;
             button1.Click += CopyToClipboard_Click;
             // 
+            // linkLabelDocumentation
+            // 
+            linkLabelDocumentation.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            linkLabelDocumentation.AutoSize = true;
+            linkLabelDocumentation.Location = new Point(684, 11);
+            linkLabelDocumentation.Name = "linkLabelDocumentation";
+            linkLabelDocumentation.Size = new Size(126, 15);
+            linkLabelDocumentation.TabIndex = 3;
+            linkLabelDocumentation.TabStop = true;
+            linkLabelDocumentation.Text = "Documentation online";
+            linkLabelDocumentation.LinkClicked += LinkLabelDocumentation_LinkClicked;
+            // 
             // HelpForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(1030, 627);
+            Controls.Add(linkLabelDocumentation);
             Controls.Add(button1);
             Controls.Add(buttonSave);
             Controls.Add(richTextBox1);
@@ -79,6 +95,7 @@
             Name = "HelpForm";
             Text = "Screenshot Tool Help";
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -86,5 +103,6 @@
         private RichTextBox richTextBox1;
         private Button buttonSave;
         private Button button1;
+        private LinkLabel linkLabelDocumentation;
     }
 }
