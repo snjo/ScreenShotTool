@@ -3,6 +3,14 @@
 *A minimalist screenshot program.*
 Each capture method can have individual settings for saving to file or clipboard.
 
+lb { rb } bs \ dbs \\ no æ ø å Æ Ø Å
+lbe \{ rbe \}
+unicode Ʊ .
+
+	tab lb { rb }
+	bs \
+	
+
 ![image](img/screenshot.png)
 --------------------------------------------------------------------------------------
 
@@ -140,6 +148,10 @@ Which of the split name element to use is set by the option "Keep split text in 
 
 If on, this option crops the captured window from top, left, right and bottom.  
 This can be used to remove the window title bar and edges. In the Windows 11 default theme, values of 32,10,10,10 will remove these.
+
+#### Counter number
+
+When using the $c or ${NUM} variable, it inserts the number in this field. The number is saved between sessions.
 
 --------------------------------------------------------------------------------------
 

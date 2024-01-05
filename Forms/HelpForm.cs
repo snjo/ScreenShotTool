@@ -9,32 +9,15 @@ namespace ScreenShotTool
         {
             InitializeComponent();
             //richTextBox1.Rtf = helpText;
-            string fileName = "readme.MD";
-            List<string> lines = new();
-            string rtfText = string.Empty;
-            if (File.Exists(fileName))
-            {
-                lines = File.ReadAllLines(fileName).ToList();
-            }
-            if (lines.Count > 0)
-            {
-                rtfText = RtfTools.CreateRtfText(lines);
-            }
-            if (rtfText.Length > 0)
-            {
-                richTextBox1.Rtf = rtfText;
-            }
-            else
-            {
-                richTextBox1.Rtf = helpText;
-            }
+            List<string> lines = File.ReadAllLines("readme.MD", System.Text.Encoding.UTF8).ToList();
+            string rtfText = RtfTools.MarkdownToRtf(lines);
+            Debug.WriteLine("Markdown to RTF start ----------------------\n" + rtfText + "\nMarkdown to RTF end ----------------------\n");
+            richTextBox1.Rtf = rtfText;
         }
 
         string helpText =
             "{\\rtf1\\ansi{\\fonttbl\\f0\\fswiss Helvetica;}\\pard" +
-            "\\i   Could not load readme.md. This is a hardcoded copy of the help manual, and could be out of date." +
-            "\\par   Open \\b Help > Documentation (on github)\\b0  for more info.\\i0 \\fs18 \\par " +
-            "\\par \\b1 \\fs32 Capture Modes\\b0 \\fs18 \\par " +
+            "\\b1 \\fs32 Capture Modes\\b0 \\fs18 \\par " +
             "\\par Screenshots are performed using hotkeys defined in Options.\\par " +
             "\\par \\b1 Default hotkeys:\\b0 \\par " +
             "\\par Region\t\tPrintscreen" +

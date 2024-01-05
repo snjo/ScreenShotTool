@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static System.Windows.Forms.LinkLabel;
 
@@ -10,7 +11,11 @@ namespace ScreenShotTool
 {
     internal static class RtfTools
     {
-        public static string CreateRtfText(List<string> lines, int defaultPointSize = 10, string font = "fswiss Helvetica")
+
+        //https://manpages.ubuntu.com/manpages/jammy/man3/RTF::Cookbook.3pm.html
+        //https://www.oreilly.com/library/view/rtf-pocket-guide/9781449302047/ch04.html   RTF escaped characters
+
+        public static string MarkdownToRtf(List<string> lines, int defaultPointSize = 10, string font = "fswiss Helvetica")
         {
             int[] textSizes = { defaultPointSize * 2, 56, 48, 40, 32, 26, 20, 20 };
             List<int> columnSizes = new List<int>();
@@ -22,6 +27,8 @@ namespace ScreenShotTool
             for (int i = 0; i < lines.Count(); i++)
             {
                 string line = lines[i];
+
+                line = SetEscapeCharacters(line);
 
                 line = SetHeading(textSizes, line);
 
@@ -51,6 +58,63 @@ namespace ScreenShotTool
 
             text.AppendLine("}");
             return text.ToString();
+        }
+
+        public static string SetEscapeCharacters(string line)
+        {
+            //https://www.oreilly.com/library/view/rtf-pocket-guide/9781449302047/ch04.html
+            string result = line;
+
+            // IMPORTANT: \’7d is not the same as \'7d, the ' character matters
+
+            // Escaped markdown characters
+            result = result.Replace(@"\\", @"\'5c"); // right curly brace
+            result = result.Replace(@"\#", @"\'23"); // number / hash, to prevent deliberate # from being used as heading
+            result = result.Replace(@"\*", @"\'2a"); // asterisk, not font style
+            result = result.Replace(@"\_", @"\'5f"); // underscore, not font style
+            result = result.Replace(@"\[", @"\'5b"); // left square brace
+            result = result.Replace(@"\]", @"\'5d"); // right square brace
+            result = result.Replace(@"\{", @"\'7b"); // left curly brace
+            result = result.Replace(@"\}", @"\'7d"); // right curly brace
+            result = result.Replace(@"\`", @"\'60"); // grave
+            result = result.Replace(@"\(", @"\'28"); // left parenthesis
+            result = result.Replace(@"\)", @"\'29"); // right parenthesis
+            result = result.Replace(@"\+", @"\'2b"); // plus
+            result = result.Replace(@"\-", @"\'2d"); // minus
+            result = result.Replace(@"\.", @"\'2e"); // period
+            result = result.Replace(@"\!", @"\'21"); // exclamation
+            result = result.Replace(@"\|", @"\'7c"); // pipe / vertical bar
+
+            // Escape RTF special characters (what remains after escaping the above)
+            // replace backslashes not followed by a '
+            string regMatchBS = @"\\+(?!')";
+            Regex reg = new Regex(regMatchBS);
+            result = reg.Replace(result, @"\'5c");
+            // replace curly braces
+            result = result.Replace(@"{", @"\'7b"); // left curly brace
+            result = result.Replace(@"}", @"\'7d"); // right curly brace
+
+            result = GetRtfUnicodeEscapedString(result);
+
+            return result;
+        }
+
+        public static string GetRtfUnicodeEscapedString(string s)
+        {
+            //https://stackoverflow.com/questions/1368020/how-to-output-unicode-string-to-rtf-using-c
+            var sb = new StringBuilder();
+            foreach (var c in s)
+            {
+                if (c <= 0x7f)
+                    sb.Append(c);
+                else
+                {
+                    sb.Append("\\u" + Convert.ToUInt32(c) + "?");
+                    //sb.Append("\\'" + ((int)c).ToString("X"));
+                }
+                    
+            }
+            return sb.ToString();
         }
 
         private static List<int> SetColumnWidths(string line)
@@ -111,12 +175,12 @@ namespace ScreenShotTool
                         {
                             int newWidth = lastColumnWidth + columSizes[c];
                             result.AppendLine($"\\cellx{newWidth}");
-                            Debug.WriteLine("Using new column width " + newWidth);
+                            //Debug.WriteLine("Using new column width " + newWidth);
                             lastColumnWidth = newWidth;
                         }
                         else
                         {
-                            Debug.WriteLine("Using default column widths");
+                            //Debug.WriteLine("Using default column widths");
                             int newWidth = (c + 1) * 2000;
                             result.AppendLine($"\\cellx{newWidth}");
                         }
