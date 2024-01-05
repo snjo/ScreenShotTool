@@ -30,6 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HelpForm));
             richTextBox1 = new RichTextBox();
+            buttonSave = new Button();
+            button1 = new Button();
             SuspendLayout();
             // 
             // richTextBox1
@@ -37,12 +39,32 @@
             richTextBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             richTextBox1.BackColor = Color.White;
             richTextBox1.BorderStyle = BorderStyle.None;
-            richTextBox1.Location = new Point(12, 12);
+            richTextBox1.Location = new Point(12, 36);
             richTextBox1.Name = "richTextBox1";
             richTextBox1.ReadOnly = true;
-            richTextBox1.Size = new Size(1006, 603);
+            richTextBox1.Size = new Size(1006, 579);
             richTextBox1.TabIndex = 0;
             richTextBox1.Text = "";
+            // 
+            // buttonSave
+            // 
+            buttonSave.Location = new Point(943, 7);
+            buttonSave.Name = "buttonSave";
+            buttonSave.Size = new Size(75, 23);
+            buttonSave.TabIndex = 1;
+            buttonSave.Text = "Save";
+            buttonSave.UseVisualStyleBackColor = true;
+            buttonSave.Click += Save_Click;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(816, 7);
+            button1.Name = "button1";
+            button1.Size = new Size(121, 23);
+            button1.TabIndex = 2;
+            button1.Text = "Copy to clipboard";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += CopyToClipboard_Click;
             // 
             // HelpForm
             // 
@@ -50,6 +72,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(1030, 627);
+            Controls.Add(button1);
+            Controls.Add(buttonSave);
             Controls.Add(richTextBox1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "HelpForm";
@@ -60,5 +84,7 @@
         #endregion
 
         private RichTextBox richTextBox1;
+        private Button buttonSave;
+        private Button button1;
     }
 }

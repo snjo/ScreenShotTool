@@ -4,20 +4,51 @@ namespace ScreenShotTool
 {
     public partial class HelpForm : Form
     {
+        string rtfText = string.Empty;
 
         public HelpForm()
         {
             InitializeComponent();
-            //richTextBox1.Rtf = helpText;
-            List<string> lines = File.ReadAllLines("readme.MD", System.Text.Encoding.UTF8).ToList();
-            string rtfText = RtfTools.MarkdownToRtf(lines, 10, Color.Red, Color.Green);
-            Debug.WriteLine("Markdown to RTF start ----------------------\n" + rtfText + "\nMarkdown to RTF end ----------------------\n");
+            string readmeFile = "readme.MD";
+
+            if (File.Exists(readmeFile))
+            {
+                List<string> lines = File.ReadAllLines(readmeFile, System.Text.Encoding.UTF8).ToList();
+                rtfText = RtfTools.MarkdownToRtf(lines, 10, Color.Black, Color.SteelBlue);
+            }
+
+            if (rtfText.Length == 0)
+            {
+                rtfText = helpTextFallback;
+            }
+
             richTextBox1.Rtf = rtfText;
         }
 
-        string helpText =
+        private void Save_Click(object sender, EventArgs e)
+        {
+            string saveFile = "readme.rtf";
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Rich Text|*.rtf";
+            saveFileDialog.FileName = saveFile;
+            saveFileDialog.OverwritePrompt = true;
+            DialogResult result = saveFileDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                saveFile = saveFileDialog.FileName;
+                File.WriteAllText(saveFile, rtfText); // DON'T specify UTF-8 encoding. It will add the byte markers at the front, making the file incompatible with Word/Wordpad
+            }
+        }
+
+        private void CopyToClipboard_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(rtfText, TextDataFormat.Rtf);
+        }
+
+        string helpTextFallback =
             "{\\rtf1\\ansi{\\fonttbl\\f0\\fswiss Helvetica;}\\pard" +
-            "\\b1 \\fs32 Capture Modes\\b0 \\fs18 \\par " +
+            "\\par \\i Could not load readme.txt. Showing hardcoded info (May be outdated) \\i0 \\par " +
+            "\\par\\b1 \\fs32 Capture Modes\\b0 \\fs18 \\par " +
             "\\par Screenshots are performed using hotkeys defined in Options.\\par " +
             "\\par \\b1 Default hotkeys:\\b0 \\par " +
             "\\par Region\t\tPrintscreen" +
@@ -117,5 +148,7 @@ namespace ScreenShotTool
             "\\par " +
             "\\par " +
             "}";
+
+
     }
 }

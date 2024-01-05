@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.LinkLabel;
 
 namespace ScreenShotTool
@@ -14,12 +15,18 @@ namespace ScreenShotTool
     internal static class RtfTools
     {
 
-        //https://manpages.ubuntu.com/manpages/jammy/man3/RTF::Cookbook.3pm.html
-        //https://www.oreilly.com/library/view/rtf-pocket-guide/9781449302047/ch04.html   RTF escaped characters
+        // https://manpages.ubuntu.com/manpages/jammy/man3/RTF::Cookbook.3pm.html   RTF cookbook
+        // https://www.oreilly.com/library/view/rtf-pocket-guide/9781449302047/   RTF Pocket Guide  // scroll down for table of contents
+        // https://www.oreilly.com/library/view/rtf-pocket-guide/9781449302047/ch04.html   ASCII-RTF Character Chart / RTF escaped characters
+        // https://www.biblioscape.com/rtf15_spec.htm   Rich Text Format (RTF) Version 1.5 Specification
+        // https://latex2rtf.sourceforge.net/rtfspec.html   Rich Text Format (RTF) Specification,version 1.6
+
+        // To set table column width, add a line before the table like this, each column value enclosed by : on both sides
+        // <!---CW:2000:4000:1000:-->
+        // Where the widths are listed in Twips, 1/20th of a point or 1/1440th of an inch.
 
         public static string MarkdownToRtf(List<string> lines, int defaultPointSize, Color textColor, Color headingColor, string font = "fswiss Helvetica", int H1 = 24, int H2 = 18, int H3 = 15, int H4 = 13, int H5 = 11, int H6 = 10)
         {
-            int H1size = 56;
             int[] textSizes = new int[7] { defaultPointSize * 2, H1 * 2, H2 * 2, H3 * 2, H4 * 2, H5 * 2, H6 * 2};
             List<int> columnSizes = new List<int>();
             var text = new StringBuilder();
@@ -27,7 +34,7 @@ namespace ScreenShotTool
             string colorTable = @"{\colortbl;" + ColorToTableDef(textColor) + ColorToTableDef(headingColor) + "}";
 
             text.AppendLine("{\\rtf1\\ansi\\deff0 {\\fonttbl\\f0\\" + font + ";}" + colorTable + "\\pard");
-
+            text.Append(@"\cf1 ");
             //foreach (var originalLine in lines)
             for (int i = 0; i < lines.Count(); i++)
             {
@@ -309,7 +316,8 @@ namespace ScreenShotTool
                 }
                 else
                 {
-                    sb.Append($"\\fs{textSizes[headingSize]} ");
+                    sb.Append(@"\cf2 "); // set heading color
+                    sb.Append($"\\fs{textSizes[headingSize]} "); // set heading size
                     int trimStart = headingSize;
                     if (line.Substring(headingSize,1) == " ")
                     {
@@ -318,7 +326,8 @@ namespace ScreenShotTool
                     }
                     sb.Append(line.Substring(trimStart));
                     //sb.Append(lineEnd);
-                    sb.Append($"\\fs{textSizes[0]}");
+                    sb.Append($"\\fs{textSizes[0]}"); // set normal size
+                    sb.Append(@"\cf1 "); // set normal color
                     line = sb.ToString();
                     return line;
                 }

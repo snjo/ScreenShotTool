@@ -1,4 +1,4 @@
-# ScreenShotTool
+# ScreenShot Tool
 
 A simple screenshot program, inspired by Greenshot, but each capture method can have individual settings for saving to file, clipboard or editor.
 	
@@ -21,6 +21,7 @@ Hotkeys can be changed in **Options**
 --------------------------------------------------------------------------------------
 
 # Capture Modes
+
 - Region
 - Window
 - Screen
