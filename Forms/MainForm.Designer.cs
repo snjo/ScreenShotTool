@@ -45,6 +45,8 @@
             contextMenuSysTray = new ContextMenuStrip(components);
             openProgramToolStripMenuItem = new ToolStripMenuItem();
             optionsToolStripMenuItem = new ToolStripMenuItem();
+            editorToolStripMenuItem = new ToolStripMenuItem();
+            helpToolStripMenuItem = new ToolStripMenuItem();
             enableCroppingToolStripMenuItem = new ToolStripMenuItem();
             openLastUsedFolderToolStripMenuItem = new ToolStripMenuItem();
             pToolStripMenuItem = new ToolStripMenuItem();
@@ -168,10 +170,10 @@
             // 
             // contextMenuSysTray
             // 
-            contextMenuSysTray.Items.AddRange(new ToolStripItem[] { openProgramToolStripMenuItem, optionsToolStripMenuItem, enableCroppingToolStripMenuItem, openLastUsedFolderToolStripMenuItem, pToolStripMenuItem, exitApplicationToolStripMenuItem });
+            contextMenuSysTray.Items.AddRange(new ToolStripItem[] { openProgramToolStripMenuItem, optionsToolStripMenuItem, editorToolStripMenuItem, helpToolStripMenuItem, enableCroppingToolStripMenuItem, openLastUsedFolderToolStripMenuItem, pToolStripMenuItem, exitApplicationToolStripMenuItem });
             contextMenuSysTray.Name = "contextMenuSysTray";
             contextMenuSysTray.ShowImageMargin = false;
-            contextMenuSysTray.Size = new Size(164, 136);
+            contextMenuSysTray.Size = new Size(164, 180);
             // 
             // openProgramToolStripMenuItem
             // 
@@ -187,6 +189,20 @@
             optionsToolStripMenuItem.Size = new Size(163, 22);
             optionsToolStripMenuItem.Text = "&Options";
             optionsToolStripMenuItem.Click += ButtonOptions_Click;
+            // 
+            // editorToolStripMenuItem
+            // 
+            editorToolStripMenuItem.Name = "editorToolStripMenuItem";
+            editorToolStripMenuItem.Size = new Size(163, 22);
+            editorToolStripMenuItem.Text = "Editor";
+            editorToolStripMenuItem.Click += editorToolStripMenuItem_Click;
+            // 
+            // helpToolStripMenuItem
+            // 
+            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            helpToolStripMenuItem.Size = new Size(163, 22);
+            helpToolStripMenuItem.Text = "Help";
+            helpToolStripMenuItem.Click += helpToolStripMenuItem_Click;
             // 
             // enableCroppingToolStripMenuItem
             // 
@@ -311,21 +327,21 @@
             // editSelectedFileToolStripMenuItem
             // 
             editSelectedFileToolStripMenuItem.Name = "editSelectedFileToolStripMenuItem";
-            editSelectedFileToolStripMenuItem.Size = new Size(180, 22);
+            editSelectedFileToolStripMenuItem.Size = new Size(176, 22);
             editSelectedFileToolStripMenuItem.Text = "Edit selected file";
             editSelectedFileToolStripMenuItem.Click += EditImageFromFile_Click;
             // 
             // editFromClipboardToolStripMenuItem
             // 
             editFromClipboardToolStripMenuItem.Name = "editFromClipboardToolStripMenuItem";
-            editFromClipboardToolStripMenuItem.Size = new Size(180, 22);
+            editFromClipboardToolStripMenuItem.Size = new Size(176, 22);
             editFromClipboardToolStripMenuItem.Text = "Edit from clipboard";
             editFromClipboardToolStripMenuItem.Click += EditImageFromClipboard_Click;
             // 
             // openEditorToolStripMenuItem
             // 
             openEditorToolStripMenuItem.Name = "openEditorToolStripMenuItem";
-            openEditorToolStripMenuItem.Size = new Size(180, 22);
+            openEditorToolStripMenuItem.Size = new Size(176, 22);
             openEditorToolStripMenuItem.Text = "Open editor";
             openEditorToolStripMenuItem.Click += EditImageNoFile_Click;
             // 
@@ -443,5 +459,7 @@
         private ToolStripMenuItem editSelectedFileToolStripMenuItem;
         private ToolStripMenuItem editFromClipboardToolStripMenuItem;
         private ToolStripMenuItem openEditorToolStripMenuItem;
+        private ToolStripMenuItem editorToolStripMenuItem;
+        private ToolStripMenuItem helpToolStripMenuItem;
     }
 }

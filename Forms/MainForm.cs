@@ -985,28 +985,28 @@ namespace ScreenShotTool
                 Debug.WriteLine("deleting " + listViewThumbnails.SelectedItems[0].Text);
                 foreach (ListViewItem item in listViewThumbnails.SelectedItems)
                 {
-                    
-                        string deleteFile = item.Tag.ToString() + "";
-                        if (File.Exists(deleteFile))
+
+                    string deleteFile = item.Tag.ToString() + "";
+                    if (File.Exists(deleteFile))
+                    {
+                        try
                         {
-                            try
-                            {
-                                File.Delete(deleteFile);
-                                item.Remove();
-                                WriteMessage("Deleted file " + deleteFile);
-                            }
-                            catch (Exception ex)
-                            {
-                                Debug.WriteLine("Couldn't delete file: " + item.Tag.ToString());
-                                Debug.WriteLine(ex.ToString());
-                            }  
+                            File.Delete(deleteFile);
+                            item.Remove();
+                            WriteMessage("Deleted file " + deleteFile);
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            WriteMessage("File no longer exists, removing from list: " + deleteFile);
+                            Debug.WriteLine("Couldn't delete file: " + item.Tag.ToString());
+                            Debug.WriteLine(ex.ToString());
                         }
-                        //item.Remove();
-                    
+                    }
+                    else
+                    {
+                        WriteMessage("File no longer exists, removing from list: " + deleteFile);
+                    }
+                    //item.Remove();
+
                 }
 
             }
@@ -1378,6 +1378,17 @@ namespace ScreenShotTool
         {
             ScreenshotEditor imageEditor = new ScreenshotEditor(true);
             imageEditor.Show();
+        }
+
+        private void editorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ScreenshotEditor imageEditor = new ScreenshotEditor();
+            imageEditor.Show();
+        }
+
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenHelp();
         }
     }
 }
