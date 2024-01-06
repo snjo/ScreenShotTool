@@ -117,12 +117,18 @@ namespace RtfTools
 
                     line = SetImage(line);
 
-
-                    var newColumnSizes = SetColumnWidths(line);
-                    if (newColumnSizes.Count > 0)
+                    if (line.Contains("<!--"))
                     {
-                        columnSizes = newColumnSizes;
-                        continue; // skip this line, it's a "<!--" comment for Column Widths
+                        if (line.Contains("<!---CW:"))
+                        {
+                            var newColumnSizes = SetColumnWidths(line);
+                            if (newColumnSizes.Count > 0)
+                            {
+                                columnSizes = newColumnSizes;
+                            }
+                        }
+                        line = RemoveComment(line);
+                        //continue; // skip this line, it's a "<!--" comment
                     }
 
                     if (line.TrimStart().StartsWith('|'))
@@ -138,6 +144,18 @@ namespace RtfTools
 
             text.AppendLine("}");
             return text.ToString();
+        }
+
+        private string RemoveComment(string line)
+        {
+            string startTag = "<!--";
+            string endTag = "-->";
+            int commentStart = line.IndexOf(startTag);
+            int commentEnd = line.IndexOf(endTag);
+            StringBuilder stringBuilder = new StringBuilder();
+            if (commentStart > 0) stringBuilder.Append(line.AsSpan(0, commentStart));
+            if (commentEnd < line.Length) stringBuilder.Append(line.AsSpan(commentEnd + endTag.Length));
+            return stringBuilder.ToString();
         }
 
         private static string CodeblockLine(string line, int padding)
@@ -343,19 +361,33 @@ namespace RtfTools
                 List<int> matches = line.AllIndexesOf(tag).ToList();
                 if (matches.Count > 0)
                 {
-                    sb.Append(line.AsSpan(0, matches[0]));
+                    Debug.WriteLine($"SetStyle start, tag: {tag} to {rtfTag}");
+                    sb.Append(line.AsSpan(0, matches[0])); // add first chunk before a tag
 
-                    for (int i = 0; i < matches.Count; i++)
+                    for (int i = 0; i < matches.Count; i++) 
                     {
-                        if (matches.Count >= i)
+                        if (i+1 < matches.Count) // is there a second closing tag?
                         {
-                            sb.Append($"\\{rtfTag} ");
+                            // TEST DEBUG
+                            Debug.WriteLine("line: " + line);
+                            Debug.WriteLine("sb  : " + sb.ToString());
+                            Debug.WriteLine($"i: {i}, mC: {matches.Count}, lineL: {line.Length}");
+                            Debug.Write("AllIndexes : ");
+                            foreach (int m in matches)
+                            {
+                                Debug.Write(m + ", ");
+                            }
+                            Debug.WriteLine("");
+                            // TEST DEBUG END
+
+                            sb.Append($"\\{rtfTag} "); // start the styled text
                             if (matches[i] < line.Length && matches[i + 1] < line.Length)
                             {
                                 try
                                 {
-                                    string words = line.Substring(matches[i], matches[i + 1] - matches[i]);
-                                    sb.Append(words.Replace(tag, ""));
+                                    string words = line.Substring(matches[i], matches[i + 1] - matches[i]); // get the styled text inside the tags
+                                    sb.Append(words.Replace(tag, "")); // remove the tags from the text
+                                    
                                 }
                                 catch
                                 {
@@ -363,18 +395,39 @@ namespace RtfTools
                                 }
                             }
 
-                            sb.Append($"\\{rtfTag}0 ");
+                            sb.Append($"\\{rtfTag}0 "); // end the styled text
+                            if (matches.Count > i + 2)
+                            {
+                                sb.Append(line.Substring(matches[i + 1] + tag.Length, matches[i + 2] - matches[i + 1] - tag.Length));
+                            }
+
+                            Debug.WriteLine($"ending? i {i}, {matches.Count}");
+                            if (i+2 == matches.Count)
+                            {
+                                
+                                string endChunk = line.Substring(matches[i + 1]+tag.Length);
+                                sb.Append(endChunk);
+                                Debug.WriteLine("at end? add:" + endChunk);
+                            }
+
                             i++;
                         }
-                        else
+                        else // there is no closing tag, output the tag as text
                         {
-                            sb.Append($"\\{rtfTag} ");
-                            sb.Append(line.AsSpan(matches[i]));
-                            sb.Append($"\\{rtfTag}0 ");
+                            string escapedTag = "";
+                            foreach (char c in tag.ToCharArray())
+                            {
+                                escapedTag += SetEscapeCharacters("\\" + c.ToString()).text;
+                            }
+                            Debug.WriteLine($"Escaped tag: {escapedTag}");
+                            sb.Append(escapedTag);
+                            sb.Append(line.AsSpan(matches[0] + tag.Length));
                         }
                     }
+                    Debug.WriteLine("Done: " + sb.ToString() + "\n");
                     line = sb.ToString();
                 }
+                
             }
             return line;
         }

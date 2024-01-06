@@ -12,6 +12,7 @@ namespace ScreenShotTool.Forms
         public Color foregroundColor;
         public Color backgroundColor;
         public bool ScalingAllowed = true;
+        public ListViewItem? ListViewItem { get; set; }
 
         private int _x;
         private int _y;

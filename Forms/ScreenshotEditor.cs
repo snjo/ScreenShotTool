@@ -357,6 +357,7 @@ namespace ScreenShotTool.Forms
                 ListViewItem newItem = listViewSymbols.Items.Add(symbol.Name);
                 newItem.Text = symbol.Name;
                 newItem.Tag = symbol;
+                symbol.ListViewItem = newItem;
                 listViewSymbols.Update();
                 if (listViewSymbols.Items.Count > 0)
                 {
@@ -694,8 +695,6 @@ namespace ScreenShotTool.Forms
                     buttonPropertiesColorLine.Enabled = true;
                     numericPropertiesLineAlpha.Enabled = true;
 
-                    textBoxSymbolText.Text = "";
-
                     labelSymbolType.Text = "Symbol: " + graphicSymbol.Name;
                     numericX.Value = graphicSymbol.Left;
                     numericY.Value = graphicSymbol.Top;
@@ -739,11 +738,19 @@ namespace ScreenShotTool.Forms
                         numericHeight.Enabled = false;
 
                         textBoxSymbolText.Text = gsText.text;
+                        if (gsText.ListViewItem != null)
+                        {
+                            gsText.ListViewItem.Text = "Text: " + gsText.text;
+                        }
                         numericPropertiesFontSize.Value = (int)Math.Clamp(gsText.fontEmSize, minimumFontSize, maxFontSize);
                         checkBoxFontBold.Checked = (gsText.fontStyle & FontStyle.Bold) != 0;
                         checkBoxFontItalic.Checked = (gsText.fontStyle & FontStyle.Italic) != 0;
                         checkBoxStrikeout.Checked = (gsText.fontStyle & FontStyle.Strikeout) != 0;
                         checkBoxUnderline.Checked = (gsText.fontStyle & FontStyle.Underline) != 0;
+                    }
+                    else
+                    {
+                        textBoxSymbolText.Text = "";
                     }
 
                     numericPropertiesLineAlpha.Value = graphicSymbol.lineAlpha;
@@ -875,16 +882,10 @@ namespace ScreenShotTool.Forms
             if (textSymbol != null)
             {
                 textSymbol.text = textBoxSymbolText.Text;
-            }
-            UpdateOverlay();
-        }
-
-        private void textBoxSymbolText_KeyDown(object sender, KeyEventArgs e)
-        {
-            GsText? textSymbol = GetSelectedTextSymbol();
-            if (textSymbol != null)
-            {
-                textSymbol.text = textBoxSymbolText.Text;
+                if (textSymbol.ListViewItem != null)
+                {
+                    textSymbol.ListViewItem.Text = "Text: " + textSymbol.text;
+                }
             }
             UpdateOverlay();
         }

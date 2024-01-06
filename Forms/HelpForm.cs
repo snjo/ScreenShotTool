@@ -1,27 +1,16 @@
 ﻿namespace ScreenShotTool
 {
+    #pragma warning disable CA1416 // Validate platform compatibility
     public partial class HelpForm : Form
     {
-        readonly string rtfText = string.Empty;
+        string rtfText = string.Empty;
+        string FileName = "readme.MD";
+        string testFile = "test.md";
 
         public HelpForm()
         {
             InitializeComponent();
-            string readmeFile = "readme.MD";
-
-            if (File.Exists(readmeFile))
-            {
-                List<string> lines = File.ReadAllLines(readmeFile, System.Text.Encoding.UTF8).ToList();
-                RtfTools.RtfConverter rtfConverter = new();
-                rtfText = rtfConverter.ConvertText(lines);
-            }
-
-            if (rtfText.Length == 0)
-            {
-                rtfText = helpTextFallback;
-            }
-
-            richTextBox1.Rtf = rtfText;
+            OpenFile(FileName);
         }
 
         private void Save_Click(object sender, EventArgs e)
@@ -41,9 +30,54 @@
             }
         }
 
+        public void OpenFile(string fileName)
+        {
+            if (File.Exists(fileName))
+            {
+                List<string> lines = File.ReadAllLines(fileName, System.Text.Encoding.UTF8).ToList();
+                RtfTools.RtfConverter rtfConverter = new();
+                rtfText = rtfConverter.ConvertText(lines);
+            }
+
+            if (rtfText.Length == 0)
+            {
+                rtfText = helpTextFallback;
+            }
+
+            richTextBox1.Rtf = rtfText;
+        }
+
         private void CopyToClipboard_Click(object sender, EventArgs e)
         {
             Clipboard.SetText(rtfText, TextDataFormat.Rtf);
+        }
+
+        private void LinkLabelDocumentation_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            MainForm.OpenLink("https://github.com/snjo/ScreenShotTool/");
+        }
+
+        private void richTextBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F5)
+            {
+                OpenFile(FileName);
+            }
+            if (e.KeyCode == Keys.O && e.Modifiers == Keys.Control)
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog()
+                {
+                    Filter = "Markdown|*.md",
+                    ShowPinnedPlaces = true,
+                    ShowPreview = true
+                };
+                DialogResult = openFileDialog.ShowDialog();
+                if (DialogResult == DialogResult.OK)
+                {
+                    FileName = openFileDialog.FileName;
+                    OpenFile(FileName);
+                }
+            }
         }
 
         readonly string helpTextFallback =
@@ -151,11 +185,6 @@
             "\\par " +
             "}";
 
-        private void LinkLabelDocumentation_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-#pragma warning disable CA1416 // Validate platform compatibility
-            MainForm.OpenLink("https://github.com/snjo/ScreenShotTool/");
-#pragma warning restore CA1416 // Validate platform compatibility
-        }
+
     }
 }
