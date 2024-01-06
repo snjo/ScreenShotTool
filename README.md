@@ -43,15 +43,15 @@ When adjusting the position of the region, arrows are shown in all directions.
 
 ![image](img/region.png)
 
-	Enter           Save image to file and exit Region capture
-	C               Copy image to clipboard and exit Region capture
-	E               Open the selection in the Editor and exit Region capture
-	Esc             Exit region capture, discard selection
-	S               Size adjustment mode (Default)
-	P               Position adjustment mode
-	Ctrl+Arrow Key  Size adjustemt side selection
-	Arrow Key       Size / Position adjustement
-	Shift           Hold Shift to adjust region by 10 pixels instead of 1
+    Enter           Save image to file and exit Region capture
+    C               Copy image to clipboard and exit Region capture
+    E               Open the selection in the Editor and exit Region capture
+    Esc             Exit region capture, discard selection
+    S               Size adjustment mode (Default)
+    P               Position adjustment mode
+    Ctrl+Arrow Key  Size adjustemt side selection
+    Arrow Key       Size / Position adjustement
+    Shift           Hold Shift to adjust region by 10 pixels instead of 1
 
 #### Region framerate
 
@@ -90,27 +90,27 @@ Save to file, open in Editor or copy to clipboard based on options (Options > Mo
 When saving to file, the name of the active application, time or incrementing numbers can be included in the file or folder name.  
 The default file name is "$w $d $t $c", which will output something like "MyWindow 2023-12-31 16:02 003"
 
-	$w      Active Window title ("Region" or "Screen" is used in those modes)
-	$d      Date in ISO format (2023-12-31)
-	$t      Time
-	$ms     Milliseconds
-	$c      Counter number (auto increments)
+    $w      Active Window title ("Region" or "Screen" is used in those modes)
+    $d      Date in ISO format (2023-12-31)
+    $t      Time
+    $ms     Milliseconds
+    $c      Counter number (auto increments)
 
 You can also use longer form variables, these are identical to Greenshot's variable format.
 
-	${DATE}         Date in ISO format (2023-12-31)
-	${YYYY}         Year
-	${MM}           Month number
-	${DD}           Day number
-	${hh}           Hour
-	${mm}           Minute
-	${ss}           Second
-	${ms}           Millisecond
-	${NUM}          Counter number (auto increments)
-	${title}        Active Window title ("Region" or "Screen" is used in those modes)
-	${user}         User account name
-	${domain}       User's domain
-	${hostname}     PC name
+    ${DATE}         Date in ISO format (2023-12-31)
+    ${YYYY}         Year
+    ${MM}           Month number
+    ${DD}           Day number
+    ${hh}           Hour
+    ${mm}           Minute
+    ${ss}           Second
+    ${ms}           Millisecond
+    ${NUM}          Counter number (auto increments)
+    ${title}        Active Window title ("Region" or "Screen" is used in those modes)
+    ${user}         User account name
+    ${domain}       User's domain
+    ${hostname}     PC name
 
 ### Title tweaks
 
@@ -126,15 +126,15 @@ If a window title is dynamically altered by the file it's viewing, extract just 
 
 Which of the split name element to use is set by the option "Keep split text in index", where 0 is the first element.
 
-	Example: "ImageEditor - mypicture.png - v12.2"
-
-	Split with " - "
-
-	Keep split text in index: 0
-	Result: $w outputs "ImageEditor"
-
-	Keep split text in index: 1
-	Result: $w outputs "mypicture.png"
+    Example: "ImageEditor - mypicture.png - v12.2"
+      
+    Split with " - "
+     
+    Keep split text in index: 0
+    Result: $w outputs "ImageEditor"
+     
+    Keep split text in index: 1
+    Result: $w outputs "mypicture.png"
 
 #### Crop Window capture
 

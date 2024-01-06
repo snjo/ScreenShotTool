@@ -1,4 +1,6 @@
-﻿namespace ScreenShotTool
+﻿using System.Diagnostics;
+
+namespace ScreenShotTool
 {
     #pragma warning disable CA1416 // Validate platform compatibility
     public partial class HelpForm : Form

@@ -30,7 +30,8 @@ namespace RtfTools
         public int H4PointSize = 13;
         public int H5PointSize = 11;
         public int H6PointSize = 10;
-        public int CodeBlockPaddingWidth = 100;
+        public int CodeBlockPaddingWidth = 50;
+        private int currentPaddingWidth;
 
         private bool codeBlockActive = false;
 
@@ -70,32 +71,37 @@ namespace RtfTools
             text.AppendLine("{\\rtf1\\ansi\\deff0 {\\fonttbl{\\f0\\" + Font + ";}{\\f1\\" + CodeFont + ";}}" + colorTable + "\\pard");
             //string fontTable = @"\deff0{\fonttbl{\f0\fnil Default Sans Serif;}{\f1\froman Times New Roman;}{\f2\fswiss Arial;}{\f3\fmodern Courier New;}{\f4\fscript Script MT Bold;}{\f5\fdecor Old English Text MT;}}";
             text.Append(@"\cf1 ");
-            //foreach (var originalLine in lines)
+            
             for (int i = 0; i < lines.Count; i++)
             {
                 string line = lines[i];
                 int numReplaced;
 
-                //(line, numReplaced) = SetEscapeCharacters(line);
+                //Debug.WriteLine($"¤{line}¤");
 
-                if (line.StartsWith('\t')) // code block, skip all other formatting
+                if (line.StartsWith('\t') || line.StartsWith("    ")) // code block, skip all other formatting
                 {
                     (line, numReplaced) = SetEscapeCharacters(line, false);
-
+                    
                     bool codeBlockStarting = false;
                     if (codeBlockActive == false)
                     {
-
+                        int longestLine = CheckMaxLineLength(lines, i);
+                        currentPaddingWidth = Math.Max(longestLine, CodeBlockPaddingWidth) + 3;
                         codeBlockStarting = true;
                     }
                     codeBlockActive = true;
                     if (codeBlockStarting)
                     {
                         //insert a blank line if it's the start of a block
-                        text.Append(CodeblockLine("\t", CodeBlockPaddingWidth));
+                        text.Append(CodeblockLine("\t", currentPaddingWidth));
                     }
 
-                    line = CodeblockLine(line, CodeBlockPaddingWidth + numReplaced);
+                    // count TABs in line as more characters than normal
+                    int tabCount = line.AllIndexesOf("\t").Count() - 1;
+                    int tabLength = 5;
+                    // instert the actual text
+                    line = CodeblockLine(line, currentPaddingWidth + numReplaced - (tabCount*tabLength));
                     text.Append(line);
                 }
                 else
@@ -104,7 +110,7 @@ namespace RtfTools
 
                     if (codeBlockActive == true)
                     {
-                        text.Append(CodeblockLine("\t", CodeBlockPaddingWidth));
+                        text.Append(CodeblockLine("\t", currentPaddingWidth));
                         codeBlockActive = false;
                     }
 
@@ -144,6 +150,18 @@ namespace RtfTools
 
             text.AppendLine("}");
             return text.ToString();
+        }
+
+        private int CheckMaxLineLength(List<string> lines, int startLine)
+        {
+            int longestLine = 0;
+
+            for (int i = startLine; i < lines.Count; i++)
+            {
+                if (lines[i].StartsWith("\t") == false && lines[i].StartsWith("    ") == false) break;
+                longestLine = Math.Max(longestLine, lines[i].Length);
+            }    
+            return longestLine;
         }
 
         private string RemoveComment(string line)
@@ -361,7 +379,7 @@ namespace RtfTools
                 List<int> matches = line.AllIndexesOf(tag).ToList();
                 if (matches.Count > 0)
                 {
-                    Debug.WriteLine($"SetStyle start, tag: {tag} to {rtfTag}");
+                    //Debug.WriteLine($"SetStyle start, tag: {tag} to {rtfTag}");
                     sb.Append(line.AsSpan(0, matches[0])); // add first chunk before a tag
 
                     for (int i = 0; i < matches.Count; i++) 
@@ -369,7 +387,7 @@ namespace RtfTools
                         if (i+1 < matches.Count) // is there a second closing tag?
                         {
                             // TEST DEBUG
-                            Debug.WriteLine("line: " + line);
+                            /*Debug.WriteLine("line: " + line);
                             Debug.WriteLine("sb  : " + sb.ToString());
                             Debug.WriteLine($"i: {i}, mC: {matches.Count}, lineL: {line.Length}");
                             Debug.Write("AllIndexes : ");
@@ -377,7 +395,7 @@ namespace RtfTools
                             {
                                 Debug.Write(m + ", ");
                             }
-                            Debug.WriteLine("");
+                            Debug.WriteLine("");*/
                             // TEST DEBUG END
 
                             sb.Append($"\\{rtfTag} "); // start the styled text
@@ -401,13 +419,13 @@ namespace RtfTools
                                 sb.Append(line.Substring(matches[i + 1] + tag.Length, matches[i + 2] - matches[i + 1] - tag.Length));
                             }
 
-                            Debug.WriteLine($"ending? i {i}, {matches.Count}");
+                            //Debug.WriteLine($"ending? i {i}, {matches.Count}");
                             if (i+2 == matches.Count)
                             {
                                 
                                 string endChunk = line.Substring(matches[i + 1]+tag.Length);
                                 sb.Append(endChunk);
-                                Debug.WriteLine("at end? add:" + endChunk);
+                                //Debug.WriteLine("at end? add:" + endChunk);
                             }
 
                             i++;
@@ -419,12 +437,12 @@ namespace RtfTools
                             {
                                 escapedTag += SetEscapeCharacters("\\" + c.ToString()).text;
                             }
-                            Debug.WriteLine($"Escaped tag: {escapedTag}");
+                            //Debug.WriteLine($"Escaped tag: {escapedTag}");
                             sb.Append(escapedTag);
                             sb.Append(line.AsSpan(matches[0] + tag.Length));
                         }
                     }
-                    Debug.WriteLine("Done: " + sb.ToString() + "\n");
+                    //Debug.WriteLine("Done: " + sb.ToString() + "\n");
                     line = sb.ToString();
                 }
                 
