@@ -37,7 +37,7 @@ namespace ScreenShotTool
             if (File.Exists(fileName))
             {
                 List<string> lines = File.ReadAllLines(fileName, System.Text.Encoding.UTF8).ToList();
-                RtfTools.RtfConverter rtfConverter = new();
+                MarkdownToRtf.RtfConverter rtfConverter = new();
                 rtfText = rtfConverter.ConvertText(lines);
             }
 

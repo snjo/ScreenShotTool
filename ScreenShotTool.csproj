@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -66,6 +66,12 @@
 
   <ItemGroup>
     <Folder Include="Resources\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="MarkdownToRtf">
+      <HintPath>..\MarkdownToRtf\MarkdownToRtf\bin\Debug\net8.0\MarkdownToRtf.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
