@@ -37,8 +37,9 @@ namespace ScreenShotTool
             if (File.Exists(fileName))
             {
                 List<string> lines = File.ReadAllLines(fileName, System.Text.Encoding.UTF8).ToList();
-                MarkdownToRtf.RtfConverter rtfConverter = new();
+                MarkdownToRtf.RtfConverter rtfConverter = new(fileName);
                 rtfText = rtfConverter.ConvertText(lines);
+                //Debug.WriteLine(rtfText);
             }
 
             if (rtfText.Length == 0)
@@ -46,7 +47,10 @@ namespace ScreenShotTool
                 rtfText = helpTextFallback;
             }
 
+            bool oldReadonly = richTextBox1.ReadOnly;
+            richTextBox1.ReadOnly = false;
             richTextBox1.Rtf = rtfText;
+            richTextBox1.ReadOnly = oldReadonly;
         }
 
         private void CopyToClipboard_Click(object sender, EventArgs e)
