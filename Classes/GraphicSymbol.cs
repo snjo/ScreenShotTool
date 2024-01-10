@@ -9,9 +9,9 @@ namespace ScreenShotTool.Forms
     public class GraphicSymbol
     {
         public Pen LinePen = new(Color.Gray);
-        public Brush LineBrush = new SolidBrush(Color.Gray);
-        public Brush FillBrush = new SolidBrush(Color.Pink);
-        public Brush ShadowBrush = new SolidBrush(Color.FromArgb(20, Color.Black));
+        public SolidBrush LineBrush = new SolidBrush(Color.Gray);
+        public SolidBrush FillBrush = new SolidBrush(Color.Pink);
+        public SolidBrush ShadowBrush = new SolidBrush(Color.FromArgb(20, Color.Black));
         public Pen ShadowPen = new Pen(Color.FromArgb(50, Color.Black));
         public Color ForegroundColor;
         public Color BackgroundColor;
@@ -118,10 +118,11 @@ namespace ScreenShotTool.Forms
             LineBrush = new SolidBrush(Color.FromArgb(lineAlpha, ForegroundColor.R, ForegroundColor.G, ForegroundColor.B));
             LinePen.Brush = LineBrush;
             LinePen.Width = LineWeight;
-            ShadowPen.Brush = ShadowBrush;
-            ShadowPen.Width = LineWeight;
-
+            
             FillBrush = new SolidBrush(Color.FromArgb(fillAlpha, BackgroundColor.R, BackgroundColor.G, BackgroundColor.B));
+            ShadowBrush.Color = Color.FromArgb(FillBrush.Color.A / 8, Color.Black);
+            ShadowPen.Color = Color.FromArgb(LineBrush.Color.A / 8, Color.Black);
+            ShadowPen.Width = LineWeight;
         }
 
         internal void UpdateColors()
@@ -161,7 +162,13 @@ namespace ScreenShotTool.Forms
             {
                 for (int i = 1; i < ShadowDistance; i++)
                 {
-                    draw(graphic, ShadowPen, ShadowBrush, new Point(i,i), true, false);
+                    // fill
+                    draw(graphic, ShadowPen, ShadowBrush, new Point(i, i), true, false);
+                }
+                for (int i = 1; i < ShadowDistance && i < LineWeight; i++)
+                {
+                    // line
+                    draw(graphic, ShadowPen, ShadowBrush, new Point(i, i), false, true);
                 }
                 //draw(graphic, ShadowPen, ShadowBrush, ShadowOffset, true, false);
             }

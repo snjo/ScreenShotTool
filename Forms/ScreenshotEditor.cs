@@ -717,25 +717,19 @@ namespace ScreenShotTool.Forms
                     buttonPropertiesColorLine.BackColor = graphicSymbol.ForegroundColor;
                     buttonPropertiesColorFill.BackColor = graphicSymbol.BackgroundColor;
                     numericPropertiesLineWeight.Value = graphicSymbol.LineWeight;
+                    checkBoxPropertiesShadow.Checked = graphicSymbol.ShadowEnabled;
                     buttonDeleteSymbol.Tag = graphicSymbol;
 
                     if (graphicSymbol is GsImage)
                     {
                         numericWidth.Enabled = false;
                         numericHeight.Enabled = false;
-
-                        //buttonPropertiesColorLine.Enabled = false;
-                        //numericPropertiesLineAlpha.Enabled = false;
-
                         panelPropertiesLine.Visible = false;
                         panelPropertiesFill.Visible = false;
                     }
 
                     if (graphicSymbol is GsImageScaled)
                     {
-                        //buttonPropertiesColorLine.Enabled = false;
-                        //numericPropertiesLineAlpha.Enabled = false;
-
                         panelPropertiesLine.Visible = false;
                         panelPropertiesFill.Visible = false;
                     }
