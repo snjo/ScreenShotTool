@@ -32,9 +32,9 @@ namespace ScreenShotTool.Forms
             numericPropertiesFontSize.Maximum = maxFontSize;
             numericPropertiesFontSize.Minimum = minimumFontSize;
             numericPropertiesFontSize.Value = startingFontSize;
-            panelSymbolGeneral.Enabled = false;
-            panelSymbolShape.Visible = false;
-            panelSymbolText.Visible = false;
+            panelPropertiesPosition.Enabled = false;
+            panelPropertiesFill.Visible = false;
+            panelPropertiesText.Visible = false;
         }
 
         public ScreenshotEditor()
@@ -215,7 +215,7 @@ namespace ScreenShotTool.Forms
         private Image DrawOverlay(GraphicSymbol? temporarySymbol = null)
         {
 
-            Bitmap img = ((Bitmap)(originalImage)).Clone(new Rectangle(0,0,originalImage.Width, originalImage.Height), System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            Bitmap img = ((Bitmap)(originalImage)).Clone(new Rectangle(0, 0, originalImage.Width, originalImage.Height), System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
             DisposeAndNull(overlayGraphics);
             overlayGraphics = Graphics.FromImage(img);
@@ -370,6 +370,7 @@ namespace ScreenShotTool.Forms
             int lineWeight = (int)numericNewLineWeight.Value;
             int lineAlpha = (int)numericNewLineAlpha.Value;
             int fillAlpha = (int)numericNewFillAlpha.Value;
+            bool shadow = checkBoxNewShadow.Checked;
 
             if (dragStarted)
             {
@@ -410,13 +411,13 @@ namespace ScreenShotTool.Forms
 
                 return newSymbolType switch
                 {
-                    SymbolType.Rectangle => new GsRectangle(lineColor, fillColor, upperLeft, size, lineWeight, lineAlpha, fillAlpha),
-                    SymbolType.Circle => new GsCircle(lineColor, fillColor, upperLeft, size, lineWeight, lineAlpha, fillAlpha),
-                    SymbolType.Line => new GsLine(lineColor, fillColor, dragStart, dragEnd, lineWeight, lineAlpha),
-                    SymbolType.Arrow => new GsArrow(lineColor, fillColor, dragStart, dragEnd, lineWeight, lineAlpha),
-                    SymbolType.Image => new GsImage(lineColor, fillColor, dragEnd, new Point(1, 1)),
-                    SymbolType.ImageScaled => new GsImageScaled(lineColor, fillColor, upperLeft, size),
-                    SymbolType.Text => new GsText(lineColor, fillColor, dragStart, size, lineWeight, lineAlpha),
+                    SymbolType.Rectangle => new GsRectangle(lineColor, fillColor, shadow, upperLeft, size, lineWeight, lineAlpha, fillAlpha),
+                    SymbolType.Circle => new GsCircle(lineColor, fillColor, shadow, upperLeft, size, lineWeight, lineAlpha, fillAlpha),
+                    SymbolType.Line => new GsLine(lineColor, fillColor, shadow, dragStart, dragEnd, lineWeight, lineAlpha),
+                    SymbolType.Arrow => new GsArrow(lineColor, fillColor, shadow, dragStart, dragEnd, lineWeight, lineAlpha),
+                    SymbolType.Image => new GsImage(lineColor, fillColor, shadow, dragEnd, new Point(1, 1)),
+                    SymbolType.ImageScaled => new GsImageScaled(lineColor, fillColor, shadow, upperLeft, size),
+                    SymbolType.Text => new GsText(lineColor, fillColor, shadow, dragStart, size, lineWeight, lineAlpha),
                     _ => null,
                 };
             }
@@ -477,7 +478,7 @@ namespace ScreenShotTool.Forms
             }
             Point upperLeft = new Point(0, 0);
             Point size = new Point(originalImage.Width, originalImage.Height);
-            GsBorder border = new GsBorder(Color.Black, Color.White, upperLeft, size, lineWeight, 255, 0);
+            GsBorder border = new GsBorder(Color.Black, Color.White, false, upperLeft, size, lineWeight, 255, 0);
             border.Name = "Border";
             AddNewSymbolToList(border);
             UpdateOverlay();
@@ -697,9 +698,11 @@ namespace ScreenShotTool.Forms
                 ListViewItem item = listViewSymbols.SelectedItems[0];
                 if (item.Tag is GraphicSymbol graphicSymbol)
                 {
-                    panelSymbolGeneral.Enabled = true;
-                    panelSymbolShape.Visible = true;
-                    panelSymbolText.Visible = false;
+                    panelPropertiesPosition.Enabled = true;
+                    panelPropertiesPosition.Visible = true;
+                    panelPropertiesFill.Visible = true;
+                    panelPropertiesLine.Visible = true;
+                    panelPropertiesText.Visible = false;
 
                     numericWidth.Enabled = true;
                     numericHeight.Enabled = true;
@@ -711,8 +714,8 @@ namespace ScreenShotTool.Forms
                     numericY.Value = graphicSymbol.Top;
                     numericWidth.Value = Math.Clamp(graphicSymbol.Width, numericWidth.Minimum, numericWidth.Maximum);
                     numericHeight.Value = Math.Clamp(graphicSymbol.Height, numericHeight.Minimum, numericHeight.Maximum);
-                    buttonPropertiesColorLine.BackColor = graphicSymbol.foregroundColor;
-                    buttonPropertiesColorFill.BackColor = graphicSymbol.backgroundColor;
+                    buttonPropertiesColorLine.BackColor = graphicSymbol.ForegroundColor;
+                    buttonPropertiesColorFill.BackColor = graphicSymbol.BackgroundColor;
                     numericPropertiesLineWeight.Value = graphicSymbol.LineWeight;
                     buttonDeleteSymbol.Tag = graphicSymbol;
 
@@ -721,18 +724,20 @@ namespace ScreenShotTool.Forms
                         numericWidth.Enabled = false;
                         numericHeight.Enabled = false;
 
-                        buttonPropertiesColorLine.Enabled = false;
-                        numericPropertiesLineAlpha.Enabled = false;
+                        //buttonPropertiesColorLine.Enabled = false;
+                        //numericPropertiesLineAlpha.Enabled = false;
 
-                        panelSymbolShape.Visible = false;
+                        panelPropertiesLine.Visible = false;
+                        panelPropertiesFill.Visible = false;
                     }
 
                     if (graphicSymbol is GsImageScaled)
                     {
-                        buttonPropertiesColorLine.Enabled = false;
-                        numericPropertiesLineAlpha.Enabled = false;
+                        //buttonPropertiesColorLine.Enabled = false;
+                        //numericPropertiesLineAlpha.Enabled = false;
 
-                        panelSymbolShape.Visible = false;
+                        panelPropertiesLine.Visible = false;
+                        panelPropertiesFill.Visible = false;
                     }
 
 
@@ -740,10 +745,9 @@ namespace ScreenShotTool.Forms
                     {
                         GsText gsText = (GsText)graphicSymbol;
 
-                        panelSymbolText.Visible = true;
-                        panelSymbolText.Location = new Point(panelSymbolGeneral.Location.X, panelSymbolGeneral.Bottom + 5);
-
-                        panelSymbolShape.Visible = false;
+                        panelPropertiesText.Visible = true;
+                        panelPropertiesLine.Visible = false;
+                        panelPropertiesText.Location = new Point(panelPropertiesFill.Location.X, panelPropertiesFill.Bottom + 5);
 
                         numericWidth.Enabled = false;
                         numericHeight.Enabled = false;
@@ -771,9 +775,9 @@ namespace ScreenShotTool.Forms
             }
             else
             {
-                panelSymbolGeneral.Enabled = false;
-                panelSymbolShape.Visible = false;
-                panelSymbolText.Visible = false;
+                panelPropertiesPosition.Enabled = false;
+                panelPropertiesFill.Visible = false;
+                panelPropertiesText.Visible = false;
                 ClearPropertyPanelValues();
             }
         }
@@ -849,13 +853,13 @@ namespace ScreenShotTool.Forms
                 {
                     gs.lineAlpha = (int)numericPropertiesLineAlpha.Value;
                     gs.UpdateColors();
-                    buttonPropertiesColorLine.BackColor = gs.foregroundColor;
+                    buttonPropertiesColorLine.BackColor = gs.ForegroundColor;
                 }
                 if (sender == numericPropertiesFillAlpha)
                 {
                     gs.fillAlpha = (int)numericPropertiesFillAlpha.Value;
                     gs.UpdateColors();
-                    buttonPropertiesColorFill.BackColor = gs.backgroundColor;
+                    buttonPropertiesColorFill.BackColor = gs.BackgroundColor;
                 }
             }
             UpdateOverlay();
@@ -874,13 +878,13 @@ namespace ScreenShotTool.Forms
                     if (sender == buttonPropertiesColorLine)
                     {
                         buttonPropertiesColorLine.BackColor = colorDialog1.Color;
-                        gs.foregroundColor = colorDialog1.Color;
+                        gs.ForegroundColor = colorDialog1.Color;
 
                     }
                     if (sender == buttonPropertiesColorFill)
                     {
                         buttonPropertiesColorFill.BackColor = colorDialog1.Color;
-                        gs.backgroundColor = colorDialog1.Color;
+                        gs.BackgroundColor = colorDialog1.Color;
                     }
                 }
             }
@@ -977,6 +981,16 @@ namespace ScreenShotTool.Forms
             UpdateOverlay();
         }
 
+        private void checkBoxPropertiesShadow_Click(object sender, EventArgs e)
+        {
+            GraphicSymbol? symbol = GetSelectedTextSymbol();
+            if (symbol != null)
+            {
+                symbol.ShadowEnabled = checkBoxPropertiesShadow.Checked;
+            }
+            UpdateOverlay();
+        }
+
         private GraphicSymbol? GetSelectedSymbol()
         {
             if (listViewSymbols.SelectedItems.Count > 0)
@@ -1053,6 +1067,5 @@ namespace ScreenShotTool.Forms
                 DeleteSelectedSymbol();
             }
         }
-
     }
 }
