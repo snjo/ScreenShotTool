@@ -99,6 +99,7 @@
             numericPropertiesFontSize = new NumericUpDown();
             comboBoxFontFamily = new ComboBox();
             panel1 = new Panel();
+            button4 = new Button();
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
@@ -211,6 +212,7 @@
             // 
             panelButtons.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             panelButtons.BorderStyle = BorderStyle.FixedSingle;
+            panelButtons.Controls.Add(button4);
             panelButtons.Controls.Add(button3);
             panelButtons.Controls.Add(buttonArrow);
             panelButtons.Controls.Add(buttonLine);
@@ -804,6 +806,19 @@
             panel1.Size = new Size(949, 31);
             panel1.TabIndex = 29;
             // 
+            // button4
+            // 
+            button4.FlatAppearance.BorderSize = 0;
+            button4.FlatStyle = FlatStyle.Flat;
+            button4.Image = Properties.Resources.toolRectangle;
+            button4.Location = new Point(3, 201);
+            button4.Margin = new Padding(1);
+            button4.Name = "button4";
+            button4.Size = new Size(36, 36);
+            button4.TabIndex = 6;
+            button4.UseVisualStyleBackColor = true;
+            button4.Click += ButtonBorder_Click;
+            // 
             // ScreenshotEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -926,5 +941,6 @@
         private CheckBox checkBoxUnderline;
         private CheckBox checkBoxStrikeout;
         private Panel panel1;
+        private Button button4;
     }
 }

@@ -471,6 +471,23 @@ namespace ScreenShotTool.Forms
             UpdateOverlay();
         }
 
+        private void ButtonBorder_Click(object sender, EventArgs e)
+        {
+            lineWeight = (int)numericNewLineWeight.Value;
+            //Point upperLeft = new Point(0 + (lineWeight / 2), 0 + (lineWeight /2 ));
+            //Point size = new Point(originalImage.Width - lineWeight, originalImage.Height - lineWeight);
+            if (originalImage == null)
+            {
+                return;
+            }
+            Point upperLeft = new Point(0, 0);
+            Point size = new Point(originalImage.Width, originalImage.Height);
+            GsBorder border = new GsBorder(Color.Black, Color.White, upperLeft, size, lineWeight, 255, 0);
+            border.Name = "Border";
+            AddNewSymbolToList(border);
+            UpdateOverlay();
+        }
+
 
         #endregion
 
@@ -546,11 +563,10 @@ namespace ScreenShotTool.Forms
                 {
                     ListViewItem item = listViewSymbols.SelectedItems[0];
                     //Debug.WriteLine($"Mouse delta {mouseDeltaX} {mouseDeltaY}");
-                    if (dragStarted)
+                    GraphicSymbol symbol = (GraphicSymbol)item.Tag;
+                    if (dragStarted && symbol.MoveAllowed == true)
                     {
-                        GraphicSymbol symbol = (GraphicSymbol)item.Tag;
-
-
+                        //GraphicSymbol symbol = (GraphicSymbol)item.Tag;
                         if (moveType == MoveType.None)
                         {
                             Vector2 cursorPosInternal = new Vector2(e.X, e.Y);
@@ -702,7 +718,7 @@ namespace ScreenShotTool.Forms
                     numericHeight.Value = Math.Clamp(graphicSymbol.Height, numericHeight.Minimum, numericHeight.Maximum);
                     buttonPropertiesColorLine.BackColor = graphicSymbol.foregroundColor;
                     buttonPropertiesColorFill.BackColor = graphicSymbol.backgroundColor;
-                    numericPropertiesLineWeight.Value = graphicSymbol.lineWeight;
+                    numericPropertiesLineWeight.Value = graphicSymbol.LineWeight;
                     buttonDeleteSymbol.Tag = graphicSymbol;
 
                     if (graphicSymbol is GsImage)
@@ -832,7 +848,7 @@ namespace ScreenShotTool.Forms
                 }
                 if (sender == numericPropertiesLineWeight)
                 {
-                    gs.lineWeight = (int)numericPropertiesLineWeight.Value;
+                    gs.LineWeight = (int)numericPropertiesLineWeight.Value;
                 }
                 if (sender == numericPropertiesLineAlpha)
                 {
@@ -1042,5 +1058,6 @@ namespace ScreenShotTool.Forms
                 DeleteSelectedSymbol();
             }
         }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Drawing.Drawing2D;
+﻿using System.Diagnostics;
+using System.Drawing.Drawing2D;
 using System.Numerics;
 
 namespace ScreenShotTool.Forms
@@ -12,6 +13,7 @@ namespace ScreenShotTool.Forms
         public Color foregroundColor;
         public Color backgroundColor;
         public bool ScalingAllowed = true;
+        public bool MoveAllowed = true;
         public ListViewItem? ListViewItem { get; set; }
 
         private int _x;
@@ -62,7 +64,10 @@ namespace ScreenShotTool.Forms
             get { return new Vector2(EndPoint.X, EndPoint.Y); }
         }
 
-        public int lineWeight;
+        public virtual int LineWeight
+        {
+            get; set;
+        }
         public int fillAlpha;
         public int lineAlpha;
         public string Name = "Blank";
@@ -77,7 +82,7 @@ namespace ScreenShotTool.Forms
             this.Top = startPoint.Y;
             this.Right = endPoint.X;
             this.Bottom = endPoint.Y;
-            this.lineWeight = lineWeight;
+            this.LineWeight = lineWeight;
             this.lineAlpha = lineAlpha;
             this.fillAlpha = fillAlpha;
         }
@@ -100,7 +105,7 @@ namespace ScreenShotTool.Forms
         {
             brush = new SolidBrush(Color.FromArgb(lineAlpha, foregroundColor.R, foregroundColor.G, foregroundColor.B));
             pen.Brush = brush;
-            pen.Width = lineWeight;
+            pen.Width = LineWeight;
 
             fillBrush = new SolidBrush(Color.FromArgb(fillAlpha, backgroundColor.R, backgroundColor.G, backgroundColor.B));
         }
@@ -142,7 +147,7 @@ namespace ScreenShotTool.Forms
             {
                 drawFill(pen, fillBrush, new Rectangle(Left, Top, Width, Height), graphic);
             }
-            if (lineAlpha > 0 && lineWeight > 0)
+            if (lineAlpha > 0 && LineWeight > 0)
             {
                 drawLine(pen, brush, new Rectangle(Left, Top, Width, Height), graphic);
             }
@@ -174,6 +179,41 @@ namespace ScreenShotTool.Forms
         public static void DrawFill(Pen pen, Brush fillBrush, Rectangle rect, Graphics graphic)
         {
             graphic.FillRectangle(fillBrush, rect);
+        }
+    }
+
+    public class GsBorder : GsRectangle
+    {
+        private int borderWeight;
+        private int originalWidth = 0;
+        private int originalHeight = 0;
+        public GsBorder(Color foregroundColor, Color backgroundColor, Point startPoint, Point endPoint, int lineWeight, int lineAlpha, int fillAlpha) : base(foregroundColor, backgroundColor, startPoint, endPoint, lineWeight, lineAlpha, fillAlpha)
+        {
+            Name = "Border";
+            drawFill = DrawFill;
+            drawLine = DrawLine;
+            originalWidth = endPoint.X;
+            originalHeight = endPoint.Y;
+            ScalingAllowed = false;
+            MoveAllowed = false;
+        }
+
+        public override int LineWeight
+        {
+            get
+            {
+                return borderWeight;
+            }
+            set
+            {
+                Debug.WriteLine("Border lineweight: " + value);
+                borderWeight = value;
+                Left = 0 + (borderWeight / 2);
+                Top = 0 + (borderWeight / 2);
+
+                Right = originalWidth  - (int)Math.Ceiling(borderWeight / 2f) ;
+                Bottom = originalHeight  - (int)Math.Ceiling(borderWeight / 2f);
+            }
         }
     }
 
@@ -276,7 +316,7 @@ namespace ScreenShotTool.Forms
         {
             UpdatePen();
             UpdateColors();
-            if (lineWeight < 1) { lineWeight = 1; }
+            if (LineWeight < 1) { LineWeight = 1; }
             if (lineAlpha > 0)
             {
                 graphic.DrawLine(pen, new Point((int)StartPoint.X, (int)StartPoint.Y), new Point((int)EndPoint.X, (int)EndPoint.Y));
