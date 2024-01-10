@@ -42,13 +42,13 @@
             itemPasteScaled = new ToolStripMenuItem();
             deleteOverlayElementsToolStripMenuItem = new ToolStripMenuItem();
             panelButtons = new Panel();
+            button4 = new Button();
             button3 = new Button();
             buttonArrow = new Button();
             buttonLine = new Button();
             button2 = new Button();
             button1 = new Button();
             numericNewLineWeight = new NumericUpDown();
-            pictureBoxOriginal = new PictureBox();
             panelImage = new Panel();
             pictureBoxOverlay = new PictureBox();
             listViewSymbols = new ListView();
@@ -99,11 +99,9 @@
             numericPropertiesFontSize = new NumericUpDown();
             comboBoxFontFamily = new ComboBox();
             panel1 = new Panel();
-            button4 = new Button();
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBoxOriginal).BeginInit();
             panelImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxOverlay).BeginInit();
             panelSymbolGeneral.SuspendLayout();
@@ -223,6 +221,19 @@
             panelButtons.Size = new Size(46, 617);
             panelButtons.TabIndex = 1;
             // 
+            // button4
+            // 
+            button4.FlatAppearance.BorderSize = 0;
+            button4.FlatStyle = FlatStyle.Flat;
+            button4.Image = Properties.Resources.toolRectangle;
+            button4.Location = new Point(3, 201);
+            button4.Margin = new Padding(1);
+            button4.Name = "button4";
+            button4.Size = new Size(36, 36);
+            button4.TabIndex = 6;
+            button4.UseVisualStyleBackColor = true;
+            button4.Click += ButtonBorder_Click;
+            // 
             // button3
             // 
             button3.FlatAppearance.BorderSize = 0;
@@ -298,23 +309,12 @@
             numericNewLineWeight.Value = new decimal(new int[] { 2, 0, 0, 0 });
             numericNewLineWeight.ValueChanged += NumericNewLineWeight_ValueChanged;
             // 
-            // pictureBoxOriginal
-            // 
-            pictureBoxOriginal.Location = new Point(0, 0);
-            pictureBoxOriginal.Name = "pictureBoxOriginal";
-            pictureBoxOriginal.Size = new Size(600, 411);
-            pictureBoxOriginal.SizeMode = PictureBoxSizeMode.AutoSize;
-            pictureBoxOriginal.TabIndex = 2;
-            pictureBoxOriginal.TabStop = false;
-            pictureBoxOriginal.LoadCompleted += PictureBoxOriginal_LoadCompleted;
-            // 
             // panelImage
             // 
             panelImage.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             panelImage.AutoScroll = true;
             panelImage.BackColor = SystemColors.ControlDark;
             panelImage.Controls.Add(pictureBoxOverlay);
-            panelImage.Controls.Add(pictureBoxOriginal);
             panelImage.Location = new Point(49, 61);
             panelImage.Name = "panelImage";
             panelImage.Size = new Size(743, 617);
@@ -322,7 +322,7 @@
             // 
             // pictureBoxOverlay
             // 
-            pictureBoxOverlay.BackColor = Color.Transparent;
+            pictureBoxOverlay.BackColor = Color.Black;
             pictureBoxOverlay.Location = new Point(0, 0);
             pictureBoxOverlay.Name = "pictureBoxOverlay";
             pictureBoxOverlay.Size = new Size(558, 375);
@@ -806,19 +806,6 @@
             panel1.Size = new Size(949, 31);
             panel1.TabIndex = 29;
             // 
-            // button4
-            // 
-            button4.FlatAppearance.BorderSize = 0;
-            button4.FlatStyle = FlatStyle.Flat;
-            button4.Image = Properties.Resources.toolRectangle;
-            button4.Location = new Point(3, 201);
-            button4.Margin = new Padding(1);
-            button4.Name = "button4";
-            button4.Size = new Size(36, 36);
-            button4.TabIndex = 6;
-            button4.UseVisualStyleBackColor = true;
-            button4.Click += ButtonBorder_Click;
-            // 
             // ScreenshotEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -843,9 +830,7 @@
             menuStrip1.PerformLayout();
             panelButtons.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).EndInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBoxOriginal).EndInit();
             panelImage.ResumeLayout(false);
-            panelImage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxOverlay).EndInit();
             panelSymbolGeneral.ResumeLayout(false);
             panelSymbolGeneral.PerformLayout();
@@ -873,7 +858,6 @@
 
         private MenuStrip menuStrip1;
         private Panel panelButtons;
-        private PictureBox pictureBoxOriginal;
         private ToolStripMenuItem fileToolStripMenuItem;
         private ToolStripMenuItem editToolStripMenuItem;
         private Panel panelImage;

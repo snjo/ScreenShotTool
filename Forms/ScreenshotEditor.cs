@@ -28,7 +28,6 @@ namespace ScreenShotTool.Forms
 
         private void SetupEditor()
         {
-            pictureBoxOverlay.Parent = pictureBoxOriginal;
             fillFontFamilyBox();
             numericPropertiesFontSize.Maximum = maxFontSize;
             numericPropertiesFontSize.Minimum = minimumFontSize;
@@ -69,7 +68,6 @@ namespace ScreenShotTool.Forms
         {
             InitializeComponent();
             SetupEditor();
-            pictureBoxOverlay.Parent = pictureBoxOriginal;
             LoadImageFromImage(loadImage);
             SetForegroundWindow(this.Handle);
         }
@@ -81,7 +79,6 @@ namespace ScreenShotTool.Forms
         private void SetOriginalImage()
         {
             // used at the end of each Load/Create image
-            pictureBoxOriginal.Image = originalImage;
             DisposeAndNull(overlayGraphics);
             DisposeAndNull(overlayImage);
             DeleteAllSymbols();
@@ -108,7 +105,6 @@ namespace ScreenShotTool.Forms
                 Debug.WriteLine("Could not load from clipboard");
                 return;
             }
-            DisposeAndNull(pictureBoxOriginal.Image);
             SetOriginalImage();
         }
 
@@ -142,7 +138,6 @@ namespace ScreenShotTool.Forms
                     Debug.WriteLine("Could not load file");
 
                 }
-                DisposeAndNull(pictureBoxOriginal.Image);
                 SetOriginalImage();
             }
         }
@@ -160,11 +155,6 @@ namespace ScreenShotTool.Forms
                 originalImage.Save(filename);
                 saveGraphic.Dispose();
             }
-        }
-
-        private void PictureBoxOriginal_LoadCompleted(object sender, EventArgs e)
-        {
-            CreateOverlay();
         }
 
         #endregion
@@ -188,8 +178,8 @@ namespace ScreenShotTool.Forms
                 overlayGraphics.TextRenderingHint = TextRenderingHint.AntiAlias; // fixes ugly aliasing on text
 
                 pictureBoxOverlay.Image = overlayImage;
-                pictureBoxOverlay.Width = pictureBoxOriginal.Width;
-                pictureBoxOverlay.Height = pictureBoxOriginal.Height;
+                pictureBoxOverlay.Width = originalImage.Width;
+                pictureBoxOverlay.Height = originalImage.Height;
             }
             else
             {
@@ -224,9 +214,14 @@ namespace ScreenShotTool.Forms
 
         private Image DrawOverlay(GraphicSymbol? temporarySymbol = null)
         {
-            Image img = new Bitmap(this.Width, this.Height);
+
+            Bitmap img = ((Bitmap)(originalImage)).Clone(new Rectangle(0,0,originalImage.Width, originalImage.Height), System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
             DisposeAndNull(overlayGraphics);
             overlayGraphics = Graphics.FromImage(img);
+
+            overlayGraphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            overlayGraphics.TextRenderingHint = TextRenderingHint.AntiAlias;
 
             DrawElements(overlayGraphics, temporarySymbol);
 
