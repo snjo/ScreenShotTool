@@ -11,10 +11,12 @@ namespace ScreenShotTool.Forms
         public Pen LinePen = new(Color.Gray);
         public SolidBrush LineBrush = new SolidBrush(Color.Gray);
         public SolidBrush FillBrush = new SolidBrush(Color.Pink);
+        public SolidBrush TextBrush = new SolidBrush(Color.Black);
         public SolidBrush ShadowBrush = new SolidBrush(Color.FromArgb(20, Color.Black));
         public Pen ShadowPen = new Pen(Color.FromArgb(50, Color.Black));
         public Color ForegroundColor;
         public Color BackgroundColor;
+        public Color TextColor;
         public bool ScalingAllowed = true;
         public bool MoveAllowed = true;
         public bool ShadowEnabled = false;
@@ -84,6 +86,7 @@ namespace ScreenShotTool.Forms
         {
             this.ForegroundColor = foregroundColor;
             this.BackgroundColor = backgroundColor;
+            this.TextColor = foregroundColor;
             this.Left = startPoint.X;
             this.Top = startPoint.Y;
             this.Right = endPoint.X;
@@ -123,12 +126,15 @@ namespace ScreenShotTool.Forms
             ShadowBrush.Color = Color.FromArgb(FillBrush.Color.A / 8, Color.Black);
             ShadowPen.Color = Color.FromArgb(LineBrush.Color.A / 8, Color.Black);
             ShadowPen.Width = LineWeight;
+
+            TextBrush.Color = TextColor;
         }
 
         internal void UpdateColors()
         {
             ForegroundColor = Color.FromArgb(lineAlpha, ForegroundColor.R, ForegroundColor.G, ForegroundColor.B);
             BackgroundColor = Color.FromArgb(lineAlpha, BackgroundColor.R, BackgroundColor.G, BackgroundColor.B);
+            TextColor = Color.FromArgb(lineAlpha, ForegroundColor.R, ForegroundColor.G, ForegroundColor.B);
         }
 
         public virtual void Dispose()
@@ -156,8 +162,8 @@ namespace ScreenShotTool.Forms
 
         public override void DrawSymbol(Graphics graphic)
         {
-            UpdatePen();
             UpdateColors();
+            UpdatePen();
             if (ShadowEnabled)
             {
                 for (int i = 1; i < ShadowDistance; i++)
@@ -311,8 +317,8 @@ namespace ScreenShotTool.Forms
 
         public override void DrawSymbol(Graphics graphic)
         {
-            UpdatePen();
             UpdateColors();
+            UpdatePen();
             if (ShadowEnabled)
             {
                 for (int i = 1; i < ShadowDistance && i < fontEmSize / 3; i++)
@@ -322,7 +328,7 @@ namespace ScreenShotTool.Forms
                 }
                 //draw(graphic, ShadowBrush, ShadowOffset);
             }
-            draw(graphic, FillBrush, new Point(0, 0));
+            draw(graphic, TextBrush, new Point(0, 0));
         }
 
         private void draw(Graphics graphic, Brush drawBrush, Point offset)
@@ -361,8 +367,8 @@ namespace ScreenShotTool.Forms
 
         public override void DrawSymbol(Graphics graphic)
         {
-            UpdatePen();
             UpdateColors();
+            UpdatePen();
             if (ShadowEnabled)
             {
                 for (int i = 1; i < ShadowDistance && i < LineWeight; i++)

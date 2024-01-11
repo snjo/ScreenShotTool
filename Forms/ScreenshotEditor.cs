@@ -34,6 +34,7 @@ namespace ScreenShotTool.Forms
             numericPropertiesFontSize.Value = startingFontSize;
             panelPropertiesPosition.Enabled = false;
             panelPropertiesFill.Visible = false;
+            panelPropertiesLine.Visible = false;
             panelPropertiesText.Visible = false;
         }
 
@@ -703,6 +704,10 @@ namespace ScreenShotTool.Forms
                     panelPropertiesLine.Visible = true;
                     panelPropertiesText.Visible = false;
 
+                    panelPropertiesFill.Location = new Point(panelPropertiesPosition.Left, panelPropertiesPosition.Bottom + 5);
+                    panelPropertiesLine.Location = new Point(panelPropertiesFill.Left, panelPropertiesFill.Bottom + 5);
+                    numericPropertiesLineWeight.Enabled = true;
+
                     numericWidth.Enabled = true;
                     numericHeight.Enabled = true;
                     buttonPropertiesColorLine.Enabled = true;
@@ -738,12 +743,15 @@ namespace ScreenShotTool.Forms
                     {
                         GsText gsText = (GsText)graphicSymbol;
 
+                        panelPropertiesFill.Visible = false;
+                        panelPropertiesLine.Visible = true;
                         panelPropertiesText.Visible = true;
-                        panelPropertiesLine.Visible = false;
-                        panelPropertiesText.Location = new Point(panelPropertiesFill.Location.X, panelPropertiesFill.Bottom + 5);
+                        panelPropertiesLine.Location = new Point(panelPropertiesPosition.Left, panelPropertiesPosition.Bottom + 5);
+                        panelPropertiesText.Location = new Point(panelPropertiesLine.Left, panelPropertiesLine.Bottom + 5);
 
                         numericWidth.Enabled = false;
                         numericHeight.Enabled = false;
+                        numericPropertiesLineWeight.Enabled = false;
 
                         textBoxSymbolText.Text = gsText.text;
                         if (gsText.ListViewItem != null)
@@ -865,6 +873,7 @@ namespace ScreenShotTool.Forms
                 ListViewItem item = listViewSymbols.SelectedItems[0];
                 if (item.Tag is not GraphicSymbol gs) return;
 
+                colorDialog1.Color = ((Button)sender).BackColor;
                 DialogResult result = colorDialog1.ShowDialog();
                 if (result == DialogResult.OK)
                 {
@@ -1022,6 +1031,7 @@ namespace ScreenShotTool.Forms
 
         private void NewColorLine_Click(object sender, EventArgs e)
         {
+            colorDialog1.Color = ((Button)sender).BackColor;
             DialogResult result = colorDialog1.ShowDialog();
             if (result == DialogResult.OK)
             {
@@ -1031,6 +1041,7 @@ namespace ScreenShotTool.Forms
 
         private void NewColorFill_Click(object sender, EventArgs e)
         {
+            colorDialog1.Color = ((Button)sender).BackColor;
             DialogResult result = colorDialog1.ShowDialog();
             if (result == DialogResult.OK)
             {
