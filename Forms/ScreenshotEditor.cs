@@ -164,7 +164,6 @@ namespace ScreenShotTool.Forms
         {
             if (originalImage != null)
             {
-                Debug.WriteLine("Creating overlay");
                 overlayImage?.Dispose();
                 overlayGraphics?.Dispose();
                 overlayImage = new Bitmap(originalImage.Width, originalImage.Height);
@@ -977,7 +976,7 @@ namespace ScreenShotTool.Forms
 
         private void checkBoxPropertiesShadow_Click(object sender, EventArgs e)
         {
-            GraphicSymbol? symbol = GetSelectedTextSymbol();
+            GraphicSymbol? symbol = GetSelectedSymbol();
             if (symbol != null)
             {
                 symbol.ShadowEnabled = checkBoxPropertiesShadow.Checked;

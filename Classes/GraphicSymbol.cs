@@ -240,7 +240,6 @@ namespace ScreenShotTool.Forms
             }
             set
             {
-                Debug.WriteLine("Border lineweight: " + value);
                 borderWeight = value;
                 Left = 0 + (borderWeight / 2);
                 Top = 0 + (borderWeight / 2);
@@ -318,6 +317,7 @@ namespace ScreenShotTool.Forms
             {
                 for (int i = 1; i < ShadowDistance && i < fontEmSize / 3; i++)
                 {
+                    //Debug.WriteLine("Draw shadow");
                     draw(graphic, ShadowBrush, new Point(i, i));
                 }
                 //draw(graphic, ShadowBrush, ShadowOffset);

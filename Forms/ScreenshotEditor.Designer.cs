@@ -589,7 +589,7 @@
             // 
             // buttonNewColorFill
             // 
-            buttonNewColorFill.BackColor = Color.FromArgb(192, 255, 255);
+            buttonNewColorFill.BackColor = Color.DimGray;
             buttonNewColorFill.FlatStyle = FlatStyle.Flat;
             buttonNewColorFill.Location = new Point(181, 5);
             buttonNewColorFill.Name = "buttonNewColorFill";
@@ -601,7 +601,7 @@
             // 
             // buttonNewColorLine
             // 
-            buttonNewColorLine.BackColor = Color.Blue;
+            buttonNewColorLine.BackColor = Color.Red;
             buttonNewColorLine.FlatStyle = FlatStyle.Flat;
             buttonNewColorLine.Location = new Point(72, 5);
             buttonNewColorLine.Name = "buttonNewColorLine";
