@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
 
-[assembly: AssemblyVersion("1.2.*")]
+[assembly: AssemblyVersion("1.3.*")]
 
 #pragma warning disable IDE0090 // Use 'new(...)'
 
