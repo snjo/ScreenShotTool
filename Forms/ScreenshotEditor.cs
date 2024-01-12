@@ -338,7 +338,8 @@ namespace ScreenShotTool.Forms
             Arrow,
             Line,
             Image,
-            ImageScaled
+            ImageScaled,
+            Blur
         }
 
 
@@ -418,6 +419,7 @@ namespace ScreenShotTool.Forms
                     SymbolType.Image => new GsImage(lineColor, fillColor, shadow, dragEnd, new Point(1, 1)),
                     SymbolType.ImageScaled => new GsImageScaled(lineColor, fillColor, shadow, upperLeft, size),
                     SymbolType.Text => new GsText(lineColor, fillColor, shadow, dragStart, size, lineWeight, lineAlpha),
+                    SymbolType.Blur => new GsBlur(lineColor, fillColor, shadow, upperLeft, size, lineWeight, lineAlpha, fillAlpha),
                     _ => null,
                 };
             }
@@ -484,6 +486,11 @@ namespace ScreenShotTool.Forms
             UpdateOverlay();
         }
 
+        private void buttonBlur_Click(object sender, EventArgs e)
+        {
+            newSymbolType = SymbolType.Blur;
+            UpdateOverlay();
+        }
 
         #endregion
 

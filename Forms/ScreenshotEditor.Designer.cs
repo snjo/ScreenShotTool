@@ -42,12 +42,12 @@
             itemPasteScaled = new ToolStripMenuItem();
             deleteOverlayElementsToolStripMenuItem = new ToolStripMenuItem();
             panelButtons = new Panel();
-            button4 = new Button();
-            button3 = new Button();
+            buttonFrame = new Button();
+            buttonText = new Button();
             buttonArrow = new Button();
             buttonLine = new Button();
-            button2 = new Button();
-            button1 = new Button();
+            buttonCircle = new Button();
+            buttonRectangle = new Button();
             numericNewLineWeight = new NumericUpDown();
             panelImage = new Panel();
             pictureBoxOverlay = new PictureBox();
@@ -102,6 +102,7 @@
             checkBoxNewShadow = new CheckBox();
             panelPropertiesLine = new Panel();
             checkBoxPropertiesShadow = new CheckBox();
+            buttonBlur = new Button();
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
@@ -214,42 +215,43 @@
             // 
             panelButtons.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             panelButtons.BorderStyle = BorderStyle.FixedSingle;
-            panelButtons.Controls.Add(button4);
-            panelButtons.Controls.Add(button3);
+            panelButtons.Controls.Add(buttonBlur);
+            panelButtons.Controls.Add(buttonFrame);
+            panelButtons.Controls.Add(buttonText);
             panelButtons.Controls.Add(buttonArrow);
             panelButtons.Controls.Add(buttonLine);
-            panelButtons.Controls.Add(button2);
-            panelButtons.Controls.Add(button1);
+            panelButtons.Controls.Add(buttonCircle);
+            panelButtons.Controls.Add(buttonRectangle);
             panelButtons.Location = new Point(0, 61);
             panelButtons.Name = "panelButtons";
             panelButtons.Size = new Size(46, 617);
             panelButtons.TabIndex = 1;
             // 
-            // button4
+            // buttonFrame
             // 
-            button4.FlatAppearance.BorderSize = 0;
-            button4.FlatStyle = FlatStyle.Flat;
-            button4.Image = Properties.Resources.frame;
-            button4.Location = new Point(3, 201);
-            button4.Margin = new Padding(1);
-            button4.Name = "button4";
-            button4.Size = new Size(36, 36);
-            button4.TabIndex = 6;
-            button4.UseVisualStyleBackColor = true;
-            button4.Click += ButtonBorder_Click;
+            buttonFrame.FlatAppearance.BorderSize = 0;
+            buttonFrame.FlatStyle = FlatStyle.Flat;
+            buttonFrame.Image = Properties.Resources.frame;
+            buttonFrame.Location = new Point(3, 201);
+            buttonFrame.Margin = new Padding(1);
+            buttonFrame.Name = "buttonFrame";
+            buttonFrame.Size = new Size(36, 36);
+            buttonFrame.TabIndex = 6;
+            buttonFrame.UseVisualStyleBackColor = true;
+            buttonFrame.Click += ButtonBorder_Click;
             // 
-            // button3
+            // buttonText
             // 
-            button3.FlatAppearance.BorderSize = 0;
-            button3.FlatStyle = FlatStyle.Flat;
-            button3.Image = Properties.Resources.toolText;
-            button3.Location = new Point(3, 163);
-            button3.Margin = new Padding(1);
-            button3.Name = "button3";
-            button3.Size = new Size(36, 36);
-            button3.TabIndex = 5;
-            button3.UseVisualStyleBackColor = true;
-            button3.Click += ButtonNewText_Click;
+            buttonText.FlatAppearance.BorderSize = 0;
+            buttonText.FlatStyle = FlatStyle.Flat;
+            buttonText.Image = Properties.Resources.toolText;
+            buttonText.Location = new Point(3, 163);
+            buttonText.Margin = new Padding(1);
+            buttonText.Name = "buttonText";
+            buttonText.Size = new Size(36, 36);
+            buttonText.TabIndex = 5;
+            buttonText.UseVisualStyleBackColor = true;
+            buttonText.Click += ButtonNewText_Click;
             // 
             // buttonArrow
             // 
@@ -277,31 +279,31 @@
             buttonLine.UseVisualStyleBackColor = true;
             buttonLine.Click += ButtonLine_Click;
             // 
-            // button2
+            // buttonCircle
             // 
-            button2.FlatAppearance.BorderSize = 0;
-            button2.FlatStyle = FlatStyle.Flat;
-            button2.Image = Properties.Resources.toolEllipse;
-            button2.Location = new Point(3, 43);
-            button2.Margin = new Padding(1);
-            button2.Name = "button2";
-            button2.Size = new Size(36, 36);
-            button2.TabIndex = 1;
-            button2.UseVisualStyleBackColor = true;
-            button2.Click += ButtonCircle_Click;
+            buttonCircle.FlatAppearance.BorderSize = 0;
+            buttonCircle.FlatStyle = FlatStyle.Flat;
+            buttonCircle.Image = Properties.Resources.toolEllipse;
+            buttonCircle.Location = new Point(3, 43);
+            buttonCircle.Margin = new Padding(1);
+            buttonCircle.Name = "buttonCircle";
+            buttonCircle.Size = new Size(36, 36);
+            buttonCircle.TabIndex = 1;
+            buttonCircle.UseVisualStyleBackColor = true;
+            buttonCircle.Click += ButtonCircle_Click;
             // 
-            // button1
+            // buttonRectangle
             // 
-            button1.FlatAppearance.BorderSize = 0;
-            button1.FlatStyle = FlatStyle.Flat;
-            button1.Image = Properties.Resources.toolRectangle2;
-            button1.Location = new Point(3, 3);
-            button1.Margin = new Padding(1);
-            button1.Name = "button1";
-            button1.Size = new Size(36, 36);
-            button1.TabIndex = 0;
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += ButtonRectangle_Click;
+            buttonRectangle.FlatAppearance.BorderSize = 0;
+            buttonRectangle.FlatStyle = FlatStyle.Flat;
+            buttonRectangle.Image = Properties.Resources.toolRectangle2;
+            buttonRectangle.Location = new Point(3, 3);
+            buttonRectangle.Margin = new Padding(1);
+            buttonRectangle.Name = "buttonRectangle";
+            buttonRectangle.Size = new Size(36, 36);
+            buttonRectangle.TabIndex = 0;
+            buttonRectangle.UseVisualStyleBackColor = true;
+            buttonRectangle.Click += ButtonRectangle_Click;
             // 
             // numericNewLineWeight
             // 
@@ -839,6 +841,16 @@
             checkBoxPropertiesShadow.UseVisualStyleBackColor = true;
             checkBoxPropertiesShadow.Click += checkBoxPropertiesShadow_Click;
             // 
+            // buttonBlur
+            // 
+            buttonBlur.Location = new Point(6, 241);
+            buttonBlur.Name = "buttonBlur";
+            buttonBlur.Size = new Size(33, 35);
+            buttonBlur.TabIndex = 7;
+            buttonBlur.Text = "blr";
+            buttonBlur.UseVisualStyleBackColor = true;
+            buttonBlur.Click += buttonBlur_Click;
+            // 
             // ScreenshotEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -902,10 +914,10 @@
         private ToolStripMenuItem itemLoadFromFile;
         private ToolStripMenuItem itemExit;
         private ToolStripMenuItem copyToolStripMenuItem;
-        private Button button1;
+        private Button buttonRectangle;
         private PictureBox pictureBoxOverlay;
         private ToolStripMenuItem deleteOverlayElementsToolStripMenuItem;
-        private Button button2;
+        private Button buttonCircle;
         private Button buttonLine;
         private ToolStripMenuItem itemLoadFromClipboard;
         private ToolStripMenuItem pasteIntoThisImageToolStripMenuItem;
@@ -950,7 +962,7 @@
         private NumericUpDown numericPropertiesLineAlpha;
         private ToolStripMenuItem itemNewImage;
         private TextBox textBoxSymbolText;
-        private Button button3;
+        private Button buttonText;
         private Panel panelPropertiesFill;
         private Panel panelPropertiesText;
         private NumericUpDown numericPropertiesFontSize;
@@ -962,9 +974,10 @@
         private CheckBox checkBoxUnderline;
         private CheckBox checkBoxStrikeout;
         private Panel panel1;
-        private Button button4;
+        private Button buttonFrame;
         private CheckBox checkBoxNewShadow;
         private Panel panelPropertiesLine;
         private CheckBox checkBoxPropertiesShadow;
+        private Button buttonBlur;
     }
 }

@@ -276,6 +276,34 @@ namespace ScreenShotTool.Forms
         }
     }
 
+    public class GsBlur : GsBoundingBox
+    {
+        public GsBlur(Color foregroundColor, Color backgroundColor, bool shadowEnabled, Point startPoint, Point endPoint, int lineWeight, int lineAlpha, int fillAlpha) : base(foregroundColor, backgroundColor, shadowEnabled, startPoint, endPoint, lineWeight, lineAlpha, fillAlpha)
+        {
+            Name = "Blur";
+            drawFill = DrawFill;
+        }
+
+        public void DrawFill(Pen pen, Brush fillBrush, Rectangle rect, Graphics graphic)
+        {
+            Pen p = new Pen(new HatchBrush(HatchStyle.ForwardDiagonal, Color.Red, Color.Transparent));
+            p.Width = LineWeight;
+            graphic.DrawRectangle(p, rect);
+            int pixelSize = 10;
+            SolidBrush blurBrush = new SolidBrush(Color.Pink);
+            for (int i = 0; i < Width; i += pixelSize)
+            {
+                for (int j = 0; j < Height; j += pixelSize)
+                {
+                    blurBrush.Color = Color.FromArgb(255, Math.Clamp(i, 0, 255), Math.Clamp(j, 0, 255), 100);
+                    Rectangle box = new Rectangle(StartPoint.X + i, StartPoint.Y + j, pixelSize + 1, pixelSize + 1);
+                    graphic.FillRectangle(blurBrush, box);
+                    //Debug.WriteLine($"Rect {i} {j}, {blurBrush.Color} {box}");
+                }
+            }
+        }
+    }
+
     public class GsText : GraphicSymbol
     {
         public FontFamily fontFamily = FontFamily.GenericSansSerif;
