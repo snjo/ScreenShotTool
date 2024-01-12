@@ -278,6 +278,8 @@ namespace ScreenShotTool.Forms
 
     public class GsBlur : GsBoundingBox
     {
+        public Bitmap? blurredImage;
+        private Bitmap? blurred;
         public GsBlur(Color foregroundColor, Color backgroundColor, bool shadowEnabled, Point startPoint, Point endPoint, int lineWeight, int lineAlpha, int fillAlpha) : base(foregroundColor, backgroundColor, shadowEnabled, startPoint, endPoint, lineWeight, lineAlpha, fillAlpha)
         {
             Name = "Blur";
@@ -286,23 +288,29 @@ namespace ScreenShotTool.Forms
 
         public void DrawFill(Pen pen, Brush fillBrush, Rectangle rect, Graphics graphic)
         {
-            Pen p = new Pen(new HatchBrush(HatchStyle.ForwardDiagonal, Color.Red, Color.Transparent));
-            p.Width = LineWeight;
-            graphic.DrawRectangle(p, rect);
-            int pixelSize = 10;
-            SolidBrush blurBrush = new SolidBrush(Color.Pink);
-            for (int i = 0; i < Width; i += pixelSize)
+            if (blurredImage == null) return;
+            blurred = CropImage(blurredImage, new Rectangle(Left, Top, Width, Height));
+
+            graphic.DrawImage(blurred, Left, Top, Width, Height);
+            blurred.Dispose();
+        }
+
+        Brush blackBrush = new SolidBrush(Color.Black);
+        Bitmap CropImage(Bitmap img, Rectangle cropArea)
+        {
+            //https://www.codingdefined.com/2015/04/solved-bitmapclone-out-of-memory.html
+            Bitmap bmp = new Bitmap(cropArea.Width, cropArea.Height);
+
+            using (Graphics gph = Graphics.FromImage(bmp))
             {
-                for (int j = 0; j < Height; j += pixelSize)
-                {
-                    blurBrush.Color = Color.FromArgb(255, Math.Clamp(i, 0, 255), Math.Clamp(j, 0, 255), 100);
-                    Rectangle box = new Rectangle(StartPoint.X + i, StartPoint.Y + j, pixelSize + 1, pixelSize + 1);
-                    graphic.FillRectangle(blurBrush, box);
-                    //Debug.WriteLine($"Rect {i} {j}, {blurBrush.Color} {box}");
-                }
+                gph.FillRectangle(blackBrush, new Rectangle(0, 0, 100, 100));
+                gph.DrawImage(img, new Rectangle(0, 0, bmp.Width, bmp.Height), cropArea, GraphicsUnit.Pixel);
             }
+            return bmp;
         }
     }
+
+
 
     public class GsText : GraphicSymbol
     {

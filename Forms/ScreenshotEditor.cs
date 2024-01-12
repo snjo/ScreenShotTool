@@ -16,6 +16,7 @@ namespace ScreenShotTool.Forms
         #region Constructor ---------------------------------------------------------------------------------
         Image? originalImage;
         Image? overlayImage;
+        Bitmap? blurImage;
         Graphics? overlayGraphics;
         int arrowWeight = 5;
         int lineWeight = 2;
@@ -77,11 +78,12 @@ namespace ScreenShotTool.Forms
 
         #region Load and Save -------------------------------------------------------------------------------
 
-        private void SetOriginalImage()
+        private void FlushImages()
         {
             // used at the end of each Load/Create image
             DisposeAndNull(overlayGraphics);
             DisposeAndNull(overlayImage);
+            DisposeAndNull(blurImage);
             DeleteAllSymbols();
         }
 
@@ -91,7 +93,7 @@ namespace ScreenShotTool.Forms
             originalImage = new Bitmap(Width, Height);
             Graphics g = Graphics.FromImage(originalImage);
             g.FillRectangle(new SolidBrush(color), 0, 0, Width, Height);
-            SetOriginalImage();
+            FlushImages();
             DeleteAllSymbols();
         }
 
@@ -106,14 +108,14 @@ namespace ScreenShotTool.Forms
                 Debug.WriteLine("Could not load from clipboard");
                 return;
             }
-            SetOriginalImage();
+            FlushImages();
         }
 
         private void LoadImageFromImage(Image image)
         {
             DisposeAndNull(originalImage);
             originalImage = image;
-            SetOriginalImage();
+            FlushImages();
         }
 
         public void LoadImageFromFile(string filename)
@@ -139,13 +141,12 @@ namespace ScreenShotTool.Forms
                     Debug.WriteLine("Could not load file");
 
                 }
-                SetOriginalImage();
+                FlushImages();
             }
         }
 
         public void SaveImage(string filename)
         {
-            //originalImage.
             if (originalImage != null)
             {
                 Graphics saveGraphic = Graphics.FromImage(originalImage);
@@ -169,7 +170,7 @@ namespace ScreenShotTool.Forms
                 overlayGraphics?.Dispose();
                 overlayImage = new Bitmap(originalImage.Width, originalImage.Height);
                 overlayGraphics = Graphics.FromImage(overlayImage);
-
+                blurImage = CreateBlurImage();
 
                 //overlayGraphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 
@@ -185,6 +186,75 @@ namespace ScreenShotTool.Forms
             {
                 //Debug.WriteLine("Create overlay failed, original image is null");
             }
+        }
+
+        private Bitmap CreateBlurImage()
+        {
+            Stopwatch sw = new Stopwatch();
+
+            sw.Start();
+
+            DisposeAndNull(blurImage);
+            int blurSize = 5;
+            blurImage = new Bitmap(originalImage.Width, originalImage.Height);
+            Graphics graphics = Graphics.FromImage(blurImage);
+            Color pixelColor = Color.Black;
+
+            for (int x = 0; x < originalImage.Width; x++)
+            {
+                for (int y = 0; y < originalImage.Height; y++)
+                {
+                    //if (x % blurSize == 0 && y % blurSize == 0)
+                    //{
+                    //    pixelColor = SamplePixelArea(originalImage, blurSize, x, y);
+                    //}
+                    pixelColor = SamplePixelArea(originalImage, blurSize, x, y);
+                    blurImage.SetPixel(x, y, pixelColor);
+                }
+            }
+
+            graphics.Dispose();
+            sw.Stop();
+
+            Debug.WriteLine($"Blur took {sw.ElapsedMilliseconds}");
+
+            return blurImage;
+        }
+
+        private Color SamplePixelArea(Image originalImage, int blurSize, int x, int y)
+        {
+            Color sampleColor;
+            Color pixelColor;
+            int sampleX = x;
+            int sampleY = y;
+            int R = 0;
+            int G = 0;
+            int B = 0;
+            int samples = 0;
+            //if (x == 12 && y == 12) Debug.WriteLine($"Sample from {x}, {y}");
+            //for (int i = -blurSize/2; i <= blurSize/2; i+=3)
+            for (int i = -blurSize; i <= blurSize; i++)
+            {
+                //for (int j = -blurSize / 2; j <= blurSize / 2; j+=3)
+                for (int j = -blurSize; j <= blurSize; j++)
+                {
+                    // sampleX = sampleX - (sampleX % blurSize) + i;
+                    //sampleY = sampleY - (sampleY % blurSize) + j;
+                    sampleX = x + i;
+                    sampleY = y + j;
+                    sampleX = Math.Clamp(sampleX, 0, originalImage.Width - 1);
+                    sampleY = Math.Clamp(sampleY, 0, originalImage.Height - 1);
+                    sampleColor = ((Bitmap)originalImage).GetPixel(sampleX, sampleY);
+                    R += sampleColor.R;
+                    G += sampleColor.G;
+                    B += sampleColor.B;
+                    samples++;
+                    //if (x == 12 && y == 12) Debug.WriteLine($"check {sampleX}, {sampleY}");
+                }
+            }
+            pixelColor = Color.FromArgb(R / samples, G / samples, B / samples);
+            //Debug.WriteLine($"Samples: {samples}");
+            return pixelColor;
         }
 
         DateTime LastFrame = DateTime.Now;
@@ -232,6 +302,13 @@ namespace ScreenShotTool.Forms
         {
             foreach (GraphicSymbol symbol in symbols)
             {
+                if (symbol is GsBlur)
+                {
+                    if (originalImage != null)
+                    {
+                        ((GsBlur)symbol).blurredImage = blurImage;
+                    }
+                }
                 symbol.DrawSymbol(graphic);
             }
             temporarySymbol?.DrawSymbol(graphic);
