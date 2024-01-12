@@ -229,7 +229,7 @@
             // 
             button4.FlatAppearance.BorderSize = 0;
             button4.FlatStyle = FlatStyle.Flat;
-            button4.Image = Properties.Resources.toolRectangle;
+            button4.Image = Properties.Resources.frame;
             button4.Location = new Point(3, 201);
             button4.Margin = new Padding(1);
             button4.Name = "button4";
