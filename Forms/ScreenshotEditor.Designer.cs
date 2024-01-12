@@ -42,6 +42,7 @@
             itemPasteScaled = new ToolStripMenuItem();
             deleteOverlayElementsToolStripMenuItem = new ToolStripMenuItem();
             panelButtons = new Panel();
+            buttonBlur = new Button();
             buttonFrame = new Button();
             buttonText = new Button();
             buttonArrow = new Button();
@@ -102,7 +103,6 @@
             checkBoxNewShadow = new CheckBox();
             panelPropertiesLine = new Panel();
             checkBoxPropertiesShadow = new CheckBox();
-            buttonBlur = new Button();
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
@@ -145,7 +145,7 @@
             // 
             itemNewImage.Name = "itemNewImage";
             itemNewImage.Size = new Size(184, 22);
-            itemNewImage.Text = "&New";
+            itemNewImage.Text = "&New...";
             itemNewImage.Click += ItemNewImage_Click;
             // 
             // itemSave
@@ -159,7 +159,7 @@
             // 
             itemLoadFromFile.Name = "itemLoadFromFile";
             itemLoadFromFile.Size = new Size(184, 22);
-            itemLoadFromFile.Text = "&Load";
+            itemLoadFromFile.Text = "&Load...";
             itemLoadFromFile.Click += LoadToolStripMenuItem_Click;
             // 
             // itemLoadFromClipboard
@@ -226,6 +226,16 @@
             panelButtons.Name = "panelButtons";
             panelButtons.Size = new Size(46, 617);
             panelButtons.TabIndex = 1;
+            // 
+            // buttonBlur
+            // 
+            buttonBlur.Location = new Point(6, 241);
+            buttonBlur.Name = "buttonBlur";
+            buttonBlur.Size = new Size(33, 35);
+            buttonBlur.TabIndex = 7;
+            buttonBlur.Text = "blr";
+            buttonBlur.UseVisualStyleBackColor = true;
+            buttonBlur.Click += buttonBlur_Click;
             // 
             // buttonFrame
             // 
@@ -832,6 +842,7 @@
             // 
             // checkBoxPropertiesShadow
             // 
+            checkBoxPropertiesShadow.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             checkBoxPropertiesShadow.AutoSize = true;
             checkBoxPropertiesShadow.Location = new Point(798, 632);
             checkBoxPropertiesShadow.Name = "checkBoxPropertiesShadow";
@@ -840,16 +851,6 @@
             checkBoxPropertiesShadow.Text = "Shadow";
             checkBoxPropertiesShadow.UseVisualStyleBackColor = true;
             checkBoxPropertiesShadow.Click += checkBoxPropertiesShadow_Click;
-            // 
-            // buttonBlur
-            // 
-            buttonBlur.Location = new Point(6, 241);
-            buttonBlur.Name = "buttonBlur";
-            buttonBlur.Size = new Size(33, 35);
-            buttonBlur.TabIndex = 7;
-            buttonBlur.Text = "blr";
-            buttonBlur.UseVisualStyleBackColor = true;
-            buttonBlur.Click += buttonBlur_Click;
             // 
             // ScreenshotEditor
             // 

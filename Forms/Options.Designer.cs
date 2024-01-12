@@ -94,6 +94,14 @@
             checkBoxWindowToFile = new CheckBox();
             labelWindow = new Label();
             tabPageApplication = new TabPage();
+            label30 = new Label();
+            label28 = new Label();
+            label29 = new Label();
+            numericBlurSampleArea = new NumericUpDown();
+            label27 = new Label();
+            label26 = new Label();
+            numericBlurMosaicSize = new NumericUpDown();
+            label25 = new Label();
             label24 = new Label();
             label13 = new Label();
             label17 = new Label();
@@ -126,6 +134,8 @@
             ((System.ComponentModel.ISupportInitialize)numericUpDownCounter).BeginInit();
             tabPageModes.SuspendLayout();
             tabPageApplication.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericBlurSampleArea).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericBlurMosaicSize).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownFramerate).BeginInit();
             tabPageHotkeys.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)HotkeyGrid).BeginInit();
@@ -502,7 +512,7 @@
             // labelFileNameResult
             // 
             labelFileNameResult.AutoSize = true;
-            labelFileNameResult.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            labelFileNameResult.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
             labelFileNameResult.Location = new Point(18, 109);
             labelFileNameResult.Name = "labelFileNameResult";
             labelFileNameResult.Size = new Size(90, 15);
@@ -512,7 +522,7 @@
             // label23
             // 
             label23.AutoSize = true;
-            label23.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            label23.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
             label23.Location = new Point(88, 317);
             label23.Name = "label23";
             label23.Size = new Size(120, 15);
@@ -522,7 +532,7 @@
             // label22
             // 
             label22.AutoSize = true;
-            label22.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            label22.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
             label22.Location = new Point(156, 407);
             label22.Name = "label22";
             label22.Size = new Size(35, 15);
@@ -532,7 +542,7 @@
             // label21
             // 
             label21.AutoSize = true;
-            label21.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            label21.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
             label21.Location = new Point(18, 411);
             label21.Name = "label21";
             label21.Size = new Size(27, 15);
@@ -542,7 +552,7 @@
             // label20
             // 
             label20.AutoSize = true;
-            label20.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            label20.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
             label20.Location = new Point(88, 436);
             label20.Name = "label20";
             label20.Size = new Size(44, 15);
@@ -552,7 +562,7 @@
             // label19
             // 
             label19.AutoSize = true;
-            label19.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            label19.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
             label19.Location = new Point(88, 382);
             label19.Name = "label19";
             label19.Size = new Size(26, 15);
@@ -697,7 +707,7 @@
             // label10
             // 
             label10.AutoSize = true;
-            label10.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label10.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label10.Location = new Point(6, 363);
             label10.Name = "label10";
             label10.Size = new Size(106, 15);
@@ -727,7 +737,7 @@
             // label11
             // 
             label11.AutoSize = true;
-            label11.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label11.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label11.Location = new Point(6, 263);
             label11.Name = "label11";
             label11.Size = new Size(130, 15);
@@ -757,7 +767,7 @@
             // labelRegion
             // 
             labelRegion.AutoSize = true;
-            labelRegion.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            labelRegion.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             labelRegion.Location = new Point(6, 12);
             labelRegion.Name = "labelRegion";
             labelRegion.Size = new Size(84, 15);
@@ -787,7 +797,7 @@
             // labelWindow
             // 
             labelWindow.AutoSize = true;
-            labelWindow.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            labelWindow.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             labelWindow.Location = new Point(6, 161);
             labelWindow.Name = "labelWindow";
             labelWindow.Size = new Size(91, 15);
@@ -796,6 +806,14 @@
             // 
             // tabPageApplication
             // 
+            tabPageApplication.Controls.Add(label30);
+            tabPageApplication.Controls.Add(label28);
+            tabPageApplication.Controls.Add(label29);
+            tabPageApplication.Controls.Add(numericBlurSampleArea);
+            tabPageApplication.Controls.Add(label27);
+            tabPageApplication.Controls.Add(label26);
+            tabPageApplication.Controls.Add(numericBlurMosaicSize);
+            tabPageApplication.Controls.Add(label25);
             tabPageApplication.Controls.Add(label24);
             tabPageApplication.Controls.Add(label13);
             tabPageApplication.Controls.Add(label17);
@@ -821,10 +839,85 @@
             tabPageApplication.Text = "Application";
             tabPageApplication.UseVisualStyleBackColor = true;
             // 
+            // label30
+            // 
+            label30.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
+            label30.Location = new Point(16, 440);
+            label30.Name = "label30";
+            label30.Size = new Size(435, 40);
+            label30.TabIndex = 81;
+            label30.Text = "A blur image is generated when loading an image in the editor. If the settings are too aggressive, it will take longer to open the editor or image";
+            // 
+            // label28
+            // 
+            label28.AutoSize = true;
+            label28.Location = new Point(182, 414);
+            label28.Name = "label28";
+            label28.Size = new Size(120, 15);
+            label28.TabIndex = 80;
+            label28.Text = "pixels (lower is faster)";
+            // 
+            // label29
+            // 
+            label29.AutoSize = true;
+            label29.Location = new Point(16, 414);
+            label29.Name = "label29";
+            label29.Size = new Size(94, 15);
+            label29.TabIndex = 79;
+            label29.Text = "Blur sample area";
+            // 
+            // numericBlurSampleArea
+            // 
+            numericBlurSampleArea.Location = new Point(122, 412);
+            numericBlurSampleArea.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
+            numericBlurSampleArea.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numericBlurSampleArea.Name = "numericBlurSampleArea";
+            numericBlurSampleArea.Size = new Size(54, 23);
+            numericBlurSampleArea.TabIndex = 78;
+            numericBlurSampleArea.Value = new decimal(new int[] { 4, 0, 0, 0 });
+            // 
+            // label27
+            // 
+            label27.AutoSize = true;
+            label27.Location = new Point(182, 387);
+            label27.Name = "label27";
+            label27.Size = new Size(125, 15);
+            label27.TabIndex = 77;
+            label27.Text = "pixels (higher is faster)";
+            // 
+            // label26
+            // 
+            label26.AutoSize = true;
+            label26.Location = new Point(16, 387);
+            label26.Name = "label26";
+            label26.Size = new Size(91, 15);
+            label26.TabIndex = 76;
+            label26.Text = "Blur mosaic size";
+            // 
+            // numericBlurMosaicSize
+            // 
+            numericBlurMosaicSize.Location = new Point(122, 385);
+            numericBlurMosaicSize.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
+            numericBlurMosaicSize.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numericBlurMosaicSize.Name = "numericBlurMosaicSize";
+            numericBlurMosaicSize.Size = new Size(54, 23);
+            numericBlurMosaicSize.TabIndex = 75;
+            numericBlurMosaicSize.Value = new decimal(new int[] { 8, 0, 0, 0 });
+            // 
+            // label25
+            // 
+            label25.AutoSize = true;
+            label25.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label25.Location = new Point(5, 359);
+            label25.Name = "label25";
+            label25.Size = new Size(87, 15);
+            label25.TabIndex = 74;
+            label25.Text = "Editor settings";
+            // 
             // label24
             // 
             label24.AutoSize = true;
-            label24.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label24.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label24.Location = new Point(5, 262);
             label24.Name = "label24";
             label24.Size = new Size(80, 15);
@@ -833,7 +926,7 @@
             // 
             // label13
             // 
-            label13.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            label13.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
             label13.Location = new Point(16, 310);
             label13.Name = "label13";
             label13.Size = new Size(435, 40);
@@ -872,7 +965,7 @@
             // label16
             // 
             label16.AutoSize = true;
-            label16.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label16.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label16.Location = new Point(5, 158);
             label16.Name = "label16";
             label16.Size = new Size(70, 15);
@@ -882,7 +975,7 @@
             // label15
             // 
             label15.AutoSize = true;
-            label15.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label15.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label15.Location = new Point(5, 57);
             label15.Name = "label15";
             label15.Size = new Size(73, 15);
@@ -892,7 +985,7 @@
             // label14
             // 
             label14.AutoSize = true;
-            label14.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label14.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label14.Location = new Point(5, 7);
             label14.Name = "label14";
             label14.Size = new Size(49, 15);
@@ -929,7 +1022,6 @@
             HotkeyGrid.Location = new Point(6, 6);
             HotkeyGrid.Name = "HotkeyGrid";
             HotkeyGrid.RowHeadersVisible = false;
-            HotkeyGrid.RowTemplate.Height = 25;
             HotkeyGrid.Size = new Size(470, 443);
             HotkeyGrid.TabIndex = 20;
             // 
@@ -1012,6 +1104,8 @@
             tabPageModes.PerformLayout();
             tabPageApplication.ResumeLayout(false);
             tabPageApplication.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericBlurSampleArea).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericBlurMosaicSize).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownFramerate).EndInit();
             tabPageHotkeys.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)HotkeyGrid).EndInit();
@@ -1103,5 +1197,13 @@
         private Label label17;
         private Label label12;
         private NumericUpDown numericUpDownFramerate;
+        private Label label26;
+        private NumericUpDown numericBlurMosaicSize;
+        private Label label25;
+        private Label label30;
+        private Label label28;
+        private Label label29;
+        private NumericUpDown numericBlurSampleArea;
+        private Label label27;
     }
 }

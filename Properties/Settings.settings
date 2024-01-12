@@ -8,7 +8,7 @@
     <Setting Name="RegisterHotkeys" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-	<Setting Name="hkCaptureWindowKey" Type="System.String" Scope="User">
+    <Setting Name="hkCaptureWindowKey" Type="System.String" Scope="User">
       <Value Profile="(Default)">PrintScreen</Value>
     </Setting>
     <Setting Name="hkCaptureWindowCtrl" Type="System.Boolean" Scope="User">
@@ -53,7 +53,7 @@
     <Setting Name="hkBrowseFolderWin" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-	<Setting Name="hkCaptureCurrentScreenKey" Type="System.String" Scope="User">
+    <Setting Name="hkCaptureCurrentScreenKey" Type="System.String" Scope="User">
       <Value Profile="(Default)">PrintScreen</Value>
     </Setting>
     <Setting Name="hkCaptureCurrentScreenCtrl" Type="System.Boolean" Scope="User">
@@ -68,13 +68,13 @@
     <Setting Name="hkCaptureCurrentScreenWin" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-	<Setting Name="hkCaptureAllScreensKey" Type="System.String" Scope="User">
+    <Setting Name="hkCaptureAllScreensKey" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="hkCaptureAllScreensCtrl" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-	<Setting Name="hkCaptureAllScreensShift" Type="System.Boolean" Scope="User">
+    <Setting Name="hkCaptureAllScreensShift" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="hkCaptureAllScreensAlt" Type="System.Boolean" Scope="User">
@@ -89,10 +89,10 @@
     <Setting Name="Foldername" Type="System.String" Scope="User">
       <Value Profile="(Default)">.\$w</Value>
     </Setting>
-	<Setting Name="FileExtension" Type="System.String" Scope="User">
+    <Setting Name="FileExtension" Type="System.String" Scope="User">
       <Value Profile="(Default)">.png</Value>
     </Setting>
-	<Setting Name="TrimChecked" Type="System.Boolean" Scope="User">
+    <Setting Name="TrimChecked" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="TrimTop" Type="System.Int32" Scope="User">
@@ -152,7 +152,7 @@
     <Setting Name="RegionToClipboard" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-	<Setting Name="RegionToEditor" Type="System.Boolean" Scope="User">
+    <Setting Name="RegionToEditor" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="WindowToFile" Type="System.Boolean" Scope="User">
@@ -161,7 +161,7 @@
     <Setting Name="WindowToClipboard" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-	<Setting Name="WindowToEditor" Type="System.Boolean" Scope="User">
+    <Setting Name="WindowToEditor" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="ScreenToFile" Type="System.Boolean" Scope="User">
@@ -170,7 +170,7 @@
     <Setting Name="ScreenToClipboard" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-	<Setting Name="ScreenToEditor" Type="System.Boolean" Scope="User">
+    <Setting Name="ScreenToEditor" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="AllScreensToFile" Type="System.Boolean" Scope="User">
@@ -179,7 +179,7 @@
     <Setting Name="AllScreensToClipboard" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-	<Setting Name="AllScreensToEditor" Type="System.Boolean" Scope="User">
+    <Setting Name="AllScreensToEditor" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="MaxFramerate" Type="System.Int32" Scope="User">
@@ -190,6 +190,12 @@
     </Setting>
     <Setting Name="Counter" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="BlurMosaicSize" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">8</Value>
+    </Setting>
+    <Setting Name="BlurSampleArea" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">4</Value>
     </Setting>
   </Settings>
 </SettingsFile>

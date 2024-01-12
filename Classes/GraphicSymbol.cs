@@ -9,6 +9,7 @@ namespace ScreenShotTool.Forms
     public class GraphicSymbol
     {
         public Pen LinePen = new(Color.Gray);
+        public Pen HightlightSymbolPen = new(Color.Red);
         public SolidBrush LineBrush = new SolidBrush(Color.Gray);
         public SolidBrush FillBrush = new SolidBrush(Color.Pink);
         public SolidBrush TextBrush = new SolidBrush(Color.Black);
@@ -96,6 +97,7 @@ namespace ScreenShotTool.Forms
             this.fillAlpha = fillAlpha;
             this.LineWeight = lineWeight;
             this.ShadowEnabled = shadowEnabled;
+            HightlightSymbolPen.DashPattern = new [] { 2f, 8f };
         }
 
         public GraphicSymbol(GraphicSymbol clonedSymbol)
@@ -112,8 +114,9 @@ namespace ScreenShotTool.Forms
         {
         }
 
-        public virtual void DrawShadow(Graphics graphic)
+        public virtual void DrawHighlight(Graphics graphic)
         {
+            graphic.DrawRectangle(HightlightSymbolPen, new Rectangle(Left, Top, Width, Height));
         }
 
         internal void UpdatePen()
@@ -288,11 +291,17 @@ namespace ScreenShotTool.Forms
 
         public void DrawFill(Pen pen, Brush fillBrush, Rectangle rect, Graphics graphic)
         {
-            if (blurredImage == null) return;
-            blurred = CropImage(blurredImage, new Rectangle(Left, Top, Width, Height));
+            if (blurredImage == null)
+            {
+                graphic.DrawRectangle(LinePen, Left, Top, Width, Height);
 
-            graphic.DrawImage(blurred, Left, Top, Width, Height);
-            blurred.Dispose();
+            }
+            else
+            {
+                blurred = CropImage(blurredImage, new Rectangle(Left, Top, Width, Height));
+                graphic.DrawImage(blurred, Left, Top, Width, Height);
+                blurred.Dispose();
+            }
         }
 
         Brush blackBrush = new SolidBrush(Color.Black);
@@ -375,6 +384,11 @@ namespace ScreenShotTool.Forms
                 graphic.DrawString(text, font, drawBrush, new PointF(Left + offset.X, Top + offset.Y));
             }
         }
+
+        public override void DrawHighlight(Graphics graphic)
+        {
+            graphic.DrawRectangle(HightlightSymbolPen, new Rectangle(Left, Top, (int)fontEmSize * 3, (int)(fontEmSize * 1.5f)));
+        }
     }
 
     public class GsLine : GraphicSymbol
@@ -423,6 +437,18 @@ namespace ScreenShotTool.Forms
             {
                 graphic.DrawLine(drawPen, new Point(StartPoint.X + offset.X, StartPoint.Y + offset.Y) , new Point(EndPoint.X + offset.X, EndPoint.Y + offset.Y));
             }
+        }
+
+        public override void DrawHighlight(Graphics graphic)
+        {
+            int _left = Math.Min(StartPoint.X, EndPoint.X);
+            int _right = Math.Max(StartPoint.X, EndPoint.X);
+            int _top = Math.Min(StartPoint.Y, EndPoint.Y);
+            int _bottom = Math.Max(StartPoint.Y, EndPoint.Y);
+            int _width = _right - _left;
+            int _height = _bottom - _top;
+            Rectangle bounds = new Rectangle(_left, _top, _width, _height);
+            graphic.DrawRectangle(HightlightSymbolPen, bounds);
         }
     }
 

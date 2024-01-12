@@ -4,6 +4,7 @@ using System.Drawing.Text;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+using System.Drawing.Imaging;
 
 namespace ScreenShotTool.Forms
 {
@@ -153,8 +154,26 @@ namespace ScreenShotTool.Forms
                 saveGraphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                 saveGraphic.TextRenderingHint = TextRenderingHint.AntiAlias;
 
+                ImageFormat imgFormat = ImageFormat.Png;
+                string extension = Path.GetExtension(filename);
+                switch (extension.ToLower())
+                {
+                    case ".png":
+                        imgFormat = ImageFormat.Png;
+                        break;
+                    case ".jpg":
+                        imgFormat = ImageFormat.Jpeg;
+                        break;
+                    case ".bmp":
+                        imgFormat = ImageFormat.Bmp;
+                        break;
+                    case ".gif":
+                        imgFormat = ImageFormat.Gif;
+                        break;
+                }
+
                 DrawElements(saveGraphic);
-                originalImage.Save(filename);
+                originalImage.Save(filename, imgFormat);
                 saveGraphic.Dispose();
             }
         }
@@ -195,21 +214,25 @@ namespace ScreenShotTool.Forms
             sw.Start();
 
             DisposeAndNull(blurImage);
-            int blurSize = 5;
+            int blurRadius = Settings.Default.BlurSampleArea;
+            int mosaicSize = Settings.Default.BlurMosaicSize;
             blurImage = new Bitmap(originalImage.Width, originalImage.Height);
             Graphics graphics = Graphics.FromImage(blurImage);
             Color pixelColor = Color.Black;
+            SolidBrush blurBrush = new SolidBrush(pixelColor);
 
-            for (int x = 0; x < originalImage.Width; x++)
+            for (int x = 0; x < originalImage.Width; x += mosaicSize)
             {
-                for (int y = 0; y < originalImage.Height; y++)
+                for (int y = 0; y < originalImage.Height; y += mosaicSize)
                 {
                     //if (x % blurSize == 0 && y % blurSize == 0)
                     //{
                     //    pixelColor = SamplePixelArea(originalImage, blurSize, x, y);
                     //}
-                    pixelColor = SamplePixelArea(originalImage, blurSize, x, y);
-                    blurImage.SetPixel(x, y, pixelColor);
+                    pixelColor = SamplePixelArea(originalImage, blurRadius, x + blurRadius, y + blurRadius);
+                    //blurImage.SetPixel(x, y, pixelColor);
+                    blurBrush.Color = pixelColor;
+                    graphics.FillRectangle(blurBrush, new Rectangle(x, y, mosaicSize, mosaicSize));
                 }
             }
 
@@ -221,7 +244,7 @@ namespace ScreenShotTool.Forms
             return blurImage;
         }
 
-        private Color SamplePixelArea(Image originalImage, int blurSize, int x, int y)
+        private Color SamplePixelArea(Image originalImage, int blurRadius, int x, int y)
         {
             Color sampleColor;
             Color pixelColor;
@@ -233,10 +256,10 @@ namespace ScreenShotTool.Forms
             int samples = 0;
             //if (x == 12 && y == 12) Debug.WriteLine($"Sample from {x}, {y}");
             //for (int i = -blurSize/2; i <= blurSize/2; i+=3)
-            for (int i = -blurSize; i <= blurSize; i++)
+            for (int i = -blurRadius; i <= blurRadius; i++)
             {
                 //for (int j = -blurSize / 2; j <= blurSize / 2; j+=3)
-                for (int j = -blurSize; j <= blurSize; j++)
+                for (int j = -blurRadius; j <= blurRadius; j++)
                 {
                     // sampleX = sampleX - (sampleX % blurSize) + i;
                     //sampleY = sampleY - (sampleY % blurSize) + j;
@@ -284,21 +307,36 @@ namespace ScreenShotTool.Forms
 
         private Image DrawOverlay(GraphicSymbol? temporarySymbol = null)
         {
-
-            Bitmap img = ((Bitmap)(originalImage)).Clone(new Rectangle(0, 0, originalImage.Width, originalImage.Height), System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-
+            //Bitmap img = ((Bitmap)(originalImage)).Clone(new Rectangle(0, 0, originalImage.Width, originalImage.Height), System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            // clone failed when reading from file, worked before... Using Crop instead, which accounts for out of area pixels.
+            Bitmap img = CropImage((Bitmap)originalImage, new Rectangle(0, 0, originalImage.Width, originalImage.Height));
+           
             DisposeAndNull(overlayGraphics);
+            
             overlayGraphics = Graphics.FromImage(img);
 
             overlayGraphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             overlayGraphics.TextRenderingHint = TextRenderingHint.AntiAlias;
 
-            DrawElements(overlayGraphics, temporarySymbol);
+            DrawElements(overlayGraphics, temporarySymbol, HighlightSelected: true);
 
             return img;
         }
 
-        private void DrawElements(Graphics graphic, GraphicSymbol? temporarySymbol = null)
+        Bitmap CropImage(Bitmap img, Rectangle cropArea)
+        {
+            //https://www.codingdefined.com/2015/04/solved-bitmapclone-out-of-memory.html
+            Bitmap bmp = new Bitmap(cropArea.Width, cropArea.Height);
+
+            using (Graphics gph = Graphics.FromImage(bmp))
+            {
+                gph.FillRectangle(new SolidBrush(Color.Black), new Rectangle(0, 0, 100, 100));
+                gph.DrawImage(img, new Rectangle(0, 0, bmp.Width, bmp.Height), cropArea, GraphicsUnit.Pixel);
+            }
+            return bmp;
+        }
+
+        private void DrawElements(Graphics graphic, GraphicSymbol? temporarySymbol = null, bool HighlightSelected = false)
         {
             foreach (GraphicSymbol symbol in symbols)
             {
@@ -311,7 +349,15 @@ namespace ScreenShotTool.Forms
                 }
                 symbol.DrawSymbol(graphic);
             }
-            temporarySymbol?.DrawSymbol(graphic);
+            if (temporarySymbol != null)
+            {
+                temporarySymbol?.DrawSymbol(graphic);
+            }
+            if (HighlightSelected)
+            {
+                GraphicSymbol? selectedSymbol = GetSelectedSymbol();
+                selectedSymbol?.DrawHighlight(graphic);
+            }
         }
 
         private static void DisposeAndNull(Image? image)
@@ -356,7 +402,14 @@ namespace ScreenShotTool.Forms
 
         private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            SaveFileAction();
+        }
+
+        private void SaveFileAction()
+        {
             FileDialog fileDialog = new SaveFileDialog();
+            fileDialog.Filter = "PNG|*.png|JPG|*.jpg|BMP|*.bmp|GIF|*.gif|All files|*.*";
+            fileDialog.FileName = "";
             DialogResult result = fileDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
@@ -719,6 +772,10 @@ namespace ScreenShotTool.Forms
             if ((e.KeyCode == Keys.C && e.Modifiers == Keys.Control))
             {
                 CopyToClipboard();
+            }
+            if ((e.KeyCode == Keys.S && e.Modifiers == Keys.Control))
+            {
+                SaveFileAction();
             }
         }
         #endregion

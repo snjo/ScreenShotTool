@@ -77,6 +77,9 @@ namespace ScreenShotTool
 
             numericUpDownFramerate.Value = settings.MaxFramerate;
 
+            numericBlurMosaicSize.Value = settings.BlurMosaicSize;
+            numericBlurSampleArea.Value = settings.BlurSampleArea;
+
             //Tab: Hotkeys
 
             FillHotkeyGrid();
@@ -147,6 +150,9 @@ namespace ScreenShotTool
             settings.AllowTrayTooltipWarning = checkBoxTrayTooltipWarning.Checked;
 
             settings.MaxFramerate = (int)numericUpDownFramerate.Value;
+
+            settings.BlurMosaicSize = (int)numericBlurMosaicSize.Value;
+            settings.BlurSampleArea = (int)numericBlurSampleArea.Value;
 
             //Tab: Hotkeys
             int i = 0;
