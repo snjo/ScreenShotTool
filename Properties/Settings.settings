@@ -192,10 +192,10 @@
       <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="BlurMosaicSize" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">8</Value>
+      <Value Profile="(Default)">10</Value>
     </Setting>
     <Setting Name="BlurSampleArea" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">4</Value>
+      <Value Profile="(Default)">2</Value>
     </Setting>
   </Settings>
 </SettingsFile>

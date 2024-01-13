@@ -100,6 +100,8 @@
             numericPropertiesFontSize = new NumericUpDown();
             comboBoxFontFamily = new ComboBox();
             panel1 = new Panel();
+            label17 = new Label();
+            numericBlurMosaicSize = new NumericUpDown();
             checkBoxNewShadow = new CheckBox();
             panelPropertiesLine = new Panel();
             checkBoxPropertiesShadow = new CheckBox();
@@ -122,6 +124,7 @@
             panelPropertiesText.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesFontSize).BeginInit();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericBlurMosaicSize).BeginInit();
             panelPropertiesLine.SuspendLayout();
             SuspendLayout();
             // 
@@ -801,6 +804,8 @@
             // 
             panel1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             panel1.BorderStyle = BorderStyle.FixedSingle;
+            panel1.Controls.Add(label17);
+            panel1.Controls.Add(numericBlurMosaicSize);
             panel1.Controls.Add(checkBoxNewShadow);
             panel1.Controls.Add(numericNewFillAlpha);
             panel1.Controls.Add(label12);
@@ -817,9 +822,31 @@
             panel1.Size = new Size(949, 31);
             panel1.TabIndex = 29;
             // 
+            // label17
+            // 
+            label17.AutoSize = true;
+            label17.Location = new Point(694, 6);
+            label17.Name = "label17";
+            label17.Size = new Size(92, 15);
+            label17.TabIndex = 26;
+            label17.Text = "Blur Mosaic Size";
+            // 
+            // numericBlurMosaicSize
+            // 
+            numericBlurMosaicSize.Location = new Point(792, 3);
+            numericBlurMosaicSize.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
+            numericBlurMosaicSize.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
+            numericBlurMosaicSize.Name = "numericBlurMosaicSize";
+            numericBlurMosaicSize.Size = new Size(55, 23);
+            numericBlurMosaicSize.TabIndex = 25;
+            numericBlurMosaicSize.Value = new decimal(new int[] { 10, 0, 0, 0 });
+            numericBlurMosaicSize.ValueChanged += numericBlurMosaicSize_ValueChanged;
+            numericBlurMosaicSize.Click += numericBlurMosaicSize_Click;
+            // 
             // checkBoxNewShadow
             // 
             checkBoxNewShadow.AutoSize = true;
+            checkBoxNewShadow.CheckAlign = ContentAlignment.MiddleRight;
             checkBoxNewShadow.Location = new Point(609, 5);
             checkBoxNewShadow.Name = "checkBoxNewShadow";
             checkBoxNewShadow.Size = new Size(68, 19);
@@ -898,6 +925,7 @@
             ((System.ComponentModel.ISupportInitialize)numericPropertiesFontSize).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericBlurMosaicSize).EndInit();
             panelPropertiesLine.ResumeLayout(false);
             panelPropertiesLine.PerformLayout();
             ResumeLayout(false);
@@ -980,5 +1008,7 @@
         private Panel panelPropertiesLine;
         private CheckBox checkBoxPropertiesShadow;
         private Button buttonBlur;
+        private Label label17;
+        private NumericUpDown numericBlurMosaicSize;
     }
 }

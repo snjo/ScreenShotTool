@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Drawing.Imaging;
+using System.Windows.Forms;
 
 namespace ScreenShotTool.Forms
 {
@@ -26,11 +27,15 @@ namespace ScreenShotTool.Forms
         public static int minimumFontSize = 5;
         public static int startingFontSize = 10;
         List<GraphicSymbol> symbols = new();
-
+        private List<ImageFormatDefinition> imageFormats = new List<ImageFormatDefinition>();
+        int blurRadius = Settings.Default.BlurSampleArea;
+        int mosaicSize = Settings.Default.BlurMosaicSize;
+        bool initialBlurComplete = false; // used to prevent blur from generating twice, when numeric is set initially
 
         private void SetupEditor()
         {
             fillFontFamilyBox();
+            imageFormats = createImageFormatsList();
             numericPropertiesFontSize.Maximum = maxFontSize;
             numericPropertiesFontSize.Minimum = minimumFontSize;
             numericPropertiesFontSize.Value = startingFontSize;
@@ -38,6 +43,7 @@ namespace ScreenShotTool.Forms
             panelPropertiesFill.Visible = false;
             panelPropertiesLine.Visible = false;
             panelPropertiesText.Visible = false;
+            numericBlurMosaicSize.Value = mosaicSize;
         }
 
         public ScreenshotEditor()
@@ -73,6 +79,18 @@ namespace ScreenShotTool.Forms
             SetupEditor();
             LoadImageFromImage(loadImage);
             SetForegroundWindow(this.Handle);
+        }
+
+        private List<ImageFormatDefinition> createImageFormatsList()
+        {
+            List<ImageFormatDefinition> list = new List<ImageFormatDefinition>();
+            list.Add(new ImageFormatDefinition("All files", "*.*", ImageFormat.Png));
+            list.Add(new ImageFormatDefinition("Images (*.png,*.jpg,*.jpeg,*.gif,*.bmp,*.webp)", "(*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp)", ImageFormat.Png));
+            list.Add(new ImageFormatDefinition("PNG", "*.png", ImageFormat.Png));
+            list.Add(new ImageFormatDefinition("JPG", "*.jpg", ImageFormat.Jpeg));
+            list.Add(new ImageFormatDefinition("GIF", "*.gif", ImageFormat.Gif));
+            list.Add(new ImageFormatDefinition("BMP", "*.bmp", ImageFormat.Bmp));
+            return list;
         }
 
         #endregion
@@ -146,35 +164,26 @@ namespace ScreenShotTool.Forms
             }
         }
 
-        public void SaveImage(string filename)
+        public void SaveImage(string filename, ImageFormat imgFormat)
         {
-            if (originalImage != null)
+            if (originalImage != null) // uhm
             {
-                Graphics saveGraphic = Graphics.FromImage(originalImage);
+                Bitmap outImage = new Bitmap(originalImage);
+                Graphics saveGraphic = Graphics.FromImage(outImage);
                 saveGraphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                 saveGraphic.TextRenderingHint = TextRenderingHint.AntiAlias;
 
-                ImageFormat imgFormat = ImageFormat.Png;
-                string extension = Path.GetExtension(filename);
-                switch (extension.ToLower())
-                {
-                    case ".png":
-                        imgFormat = ImageFormat.Png;
-                        break;
-                    case ".jpg":
-                        imgFormat = ImageFormat.Jpeg;
-                        break;
-                    case ".bmp":
-                        imgFormat = ImageFormat.Bmp;
-                        break;
-                    case ".gif":
-                        imgFormat = ImageFormat.Gif;
-                        break;
-                }
-
                 DrawElements(saveGraphic);
-                originalImage.Save(filename, imgFormat);
+
+                Debug.WriteLine($"Saving image {filename} with format {imgFormat.ToString()}");
+
+                if (imgFormat == ImageFormat.Jpeg)
+                {
+                    MainForm.SaveJpeg(filename, (Bitmap)outImage, Settings.Default.JpegQuality);
+                }
+                outImage.Save(filename, imgFormat);
                 saveGraphic.Dispose();
+                outImage.Dispose();
             }
         }
 
@@ -214,8 +223,9 @@ namespace ScreenShotTool.Forms
             sw.Start();
 
             DisposeAndNull(blurImage);
-            int blurRadius = Settings.Default.BlurSampleArea;
-            int mosaicSize = Settings.Default.BlurMosaicSize;
+            //int blurRadius = Settings.Default.BlurSampleArea;
+            //int mosaicSize = Settings.Default.BlurMosaicSize;
+            mosaicSize = (int)numericBlurMosaicSize.Value;
             blurImage = new Bitmap(originalImage.Width, originalImage.Height);
             Graphics graphics = Graphics.FromImage(blurImage);
             Color pixelColor = Color.Black;
@@ -241,6 +251,7 @@ namespace ScreenShotTool.Forms
 
             Debug.WriteLine($"Blur took {sw.ElapsedMilliseconds}");
 
+            initialBlurComplete = true;
             return blurImage;
         }
 
@@ -310,9 +321,9 @@ namespace ScreenShotTool.Forms
             //Bitmap img = ((Bitmap)(originalImage)).Clone(new Rectangle(0, 0, originalImage.Width, originalImage.Height), System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             // clone failed when reading from file, worked before... Using Crop instead, which accounts for out of area pixels.
             Bitmap img = CropImage((Bitmap)originalImage, new Rectangle(0, 0, originalImage.Width, originalImage.Height));
-           
+
             DisposeAndNull(overlayGraphics);
-            
+
             overlayGraphics = Graphics.FromImage(img);
 
             overlayGraphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
@@ -393,6 +404,7 @@ namespace ScreenShotTool.Forms
         private void LoadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Filter = "Images (*.png,*.jpg,*.jpeg,*.gif,*.bmp,*.webp)|(*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp)|PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|All files|*.*";
             DialogResult result = fileDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
@@ -405,15 +417,62 @@ namespace ScreenShotTool.Forms
             SaveFileAction();
         }
 
+
         private void SaveFileAction()
         {
             FileDialog fileDialog = new SaveFileDialog();
-            fileDialog.Filter = "PNG|*.png|JPG|*.jpg|BMP|*.bmp|GIF|*.gif|All files|*.*";
+
+            string filter = "";
+            for (int i = 0; i < imageFormats.Count; i++)
+            {
+                filter += imageFormats[i].FilterString;
+                if (i < imageFormats.Count - 1)
+                    filter += "|";
+            }
+
+            //Debug.WriteLine("Filter set to: " + filter);
+
+            fileDialog.Filter = filter;
             fileDialog.FileName = "";
+            fileDialog.FilterIndex = 3;
             DialogResult result = fileDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                SaveImage(fileDialog.FileName);
+                string filename = fileDialog.FileName;
+                ImageFormat imgFormat = ImageFormat.Png;
+                int selectedFormat = fileDialog.FilterIndex - 1; // filter start with 1, correcting to 0-based
+                if (selectedFormat < 2) // all or multi-filter images
+                {
+                    imgFormat = ImageFormatFromExtension(filename);
+                    Debug.WriteLine($"Guessed file format from file name ({filename}): {imgFormat.ToString()} ");
+                }
+                else
+                {
+                    if (selectedFormat < imageFormats.Count)
+                    {
+                        imgFormat = imageFormats[selectedFormat].Format;
+                        Debug.WriteLine($"Using format from index {selectedFormat}: {imgFormat.ToString()} ");
+                    }
+                }
+                SaveImage(fileDialog.FileName, imgFormat);
+            }
+        }
+
+        private ImageFormat ImageFormatFromExtension(string filename)
+        {
+            string extension = Path.GetExtension(filename);
+            switch (extension)
+            {
+                case ".png":
+                    return ImageFormat.Png;
+                case ".jpg":
+                    return ImageFormat.Jpeg;
+                case ".bmp":
+                    return ImageFormat.Bmp;
+                case ".gif":
+                    return ImageFormat.Gif;
+                default:
+                    return ImageFormat.Png;
             }
         }
 
@@ -1210,6 +1269,20 @@ namespace ScreenShotTool.Forms
             if (e.KeyCode == Keys.Delete)
             {
                 DeleteSelectedSymbol();
+            }
+        }
+
+        private void numericBlurMosaicSize_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void numericBlurMosaicSize_ValueChanged(object sender, EventArgs e)
+        {
+            if (initialBlurComplete)
+            {
+                CreateBlurImage();
+                UpdateOverlay();
             }
         }
     }

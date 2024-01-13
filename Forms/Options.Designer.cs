@@ -898,7 +898,7 @@
             // 
             numericBlurMosaicSize.Location = new Point(122, 385);
             numericBlurMosaicSize.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
-            numericBlurMosaicSize.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numericBlurMosaicSize.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
             numericBlurMosaicSize.Name = "numericBlurMosaicSize";
             numericBlurMosaicSize.Size = new Size(54, 23);
             numericBlurMosaicSize.TabIndex = 75;
