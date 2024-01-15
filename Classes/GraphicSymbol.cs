@@ -440,20 +440,19 @@ namespace ScreenShotTool.Forms
         public override int Width { get { return 1; } }
         public override int Height { get { return 1; } }
 
-        //public override void DrawSymbol(Graphics graphic)
-        //{
-        //    UpdateColors();
-        //    UpdatePen();
-        //    if (ShadowEnabled)
-        //    {
-        //        for (int i = 1; i < ShadowDistance && i < LineWeight; i++)
-        //        {
-        //            draw(graphic, ShadowPen, new Point(i, i));
-        //        }
-        //        //draw(graphic, ShadowPen, ShadowOffset);
-        //    }
-        //    draw(graphic, LinePen, new Point(0, 0));
-        //}
+        public override Rectangle Bounds
+        {
+            get
+            {
+                int _left = Math.Min(StartPoint.X, EndPoint.X);
+                int _right = Math.Max(StartPoint.X, EndPoint.X);
+                int _top = Math.Min(StartPoint.Y, EndPoint.Y);
+                int _bottom = Math.Max(StartPoint.Y, EndPoint.Y);
+                int _width = _right - _left;
+                int _height = _bottom - _top;
+                return new Rectangle(_left, _top, _width, _height);
+            }
+        }
 
         internal override void DrawShape(Graphics graphic, Pen drawPen, Brush drawBrush, Point offset, bool fill = true, bool outline = true)
         {
@@ -475,17 +474,11 @@ namespace ScreenShotTool.Forms
             }
         }
 
-        public override void DrawHighlight(Graphics graphic)
-        {
-            int _left = Math.Min(StartPoint.X, EndPoint.X);
-            int _right = Math.Max(StartPoint.X, EndPoint.X);
-            int _top = Math.Min(StartPoint.Y, EndPoint.Y);
-            int _bottom = Math.Max(StartPoint.Y, EndPoint.Y);
-            int _width = _right - _left;
-            int _height = _bottom - _top;
-            Rectangle bounds = new Rectangle(_left, _top, _width, _height);
-            graphic.DrawRectangle(HightlightSymbolPen, bounds);
-        }
+        //public override void DrawHighlight(Graphics graphic)
+        //{
+            
+        //    graphic.DrawRectangle(HightlightSymbolPen, Bounds);
+        //}
     }
 
     public class GsArrow : GsLine

@@ -727,26 +727,54 @@ namespace ScreenShotTool.Forms
             }
         }
 
+        GraphicSymbol? currentSelectedSymbol = null;
+        GraphicSymbol? previousTopmostSymbol = null;
+        int stackedSymbolsIndex = -1;
         private void PictureBoxOverlay_MouseUp(object sender, MouseEventArgs e)
         {
             if (dragMoved == false) // user clicked and released mouse without moving it
             {
-                GraphicSymbol? symbolUnderCursor = GetSymbolUnderCursor();
-                if (symbolUnderCursor != null)
+                List <GraphicSymbol> symbolsUnderCursor = GetSymbolsUnderCursor();
+                Debug.WriteLine($"Stack size: {symbolsUnderCursor.Count}");
+                if (symbolsUnderCursor.Count == 0)
                 {
+                    //Debug.WriteLine($"Stack blanked");
+                    stackedSymbolsIndex = -1;
+                    previousTopmostSymbol = null;
                     listViewSymbols.SelectedItems.Clear();
-                    int selectedIndex = GetListItemFromSymbol(symbolUnderCursor).Index;
-                    if (selectedIndex > -1 && selectedIndex < listViewSymbols.Items.Count)
-                    {
-                        listViewSymbols.Items[selectedIndex].Selected = true; //GetListItemFromSymbol(symbolUnderCursor));
-                    }
                 }
                 else
                 {
-                    listViewSymbols.SelectedItems.Clear();
+                    if (stackedSymbolsIndex == -1 || stackedSymbolsIndex >= symbolsUnderCursor.Count)
+                    {
+                        stackedSymbolsIndex = Math.Max(symbolsUnderCursor.Count - 1, 0);
+                    }
+
+                    if (currentSelectedSymbol != null)
+                    {
+                        currentSelectedSymbol = symbolsUnderCursor[Math.Clamp(stackedSymbolsIndex, 0, symbolsUnderCursor.Count-1)];
+                        //Debug.WriteLine($"Stack index is {stackedSymbolsIndex}, {currentSelectedSymbol.Name}");
+                        listViewSymbols.SelectedItems.Clear();
+                        ListViewItem? listFromSymbol = GetListItemFromSymbol(currentSelectedSymbol);
+                        int selectedIndex = listFromSymbol != null ? listFromSymbol.Index : -1;
+                        if (selectedIndex > -1 && selectedIndex < listViewSymbols.Items.Count)
+                        {
+                            //currentSelectedSymbol = symbolUnderCursor;
+                            listViewSymbols.Items[selectedIndex].Selected = true; //GetListItemFromSymbol(symbolUnderCursor));
+                        }
+                        //Debug.WriteLine($"Stack item selected in list: {listFromSymbol?.Name}");
+                        stackedSymbolsIndex--;
+                    }
+                    else
+                    {
+                        listViewSymbols.SelectedItems.Clear();
+                        //Debug.WriteLine($"Selected symbol is null");
+                    }
                 }
                 //selectedUserAction = UserActions.Select;
             }
+
+            Debug.WriteLine("------------------");
 
             if (originalImage == null) return;
             GraphicSymbol? symbol = GetSymbol(sender, e);
@@ -858,21 +886,20 @@ namespace ScreenShotTool.Forms
             //dragStarted = false;
         }
 
-
-        private GraphicSymbol? GetSymbolUnderCursor()
+        private List<GraphicSymbol> GetSymbolsUnderCursor()
         {
+            List<GraphicSymbol> symbolsUnderCursor = new();
             Point cursorPos = pictureBoxOverlay.PointToClient(Cursor.Position);
-            GraphicSymbol? symbolUnderCursor = null;
+            //GraphicSymbol? symbolUnderCursor = null;
             foreach (GraphicSymbol gs in symbols)
             {
                 if (gs.Bounds.Contains(cursorPos))
                 {
-                    symbolUnderCursor = gs;
+                    symbolsUnderCursor.Add(gs);
                     Debug.WriteLine(gs.Name + " is under cursor");
                 }
             }
-            Debug.WriteLine(symbolUnderCursor?.Name + " selected");
-            return symbolUnderCursor;
+            return symbolsUnderCursor;
         }
 
         private ListViewItem? GetListItemFromSymbol(GraphicSymbol symbol)
@@ -1270,18 +1297,18 @@ namespace ScreenShotTool.Forms
             if (listViewSymbols.SelectedItems.Count > 0)
             {
                 ListViewItem item = listViewSymbols.SelectedItems[0];
-                if (item.Tag is GraphicSymbol gs) return gs;
+                if (item.Tag is GraphicSymbol gs)
+                {
+                    currentSelectedSymbol = gs;
+                    return gs;
+                }
             }
             return null;
         }
 
         private GsText? GetSelectedTextSymbol()
         {
-            if (listViewSymbols.SelectedItems.Count > 0)
-            {
-                ListViewItem item = listViewSymbols.SelectedItems[0];
-                if (item.Tag is GsText gs) return gs;
-            }
+            if (GetSelectedSymbol() is GsText gs) return gs;
             return null;
         }
 
