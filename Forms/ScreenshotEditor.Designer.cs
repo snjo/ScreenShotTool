@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ScreenshotEditor));
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
@@ -43,7 +44,8 @@
             deleteOverlayElementsToolStripMenuItem = new ToolStripMenuItem();
             panelButtons = new Panel();
             buttonBlur = new Button();
-            buttonFrame = new Button();
+            buttonSelect = new Button();
+            buttonBorder = new Button();
             buttonText = new Button();
             buttonArrow = new Button();
             buttonLine = new Button();
@@ -105,6 +107,7 @@
             checkBoxNewShadow = new CheckBox();
             panelPropertiesLine = new Panel();
             checkBoxPropertiesShadow = new CheckBox();
+            timerAfterLoad = new System.Windows.Forms.Timer(components);
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
@@ -219,7 +222,8 @@
             panelButtons.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             panelButtons.BorderStyle = BorderStyle.FixedSingle;
             panelButtons.Controls.Add(buttonBlur);
-            panelButtons.Controls.Add(buttonFrame);
+            panelButtons.Controls.Add(buttonSelect);
+            panelButtons.Controls.Add(buttonBorder);
             panelButtons.Controls.Add(buttonText);
             panelButtons.Controls.Add(buttonArrow);
             panelButtons.Controls.Add(buttonLine);
@@ -232,33 +236,49 @@
             // 
             // buttonBlur
             // 
-            buttonBlur.Location = new Point(6, 241);
+            buttonBlur.FlatAppearance.BorderSize = 0;
+            buttonBlur.FlatStyle = FlatStyle.Flat;
+            buttonBlur.Image = Properties.Resources.blur;
+            buttonBlur.Location = new Point(4, 279);
+            buttonBlur.Margin = new Padding(1);
             buttonBlur.Name = "buttonBlur";
-            buttonBlur.Size = new Size(33, 35);
-            buttonBlur.TabIndex = 7;
-            buttonBlur.Text = "blr";
+            buttonBlur.Size = new Size(36, 36);
+            buttonBlur.TabIndex = 9;
             buttonBlur.UseVisualStyleBackColor = true;
             buttonBlur.Click += buttonBlur_Click;
             // 
-            // buttonFrame
+            // buttonSelect
             // 
-            buttonFrame.FlatAppearance.BorderSize = 0;
-            buttonFrame.FlatStyle = FlatStyle.Flat;
-            buttonFrame.Image = Properties.Resources.frame;
-            buttonFrame.Location = new Point(3, 201);
-            buttonFrame.Margin = new Padding(1);
-            buttonFrame.Name = "buttonFrame";
-            buttonFrame.Size = new Size(36, 36);
-            buttonFrame.TabIndex = 6;
-            buttonFrame.UseVisualStyleBackColor = true;
-            buttonFrame.Click += ButtonBorder_Click;
+            buttonSelect.FlatAppearance.BorderSize = 0;
+            buttonSelect.FlatStyle = FlatStyle.Flat;
+            buttonSelect.Image = Properties.Resources.cursor_select;
+            buttonSelect.Location = new Point(4, 5);
+            buttonSelect.Margin = new Padding(1);
+            buttonSelect.Name = "buttonSelect";
+            buttonSelect.Size = new Size(36, 36);
+            buttonSelect.TabIndex = 8;
+            buttonSelect.UseVisualStyleBackColor = true;
+            buttonSelect.Click += buttonSelect_Click;
+            // 
+            // buttonBorder
+            // 
+            buttonBorder.FlatAppearance.BorderSize = 0;
+            buttonBorder.FlatStyle = FlatStyle.Flat;
+            buttonBorder.Image = Properties.Resources.frame;
+            buttonBorder.Location = new Point(4, 241);
+            buttonBorder.Margin = new Padding(1);
+            buttonBorder.Name = "buttonBorder";
+            buttonBorder.Size = new Size(36, 36);
+            buttonBorder.TabIndex = 6;
+            buttonBorder.UseVisualStyleBackColor = true;
+            buttonBorder.Click += ButtonBorder_Click;
             // 
             // buttonText
             // 
             buttonText.FlatAppearance.BorderSize = 0;
             buttonText.FlatStyle = FlatStyle.Flat;
             buttonText.Image = Properties.Resources.toolText;
-            buttonText.Location = new Point(3, 163);
+            buttonText.Location = new Point(4, 203);
             buttonText.Margin = new Padding(1);
             buttonText.Name = "buttonText";
             buttonText.Size = new Size(36, 36);
@@ -271,7 +291,7 @@
             buttonArrow.FlatAppearance.BorderSize = 0;
             buttonArrow.FlatStyle = FlatStyle.Flat;
             buttonArrow.Image = Properties.Resources.toolArrow;
-            buttonArrow.Location = new Point(3, 123);
+            buttonArrow.Location = new Point(4, 163);
             buttonArrow.Margin = new Padding(1);
             buttonArrow.Name = "buttonArrow";
             buttonArrow.Size = new Size(36, 36);
@@ -284,7 +304,7 @@
             buttonLine.FlatAppearance.BorderSize = 0;
             buttonLine.FlatStyle = FlatStyle.Flat;
             buttonLine.Image = Properties.Resources.toolLine;
-            buttonLine.Location = new Point(3, 83);
+            buttonLine.Location = new Point(4, 123);
             buttonLine.Margin = new Padding(1);
             buttonLine.Name = "buttonLine";
             buttonLine.Size = new Size(36, 36);
@@ -297,7 +317,7 @@
             buttonCircle.FlatAppearance.BorderSize = 0;
             buttonCircle.FlatStyle = FlatStyle.Flat;
             buttonCircle.Image = Properties.Resources.toolEllipse;
-            buttonCircle.Location = new Point(3, 43);
+            buttonCircle.Location = new Point(4, 83);
             buttonCircle.Margin = new Padding(1);
             buttonCircle.Name = "buttonCircle";
             buttonCircle.Size = new Size(36, 36);
@@ -310,7 +330,7 @@
             buttonRectangle.FlatAppearance.BorderSize = 0;
             buttonRectangle.FlatStyle = FlatStyle.Flat;
             buttonRectangle.Image = Properties.Resources.toolRectangle2;
-            buttonRectangle.Location = new Point(3, 3);
+            buttonRectangle.Location = new Point(4, 43);
             buttonRectangle.Margin = new Padding(1);
             buttonRectangle.Name = "buttonRectangle";
             buttonRectangle.Size = new Size(36, 36);
@@ -879,6 +899,11 @@
             checkBoxPropertiesShadow.UseVisualStyleBackColor = true;
             checkBoxPropertiesShadow.Click += checkBoxPropertiesShadow_Click;
             // 
+            // timerAfterLoad
+            // 
+            timerAfterLoad.Interval = 50;
+            timerAfterLoad.Tick += timerAfterLoad_Tick;
+            // 
             // ScreenshotEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -900,6 +925,8 @@
             MainMenuStrip = menuStrip1;
             Name = "ScreenshotEditor";
             Text = "ImageEditor";
+            TopMost = true;
+            Load += ScreenshotEditor_Load;
             KeyDown += ScreenshotEditor_KeyDown;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
@@ -1003,12 +1030,15 @@
         private CheckBox checkBoxUnderline;
         private CheckBox checkBoxStrikeout;
         private Panel panel1;
-        private Button buttonFrame;
+        private Button buttonBorder;
         private CheckBox checkBoxNewShadow;
         private Panel panelPropertiesLine;
         private CheckBox checkBoxPropertiesShadow;
         private Button buttonBlur;
         private Label label17;
         private NumericUpDown numericBlurMosaicSize;
+        private System.Windows.Forms.Timer timerAfterLoad;
+        private Button buttonSelect;
+        private Button button1;
     }
 }

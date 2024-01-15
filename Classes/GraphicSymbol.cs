@@ -73,6 +73,11 @@ namespace ScreenShotTool.Forms
             get { return new Vector2(EndPoint.X, EndPoint.Y); }
         }
 
+        public virtual Rectangle Bounds
+        {
+            get { return new Rectangle(Left, Top, Width, Height); }
+        }
+
         public virtual int LineWeight
         {
             get; set;
@@ -83,7 +88,7 @@ namespace ScreenShotTool.Forms
 
         public bool ValidSymbol = false;
 
-        public GraphicSymbol(Color foregroundColor, Color backgroundColor, bool shadowEnabled, Point startPoint, Point endPoint, int lineWeight = 1, int lineAlpha = 255, int fillAlpha = 255)
+        public GraphicSymbol(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled = false, int lineWeight = 1, int lineAlpha = 255, int fillAlpha = 255)
         {
             this.ForegroundColor = foregroundColor;
             this.BackgroundColor = backgroundColor;
@@ -95,28 +100,68 @@ namespace ScreenShotTool.Forms
             this.LineWeight = lineWeight;
             this.lineAlpha = lineAlpha;
             this.fillAlpha = fillAlpha;
-            this.LineWeight = lineWeight;
             this.ShadowEnabled = shadowEnabled;
             HightlightSymbolPen.DashPattern = new [] { 2f, 8f };
         }
 
-        public GraphicSymbol(GraphicSymbol clonedSymbol)
+        public GraphicSymbol(Point startPoint, Point endPoint, bool shadow = false)
         {
-            this.LineBrush = clonedSymbol.LineBrush;
-            this.LinePen = clonedSymbol.LinePen;
-            this.ForegroundColor = clonedSymbol.ForegroundColor;
-            this.BackgroundColor = clonedSymbol.BackgroundColor;
-            this.StartPoint = clonedSymbol.StartPoint; // coordinate 1
-            this.EndPoint = clonedSymbol.EndPoint; // width or coordinate 2
+            this.ForegroundColor = Color.Black;
+            this.BackgroundColor = Color.White;
+            this.TextColor = Color.Black;
+            this.Left = startPoint.X;
+            this.Top = startPoint.Y;
+            this.Right = endPoint.X;
+            this.Bottom = endPoint.Y;
+            this.LineWeight = 1;
+            this.lineAlpha = 255;
+            this.fillAlpha = 255;
+            this.ShadowEnabled = shadow;
+            HightlightSymbolPen.DashPattern = new[] { 2f, 8f };
         }
 
+        //public GraphicSymbol(GraphicSymbol clonedSymbol)
+        //{
+        //    this.LineBrush = clonedSymbol.LineBrush;
+        //    this.LinePen = clonedSymbol.LinePen;
+        //    this.ForegroundColor = clonedSymbol.ForegroundColor;
+        //    this.BackgroundColor = clonedSymbol.BackgroundColor;
+        //    this.StartPoint = clonedSymbol.StartPoint; // coordinate 1
+        //    this.EndPoint = clonedSymbol.EndPoint; // width or coordinate 2
+        //}
+
         public virtual void DrawSymbol(Graphics graphic)
+        {
+            UpdateColors();
+            UpdatePen();
+            DrawShadow(graphic);
+            DrawShape(graphic, LinePen, FillBrush, new Point(0, 0), true, true);
+        }
+
+        public virtual void DrawShadow(Graphics graphic)
+        {
+            if (ShadowEnabled)
+            {
+                for (int i = 1; i < ShadowDistance; i++)
+                {
+                    // fill
+                    DrawShape(graphic, ShadowPen, ShadowBrush, new Point(i, i), true, false);
+                }
+                for (int i = 1; i < ShadowDistance && i < LineWeight; i++)
+                {
+                    // line
+                    DrawShape(graphic, ShadowPen, ShadowBrush, new Point(i, i), false, true);
+                }
+            }
+        }
+
+        internal virtual void DrawShape(Graphics graphic, Pen drawPen, Brush drawBrush, Point offset, bool fill = true, bool outline = true)
         {
         }
 
         public virtual void DrawHighlight(Graphics graphic)
         {
-            graphic.DrawRectangle(HightlightSymbolPen, new Rectangle(Left, Top, Width, Height));
+            graphic.DrawRectangle(HightlightSymbolPen, Bounds);
         }
 
         internal void UpdatePen()
@@ -149,7 +194,18 @@ namespace ScreenShotTool.Forms
     {
         public delegate void DrawShapeDelegate(Pen pen, Brush brush, Rectangle rect, Graphics graphic);
 
-        public GsBoundingBox(Color foregroundColor, Color backgroundColor, bool shadowEnabled, Point startPoint, Point endPoint, int lineWeight, int lineAlpha, int fillAlpha) : base(foregroundColor, backgroundColor, shadowEnabled, startPoint, endPoint, lineWeight, lineAlpha, fillAlpha)
+        public GsBoundingBox(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight, int lineAlpha, int fillAlpha) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight, lineAlpha, fillAlpha)
+        {
+            Name = "Rectangle";
+            Width = endPoint.X;
+            Height = endPoint.Y;
+            if (Width > 0 && Height > 0)
+            {
+                ValidSymbol = true;
+            }
+        }
+
+        public GsBoundingBox(Point startPoint, Point endPoint) : base(startPoint, endPoint)
         {
             Name = "Rectangle";
             Width = endPoint.X;
@@ -163,28 +219,7 @@ namespace ScreenShotTool.Forms
         public override Point StartPoint { get { return new Point(Left, Top); } set { Left = value.X; Top = value.Y; } }
         public override Point EndPoint { get { return new Point(Right, Bottom); } set { Right = value.X; Bottom = value.Y; } }
 
-        public override void DrawSymbol(Graphics graphic)
-        {
-            UpdateColors();
-            UpdatePen();
-            if (ShadowEnabled)
-            {
-                for (int i = 1; i < ShadowDistance; i++)
-                {
-                    // fill
-                    draw(graphic, ShadowPen, ShadowBrush, new Point(i, i), true, false);
-                }
-                for (int i = 1; i < ShadowDistance && i < LineWeight; i++)
-                {
-                    // line
-                    draw(graphic, ShadowPen, ShadowBrush, new Point(i, i), false, true);
-                }
-                //draw(graphic, ShadowPen, ShadowBrush, ShadowOffset, true, false);
-            }
-            draw(graphic, LinePen, FillBrush, new Point(0,0), true, true);
-        }
-
-        private void draw(Graphics graphic, Pen drawPen, Brush drawBrush, Point offset, bool fill = true, bool outline = true)
+        internal override void DrawShape(Graphics graphic, Pen drawPen, Brush drawBrush, Point offset, bool fill = true, bool outline = true)
         {
             
             if (fillAlpha > 0 && fill)
@@ -206,7 +241,7 @@ namespace ScreenShotTool.Forms
 
     public class GsRectangle : GsBoundingBox
     {
-        public GsRectangle(Color foregroundColor, Color backgroundColor, bool shadowEnabled, Point startPoint, Point endPoint, int lineWeight, int lineAlpha, int fillAlpha) : base(foregroundColor, backgroundColor, shadowEnabled, startPoint, endPoint, lineWeight, lineAlpha, fillAlpha)
+        public GsRectangle(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight, int lineAlpha, int fillAlpha) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight, lineAlpha, fillAlpha)
         {
             Name = "Rectangle";
             drawFill = DrawFill;
@@ -230,7 +265,7 @@ namespace ScreenShotTool.Forms
         private int borderWeight;
         private int originalWidth = 0;
         private int originalHeight = 0;
-        public GsBorder(Color foregroundColor, Color backgroundColor, bool shadowEnabled, Point startPoint, Point endPoint, int lineWeight, int lineAlpha, int fillAlpha) : base(foregroundColor, backgroundColor, shadowEnabled, startPoint, endPoint, lineWeight, lineAlpha, fillAlpha)
+        public GsBorder(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight, int lineAlpha, int fillAlpha) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight, lineAlpha, fillAlpha)
         {
             Name = "Border";
             drawFill = DrawFill;
@@ -261,7 +296,7 @@ namespace ScreenShotTool.Forms
 
     public class GsCircle : GsBoundingBox
     {
-        public GsCircle(Color foregroundColor, Color backgroundColor, bool shadowEnabled, Point startPoint, Point endPoint, int lineWeight, int lineAlpha, int fillAlpha) : base(foregroundColor, backgroundColor, shadowEnabled, startPoint, endPoint, lineWeight, lineAlpha, fillAlpha)
+        public GsCircle(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight, int lineAlpha, int fillAlpha) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight, lineAlpha, fillAlpha)
         {
             Name = "Circle";
             drawFill = DrawFill;
@@ -283,7 +318,8 @@ namespace ScreenShotTool.Forms
     {
         public Bitmap? blurredImage;
         private Bitmap? blurred;
-        public GsBlur(Color foregroundColor, Color backgroundColor, bool shadowEnabled, Point startPoint, Point endPoint, int lineWeight, int lineAlpha, int fillAlpha) : base(foregroundColor, backgroundColor, shadowEnabled, startPoint, endPoint, lineWeight, lineAlpha, fillAlpha)
+        //public GsBlur(Color foregroundColor, Color backgroundColor, bool shadowEnabled, Point startPoint, Point endPoint, int lineWeight, int lineAlpha, int fillAlpha) : base(foregroundColor, backgroundColor, shadowEnabled, startPoint, endPoint, lineWeight, lineAlpha, fillAlpha)
+        public GsBlur(Point startPoint, Point endPoint) : base(startPoint, endPoint)
         {
             Name = "Blur";
             drawFill = DrawFill;
@@ -332,7 +368,7 @@ namespace ScreenShotTool.Forms
         readonly int maxFontSize;
         readonly int minFontSize;
 
-        public GsText(Color foregroundColor, Color backgroundColor, bool shadowEnabled, Point startPoint, Point endPoint, int lineWeight, int lineAlpha) : base(foregroundColor, backgroundColor, shadowEnabled, startPoint, endPoint, lineWeight, lineAlpha)
+        public GsText(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight, int lineAlpha) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight, lineAlpha)
         {
             Name = "Text";
             Width = endPoint.X;
@@ -360,28 +396,17 @@ namespace ScreenShotTool.Forms
             font = CreateFont();
         }
 
-        public override void DrawSymbol(Graphics graphic)
-        {
-            UpdateColors();
-            UpdatePen();
-            if (ShadowEnabled)
-            {
-                for (int i = 1; i < ShadowDistance && i < fontEmSize / 3; i++)
-                {
-                    //Debug.WriteLine("Draw shadow");
-                    draw(graphic, ShadowBrush, new Point(i, i));
-                }
-                //draw(graphic, ShadowBrush, ShadowOffset);
-            }
-            draw(graphic, TextBrush, new Point(0, 0));
-        }
-
-        private void draw(Graphics graphic, Brush drawBrush, Point offset)
+        internal override void DrawShape(Graphics graphic, Pen drawPen, Brush drawBrush, Point offset, bool fill = true, bool outline = true)
         {   
             if (lineAlpha > 0)
             {
+                Brush tempBrush = TextBrush;
+                if (drawBrush == ShadowBrush)
+                {
+                    tempBrush = ShadowBrush;
+                }
                 UpdateFont();
-                graphic.DrawString(text, font, drawBrush, new PointF(Left + offset.X, Top + offset.Y));
+                graphic.DrawString(text, font, tempBrush, new PointF(Left + offset.X, Top + offset.Y));
             }
         }
 
@@ -395,7 +420,7 @@ namespace ScreenShotTool.Forms
     {
         public Point lineEnd;
 
-        public GsLine(Color foregroundColor, Color backgroundColor, bool shadowEnabled, Point startPoint, Point endPoint, int lineWeight, int lineAlpha) : base(foregroundColor, backgroundColor, shadowEnabled, startPoint, endPoint, lineWeight, lineAlpha)
+        public GsLine(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight, int lineAlpha) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight, lineAlpha)
         {
             Name = "Line";
             CheckValid(StartPointV2, EndPointV2);
@@ -415,27 +440,38 @@ namespace ScreenShotTool.Forms
         public override int Width { get { return 1; } }
         public override int Height { get { return 1; } }
 
-        public override void DrawSymbol(Graphics graphic)
-        {
-            UpdateColors();
-            UpdatePen();
-            if (ShadowEnabled)
-            {
-                for (int i = 1; i < ShadowDistance && i < LineWeight; i++)
-                {
-                    draw(graphic, ShadowPen, new Point(i, i));
-                }
-                //draw(graphic, ShadowPen, ShadowOffset);
-            }
-            draw(graphic, LinePen, new Point(0, 0));
-        }
+        //public override void DrawSymbol(Graphics graphic)
+        //{
+        //    UpdateColors();
+        //    UpdatePen();
+        //    if (ShadowEnabled)
+        //    {
+        //        for (int i = 1; i < ShadowDistance && i < LineWeight; i++)
+        //        {
+        //            draw(graphic, ShadowPen, new Point(i, i));
+        //        }
+        //        //draw(graphic, ShadowPen, ShadowOffset);
+        //    }
+        //    draw(graphic, LinePen, new Point(0, 0));
+        //}
 
-        private void draw(Graphics graphic, Pen drawPen, Point offset)
+        internal override void DrawShape(Graphics graphic, Pen drawPen, Brush drawBrush, Point offset, bool fill = true, bool outline = true)
         {
             if (LineWeight < 1) { LineWeight = 1; }
             if (lineAlpha > 0)
             {
                 graphic.DrawLine(drawPen, new Point(StartPoint.X + offset.X, StartPoint.Y + offset.Y) , new Point(EndPoint.X + offset.X, EndPoint.Y + offset.Y));
+            }
+        }
+
+        public override void DrawShadow(Graphics graphic)
+        {
+            if (ShadowEnabled)
+            {
+                for (int i = 1; i < ShadowDistance && i < LineWeight; i++)
+                {
+                    DrawShape(graphic, ShadowPen, ShadowBrush, new Point(i, i));
+                }
             }
         }
 
@@ -454,9 +490,7 @@ namespace ScreenShotTool.Forms
 
     public class GsArrow : GsLine
     {
-
-
-        public GsArrow(Color foregroundColor, Color backgroundColor, bool shadowEnabled, Point startPoint, Point endPoint, int lineWeight, int lineAlpha) : base(foregroundColor, backgroundColor, shadowEnabled, startPoint, endPoint, lineWeight, lineAlpha)
+        public GsArrow(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight, int lineAlpha) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight, lineAlpha)
         {
             Name = "Arrow";
             int arrowSize = 5;
@@ -471,7 +505,7 @@ namespace ScreenShotTool.Forms
     {
         readonly Image? image;
 
-        public GsImage(Color foregroundColor, Color backgroundColor, bool shadowEnabled, Point startPoint, Point endPoint) : base(foregroundColor, backgroundColor, shadowEnabled, startPoint, endPoint)
+        public GsImage(Point startPoint, Point endPoint, bool shadow) : base(startPoint, endPoint, shadow)
         {
             Name = "Image";
             if (image == null)
@@ -505,11 +539,24 @@ namespace ScreenShotTool.Forms
             }
         }
 
-        public override void DrawSymbol(Graphics graphic)
+        internal override void DrawShape(Graphics graphic, Pen drawPen, Brush drawBrush, Point offset, bool fill = true, bool outline = true)
         {
             if (image != null)
             {
                 graphic.DrawImageUnscaled(image, Left, Top);
+            }
+        }
+
+        public override void DrawShadow(Graphics graphic)
+        {
+            if (ShadowEnabled)
+            {
+                for (int i = 1; i < ShadowDistance; i++)
+                {
+                    // fill
+                    //DrawShape(graphic, ShadowPen, ShadowBrush, new Point(i, i), true, false);
+                    graphic.FillRectangle(ShadowBrush, new Rectangle(Left + i, Top + i, Width, Height));
+                }
             }
         }
 
@@ -523,7 +570,7 @@ namespace ScreenShotTool.Forms
     {
         readonly Image? image;
 
-        public GsImageScaled(Color foregroundColor, Color backgroundColor, bool shadowEnabled, Point startPoint, Point endPoint) : base(foregroundColor, backgroundColor, shadowEnabled, startPoint, endPoint)
+        public GsImageScaled(Point startPoint, Point endPoint, bool shadow) : base(startPoint, endPoint, shadow)
         {
             Name = "Scaled Image";
             Width = endPoint.X;
@@ -552,11 +599,23 @@ namespace ScreenShotTool.Forms
         public override Point StartPoint { get { return new Point(Left, Top); } set { Left = value.X; Top = value.Y; } }
         public override Point EndPoint { get { return new Point(Right, Bottom); } set { Right = value.X; Bottom = value.Y; } }
 
-        public override void DrawSymbol(Graphics graphic)
+        //public override void DrawSymbol(Graphics graphic)
+        internal override void DrawShape(Graphics graphic, Pen drawPen, Brush drawBrush, Point offset, bool fill = true, bool outline = true)
         {
             if (image != null)
             {
                 graphic.DrawImage(image, Left, Top, Width, Height);
+            }
+        }
+
+        public override void DrawShadow(Graphics graphic)
+        {
+            if (ShadowEnabled)
+            {
+                for (int i = 1; i < ShadowDistance; i++)
+                {
+                    graphic.FillRectangle(ShadowBrush, new Rectangle(Left + i, Top + i, Width, Height));
+                }
             }
         }
 

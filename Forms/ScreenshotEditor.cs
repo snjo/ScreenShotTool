@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
+using static System.Windows.Forms.DataFormats;
 
 namespace ScreenShotTool.Forms
 {
@@ -31,6 +32,13 @@ namespace ScreenShotTool.Forms
         int blurRadius = Settings.Default.BlurSampleArea;
         int mosaicSize = Settings.Default.BlurMosaicSize;
         bool initialBlurComplete = false; // used to prevent blur from generating twice, when numeric is set initially
+        List<Button> toolButtons = new();
+
+        private void ScreenshotEditor_Load(object sender, EventArgs e)
+        {
+            //SetForegroundWindow(Handle);
+            //Activate();
+        }
 
         private void SetupEditor()
         {
@@ -44,6 +52,16 @@ namespace ScreenShotTool.Forms
             panelPropertiesLine.Visible = false;
             panelPropertiesText.Visible = false;
             numericBlurMosaicSize.Value = mosaicSize;
+            timerAfterLoad.Start(); // turns off TopMost shortly after Load. Without TopMost the Window opens behind other forms (why? who can say)
+            
+            toolButtons.Add(buttonSelect);
+            toolButtons.Add(buttonRectangle);
+            toolButtons.Add(buttonCircle);
+            toolButtons.Add(buttonLine);
+            toolButtons.Add(buttonArrow);
+            toolButtons.Add(buttonText);
+            toolButtons.Add(buttonBorder);
+            toolButtons.Add(buttonBlur);
         }
 
         public ScreenshotEditor()
@@ -517,22 +535,38 @@ namespace ScreenShotTool.Forms
 
         #region Symbols -------------------------------------------------------------------------------------
 
-        public enum SymbolType
+        public enum UserActions
         {
             None,
+            Select,
             MoveSymbol,
-            Rectangle,
-            Circle,
-            Text,
-            Arrow,
-            Line,
-            Image,
-            ImageScaled,
-            Blur
+            CreateRectangle,
+            CreateCircle,
+            CreateLine,
+            CreateArrow,
+            CreateText,
+            CreateImage,
+            CreateImageScaled,
+            CreateBlur
         }
 
-
-        private SymbolType newSymbolType = SymbolType.Rectangle;
+        UserActions selectedUserAction = UserActions.None;
+        private void SetUserAction(UserActions action)
+        {
+            selectedUserAction = action;
+            foreach (Button b in toolButtons)
+            {
+                b.BackColor = Color.Transparent;
+            }
+            if (selectedUserAction == UserActions.Select) buttonSelect.BackColor = Color.Yellow;
+            if (selectedUserAction == UserActions.CreateRectangle) buttonRectangle.BackColor = Color.Yellow;
+            if (selectedUserAction == UserActions.CreateCircle) buttonCircle.BackColor = Color.Yellow;
+            if (selectedUserAction == UserActions.CreateLine) buttonLine.BackColor = Color.Yellow;
+            if (selectedUserAction == UserActions.CreateArrow) buttonArrow.BackColor = Color.Yellow;
+            //if (selectedUserAction == UserActions.CreateBorder) buttonCircle.BackColor = Color.Yellow; // happens right away
+            if (selectedUserAction == UserActions.CreateText) buttonText.BackColor = Color.Yellow;
+            if (selectedUserAction == UserActions.CreateBlur) buttonBlur.BackColor = Color.Yellow;
+        }
 
         private void AddNewSymbolToList(GraphicSymbol symbol)
         {
@@ -580,35 +614,16 @@ namespace ScreenShotTool.Forms
                 Color lineColor = buttonNewColorLine.BackColor;
                 Color fillColor = buttonNewColorFill.BackColor;
 
-                /* switch (newSymbolType)
+                return selectedUserAction switch
                 {
-                    case SymbolType.Rectangle:
-                        return new GsRectangle(lineColor, fillColor, dragRect.X, dragRect.Y, dragRect.Width, dragRect.Height, lineWeight, lineAlpha, fillAlpha);
-                    case SymbolType.Circle:
-                        return new GsCircle(lineColor, fillColor, dragRect.X, dragRect.Y, dragRect.Width, dragRect.Height, lineWeight, lineAlpha, fillAlpha);
-                    case SymbolType.Line:
-                        return new GsLine(lineColor, fillColor, dragStartX, dragStartY, dragEndX, dragEndY, lineWeight, lineAlpha);
-                    case SymbolType.Arrow:
-                        return new GsArrow(lineColor, fillColor, dragStartX, dragStartY, dragEndX, dragEndY, lineWeight, lineAlpha);
-                    case SymbolType.Image:
-                        return new GsImage(lineColor, fillColor, dragStartX, dragStartY, dragEndX, dragEndY);
-                    case SymbolType.ImageScaled:
-                        return new GsImageScaled(lineColor, fillColor, dragLeft, dragTop, dragWidth, dragHeight);
-                    default:
-                        return null;
-                }
-                */
-
-                return newSymbolType switch
-                {
-                    SymbolType.Rectangle => new GsRectangle(lineColor, fillColor, shadow, upperLeft, size, lineWeight, lineAlpha, fillAlpha),
-                    SymbolType.Circle => new GsCircle(lineColor, fillColor, shadow, upperLeft, size, lineWeight, lineAlpha, fillAlpha),
-                    SymbolType.Line => new GsLine(lineColor, fillColor, shadow, dragStart, dragEnd, lineWeight, lineAlpha),
-                    SymbolType.Arrow => new GsArrow(lineColor, fillColor, shadow, dragStart, dragEnd, lineWeight, lineAlpha),
-                    SymbolType.Image => new GsImage(lineColor, fillColor, shadow, dragEnd, new Point(1, 1)),
-                    SymbolType.ImageScaled => new GsImageScaled(lineColor, fillColor, shadow, upperLeft, size),
-                    SymbolType.Text => new GsText(lineColor, fillColor, shadow, dragStart, size, lineWeight, lineAlpha),
-                    SymbolType.Blur => new GsBlur(lineColor, fillColor, shadow, upperLeft, size, lineWeight, lineAlpha, fillAlpha),
+                    UserActions.CreateRectangle => new GsRectangle(upperLeft, size, lineColor, fillColor, shadow, lineWeight, lineAlpha, fillAlpha),
+                    UserActions.CreateCircle => new GsCircle(upperLeft, size, lineColor, fillColor, shadow, lineWeight, lineAlpha, fillAlpha),
+                    UserActions.CreateLine => new GsLine(dragStart, dragEnd, lineColor, fillColor, shadow, lineWeight, lineAlpha),
+                    UserActions.CreateArrow => new GsArrow(dragStart, dragEnd, lineColor, fillColor, shadow, lineWeight, lineAlpha),
+                    UserActions.CreateImage => new GsImage(dragEnd, new Point(1, 1), shadow),
+                    UserActions.CreateImageScaled => new GsImageScaled(upperLeft, size, shadow),
+                    UserActions.CreateText => new GsText(dragStart, size, lineColor, fillColor, shadow, lineWeight, lineAlpha),
+                    UserActions.CreateBlur => new GsBlur(upperLeft, size),
                     _ => null,
                 };
             }
@@ -622,30 +637,36 @@ namespace ScreenShotTool.Forms
 
         #region Symbol toolbar buttons ----------------------------------------------------------------------
 
+        private void buttonSelect_Click(object sender, EventArgs e)
+        {
+            SetUserAction(UserActions.Select);
+            UpdateOverlay();
+        }
+
         private void ButtonRectangle_Click(object sender, EventArgs e)
         {
-            newSymbolType = SymbolType.Rectangle;
+            SetUserAction(UserActions.CreateRectangle);
             numericNewLineWeight.Value = lineWeight;
             UpdateOverlay();
         }
 
         private void ButtonCircle_Click(object sender, EventArgs e)
         {
-            newSymbolType = SymbolType.Circle;
+            SetUserAction(UserActions.CreateCircle);
             numericNewLineWeight.Value = lineWeight;
             UpdateOverlay();
         }
 
         private void ButtonLine_Click(object sender, EventArgs e)
         {
-            newSymbolType = SymbolType.Line;
+            SetUserAction(UserActions.CreateLine);
             numericNewLineWeight.Value = lineWeight;
             UpdateOverlay();
         }
 
         private void ButtonArrow_Click(object sender, EventArgs e)
         {
-            newSymbolType = SymbolType.Arrow;
+            SetUserAction(UserActions.CreateArrow);
             numericNewLineWeight.Value = arrowWeight;
             UpdateOverlay();
         }
@@ -653,7 +674,7 @@ namespace ScreenShotTool.Forms
 
         private void ButtonNewText_Click(object sender, EventArgs e)
         {
-            newSymbolType = SymbolType.Text;
+            SetUserAction(UserActions.CreateText);
             numericNewLineWeight.Value = lineWeight;
             UpdateOverlay();
         }
@@ -669,7 +690,7 @@ namespace ScreenShotTool.Forms
             }
             Point upperLeft = new Point(0, 0);
             Point size = new Point(originalImage.Width, originalImage.Height);
-            GsBorder border = new GsBorder(Color.Black, Color.White, false, upperLeft, size, lineWeight, 255, 0);
+            GsBorder border = new GsBorder(upperLeft, size, Color.Black, Color.White, false, lineWeight, 255, 0);
             border.Name = "Border";
             AddNewSymbolToList(border);
             UpdateOverlay();
@@ -677,15 +698,18 @@ namespace ScreenShotTool.Forms
 
         private void buttonBlur_Click(object sender, EventArgs e)
         {
-            newSymbolType = SymbolType.Blur;
+            SetUserAction(UserActions.CreateBlur);
             UpdateOverlay();
         }
+
+
 
         #endregion
 
         #region Mouse input ---------------------------------------------------------------------------------
 
         bool dragStarted = false;
+        bool dragMoved = false;
         Point dragStart = new Point(0, 0);
         //int dragStartX = 0;
         //int dragStartY = 0;
@@ -695,6 +719,7 @@ namespace ScreenShotTool.Forms
         {
             if (originalImage == null) return;
             dragStarted = true;
+            dragMoved = false;
             dragStart = new Point(e.X, e.Y);
             if (overlayGraphics == null)
             {
@@ -704,6 +729,25 @@ namespace ScreenShotTool.Forms
 
         private void PictureBoxOverlay_MouseUp(object sender, MouseEventArgs e)
         {
+            if (dragMoved == false) // user clicked and released mouse without moving it
+            {
+                GraphicSymbol? symbolUnderCursor = GetSymbolUnderCursor();
+                if (symbolUnderCursor != null)
+                {
+                    listViewSymbols.SelectedItems.Clear();
+                    int selectedIndex = GetListItemFromSymbol(symbolUnderCursor).Index;
+                    if (selectedIndex > -1 && selectedIndex < listViewSymbols.Items.Count)
+                    {
+                        listViewSymbols.Items[selectedIndex].Selected = true; //GetListItemFromSymbol(symbolUnderCursor));
+                    }
+                }
+                else
+                {
+                    listViewSymbols.SelectedItems.Clear();
+                }
+                //selectedUserAction = UserActions.Select;
+            }
+
             if (originalImage == null) return;
             GraphicSymbol? symbol = GetSymbol(sender, e);
             if (symbol != null)
@@ -716,14 +760,10 @@ namespace ScreenShotTool.Forms
             UpdateOverlay();
             UpdatePropertiesPanel();
             dragStarted = false;
-            //if (newSymbolType == SymbolType.Image || newSymbolType == SymbolType.ImageScaled)
-            //{
-            //    // don't repeatedly add pasted images
-            //    newSymbolType = SymbolType.None;
-            //}
-            if (newSymbolType != SymbolType.MoveSymbol)
+
+            if (selectedUserAction != UserActions.MoveSymbol)
             {
-                newSymbolType = SymbolType.None;
+                SetUserAction(UserActions.Select);
             }
         }
 
@@ -740,6 +780,10 @@ namespace ScreenShotTool.Forms
 
         private void PictureBoxOverlay_MouseMove(object sender, MouseEventArgs e)
         {
+            if (e.X != dragStart.X || e.Y != dragStart.Y)
+            {
+                dragMoved = true;
+            }
             if (originalImage == null) return;
             GraphicSymbol? tempSymbol = GetSymbol(sender, e);
             if (tempSymbol != null)
@@ -747,7 +791,7 @@ namespace ScreenShotTool.Forms
                 UpdateOverlay(tempSymbol, false);
                 tempSymbol.Dispose();
             }
-            else if (newSymbolType == SymbolType.MoveSymbol)
+            else if (selectedUserAction == UserActions.MoveSymbol)
             {
                 int mouseDeltaX = Cursor.Position.X - oldMouseX;
                 int mouseDeltaY = Cursor.Position.Y - oldMouseY;
@@ -815,6 +859,34 @@ namespace ScreenShotTool.Forms
         }
 
 
+        private GraphicSymbol? GetSymbolUnderCursor()
+        {
+            Point cursorPos = pictureBoxOverlay.PointToClient(Cursor.Position);
+            GraphicSymbol? symbolUnderCursor = null;
+            foreach (GraphicSymbol gs in symbols)
+            {
+                if (gs.Bounds.Contains(cursorPos))
+                {
+                    symbolUnderCursor = gs;
+                    Debug.WriteLine(gs.Name + " is under cursor");
+                }
+            }
+            Debug.WriteLine(symbolUnderCursor?.Name + " selected");
+            return symbolUnderCursor;
+        }
+
+        private ListViewItem? GetListItemFromSymbol(GraphicSymbol symbol)
+        {
+            foreach (ListViewItem lvi in listViewSymbols.Items)
+            {
+                if (lvi.Tag == symbol)
+                {
+                    return lvi;
+                }
+            }
+            return null;
+        }
+
         #endregion
 
         #region Key input -----------------------------------------------------------------------------------
@@ -857,7 +929,7 @@ namespace ScreenShotTool.Forms
 
         private void PasteIntoImage()
         {
-            newSymbolType = SymbolType.Image;
+            SetUserAction(UserActions.CreateImage);
             dragStarted = true;
             dragStart = new Point(0, 0);
             UpdateOverlay();
@@ -865,7 +937,7 @@ namespace ScreenShotTool.Forms
 
         private void PasteIntoImageScaled()
         {
-            newSymbolType = SymbolType.ImageScaled;
+            SetUserAction(UserActions.CreateImageScaled);
             UpdateOverlay();
         }
 
@@ -877,14 +949,14 @@ namespace ScreenShotTool.Forms
         {
             if (listViewSymbols.SelectedItems.Count > 0)
             {
-                newSymbolType = SymbolType.MoveSymbol;
+                SetUserAction(UserActions.MoveSymbol);
 
             }
             else
             {
-                if (newSymbolType == SymbolType.MoveSymbol)
+                if (selectedUserAction == UserActions.MoveSymbol)
                 {
-                    newSymbolType = SymbolType.None;
+                    SetUserAction(UserActions.Select);
                 }
             }
             UpdatePropertiesPanel();
@@ -1219,7 +1291,7 @@ namespace ScreenShotTool.Forms
 
         private void NumericNewLineWeight_ValueChanged(object sender, EventArgs e)
         {
-            if (newSymbolType == SymbolType.Arrow)
+            if (selectedUserAction == UserActions.CreateArrow)
             {
                 arrowWeight = (int)numericNewLineWeight.Value;
             }
@@ -1274,7 +1346,7 @@ namespace ScreenShotTool.Forms
 
         private void numericBlurMosaicSize_Click(object sender, EventArgs e)
         {
-            
+
         }
 
         private void numericBlurMosaicSize_ValueChanged(object sender, EventArgs e)
@@ -1284,6 +1356,12 @@ namespace ScreenShotTool.Forms
                 CreateBlurImage();
                 UpdateOverlay();
             }
+        }
+
+        private void timerAfterLoad_Tick(object sender, EventArgs e)
+        {
+            timerAfterLoad.Stop();
+            this.TopMost = false;
         }
     }
 }

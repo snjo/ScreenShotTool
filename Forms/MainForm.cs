@@ -1364,6 +1364,7 @@ namespace ScreenShotTool
                 {
                     ScreenshotEditor imageEditor = new ScreenshotEditor(file);
                     imageEditor.Show();
+                    imageEditor.BringToFront();
                 }
             }
         }

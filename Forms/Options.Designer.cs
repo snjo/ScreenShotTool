@@ -853,9 +853,9 @@
             label28.AutoSize = true;
             label28.Location = new Point(182, 414);
             label28.Name = "label28";
-            label28.Size = new Size(120, 15);
+            label28.Size = new Size(244, 15);
             label28.TabIndex = 80;
-            label28.Text = "pixels (lower is faster)";
+            label28.Text = "pixels (lower is faster, but less accurate color)";
             // 
             // label29
             // 
@@ -870,20 +870,19 @@
             // 
             numericBlurSampleArea.Location = new Point(122, 412);
             numericBlurSampleArea.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
-            numericBlurSampleArea.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numericBlurSampleArea.Name = "numericBlurSampleArea";
             numericBlurSampleArea.Size = new Size(54, 23);
             numericBlurSampleArea.TabIndex = 78;
-            numericBlurSampleArea.Value = new decimal(new int[] { 4, 0, 0, 0 });
+            numericBlurSampleArea.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // label27
             // 
             label27.AutoSize = true;
             label27.Location = new Point(182, 387);
             label27.Name = "label27";
-            label27.Size = new Size(125, 15);
+            label27.Size = new Size(232, 15);
             label27.TabIndex = 77;
-            label27.Text = "pixels (higher is faster)";
+            label27.Text = "pixels (higher is faster, adjustable in editor)";
             // 
             // label26
             // 
