@@ -14,6 +14,7 @@ namespace ScreenShotTool.Forms
         public SolidBrush FillBrush = new SolidBrush(Color.Pink);
         public SolidBrush TextBrush = new SolidBrush(Color.Black);
         public SolidBrush ShadowBrush = new SolidBrush(Color.FromArgb(20, Color.Black));
+        public SolidBrush HighlightBrush = new SolidBrush(Color.Red);
         public Pen ShadowPen = new Pen(Color.FromArgb(50, Color.Black));
         public Color ForegroundColor;
         public Color BackgroundColor;
@@ -101,7 +102,8 @@ namespace ScreenShotTool.Forms
             this.lineAlpha = lineAlpha;
             this.fillAlpha = fillAlpha;
             this.ShadowEnabled = shadowEnabled;
-            HightlightSymbolPen.DashPattern = new [] { 2f, 8f };
+            HightlightSymbolPen.DashPattern = new[] { 2f, 8f };
+            //Hitboxes = CreateHitboxList();
         }
 
         public GraphicSymbol(Point startPoint, Point endPoint, bool shadow = false)
@@ -118,17 +120,8 @@ namespace ScreenShotTool.Forms
             this.fillAlpha = 255;
             this.ShadowEnabled = shadow;
             HightlightSymbolPen.DashPattern = new[] { 2f, 8f };
+            //Hitboxes = CreateHitboxList();
         }
-
-        //public GraphicSymbol(GraphicSymbol clonedSymbol)
-        //{
-        //    this.LineBrush = clonedSymbol.LineBrush;
-        //    this.LinePen = clonedSymbol.LinePen;
-        //    this.ForegroundColor = clonedSymbol.ForegroundColor;
-        //    this.BackgroundColor = clonedSymbol.BackgroundColor;
-        //    this.StartPoint = clonedSymbol.StartPoint; // coordinate 1
-        //    this.EndPoint = clonedSymbol.EndPoint; // width or coordinate 2
-        //}
 
         public virtual void DrawSymbol(Graphics graphic)
         {
@@ -159,9 +152,85 @@ namespace ScreenShotTool.Forms
         {
         }
 
+        private int anchorsize = 8;
+        private int anchorHalf = 4;
+        Rectangle boundsShifted
+        {
+            get
+            {
+                return new Rectangle(Bounds.X - anchorHalf, Bounds.Y - anchorHalf, Bounds.Width, Bounds.Height);
+            }
+        }
+
+        //public List<Rectangle> Hitboxes;
+        //private List<Rectangle> CreateHitboxList()
+        //{
+        //    List<Rectangle> hitboxes = new();
+        //    hitboxes.Add(HitboxUpperLeft);
+        //    hitboxes.Add(HitboxUpperCenter);
+        //    hitboxes.Add(HitboxUpperRight);
+        //    hitboxes.Add(HitboxCenterLeft);
+        //    hitboxes.Add(HitboxCenterRight);
+        //    hitboxes.Add(HitboxLowerLeft);
+        //    hitboxes.Add(HitboxLowerCenter);
+        //    hitboxes.Add(HitboxLowerRight);
+        //    return hitboxes;
+        //}
+
+        public Rectangle GetHitbox(int index)
+        {
+            switch (index)
+            {
+                case 0:
+                    return HitboxUpperLeft;
+                case 1:
+                    return HitboxUpperCenter;
+                case 2:
+                    return HitboxUpperRight;
+                case 3:
+                    return HitboxCenterLeft;
+                case 4:
+                    return HitboxCenterRight;
+                case 5:
+                    return HitboxLowerLeft;
+                case 6:
+                    return HitboxLowerCenter;
+                case 7:
+                    return HitboxLowerRight;
+                default:
+                    return new Rectangle(0,0,0,0);
+            }
+        }
+        public Rectangle HitboxUpperLeft { get { return new Rectangle(boundsShifted.Left, boundsShifted.Top, anchorsize, anchorsize); }}
+        public Rectangle HitboxUpperCenter { get { return new Rectangle(boundsShifted.Left + (boundsShifted.Right - Bounds.Left) / 2, boundsShifted.Top, anchorsize, anchorsize); }}
+        public Rectangle HitboxUpperRight { get { return new Rectangle(boundsShifted.Right, boundsShifted.Top, anchorsize, anchorsize); }}
+        public Rectangle HitboxCenterLeft { get { return new Rectangle(boundsShifted.Left, boundsShifted.Top + (boundsShifted.Bottom - Bounds.Top) / 2, anchorsize, anchorsize); } }
+        public Rectangle HitboxCenterRight { get { return new Rectangle(boundsShifted.Right, boundsShifted.Top + (boundsShifted.Bottom - Bounds.Top)/2, anchorsize, anchorsize); } }
+        public Rectangle HitboxLowerLeft { get { return new Rectangle(boundsShifted.Left, boundsShifted.Bottom, anchorsize, anchorsize); } }
+        public Rectangle HitboxLowerCenter { get { return new Rectangle(boundsShifted.Left + (boundsShifted.Right - Bounds.Left) / 2, boundsShifted.Bottom, anchorsize, anchorsize); } }
+        public Rectangle HitboxLowerRight { get { return new Rectangle(boundsShifted.Right, boundsShifted.Bottom, anchorsize, anchorsize);  } }
+        public Rectangle HitboxCenter { get { return new Rectangle(boundsShifted.Left + (boundsShifted.Right - Bounds.Left) / 2, boundsShifted.Top + (boundsShifted.Bottom - Bounds.Top) / 2, anchorsize, anchorsize); } }
+
         public virtual void DrawHighlight(Graphics graphic)
         {
-            graphic.DrawRectangle(HightlightSymbolPen, Bounds);
+            int anchorsize = 4;
+            int anchorHalf = anchorsize / 2;
+            Rectangle boundsShifted = new Rectangle(Bounds.X - anchorHalf, Bounds.Y - anchorHalf, Bounds.Width, Bounds.Height);
+            
+            int BoundsWidth = (boundsShifted.Right - Bounds.Left);
+            int BoundsHeight = (boundsShifted.Bottom - Bounds.Top);
+            int HalfWidth = BoundsWidth / 2;
+            int HalfHeight = BoundsHeight / 2;
+
+            graphic.FillRectangle(HighlightBrush, HitboxUpperLeft); // Upper Left
+            graphic.FillRectangle(HighlightBrush, HitboxUpperCenter); // Upper Center
+            graphic.FillRectangle(HighlightBrush, HitboxUpperRight); // Upper Right
+            graphic.FillRectangle(HighlightBrush, HitboxCenterLeft); // Center Left
+            graphic.FillRectangle(HighlightBrush, HitboxCenterRight); // Center Right
+            graphic.FillRectangle(HighlightBrush, HitboxLowerLeft); // Lower Left
+            graphic.FillRectangle(HighlightBrush, HitboxLowerCenter); // Lower Center
+            graphic.FillRectangle(HighlightBrush, HitboxLowerRight); // Lower Right
+            graphic.FillRectangle(HighlightBrush, HitboxCenter); // Center of symbol
         }
 
         internal void UpdatePen()

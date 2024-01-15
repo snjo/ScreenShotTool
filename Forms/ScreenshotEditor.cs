@@ -540,6 +540,7 @@ namespace ScreenShotTool.Forms
             None,
             Select,
             MoveSymbol,
+            ScaleSymbol,
             CreateRectangle,
             CreateCircle,
             CreateLine,
@@ -566,6 +567,19 @@ namespace ScreenShotTool.Forms
             //if (selectedUserAction == UserActions.CreateBorder) buttonCircle.BackColor = Color.Yellow; // happens right away
             if (selectedUserAction == UserActions.CreateText) buttonText.BackColor = Color.Yellow;
             if (selectedUserAction == UserActions.CreateBlur) buttonBlur.BackColor = Color.Yellow;
+
+            if (selectedUserAction == UserActions.MoveSymbol)
+            {
+                pictureBoxOverlay.Cursor = Cursors.SizeAll;
+            }
+            else if (selectedUserAction == UserActions.ScaleSymbol)
+            {
+                pictureBoxOverlay.Cursor = Cursors.SizeWE;
+            }
+            else
+            {
+                pictureBoxOverlay.Cursor = Cursors.Arrow;
+            }
         }
 
         private void AddNewSymbolToList(GraphicSymbol symbol)
@@ -606,7 +620,7 @@ namespace ScreenShotTool.Forms
                 int dragHeight = dragBottom - dragTop;
                 Point size = new Point(dragWidth, dragHeight);
 
-                dragRect = new Rectangle(dragLeft, dragTop, dragWidth, dragHeight);
+                //dragRect = new Rectangle(dragLeft, dragTop, dragWidth, dragHeight);
 
                 Point upperLeft = new Point(dragLeft, dragTop);
                 Point bottomRight = new Point(dragRight, dragBottom);
@@ -713,7 +727,9 @@ namespace ScreenShotTool.Forms
         Point dragStart = new Point(0, 0);
         //int dragStartX = 0;
         //int dragStartY = 0;
-        Rectangle dragRect = new();
+        //Rectangle dragRect = new();
+        GraphicSymbol? selectedHitboxSymbol = null;
+        int selectedHitboxIndex = -1;
 
         private void PictureBoxOverlay_MouseDown(object sender, MouseEventArgs e)
         {
@@ -721,9 +737,34 @@ namespace ScreenShotTool.Forms
             dragStarted = true;
             dragMoved = false;
             dragStart = new Point(e.X, e.Y);
+
+            //GraphicSymbol? clickedSymbol = null;
+            //List<GraphicSymbol> clickedSymbols = GetSymbolsUnderCursor(); // the topmost of the symbols in the possible stack
+            
+            GetHitboxUnderCursor(e);
+
             if (overlayGraphics == null)
             {
                 CreateOverlay();
+            }
+        }
+
+        private void GetHitboxUnderCursor(MouseEventArgs e)
+        {
+            if (currentSelectedSymbol != null)
+            {
+                selectedHitboxSymbol = null;
+                selectedHitboxIndex = -1;
+                for (int i = 0; i < 8; i++)
+                {
+                    Rectangle hitbox = currentSelectedSymbol.GetHitbox(i);
+                    if (currentSelectedSymbol.GetHitbox(i).Contains(e.X, e.Y))
+                    {
+                        selectedHitboxSymbol = currentSelectedSymbol;
+                        selectedHitboxIndex = i;
+                        break;
+                    }
+                }
             }
         }
 
@@ -734,46 +775,8 @@ namespace ScreenShotTool.Forms
         {
             if (dragMoved == false) // user clicked and released mouse without moving it
             {
-                List <GraphicSymbol> symbolsUnderCursor = GetSymbolsUnderCursor();
-                //Debug.WriteLine($"Stack size: {symbolsUnderCursor.Count}");
-                if (symbolsUnderCursor.Count == 0)
-                {
-                    //Debug.WriteLine($"Stack blanked");
-                    stackedSymbolsIndex = -1;
-                    previousTopmostSymbol = null;
-                    listViewSymbols.SelectedItems.Clear();
-                }
-                else
-                {
-                    if (stackedSymbolsIndex == -1 || stackedSymbolsIndex >= symbolsUnderCursor.Count)
-                    {
-                        stackedSymbolsIndex = Math.Max(symbolsUnderCursor.Count - 1, 0);
-                    }
-
-                    if (currentSelectedSymbol != null)
-                    {
-                        currentSelectedSymbol = symbolsUnderCursor[Math.Clamp(stackedSymbolsIndex, 0, symbolsUnderCursor.Count-1)];
-                        //Debug.WriteLine($"Stack index is {stackedSymbolsIndex}, {currentSelectedSymbol.Name}");
-                        listViewSymbols.SelectedItems.Clear();
-                        ListViewItem? listFromSymbol = GetListItemFromSymbol(currentSelectedSymbol);
-                        int selectedIndex = listFromSymbol != null ? listFromSymbol.Index : -1;
-                        if (selectedIndex > -1 && selectedIndex < listViewSymbols.Items.Count)
-                        {
-                            //currentSelectedSymbol = symbolUnderCursor;
-                            listViewSymbols.Items[selectedIndex].Selected = true; //GetListItemFromSymbol(symbolUnderCursor));
-                        }
-                        //Debug.WriteLine($"Stack item selected in list: {listFromSymbol?.Name}");
-                        stackedSymbolsIndex--;
-                    }
-                    else
-                    {
-                        listViewSymbols.SelectedItems.Clear();
-                        //Debug.WriteLine($"Selected symbol is null");
-                    }
-                }
-                //selectedUserAction = UserActions.Select;
+                SelectSymbolUnderCursor();
             }
-
 
             if (originalImage == null) return;
             GraphicSymbol? symbol = GetSymbol(sender, e);
@@ -794,6 +797,47 @@ namespace ScreenShotTool.Forms
             }
         }
 
+        private void SelectSymbolUnderCursor()
+        {
+            List<GraphicSymbol> symbolsUnderCursor = GetSymbolsUnderCursor();
+            //Debug.WriteLine($"Stack size: {symbolsUnderCursor.Count}");
+            if (symbolsUnderCursor.Count == 0)
+            {
+                //Debug.WriteLine($"Stack blanked");
+                stackedSymbolsIndex = -1;
+                previousTopmostSymbol = null;
+                listViewSymbols.SelectedItems.Clear();
+            }
+            else
+            {
+                if (stackedSymbolsIndex == -1 || stackedSymbolsIndex >= symbolsUnderCursor.Count)
+                {
+                    stackedSymbolsIndex = Math.Max(symbolsUnderCursor.Count - 1, 0);
+                }
+
+                if (currentSelectedSymbol != null)
+                {
+                    currentSelectedSymbol = symbolsUnderCursor[Math.Clamp(stackedSymbolsIndex, 0, symbolsUnderCursor.Count - 1)];
+                    //Debug.WriteLine($"Stack index is {stackedSymbolsIndex}, {currentSelectedSymbol.Name}");
+                    listViewSymbols.SelectedItems.Clear();
+                    ListViewItem? listFromSymbol = GetListItemFromSymbol(currentSelectedSymbol);
+                    int selectedIndex = listFromSymbol != null ? listFromSymbol.Index : -1;
+                    if (selectedIndex > -1 && selectedIndex < listViewSymbols.Items.Count)
+                    {
+                        //currentSelectedSymbol = symbolUnderCursor;
+                        listViewSymbols.Items[selectedIndex].Selected = true; //GetListItemFromSymbol(symbolUnderCursor));
+                    }
+                    //Debug.WriteLine($"Stack item selected in list: {listFromSymbol?.Name}");
+                    stackedSymbolsIndex--;
+                }
+                else
+                {
+                    listViewSymbols.SelectedItems.Clear();
+                    //Debug.WriteLine($"Selected symbol is null");
+                }
+            }
+        }
+
         int oldMouseX = 0;
         int oldMouseY = 0;
 
@@ -807,6 +851,21 @@ namespace ScreenShotTool.Forms
 
         private void PictureBoxOverlay_MouseMove(object sender, MouseEventArgs e)
         {
+            // TODO update hitbox scale cursors
+            GetHitboxUnderCursor(e);
+            //if (selectedHitboxIndex > -1)
+            //{
+                switch (selectedHitboxIndex)
+                {
+                    case 0: case 7: pictureBoxOverlay.Cursor = Cursors.SizeNWSE; break;
+                    case 2: case 5: pictureBoxOverlay.Cursor = Cursors.SizeNESW; break;
+                    case 3: case 4: pictureBoxOverlay.Cursor = Cursors.SizeWE; break;
+                    case 1: case 6: pictureBoxOverlay.Cursor = Cursors.SizeNS; break;
+                    default: pictureBoxOverlay.Cursor = Cursors.Arrow; break;
+                }
+            //}
+
+
             if (e.X != dragStart.X || e.Y != dragStart.Y)
             {
                 dragMoved = true;
