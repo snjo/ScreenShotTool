@@ -406,13 +406,20 @@ namespace ScreenShotTool.Forms
                     tempBrush = ShadowBrush;
                 }
                 UpdateFont();
+                //graphic.PageUnit = GraphicsUnit.Pixel;
+                //StringFormat stringFormat = new StringFormat();
+                //stringFormat.FormatFlags = StringFormatFlags.NoWrap;
                 graphic.DrawString(text, font, tempBrush, new PointF(Left + offset.X, Top + offset.Y));
+                SizeF sizeInPixels = graphic.MeasureString(text, font);
+                Width = (int)sizeInPixels.Width;
+                Height = (int)sizeInPixels.Height;
             }
+            
         }
 
         public override void DrawHighlight(Graphics graphic)
         {
-            graphic.DrawRectangle(HightlightSymbolPen, new Rectangle(Left, Top, (int)fontEmSize * 3, (int)(fontEmSize * 1.5f)));
+            graphic.DrawRectangle(HightlightSymbolPen, Bounds);
         }
     }
 

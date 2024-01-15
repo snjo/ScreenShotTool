@@ -735,7 +735,7 @@ namespace ScreenShotTool.Forms
             if (dragMoved == false) // user clicked and released mouse without moving it
             {
                 List <GraphicSymbol> symbolsUnderCursor = GetSymbolsUnderCursor();
-                Debug.WriteLine($"Stack size: {symbolsUnderCursor.Count}");
+                //Debug.WriteLine($"Stack size: {symbolsUnderCursor.Count}");
                 if (symbolsUnderCursor.Count == 0)
                 {
                     //Debug.WriteLine($"Stack blanked");
@@ -774,7 +774,6 @@ namespace ScreenShotTool.Forms
                 //selectedUserAction = UserActions.Select;
             }
 
-            Debug.WriteLine("------------------");
 
             if (originalImage == null) return;
             GraphicSymbol? symbol = GetSymbol(sender, e);
@@ -896,7 +895,6 @@ namespace ScreenShotTool.Forms
                 if (gs.Bounds.Contains(cursorPos))
                 {
                     symbolsUnderCursor.Add(gs);
-                    Debug.WriteLine(gs.Name + " is under cursor");
                 }
             }
             return symbolsUnderCursor;
