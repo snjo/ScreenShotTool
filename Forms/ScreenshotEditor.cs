@@ -851,19 +851,16 @@ namespace ScreenShotTool.Forms
 
         private void PictureBoxOverlay_MouseMove(object sender, MouseEventArgs e)
         {
-            // TODO update hitbox scale cursors
             GetHitboxUnderCursor(e);
-            //if (selectedHitboxIndex > -1)
-            //{
-                switch (selectedHitboxIndex)
-                {
-                    case 0: case 7: pictureBoxOverlay.Cursor = Cursors.SizeNWSE; break;
-                    case 2: case 5: pictureBoxOverlay.Cursor = Cursors.SizeNESW; break;
-                    case 3: case 4: pictureBoxOverlay.Cursor = Cursors.SizeWE; break;
-                    case 1: case 6: pictureBoxOverlay.Cursor = Cursors.SizeNS; break;
-                    default: pictureBoxOverlay.Cursor = Cursors.Arrow; break;
-                }
-            //}
+
+            switch (selectedHitboxIndex)
+            {
+                case 0: case 7: pictureBoxOverlay.Cursor = Cursors.SizeNWSE; break;
+                case 2: case 5: pictureBoxOverlay.Cursor = Cursors.SizeNESW; break;
+                case 3: case 4: pictureBoxOverlay.Cursor = Cursors.SizeWE; break;
+                case 1: case 6: pictureBoxOverlay.Cursor = Cursors.SizeNS; break;
+                default: pictureBoxOverlay.Cursor = Cursors.Arrow; break;
+            }
 
 
             if (e.X != dragStart.X || e.Y != dragStart.Y)
