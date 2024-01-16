@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using ScreenShotTool.Classes;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Numerics;
@@ -79,12 +80,17 @@ namespace ScreenShotTool.Forms
         }
 
         public virtual Point Position
-        { get {  return new Point(Left, Top); } }
+        { get { return new Point(Left, Top); } }
 
         public virtual void Move(int x, int y)
         {
-            Left += x;
-            Top += y;
+            MoveTo(Left += x, Top += y);
+        }
+
+        public virtual void MoveTo(int x, int y)
+        {
+            Left = x;
+            Top = y;
         }
 
         public virtual void MoveLeftEdgeTo(int x)
@@ -230,23 +236,23 @@ namespace ScreenShotTool.Forms
                 case 8:
                     return HitboxSE;
                 default:
-                    return new Rectangle(0,0,0,0);
+                    return new Rectangle(0, 0, 0, 0);
             }
         }
-        public Rectangle HitboxNW { get { return new Rectangle(boundsShifted.Left, boundsShifted.Top, anchorsize, anchorsize); }}
-        public Rectangle HitboxN { get { return new Rectangle(boundsShifted.Left + (boundsShifted.Right - Bounds.Left) / 2, boundsShifted.Top, anchorsize, anchorsize); }}
-        public Rectangle HitboxNE { get { return new Rectangle(boundsShifted.Right, boundsShifted.Top, anchorsize, anchorsize); }}
+        public Rectangle HitboxNW { get { return new Rectangle(boundsShifted.Left, boundsShifted.Top, anchorsize, anchorsize); } }
+        public Rectangle HitboxN { get { return new Rectangle(boundsShifted.Left + (boundsShifted.Right - Bounds.Left) / 2, boundsShifted.Top, anchorsize, anchorsize); } }
+        public Rectangle HitboxNE { get { return new Rectangle(boundsShifted.Right, boundsShifted.Top, anchorsize, anchorsize); } }
         public Rectangle HitboxW { get { return new Rectangle(boundsShifted.Left, boundsShifted.Top + (boundsShifted.Bottom - Bounds.Top) / 2, anchorsize, anchorsize); } }
-        public Rectangle HitboxE { get { return new Rectangle(boundsShifted.Right, boundsShifted.Top + (boundsShifted.Bottom - Bounds.Top)/2, anchorsize, anchorsize); } }
+        public Rectangle HitboxE { get { return new Rectangle(boundsShifted.Right, boundsShifted.Top + (boundsShifted.Bottom - Bounds.Top) / 2, anchorsize, anchorsize); } }
         public Rectangle HitboxSW { get { return new Rectangle(boundsShifted.Left, boundsShifted.Bottom, anchorsize, anchorsize); } }
         public Rectangle HitboxS { get { return new Rectangle(boundsShifted.Left + (boundsShifted.Right - Bounds.Left) / 2, boundsShifted.Bottom, anchorsize, anchorsize); } }
-        public Rectangle HitboxSE { get { return new Rectangle(boundsShifted.Right, boundsShifted.Bottom, anchorsize, anchorsize);  } }
+        public Rectangle HitboxSE { get { return new Rectangle(boundsShifted.Right, boundsShifted.Bottom, anchorsize, anchorsize); } }
         //public Rectangle HitboxCenter { get { return new Rectangle(boundsShifted.Left + (boundsShifted.Right - Bounds.Left) / 2, boundsShifted.Top + (boundsShifted.Bottom - Bounds.Top) / 2, anchorsize, anchorsize); } }
         public Rectangle HitboxCenter { get { return new Rectangle(Bounds.Left, Bounds.Top, Bounds.Width, Bounds.Height); } }
 
-        public virtual void DrawHighlight(Graphics graphic)
+        public virtual void DrawHitboxes(Graphics graphic)
         {
-            for (int i = 1; i <= 8; i++)
+            for (int i = 1; i <= 8; i++) // start at 1 to skip center hitbox drawing
             {
                 graphic.FillRectangle(HighlightBrush, GetHitbox(i));
             }
@@ -257,7 +263,7 @@ namespace ScreenShotTool.Forms
             LineBrush = new SolidBrush(Color.FromArgb(lineAlpha, ForegroundColor.R, ForegroundColor.G, ForegroundColor.B));
             LinePen.Brush = LineBrush;
             LinePen.Width = LineWeight;
-            
+
             FillBrush = new SolidBrush(Color.FromArgb(fillAlpha, BackgroundColor.R, BackgroundColor.G, BackgroundColor.B));
             ShadowBrush.Color = Color.FromArgb(FillBrush.Color.A / 8, Color.Black);
             ShadowPen.Color = Color.FromArgb(LineBrush.Color.A / 8, Color.Black);
@@ -309,7 +315,7 @@ namespace ScreenShotTool.Forms
 
         internal override void DrawShape(Graphics graphic, Pen drawPen, Brush drawBrush, Point offset, bool fill = true, bool outline = true)
         {
-            
+
             if (fillAlpha > 0 && fill)
             {
                 drawFill(drawPen, drawBrush, new Rectangle(Left + offset.X, Top + offset.Y, Width, Height), graphic);
@@ -376,8 +382,8 @@ namespace ScreenShotTool.Forms
                 Left = 0 + (borderWeight / 2);
                 Top = 0 + (borderWeight / 2);
 
-                Right = originalWidth  - (int)Math.Ceiling(borderWeight / 2f) ;
-                Bottom = originalHeight  - (int)Math.Ceiling(borderWeight / 2f);
+                Right = originalWidth - (int)Math.Ceiling(borderWeight / 2f);
+                Bottom = originalHeight - (int)Math.Ceiling(borderWeight / 2f);
             }
         }
     }
@@ -485,7 +491,7 @@ namespace ScreenShotTool.Forms
         }
 
         internal override void DrawShape(Graphics graphic, Pen drawPen, Brush drawBrush, Point offset, bool fill = true, bool outline = true)
-        {   
+        {
             if (lineAlpha > 0)
             {
                 Brush tempBrush = TextBrush;
@@ -502,10 +508,10 @@ namespace ScreenShotTool.Forms
                 Width = (int)sizeInPixels.Width;
                 Height = (int)sizeInPixels.Height;
             }
-            
+
         }
 
-        public override void DrawHighlight(Graphics graphic)
+        public override void DrawHitboxes(Graphics graphic)
         {
             graphic.DrawRectangle(HightlightSymbolPen, Bounds);
         }
@@ -555,7 +561,7 @@ namespace ScreenShotTool.Forms
             if (LineWeight < 1) { LineWeight = 1; }
             if (lineAlpha > 0)
             {
-                graphic.DrawLine(drawPen, new Point(StartPoint.X + offset.X, StartPoint.Y + offset.Y) , new Point(EndPoint.X + offset.X, EndPoint.Y + offset.Y));
+                graphic.DrawLine(drawPen, new Point(StartPoint.X + offset.X, StartPoint.Y + offset.Y), new Point(EndPoint.X + offset.X, EndPoint.Y + offset.Y));
             }
         }
 
@@ -568,6 +574,13 @@ namespace ScreenShotTool.Forms
                     DrawShape(graphic, ShadowPen, ShadowBrush, new Point(i, i));
                 }
             }
+        }
+
+        public override void MoveTo(int x, int y)
+        {
+            Point EndOffset = StartPoint.Subtract(EndPoint);
+            StartPoint = new Point(x, y);
+            EndPoint = StartPoint.Subtract(EndOffset);
         }
 
         public override Rectangle GetHitbox(int index)
@@ -585,9 +598,22 @@ namespace ScreenShotTool.Forms
                     return new Rectangle(0, 0, 0, 0);
             }
         }
+
+        public float GetLineLength()
+        {
+            return StartPoint.DistanceTo(EndPoint);
+        }
+
         public Rectangle HitboxStart { get { return new Rectangle(StartPoint.X - anchorHalf, StartPoint.Y - anchorHalf, anchorsize, anchorsize); } }
         public Rectangle HitboxEnd { get { return new Rectangle(EndPoint.X - anchorHalf, EndPoint.Y - anchorHalf, anchorsize, anchorsize); } }
-        public Rectangle HitboxMiddle { get { return new Rectangle(((StartPoint.X + EndPoint.X) / 2) - anchorHalf, ((StartPoint.Y + EndPoint.Y) / 2) - anchorHalf, anchorsize, anchorsize); } }
+        public Rectangle HitboxMiddle { get {
+                return new Rectangle(
+                    Bounds.Left + (int)(Bounds.Width * 0.2f) - 2,
+                    Bounds.Top + (int)(Bounds.Height * 0.2f) - 2,
+                    Math.Max(Bounds.Width - (int)(Bounds.Width * 0.4f), 4),
+                    Math.Max(Bounds.Height - (int)(Bounds.Height * 0.4f), 4)
+                );
+            } }
     }
 
     public class GsArrow : GsLine

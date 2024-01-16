@@ -394,7 +394,7 @@ namespace ScreenShotTool.Forms
             if (HighlightSelected)
             {
                 GraphicSymbol? selectedSymbol = GetSelectedSymbol();
-                selectedSymbol?.DrawHighlight(graphic);
+                selectedSymbol?.DrawHitboxes(graphic);
             }
         }
 
@@ -456,8 +456,6 @@ namespace ScreenShotTool.Forms
                 if (i < imageFormats.Count - 1)
                     filter += "|";
             }
-
-            //Debug.WriteLine("Filter set to: " + filter);
 
             fileDialog.Filter = filter;
             fileDialog.FileName = "";
@@ -685,6 +683,7 @@ namespace ScreenShotTool.Forms
                     if (currentSelectedSymbol.GetHitbox(i).Contains(e.X, e.Y))
                     {
                         selectedHitboxIndex = (HitboxDirection)i;
+                        
                         break;
                     }
                 }
@@ -701,10 +700,9 @@ namespace ScreenShotTool.Forms
         private void SelectSymbolUnderCursor()
         {
             List<GraphicSymbol> symbolsUnderCursor = GetSymbolsUnderCursor();
-            Debug.WriteLine($"Stack size: {symbolsUnderCursor.Count}");
             if (symbolsUnderCursor.Count == 0 && selectedUserAction != UserActions.ScaleSymbol)
             {
-                //Debug.WriteLine($"Stack blanked");
+                // empty stack
                 stackedSymbolsIndex = -1;
                 previousTopmostSymbol = null;
                 listViewSymbols.SelectedItems.Clear();
@@ -717,19 +715,16 @@ namespace ScreenShotTool.Forms
                     stackedSymbolsIndex = Math.Max(symbolsUnderCursor.Count - 1, 0);
                 }
 
-                //if (currentSelectedSymbol != null)
                 if (symbolsUnderCursor.Count > 0)
                 {
                     currentSelectedSymbol = symbolsUnderCursor[Math.Clamp(stackedSymbolsIndex, 0, symbolsUnderCursor.Count - 1)];
-                    //Debug.WriteLine($"Stack index is {stackedSymbolsIndex}, {currentSelectedSymbol.Name}");
                     listViewSymbols.SelectedItems.Clear();
                     ListViewItem? listFromSymbol = GetListItemFromSymbol(currentSelectedSymbol);
                     int selectedIndex = listFromSymbol != null ? listFromSymbol.Index : -1;
                     if (selectedIndex > -1 && selectedIndex < listViewSymbols.Items.Count)
                     {
-                        listViewSymbols.Items[selectedIndex].Selected = true; //GetListItemFromSymbol(symbolUnderCursor));
+                        listViewSymbols.Items[selectedIndex].Selected = true;
                     }
-                    //Debug.WriteLine($"Stack item selected in list: {listFromSymbol?.Name}");
                     stackedSymbolsIndex--;
                 }
                 else
@@ -737,7 +732,6 @@ namespace ScreenShotTool.Forms
                     listViewSymbols.SelectedItems.Clear();
                     currentSelectedSymbol = null;
                     stackedSymbolsIndex = -1;
-                    //Debug.WriteLine($"Selected symbol is null");
                 }
             }
         }
@@ -891,7 +885,6 @@ namespace ScreenShotTool.Forms
             if (currentSelectedSymbol != null)
             {
                 dragStartOffsetFromSymbolCenter = new Point(e.X, e.Y).Subtract(currentSelectedSymbol.Position);
-                Debug.WriteLine($"Drag offset from center: {dragStartOffsetFromSymbolCenter}");
             }
 
             GetHitboxUnderCursor(e);
@@ -955,7 +948,7 @@ namespace ScreenShotTool.Forms
             if (originalImage == null) return;
 
             Point mouseDelta = MousePosition.Subtract(oldMousePosition);
-            
+
             //int mouseDeltaY = Cursor.Position.Y - oldMouseY;
 
             if (selectedUserAction >= UserActions.CreateRectangle) // any UserAction above CreateRectangle is a new symbol creation
@@ -978,29 +971,35 @@ namespace ScreenShotTool.Forms
 
         private void MoveSymbol(MouseEventArgs e, Point mouseDelta)
         {
-            //Debug.WriteLine($"Move symbol, eX: {e.X}, eY: {e.Y}, {mouseDelta}");
             if (currentSelectedSymbol == null) return;
 
             if (currentSelectedSymbol.MoveAllowed && dragStarted)
             {
-                if (currentSelectedSymbol is GsLine)
-                {
-
-                }
-                else
-                {
-                    currentSelectedSymbol.Left = Math.Clamp(e.X - dragStartOffsetFromSymbolCenter.X, -100, CanvasSize.Width + 100);
-                    currentSelectedSymbol.Top = Math.Clamp(e.Y - dragStartOffsetFromSymbolCenter.Y, -100, CanvasSize.Height + 100);
-                }
+                Point newPos = new Point(
+                    Math.Clamp(e.X - dragStartOffsetFromSymbolCenter.X, -100, CanvasSize.Width + 100),
+                    Math.Clamp(e.Y - dragStartOffsetFromSymbolCenter.Y, -100, CanvasSize.Height + 100)
+                );
+                currentSelectedSymbol.MoveTo(newPos.X, newPos.Y);
             }
         }
 
         private void ScaleSymbol(MouseEventArgs e, Point MouseDelta)
         {
-            //Debug.WriteLine("Scale symbol");
             if (currentSelectedSymbol == null) return;
+            if (dragStarted == false) return;
 
-            if (currentSelectedSymbol.ScalingAllowed && dragStarted)
+            if (currentSelectedSymbol is GsLine)
+            {
+                if ((int)selectedHitboxIndex == 1)
+                {
+                    currentSelectedSymbol.StartPoint = new Point(e.X, e.Y);
+                }
+                if ((int)selectedHitboxIndex == 2)
+                {
+                    currentSelectedSymbol.EndPoint = new Point(e.X, e.Y);
+                }
+            }
+            else if(currentSelectedSymbol.ScalingAllowed)
             {
                 if (selectedHitboxIndex == HitboxDirection.W || selectedHitboxIndex == HitboxDirection.NW || selectedHitboxIndex == HitboxDirection.SW)
                 {
@@ -1029,7 +1028,6 @@ namespace ScreenShotTool.Forms
             if (listViewSymbols.SelectedItems.Count > 0)
             {
                 ListViewItem item = listViewSymbols.SelectedItems[0];
-                //Debug.WriteLine($"Mouse delta {mouseDeltaX} {mouseDeltaY}");
                 GraphicSymbol symbol = GetSymbolFromTag(item);
                 if (dragStarted && symbol.MoveAllowed == true)
                 {
