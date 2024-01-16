@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
 
-[assembly: AssemblyVersion("1.3.*")]
+[assembly: AssemblyVersion("1.4.*")]
 
 #pragma warning disable IDE0090 // Use 'new(...)'
 
@@ -40,19 +40,20 @@ namespace ScreenShotTool
         Bitmap? bitmap;
         ImageList imageList = new ImageList();
 
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern bool SetForegroundWindow(IntPtr hWnd);
+        [LibraryImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static partial bool SetForegroundWindow(IntPtr hWnd);
 
-        public Dictionary<string, Hotkey> HotkeyList = new Dictionary<string, Hotkey>();
+        public Dictionary<string, Hotkey> HotkeyList = [];
 
-        public List<string> HotkeyNames = new List<string>
-        {
+        public List<string> HotkeyNames =
+        [
             "CaptureRegion",
             "CaptureWindow",
             "CaptureCurrentScreen",
             "CaptureAllScreens",
             "BrowseFolder",
-        };
+        ];
 
         #region form open and close
         public MainForm()
@@ -613,14 +614,15 @@ namespace ScreenShotTool
             bool saved = false;
             Screen screen = Screen.FromPoint(Cursor.Position);
             Bitmap bmp = GetScreenImage(screen);
-            ImageView imgView = new ImageView(true, screen, bmp);
-
-            imgView.Location = new Point(screen.Bounds.X, screen.Bounds.Y);
+            ImageView imgView = new ImageView(true, screen, bmp)
+            {
+                Location = new Point(screen.Bounds.X, screen.Bounds.Y),
+                CompleteCaptureOnMoureRelease = settings.RegionCompletesOnMouseRelease,
+                SaveToFile = settings.RegionToFile,
+                SendToEditor = settings.RegionToEditor,
+                SendToClipboard = settings.RegionToClipboard,
+            };
             imgView.SetImage();
-            imgView.CompleteCaptureOnMoureRelease = settings.RegionCompletesOnMouseRelease;
-            imgView.SaveToFile = settings.RegionToFile;
-            imgView.SendToEditor = settings.RegionToEditor;
-            imgView.SendToClipboard = settings.RegionToClipboard;
             DialogResult result = imgView.ShowDialog();
             if (result == DialogResult.Yes) // Yes means save to file
             {
@@ -826,7 +828,6 @@ namespace ScreenShotTool
 
         private static IntPtr GetActiveWindow()
         {
-            IntPtr handle = IntPtr.Zero;
             Debug.WriteLine("ForeGround Window:" + GetForegroundWindow());
             return GetForegroundWindow();
         }
@@ -842,14 +843,14 @@ namespace ScreenShotTool
             public int Top;         // y position of upper-left corner  
             public int Right;       // x position of lower-right corner  
             public int Bottom;      // y position of lower-right corner  
-            public int Width
+            public readonly int Width
             {
                 get
                 {
                     return Right - Left;
                 }
             }
-            public int Height
+            public readonly int Height
             {
                 get
                 {
@@ -1344,7 +1345,7 @@ namespace ScreenShotTool
             {
                 Debug.WriteLine("Copying files to clipboard");
 
-                List<string> fileList = new List<string>();
+                List<string> fileList = [];
 
                 foreach (ListViewItem item in listViewThumbnails.SelectedItems)
                 {
@@ -1390,13 +1391,13 @@ namespace ScreenShotTool
             imageEditor.Show();
         }
 
-        private void editorToolStripMenuItem_Click(object sender, EventArgs e)
+        private void EditorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ScreenshotEditor imageEditor = new ScreenshotEditor();
             imageEditor.Show();
         }
 
-        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenHelp();
         }

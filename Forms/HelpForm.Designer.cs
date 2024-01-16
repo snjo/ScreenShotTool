@@ -45,7 +45,7 @@
             richTextBox1.Size = new Size(1006, 579);
             richTextBox1.TabIndex = 0;
             richTextBox1.Text = "";
-            richTextBox1.KeyDown += richTextBox1_KeyDown;
+            richTextBox1.KeyDown += RichTextBox1_KeyDown;
             // 
             // buttonSave
             // 

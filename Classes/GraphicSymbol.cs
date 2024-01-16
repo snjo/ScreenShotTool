@@ -1,6 +1,4 @@
 ﻿using ScreenShotTool.Classes;
-using System.Diagnostics;
-using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Numerics;
 
@@ -11,12 +9,12 @@ namespace ScreenShotTool.Forms
     {
         public Pen LinePen = new(Color.Gray);
         public Pen HightlightSymbolPen = new(Color.Red);
-        public SolidBrush LineBrush = new SolidBrush(Color.Gray);
-        public SolidBrush FillBrush = new SolidBrush(Color.Pink);
-        public SolidBrush TextBrush = new SolidBrush(Color.Black);
-        public SolidBrush ShadowBrush = new SolidBrush(Color.FromArgb(20, Color.Black));
-        public SolidBrush HighlightBrush = new SolidBrush(Color.Red);
-        public Pen ShadowPen = new Pen(Color.FromArgb(50, Color.Black));
+        public SolidBrush LineBrush = new(Color.Gray);
+        public SolidBrush FillBrush = new(Color.Pink);
+        public SolidBrush TextBrush = new(Color.Black);
+        public SolidBrush ShadowBrush = new(Color.FromArgb(20, Color.Black));
+        public SolidBrush HighlightBrush = new(Color.Red);
+        public Pen ShadowPen = new(Color.FromArgb(50, Color.Black));
         public Color ForegroundColor;
         public Color BackgroundColor;
         public Color TextColor;
@@ -140,7 +138,7 @@ namespace ScreenShotTool.Forms
             this.lineAlpha = lineAlpha;
             this.fillAlpha = fillAlpha;
             this.ShadowEnabled = shadowEnabled;
-            HightlightSymbolPen.DashPattern = new[] { 2f, 8f };
+            HightlightSymbolPen.DashPattern = [2f, 8f];
             //Hitboxes = CreateHitboxList();
         }
 
@@ -157,7 +155,7 @@ namespace ScreenShotTool.Forms
             this.lineAlpha = 255;
             this.fillAlpha = 255;
             this.ShadowEnabled = shadow;
-            HightlightSymbolPen.DashPattern = new[] { 2f, 8f };
+            HightlightSymbolPen.DashPattern = [2f, 8f];
             //Hitboxes = CreateHitboxList();
         }
 
@@ -192,7 +190,7 @@ namespace ScreenShotTool.Forms
 
         internal int anchorsize = 8;
         internal int anchorHalf = 4;
-        Rectangle boundsShifted
+        Rectangle BoundsShifted
         {
             get
             {
@@ -215,38 +213,28 @@ namespace ScreenShotTool.Forms
 
         public virtual Rectangle GetHitbox(int index)
         {
-            switch (index)
+            return index switch
             {
-                case 0:
-                    return HitboxCenter;
-                case 1:
-                    return HitboxNW;
-                case 2:
-                    return HitboxN;
-                case 3:
-                    return HitboxNE;
-                case 4:
-                    return HitboxW;
-                case 5:
-                    return HitboxE;
-                case 6:
-                    return HitboxSW;
-                case 7:
-                    return HitboxS;
-                case 8:
-                    return HitboxSE;
-                default:
-                    return new Rectangle(0, 0, 0, 0);
-            }
+                0 => HitboxCenter,
+                1 => HitboxNW,
+                2 => HitboxN,
+                3 => HitboxNE,
+                4 => HitboxW,
+                5 => HitboxE,
+                6 => HitboxSW,
+                7 => HitboxS,
+                8 => HitboxSE,
+                _ => new Rectangle(0, 0, 0, 0),
+            };
         }
-        public Rectangle HitboxNW { get { return new Rectangle(boundsShifted.Left, boundsShifted.Top, anchorsize, anchorsize); } }
-        public Rectangle HitboxN { get { return new Rectangle(boundsShifted.Left + (boundsShifted.Right - Bounds.Left) / 2, boundsShifted.Top, anchorsize, anchorsize); } }
-        public Rectangle HitboxNE { get { return new Rectangle(boundsShifted.Right, boundsShifted.Top, anchorsize, anchorsize); } }
-        public Rectangle HitboxW { get { return new Rectangle(boundsShifted.Left, boundsShifted.Top + (boundsShifted.Bottom - Bounds.Top) / 2, anchorsize, anchorsize); } }
-        public Rectangle HitboxE { get { return new Rectangle(boundsShifted.Right, boundsShifted.Top + (boundsShifted.Bottom - Bounds.Top) / 2, anchorsize, anchorsize); } }
-        public Rectangle HitboxSW { get { return new Rectangle(boundsShifted.Left, boundsShifted.Bottom, anchorsize, anchorsize); } }
-        public Rectangle HitboxS { get { return new Rectangle(boundsShifted.Left + (boundsShifted.Right - Bounds.Left) / 2, boundsShifted.Bottom, anchorsize, anchorsize); } }
-        public Rectangle HitboxSE { get { return new Rectangle(boundsShifted.Right, boundsShifted.Bottom, anchorsize, anchorsize); } }
+        public Rectangle HitboxNW { get { return new Rectangle(BoundsShifted.Left, BoundsShifted.Top, anchorsize, anchorsize); } }
+        public Rectangle HitboxN { get { return new Rectangle(BoundsShifted.Left + (BoundsShifted.Right - Bounds.Left) / 2, BoundsShifted.Top, anchorsize, anchorsize); } }
+        public Rectangle HitboxNE { get { return new Rectangle(BoundsShifted.Right, BoundsShifted.Top, anchorsize, anchorsize); } }
+        public Rectangle HitboxW { get { return new Rectangle(BoundsShifted.Left, BoundsShifted.Top + (BoundsShifted.Bottom - Bounds.Top) / 2, anchorsize, anchorsize); } }
+        public Rectangle HitboxE { get { return new Rectangle(BoundsShifted.Right, BoundsShifted.Top + (BoundsShifted.Bottom - Bounds.Top) / 2, anchorsize, anchorsize); } }
+        public Rectangle HitboxSW { get { return new Rectangle(BoundsShifted.Left, BoundsShifted.Bottom, anchorsize, anchorsize); } }
+        public Rectangle HitboxS { get { return new Rectangle(BoundsShifted.Left + (BoundsShifted.Right - Bounds.Left) / 2, BoundsShifted.Bottom, anchorsize, anchorsize); } }
+        public Rectangle HitboxSE { get { return new Rectangle(BoundsShifted.Right, BoundsShifted.Bottom, anchorsize, anchorsize); } }
         //public Rectangle HitboxCenter { get { return new Rectangle(boundsShifted.Left + (boundsShifted.Right - Bounds.Left) / 2, boundsShifted.Top + (boundsShifted.Bottom - Bounds.Top) / 2, anchorsize, anchorsize); } }
         public Rectangle HitboxCenter { get { return new Rectangle(Bounds.Left, Bounds.Top, Bounds.Width, Bounds.Height); } }
 
@@ -357,8 +345,8 @@ namespace ScreenShotTool.Forms
     public class GsBorder : GsRectangle
     {
         private int borderWeight;
-        private int originalWidth = 0;
-        private int originalHeight = 0;
+        private readonly int originalWidth = 0;
+        private readonly int originalHeight = 0;
         public GsBorder(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight, int lineAlpha, int fillAlpha) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight, lineAlpha, fillAlpha)
         {
             Name = "Border";
@@ -434,11 +422,11 @@ namespace ScreenShotTool.Forms
             }
         }
 
-        Brush blackBrush = new SolidBrush(Color.Black);
+        readonly Brush blackBrush = new SolidBrush(Color.Black);
         Bitmap CropImage(Bitmap img, Rectangle cropArea)
         {
             //https://www.codingdefined.com/2015/04/solved-bitmapclone-out-of-memory.html
-            Bitmap bmp = new Bitmap(cropArea.Width, cropArea.Height);
+            Bitmap bmp = new(cropArea.Width, cropArea.Height);
 
             using (Graphics gph = Graphics.FromImage(bmp))
             {
@@ -585,18 +573,13 @@ namespace ScreenShotTool.Forms
 
         public override Rectangle GetHitbox(int index)
         {
-            switch (index)
+            return index switch
             {
-                case 0:
-                    return HitboxMiddle;
-                case 1:
-                    return HitboxStart;
-                case 2:
-                    return HitboxEnd;
-                case 3:
-                default:
-                    return new Rectangle(0, 0, 0, 0);
-            }
+                0 => HitboxMiddle,
+                1 => HitboxStart,
+                2 => HitboxEnd,
+                _ => new Rectangle(0, 0, 0, 0),
+            };
         }
 
         public float GetLineLength()
@@ -606,14 +589,18 @@ namespace ScreenShotTool.Forms
 
         public Rectangle HitboxStart { get { return new Rectangle(StartPoint.X - anchorHalf, StartPoint.Y - anchorHalf, anchorsize, anchorsize); } }
         public Rectangle HitboxEnd { get { return new Rectangle(EndPoint.X - anchorHalf, EndPoint.Y - anchorHalf, anchorsize, anchorsize); } }
-        public Rectangle HitboxMiddle { get {
+        public Rectangle HitboxMiddle
+        {
+            get
+            {
                 return new Rectangle(
                     Bounds.Left + (int)(Bounds.Width * 0.2f) - 2,
                     Bounds.Top + (int)(Bounds.Height * 0.2f) - 2,
                     Math.Max(Bounds.Width - (int)(Bounds.Width * 0.4f), 4),
                     Math.Max(Bounds.Height - (int)(Bounds.Height * 0.4f), 4)
                 );
-            } }
+            }
+        }
     }
 
     public class GsArrow : GsLine

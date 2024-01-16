@@ -1,38 +1,37 @@
-﻿namespace ScreenShotTool.Forms
+﻿namespace ScreenShotTool.Forms;
+#pragma warning disable CA1416 // Validate platform compatibility
+public partial class NewImagePrompt : Form
 {
-    public partial class NewImagePrompt : Form
+    public Color color = Color.White;
+    public int imageWidth = 500;
+    public int imageHeight = 500;
+
+    public NewImagePrompt()
     {
-        public Color color = Color.White;
-        public int imageWidth = 500;
-        public int imageHeight = 500;
+        InitializeComponent();
+        numericWidth.Value = imageWidth;
+        numericHeight.Value = imageHeight;
+    }
 
-        public NewImagePrompt()
+    private void Button1_Click(object sender, EventArgs e)
+    {
+        DialogResult result = colorDialog1.ShowDialog();
+        if (result == DialogResult.OK)
         {
-            InitializeComponent();
-            numericWidth.Value = imageWidth;
-            numericHeight.Value = imageHeight;
+            buttonColor.BackColor = colorDialog1.Color;
+            color = colorDialog1.Color;
         }
+    }
 
-        private void Button1_Click(object sender, EventArgs e)
-        {
-            DialogResult result = colorDialog1.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                buttonColor.BackColor = colorDialog1.Color;
-                color = colorDialog1.Color;
-            }
-        }
+    private void ButtonCancel_Click(object sender, EventArgs e)
+    {
+        DialogResult = DialogResult.Cancel;
+    }
 
-        private void ButtonCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-        }
-
-        private void ButtonOK_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.OK;
-            imageWidth = (int)numericWidth.Value;
-            imageHeight = (int)numericHeight.Value;
-        }
+    private void ButtonOK_Click(object sender, EventArgs e)
+    {
+        DialogResult = DialogResult.OK;
+        imageWidth = (int)numericWidth.Value;
+        imageHeight = (int)numericHeight.Value;
     }
 }

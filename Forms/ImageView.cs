@@ -50,8 +50,9 @@ namespace ScreenShotTool
         }
         private AdjustMode adjustMode = AdjustMode.Size;
 
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern bool SetForegroundWindow(IntPtr hWnd);
+        [LibraryImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static partial bool SetForegroundWindow(IntPtr hWnd);
 
         public ImageView(bool startCropping, Screen activeScreen, Bitmap? image)
         {

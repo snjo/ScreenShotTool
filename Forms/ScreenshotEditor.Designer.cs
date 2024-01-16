@@ -245,7 +245,7 @@
             buttonBlur.Size = new Size(36, 36);
             buttonBlur.TabIndex = 9;
             buttonBlur.UseVisualStyleBackColor = true;
-            buttonBlur.Click += buttonBlur_Click;
+            buttonBlur.Click += ButtonBlur_Click;
             // 
             // buttonSelect
             // 
@@ -258,7 +258,7 @@
             buttonSelect.Size = new Size(36, 36);
             buttonSelect.TabIndex = 8;
             buttonSelect.UseVisualStyleBackColor = true;
-            buttonSelect.Click += buttonSelect_Click;
+            buttonSelect.Click += ButtonSelect_Click;
             // 
             // buttonBorder
             // 
@@ -384,7 +384,7 @@
             listViewSymbols.UseCompatibleStateImageBehavior = false;
             listViewSymbols.View = View.List;
             listViewSymbols.SelectedIndexChanged += ListViewSymbols_SelectedIndexChanged;
-            listViewSymbols.KeyDown += listViewSymbols_KeyDown;
+            listViewSymbols.KeyDown += ListViewSymbols_KeyDown;
             // 
             // columnHeaderType
             // 
@@ -544,7 +544,7 @@
             textBoxSymbolText.Name = "textBoxSymbolText";
             textBoxSymbolText.Size = new Size(135, 23);
             textBoxSymbolText.TabIndex = 26;
-            textBoxSymbolText.TextChanged += textBoxSymbolText_TextChanged;
+            textBoxSymbolText.TextChanged += TextBoxSymbolText_TextChanged;
             // 
             // label14
             // 
@@ -747,7 +747,7 @@
             checkBoxUnderline.TabIndex = 34;
             checkBoxUnderline.Text = "Underline";
             checkBoxUnderline.UseVisualStyleBackColor = true;
-            checkBoxUnderline.Click += fontStyle_CheckedChanged;
+            checkBoxUnderline.Click += FontStyle_CheckedChanged;
             // 
             // checkBoxStrikeout
             // 
@@ -758,7 +758,7 @@
             checkBoxStrikeout.TabIndex = 33;
             checkBoxStrikeout.Text = "Strikeout";
             checkBoxStrikeout.UseVisualStyleBackColor = true;
-            checkBoxStrikeout.Click += fontStyle_CheckedChanged;
+            checkBoxStrikeout.Click += FontStyle_CheckedChanged;
             // 
             // checkBoxFontItalic
             // 
@@ -769,7 +769,7 @@
             checkBoxFontItalic.TabIndex = 32;
             checkBoxFontItalic.Text = "Italic";
             checkBoxFontItalic.UseVisualStyleBackColor = true;
-            checkBoxFontItalic.Click += fontStyle_CheckedChanged;
+            checkBoxFontItalic.Click += FontStyle_CheckedChanged;
             // 
             // checkBoxFontBold
             // 
@@ -780,7 +780,7 @@
             checkBoxFontBold.TabIndex = 31;
             checkBoxFontBold.Text = "Bold";
             checkBoxFontBold.UseVisualStyleBackColor = true;
-            checkBoxFontBold.Click += fontStyle_CheckedChanged;
+            checkBoxFontBold.Click += FontStyle_CheckedChanged;
             // 
             // label16
             // 
@@ -809,7 +809,7 @@
             numericPropertiesFontSize.Size = new Size(65, 23);
             numericPropertiesFontSize.TabIndex = 28;
             numericPropertiesFontSize.Value = new decimal(new int[] { 10, 0, 0, 0 });
-            numericPropertiesFontSize.ValueChanged += numericPropertiesFontSize_ValueChanged;
+            numericPropertiesFontSize.ValueChanged += NumericPropertiesFontSize_ValueChanged;
             // 
             // comboBoxFontFamily
             // 
@@ -818,7 +818,7 @@
             comboBoxFontFamily.Name = "comboBoxFontFamily";
             comboBoxFontFamily.Size = new Size(135, 23);
             comboBoxFontFamily.TabIndex = 27;
-            comboBoxFontFamily.TextChanged += comboBoxFontFamily_ValueMemberChanged;
+            comboBoxFontFamily.TextChanged += ComboBoxFontFamily_ValueMemberChanged;
             // 
             // panel1
             // 
@@ -860,8 +860,8 @@
             numericBlurMosaicSize.Size = new Size(55, 23);
             numericBlurMosaicSize.TabIndex = 25;
             numericBlurMosaicSize.Value = new decimal(new int[] { 10, 0, 0, 0 });
-            numericBlurMosaicSize.ValueChanged += numericBlurMosaicSize_ValueChanged;
-            numericBlurMosaicSize.Click += numericBlurMosaicSize_Click;
+            numericBlurMosaicSize.ValueChanged += NumericBlurMosaicSize_ValueChanged;
+            numericBlurMosaicSize.Click += NumericBlurMosaicSize_Click;
             // 
             // checkBoxNewShadow
             // 
@@ -897,12 +897,12 @@
             checkBoxPropertiesShadow.TabIndex = 30;
             checkBoxPropertiesShadow.Text = "Shadow";
             checkBoxPropertiesShadow.UseVisualStyleBackColor = true;
-            checkBoxPropertiesShadow.Click += checkBoxPropertiesShadow_Click;
+            checkBoxPropertiesShadow.Click += CheckBoxPropertiesShadow_Click;
             // 
             // timerAfterLoad
             // 
             timerAfterLoad.Interval = 50;
-            timerAfterLoad.Tick += timerAfterLoad_Tick;
+            timerAfterLoad.Tick += TimerAfterLoad_Tick;
             // 
             // ScreenshotEditor
             // 

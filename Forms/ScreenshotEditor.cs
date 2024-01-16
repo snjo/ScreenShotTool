@@ -1,21 +1,17 @@
-﻿using ScreenShotTool.Properties;
+﻿using ScreenShotTool.Classes;
+using ScreenShotTool.Properties;
 using System.Diagnostics;
-using System.Drawing.Text;
-using System.Numerics;
-using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
 using System.Drawing.Imaging;
-using System.Windows.Forms;
-using static System.Windows.Forms.DataFormats;
-using ScreenShotTool.Classes;
+using System.Drawing.Text;
+using System.Runtime.Versioning;
 
 namespace ScreenShotTool.Forms
 {
     [SupportedOSPlatform("windows")]
     public partial class ScreenshotEditor : Form
     {
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern bool SetForegroundWindow(IntPtr hWnd);
+        //[DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        //public static extern bool SetForegroundWindow(IntPtr hWnd);
 
         #region Constructor ---------------------------------------------------------------------------------
         Image? originalImage;
@@ -24,17 +20,17 @@ namespace ScreenShotTool.Forms
         Graphics? overlayGraphics;
         int arrowWeight = 5;
         int lineWeight = 2;
-        int frameRate = Settings.Default.MaxFramerate;
-        public static int maxFontSize = 200;
-        public static int minimumFontSize = 5;
-        public static int startingFontSize = 10;
-        List<GraphicSymbol> symbols = new();
-        private List<ImageFormatDefinition> imageFormats = new List<ImageFormatDefinition>();
-        int blurRadius = Settings.Default.BlurSampleArea;
+        readonly int frameRate = Settings.Default.MaxFramerate;
+        public readonly static int maxFontSize = 200;
+        public readonly static int minimumFontSize = 5;
+        public readonly static int startingFontSize = 10;
+        readonly List<GraphicSymbol> symbols = [];
+        private List<ImageFormatDefinition> imageFormats = [];
+        readonly int blurRadius = Settings.Default.BlurSampleArea;
         int mosaicSize = Settings.Default.BlurMosaicSize;
         bool initialBlurComplete = false; // used to prevent blur from generating twice, when numeric is set initially
-        List<Button> toolButtons = new();
-        Size CanvasSize = new Size(100, 100);
+        readonly List<Button> toolButtons = [];
+        Size CanvasSize = new(100, 100);
 
         private void ScreenshotEditor_Load(object sender, EventArgs e)
         {
@@ -44,8 +40,8 @@ namespace ScreenShotTool.Forms
 
         private void SetupEditor()
         {
-            fillFontFamilyBox();
-            imageFormats = createImageFormatsList();
+            FillFontFamilyBox();
+            imageFormats = CreateImageFormatsList();
             numericPropertiesFontSize.Maximum = maxFontSize;
             numericPropertiesFontSize.Minimum = minimumFontSize;
             numericPropertiesFontSize.Value = startingFontSize;
@@ -55,7 +51,7 @@ namespace ScreenShotTool.Forms
             panelPropertiesText.Visible = false;
             numericBlurMosaicSize.Value = mosaicSize;
             timerAfterLoad.Start(); // turns off TopMost shortly after Load. Without TopMost the Window opens behind other forms (why? who can say)
-            
+
             toolButtons.Add(buttonSelect);
             toolButtons.Add(buttonRectangle);
             toolButtons.Add(buttonCircle);
@@ -98,12 +94,12 @@ namespace ScreenShotTool.Forms
             InitializeComponent();
             SetupEditor();
             LoadImageFromImage(loadImage);
-            SetForegroundWindow(this.Handle);
+            //SetForegroundWindow(this.Handle);
         }
 
-        private List<ImageFormatDefinition> createImageFormatsList()
+        private List<ImageFormatDefinition> CreateImageFormatsList()
         {
-            List<ImageFormatDefinition> list = new List<ImageFormatDefinition>();
+            List<ImageFormatDefinition> list = [];
             list.Add(new ImageFormatDefinition("All files", "*.*", ImageFormat.Png));
             list.Add(new ImageFormatDefinition("Images (*.png,*.jpg,*.jpeg,*.gif,*.bmp,*.webp)", "(*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp)", ImageFormat.Png));
             list.Add(new ImageFormatDefinition("PNG", "*.png", ImageFormat.Png));
@@ -174,7 +170,7 @@ namespace ScreenShotTool.Forms
                     // Using and closing filestream, so the file isn't reserved by the process
 
                     Image? tempImage = null;
-                    using (FileStream stream = new FileStream(filename, FileMode.Open))
+                    using (FileStream stream = new(filename, FileMode.Open))
                     {
                         tempImage = Image.FromStream(stream);
                     }
@@ -198,14 +194,14 @@ namespace ScreenShotTool.Forms
         {
             if (originalImage != null) // uhm
             {
-                Bitmap outImage = new Bitmap(originalImage);
+                Bitmap outImage = new(originalImage);
                 Graphics saveGraphic = Graphics.FromImage(outImage);
                 saveGraphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                 saveGraphic.TextRenderingHint = TextRenderingHint.AntiAlias;
 
                 DrawElements(saveGraphic);
 
-                Debug.WriteLine($"Saving image {filename} with format {imgFormat.ToString()}");
+                Debug.WriteLine($"Saving image {filename} with format {imgFormat}");
 
                 if (imgFormat == ImageFormat.Jpeg)
                 {
@@ -253,7 +249,7 @@ namespace ScreenShotTool.Forms
                 Debug.WriteLine("Couldn't create blur image, originalImage is null");
                 return new Bitmap(100, 100);
             }
-            Stopwatch sw = new Stopwatch(); // for measuring the time it takes to create the blur image
+            Stopwatch sw = new(); // for measuring the time it takes to create the blur image
             sw.Start();
             DisposeAndNull(blurImage);
             mosaicSize = (int)numericBlurMosaicSize.Value;
@@ -261,7 +257,7 @@ namespace ScreenShotTool.Forms
             blurImage = new Bitmap(originalImage.Width, originalImage.Height);
             Graphics graphics = Graphics.FromImage(blurImage);
             Color pixelColor = Color.Black;
-            SolidBrush blurBrush = new SolidBrush(pixelColor);
+            SolidBrush blurBrush = new(pixelColor);
 
             for (int x = 0; x < originalImage.Width; x += mosaicSize)
             {
@@ -281,12 +277,12 @@ namespace ScreenShotTool.Forms
             return blurImage;
         }
 
-        private Color SamplePixelArea(Image originalImage, int blurRadius, int x, int y)
+        private static Color SamplePixelArea(Image originalImage, int blurRadius, int x, int y)
         {
             Color sampleColor;
             Color pixelColor;
-            int sampleX = x;
-            int sampleY = y;
+            int sampleX;
+            int sampleY;
             int R = 0;
             int G = 0;
             int B = 0;
@@ -335,7 +331,7 @@ namespace ScreenShotTool.Forms
             return true;
         }
 
-        private Image DrawOverlay(GraphicSymbol? temporarySymbol = null)
+        private Bitmap DrawOverlay(GraphicSymbol? temporarySymbol = null)
         {
             //Bitmap img = ((Bitmap)(originalImage)).Clone(new Rectangle(0, 0, originalImage.Width, originalImage.Height), System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             // clone failed when reading from file, worked before... Using Crop instead, which accounts for out of area pixels.
@@ -347,7 +343,7 @@ namespace ScreenShotTool.Forms
             else
             {
                 Debug.WriteLine("Couldn't create correct overlay image, originalImage is null");
-                img = new Bitmap(100,100);
+                img = new Bitmap(100, 100);
             }
             DisposeAndNull(overlayGraphics);
 
@@ -361,10 +357,10 @@ namespace ScreenShotTool.Forms
             return img;
         }
 
-        Bitmap CropImage(Bitmap img, Rectangle cropArea)
+        static Bitmap CropImage(Bitmap img, Rectangle cropArea)
         {
             //https://www.codingdefined.com/2015/04/solved-bitmapclone-out-of-memory.html
-            Bitmap bmp = new Bitmap(cropArea.Width, cropArea.Height);
+            Bitmap bmp = new(cropArea.Width, cropArea.Height);
 
             using (Graphics gph = Graphics.FromImage(bmp))
             {
@@ -378,11 +374,11 @@ namespace ScreenShotTool.Forms
         {
             foreach (GraphicSymbol symbol in symbols)
             {
-                if (symbol is GsBlur)
+                if (symbol is GsBlur blur)
                 {
                     if (originalImage != null)
                     {
-                        ((GsBlur)symbol).blurredImage = blurImage;
+                        blur.blurredImage = blurImage;
                     }
                 }
                 symbol.DrawSymbol(graphic);
@@ -430,8 +426,10 @@ namespace ScreenShotTool.Forms
 
         private void LoadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FileDialog fileDialog = new OpenFileDialog();
-            fileDialog.Filter = "Images (*.png,*.jpg,*.jpeg,*.gif,*.bmp,*.webp)|(*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp)|PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|All files|*.*";
+            FileDialog fileDialog = new OpenFileDialog
+            {
+                Filter = "Images (*.png,*.jpg,*.jpeg,*.gif,*.bmp,*.webp)|(*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp)|PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|All files|*.*"
+            };
             DialogResult result = fileDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
@@ -469,36 +467,31 @@ namespace ScreenShotTool.Forms
                 if (selectedFormat < 2) // all or multi-filter images
                 {
                     imgFormat = ImageFormatFromExtension(filename);
-                    Debug.WriteLine($"Guessed file format from file name ({filename}): {imgFormat.ToString()} ");
+                    Debug.WriteLine($"Guessed file format from file name ({filename}): {imgFormat} ");
                 }
                 else
                 {
                     if (selectedFormat < imageFormats.Count)
                     {
                         imgFormat = imageFormats[selectedFormat].Format;
-                        Debug.WriteLine($"Using format from index {selectedFormat}: {imgFormat.ToString()} ");
+                        Debug.WriteLine($"Using format from index {selectedFormat}: {imgFormat} ");
                     }
                 }
                 SaveImage(fileDialog.FileName, imgFormat);
             }
         }
 
-        private ImageFormat ImageFormatFromExtension(string filename)
+        private static ImageFormat ImageFormatFromExtension(string filename)
         {
             string extension = Path.GetExtension(filename);
-            switch (extension)
+            return extension switch
             {
-                case ".png":
-                    return ImageFormat.Png;
-                case ".jpg":
-                    return ImageFormat.Jpeg;
-                case ".bmp":
-                    return ImageFormat.Bmp;
-                case ".gif":
-                    return ImageFormat.Gif;
-                default:
-                    return ImageFormat.Png;
-            }
+                ".png" => ImageFormat.Png,
+                ".jpg" => ImageFormat.Jpeg,
+                ".bmp" => ImageFormat.Bmp,
+                ".gif" => ImageFormat.Gif,
+                _ => ImageFormat.Png,
+            };
         }
 
         private void DeleteOverlayElementsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -601,9 +594,9 @@ namespace ScreenShotTool.Forms
                 listViewSymbols.Update();
                 if (listViewSymbols.Items.Count > 0)
                 {
-                    listViewSymbols.Items[listViewSymbols.Items.Count - 1].Focused = true;
-                    listViewSymbols.Items[listViewSymbols.Items.Count - 1].Selected = true;
-                    listViewSymbols.Items[listViewSymbols.Items.Count - 1].EnsureVisible();
+                    listViewSymbols.Items[^1].Focused = true; // ^1 is listViewSymbols.Items.Count - 1, https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-8.0/ranges
+                    listViewSymbols.Items[^1].Selected = true;
+                    listViewSymbols.Items[^1].EnsureVisible();
                     listViewSymbols.Select();
                 }
             }
@@ -611,7 +604,7 @@ namespace ScreenShotTool.Forms
 
         private GraphicSymbol? GetNewSymbol(object sender, MouseEventArgs e)
         {
-            Point dragEnd = new Point(e.X, e.Y);
+            Point dragEnd = new(e.X, e.Y);
             int lineWeight = (int)numericNewLineWeight.Value;
             int lineAlpha = (int)numericNewLineAlpha.Value;
             int fillAlpha = (int)numericNewFillAlpha.Value;
@@ -625,12 +618,12 @@ namespace ScreenShotTool.Forms
                 int dragBottom = Math.Max(dragStart.Y, dragEnd.Y);
                 int dragWidth = dragRight - dragLeft;
                 int dragHeight = dragBottom - dragTop;
-                Point size = new Point(dragWidth, dragHeight);
+                Point size = new(dragWidth, dragHeight);
 
                 //dragRect = new Rectangle(dragLeft, dragTop, dragWidth, dragHeight);
 
-                Point upperLeft = new Point(dragLeft, dragTop);
-                Point bottomRight = new Point(dragRight, dragBottom);
+                Point upperLeft = new(dragLeft, dragTop);
+                //Point bottomRight = new(dragRight, dragBottom);
 
                 Color lineColor = buttonNewColorLine.BackColor;
                 Color fillColor = buttonNewColorFill.BackColor;
@@ -683,7 +676,7 @@ namespace ScreenShotTool.Forms
                     if (currentSelectedSymbol.GetHitbox(i).Contains(e.X, e.Y))
                     {
                         selectedHitboxIndex = (HitboxDirection)i;
-                        
+
                         break;
                     }
                 }
@@ -738,7 +731,7 @@ namespace ScreenShotTool.Forms
 
         private List<GraphicSymbol> GetSymbolsUnderCursor()
         {
-            List<GraphicSymbol> symbolsUnderCursor = new();
+            List<GraphicSymbol> symbolsUnderCursor = [];
             Point cursorPos = pictureBoxOverlay.PointToClient(Cursor.Position);
             foreach (GraphicSymbol gs in symbols)
             {
@@ -762,16 +755,16 @@ namespace ScreenShotTool.Forms
             return null;
         }
 
-        private GraphicSymbol GetSymbolFromTag(ListViewItem lvi)
+        private static GraphicSymbol GetSymbolFromTag(ListViewItem lvi)
         {
             object? tag = lvi.Tag;
             if (tag == null)
             {
                 throw new NullReferenceException($"ListviewItem {lvi.Name} tag is null");
             }
-            else if (lvi.Tag is GraphicSymbol)
+            else if (lvi.Tag is GraphicSymbol symbol)
             {
-                return (GraphicSymbol)lvi.Tag;
+                return symbol;
             }
             else
             {
@@ -783,7 +776,7 @@ namespace ScreenShotTool.Forms
 
         #region Symbol toolbar buttons ----------------------------------------------------------------------
 
-        private void buttonSelect_Click(object sender, EventArgs e)
+        private void ButtonSelect_Click(object sender, EventArgs e)
         {
             SetUserAction(UserActions.Select);
             UpdateOverlay();
@@ -834,15 +827,17 @@ namespace ScreenShotTool.Forms
             {
                 return;
             }
-            Point upperLeft = new Point(0, 0);
-            Point size = new Point(originalImage.Width, originalImage.Height);
-            GsBorder border = new GsBorder(upperLeft, size, Color.Black, Color.White, false, lineWeight, 255, 0);
-            border.Name = "Border";
+            Point upperLeft = new(0, 0);
+            Point size = new(originalImage.Width, originalImage.Height);
+            GsBorder border = new(upperLeft, size, Color.Black, Color.White, false, lineWeight, 255, 0)
+            {
+                Name = "Border"
+            };
             AddNewSymbolToList(border);
             UpdateOverlay();
         }
 
-        private void buttonBlur_Click(object sender, EventArgs e)
+        private void ButtonBlur_Click(object sender, EventArgs e)
         {
             SetUserAction(UserActions.CreateBlur);
             UpdateOverlay();
@@ -854,15 +849,15 @@ namespace ScreenShotTool.Forms
 
         #region Mouse input ---------------------------------------------------------------------------------
 
-        Point oldMousePosition = new Point(0, 0);
+        Point oldMousePosition = new(0, 0);
         //int oldMouseY = 0;
-        enum MoveType
-        {
-            None,
-            Start,
-            End,
-        }
-        MoveType moveType = MoveType.None;
+        //enum MoveType
+        //{
+        //    None,
+        //    Start,
+        //    End,
+        //}
+        //MoveType moveType = MoveType.None;
 
 
 
@@ -873,8 +868,8 @@ namespace ScreenShotTool.Forms
 
         bool dragStarted = false;
         bool dragMoved = false;
-        Point dragStart = new Point(0, 0);
-        Point dragStartOffsetFromSymbolCenter = new Point(0, 0);
+        Point dragStart = new(0, 0);
+        Point dragStartOffsetFromSymbolCenter = new(0, 0);
 
         private void PictureBoxOverlay_MouseDown(object sender, MouseEventArgs e)
         {
@@ -912,7 +907,7 @@ namespace ScreenShotTool.Forms
 
         private void PictureBoxOverlay_MouseMove(object sender, MouseEventArgs e)
         {
-            Point MousePosition = new Point(e.X, e.Y);
+            Point MousePosition = new(e.X, e.Y);
             if (dragStarted == false) // don't update the selected hitbox index while a drag scale is active
             {
                 GetHitboxUnderCursor(e);
@@ -921,7 +916,7 @@ namespace ScreenShotTool.Forms
             pictureBoxOverlay.Cursor = Cursors.Arrow;
             if (currentSelectedSymbol != null)
             {
-                
+
                 if (currentSelectedSymbol.MoveAllowed)
                 {
                     if (selectedHitboxIndex == HitboxDirection.Center)
@@ -947,35 +942,34 @@ namespace ScreenShotTool.Forms
             }
             if (originalImage == null) return;
 
-            Point mouseDelta = MousePosition.Subtract(oldMousePosition);
+            //Point mouseDelta = MousePosition.Subtract(oldMousePosition);
 
-            //int mouseDeltaY = Cursor.Position.Y - oldMouseY;
 
             if (selectedUserAction >= UserActions.CreateRectangle) // any UserAction above CreateRectangle is a new symbol creation
             {
                 CreateTempSymbol(sender, e);
             }
             else if (selectedUserAction == UserActions.MoveSymbol)
-            {   
-                MoveSymbol(e, mouseDelta);
+            {
+                MoveSymbol(e);
                 UpdateOverlay();
             }
             else if (selectedUserAction == UserActions.ScaleSymbol)
             {
-                ScaleSymbol(e, mouseDelta);
+                ScaleSymbol(e);
                 UpdateOverlay();
             }
 
             oldMousePosition = MousePosition;
         }
 
-        private void MoveSymbol(MouseEventArgs e, Point mouseDelta)
+        private void MoveSymbol(MouseEventArgs e)
         {
             if (currentSelectedSymbol == null) return;
 
             if (currentSelectedSymbol.MoveAllowed && dragStarted)
             {
-                Point newPos = new Point(
+                Point newPos = new(
                     Math.Clamp(e.X - dragStartOffsetFromSymbolCenter.X, -100, CanvasSize.Width + 100),
                     Math.Clamp(e.Y - dragStartOffsetFromSymbolCenter.Y, -100, CanvasSize.Height + 100)
                 );
@@ -983,7 +977,7 @@ namespace ScreenShotTool.Forms
             }
         }
 
-        private void ScaleSymbol(MouseEventArgs e, Point MouseDelta)
+        private void ScaleSymbol(MouseEventArgs e)
         {
             if (currentSelectedSymbol == null) return;
             if (dragStarted == false) return;
@@ -999,7 +993,7 @@ namespace ScreenShotTool.Forms
                     currentSelectedSymbol.EndPoint = new Point(e.X, e.Y);
                 }
             }
-            else if(currentSelectedSymbol.ScalingAllowed)
+            else if (currentSelectedSymbol.ScalingAllowed)
             {
                 if (selectedHitboxIndex == HitboxDirection.W || selectedHitboxIndex == HitboxDirection.NW || selectedHitboxIndex == HitboxDirection.SW)
                 {
@@ -1016,64 +1010,6 @@ namespace ScreenShotTool.Forms
                 if (selectedHitboxIndex == HitboxDirection.S || selectedHitboxIndex == HitboxDirection.SE || selectedHitboxIndex == HitboxDirection.SW)
                 {
                     currentSelectedSymbol.MoveBottomEdgeTo(e.Y);
-                }
-            }
-        }
-
-
-
-        private void OldMoveSymbol(MouseEventArgs e, Point mouseDelta)
-        {
-
-            if (listViewSymbols.SelectedItems.Count > 0)
-            {
-                ListViewItem item = listViewSymbols.SelectedItems[0];
-                GraphicSymbol symbol = GetSymbolFromTag(item);
-                if (dragStarted && symbol.MoveAllowed == true)
-                {
-                    //GraphicSymbol symbol = (GraphicSymbol)item.Tag;
-                    if (moveType == MoveType.None)
-                    {
-                        Vector2 cursorPosInternal = new Vector2(e.X, e.Y);
-                        float distanceToStart = Vector2.Distance(cursorPosInternal, symbol.StartPointV2);
-                        float distanceToEnd = Vector2.Distance(cursorPosInternal, symbol.EndPointV2);
-                        if (distanceToStart < distanceToEnd || symbol.ScalingAllowed == false)
-                        {
-                            moveType = MoveType.Start;
-                        }
-                        else
-                        {
-                            moveType = MoveType.End;
-                        }
-                    }
-                    if (moveType == MoveType.Start)
-                    {
-                        Point newPos = symbol.StartPoint.Add(mouseDelta);
-                        newPos.X = Math.Max(-100, newPos.X);
-                        newPos.Y = Math.Max(-100, newPos.Y);
-                        newPos.X = Math.Min(newPos.X, originalImage.Width);
-                        newPos.Y = Math.Min(newPos.Y, originalImage.Height);
-
-                        symbol.StartPoint = newPos;
-                    }
-                    else if (moveType == MoveType.End)
-                    {
-                        int newX = symbol.EndPoint.X + mouseDelta.X;
-                        int newY = Math.Max(0, symbol.EndPoint.Y + mouseDelta.Y);
-                        newX = Math.Max(0, newX);
-                        newY = Math.Max(0, newY);
-                        newX = Math.Min(newX, originalImage.Width);
-                        newY = Math.Min(newY, originalImage.Height);
-
-                        symbol.EndPoint = new Point(newX, newY);
-                    }
-                    UpdateOverlay(null, false);
-                    oldMousePosition = Cursor.Position;
-                }
-                else
-                {
-                    moveType = MoveType.None;
-                    oldMousePosition = Cursor.Position;
                 }
             }
         }
@@ -1148,7 +1084,7 @@ namespace ScreenShotTool.Forms
         {
             if (originalImage != null)
             {
-                Bitmap outImage = new Bitmap(originalImage);
+                Bitmap outImage = new(originalImage);
                 Graphics saveGraphic = Graphics.FromImage(outImage);
                 saveGraphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                 saveGraphic.TextRenderingHint = TextRenderingHint.AntiAlias;
@@ -1243,10 +1179,8 @@ namespace ScreenShotTool.Forms
                     }
 
 
-                    if (graphicSymbol is GsText)
+                    if (graphicSymbol is GsText gsText)
                     {
-                        GsText gsText = (GsText)graphicSymbol;
-
                         panelPropertiesFill.Visible = false;
                         panelPropertiesLine.Visible = true;
                         panelPropertiesText.Visible = true;
@@ -1397,7 +1331,7 @@ namespace ScreenShotTool.Forms
             UpdateOverlay();
         }
 
-        private void textBoxSymbolText_TextChanged(object sender, EventArgs e)
+        private void TextBoxSymbolText_TextChanged(object sender, EventArgs e)
         {
             GsText? textSymbol = GetSelectedTextSymbol();
             if (textSymbol != null)
@@ -1411,7 +1345,7 @@ namespace ScreenShotTool.Forms
             UpdateOverlay();
         }
 
-        private void numericPropertiesFontSize_ValueChanged(object sender, EventArgs e)
+        private void NumericPropertiesFontSize_ValueChanged(object sender, EventArgs e)
         {
             GsText? textSymbol = GetSelectedTextSymbol();
             if (textSymbol != null)
@@ -1422,26 +1356,26 @@ namespace ScreenShotTool.Forms
             UpdateOverlay();
         }
 
-        private void comboBoxFontFamily_ValueMemberChanged(object sender, EventArgs e)
+        private void ComboBoxFontFamily_ValueMemberChanged(object sender, EventArgs e)
         {
             GsText? textSymbol = GetSelectedTextSymbol();
             if (textSymbol != null)
             {
                 string selectedFont = comboBoxFontFamily.Text;
-                if (fontDictionary.ContainsKey(selectedFont))
+                if (fontDictionary.TryGetValue(selectedFont, out FontFamily? value))
                 {
-                    textSymbol.fontFamily = fontDictionary[selectedFont];
+                    textSymbol.fontFamily = value;
                     textSymbol.UpdateFont();
                 }
             }
             UpdateOverlay();
         }
 
-        Dictionary<string, FontFamily> fontDictionary = new();
-        private void fillFontFamilyBox()
+        readonly Dictionary<string, FontFamily> fontDictionary = [];
+        private void FillFontFamilyBox()
         {
-            List<FontFamily> fontList = System.Drawing.FontFamily.Families.ToList();
-            List<string> fontNames = new List<string>();
+            List<FontFamily> fontList = FontFamily.Families.ToList();
+            List<string> fontNames = [];
 
             foreach (FontFamily font in fontList)
             {
@@ -1451,7 +1385,7 @@ namespace ScreenShotTool.Forms
             comboBoxFontFamily.DataSource = fontNames;
         }
 
-        private void fontStyle_CheckedChanged(object sender, EventArgs e)
+        private void FontStyle_CheckedChanged(object sender, EventArgs e)
         {
             UpdateFontStyle();
         }
@@ -1487,7 +1421,7 @@ namespace ScreenShotTool.Forms
             UpdateOverlay();
         }
 
-        private void checkBoxPropertiesShadow_Click(object sender, EventArgs e)
+        private void CheckBoxPropertiesShadow_Click(object sender, EventArgs e)
         {
             GraphicSymbol? symbol = GetSelectedSymbol();
             if (symbol != null)
@@ -1566,7 +1500,7 @@ namespace ScreenShotTool.Forms
 
         #endregion
 
-        private void listViewSymbols_KeyDown(object sender, KeyEventArgs e)
+        private void ListViewSymbols_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete)
             {
@@ -1574,12 +1508,12 @@ namespace ScreenShotTool.Forms
             }
         }
 
-        private void numericBlurMosaicSize_Click(object sender, EventArgs e)
+        private void NumericBlurMosaicSize_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void numericBlurMosaicSize_ValueChanged(object sender, EventArgs e)
+        private void NumericBlurMosaicSize_ValueChanged(object sender, EventArgs e)
         {
             if (initialBlurComplete)
             {
@@ -1588,7 +1522,7 @@ namespace ScreenShotTool.Forms
             }
         }
 
-        private void timerAfterLoad_Tick(object sender, EventArgs e)
+        private void TimerAfterLoad_Tick(object sender, EventArgs e)
         {
             timerAfterLoad.Stop();
             this.TopMost = false;

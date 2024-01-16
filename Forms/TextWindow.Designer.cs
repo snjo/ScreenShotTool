@@ -52,7 +52,7 @@
             buttonClose.TabIndex = 0;
             buttonClose.Text = "Close";
             buttonClose.UseVisualStyleBackColor = true;
-            buttonClose.Click += buttonClose_Click;
+            buttonClose.Click += ButtonClose_Click;
             // 
             // TextWindow
             // 

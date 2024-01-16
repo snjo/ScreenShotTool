@@ -1,18 +1,15 @@
-﻿namespace ScreenShotTool
+﻿namespace ScreenShotTool;
+#pragma warning disable CA1416 // Validate platform compatibility
+public partial class TextWindow : Form
 {
-    public partial class TextWindow : Form
+    public TextWindow(string text)
     {
-        MainForm mainForm;
-        public TextWindow(MainForm parent, string text)
-        {
-            InitializeComponent();
-            mainForm = parent;
-            textBox1.Text = text;
-        }
+        InitializeComponent();
+        textBox1.Text = text;
+    }
 
-        private void buttonClose_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
+    private void ButtonClose_Click(object sender, EventArgs e)
+    {
+        Close();
     }
 }

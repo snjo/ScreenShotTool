@@ -195,14 +195,14 @@
             editorToolStripMenuItem.Name = "editorToolStripMenuItem";
             editorToolStripMenuItem.Size = new Size(163, 22);
             editorToolStripMenuItem.Text = "Editor";
-            editorToolStripMenuItem.Click += editorToolStripMenuItem_Click;
+            editorToolStripMenuItem.Click += EditorToolStripMenuItem_Click;
             // 
             // helpToolStripMenuItem
             // 
             helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             helpToolStripMenuItem.Size = new Size(163, 22);
             helpToolStripMenuItem.Text = "Help";
-            helpToolStripMenuItem.Click += helpToolStripMenuItem_Click;
+            helpToolStripMenuItem.Click += HelpToolStripMenuItem_Click;
             // 
             // enableCroppingToolStripMenuItem
             // 

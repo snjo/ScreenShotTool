@@ -1,13 +1,11 @@
-﻿using System.Diagnostics;
-
-namespace ScreenShotTool
+﻿namespace ScreenShotTool
 {
-    #pragma warning disable CA1416 // Validate platform compatibility
+#pragma warning disable CA1416 // Validate platform compatibility
     public partial class HelpForm : Form
     {
         string rtfText = string.Empty;
         string FileName = "readme.MD";
-        string testFile = "test.md";
+        //string testFile = "test.md";
 
         public HelpForm()
         {
@@ -63,7 +61,7 @@ namespace ScreenShotTool
             MainForm.OpenLink("https://github.com/snjo/ScreenShotTool/");
         }
 
-        private void richTextBox1_KeyDown(object sender, KeyEventArgs e)
+        private void RichTextBox1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.F5)
             {
@@ -71,7 +69,7 @@ namespace ScreenShotTool
             }
             if (e.KeyCode == Keys.O && e.Modifiers == Keys.Control)
             {
-                OpenFileDialog openFileDialog = new OpenFileDialog()
+                OpenFileDialog openFileDialog = new()
                 {
                     Filter = "Markdown|*.md",
                     ShowPinnedPlaces = true,
