@@ -22,7 +22,6 @@ namespace ScreenShotTool.Forms
         public bool ScalingAllowed = true;
         public bool MoveAllowed = true;
         public bool ShadowEnabled = false;
-        //public Point ShadowOffset = new Point(10, 10);
         public int ShadowDistance = 10;
         public ListViewItem? ListViewItem { get; set; }
 
@@ -77,6 +76,39 @@ namespace ScreenShotTool.Forms
         public virtual Rectangle Bounds
         {
             get { return new Rectangle(Left, Top, Width, Height); }
+        }
+
+        public virtual Point Position
+        { get {  return new Point(Left, Top); } }
+
+        public virtual void Move(int x, int y)
+        {
+            Left += x;
+            Top += y;
+        }
+
+        public virtual void MoveLeftEdgeTo(int x)
+        {
+            int oldRight = Right;
+            Left = Math.Min(x, Right - 1); // don't go beyond the right edge, width is minimum 1
+            Width = oldRight - Left;
+        }
+
+        public virtual void MoveTopEdgeTo(int y)
+        {
+            int oldBottom = Bottom;
+            Top = Math.Min(y, Bottom - 1);
+            Height = oldBottom - Top;
+        }
+
+        public virtual void MoveRightEdgeTo(int x)
+        {
+            Right = Math.Max(x, Left + 1); // don't go beyond the left edge, width is minimum 1
+        }
+
+        public virtual void MoveBottomEdgeTo(int y)
+        {
+            Bottom = Math.Max(y, Top + 1);
         }
 
         public virtual int LineWeight
@@ -152,8 +184,8 @@ namespace ScreenShotTool.Forms
         {
         }
 
-        private int anchorsize = 8;
-        private int anchorHalf = 4;
+        internal int anchorsize = 8;
+        internal int anchorHalf = 4;
         Rectangle boundsShifted
         {
             get
@@ -175,7 +207,7 @@ namespace ScreenShotTool.Forms
             SE = 8,
         }
 
-        public Rectangle GetHitbox(int index)
+        public virtual Rectangle GetHitbox(int index)
         {
             switch (index)
             {
@@ -209,28 +241,15 @@ namespace ScreenShotTool.Forms
         public Rectangle HitboxSW { get { return new Rectangle(boundsShifted.Left, boundsShifted.Bottom, anchorsize, anchorsize); } }
         public Rectangle HitboxS { get { return new Rectangle(boundsShifted.Left + (boundsShifted.Right - Bounds.Left) / 2, boundsShifted.Bottom, anchorsize, anchorsize); } }
         public Rectangle HitboxSE { get { return new Rectangle(boundsShifted.Right, boundsShifted.Bottom, anchorsize, anchorsize);  } }
-        public Rectangle HitboxCenter { get { return new Rectangle(boundsShifted.Left + (boundsShifted.Right - Bounds.Left) / 2, boundsShifted.Top + (boundsShifted.Bottom - Bounds.Top) / 2, anchorsize, anchorsize); } }
+        //public Rectangle HitboxCenter { get { return new Rectangle(boundsShifted.Left + (boundsShifted.Right - Bounds.Left) / 2, boundsShifted.Top + (boundsShifted.Bottom - Bounds.Top) / 2, anchorsize, anchorsize); } }
+        public Rectangle HitboxCenter { get { return new Rectangle(Bounds.Left, Bounds.Top, Bounds.Width, Bounds.Height); } }
 
         public virtual void DrawHighlight(Graphics graphic)
         {
-            int anchorsize = 4;
-            int anchorHalf = anchorsize / 2;
-            Rectangle boundsShifted = new Rectangle(Bounds.X - anchorHalf, Bounds.Y - anchorHalf, Bounds.Width, Bounds.Height);
-            
-            int BoundsWidth = (boundsShifted.Right - Bounds.Left);
-            int BoundsHeight = (boundsShifted.Bottom - Bounds.Top);
-            int HalfWidth = BoundsWidth / 2;
-            int HalfHeight = BoundsHeight / 2;
-
-            graphic.FillRectangle(HighlightBrush, HitboxNW); // Upper Left
-            graphic.FillRectangle(HighlightBrush, HitboxN); // Upper Center
-            graphic.FillRectangle(HighlightBrush, HitboxNE); // Upper Right
-            graphic.FillRectangle(HighlightBrush, HitboxW); // Center Left
-            graphic.FillRectangle(HighlightBrush, HitboxE); // Center Right
-            graphic.FillRectangle(HighlightBrush, HitboxSW); // Lower Left
-            graphic.FillRectangle(HighlightBrush, HitboxS); // Lower Center
-            graphic.FillRectangle(HighlightBrush, HitboxSE); // Lower Right
-            graphic.FillRectangle(HighlightBrush, HitboxCenter); // Center of symbol
+            for (int i = 1; i <= 8; i++)
+            {
+                graphic.FillRectangle(HighlightBrush, GetHitbox(i));
+            }
         }
 
         internal void UpdatePen()
@@ -501,6 +520,7 @@ namespace ScreenShotTool.Forms
             Name = "Line";
             CheckValid(StartPointV2, EndPointV2);
             EndPoint = endPoint;
+            ScalingAllowed = false;
         }
 
         protected void CheckValid(Vector2 start, Vector2 end)
@@ -550,11 +570,24 @@ namespace ScreenShotTool.Forms
             }
         }
 
-        //public override void DrawHighlight(Graphics graphic)
-        //{
-            
-        //    graphic.DrawRectangle(HightlightSymbolPen, Bounds);
-        //}
+        public override Rectangle GetHitbox(int index)
+        {
+            switch (index)
+            {
+                case 0:
+                    return HitboxMiddle;
+                case 1:
+                    return HitboxStart;
+                case 2:
+                    return HitboxEnd;
+                case 3:
+                default:
+                    return new Rectangle(0, 0, 0, 0);
+            }
+        }
+        public Rectangle HitboxStart { get { return new Rectangle(StartPoint.X - anchorHalf, StartPoint.Y - anchorHalf, anchorsize, anchorsize); } }
+        public Rectangle HitboxEnd { get { return new Rectangle(EndPoint.X - anchorHalf, EndPoint.Y - anchorHalf, anchorsize, anchorsize); } }
+        public Rectangle HitboxMiddle { get { return new Rectangle(((StartPoint.X + EndPoint.X) / 2) - anchorHalf, ((StartPoint.Y + EndPoint.Y) / 2) - anchorHalf, anchorsize, anchorsize); } }
     }
 
     public class GsArrow : GsLine
