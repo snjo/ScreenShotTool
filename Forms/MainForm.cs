@@ -926,7 +926,11 @@ namespace ScreenShotTool
                 ListViewItem item = listViewThumbnails.SelectedItems[0];
                 if (item != null)
                 {
-                    string itemFile = item.Tag.ToString() + "";
+                    string itemFile = "";
+                    if (item.Tag != null)
+                    {
+                        itemFile = item.Tag.ToString() + "";
+                    }
                     if (itemFile.Length > 0)
                     {
                         OpenFileExternal(itemFile);
@@ -985,8 +989,9 @@ namespace ScreenShotTool
                 Debug.WriteLine("deleting " + listViewThumbnails.SelectedItems[0].Text);
                 foreach (ListViewItem item in listViewThumbnails.SelectedItems)
                 {
-
-                    string deleteFile = item.Tag.ToString() + "";
+                    string deleteFile = "";
+                    if (item.Tag != null)
+                        deleteFile = item.Tag.ToString() + "";
                     if (File.Exists(deleteFile))
                     {
                         try
@@ -997,7 +1002,7 @@ namespace ScreenShotTool
                         }
                         catch (Exception ex)
                         {
-                            Debug.WriteLine("Couldn't delete file: " + item.Tag.ToString());
+                            Debug.WriteLine("Couldn't delete file: " + item.Tag?.ToString());
                             Debug.WriteLine(ex.ToString());
                         }
                     }
@@ -1207,7 +1212,11 @@ namespace ScreenShotTool
             // open first selected image in external viewer
             if (listViewThumbnails.SelectedItems.Count > 0)
             {
-                OpenFileExternal(listViewThumbnails.SelectedItems[0].Tag.ToString() + "");
+                object? tag = listViewThumbnails.SelectedItems[0].Tag;
+                if (tag != null)
+                {
+                    OpenFileExternal(tag.ToString() + "");
+                }
             }
         }
 
@@ -1232,7 +1241,7 @@ namespace ScreenShotTool
             // open folder of first selected file
             if (listViewThumbnails.SelectedItems.Count > 0)
             {
-                string? file = listViewThumbnails.SelectedItems[0].Tag.ToString();
+                string? file = listViewThumbnails.SelectedItems[0].Tag?.ToString();
                 if (file == null) return;
                 string? folder = Path.GetDirectoryName(file);
                 if (folder == null) return;
@@ -1244,7 +1253,7 @@ namespace ScreenShotTool
         {
             if (listViewThumbnails.SelectedItems.Count > 0)
             {
-                string? file = listViewThumbnails.SelectedItems[0].Tag.ToString();
+                string? file = listViewThumbnails.SelectedItems[0].Tag?.ToString();
                 if (file == null) return;
                 if (File.Exists(file))
                 {
@@ -1340,7 +1349,7 @@ namespace ScreenShotTool
                 foreach (ListViewItem item in listViewThumbnails.SelectedItems)
                 {
 
-                    string file = item.Tag.ToString() + "";
+                    string file = item.Tag?.ToString() + "";
                     if (File.Exists(file))
                     {
                         fileList.Add(file);
@@ -1359,7 +1368,7 @@ namespace ScreenShotTool
         {
             if (listViewThumbnails.SelectedItems.Count > 0)
             {
-                string? file = listViewThumbnails.SelectedItems[0].Tag.ToString();
+                string? file = listViewThumbnails.SelectedItems[0].Tag?.ToString();
                 if (File.Exists(file))
                 {
                     ScreenshotEditor imageEditor = new ScreenshotEditor(file);

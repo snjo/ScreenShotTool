@@ -1039,6 +1039,5 @@
         private NumericUpDown numericBlurMosaicSize;
         private System.Windows.Forms.Timer timerAfterLoad;
         private Button buttonSelect;
-        private Button button1;
     }
 }

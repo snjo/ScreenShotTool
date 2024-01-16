@@ -236,14 +236,16 @@ namespace ScreenShotTool.Forms
 
         private Bitmap CreateBlurImage()
         {
-            Stopwatch sw = new Stopwatch();
-
+            if (originalImage == null)
+            {
+                Debug.WriteLine("Couldn't create blur image, originalImage is null");
+                return new Bitmap(100, 100);
+            }
+            Stopwatch sw = new Stopwatch(); // for measuring the time it takes to create the blur image
             sw.Start();
-
             DisposeAndNull(blurImage);
-            //int blurRadius = Settings.Default.BlurSampleArea;
-            //int mosaicSize = Settings.Default.BlurMosaicSize;
             mosaicSize = (int)numericBlurMosaicSize.Value;
+
             blurImage = new Bitmap(originalImage.Width, originalImage.Height);
             Graphics graphics = Graphics.FromImage(blurImage);
             Color pixelColor = Color.Black;
@@ -253,12 +255,7 @@ namespace ScreenShotTool.Forms
             {
                 for (int y = 0; y < originalImage.Height; y += mosaicSize)
                 {
-                    //if (x % blurSize == 0 && y % blurSize == 0)
-                    //{
-                    //    pixelColor = SamplePixelArea(originalImage, blurSize, x, y);
-                    //}
                     pixelColor = SamplePixelArea(originalImage, blurRadius, x + blurRadius, y + blurRadius);
-                    //blurImage.SetPixel(x, y, pixelColor);
                     blurBrush.Color = pixelColor;
                     graphics.FillRectangle(blurBrush, new Rectangle(x, y, mosaicSize, mosaicSize));
                 }
@@ -266,7 +263,6 @@ namespace ScreenShotTool.Forms
 
             graphics.Dispose();
             sw.Stop();
-
             Debug.WriteLine($"Blur took {sw.ElapsedMilliseconds}");
 
             initialBlurComplete = true;
@@ -283,15 +279,10 @@ namespace ScreenShotTool.Forms
             int G = 0;
             int B = 0;
             int samples = 0;
-            //if (x == 12 && y == 12) Debug.WriteLine($"Sample from {x}, {y}");
-            //for (int i = -blurSize/2; i <= blurSize/2; i+=3)
             for (int i = -blurRadius; i <= blurRadius; i++)
             {
-                //for (int j = -blurSize / 2; j <= blurSize / 2; j+=3)
                 for (int j = -blurRadius; j <= blurRadius; j++)
                 {
-                    // sampleX = sampleX - (sampleX % blurSize) + i;
-                    //sampleY = sampleY - (sampleY % blurSize) + j;
                     sampleX = x + i;
                     sampleY = y + j;
                     sampleX = Math.Clamp(sampleX, 0, originalImage.Width - 1);
@@ -301,11 +292,9 @@ namespace ScreenShotTool.Forms
                     G += sampleColor.G;
                     B += sampleColor.B;
                     samples++;
-                    //if (x == 12 && y == 12) Debug.WriteLine($"check {sampleX}, {sampleY}");
                 }
             }
             pixelColor = Color.FromArgb(R / samples, G / samples, B / samples);
-            //Debug.WriteLine($"Samples: {samples}");
             return pixelColor;
         }
 
@@ -338,8 +327,16 @@ namespace ScreenShotTool.Forms
         {
             //Bitmap img = ((Bitmap)(originalImage)).Clone(new Rectangle(0, 0, originalImage.Width, originalImage.Height), System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             // clone failed when reading from file, worked before... Using Crop instead, which accounts for out of area pixels.
-            Bitmap img = CropImage((Bitmap)originalImage, new Rectangle(0, 0, originalImage.Width, originalImage.Height));
-
+            Bitmap img;
+            if (originalImage != null)
+            {
+                img = CropImage((Bitmap)originalImage, new Rectangle(0, 0, originalImage.Width, originalImage.Height));
+            }
+            else
+            {
+                Debug.WriteLine("Couldn't create correct overlay image, originalImage is null");
+                img = new Bitmap(100,100);
+            }
             DisposeAndNull(overlayGraphics);
 
             overlayGraphics = Graphics.FromImage(img);
@@ -839,7 +836,6 @@ namespace ScreenShotTool.Forms
                     int selectedIndex = listFromSymbol != null ? listFromSymbol.Index : -1;
                     if (selectedIndex > -1 && selectedIndex < listViewSymbols.Items.Count)
                     {
-                        //currentSelectedSymbol = symbolUnderCursor;
                         listViewSymbols.Items[selectedIndex].Selected = true; //GetListItemFromSymbol(symbolUnderCursor));
                     }
                     //Debug.WriteLine($"Stack item selected in list: {listFromSymbol?.Name}");
@@ -898,7 +894,7 @@ namespace ScreenShotTool.Forms
                 {
                     ListViewItem item = listViewSymbols.SelectedItems[0];
                     //Debug.WriteLine($"Mouse delta {mouseDeltaX} {mouseDeltaY}");
-                    GraphicSymbol symbol = (GraphicSymbol)item.Tag;
+                    GraphicSymbol symbol = GetSymbolFromTag(item);
                     if (dragStarted && symbol.MoveAllowed == true)
                     {
                         //GraphicSymbol symbol = (GraphicSymbol)item.Tag;
@@ -961,10 +957,9 @@ namespace ScreenShotTool.Forms
         {
             List<GraphicSymbol> symbolsUnderCursor = new();
             Point cursorPos = pictureBoxOverlay.PointToClient(Cursor.Position);
-            //GraphicSymbol? symbolUnderCursor = null;
             foreach (GraphicSymbol gs in symbols)
             {
-                if (gs.Bounds.Contains(cursorPos))
+                if (gs.Bounds.Contains(cursorPos) && (gs is GsBorder) == false) // don't select the border symbol, since it covers everything
                 {
                     symbolsUnderCursor.Add(gs);
                 }
@@ -982,6 +977,23 @@ namespace ScreenShotTool.Forms
                 }
             }
             return null;
+        }
+
+        private GraphicSymbol GetSymbolFromTag(ListViewItem lvi)
+        {
+            object? tag = lvi.Tag;
+            if (tag == null)
+            {
+                throw new NullReferenceException($"ListviewItem {lvi.Name} tag is null");
+            }
+            else if (lvi.Tag is GraphicSymbol)
+            {
+                return (GraphicSymbol)lvi.Tag;
+            }
+            else
+            {
+                throw new InvalidCastException($"ListviewItem {lvi.Name} tag is not a GraphicSymbol");
+            }
         }
 
         #endregion
