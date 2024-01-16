@@ -162,53 +162,53 @@ namespace ScreenShotTool.Forms
             }
         }
 
-        //public List<Rectangle> Hitboxes;
-        //private List<Rectangle> CreateHitboxList()
-        //{
-        //    List<Rectangle> hitboxes = new();
-        //    hitboxes.Add(HitboxUpperLeft);
-        //    hitboxes.Add(HitboxUpperCenter);
-        //    hitboxes.Add(HitboxUpperRight);
-        //    hitboxes.Add(HitboxCenterLeft);
-        //    hitboxes.Add(HitboxCenterRight);
-        //    hitboxes.Add(HitboxLowerLeft);
-        //    hitboxes.Add(HitboxLowerCenter);
-        //    hitboxes.Add(HitboxLowerRight);
-        //    return hitboxes;
-        //}
+        enum HitboxDirection
+        {
+            Center = 0,
+            NW = 1,
+            N = 2,
+            NE = 3,
+            W = 4,
+            E = 5,
+            SW = 6,
+            S = 7,
+            SE = 8,
+        }
 
         public Rectangle GetHitbox(int index)
         {
             switch (index)
             {
                 case 0:
-                    return HitboxUpperLeft;
+                    return HitboxCenter;
                 case 1:
-                    return HitboxUpperCenter;
+                    return HitboxNW;
                 case 2:
-                    return HitboxUpperRight;
+                    return HitboxN;
                 case 3:
-                    return HitboxCenterLeft;
+                    return HitboxNE;
                 case 4:
-                    return HitboxCenterRight;
+                    return HitboxW;
                 case 5:
-                    return HitboxLowerLeft;
+                    return HitboxE;
                 case 6:
-                    return HitboxLowerCenter;
+                    return HitboxSW;
                 case 7:
-                    return HitboxLowerRight;
+                    return HitboxS;
+                case 8:
+                    return HitboxSE;
                 default:
                     return new Rectangle(0,0,0,0);
             }
         }
-        public Rectangle HitboxUpperLeft { get { return new Rectangle(boundsShifted.Left, boundsShifted.Top, anchorsize, anchorsize); }}
-        public Rectangle HitboxUpperCenter { get { return new Rectangle(boundsShifted.Left + (boundsShifted.Right - Bounds.Left) / 2, boundsShifted.Top, anchorsize, anchorsize); }}
-        public Rectangle HitboxUpperRight { get { return new Rectangle(boundsShifted.Right, boundsShifted.Top, anchorsize, anchorsize); }}
-        public Rectangle HitboxCenterLeft { get { return new Rectangle(boundsShifted.Left, boundsShifted.Top + (boundsShifted.Bottom - Bounds.Top) / 2, anchorsize, anchorsize); } }
-        public Rectangle HitboxCenterRight { get { return new Rectangle(boundsShifted.Right, boundsShifted.Top + (boundsShifted.Bottom - Bounds.Top)/2, anchorsize, anchorsize); } }
-        public Rectangle HitboxLowerLeft { get { return new Rectangle(boundsShifted.Left, boundsShifted.Bottom, anchorsize, anchorsize); } }
-        public Rectangle HitboxLowerCenter { get { return new Rectangle(boundsShifted.Left + (boundsShifted.Right - Bounds.Left) / 2, boundsShifted.Bottom, anchorsize, anchorsize); } }
-        public Rectangle HitboxLowerRight { get { return new Rectangle(boundsShifted.Right, boundsShifted.Bottom, anchorsize, anchorsize);  } }
+        public Rectangle HitboxNW { get { return new Rectangle(boundsShifted.Left, boundsShifted.Top, anchorsize, anchorsize); }}
+        public Rectangle HitboxN { get { return new Rectangle(boundsShifted.Left + (boundsShifted.Right - Bounds.Left) / 2, boundsShifted.Top, anchorsize, anchorsize); }}
+        public Rectangle HitboxNE { get { return new Rectangle(boundsShifted.Right, boundsShifted.Top, anchorsize, anchorsize); }}
+        public Rectangle HitboxW { get { return new Rectangle(boundsShifted.Left, boundsShifted.Top + (boundsShifted.Bottom - Bounds.Top) / 2, anchorsize, anchorsize); } }
+        public Rectangle HitboxE { get { return new Rectangle(boundsShifted.Right, boundsShifted.Top + (boundsShifted.Bottom - Bounds.Top)/2, anchorsize, anchorsize); } }
+        public Rectangle HitboxSW { get { return new Rectangle(boundsShifted.Left, boundsShifted.Bottom, anchorsize, anchorsize); } }
+        public Rectangle HitboxS { get { return new Rectangle(boundsShifted.Left + (boundsShifted.Right - Bounds.Left) / 2, boundsShifted.Bottom, anchorsize, anchorsize); } }
+        public Rectangle HitboxSE { get { return new Rectangle(boundsShifted.Right, boundsShifted.Bottom, anchorsize, anchorsize);  } }
         public Rectangle HitboxCenter { get { return new Rectangle(boundsShifted.Left + (boundsShifted.Right - Bounds.Left) / 2, boundsShifted.Top + (boundsShifted.Bottom - Bounds.Top) / 2, anchorsize, anchorsize); } }
 
         public virtual void DrawHighlight(Graphics graphic)
@@ -222,14 +222,14 @@ namespace ScreenShotTool.Forms
             int HalfWidth = BoundsWidth / 2;
             int HalfHeight = BoundsHeight / 2;
 
-            graphic.FillRectangle(HighlightBrush, HitboxUpperLeft); // Upper Left
-            graphic.FillRectangle(HighlightBrush, HitboxUpperCenter); // Upper Center
-            graphic.FillRectangle(HighlightBrush, HitboxUpperRight); // Upper Right
-            graphic.FillRectangle(HighlightBrush, HitboxCenterLeft); // Center Left
-            graphic.FillRectangle(HighlightBrush, HitboxCenterRight); // Center Right
-            graphic.FillRectangle(HighlightBrush, HitboxLowerLeft); // Lower Left
-            graphic.FillRectangle(HighlightBrush, HitboxLowerCenter); // Lower Center
-            graphic.FillRectangle(HighlightBrush, HitboxLowerRight); // Lower Right
+            graphic.FillRectangle(HighlightBrush, HitboxNW); // Upper Left
+            graphic.FillRectangle(HighlightBrush, HitboxN); // Upper Center
+            graphic.FillRectangle(HighlightBrush, HitboxNE); // Upper Right
+            graphic.FillRectangle(HighlightBrush, HitboxW); // Center Left
+            graphic.FillRectangle(HighlightBrush, HitboxE); // Center Right
+            graphic.FillRectangle(HighlightBrush, HitboxSW); // Lower Left
+            graphic.FillRectangle(HighlightBrush, HitboxS); // Lower Center
+            graphic.FillRectangle(HighlightBrush, HitboxSE); // Lower Right
             graphic.FillRectangle(HighlightBrush, HitboxCenter); // Center of symbol
         }
 

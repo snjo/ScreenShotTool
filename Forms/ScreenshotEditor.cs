@@ -729,7 +729,22 @@ namespace ScreenShotTool.Forms
         //int dragStartY = 0;
         //Rectangle dragRect = new();
         GraphicSymbol? selectedHitboxSymbol = null;
-        int selectedHitboxIndex = -1;
+        //int selectedHitboxIndex = -1;
+
+        enum HitboxDirection
+        {
+            None = -1,
+            Center = 0,
+            NW = 1,
+            N = 2,
+            NE = 3,
+            W = 4,
+            E = 5,
+            SW = 6,
+            S = 7,
+            SE = 8,
+        }
+        HitboxDirection selectedHitboxIndex = HitboxDirection.None;
 
         private void PictureBoxOverlay_MouseDown(object sender, MouseEventArgs e)
         {
@@ -754,14 +769,14 @@ namespace ScreenShotTool.Forms
             if (currentSelectedSymbol != null)
             {
                 selectedHitboxSymbol = null;
-                selectedHitboxIndex = -1;
-                for (int i = 0; i < 8; i++)
+                selectedHitboxIndex = HitboxDirection.None;
+                for (int i = 0; i <= 8; i++)
                 {
                     Rectangle hitbox = currentSelectedSymbol.GetHitbox(i);
                     if (currentSelectedSymbol.GetHitbox(i).Contains(e.X, e.Y))
                     {
                         selectedHitboxSymbol = currentSelectedSymbol;
-                        selectedHitboxIndex = i;
+                        selectedHitboxIndex = (HitboxDirection)i;
                         break;
                     }
                 }
@@ -855,10 +870,11 @@ namespace ScreenShotTool.Forms
 
             switch (selectedHitboxIndex)
             {
-                case 0: case 7: pictureBoxOverlay.Cursor = Cursors.SizeNWSE; break;
-                case 2: case 5: pictureBoxOverlay.Cursor = Cursors.SizeNESW; break;
-                case 3: case 4: pictureBoxOverlay.Cursor = Cursors.SizeWE; break;
-                case 1: case 6: pictureBoxOverlay.Cursor = Cursors.SizeNS; break;
+                case HitboxDirection.Center: pictureBoxOverlay.Cursor = Cursors.SizeAll; break;
+                case HitboxDirection.NW: case HitboxDirection.SE: pictureBoxOverlay.Cursor = Cursors.SizeNWSE; break;
+                case HitboxDirection.NE: case HitboxDirection.SW: pictureBoxOverlay.Cursor = Cursors.SizeNESW; break;
+                case HitboxDirection.W: case HitboxDirection.E: pictureBoxOverlay.Cursor = Cursors.SizeWE; break;
+                case HitboxDirection.N: case HitboxDirection.S: pictureBoxOverlay.Cursor = Cursors.SizeNS; break;
                 default: pictureBoxOverlay.Cursor = Cursors.Arrow; break;
             }
 
