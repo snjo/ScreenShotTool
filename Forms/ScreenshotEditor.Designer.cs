@@ -108,6 +108,7 @@
             panelPropertiesLine = new Panel();
             checkBoxPropertiesShadow = new CheckBox();
             timerAfterLoad = new System.Windows.Forms.Timer(components);
+            buttonHighlight = new Button();
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
@@ -221,6 +222,7 @@
             // 
             panelButtons.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             panelButtons.BorderStyle = BorderStyle.FixedSingle;
+            panelButtons.Controls.Add(buttonHighlight);
             panelButtons.Controls.Add(buttonBlur);
             panelButtons.Controls.Add(buttonSelect);
             panelButtons.Controls.Add(buttonBorder);
@@ -239,7 +241,7 @@
             buttonBlur.FlatAppearance.BorderSize = 0;
             buttonBlur.FlatStyle = FlatStyle.Flat;
             buttonBlur.Image = Properties.Resources.blur;
-            buttonBlur.Location = new Point(4, 279);
+            buttonBlur.Location = new Point(4, 245);
             buttonBlur.Margin = new Padding(1);
             buttonBlur.Name = "buttonBlur";
             buttonBlur.Size = new Size(36, 36);
@@ -265,7 +267,7 @@
             buttonBorder.FlatAppearance.BorderSize = 0;
             buttonBorder.FlatStyle = FlatStyle.Flat;
             buttonBorder.Image = Properties.Resources.frame;
-            buttonBorder.Location = new Point(4, 241);
+            buttonBorder.Location = new Point(4, 321);
             buttonBorder.Margin = new Padding(1);
             buttonBorder.Name = "buttonBorder";
             buttonBorder.Size = new Size(36, 36);
@@ -904,6 +906,19 @@
             timerAfterLoad.Interval = 50;
             timerAfterLoad.Tick += TimerAfterLoad_Tick;
             // 
+            // buttonHighlight
+            // 
+            buttonHighlight.FlatAppearance.BorderSize = 0;
+            buttonHighlight.FlatStyle = FlatStyle.Flat;
+            buttonHighlight.Image = Properties.Resources.highlight;
+            buttonHighlight.Location = new Point(4, 283);
+            buttonHighlight.Margin = new Padding(1);
+            buttonHighlight.Name = "buttonHighlight";
+            buttonHighlight.Size = new Size(36, 36);
+            buttonHighlight.TabIndex = 10;
+            buttonHighlight.UseVisualStyleBackColor = true;
+            buttonHighlight.Click += ButtonHighlight_Click;
+            // 
             // ScreenshotEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1039,5 +1054,6 @@
         private NumericUpDown numericBlurMosaicSize;
         private System.Windows.Forms.Timer timerAfterLoad;
         private Button buttonSelect;
+        private Button buttonHighlight;
     }
 }

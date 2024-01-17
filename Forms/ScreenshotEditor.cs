@@ -381,6 +381,13 @@ namespace ScreenShotTool.Forms
                         blur.blurredImage = blurImage;
                     }
                 }
+                if (symbol is GsHighlight hl)
+                {
+                    if (originalImage != null)
+                    {
+                        hl.originalImage = (Bitmap)originalImage;
+                    }
+                }
                 symbol.DrawSymbol(graphic);
             }
             if (temporarySymbol != null)
@@ -548,7 +555,8 @@ namespace ScreenShotTool.Forms
             CreateText,
             CreateImage,
             CreateImageScaled,
-            CreateBlur
+            CreateBlur,
+            CreateHighlight
         }
 
         UserActions selectedUserAction = UserActions.None;
@@ -567,6 +575,7 @@ namespace ScreenShotTool.Forms
             //if (selectedUserAction == UserActions.CreateBorder) buttonCircle.BackColor = Color.Yellow; // happens right away
             if (selectedUserAction == UserActions.CreateText) buttonText.BackColor = Color.Yellow;
             if (selectedUserAction == UserActions.CreateBlur) buttonBlur.BackColor = Color.Yellow;
+            if (selectedUserAction == UserActions.CreateHighlight) buttonHighlight.BackColor = Color.Yellow;
 
             if (selectedUserAction == UserActions.MoveSymbol)
             {
@@ -638,6 +647,7 @@ namespace ScreenShotTool.Forms
                     UserActions.CreateImageScaled => new GsImageScaled(upperLeft, size, shadow),
                     UserActions.CreateText => new GsText(dragStart, size, lineColor, fillColor, shadow, lineWeight, lineAlpha),
                     UserActions.CreateBlur => new GsBlur(upperLeft, size),
+                    UserActions.CreateHighlight => new GsHighlight(upperLeft, size, lineColor, Color.Yellow, shadow, lineWeight, lineAlpha, fillAlpha),
                     _ => null,
                 };
             }
@@ -843,7 +853,11 @@ namespace ScreenShotTool.Forms
             UpdateOverlay();
         }
 
-
+        private void ButtonHighlight_Click(object sender, EventArgs e)
+        {
+            SetUserAction(UserActions.CreateHighlight);
+            UpdateOverlay();
+        }
 
         #endregion
 

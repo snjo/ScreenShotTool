@@ -739,4 +739,45 @@ namespace ScreenShotTool.Forms
             image?.Dispose();
         }
     }
+
+    public class GsHighlight : GsBoundingBox
+    {
+        public Bitmap? originalImage;
+        public GsHighlight(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight, int lineAlpha, int fillAlpha) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight, lineAlpha, fillAlpha)
+        {
+            Name = "Rectangle";
+            drawFill = DrawFill;
+            base.BackgroundColor = backgroundColor;
+        }
+
+        public void DrawFill(Pen pen, Brush fillBrush, Rectangle rect, Graphics graphic)
+        {
+            //graphic.FillRectangle(fillBrush, rect);
+            if (rect.Width < 1 || rect.Height < 1) return;
+            
+            if (originalImage != null)
+            {
+                Bitmap highlightedBmp = new Bitmap(rect.Width, rect.Height);
+                int bmpLeft = Math.Max(0, Left);
+                int bmpTop = Math.Max(0, Top);
+                int bmpRight = Math.Min(originalImage.Width, Right);
+                int bmpBottom = Math.Min(originalImage.Height, Bottom);
+                int bmpWidth = bmpRight - bmpLeft;
+                int bmpHeight = bmpBottom - bmpTop;
+                for (int x = 0; x < bmpWidth; x++)
+                {
+                    for (int y = 0; y < bmpHeight; y++)
+                    {
+                        Color sourcePixel = originalImage.GetPixel(bmpLeft + x, bmpTop + y);
+                        //graphic.
+                        //highlightedBmp.SetPixel(x, y, Color.FromArgb(Math.Min((int)sourcePixel.R, 100), Math.Min((int)sourcePixel.G, 100), sourcePixel.B));
+                        highlightedBmp.SetPixel(x, y, Color.FromArgb(Math.Min((int)sourcePixel.R, BackgroundColor.R), Math.Min((int)sourcePixel.G, BackgroundColor.G), Math.Min((int)sourcePixel.B, BackgroundColor.B)));
+                    }
+                }
+                graphic.DrawImage(highlightedBmp, rect);
+                highlightedBmp.Dispose();
+            }
+        }
+    }
 }
+
