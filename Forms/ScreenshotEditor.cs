@@ -391,18 +391,18 @@ namespace ScreenShotTool.Forms
 
         private void InsertImagesInSymbol(GraphicSymbol symbol)
         {
-            if (symbol is GsBlur blur)
+            if (symbol is GsBlur gsblur)
             {
                 if (originalImage != null)
                 {
-                    blur.blurredImage = blurImage;
+                    gsblur.sourceImage = blurImage;
                 }
             }
-            if (symbol is GsHighlight hl)
+            else if (symbol is GsDynamicImage gsdi)
             {
                 if (originalImage != null)
                 {
-                    hl.originalImage = (Bitmap)originalImage;
+                    gsdi.sourceImage = (Bitmap)originalImage;
                 }
             }
         }
@@ -652,8 +652,8 @@ namespace ScreenShotTool.Forms
                     UserActions.CreateImage => new GsImage(dragEnd, new Point(1, 1), shadow),
                     UserActions.CreateImageScaled => new GsImageScaled(upperLeft, size, shadow),
                     UserActions.CreateText => new GsText(dragStart, size, lineColor, fillColor, shadow, lineWeight, lineAlpha),
-                    UserActions.CreateBlur => new GsBlur(upperLeft, size),
-                    UserActions.CreateHighlight => new GsHighlight(upperLeft, size, lineColor, Color.Yellow, shadow, lineWeight, lineAlpha, fillAlpha),
+                    UserActions.CreateBlur => new GsBlur(upperLeft, size, lineColor, fillColor),
+                    UserActions.CreateHighlight => new GsHighlight(upperLeft, size, lineColor, Color.Yellow),
                     _ => null,
                 };
             }
@@ -952,6 +952,13 @@ namespace ScreenShotTool.Forms
                         case HitboxDirection.NE: case HitboxDirection.SW: pictureBoxOverlay.Cursor = Cursors.SizeNESW; break;
                         case HitboxDirection.W: case HitboxDirection.E: pictureBoxOverlay.Cursor = Cursors.SizeWE; break;
                         case HitboxDirection.N: case HitboxDirection.S: pictureBoxOverlay.Cursor = Cursors.SizeNS; break;
+                    }
+                }
+                if (currentSelectedSymbol is GsLine)
+                {
+                    if ((int)selectedHitboxIndex == 1 || (int)selectedHitboxIndex == 2)
+                    {
+                        pictureBoxOverlay.Cursor = Cursors.SizeAll;
                     }
                 }
             }
