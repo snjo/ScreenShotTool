@@ -174,7 +174,7 @@
             // 
             itemLoadFromFile.Name = "itemLoadFromFile";
             itemLoadFromFile.Size = new Size(184, 22);
-            itemLoadFromFile.Text = "&Load...";
+            itemLoadFromFile.Text = "&Open...";
             itemLoadFromFile.Click += LoadToolStripMenuItem_Click;
             // 
             // itemLoadFromClipboard

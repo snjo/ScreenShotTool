@@ -802,5 +802,17 @@ namespace ScreenShotTool.Properties {
                 this["BlurSampleArea"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool MinimizeOnClose {
+            get {
+                return ((bool)(this["MinimizeOnClose"]));
+            }
+            set {
+                this["MinimizeOnClose"] = value;
+            }
+        }
     }
 }

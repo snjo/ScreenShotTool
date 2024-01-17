@@ -28,6 +28,7 @@ namespace ScreenShotTool
         bool showLog = false;
         private int Counter = 0;
         private readonly int CounterMax = 9999;
+        private bool ExitForSure = false;
 
         public string helpText =
             "Default filename values:\r" +
@@ -76,6 +77,12 @@ namespace ScreenShotTool
             UpdateLogVisible();
 
             SetInfoText();
+        }
+
+        private void ExitProgram()
+        {
+            ExitForSure = true;
+            Close();
         }
 
         private static void UpgradeSettings()
@@ -142,13 +149,23 @@ namespace ScreenShotTool
                 Size = DefaultSize;
             }
             Show();
-            BringToFront();
-            SetForegroundWindow(this.Handle);
+            WindowState = FormWindowState.Normal;
+            //BringToFront();
+            //SetForegroundWindow(this.Handle);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            HotkeyTools.ReleaseHotkeys(HotkeyList);
+            Debug.WriteLine($"FormClosing: {e.CloseReason} {sender}");
+            if (settings.MinimizeOnClose && ExitForSure == false)
+            {
+                this.WindowState = FormWindowState.Minimized;
+                e.Cancel = true;
+            }
+            else
+            {
+                HotkeyTools.ReleaseHotkeys(HotkeyList);
+            }
         }
         #endregion
 
@@ -1056,7 +1073,7 @@ namespace ScreenShotTool
 
         private void ExitApplicationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Close();
+            ExitProgram();
         }
 
         private void OpenFileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1296,7 +1313,7 @@ namespace ScreenShotTool
 
         private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Close();
+            ExitProgram();
         }
 
         private void HelpofflineCopyToolStripMenuItem_Click(object sender, EventArgs e)

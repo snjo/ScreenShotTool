@@ -37,7 +37,6 @@
                 List<string> lines = File.ReadAllLines(fileName, System.Text.Encoding.UTF8).ToList();
                 MarkdownToRtf.RtfConverter rtfConverter = new(fileName);
                 rtfText = rtfConverter.ConvertText(lines);
-                //Debug.WriteLine(rtfText);
             }
 
             if (rtfText.Length == 0)

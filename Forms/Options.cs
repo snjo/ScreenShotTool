@@ -67,6 +67,7 @@ namespace ScreenShotTool
 
             //Tab: Application
             checkBoxStartHidden.Checked = settings.StartHidden;
+            checkBoxMinimizeOnClose.Checked = settings.MinimizeOnClose;
             checkBoxTrayTooltipInfoCapture.Checked = settings.AllowTrayTooltipInfoCapture;
             checkBoxTrayTooltipInfoFolder.Checked = settings.AllowTrayTooltipInfoFolder;
             checkBoxTrayTooltipWarning.Checked = settings.AllowTrayTooltipWarning;
@@ -142,6 +143,7 @@ namespace ScreenShotTool
 
             //Tab: Application
             settings.StartHidden = checkBoxStartHidden.Checked;
+            settings.MinimizeOnClose = checkBoxMinimizeOnClose.Checked;
             settings.CropThumbnails = checkBoxCropThumbnails.Checked;
             settings.ThumbnailWidth = (int)numericThumbWidth.Value;
             settings.ThumbnailHeight = (int)numericThumbHeight.Value;

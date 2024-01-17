@@ -120,6 +120,7 @@
             ColumnShift = new DataGridViewCheckBoxColumn();
             ColumnWin = new DataGridViewCheckBoxColumn();
             buttonResetOptions = new Button();
+            checkBoxMinimizeOnClose = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
@@ -382,15 +383,15 @@
             checkBoxStartHidden.AutoSize = true;
             checkBoxStartHidden.Location = new Point(16, 25);
             checkBoxStartHidden.Name = "checkBoxStartHidden";
-            checkBoxStartHidden.Size = new Size(92, 19);
+            checkBoxStartHidden.Size = new Size(232, 19);
             checkBoxStartHidden.TabIndex = 20;
-            checkBoxStartHidden.Text = "Start Hidden";
+            checkBoxStartHidden.Text = "Start Hidden and hide when minimized";
             checkBoxStartHidden.UseVisualStyleBackColor = true;
             // 
             // checkBoxCropThumbnails
             // 
             checkBoxCropThumbnails.AutoSize = true;
-            checkBoxCropThumbnails.Location = new Point(16, 176);
+            checkBoxCropThumbnails.Location = new Point(17, 194);
             checkBoxCropThumbnails.Name = "checkBoxCropThumbnails";
             checkBoxCropThumbnails.Size = new Size(234, 19);
             checkBoxCropThumbnails.TabIndex = 24;
@@ -399,7 +400,7 @@
             // 
             // numericThumbWidth
             // 
-            numericThumbWidth.Location = new Point(122, 196);
+            numericThumbWidth.Location = new Point(123, 214);
             numericThumbWidth.Maximum = new decimal(new int[] { 256, 0, 0, 0 });
             numericThumbWidth.Minimum = new decimal(new int[] { 20, 0, 0, 0 });
             numericThumbWidth.Name = "numericThumbWidth";
@@ -409,7 +410,7 @@
             // 
             // numericThumbHeight
             // 
-            numericThumbHeight.Location = new Point(122, 224);
+            numericThumbHeight.Location = new Point(123, 242);
             numericThumbHeight.Maximum = new decimal(new int[] { 256, 0, 0, 0 });
             numericThumbHeight.Minimum = new decimal(new int[] { 20, 0, 0, 0 });
             numericThumbHeight.Name = "numericThumbHeight";
@@ -420,7 +421,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(16, 198);
+            label8.Location = new Point(17, 216);
             label8.Name = "label8";
             label8.Size = new Size(99, 15);
             label8.TabIndex = 53;
@@ -429,7 +430,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(16, 226);
+            label9.Location = new Point(17, 244);
             label9.Name = "label9";
             label9.Size = new Size(103, 15);
             label9.TabIndex = 54;
@@ -438,7 +439,7 @@
             // checkBoxTrayTooltipInfoCapture
             // 
             checkBoxTrayTooltipInfoCapture.AutoSize = true;
-            checkBoxTrayTooltipInfoCapture.Location = new Point(16, 75);
+            checkBoxTrayTooltipInfoCapture.Location = new Point(17, 93);
             checkBoxTrayTooltipInfoCapture.Name = "checkBoxTrayTooltipInfoCapture";
             checkBoxTrayTooltipInfoCapture.Size = new Size(211, 19);
             checkBoxTrayTooltipInfoCapture.TabIndex = 21;
@@ -448,7 +449,7 @@
             // checkBoxTrayTooltipWarning
             // 
             checkBoxTrayTooltipWarning.AutoSize = true;
-            checkBoxTrayTooltipWarning.Location = new Point(16, 125);
+            checkBoxTrayTooltipWarning.Location = new Point(17, 143);
             checkBoxTrayTooltipWarning.Name = "checkBoxTrayTooltipWarning";
             checkBoxTrayTooltipWarning.Size = new Size(176, 19);
             checkBoxTrayTooltipWarning.TabIndex = 23;
@@ -806,6 +807,7 @@
             // 
             // tabPageApplication
             // 
+            tabPageApplication.Controls.Add(checkBoxMinimizeOnClose);
             tabPageApplication.Controls.Add(label30);
             tabPageApplication.Controls.Add(label28);
             tabPageApplication.Controls.Add(label29);
@@ -842,7 +844,7 @@
             // label30
             // 
             label30.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
-            label30.Location = new Point(16, 440);
+            label30.Location = new Point(17, 458);
             label30.Name = "label30";
             label30.Size = new Size(435, 40);
             label30.TabIndex = 81;
@@ -860,7 +862,7 @@
             // label29
             // 
             label29.AutoSize = true;
-            label29.Location = new Point(16, 414);
+            label29.Location = new Point(17, 432);
             label29.Name = "label29";
             label29.Size = new Size(94, 15);
             label29.TabIndex = 79;
@@ -868,7 +870,7 @@
             // 
             // numericBlurSampleArea
             // 
-            numericBlurSampleArea.Location = new Point(122, 412);
+            numericBlurSampleArea.Location = new Point(123, 430);
             numericBlurSampleArea.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
             numericBlurSampleArea.Name = "numericBlurSampleArea";
             numericBlurSampleArea.Size = new Size(54, 23);
@@ -887,7 +889,7 @@
             // label26
             // 
             label26.AutoSize = true;
-            label26.Location = new Point(16, 387);
+            label26.Location = new Point(17, 405);
             label26.Name = "label26";
             label26.Size = new Size(91, 15);
             label26.TabIndex = 76;
@@ -895,7 +897,7 @@
             // 
             // numericBlurMosaicSize
             // 
-            numericBlurMosaicSize.Location = new Point(122, 385);
+            numericBlurMosaicSize.Location = new Point(123, 403);
             numericBlurMosaicSize.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
             numericBlurMosaicSize.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
             numericBlurMosaicSize.Name = "numericBlurMosaicSize";
@@ -907,7 +909,7 @@
             // 
             label25.AutoSize = true;
             label25.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label25.Location = new Point(5, 359);
+            label25.Location = new Point(6, 377);
             label25.Name = "label25";
             label25.Size = new Size(87, 15);
             label25.TabIndex = 74;
@@ -917,7 +919,7 @@
             // 
             label24.AutoSize = true;
             label24.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label24.Location = new Point(5, 262);
+            label24.Location = new Point(6, 280);
             label24.Name = "label24";
             label24.Size = new Size(80, 15);
             label24.TabIndex = 73;
@@ -926,7 +928,7 @@
             // label13
             // 
             label13.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
-            label13.Location = new Point(16, 310);
+            label13.Location = new Point(17, 328);
             label13.Name = "label13";
             label13.Size = new Size(435, 40);
             label13.TabIndex = 72;
@@ -944,7 +946,7 @@
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new Point(16, 286);
+            label12.Location = new Point(17, 304);
             label12.Name = "label12";
             label12.Size = new Size(84, 15);
             label12.TabIndex = 70;
@@ -953,7 +955,7 @@
             // numericUpDownFramerate
             // 
             numericUpDownFramerate.Increment = new decimal(new int[] { 5, 0, 0, 0 });
-            numericUpDownFramerate.Location = new Point(122, 284);
+            numericUpDownFramerate.Location = new Point(123, 302);
             numericUpDownFramerate.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
             numericUpDownFramerate.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
             numericUpDownFramerate.Name = "numericUpDownFramerate";
@@ -965,7 +967,7 @@
             // 
             label16.AutoSize = true;
             label16.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label16.Location = new Point(5, 158);
+            label16.Location = new Point(6, 176);
             label16.Name = "label16";
             label16.Size = new Size(70, 15);
             label16.TabIndex = 63;
@@ -975,7 +977,7 @@
             // 
             label15.AutoSize = true;
             label15.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label15.Location = new Point(5, 57);
+            label15.Location = new Point(6, 75);
             label15.Name = "label15";
             label15.Size = new Size(73, 15);
             label15.TabIndex = 62;
@@ -987,14 +989,14 @@
             label14.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label14.Location = new Point(5, 7);
             label14.Name = "label14";
-            label14.Size = new Size(49, 15);
+            label14.Size = new Size(130, 15);
             label14.TabIndex = 61;
-            label14.Text = "Startup";
+            label14.Text = "Startup and shutdown";
             // 
             // checkBoxTrayTooltipInfoFolder
             // 
             checkBoxTrayTooltipInfoFolder.AutoSize = true;
-            checkBoxTrayTooltipInfoFolder.Location = new Point(16, 100);
+            checkBoxTrayTooltipInfoFolder.Location = new Point(17, 118);
             checkBoxTrayTooltipInfoFolder.Name = "checkBoxTrayTooltipInfoFolder";
             checkBoxTrayTooltipInfoFolder.Size = new Size(237, 19);
             checkBoxTrayTooltipInfoFolder.TabIndex = 22;
@@ -1071,6 +1073,16 @@
             buttonResetOptions.Text = "Reset options";
             buttonResetOptions.UseVisualStyleBackColor = true;
             buttonResetOptions.Click += ButtonResetOptions_Click;
+            // 
+            // checkBoxMinimizeOnClose
+            // 
+            checkBoxMinimizeOnClose.AutoSize = true;
+            checkBoxMinimizeOnClose.Location = new Point(16, 50);
+            checkBoxMinimizeOnClose.Name = "checkBoxMinimizeOnClose";
+            checkBoxMinimizeOnClose.Size = new Size(184, 19);
+            checkBoxMinimizeOnClose.TabIndex = 82;
+            checkBoxMinimizeOnClose.Text = "Minimize when closing with X";
+            checkBoxMinimizeOnClose.UseVisualStyleBackColor = true;
             // 
             // Options
             // 
@@ -1204,5 +1216,6 @@
         private Label label29;
         private NumericUpDown numericBlurSampleArea;
         private Label label27;
+        private CheckBox checkBoxMinimizeOnClose;
     }
 }

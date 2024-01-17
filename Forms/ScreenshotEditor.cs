@@ -437,6 +437,11 @@ namespace ScreenShotTool.Forms
 
         private void LoadToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            OpenFileAction();
+        }
+
+        private void OpenFileAction()
+        {
             FileDialog fileDialog = new OpenFileDialog
             {
                 Filter = "Images (*.png,*.jpg,*.jpeg,*.gif,*.bmp,*.webp)|(*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp)|PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|All files|*.*"
@@ -1100,6 +1105,10 @@ namespace ScreenShotTool.Forms
             {
                 SaveFileAction();
             }
+            if ((e.KeyCode == Keys.O && e.Modifiers == Keys.Control))
+            {
+                OpenFileAction();
+            }
         }
         #endregion
 
@@ -1157,7 +1166,7 @@ namespace ScreenShotTool.Forms
 
         
 
-        private void EnablePanel(Panel panel, int left, ref int top)
+        private static void EnablePanel(Panel panel, int left, ref int top)
         {
             panel.Enabled = true;
             panel.Visible = true;
@@ -1165,7 +1174,7 @@ namespace ScreenShotTool.Forms
             top += panel.Height + 5;
         }
 
-        private void DisablePanel(Panel panel)
+        private static void DisablePanel(Panel panel)
         {
             panel.Enabled = false;
             panel.Visible = false;
@@ -1511,11 +1520,9 @@ namespace ScreenShotTool.Forms
         {
             if (currentSelectedSymbol is GsHighlight gshl)
             {
-                ColorBlend.BlendModes newBlend = ColorBlend.BlendModes.Darken;
-                if (Enum.TryParse<ColorBlend.BlendModes>(comboBoxBlendMode.Text, out newBlend))
+                if (Enum.TryParse(comboBoxBlendMode.Text, out ColorBlend.BlendModes newBlend))
                 {
                     gshl.blendMode = newBlend;
-                    //gshl.Update
                 }
                 UpdateOverlay();
             }
