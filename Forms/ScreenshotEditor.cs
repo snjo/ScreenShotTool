@@ -45,10 +45,7 @@ namespace ScreenShotTool.Forms
             numericPropertiesFontSize.Maximum = maxFontSize;
             numericPropertiesFontSize.Minimum = minimumFontSize;
             numericPropertiesFontSize.Value = startingFontSize;
-            panelPropertiesPosition.Enabled = false;
-            panelPropertiesFill.Visible = false;
-            panelPropertiesLine.Visible = false;
-            panelPropertiesText.Visible = false;
+            DisableAllPanels();
             numericBlurMosaicSize.Value = mosaicSize;
             timerAfterLoad.Start(); // turns off TopMost shortly after Load. Without TopMost the Window opens behind other forms (why? who can say)
 
@@ -60,6 +57,7 @@ namespace ScreenShotTool.Forms
             toolButtons.Add(buttonText);
             toolButtons.Add(buttonBorder);
             toolButtons.Add(buttonBlur);
+            toolButtons.Add(buttonHighlight);
         }
 
         public ScreenshotEditor()
@@ -713,7 +711,7 @@ namespace ScreenShotTool.Forms
             {
                 // empty stack
                 stackedSymbolsIndex = -1;
-                previousTopmostSymbol = null;
+                //previousTopmostSymbol = null;
                 listViewSymbols.SelectedItems.Clear();
                 currentSelectedSymbol = null;
             }
@@ -1053,7 +1051,7 @@ namespace ScreenShotTool.Forms
         }
 
         GraphicSymbol? currentSelectedSymbol = null;
-        GraphicSymbol? previousTopmostSymbol = null;
+        //GraphicSymbol? previousTopmostSymbol = null;
         int stackedSymbolsIndex = -1;
         private void PictureBoxOverlay_MouseUp(object sender, MouseEventArgs e)
         {
@@ -1157,25 +1155,51 @@ namespace ScreenShotTool.Forms
             UpdatePropertiesPanel();
         }
 
+        
+
+        private void EnablePanel(Panel panel, int left, ref int top)
+        {
+            panel.Enabled = true;
+            panel.Visible = true;
+            panel.Location = new Point(left, top);
+            top += panel.Height + 5;
+        }
+
+        private void DisablePanel(Panel panel)
+        {
+            panel.Enabled = false;
+            panel.Visible = false;
+        }
+
+        private void DisableAllPanels()
+        {
+            panelPropertiesPosition.Visible = true;
+            panelPropertiesPosition.Enabled = false;
+            //DisablePanel(panelPropertiesPosition);
+            DisablePanel(panelPropertiesFill);
+            DisablePanel(panelPropertiesLine);
+            DisablePanel(panelPropertiesText);
+            DisablePanel(panelPropertiesHighlight);
+            DisablePanel(panelPropertiesShadow);
+            DisablePanel(panelPropertiesDelete);
+        }
+
         private void UpdatePropertiesPanel()
         {
+            int panelLeft = listViewSymbols.Left;
+            int lastPanelBottom = listViewSymbols.Bottom;
             if (listViewSymbols.SelectedItems.Count > 0)
             {
                 //newSymbolType = SymbolType.MoveSymbol;
                 ListViewItem item = listViewSymbols.SelectedItems[0];
                 if (item.Tag is GraphicSymbol graphicSymbol)
                 {
-                    panelPropertiesPosition.Enabled = true;
-                    panelPropertiesPosition.Visible = true;
-                    panelPropertiesFill.Visible = true;
-                    panelPropertiesLine.Visible = true;
-                    panelPropertiesText.Visible = false;
-                    panelPropertiesHighlight.Visible = false;
+                    DisableAllPanels();
+                    EnablePanel(panelPropertiesPosition, panelLeft, ref lastPanelBottom);
 
-                    panelPropertiesFill.Location = new Point(panelPropertiesPosition.Left, panelPropertiesPosition.Bottom + 5);
-                    panelPropertiesLine.Location = new Point(panelPropertiesFill.Left, panelPropertiesFill.Bottom + 5);
+                    //panelPropertiesFill.Location = new Point(panelPropertiesPosition.Left, panelPropertiesPosition.Bottom + 5);
+                    //panelPropertiesLine.Location = new Point(panelPropertiesFill.Left, panelPropertiesFill.Bottom + 5);
                     numericPropertiesLineWeight.Enabled = true;
-
                     numericWidth.Enabled = true;
                     numericHeight.Enabled = true;
                     buttonPropertiesColorLine.Enabled = true;
@@ -1192,28 +1216,11 @@ namespace ScreenShotTool.Forms
                     checkBoxPropertiesShadow.Checked = graphicSymbol.ShadowEnabled;
                     buttonDeleteSymbol.Tag = graphicSymbol;
 
-                    if (graphicSymbol is GsImage)
-                    {
-                        numericWidth.Enabled = false;
-                        numericHeight.Enabled = false;
-                        panelPropertiesLine.Visible = false;
-                        panelPropertiesFill.Visible = false;
-                    }
-
-                    if (graphicSymbol is GsImageScaled)
-                    {
-                        panelPropertiesLine.Visible = false;
-                        panelPropertiesFill.Visible = false;
-                    }
-
-
                     if (graphicSymbol is GsText gsText)
                     {
-                        panelPropertiesFill.Visible = false;
-                        panelPropertiesLine.Visible = true;
-                        panelPropertiesText.Visible = true;
-                        panelPropertiesLine.Location = new Point(panelPropertiesPosition.Left, panelPropertiesPosition.Bottom + 5);
-                        panelPropertiesText.Location = new Point(panelPropertiesLine.Left, panelPropertiesLine.Bottom + 5);
+                        EnablePanel(panelPropertiesLine, panelLeft, ref lastPanelBottom);
+                        EnablePanel(panelPropertiesText, panelLeft, ref lastPanelBottom);
+                        EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
 
                         numericWidth.Enabled = false;
                         numericHeight.Enabled = false;
@@ -1230,30 +1237,42 @@ namespace ScreenShotTool.Forms
                         checkBoxStrikeout.Checked = (gsText.fontStyle & FontStyle.Strikeout) != 0;
                         checkBoxUnderline.Checked = (gsText.fontStyle & FontStyle.Underline) != 0;
                     }
-                    else
+                    else if (graphicSymbol is GsHighlight gsHL)
                     {
-                        textBoxSymbolText.Text = "";
+                        EnablePanel(panelPropertiesFill, panelLeft, ref lastPanelBottom);
+                        EnablePanel(panelPropertiesHighlight, panelLeft, ref lastPanelBottom);
+                        comboBoxBlendMode.Text = gsHL.blendMode.ToString();
+                    }
+                    else if (graphicSymbol is GsBlur)
+                    {
+                        // just position shown
+                    }
+                    else if (graphicSymbol is GsBoundingBox)
+                    {
+                        EnablePanel(panelPropertiesFill, panelLeft, ref lastPanelBottom);
+                        EnablePanel(panelPropertiesLine, panelLeft, ref lastPanelBottom);
+                        EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
+                    }
+                    else if (graphicSymbol is GsLine)
+                    {
+                        EnablePanel(panelPropertiesLine, panelLeft, ref lastPanelBottom);
+                        EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
                     }
 
-                    if (graphicSymbol is GsHighlight gsHL)
+                    EnablePanel(panelPropertiesDelete, panelLeft, ref lastPanelBottom);
+
+                    if (graphicSymbol is GsText == false)
                     {
-                        panelPropertiesHighlight.Visible = true;
-                        panelPropertiesFill.Visible = true;
-                        panelPropertiesLine.Visible = false;
-                        panelPropertiesHighlight.Location = new Point(panelPropertiesFill.Left, panelPropertiesFill.Bottom + 5);
-                        comboBoxBlendMode.Text = gsHL.blendMode.ToString();
+                        textBoxSymbolText.Text = "";
                     }
 
                     numericPropertiesLineAlpha.Value = graphicSymbol.lineAlpha;
                     numericPropertiesFillAlpha.Value = graphicSymbol.fillAlpha;
                 }
-
             }
             else
             {
-                panelPropertiesPosition.Enabled = false;
-                panelPropertiesFill.Visible = false;
-                panelPropertiesText.Visible = false;
+                DisableAllPanels();
                 ClearPropertyPanelValues();
             }
         }

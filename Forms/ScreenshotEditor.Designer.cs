@@ -112,6 +112,8 @@
             panelPropertiesHighlight = new Panel();
             label18 = new Label();
             comboBoxBlendMode = new ComboBox();
+            panelPropertiesShadow = new Panel();
+            panelPropertiesDelete = new Panel();
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
@@ -134,6 +136,8 @@
             ((System.ComponentModel.ISupportInitialize)numericBlurMosaicSize).BeginInit();
             panelPropertiesLine.SuspendLayout();
             panelPropertiesHighlight.SuspendLayout();
+            panelPropertiesShadow.SuspendLayout();
+            panelPropertiesDelete.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
@@ -627,12 +631,11 @@
             // 
             // buttonDeleteSymbol
             // 
-            buttonDeleteSymbol.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonDeleteSymbol.Location = new Point(795, 715);
+            buttonDeleteSymbol.Location = new Point(3, 1);
             buttonDeleteSymbol.Name = "buttonDeleteSymbol";
-            buttonDeleteSymbol.Size = new Size(48, 23);
+            buttonDeleteSymbol.Size = new Size(94, 23);
             buttonDeleteSymbol.TabIndex = 0;
-            buttonDeleteSymbol.Text = "Delete";
+            buttonDeleteSymbol.Text = "Delete Symbol";
             buttonDeleteSymbol.UseVisualStyleBackColor = true;
             buttonDeleteSymbol.Click += ButtonDeleteSymbol_Click;
             // 
@@ -895,6 +898,7 @@
             // 
             // panelPropertiesLine
             // 
+            panelPropertiesLine.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             panelPropertiesLine.Controls.Add(label13);
             panelPropertiesLine.Controls.Add(numericPropertiesLineWeight);
             panelPropertiesLine.Controls.Add(label6);
@@ -910,7 +914,7 @@
             // 
             checkBoxPropertiesShadow.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             checkBoxPropertiesShadow.AutoSize = true;
-            checkBoxPropertiesShadow.Location = new Point(798, 692);
+            checkBoxPropertiesShadow.Location = new Point(3, 4);
             checkBoxPropertiesShadow.Name = "checkBoxPropertiesShadow";
             checkBoxPropertiesShadow.Size = new Size(68, 19);
             checkBoxPropertiesShadow.TabIndex = 30;
@@ -925,6 +929,7 @@
             // 
             // panelPropertiesHighlight
             // 
+            panelPropertiesHighlight.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             panelPropertiesHighlight.Controls.Add(label18);
             panelPropertiesHighlight.Controls.Add(comboBoxBlendMode);
             panelPropertiesHighlight.Location = new Point(795, 631);
@@ -945,21 +950,39 @@
             // comboBoxBlendMode
             // 
             comboBoxBlendMode.FormattingEnabled = true;
-            comboBoxBlendMode.Items.AddRange(new object[] { "Darken", "Lighten", "Normal", "Multiply", "Divide", "Average", "Desaturate" });
+            comboBoxBlendMode.Items.AddRange(new object[] { "Multiply", "Lighten", "Darken", "Desaturate", "Normal", "Divide", "Average" });
             comboBoxBlendMode.Location = new Point(3, 22);
             comboBoxBlendMode.Name = "comboBoxBlendMode";
             comboBoxBlendMode.Size = new Size(135, 23);
             comboBoxBlendMode.TabIndex = 0;
-            comboBoxBlendMode.Text = "Darken";
+            comboBoxBlendMode.Text = "Multiply";
             comboBoxBlendMode.SelectedIndexChanged += ComboBoxBlendMode_SelectedIndexChanged;
+            // 
+            // panelPropertiesShadow
+            // 
+            panelPropertiesShadow.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            panelPropertiesShadow.Controls.Add(checkBoxPropertiesShadow);
+            panelPropertiesShadow.Location = new Point(795, 682);
+            panelPropertiesShadow.Name = "panelPropertiesShadow";
+            panelPropertiesShadow.Size = new Size(153, 26);
+            panelPropertiesShadow.TabIndex = 32;
+            // 
+            // panelPropertiesDelete
+            // 
+            panelPropertiesDelete.Controls.Add(buttonDeleteSymbol);
+            panelPropertiesDelete.Location = new Point(795, 711);
+            panelPropertiesDelete.Name = "panelPropertiesDelete";
+            panelPropertiesDelete.Size = new Size(153, 27);
+            panelPropertiesDelete.TabIndex = 33;
             // 
             // ScreenshotEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(950, 742);
+            Controls.Add(panelPropertiesDelete);
+            Controls.Add(panelPropertiesShadow);
             Controls.Add(panelPropertiesHighlight);
-            Controls.Add(checkBoxPropertiesShadow);
             Controls.Add(panelPropertiesFill);
             Controls.Add(panelPropertiesLine);
             Controls.Add(panel1);
@@ -969,7 +992,6 @@
             Controls.Add(panelImage);
             Controls.Add(panelButtons);
             Controls.Add(menuStrip1);
-            Controls.Add(buttonDeleteSymbol);
             Icon = (Icon)resources.GetObject("$this.Icon");
             KeyPreview = true;
             MainMenuStrip = menuStrip1;
@@ -1007,6 +1029,9 @@
             panelPropertiesLine.PerformLayout();
             panelPropertiesHighlight.ResumeLayout(false);
             panelPropertiesHighlight.PerformLayout();
+            panelPropertiesShadow.ResumeLayout(false);
+            panelPropertiesShadow.PerformLayout();
+            panelPropertiesDelete.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1095,5 +1120,7 @@
         private Panel panelPropertiesHighlight;
         private ComboBox comboBoxBlendMode;
         private Label label18;
+        private Panel panelPropertiesShadow;
+        private Panel panelPropertiesDelete;
     }
 }
