@@ -1,10 +1,15 @@
-﻿namespace ScreenShotTool.Forms;
+﻿using System.Diagnostics;
+
+namespace ScreenShotTool.Forms;
 #pragma warning disable CA1416 // Validate platform compatibility
 public class GsHighlight : GsDynamicImage
 {
     //public Bitmap? originalImage;
     Bitmap? highlightedBmp;
-    public GsHighlight(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor) : base(startPoint, endPoint, foregroundColor, backgroundColor)
+    public ColorBlend.BlendModes blendMode = ColorBlend.BlendModes.Darken;
+    private Color previousColor = Color.White;
+    private ColorBlend.BlendModes previousBlendMode = ColorBlend.BlendModes.Darken;
+    public GsHighlight(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadow, int lineWidth, int lineAlpha, int fillAlpha) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadow, lineWidth, lineAlpha, fillAlpha)
     {
         Name = "Highlight";
         drawFill = DrawFill;
@@ -17,11 +22,13 @@ public class GsHighlight : GsDynamicImage
         
         if (sourceImage != null)
         {
-            if (highlightedBmp == null || RectChanged(rect))
+            if (highlightedBmp == null || RectChanged(rect) || previousColor != BackgroundColor || previousBlendMode != blendMode)
             {
                 UpdateHighlightBmp(rect);
                 previousPosition = new Point(rect.Left, rect.Top);
                 previousSize = new Size(rect.Width, rect.Height);
+                previousColor = BackgroundColor;
+                previousBlendMode = blendMode;
             }
             if (highlightedBmp != null)
             {
@@ -43,8 +50,10 @@ public class GsHighlight : GsDynamicImage
             highlightedBmp = null;
         }
         highlightedBmp = new Bitmap(rect.Width, rect.Height);
-        int bmpLeft = Math.Max(0, Left);
-        int bmpTop = Math.Max(0, Top);
+        //int bmpLeft = Math.Max(0, Left);
+        //int bmpTop = Math.Max(0, Top);
+        int bmpLeft = Left;
+        int bmpTop = Top;
         int bmpRight = Math.Min(sourceImage.Width, Right);
         int bmpBottom = Math.Min(sourceImage.Height, Bottom);
         int bmpWidth = bmpRight - bmpLeft;
@@ -53,8 +62,13 @@ public class GsHighlight : GsDynamicImage
         {
             for (int y = 0; y < bmpHeight; y++)
             {
-                Color sourcePixel = sourceImage.GetPixel(bmpLeft + x, bmpTop + y);
-                highlightedBmp.SetPixel(x, y, Color.FromArgb(Math.Min((int)sourcePixel.R, BackgroundColor.R), Math.Min((int)sourcePixel.G, BackgroundColor.G), Math.Min((int)sourcePixel.B, BackgroundColor.B)));
+                int sampleX = bmpLeft + x;
+                int sampleY = bmpTop + y;
+                if (sampleX < 0 || sampleY < 0 || sampleX >= sourceImage.Width || sampleY >= sourceImage.Height) continue;
+                Color sourcePixel = sourceImage.GetPixel(sampleX, sampleY);
+                //highlightedBmp.SetPixel(x, y, Color.FromArgb(Math.Min((int)sourcePixel.R, BackgroundColor.R), Math.Min((int)sourcePixel.G, BackgroundColor.G), Math.Min((int)sourcePixel.B, BackgroundColor.B)));
+                highlightedBmp.SetPixel(x, y, ColorBlend.BlendColors(sourcePixel, BackgroundColor, blendMode));
+                //if (x == 100) Debug.WriteLine("color at 100: " +ColorBlend.BlendColors(sourcePixel, BackgroundColor, blendMode));
             }
         }
     }

@@ -641,7 +641,7 @@ namespace ScreenShotTool.Forms
                 //Point bottomRight = new(dragRight, dragBottom);
 
                 Color lineColor = buttonNewColorLine.BackColor;
-                Color fillColor = buttonNewColorFill.BackColor;
+                Color fillColor = Color.FromArgb((int)numericNewFillAlpha.Value, buttonNewColorFill.BackColor);
 
                 return selectedUserAction switch
                 {
@@ -653,7 +653,7 @@ namespace ScreenShotTool.Forms
                     UserActions.CreateImageScaled => new GsImageScaled(upperLeft, size, shadow),
                     UserActions.CreateText => new GsText(dragStart, size, lineColor, fillColor, shadow, lineWeight, lineAlpha),
                     UserActions.CreateBlur => new GsBlur(upperLeft, size, lineColor, fillColor),
-                    UserActions.CreateHighlight => new GsHighlight(upperLeft, size, lineColor, Color.Yellow),
+                    UserActions.CreateHighlight => new GsHighlight(upperLeft, size, lineColor, Color.Yellow, false, 0, 0, fillAlpha),
                     _ => null,
                 };
             }
@@ -1170,6 +1170,7 @@ namespace ScreenShotTool.Forms
                     panelPropertiesFill.Visible = true;
                     panelPropertiesLine.Visible = true;
                     panelPropertiesText.Visible = false;
+                    panelPropertiesHighlight.Visible = false;
 
                     panelPropertiesFill.Location = new Point(panelPropertiesPosition.Left, panelPropertiesPosition.Bottom + 5);
                     panelPropertiesLine.Location = new Point(panelPropertiesFill.Left, panelPropertiesFill.Bottom + 5);
@@ -1232,6 +1233,15 @@ namespace ScreenShotTool.Forms
                     else
                     {
                         textBoxSymbolText.Text = "";
+                    }
+
+                    if (graphicSymbol is GsHighlight gsHL)
+                    {
+                        panelPropertiesHighlight.Visible = true;
+                        panelPropertiesFill.Visible = true;
+                        panelPropertiesLine.Visible = false;
+                        panelPropertiesHighlight.Location = new Point(panelPropertiesFill.Left, panelPropertiesFill.Bottom + 5);
+                        comboBoxBlendMode.Text = gsHL.blendMode.ToString();
                     }
 
                     numericPropertiesLineAlpha.Value = graphicSymbol.lineAlpha;
@@ -1476,6 +1486,20 @@ namespace ScreenShotTool.Forms
         {
             if (GetSelectedSymbol() is GsText gs) return gs;
             return null;
+        }
+
+        private void ComboBoxBlendMode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (currentSelectedSymbol is GsHighlight gshl)
+            {
+                ColorBlend.BlendModes newBlend = ColorBlend.BlendModes.Darken;
+                if (Enum.TryParse<ColorBlend.BlendModes>(comboBoxBlendMode.Text, out newBlend))
+                {
+                    gshl.blendMode = newBlend;
+                    //gshl.Update
+                }
+                UpdateOverlay();
+            }
         }
 
         #endregion

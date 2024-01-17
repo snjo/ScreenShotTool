@@ -43,6 +43,7 @@
             itemPasteScaled = new ToolStripMenuItem();
             deleteOverlayElementsToolStripMenuItem = new ToolStripMenuItem();
             panelButtons = new Panel();
+            buttonHighlight = new Button();
             buttonBlur = new Button();
             buttonSelect = new Button();
             buttonBorder = new Button();
@@ -108,7 +109,9 @@
             panelPropertiesLine = new Panel();
             checkBoxPropertiesShadow = new CheckBox();
             timerAfterLoad = new System.Windows.Forms.Timer(components);
-            buttonHighlight = new Button();
+            panelPropertiesHighlight = new Panel();
+            label18 = new Label();
+            comboBoxBlendMode = new ComboBox();
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
@@ -130,6 +133,7 @@
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericBlurMosaicSize).BeginInit();
             panelPropertiesLine.SuspendLayout();
+            panelPropertiesHighlight.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
@@ -233,8 +237,21 @@
             panelButtons.Controls.Add(buttonRectangle);
             panelButtons.Location = new Point(0, 61);
             panelButtons.Name = "panelButtons";
-            panelButtons.Size = new Size(46, 617);
+            panelButtons.Size = new Size(46, 677);
             panelButtons.TabIndex = 1;
+            // 
+            // buttonHighlight
+            // 
+            buttonHighlight.FlatAppearance.BorderSize = 0;
+            buttonHighlight.FlatStyle = FlatStyle.Flat;
+            buttonHighlight.Image = Properties.Resources.highlight;
+            buttonHighlight.Location = new Point(4, 283);
+            buttonHighlight.Margin = new Padding(1);
+            buttonHighlight.Name = "buttonHighlight";
+            buttonHighlight.Size = new Size(36, 36);
+            buttonHighlight.TabIndex = 10;
+            buttonHighlight.UseVisualStyleBackColor = true;
+            buttonHighlight.Click += ButtonHighlight_Click;
             // 
             // buttonBlur
             // 
@@ -358,7 +375,7 @@
             panelImage.Controls.Add(pictureBoxOverlay);
             panelImage.Location = new Point(49, 61);
             panelImage.Name = "panelImage";
-            panelImage.Size = new Size(743, 617);
+            panelImage.Size = new Size(743, 677);
             panelImage.TabIndex = 3;
             // 
             // pictureBoxOverlay
@@ -381,7 +398,7 @@
             listViewSymbols.Location = new Point(795, 61);
             listViewSymbols.MultiSelect = false;
             listViewSymbols.Name = "listViewSymbols";
-            listViewSymbols.Size = new Size(153, 196);
+            listViewSymbols.Size = new Size(153, 256);
             listViewSymbols.TabIndex = 0;
             listViewSymbols.UseCompatibleStateImageBehavior = false;
             listViewSymbols.View = View.List;
@@ -404,7 +421,7 @@
             panelPropertiesPosition.Controls.Add(label3);
             panelPropertiesPosition.Controls.Add(label2);
             panelPropertiesPosition.Controls.Add(labelSymbolType);
-            panelPropertiesPosition.Location = new Point(795, 263);
+            panelPropertiesPosition.Location = new Point(795, 323);
             panelPropertiesPosition.Name = "panelPropertiesPosition";
             panelPropertiesPosition.Size = new Size(153, 81);
             panelPropertiesPosition.TabIndex = 4;
@@ -611,7 +628,7 @@
             // buttonDeleteSymbol
             // 
             buttonDeleteSymbol.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonDeleteSymbol.Location = new Point(795, 655);
+            buttonDeleteSymbol.Location = new Point(795, 715);
             buttonDeleteSymbol.Name = "buttonDeleteSymbol";
             buttonDeleteSymbol.Size = new Size(48, 23);
             buttonDeleteSymbol.TabIndex = 0;
@@ -718,7 +735,7 @@
             panelPropertiesFill.Controls.Add(numericPropertiesFillAlpha);
             panelPropertiesFill.Controls.Add(label7);
             panelPropertiesFill.Controls.Add(buttonPropertiesColorFill);
-            panelPropertiesFill.Location = new Point(795, 348);
+            panelPropertiesFill.Location = new Point(795, 408);
             panelPropertiesFill.Name = "panelPropertiesFill";
             panelPropertiesFill.Size = new Size(153, 51);
             panelPropertiesFill.TabIndex = 27;
@@ -735,7 +752,7 @@
             panelPropertiesText.Controls.Add(numericPropertiesFontSize);
             panelPropertiesText.Controls.Add(comboBoxFontFamily);
             panelPropertiesText.Controls.Add(textBoxSymbolText);
-            panelPropertiesText.Location = new Point(795, 482);
+            panelPropertiesText.Location = new Point(795, 485);
             panelPropertiesText.Name = "panelPropertiesText";
             panelPropertiesText.Size = new Size(153, 144);
             panelPropertiesText.TabIndex = 28;
@@ -893,7 +910,7 @@
             // 
             checkBoxPropertiesShadow.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             checkBoxPropertiesShadow.AutoSize = true;
-            checkBoxPropertiesShadow.Location = new Point(798, 632);
+            checkBoxPropertiesShadow.Location = new Point(798, 692);
             checkBoxPropertiesShadow.Name = "checkBoxPropertiesShadow";
             checkBoxPropertiesShadow.Size = new Size(68, 19);
             checkBoxPropertiesShadow.TabIndex = 30;
@@ -906,24 +923,42 @@
             timerAfterLoad.Interval = 50;
             timerAfterLoad.Tick += TimerAfterLoad_Tick;
             // 
-            // buttonHighlight
+            // panelPropertiesHighlight
             // 
-            buttonHighlight.FlatAppearance.BorderSize = 0;
-            buttonHighlight.FlatStyle = FlatStyle.Flat;
-            buttonHighlight.Image = Properties.Resources.highlight;
-            buttonHighlight.Location = new Point(4, 283);
-            buttonHighlight.Margin = new Padding(1);
-            buttonHighlight.Name = "buttonHighlight";
-            buttonHighlight.Size = new Size(36, 36);
-            buttonHighlight.TabIndex = 10;
-            buttonHighlight.UseVisualStyleBackColor = true;
-            buttonHighlight.Click += ButtonHighlight_Click;
+            panelPropertiesHighlight.Controls.Add(label18);
+            panelPropertiesHighlight.Controls.Add(comboBoxBlendMode);
+            panelPropertiesHighlight.Location = new Point(795, 631);
+            panelPropertiesHighlight.Name = "panelPropertiesHighlight";
+            panelPropertiesHighlight.Size = new Size(153, 48);
+            panelPropertiesHighlight.TabIndex = 31;
+            panelPropertiesHighlight.Visible = false;
+            // 
+            // label18
+            // 
+            label18.AutoSize = true;
+            label18.Location = new Point(3, 4);
+            label18.Name = "label18";
+            label18.Size = new Size(117, 15);
+            label18.TabIndex = 30;
+            label18.Text = "Higlight blend mode";
+            // 
+            // comboBoxBlendMode
+            // 
+            comboBoxBlendMode.FormattingEnabled = true;
+            comboBoxBlendMode.Items.AddRange(new object[] { "Darken", "Lighten", "Normal", "Multiply", "Divide", "Average", "Desaturate" });
+            comboBoxBlendMode.Location = new Point(3, 22);
+            comboBoxBlendMode.Name = "comboBoxBlendMode";
+            comboBoxBlendMode.Size = new Size(135, 23);
+            comboBoxBlendMode.TabIndex = 0;
+            comboBoxBlendMode.Text = "Darken";
+            comboBoxBlendMode.SelectedIndexChanged += ComboBoxBlendMode_SelectedIndexChanged;
             // 
             // ScreenshotEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(950, 682);
+            ClientSize = new Size(950, 742);
+            Controls.Add(panelPropertiesHighlight);
             Controls.Add(checkBoxPropertiesShadow);
             Controls.Add(panelPropertiesFill);
             Controls.Add(panelPropertiesLine);
@@ -970,6 +1005,8 @@
             ((System.ComponentModel.ISupportInitialize)numericBlurMosaicSize).EndInit();
             panelPropertiesLine.ResumeLayout(false);
             panelPropertiesLine.PerformLayout();
+            panelPropertiesHighlight.ResumeLayout(false);
+            panelPropertiesHighlight.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1055,5 +1092,8 @@
         private System.Windows.Forms.Timer timerAfterLoad;
         private Button buttonSelect;
         private Button buttonHighlight;
+        private Panel panelPropertiesHighlight;
+        private ComboBox comboBoxBlendMode;
+        private Label label18;
     }
 }
