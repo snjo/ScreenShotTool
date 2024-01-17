@@ -374,30 +374,36 @@ namespace ScreenShotTool.Forms
         {
             foreach (GraphicSymbol symbol in symbols)
             {
-                if (symbol is GsBlur blur)
-                {
-                    if (originalImage != null)
-                    {
-                        blur.blurredImage = blurImage;
-                    }
-                }
-                if (symbol is GsHighlight hl)
-                {
-                    if (originalImage != null)
-                    {
-                        hl.originalImage = (Bitmap)originalImage;
-                    }
-                }
+                InsertImagesInSymbol(symbol);
                 symbol.DrawSymbol(graphic);
             }
             if (temporarySymbol != null)
             {
+                InsertImagesInSymbol(temporarySymbol);
                 temporarySymbol?.DrawSymbol(graphic);
             }
             if (HighlightSelected)
             {
                 GraphicSymbol? selectedSymbol = GetSelectedSymbol();
                 selectedSymbol?.DrawHitboxes(graphic);
+            }
+        }
+
+        private void InsertImagesInSymbol(GraphicSymbol symbol)
+        {
+            if (symbol is GsBlur blur)
+            {
+                if (originalImage != null)
+                {
+                    blur.blurredImage = blurImage;
+                }
+            }
+            if (symbol is GsHighlight hl)
+            {
+                if (originalImage != null)
+                {
+                    hl.originalImage = (Bitmap)originalImage;
+                }
             }
         }
 
