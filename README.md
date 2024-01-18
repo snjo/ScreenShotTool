@@ -147,6 +147,16 @@ When using the $c or ${NUM} variable, it inserts the number in this field. The n
 
 --------------------------------------------------------------------------------------
 
+# Screenshot Editor
+
+![editor screenshot](img/editor.png)
+
+You can open an image in the editor by using the Edit menu in the main application window, or when performing a region capture by pressing E.
+
+Select the type of graphic symbol to add from the vertical list on the left. The new symbol will be added with the colors and settings at the top of the window.
+
+You can move, edit and scale symbols after you have placed them by clicking and dragging the symbol, or using the Properties panel on the right.
+
 # Application options
 
 #### Start Hidden

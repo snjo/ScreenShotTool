@@ -1,4 +1,7 @@
-﻿//   Copyright 2019 Kevin Godden
+﻿// Edits to the source code marked in comments: "EDITED FROM THE ORIGINAL SOURCE" -Andreas Aakvik Gogstad
+// From https://github.com/kgodden/DotNetPixelSnoop/
+
+//   Copyright 2019 Kevin Godden
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -50,7 +53,7 @@ unsafe class BmpPixelSnoop : IDisposable
     private readonly Bitmap wrappedBitmap;
 
     // The bitmap's data (once it has been locked)
-    private BitmapData? data = null;
+    private BitmapData? data = null;    // EDITED FROM THE ORIGINAL SOURCE, added ? to avoid null warning
 
     // Pointer to the first pixel
     private readonly byte* scan0;
@@ -129,7 +132,7 @@ unsafe class BmpPixelSnoop : IDisposable
         {
             if (wrappedBitmap != null)
             {
-                if (data != null)
+                if (data != null) // EDITED FROM THE ORIGINAL SOURCE, added null check
                 {
                     wrappedBitmap.UnlockBits(data);
                 }
