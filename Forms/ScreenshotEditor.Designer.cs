@@ -969,6 +969,7 @@
             // 
             // panelPropertiesDelete
             // 
+            panelPropertiesDelete.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             panelPropertiesDelete.Controls.Add(buttonDeleteSymbol);
             panelPropertiesDelete.Location = new Point(795, 711);
             panelPropertiesDelete.Name = "panelPropertiesDelete";
@@ -1000,6 +1001,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             KeyPreview = true;
             MainMenuStrip = menuStrip1;
+            MinimumSize = new Size(700, 550);
             Name = "ScreenshotEditor";
             Text = "ImageEditor";
             TopMost = true;

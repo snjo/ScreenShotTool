@@ -50,6 +50,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="img\editor.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="img\region.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
