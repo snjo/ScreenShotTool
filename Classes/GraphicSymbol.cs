@@ -8,7 +8,7 @@ namespace ScreenShotTool.Forms
     public class GraphicSymbol
     {
         public Pen LinePen = new(Color.Gray);
-        public Pen HightlightSymbolPen = new(Color.Red);
+        public Pen HighlightSymbolPen = new(Color.Red);
         public SolidBrush LineBrush = new(Color.Gray);
         public SolidBrush FillBrush = new(Color.Pink);
         public SolidBrush TextBrush = new(Color.Black);
@@ -138,7 +138,7 @@ namespace ScreenShotTool.Forms
             this.lineAlpha = lineAlpha;
             this.fillAlpha = fillAlpha;
             this.ShadowEnabled = shadowEnabled;
-            HightlightSymbolPen.DashPattern = [2f, 8f];
+            HighlightSymbolPen.DashPattern = [2f, 8f];
             //Hitboxes = CreateHitboxList();
         }
 
@@ -155,7 +155,7 @@ namespace ScreenShotTool.Forms
             this.lineAlpha = 255;
             this.fillAlpha = 255;
             this.ShadowEnabled = shadow;
-            HightlightSymbolPen.DashPattern = [2f, 8f];
+            HighlightSymbolPen.DashPattern = [2f, 8f];
             //Hitboxes = CreateHitboxList();
         }
 

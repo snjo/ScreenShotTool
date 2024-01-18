@@ -14,7 +14,7 @@ namespace ScreenShotTool.Forms
         //public static extern bool SetForegroundWindow(IntPtr hWnd);
 
         #region Constructor ---------------------------------------------------------------------------------
-        Image? originalImage;
+        Bitmap? originalImage;
         Image? overlayImage;
         Bitmap? blurImage;
         Graphics? overlayGraphics;
@@ -30,7 +30,9 @@ namespace ScreenShotTool.Forms
         int mosaicSize = Settings.Default.BlurMosaicSize;
         bool initialBlurComplete = false; // used to prevent blur from generating twice, when numeric is set initially
         readonly List<Button> toolButtons = [];
-        Size CanvasSize = new(100, 100);
+        int OutOfBoundsMaxPixels = 1000;
+        Size CanvasSize = new(100, 100); // will be update when the image loads
+
 
         private void ScreenshotEditor_Load(object sender, EventArgs e)
         {
@@ -58,6 +60,7 @@ namespace ScreenShotTool.Forms
             toolButtons.Add(buttonBorder);
             toolButtons.Add(buttonBlur);
             toolButtons.Add(buttonHighlight);
+            toolButtons.Add(buttonCrop);
         }
 
         public ScreenshotEditor()
@@ -111,34 +114,67 @@ namespace ScreenShotTool.Forms
 
         #region Load and Save -------------------------------------------------------------------------------
 
-        private void FlushImages()
+        private void FlushImages(bool deleteSymbols = false)
         {
             // used at the end of each Load/Create image
             DisposeAndNull(overlayGraphics);
             DisposeAndNull(overlayImage);
             DisposeAndNull(blurImage);
-            DeleteAllSymbols();
+            if (deleteSymbols)
+            {
+                DeleteAllSymbols();
+            }
         }
 
         private void CreateNewImage(int Width, int Height, Color color)
         {
             DisposeAndNull(originalImage);
-            originalImage = new Bitmap(Width, Height);
+            originalImage = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
             CanvasSize = originalImage.Size;
+            numericPropertiesX.Minimum = -OutOfBoundsMaxPixels;
+            numericPropertiesX.Maximum = CanvasSize.Width + OutOfBoundsMaxPixels;
+            numericPropertiesY.Minimum = -OutOfBoundsMaxPixels;
+            numericPropertiesY.Maximum = CanvasSize.Height + OutOfBoundsMaxPixels;
             Graphics g = Graphics.FromImage(originalImage);
             g.FillRectangle(new SolidBrush(color), 0, 0, Width, Height);
             FlushImages();
-            DeleteAllSymbols();
+            CreateOverlay();
+            UpdateOverlay();
+        }
+
+        private Bitmap? ImageToBitmap32bppArgb(Image? img, bool disposeSource)
+        {
+            Bitmap? clone = null;
+            if (img != null)
+            {
+                clone = new Bitmap(img.Width, img.Height, PixelFormat.Format32bppArgb);
+                using (Graphics gr = Graphics.FromImage(clone))
+                {
+                    gr.DrawImage(img, new Rectangle(0, 0, clone.Width, clone.Height));
+                }
+                if (disposeSource)
+                {
+                    img.Dispose();
+                }
+            }
+            return clone;
         }
 
         private void LoadImageFromClipboard()
         {
             try
             {
-                originalImage = Clipboard.GetImage();
+                DisposeAndNull(originalImage);
+                originalImage = ImageToBitmap32bppArgb(Clipboard.GetImage(), true); //(Bitmap)Clipboard.GetImage(); 
                 if (originalImage != null)
                 {
                     CanvasSize = originalImage.Size;
+                }
+                else
+                {
+                    Debug.WriteLine("Couldn't load image from clipboard");
+                    MessageBox.Show("Couldn't load image from clipboard.\nUsing blank image.");
+                    CreateNewImage(640, 480, Color.White);
                 }
             }
             catch
@@ -147,14 +183,27 @@ namespace ScreenShotTool.Forms
                 return;
             }
             FlushImages();
+            CreateOverlay();
+            UpdateOverlay();
         }
 
         private void LoadImageFromImage(Image image)
         {
             DisposeAndNull(originalImage);
-            originalImage = image;
-            CanvasSize = originalImage.Size;
+            originalImage = ImageToBitmap32bppArgb(image, true);
+            if (originalImage != null)
+            {
+                CanvasSize = originalImage.Size;
+            }
+            else
+            {
+                Debug.WriteLine("Couldn't load image from other image object");
+                MessageBox.Show("Error: Couldn't load image.\nUsing blank image.");
+                CreateNewImage(640, 480, Color.White);
+            }
             FlushImages();
+            CreateOverlay();
+            UpdateOverlay();
         }
 
         public void LoadImageFromFile(string filename)
@@ -173,7 +222,7 @@ namespace ScreenShotTool.Forms
                         tempImage = Image.FromStream(stream);
                     }
                     DisposeAndNull(originalImage);
-                    originalImage = tempImage;
+                    originalImage = ImageToBitmap32bppArgb(tempImage, true);
                     if (originalImage != null)
                     {
                         CanvasSize = originalImage.Size;
@@ -185,6 +234,8 @@ namespace ScreenShotTool.Forms
 
                 }
                 FlushImages();
+                CreateOverlay();
+                UpdateOverlay();
             }
         }
 
@@ -192,22 +243,25 @@ namespace ScreenShotTool.Forms
         {
             if (originalImage != null) // uhm
             {
-                Bitmap outImage = new(originalImage);
-                Graphics saveGraphic = Graphics.FromImage(outImage);
-                saveGraphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                saveGraphic.TextRenderingHint = TextRenderingHint.AntiAlias;
-
-                DrawElements(saveGraphic);
-
+                //Bitmap outImage = new(originalImage);
+                //Graphics saveGraphic = Graphics.FromImage(outImage);
+                //saveGraphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                //saveGraphic.TextRenderingHint = TextRenderingHint.AntiAlias;
+                //DrawElements(saveGraphic);
+                
                 Debug.WriteLine($"Saving image {filename} with format {imgFormat}");
+                Bitmap? outImage = AssembleImageForSaveOrCopy();
 
-                if (imgFormat == ImageFormat.Jpeg)
+                if (outImage != null && imgFormat == ImageFormat.Jpeg)
                 {
                     MainForm.SaveJpeg(filename, (Bitmap)outImage, Settings.Default.JpegQuality);
+                    outImage.Dispose();
                 }
-                outImage.Save(filename, imgFormat);
-                saveGraphic.Dispose();
-                outImage.Dispose();
+                else if (outImage != null)
+                {
+                    outImage.Save(filename, imgFormat);
+                    outImage.Dispose();
+                }
             }
         }
 
@@ -570,7 +624,8 @@ namespace ScreenShotTool.Forms
             CreateImage,
             CreateImageScaled,
             CreateBlur,
-            CreateHighlight
+            CreateHighlight,
+            CreateCrop
         }
 
         UserActions selectedUserAction = UserActions.None;
@@ -590,6 +645,7 @@ namespace ScreenShotTool.Forms
             if (selectedUserAction == UserActions.CreateText) buttonText.BackColor = Color.Yellow;
             if (selectedUserAction == UserActions.CreateBlur) buttonBlur.BackColor = Color.Yellow;
             if (selectedUserAction == UserActions.CreateHighlight) buttonHighlight.BackColor = Color.Yellow;
+            if (selectedUserAction == UserActions.CreateCrop) buttonCrop.BackColor = Color.Yellow;
 
             if (selectedUserAction == UserActions.MoveSymbol)
             {
@@ -662,6 +718,7 @@ namespace ScreenShotTool.Forms
                     UserActions.CreateText => new GsText(dragStart, size, lineColor, fillColor, shadow, lineWeight, lineAlpha),
                     UserActions.CreateBlur => new GsBlur(upperLeft, size, lineColor, fillColor),
                     UserActions.CreateHighlight => new GsHighlight(upperLeft, size, lineColor, Color.Yellow, false, 0, 0, fillAlpha),
+                    UserActions.CreateCrop => new GsCrop(upperLeft, size, lineColor, fillColor),
                     _ => null,
                 };
             }
@@ -873,6 +930,12 @@ namespace ScreenShotTool.Forms
             UpdateOverlay();
         }
 
+        private void buttonCrop_Click(object sender, EventArgs e)
+        {
+            SetUserAction(UserActions.CreateCrop);
+            UpdateOverlay();
+        }
+
         #endregion
 
         #region Mouse input ---------------------------------------------------------------------------------
@@ -996,8 +1059,8 @@ namespace ScreenShotTool.Forms
             if (currentSelectedSymbol.MoveAllowed && dragStarted)
             {
                 Point newPos = new(
-                    Math.Clamp(e.X - dragStartOffsetFromSymbolCenter.X, -100, CanvasSize.Width + 100),
-                    Math.Clamp(e.Y - dragStartOffsetFromSymbolCenter.Y, -100, CanvasSize.Height + 100)
+                    Math.Clamp(e.X - dragStartOffsetFromSymbolCenter.X, -OutOfBoundsMaxPixels, CanvasSize.Width + OutOfBoundsMaxPixels),
+                    Math.Clamp(e.Y - dragStartOffsetFromSymbolCenter.Y, -OutOfBoundsMaxPixels, CanvasSize.Height + OutOfBoundsMaxPixels)
                 );
                 currentSelectedSymbol.MoveTo(newPos.X, newPos.Y);
             }
@@ -1056,8 +1119,9 @@ namespace ScreenShotTool.Forms
         int stackedSymbolsIndex = -1;
         private void PictureBoxOverlay_MouseUp(object sender, MouseEventArgs e)
         {
-            if (dragMoved == false) // user clicked and released mouse without moving it
+            if (dragMoved == false && selectedUserAction != UserActions.CreateImage) // user clicked and released mouse without moving it. Also don't update if the action is inserting an unscaled image, since the click place is different
             {
+                Debug.WriteLine("Get symbol under cursor");
                 SelectSymbolUnderCursor();
             }
 
@@ -1114,14 +1178,33 @@ namespace ScreenShotTool.Forms
         {
             if (originalImage != null)
             {
-                Bitmap outImage = new(originalImage);
-                Graphics saveGraphic = Graphics.FromImage(outImage);
-                saveGraphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                saveGraphic.TextRenderingHint = TextRenderingHint.AntiAlias;
-                DrawElements(saveGraphic);
-                Clipboard.SetImage(outImage);
-                saveGraphic.Dispose();
+                //Bitmap outImage = new(originalImage);
+                //Graphics saveGraphic = Graphics.FromImage(outImage);
+                //saveGraphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                //saveGraphic.TextRenderingHint = TextRenderingHint.AntiAlias;
+                //DrawElements(saveGraphic);
+                //Clipboard.SetImage(outImage);
+                //saveGraphic.Dispose();
+                Bitmap? result = AssembleImageForSaveOrCopy();
+                if (result != null)
+                {
+                    Clipboard.SetImage(result);
+                    result.Dispose();
+                }
             }
+        }
+
+        private Bitmap? AssembleImageForSaveOrCopy()
+        {
+            if (originalImage == null) return null;
+            Bitmap outImage = new(originalImage);
+            Graphics saveGraphic = Graphics.FromImage(outImage);
+            saveGraphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            saveGraphic.TextRenderingHint = TextRenderingHint.AntiAlias;
+            DrawElements(saveGraphic);
+            Clipboard.SetImage(outImage);
+            saveGraphic.Dispose();
+            return outImage;
         }
 
         private void PasteIntoImage()
@@ -1185,6 +1268,7 @@ namespace ScreenShotTool.Forms
             DisablePanel(panelPropertiesHighlight);
             DisablePanel(panelPropertiesShadow);
             DisablePanel(panelPropertiesDelete);
+            DisablePanel(panelPropertiesCrop);
         }
 
         private void SetNumericClamp(NumericUpDown numericUpDown, int value)
@@ -1210,16 +1294,16 @@ namespace ScreenShotTool.Forms
                     //panelPropertiesFill.Location = new Point(panelPropertiesPosition.Left, panelPropertiesPosition.Bottom + 5);
                     //panelPropertiesLine.Location = new Point(panelPropertiesFill.Left, panelPropertiesFill.Bottom + 5);
                     numericPropertiesLineWeight.Enabled = true;
-                    numericWidth.Enabled = true;
-                    numericHeight.Enabled = true;
+                    numericPropertiesWidth.Enabled = true;
+                    numericPropertiesHeight.Enabled = true;
                     buttonPropertiesColorLine.Enabled = true;
                     numericPropertiesLineAlpha.Enabled = true;
 
                     labelSymbolType.Text = "Symbol: " + graphicSymbol.Name;
-                    SetNumericClamp(numericX, graphicSymbol.Left);
-                    SetNumericClamp(numericY, graphicSymbol.Top);
-                    SetNumericClamp(numericWidth, graphicSymbol.Width);
-                    SetNumericClamp(numericHeight, graphicSymbol.Height);
+                    SetNumericClamp(numericPropertiesX, graphicSymbol.Left);
+                    SetNumericClamp(numericPropertiesY, graphicSymbol.Top);
+                    SetNumericClamp(numericPropertiesWidth, graphicSymbol.Width);
+                    SetNumericClamp(numericPropertiesHeight, graphicSymbol.Height);
                     buttonPropertiesColorLine.BackColor = graphicSymbol.ForegroundColor;
                     buttonPropertiesColorFill.BackColor = graphicSymbol.BackgroundColor;
                     numericPropertiesLineWeight.Value = graphicSymbol.LineWeight;
@@ -1232,8 +1316,8 @@ namespace ScreenShotTool.Forms
                         EnablePanel(panelPropertiesText, panelLeft, ref lastPanelBottom);
                         EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
 
-                        numericWidth.Enabled = false;
-                        numericHeight.Enabled = false;
+                        numericPropertiesWidth.Enabled = false;
+                        numericPropertiesHeight.Enabled = false;
                         numericPropertiesLineWeight.Enabled = false;
 
                         textBoxSymbolText.Text = gsText.text;
@@ -1257,7 +1341,11 @@ namespace ScreenShotTool.Forms
                     {
                         // just position shown
                     }
-                    else if (graphicSymbol is GsBoundingBox)
+                    else if (graphicSymbol is GsCrop)
+                    {
+                        EnablePanel(panelPropertiesCrop, panelLeft, ref lastPanelBottom);
+                    }
+                    else if (graphicSymbol is GsBoundingBox) // must be after all other symbols that inherit from GsBoundingBox
                     {
                         EnablePanel(panelPropertiesFill, panelLeft, ref lastPanelBottom);
                         EnablePanel(panelPropertiesLine, panelLeft, ref lastPanelBottom);
@@ -1268,6 +1356,7 @@ namespace ScreenShotTool.Forms
                         EnablePanel(panelPropertiesLine, panelLeft, ref lastPanelBottom);
                         EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
                     }
+
 
                     EnablePanel(panelPropertiesDelete, panelLeft, ref lastPanelBottom);
 
@@ -1312,10 +1401,10 @@ namespace ScreenShotTool.Forms
         private void ClearPropertyPanelValues()
         {
             labelSymbolType.Text = "Symbol: ";
-            numericX.Value = 0;
-            numericY.Value = 0;
-            numericWidth.Value = 1;
-            numericHeight.Value = 1;
+            numericPropertiesX.Value = 0;
+            numericPropertiesY.Value = 0;
+            numericPropertiesWidth.Value = 1;
+            numericPropertiesHeight.Value = 1;
             buttonPropertiesColorLine.BackColor = Color.Gray;
             buttonPropertiesColorFill.BackColor = Color.Gray;
             numericPropertiesLineAlpha.Value = 255;
@@ -1332,21 +1421,21 @@ namespace ScreenShotTool.Forms
                 ListViewItem item = listViewSymbols.SelectedItems[0];
                 if (item.Tag is not GraphicSymbol gs) return;
 
-                if (sender == numericX)
+                if (sender == numericPropertiesX)
                 {
-                    gs.Left = (int)numericX.Value;
+                    gs.Left = (int)numericPropertiesX.Value;
                 }
-                if (sender == numericY)
+                if (sender == numericPropertiesY)
                 {
-                    gs.Top = (int)numericY.Value;
+                    gs.Top = (int)numericPropertiesY.Value;
                 }
-                if (sender == numericWidth)
+                if (sender == numericPropertiesWidth)
                 {
-                    gs.Width = (int)numericWidth.Value;
+                    gs.Width = (int)numericPropertiesWidth.Value;
                 }
-                if (sender == numericHeight)
+                if (sender == numericPropertiesHeight)
                 {
-                    gs.Height = (int)numericHeight.Value;
+                    gs.Height = (int)numericPropertiesHeight.Value;
                 }
                 if (sender == numericPropertiesLineWeight)
                 {
@@ -1524,6 +1613,45 @@ namespace ScreenShotTool.Forms
                     gshl.blendMode = newBlend;
                 }
                 UpdateOverlay();
+            }
+        }
+
+        private void buttonPropertyCrop_Click(object sender, EventArgs e)
+        {
+            if (GetSelectedSymbol() is GsCrop gsC)
+            {
+                gsC.showOutline = false;
+                //Bitmap? cropped = AssembleImageForSaveOrCopy();
+                if (originalImage != null)
+                {
+                    Rectangle cropRect = gsC.Bounds;
+                    Bitmap outImage = CropImage(originalImage, cropRect);
+                    foreach (GraphicSymbol gs in symbols)
+                    {
+                        gs.MoveTo(gs.Left - cropRect.Left, gs.Top - cropRect.Top);
+                    }
+                    LoadImageFromImage(outImage);
+                    gsC.showOutline = true;
+                }
+                DeleteSelectedSymbol();
+            }
+        }
+
+        private void buttonPropertyCopyCrop_Click(object sender, EventArgs e)
+        {
+            if (GetSelectedSymbol() is GsCrop gsC)
+            {
+                gsC.showOutline = false;
+                Bitmap? assembled = AssembleImageForSaveOrCopy();
+                if (assembled != null)
+                {
+                    Rectangle cropRect = gsC.Bounds;
+                    Bitmap outImage = CropImage(assembled, cropRect);
+                    assembled.Dispose();
+                    Clipboard.SetImage(outImage);
+                    outImage.Dispose();
+                    gsC.showOutline = true;
+                }
             }
         }
 

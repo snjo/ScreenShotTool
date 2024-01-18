@@ -43,6 +43,7 @@
             itemPasteScaled = new ToolStripMenuItem();
             deleteOverlayElementsToolStripMenuItem = new ToolStripMenuItem();
             panelButtons = new Panel();
+            buttonCrop = new Button();
             buttonHighlight = new Button();
             buttonBlur = new Button();
             buttonSelect = new Button();
@@ -61,10 +62,10 @@
             columnHeaderY = new ColumnHeader();
             columnHeaderColor = new ColumnHeader();
             panelPropertiesPosition = new Panel();
-            numericHeight = new NumericUpDown();
-            numericY = new NumericUpDown();
-            numericWidth = new NumericUpDown();
-            numericX = new NumericUpDown();
+            numericPropertiesHeight = new NumericUpDown();
+            numericPropertiesY = new NumericUpDown();
+            numericPropertiesWidth = new NumericUpDown();
+            numericPropertiesX = new NumericUpDown();
             label5 = new Label();
             label4 = new Label();
             label3 = new Label();
@@ -115,16 +116,19 @@
             panelPropertiesShadow = new Panel();
             panelPropertiesDelete = new Panel();
             TimerUpdateOverlay = new System.Windows.Forms.Timer(components);
+            panelPropertiesCrop = new Panel();
+            buttonPropertyCopyCrop = new Button();
+            buttonPropertyCrop = new Button();
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
             panelImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxOverlay).BeginInit();
             panelPropertiesPosition.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericHeight).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericY).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericWidth).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericX).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericPropertiesHeight).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericPropertiesY).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericPropertiesWidth).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericPropertiesX).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesLineAlpha).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesFillAlpha).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesLineWeight).BeginInit();
@@ -139,6 +143,7 @@
             panelPropertiesHighlight.SuspendLayout();
             panelPropertiesShadow.SuspendLayout();
             panelPropertiesDelete.SuspendLayout();
+            panelPropertiesCrop.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
@@ -146,7 +151,7 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, editToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(950, 24);
+            menuStrip1.Size = new Size(952, 24);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -231,6 +236,7 @@
             // 
             panelButtons.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             panelButtons.BorderStyle = BorderStyle.FixedSingle;
+            panelButtons.Controls.Add(buttonCrop);
             panelButtons.Controls.Add(buttonHighlight);
             panelButtons.Controls.Add(buttonBlur);
             panelButtons.Controls.Add(buttonSelect);
@@ -242,14 +248,29 @@
             panelButtons.Controls.Add(buttonRectangle);
             panelButtons.Location = new Point(0, 61);
             panelButtons.Name = "panelButtons";
-            panelButtons.Size = new Size(46, 677);
+            panelButtons.Size = new Size(46, 657);
             panelButtons.TabIndex = 1;
+            // 
+            // buttonCrop
+            // 
+            buttonCrop.AccessibleName = "Crop";
+            buttonCrop.FlatAppearance.BorderSize = 0;
+            buttonCrop.FlatStyle = FlatStyle.Flat;
+            buttonCrop.Image = Properties.Resources.crop;
+            buttonCrop.Location = new Point(4, 357);
+            buttonCrop.Margin = new Padding(1);
+            buttonCrop.Name = "buttonCrop";
+            buttonCrop.Size = new Size(36, 36);
+            buttonCrop.TabIndex = 11;
+            buttonCrop.UseVisualStyleBackColor = true;
+            buttonCrop.Click += buttonCrop_Click;
             // 
             // buttonHighlight
             // 
+            buttonHighlight.AccessibleName = "Highlighter";
             buttonHighlight.FlatAppearance.BorderSize = 0;
             buttonHighlight.FlatStyle = FlatStyle.Flat;
-            buttonHighlight.Image = Properties.Resources.highlight;
+            buttonHighlight.Image = Properties.Resources.highlight1;
             buttonHighlight.Location = new Point(4, 283);
             buttonHighlight.Margin = new Padding(1);
             buttonHighlight.Name = "buttonHighlight";
@@ -260,9 +281,10 @@
             // 
             // buttonBlur
             // 
+            buttonBlur.AccessibleName = "Blur Mosaic";
             buttonBlur.FlatAppearance.BorderSize = 0;
             buttonBlur.FlatStyle = FlatStyle.Flat;
-            buttonBlur.Image = Properties.Resources.blur;
+            buttonBlur.Image = Properties.Resources.blur1;
             buttonBlur.Location = new Point(4, 245);
             buttonBlur.Margin = new Padding(1);
             buttonBlur.Name = "buttonBlur";
@@ -273,6 +295,7 @@
             // 
             // buttonSelect
             // 
+            buttonSelect.AccessibleName = "Select";
             buttonSelect.FlatAppearance.BorderSize = 0;
             buttonSelect.FlatStyle = FlatStyle.Flat;
             buttonSelect.Image = Properties.Resources.cursor_select;
@@ -286,6 +309,7 @@
             // 
             // buttonBorder
             // 
+            buttonBorder.AccessibleName = "Border Frame";
             buttonBorder.FlatAppearance.BorderSize = 0;
             buttonBorder.FlatStyle = FlatStyle.Flat;
             buttonBorder.Image = Properties.Resources.frame;
@@ -299,6 +323,7 @@
             // 
             // buttonText
             // 
+            buttonText.AccessibleName = "Text";
             buttonText.FlatAppearance.BorderSize = 0;
             buttonText.FlatStyle = FlatStyle.Flat;
             buttonText.Image = Properties.Resources.toolText;
@@ -312,6 +337,7 @@
             // 
             // buttonArrow
             // 
+            buttonArrow.AccessibleName = "Arrow";
             buttonArrow.FlatAppearance.BorderSize = 0;
             buttonArrow.FlatStyle = FlatStyle.Flat;
             buttonArrow.Image = Properties.Resources.toolArrow;
@@ -325,6 +351,7 @@
             // 
             // buttonLine
             // 
+            buttonLine.AccessibleName = "Line";
             buttonLine.FlatAppearance.BorderSize = 0;
             buttonLine.FlatStyle = FlatStyle.Flat;
             buttonLine.Image = Properties.Resources.toolLine;
@@ -338,6 +365,7 @@
             // 
             // buttonCircle
             // 
+            buttonCircle.AccessibleName = "Ellipse";
             buttonCircle.FlatAppearance.BorderSize = 0;
             buttonCircle.FlatStyle = FlatStyle.Flat;
             buttonCircle.Image = Properties.Resources.toolEllipse;
@@ -351,6 +379,7 @@
             // 
             // buttonRectangle
             // 
+            buttonRectangle.AccessibleName = "Rectangle";
             buttonRectangle.FlatAppearance.BorderSize = 0;
             buttonRectangle.FlatStyle = FlatStyle.Flat;
             buttonRectangle.Image = Properties.Resources.toolRectangle2;
@@ -364,6 +393,7 @@
             // 
             // numericNewLineWeight
             // 
+            numericNewLineWeight.AccessibleName = "New symbol line weight";
             numericNewLineWeight.Location = new Point(306, 3);
             numericNewLineWeight.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
             numericNewLineWeight.Name = "numericNewLineWeight";
@@ -380,7 +410,7 @@
             panelImage.Controls.Add(pictureBoxOverlay);
             panelImage.Location = new Point(49, 61);
             panelImage.Name = "panelImage";
-            panelImage.Size = new Size(743, 677);
+            panelImage.Size = new Size(745, 657);
             panelImage.TabIndex = 3;
             // 
             // pictureBoxOverlay
@@ -399,10 +429,10 @@
             // 
             listViewSymbols.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             listViewSymbols.Columns.AddRange(new ColumnHeader[] { columnHeaderType, columnHeaderX, columnHeaderY, columnHeaderColor });
-            listViewSymbols.Location = new Point(795, 61);
+            listViewSymbols.Location = new Point(797, 61);
             listViewSymbols.MultiSelect = false;
             listViewSymbols.Name = "listViewSymbols";
-            listViewSymbols.Size = new Size(153, 256);
+            listViewSymbols.Size = new Size(153, 160);
             listViewSymbols.TabIndex = 0;
             listViewSymbols.UseCompatibleStateImageBehavior = false;
             listViewSymbols.View = View.List;
@@ -416,65 +446,65 @@
             // panelPropertiesPosition
             // 
             panelPropertiesPosition.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            panelPropertiesPosition.Controls.Add(numericHeight);
-            panelPropertiesPosition.Controls.Add(numericY);
-            panelPropertiesPosition.Controls.Add(numericWidth);
-            panelPropertiesPosition.Controls.Add(numericX);
+            panelPropertiesPosition.Controls.Add(numericPropertiesHeight);
+            panelPropertiesPosition.Controls.Add(numericPropertiesY);
+            panelPropertiesPosition.Controls.Add(numericPropertiesWidth);
+            panelPropertiesPosition.Controls.Add(numericPropertiesX);
             panelPropertiesPosition.Controls.Add(label5);
             panelPropertiesPosition.Controls.Add(label4);
             panelPropertiesPosition.Controls.Add(label3);
             panelPropertiesPosition.Controls.Add(label2);
             panelPropertiesPosition.Controls.Add(labelSymbolType);
-            panelPropertiesPosition.Location = new Point(795, 323);
+            panelPropertiesPosition.Location = new Point(797, 225);
             panelPropertiesPosition.Name = "panelPropertiesPosition";
             panelPropertiesPosition.Size = new Size(153, 81);
             panelPropertiesPosition.TabIndex = 4;
             // 
-            // numericHeight
+            // numericPropertiesHeight
             // 
-            numericHeight.Location = new Point(94, 53);
-            numericHeight.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
-            numericHeight.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            numericHeight.Name = "numericHeight";
-            numericHeight.Size = new Size(43, 23);
-            numericHeight.TabIndex = 12;
-            numericHeight.Tag = "Height";
-            numericHeight.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            numericHeight.ValueChanged += Numeric_ValueChanged;
+            numericPropertiesHeight.Location = new Point(94, 53);
+            numericPropertiesHeight.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            numericPropertiesHeight.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numericPropertiesHeight.Name = "numericPropertiesHeight";
+            numericPropertiesHeight.Size = new Size(43, 23);
+            numericPropertiesHeight.TabIndex = 12;
+            numericPropertiesHeight.Tag = "Height";
+            numericPropertiesHeight.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            numericPropertiesHeight.ValueChanged += Numeric_ValueChanged;
             // 
-            // numericY
+            // numericPropertiesY
             // 
-            numericY.Location = new Point(94, 24);
-            numericY.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
-            numericY.Minimum = new decimal(new int[] { 100, 0, 0, int.MinValue });
-            numericY.Name = "numericY";
-            numericY.Size = new Size(43, 23);
-            numericY.TabIndex = 11;
-            numericY.Tag = "Y";
-            numericY.ValueChanged += Numeric_ValueChanged;
+            numericPropertiesY.Location = new Point(94, 24);
+            numericPropertiesY.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            numericPropertiesY.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
+            numericPropertiesY.Name = "numericPropertiesY";
+            numericPropertiesY.Size = new Size(43, 23);
+            numericPropertiesY.TabIndex = 11;
+            numericPropertiesY.Tag = "Y";
+            numericPropertiesY.ValueChanged += Numeric_ValueChanged;
             // 
-            // numericWidth
+            // numericPropertiesWidth
             // 
-            numericWidth.Location = new Point(21, 53);
-            numericWidth.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
-            numericWidth.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            numericWidth.Name = "numericWidth";
-            numericWidth.Size = new Size(43, 23);
-            numericWidth.TabIndex = 10;
-            numericWidth.Tag = "Width";
-            numericWidth.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            numericWidth.ValueChanged += Numeric_ValueChanged;
+            numericPropertiesWidth.Location = new Point(21, 53);
+            numericPropertiesWidth.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            numericPropertiesWidth.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numericPropertiesWidth.Name = "numericPropertiesWidth";
+            numericPropertiesWidth.Size = new Size(43, 23);
+            numericPropertiesWidth.TabIndex = 10;
+            numericPropertiesWidth.Tag = "Width";
+            numericPropertiesWidth.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            numericPropertiesWidth.ValueChanged += Numeric_ValueChanged;
             // 
-            // numericX
+            // numericPropertiesX
             // 
-            numericX.Location = new Point(21, 24);
-            numericX.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
-            numericX.Minimum = new decimal(new int[] { 100, 0, 0, int.MinValue });
-            numericX.Name = "numericX";
-            numericX.Size = new Size(43, 23);
-            numericX.TabIndex = 9;
-            numericX.Tag = "X";
-            numericX.ValueChanged += Numeric_ValueChanged;
+            numericPropertiesX.Location = new Point(21, 24);
+            numericPropertiesX.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            numericPropertiesX.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
+            numericPropertiesX.Name = "numericPropertiesX";
+            numericPropertiesX.Size = new Size(43, 23);
+            numericPropertiesX.TabIndex = 9;
+            numericPropertiesX.Tag = "X";
+            numericPropertiesX.ValueChanged += Numeric_ValueChanged;
             // 
             // label5
             // 
@@ -646,6 +676,7 @@
             // 
             // buttonNewColorFill
             // 
+            buttonNewColorFill.AccessibleName = "New symbol fill color";
             buttonNewColorFill.BackColor = Color.LightCyan;
             buttonNewColorFill.FlatStyle = FlatStyle.Flat;
             buttonNewColorFill.Location = new Point(181, 5);
@@ -658,6 +689,7 @@
             // 
             // buttonNewColorLine
             // 
+            buttonNewColorLine.AccessibleName = "New symbol line color";
             buttonNewColorLine.BackColor = Color.Orange;
             buttonNewColorLine.FlatStyle = FlatStyle.Flat;
             buttonNewColorLine.Location = new Point(72, 5);
@@ -697,6 +729,7 @@
             // 
             // numericNewLineAlpha
             // 
+            numericNewLineAlpha.AccessibleName = "New symbol line alpha value";
             numericNewLineAlpha.Location = new Point(447, 3);
             numericNewLineAlpha.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
             numericNewLineAlpha.Name = "numericNewLineAlpha";
@@ -724,6 +757,7 @@
             // 
             // numericNewFillAlpha
             // 
+            numericNewFillAlpha.AccessibleName = "New symbol fill alpha value";
             numericNewFillAlpha.Location = new Point(559, 3);
             numericNewFillAlpha.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
             numericNewFillAlpha.Name = "numericNewFillAlpha";
@@ -738,7 +772,7 @@
             panelPropertiesFill.Controls.Add(numericPropertiesFillAlpha);
             panelPropertiesFill.Controls.Add(label7);
             panelPropertiesFill.Controls.Add(buttonPropertiesColorFill);
-            panelPropertiesFill.Location = new Point(795, 408);
+            panelPropertiesFill.Location = new Point(797, 307);
             panelPropertiesFill.Name = "panelPropertiesFill";
             panelPropertiesFill.Size = new Size(153, 51);
             panelPropertiesFill.TabIndex = 27;
@@ -755,7 +789,7 @@
             panelPropertiesText.Controls.Add(numericPropertiesFontSize);
             panelPropertiesText.Controls.Add(comboBoxFontFamily);
             panelPropertiesText.Controls.Add(textBoxSymbolText);
-            panelPropertiesText.Location = new Point(795, 485);
+            panelPropertiesText.Location = new Point(797, 437);
             panelPropertiesText.Name = "panelPropertiesText";
             panelPropertiesText.Size = new Size(153, 144);
             panelPropertiesText.TabIndex = 28;
@@ -861,7 +895,7 @@
             panel1.Controls.Add(numericNewLineWeight);
             panel1.Location = new Point(0, 27);
             panel1.Name = "panel1";
-            panel1.Size = new Size(949, 31);
+            panel1.Size = new Size(951, 31);
             panel1.TabIndex = 29;
             // 
             // label17
@@ -875,6 +909,7 @@
             // 
             // numericBlurMosaicSize
             // 
+            numericBlurMosaicSize.AccessibleName = "Mosaic pixel size (applies to all blur symbols)";
             numericBlurMosaicSize.Location = new Point(792, 3);
             numericBlurMosaicSize.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
             numericBlurMosaicSize.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
@@ -887,6 +922,7 @@
             // 
             // checkBoxNewShadow
             // 
+            checkBoxNewShadow.AccessibleName = "New symbol Shadow toggle";
             checkBoxNewShadow.AutoSize = true;
             checkBoxNewShadow.CheckAlign = ContentAlignment.MiddleRight;
             checkBoxNewShadow.Location = new Point(609, 5);
@@ -905,7 +941,7 @@
             panelPropertiesLine.Controls.Add(numericPropertiesLineAlpha);
             panelPropertiesLine.Controls.Add(buttonPropertiesColorLine);
             panelPropertiesLine.Controls.Add(label8);
-            panelPropertiesLine.Location = new Point(795, 402);
+            panelPropertiesLine.Location = new Point(797, 359);
             panelPropertiesLine.Name = "panelPropertiesLine";
             panelPropertiesLine.Size = new Size(153, 77);
             panelPropertiesLine.TabIndex = 2;
@@ -932,7 +968,7 @@
             panelPropertiesHighlight.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             panelPropertiesHighlight.Controls.Add(label18);
             panelPropertiesHighlight.Controls.Add(comboBoxBlendMode);
-            panelPropertiesHighlight.Location = new Point(795, 631);
+            panelPropertiesHighlight.Location = new Point(797, 582);
             panelPropertiesHighlight.Name = "panelPropertiesHighlight";
             panelPropertiesHighlight.Size = new Size(153, 48);
             panelPropertiesHighlight.TabIndex = 31;
@@ -962,7 +998,7 @@
             // 
             panelPropertiesShadow.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             panelPropertiesShadow.Controls.Add(checkBoxPropertiesShadow);
-            panelPropertiesShadow.Location = new Point(795, 682);
+            panelPropertiesShadow.Location = new Point(797, 631);
             panelPropertiesShadow.Name = "panelPropertiesShadow";
             panelPropertiesShadow.Size = new Size(153, 26);
             panelPropertiesShadow.TabIndex = 32;
@@ -971,7 +1007,7 @@
             // 
             panelPropertiesDelete.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             panelPropertiesDelete.Controls.Add(buttonDeleteSymbol);
-            panelPropertiesDelete.Location = new Point(795, 711);
+            panelPropertiesDelete.Location = new Point(797, 691);
             panelPropertiesDelete.Name = "panelPropertiesDelete";
             panelPropertiesDelete.Size = new Size(153, 27);
             panelPropertiesDelete.TabIndex = 33;
@@ -981,18 +1017,49 @@
             TimerUpdateOverlay.Interval = 2;
             TimerUpdateOverlay.Tick += TimerUpdateOverlay_Tick;
             // 
+            // panelPropertiesCrop
+            // 
+            panelPropertiesCrop.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            panelPropertiesCrop.Controls.Add(buttonPropertyCopyCrop);
+            panelPropertiesCrop.Controls.Add(buttonPropertyCrop);
+            panelPropertiesCrop.Location = new Point(797, 658);
+            panelPropertiesCrop.Name = "panelPropertiesCrop";
+            panelPropertiesCrop.Size = new Size(153, 28);
+            panelPropertiesCrop.TabIndex = 34;
+            // 
+            // buttonPropertyCopyCrop
+            // 
+            buttonPropertyCopyCrop.Location = new Point(62, 3);
+            buttonPropertyCopyCrop.Name = "buttonPropertyCopyCrop";
+            buttonPropertyCopyCrop.Size = new Size(75, 23);
+            buttonPropertyCopyCrop.TabIndex = 2;
+            buttonPropertyCopyCrop.Text = "Copy crop";
+            buttonPropertyCopyCrop.UseVisualStyleBackColor = true;
+            buttonPropertyCopyCrop.Click += buttonPropertyCopyCrop_Click;
+            // 
+            // buttonPropertyCrop
+            // 
+            buttonPropertyCrop.Location = new Point(3, 3);
+            buttonPropertyCrop.Name = "buttonPropertyCrop";
+            buttonPropertyCrop.Size = new Size(53, 23);
+            buttonPropertyCrop.TabIndex = 1;
+            buttonPropertyCrop.Text = "Crop";
+            buttonPropertyCrop.UseVisualStyleBackColor = true;
+            buttonPropertyCrop.Click += buttonPropertyCrop_Click;
+            // 
             // ScreenshotEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(950, 742);
+            ClientSize = new Size(952, 722);
+            Controls.Add(panelPropertiesCrop);
             Controls.Add(panelPropertiesDelete);
-            Controls.Add(panelPropertiesShadow);
             Controls.Add(panelPropertiesHighlight);
-            Controls.Add(panelPropertiesFill);
-            Controls.Add(panelPropertiesLine);
-            Controls.Add(panel1);
             Controls.Add(panelPropertiesText);
+            Controls.Add(panelPropertiesLine);
+            Controls.Add(panelPropertiesFill);
+            Controls.Add(panelPropertiesShadow);
+            Controls.Add(panel1);
             Controls.Add(panelPropertiesPosition);
             Controls.Add(listViewSymbols);
             Controls.Add(panelImage);
@@ -1016,10 +1083,10 @@
             ((System.ComponentModel.ISupportInitialize)pictureBoxOverlay).EndInit();
             panelPropertiesPosition.ResumeLayout(false);
             panelPropertiesPosition.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numericHeight).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericY).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericWidth).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericX).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericPropertiesHeight).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericPropertiesY).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericPropertiesWidth).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericPropertiesX).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesLineAlpha).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesFillAlpha).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesLineWeight).EndInit();
@@ -1040,6 +1107,7 @@
             panelPropertiesShadow.ResumeLayout(false);
             panelPropertiesShadow.PerformLayout();
             panelPropertiesDelete.ResumeLayout(false);
+            panelPropertiesCrop.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1078,10 +1146,10 @@
         private Label label4;
         private Label label3;
         private Label label2;
-        private NumericUpDown numericX;
-        private NumericUpDown numericHeight;
-        private NumericUpDown numericY;
-        private NumericUpDown numericWidth;
+        private NumericUpDown numericPropertiesX;
+        private NumericUpDown numericPropertiesHeight;
+        private NumericUpDown numericPropertiesY;
+        private NumericUpDown numericPropertiesWidth;
         private ColorDialog colorDialog1;
         private NumericUpDown numericPropertiesLineWeight;
         private Button buttonPropertiesColorFill;
@@ -1131,5 +1199,9 @@
         private Panel panelPropertiesShadow;
         private Panel panelPropertiesDelete;
         private System.Windows.Forms.Timer TimerUpdateOverlay;
+        private Button buttonCrop;
+        private Panel panelPropertiesCrop;
+        private Button buttonPropertyCopyCrop;
+        private Button buttonPropertyCrop;
     }
 }

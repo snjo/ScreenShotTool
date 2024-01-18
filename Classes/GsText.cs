@@ -62,7 +62,7 @@ public class GsText : GraphicSymbol
 
     public override void DrawHitboxes(Graphics graphic)
     {
-        graphic.DrawRectangle(HightlightSymbolPen, Bounds);
+        graphic.DrawRectangle(HighlightSymbolPen, Bounds);
     }
 }
 

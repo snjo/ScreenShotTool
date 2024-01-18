@@ -4,6 +4,7 @@
 public class GsImage : GraphicSymbol
 {
     readonly Image? image;
+    bool isDisposed = false;
 
     public GsImage(Point startPoint, Point endPoint, bool shadow) : base(startPoint, endPoint, shadow)
     {
@@ -27,7 +28,14 @@ public class GsImage : GraphicSymbol
     {
         get
         {
-            return image != null ? image.Width : 1;
+            if (isDisposed == false && image != null)
+            {
+                return image.Width;
+            }
+            else
+            {
+                return base.Width;
+            }
         }
     }
 
@@ -35,13 +43,20 @@ public class GsImage : GraphicSymbol
     {
         get
         {
-            return image != null ? image.Height : 1;
+            if (isDisposed == false && image != null)
+            {
+                return image.Height;
+            }
+            else
+            {
+                return base.Height;
+            }
         }
     }
 
     internal override void DrawShape(Graphics graphic, Pen drawPen, Brush drawBrush, Point offset, bool fill = true, bool outline = true)
     {
-        if (image != null)
+        if (image != null && isDisposed == false)
         {
             graphic.DrawImageUnscaled(image, Left, Top);
         }
@@ -62,6 +77,7 @@ public class GsImage : GraphicSymbol
 
     public override void Dispose()
     {
+        isDisposed = true;
         image?.Dispose();
     }
 }

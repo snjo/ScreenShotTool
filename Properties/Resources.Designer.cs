@@ -73,6 +73,26 @@ namespace ScreenShotTool.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap blur1 {
+            get {
+                object obj = ResourceManager.GetObject("blur1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap crop {
+            get {
+                object obj = ResourceManager.GetObject("crop", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap cursor_select {
             get {
                 object obj = ResourceManager.GetObject("cursor select", resourceCulture);
@@ -96,6 +116,16 @@ namespace ScreenShotTool.Properties {
         internal static System.Drawing.Bitmap highlight {
             get {
                 object obj = ResourceManager.GetObject("highlight", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap highlight1 {
+            get {
+                object obj = ResourceManager.GetObject("highlight1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
