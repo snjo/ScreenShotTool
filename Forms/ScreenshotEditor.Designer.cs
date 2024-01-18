@@ -392,7 +392,6 @@
             pictureBoxOverlay.TabIndex = 1;
             pictureBoxOverlay.TabStop = false;
             pictureBoxOverlay.MouseDown += PictureBoxOverlay_MouseDown;
-            pictureBoxOverlay.MouseLeave += PictureBoxOverlay_MouseLeave;
             pictureBoxOverlay.MouseMove += PictureBoxOverlay_MouseMove;
             pictureBoxOverlay.MouseUp += PictureBoxOverlay_MouseUp;
             // 
@@ -1004,6 +1003,7 @@
             Name = "ScreenshotEditor";
             Text = "ImageEditor";
             TopMost = true;
+            Deactivate += ScreenshotEditor_Deactivate;
             Load += ScreenshotEditor_Load;
             KeyDown += ScreenshotEditor_KeyDown;
             menuStrip1.ResumeLayout(false);

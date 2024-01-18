@@ -331,8 +331,6 @@ namespace ScreenShotTool.Forms
                 pictureBoxOverlay.Image = DrawOverlay(temporarySymbol); ;
             }
             //sw.Stop();
-            //Debug.WriteLine($"UpdateOverlay took {sw.ElapsedMilliseconds}");
-            //Debug.WriteLine($"Skipped update calles since last frame draw: {skippedUpdates}");
             //Debug.WriteLine($"MS since last frame: {ts.Milliseconds}");
             LastFrame = DateTime.Now;
             return true;
@@ -340,11 +338,6 @@ namespace ScreenShotTool.Forms
 
         private Bitmap DrawOverlay(GraphicSymbol? temporarySymbol = null)
         {
-            //Bitmap img = ((Bitmap)(originalImage)).Clone(new Rectangle(0, 0, originalImage.Width, originalImage.Height), System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            // clone failed when reading from file, worked before... Using Crop instead, which accounts for out of area pixels.
-
-            //Stopwatch sw = Stopwatch.StartNew();
-
             Bitmap img;
             if (originalImage != null)
             {
@@ -364,9 +357,6 @@ namespace ScreenShotTool.Forms
 
             DrawElements(overlayGraphics, temporarySymbol, HighlightSelected: true);
 
-            //sw.Stop();
-            //Debug.WriteLine($"DrawOverlay took {sw.ElapsedMilliseconds}");
-
             return img;
         }
 
@@ -385,11 +375,10 @@ namespace ScreenShotTool.Forms
 
         private void DrawElements(Graphics graphic, GraphicSymbol? temporarySymbol = null, bool HighlightSelected = false)
         {
-            //foreach (GraphicSymbol symbol in symbols)
-            for (int i = 0; i < symbols.Count; i++)
+            foreach (GraphicSymbol symbol in symbols)
             {
-                InsertImagesInSymbol(symbols[i]);
-                symbols[i].DrawSymbol(graphic);
+                InsertImagesInSymbol(symbol);
+                symbol.DrawSymbol(graphic);
             }
             if (temporarySymbol != null)
             {
@@ -899,12 +888,6 @@ namespace ScreenShotTool.Forms
         //MoveType moveType = MoveType.None;
 
 
-
-        private void PictureBoxOverlay_MouseLeave(object sender, EventArgs e)
-        {
-            //dragStarted = false;
-        }
-
         bool dragStarted = false;
         bool dragMoved = false;
         Point dragStart = new(0, 0);
@@ -987,9 +970,6 @@ namespace ScreenShotTool.Forms
                 dragMoved = true;
             }
             if (originalImage == null) return;
-
-            //Point mouseDelta = MousePosition.Subtract(oldMousePosition);
-
 
             if (selectedUserAction >= UserActions.CreateRectangle) // any UserAction above CreateRectangle is a new symbol creation
             {
@@ -1207,6 +1187,13 @@ namespace ScreenShotTool.Forms
             DisablePanel(panelPropertiesDelete);
         }
 
+        private void SetNumericClamp(NumericUpDown numericUpDown, int value)
+        {
+            numericUpDown.Value = Math.Clamp(value, numericUpDown.Minimum, numericUpDown.Maximum);
+            if (value < numericUpDown.Minimum) Debug.WriteLine($"Value is below {numericUpDown.Name} Minimum");
+            if (value > numericUpDown.Maximum) Debug.WriteLine($"Value is above {numericUpDown.Name} Maximum");
+        }
+
         private void UpdatePropertiesPanel()
         {
             int panelLeft = listViewSymbols.Left;
@@ -1229,10 +1216,10 @@ namespace ScreenShotTool.Forms
                     numericPropertiesLineAlpha.Enabled = true;
 
                     labelSymbolType.Text = "Symbol: " + graphicSymbol.Name;
-                    numericX.Value = graphicSymbol.Left;
-                    numericY.Value = graphicSymbol.Top;
-                    numericWidth.Value = Math.Clamp(graphicSymbol.Width, numericWidth.Minimum, numericWidth.Maximum);
-                    numericHeight.Value = Math.Clamp(graphicSymbol.Height, numericHeight.Minimum, numericHeight.Maximum);
+                    SetNumericClamp(numericX, graphicSymbol.Left);
+                    SetNumericClamp(numericY, graphicSymbol.Top);
+                    SetNumericClamp(numericWidth, graphicSymbol.Width);
+                    SetNumericClamp(numericHeight, graphicSymbol.Height);
                     buttonPropertiesColorLine.BackColor = graphicSymbol.ForegroundColor;
                     buttonPropertiesColorFill.BackColor = graphicSymbol.BackgroundColor;
                     numericPropertiesLineWeight.Value = graphicSymbol.LineWeight;
@@ -1623,6 +1610,12 @@ namespace ScreenShotTool.Forms
             {
                 //UpdateOverlay();
             }
+        }
+
+        private void ScreenshotEditor_Deactivate(object sender, EventArgs e)
+        {
+            dragStarted = false;
+            Debug.WriteLine("Editor form deactivate, setting dragStarted to False");
         }
     }
 }
