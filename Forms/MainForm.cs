@@ -142,16 +142,14 @@ namespace ScreenShotTool
 
         private void ShowApplication()
         {
-            this.WindowState = FormWindowState.Normal;
+            //WindowState = FormWindowState.Normal; // setting Normal before messing with size
             Debug.WriteLine("Showing Application");
-            if (this.Size.Height < 50)
-            {
-                Size = DefaultSize;
-            }
+            //if (this.Size.Height < 50)
+            //{
+            //    Size = DefaultSize;
+            //}
             Show();
-            WindowState = FormWindowState.Normal;
-            //BringToFront();
-            //SetForegroundWindow(this.Handle);
+            WindowState = FormWindowState.Normal; // setting Normal a second time makes it actually show up in front of other windows
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -280,15 +278,30 @@ namespace ScreenShotTool
             bitmap?.Dispose();
         }
 
-        private void UpdateInfoLabelVisibility()
+        private void UpdateInfoLabelVisibility(bool forceHide = false)
         {
-            if (listViewThumbnails.Items.Count > 0)
+            if (listViewThumbnails.Items.Count > 0 || forceHide)
             {
                 labelInfo.Visible = false;
             }
             else
             {
                 labelInfo.Visible = true;
+            }
+        }
+
+        private void UpdateLabelInfoPosition()
+        {
+            int widthAvailable = listViewThumbnails.Width - labelInfo.Width;
+            int HeightAvailable = listViewThumbnails.Height - labelInfo.Height;
+            labelInfo.Location = new Point(Math.Max(listViewThumbnails.Left + 5, widthAvailable / 2), Math.Max(listViewThumbnails.Top + 5, HeightAvailable / 2));
+            if (labelInfo.Height+5 > listViewThumbnails.Height)
+            {
+                UpdateInfoLabelVisibility(forceHide: true);
+            }
+            else
+            {
+                UpdateInfoLabelVisibility();
             }
         }
 
@@ -1127,6 +1140,7 @@ namespace ScreenShotTool
                 }
             }
             UpdateLogVisible();
+            //UpdateLabelInfoPosition();
         }
 
         #region Balloon Tip ----------------------------------------------------------------
@@ -1417,6 +1431,11 @@ namespace ScreenShotTool
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenHelp();
+        }
+
+        private void listViewThumbnails_SizeChanged(object sender, EventArgs e)
+        {
+            UpdateLabelInfoPosition();
         }
     }
 }

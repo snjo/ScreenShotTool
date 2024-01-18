@@ -81,11 +81,11 @@
             // textBoxLog
             // 
             textBoxLog.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            textBoxLog.Location = new Point(12, 299);
+            textBoxLog.Location = new Point(12, 369);
             textBoxLog.Multiline = true;
             textBoxLog.Name = "textBoxLog";
             textBoxLog.ScrollBars = ScrollBars.Vertical;
-            textBoxLog.Size = new Size(519, 108);
+            textBoxLog.Size = new Size(672, 108);
             textBoxLog.TabIndex = 5;
             // 
             // listViewThumbnails
@@ -94,9 +94,10 @@
             listViewThumbnails.ContextMenuStrip = contextMenuListView;
             listViewThumbnails.Location = new Point(12, 27);
             listViewThumbnails.Name = "listViewThumbnails";
-            listViewThumbnails.Size = new Size(520, 254);
+            listViewThumbnails.Size = new Size(673, 324);
             listViewThumbnails.TabIndex = 0;
             listViewThumbnails.UseCompatibleStateImageBehavior = false;
+            listViewThumbnails.SizeChanged += listViewThumbnails_SizeChanged;
             listViewThumbnails.DoubleClick += ListView1_DoubleClick;
             listViewThumbnails.KeyDown += ListView1_KeyDown;
             listViewThumbnails.MouseDown += ListViewThumbnails_MouseDown;
@@ -240,7 +241,7 @@
             // 
             labelShowLog.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             labelShowLog.AutoSize = true;
-            labelShowLog.Location = new Point(239, 281);
+            labelShowLog.Location = new Point(239, 351);
             labelShowLog.Name = "labelShowLog";
             labelShowLog.Size = new Size(52, 15);
             labelShowLog.TabIndex = 35;
@@ -252,7 +253,7 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { TopMenuProgram, TopMenuOptions, topMenuEdit, TopMenuHelp });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(543, 24);
+            menuStrip1.Size = new Size(696, 24);
             menuStrip1.TabIndex = 36;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -383,11 +384,11 @@
             // labelInfo
             // 
             labelInfo.BackColor = Color.White;
-            labelInfo.Font = new Font("Courier New", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            labelInfo.Font = new Font("Courier New", 9F);
             labelInfo.ForeColor = Color.Gray;
-            labelInfo.Location = new Point(65, 106);
+            labelInfo.Location = new Point(144, 99);
             labelInfo.Name = "labelInfo";
-            labelInfo.Size = new Size(411, 141);
+            labelInfo.Size = new Size(401, 138);
             labelInfo.TabIndex = 37;
             labelInfo.Text = "To take a screenshot use hotkeys";
             // 
@@ -395,7 +396,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(543, 419);
+            ClientSize = new Size(696, 489);
             Controls.Add(labelInfo);
             Controls.Add(menuStrip1);
             Controls.Add(labelShowLog);
@@ -403,6 +404,7 @@
             Controls.Add(textBoxLog);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
+            MinimumSize = new Size(500, 300);
             Name = "MainForm";
             Text = "Screenshot Tool";
             FormClosing += Form1_FormClosing;
