@@ -24,21 +24,23 @@ namespace ScreenShotTool
             Lighten = 4,
             Darken = 5,
             Desaturate = 6,
-            Average,
+            Invert = 7,
+            Average = 8,
         }
 
         public static Color BlendColors(Color color1, Color color2, BlendModes blendmode)
         {
             return blendmode switch
             {
-                BlendModes.None => color1,
-                BlendModes.Normal => color2, // not done
-                BlendModes.Multiply => Multiply(color1, color2),
-                BlendModes.Divide => Divide(color1, color2),
-                BlendModes.Lighten => Lighten(color1, color2),
-                BlendModes.Darken => Darken(color1, color2),
-                BlendModes.Desaturate => Desaturate(color1, color2),
-                BlendModes.Average => Average(color1, color2),
+                BlendModes.None => color1, // keeps the bottom color unchanged
+                BlendModes.Normal => color2, // uses the top color unchanged
+                BlendModes.Multiply => Multiply(color1, color2), // all colors are darkened by the amount in color2
+                BlendModes.Divide => Divide(color1, color2), // this one gets kinda weird
+                BlendModes.Lighten => Lighten(color1, color2), // only colors that are darker than color2 are lightened
+                BlendModes.Darken => Darken(color1, color2), // only colors that are lighter than color2 are darkened
+                BlendModes.Desaturate => Desaturate(color1, color2), // grayscale
+                BlendModes.Invert => Invert(color1), // outputs the inverted color, light channels becomes dark, dark becomes light
+                BlendModes.Average => Average(color1, color2), // same as Normal with 50% opacity
                 _ => color1
             };
         }
@@ -116,6 +118,12 @@ namespace ScreenShotTool
             int Alpha = CombineTransparencies(color1, color2);
             int avgColor = Math.Clamp((int)((color1.R + color1.G + color1.B) / 3f),0,255);
             return Color.FromArgb(Alpha, avgColor, avgColor, avgColor);
+        }
+
+        public static Color Invert(Color color1)
+        {
+            //int Alpha = CombineTransparencies(color1, color2);
+            return Color.FromArgb(color1.A, 255-color1.R, 255-color1.G, 255-color1.B);
         }
     }
 }

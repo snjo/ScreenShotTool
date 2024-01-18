@@ -114,6 +114,7 @@
             comboBoxBlendMode = new ComboBox();
             panelPropertiesShadow = new Panel();
             panelPropertiesDelete = new Panel();
+            TimerUpdateOverlay = new System.Windows.Forms.Timer(components);
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
@@ -950,7 +951,7 @@
             // comboBoxBlendMode
             // 
             comboBoxBlendMode.FormattingEnabled = true;
-            comboBoxBlendMode.Items.AddRange(new object[] { "Multiply", "Lighten", "Darken", "Desaturate", "Normal", "Divide", "Average" });
+            comboBoxBlendMode.Items.AddRange(new object[] { "Multiply", "Lighten", "Darken", "Desaturate", "Normal", "Divide", "Invert" });
             comboBoxBlendMode.Location = new Point(3, 22);
             comboBoxBlendMode.Name = "comboBoxBlendMode";
             comboBoxBlendMode.Size = new Size(135, 23);
@@ -974,6 +975,11 @@
             panelPropertiesDelete.Name = "panelPropertiesDelete";
             panelPropertiesDelete.Size = new Size(153, 27);
             panelPropertiesDelete.TabIndex = 33;
+            // 
+            // TimerUpdateOverlay
+            // 
+            TimerUpdateOverlay.Interval = 2;
+            TimerUpdateOverlay.Tick += TimerUpdateOverlay_Tick;
             // 
             // ScreenshotEditor
             // 
@@ -1122,5 +1128,6 @@
         private Label label18;
         private Panel panelPropertiesShadow;
         private Panel panelPropertiesDelete;
+        private System.Windows.Forms.Timer TimerUpdateOverlay;
     }
 }

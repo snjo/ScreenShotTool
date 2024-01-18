@@ -257,13 +257,16 @@ namespace ScreenShotTool.Forms
             Color pixelColor = Color.Black;
             SolidBrush blurBrush = new(pixelColor);
 
-            for (int x = 0; x < originalImage.Width; x += mosaicSize)
+            using (var snoop = new BmpPixelSnoop((Bitmap)originalImage))
             {
-                for (int y = 0; y < originalImage.Height; y += mosaicSize)
+                for (int x = 0; x < originalImage.Width; x += mosaicSize)
                 {
-                    pixelColor = SamplePixelArea(originalImage, blurRadius, x + blurRadius, y + blurRadius);
-                    blurBrush.Color = pixelColor;
-                    graphics.FillRectangle(blurBrush, new Rectangle(x, y, mosaicSize, mosaicSize));
+                    for (int y = 0; y < originalImage.Height; y += mosaicSize)
+                    {
+                        pixelColor = SamplePixelArea(snoop, blurRadius, x + blurRadius, y + blurRadius);
+                        blurBrush.Color = pixelColor;
+                        graphics.FillRectangle(blurBrush, new Rectangle(x, y, mosaicSize, mosaicSize));
+                    }
                 }
             }
 
@@ -275,7 +278,8 @@ namespace ScreenShotTool.Forms
             return blurImage;
         }
 
-        private static Color SamplePixelArea(Image originalImage, int blurRadius, int x, int y)
+        //private static Color SamplePixelArea(Image originalImage, int blurRadius, int x, int y)
+        private static Color SamplePixelArea(BmpPixelSnoop sourceImage, int blurRadius, int x, int y)
         {
             Color sampleColor;
             Color pixelColor;
@@ -291,9 +295,9 @@ namespace ScreenShotTool.Forms
                 {
                     sampleX = x + i;
                     sampleY = y + j;
-                    sampleX = Math.Clamp(sampleX, 0, originalImage.Width - 1);
-                    sampleY = Math.Clamp(sampleY, 0, originalImage.Height - 1);
-                    sampleColor = ((Bitmap)originalImage).GetPixel(sampleX, sampleY);
+                    sampleX = Math.Clamp(sampleX, 0, sourceImage.Width - 1);
+                    sampleY = Math.Clamp(sampleY, 0, sourceImage.Height - 1);
+                    sampleColor = sourceImage.GetPixel(sampleX, sampleY);
                     R += sampleColor.R;
                     G += sampleColor.G;
                     B += sampleColor.B;
@@ -305,13 +309,15 @@ namespace ScreenShotTool.Forms
         }
 
         DateTime LastFrame = DateTime.Now;
-
+        int skippedUpdates = 0;
         private bool UpdateOverlay(GraphicSymbol? temporarySymbol = null, bool forceUpdate = true)
         {
+            //Stopwatch sw = Stopwatch.StartNew();
             float MilliSecondsPerFrame = (1f / frameRate) * 1000;
             TimeSpan ts = DateTime.Now - LastFrame;
             if (ts.Milliseconds < MilliSecondsPerFrame && forceUpdate == false)
             {
+                skippedUpdates++;
                 return false;
             }
 
@@ -324,7 +330,10 @@ namespace ScreenShotTool.Forms
                 pictureBoxOverlay.Image.Dispose();
                 pictureBoxOverlay.Image = DrawOverlay(temporarySymbol); ;
             }
-
+            //sw.Stop();
+            //Debug.WriteLine($"UpdateOverlay took {sw.ElapsedMilliseconds}");
+            //Debug.WriteLine($"Skipped update calles since last frame draw: {skippedUpdates}");
+            //Debug.WriteLine($"MS since last frame: {ts.Milliseconds}");
             LastFrame = DateTime.Now;
             return true;
         }
@@ -333,6 +342,9 @@ namespace ScreenShotTool.Forms
         {
             //Bitmap img = ((Bitmap)(originalImage)).Clone(new Rectangle(0, 0, originalImage.Width, originalImage.Height), System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             // clone failed when reading from file, worked before... Using Crop instead, which accounts for out of area pixels.
+
+            //Stopwatch sw = Stopwatch.StartNew();
+
             Bitmap img;
             if (originalImage != null)
             {
@@ -352,6 +364,9 @@ namespace ScreenShotTool.Forms
 
             DrawElements(overlayGraphics, temporarySymbol, HighlightSelected: true);
 
+            //sw.Stop();
+            //Debug.WriteLine($"DrawOverlay took {sw.ElapsedMilliseconds}");
+
             return img;
         }
 
@@ -370,10 +385,11 @@ namespace ScreenShotTool.Forms
 
         private void DrawElements(Graphics graphic, GraphicSymbol? temporarySymbol = null, bool HighlightSelected = false)
         {
-            foreach (GraphicSymbol symbol in symbols)
+            //foreach (GraphicSymbol symbol in symbols)
+            for (int i = 0; i < symbols.Count; i++)
             {
-                InsertImagesInSymbol(symbol);
-                symbol.DrawSymbol(graphic);
+                InsertImagesInSymbol(symbols[i]);
+                symbols[i].DrawSymbol(graphic);
             }
             if (temporarySymbol != null)
             {
@@ -982,12 +998,12 @@ namespace ScreenShotTool.Forms
             else if (selectedUserAction == UserActions.MoveSymbol)
             {
                 MoveSymbol(e);
-                UpdateOverlay();
+                UpdateOverlay(null, false);
             }
             else if (selectedUserAction == UserActions.ScaleSymbol)
             {
                 ScaleSymbol(e);
-                UpdateOverlay();
+                UpdateOverlay(null, false);
             }
 
             oldMousePosition = MousePosition;
@@ -1164,8 +1180,6 @@ namespace ScreenShotTool.Forms
             UpdatePropertiesPanel();
         }
 
-        
-
         private static void EnablePanel(Panel panel, int left, ref int top)
         {
             panel.Enabled = true;
@@ -1326,8 +1340,6 @@ namespace ScreenShotTool.Forms
 
         private void Numeric_ValueChanged(object sender, EventArgs e)
         {
-            //if (dragStarted) return;
-
             if (listViewSymbols.SelectedItems.Count > 0)
             {
                 ListViewItem item = listViewSymbols.SelectedItems[0];
@@ -1603,6 +1615,14 @@ namespace ScreenShotTool.Forms
         {
             timerAfterLoad.Stop();
             this.TopMost = false;
+        }
+
+        private void TimerUpdateOverlay_Tick(object sender, EventArgs e)
+        {
+            if (dragStarted)
+            {
+                //UpdateOverlay();
+            }
         }
     }
 }

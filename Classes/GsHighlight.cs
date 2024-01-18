@@ -6,9 +6,9 @@ public class GsHighlight : GsDynamicImage
 {
     //public Bitmap? originalImage;
     Bitmap? highlightedBmp;
-    public ColorBlend.BlendModes blendMode = ColorBlend.BlendModes.Darken;
+    public ColorBlend.BlendModes blendMode = ColorBlend.BlendModes.Multiply;
     private Color previousColor = Color.White;
-    private ColorBlend.BlendModes previousBlendMode = ColorBlend.BlendModes.Darken;
+    private ColorBlend.BlendModes previousBlendMode = ColorBlend.BlendModes.Multiply;
     public GsHighlight(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadow, int lineWidth, int lineAlpha, int fillAlpha) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadow, lineWidth, lineAlpha, fillAlpha)
     {
         Name = "Highlight";
@@ -58,17 +58,24 @@ public class GsHighlight : GsDynamicImage
         int bmpBottom = Math.Min(sourceImage.Height, Bottom);
         int bmpWidth = bmpRight - bmpLeft;
         int bmpHeight = bmpBottom - bmpTop;
-        for (int x = 0; x < bmpWidth; x++)
+
+        using (var snoop = new BmpPixelSnoop(sourceImage))
         {
-            for (int y = 0; y < bmpHeight; y++)
+            using (var target = new BmpPixelSnoop(highlightedBmp))
             {
-                int sampleX = bmpLeft + x;
-                int sampleY = bmpTop + y;
-                if (sampleX < 0 || sampleY < 0 || sampleX >= sourceImage.Width || sampleY >= sourceImage.Height) continue;
-                Color sourcePixel = sourceImage.GetPixel(sampleX, sampleY);
-                //highlightedBmp.SetPixel(x, y, Color.FromArgb(Math.Min((int)sourcePixel.R, BackgroundColor.R), Math.Min((int)sourcePixel.G, BackgroundColor.G), Math.Min((int)sourcePixel.B, BackgroundColor.B)));
-                highlightedBmp.SetPixel(x, y, ColorBlend.BlendColors(sourcePixel, BackgroundColor, blendMode));
-                //if (x == 100) Debug.WriteLine("color at 100: " +ColorBlend.BlendColors(sourcePixel, BackgroundColor, blendMode));
+                //var col = snoop.GetPixel(0, 0);
+                for (int x = 0; x < bmpWidth; x++)
+                {
+                    for (int y = 0; y < bmpHeight; y++)
+                    {
+                        int sampleX = bmpLeft + x;
+                        int sampleY = bmpTop + y;
+                        if (sampleX < 0 || sampleY < 0 || sampleX >= snoop.Width || sampleY >= snoop.Height) continue;
+                        Color sourcePixel = snoop.GetPixel(sampleX, sampleY);
+                        target.SetPixel(x, y, ColorBlend.BlendColors(sourcePixel, BackgroundColor, blendMode));
+
+                    }
+                }
             }
         }
     }
