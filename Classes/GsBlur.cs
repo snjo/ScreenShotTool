@@ -1,9 +1,12 @@
-﻿namespace ScreenShotTool.Forms;
+﻿using System.Diagnostics;
+
+namespace ScreenShotTool.Forms;
 #pragma warning disable CA1416 // Validate platform compatibility
 public class GsBlur : GsDynamicImage
 {
     //public Bitmap? blurredImage;
     private Bitmap? blurredCrop;
+    DateTime? lastLocalImageUpdate;
 
     public GsBlur(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor) : base(startPoint, endPoint, foregroundColor, backgroundColor)
     {
@@ -13,13 +16,13 @@ public class GsBlur : GsDynamicImage
 
     public void DrawFill(Pen pen, Brush fillBrush, Rectangle rect, Graphics graphic)
     {
-        if (sourceImage == null)
+        if (SourceImage == null)
         {
             graphic.DrawRectangle(LinePen, Left, Top, Width, Height);
         }
         else
         {
-            if (RectChanged(rect) || blurredCrop == null)
+            if (RectChanged(rect) || blurredCrop == null || LastSourceUpdate > lastLocalImageUpdate)
             {
                 UpdateBlurImage();
                 previousPosition = new Point(rect.Left, rect.Top);
@@ -39,14 +42,16 @@ public class GsBlur : GsDynamicImage
 
     private void UpdateBlurImage()
     {
-        if (sourceImage == null) return;
+        Debug.WriteLine("UpdateBlurImage called");
+        if (SourceImage == null) return;
         if (Width < 1 || Height < 1) return;
         if (blurredCrop != null)
         {
             blurredCrop.Dispose();
             blurredCrop = null;
         }
-        blurredCrop = CropImage(sourceImage, new Rectangle(Left, Top, Width, Height));
+        blurredCrop = CropImage(SourceImage, new Rectangle(Left, Top, Width, Height));
+        lastLocalImageUpdate = DateTime.Now;
     }
 
     readonly Brush blackBrush = new SolidBrush(Color.Black);

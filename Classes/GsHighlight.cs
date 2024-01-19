@@ -20,7 +20,7 @@ public class GsHighlight : GsDynamicImage
     {
         if (rect.Width < 1 || rect.Height < 1) return;
         
-        if (sourceImage != null)
+        if (SourceImage != null)
         {
             if (highlightedBmp == null || RectChanged(rect) || previousColor != BackgroundColor || previousBlendMode != blendMode)
             {
@@ -44,7 +44,7 @@ public class GsHighlight : GsDynamicImage
 
     private void UpdateHighlightBmp(Rectangle rect)
     {
-        if (sourceImage == null) return;
+        if (SourceImage == null) return;
         if (highlightedBmp != null) { 
             highlightedBmp.Dispose();
             highlightedBmp = null;
@@ -54,12 +54,12 @@ public class GsHighlight : GsDynamicImage
         //int bmpTop = Math.Max(0, Top);
         int bmpLeft = Left;
         int bmpTop = Top;
-        int bmpRight = Math.Min(sourceImage.Width, Right);
-        int bmpBottom = Math.Min(sourceImage.Height, Bottom);
+        int bmpRight = Math.Min(SourceImage.Width, Right);
+        int bmpBottom = Math.Min(SourceImage.Height, Bottom);
         int bmpWidth = bmpRight - bmpLeft;
         int bmpHeight = bmpBottom - bmpTop;
 
-        using (var snoop = new BmpPixelSnoop(sourceImage))
+        using (var snoop = new BmpPixelSnoop(SourceImage))
         {
             using (var target = new BmpPixelSnoop(highlightedBmp))
             {

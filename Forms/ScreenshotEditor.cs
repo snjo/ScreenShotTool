@@ -61,6 +61,9 @@ namespace ScreenShotTool.Forms
             toolButtons.Add(buttonBlur);
             toolButtons.Add(buttonHighlight);
             toolButtons.Add(buttonCrop);
+
+            listViewSymbols.Height = 200;
+            UpdatePropertiesPanel();
         }
 
         public ScreenshotEditor()
@@ -94,7 +97,7 @@ namespace ScreenShotTool.Forms
         {
             InitializeComponent();
             SetupEditor();
-            LoadImageFromImage(loadImage);
+            LoadImageFromImage(loadImage, true);
             //SetForegroundWindow(this.Handle);
         }
 
@@ -130,16 +133,21 @@ namespace ScreenShotTool.Forms
         {
             DisposeAndNull(originalImage);
             originalImage = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
-            CanvasSize = originalImage.Size;
+            UpdateCanvasSize(originalImage.Size);
+            Graphics g = Graphics.FromImage(originalImage);
+            g.FillRectangle(new SolidBrush(color), 0, 0, Width, Height);
+            FlushImages(true);
+            CreateOverlay();
+            UpdateOverlay();
+        }
+
+        private void UpdateCanvasSize(Size size)
+        {
+            CanvasSize = size;
             numericPropertiesX.Minimum = -OutOfBoundsMaxPixels;
             numericPropertiesX.Maximum = CanvasSize.Width + OutOfBoundsMaxPixels;
             numericPropertiesY.Minimum = -OutOfBoundsMaxPixels;
             numericPropertiesY.Maximum = CanvasSize.Height + OutOfBoundsMaxPixels;
-            Graphics g = Graphics.FromImage(originalImage);
-            g.FillRectangle(new SolidBrush(color), 0, 0, Width, Height);
-            FlushImages();
-            CreateOverlay();
-            UpdateOverlay();
         }
 
         private Bitmap? ImageToBitmap32bppArgb(Image? img, bool disposeSource)
@@ -168,7 +176,7 @@ namespace ScreenShotTool.Forms
                 originalImage = ImageToBitmap32bppArgb(Clipboard.GetImage(), true); //(Bitmap)Clipboard.GetImage(); 
                 if (originalImage != null)
                 {
-                    CanvasSize = originalImage.Size;
+                    UpdateCanvasSize(originalImage.Size);
                 }
                 else
                 {
@@ -182,18 +190,18 @@ namespace ScreenShotTool.Forms
                 Debug.WriteLine("Could not load from clipboard");
                 return;
             }
-            FlushImages();
+            FlushImages(true);
             CreateOverlay();
             UpdateOverlay();
         }
 
-        private void LoadImageFromImage(Image image)
+        private void LoadImageFromImage(Image image, bool deleteAllSymbols)
         {
             DisposeAndNull(originalImage);
             originalImage = ImageToBitmap32bppArgb(image, true);
             if (originalImage != null)
             {
-                CanvasSize = originalImage.Size;
+                UpdateCanvasSize(originalImage.Size);
             }
             else
             {
@@ -201,7 +209,7 @@ namespace ScreenShotTool.Forms
                 MessageBox.Show("Error: Couldn't load image.\nUsing blank image.");
                 CreateNewImage(640, 480, Color.White);
             }
-            FlushImages();
+            FlushImages(deleteAllSymbols);
             CreateOverlay();
             UpdateOverlay();
         }
@@ -225,7 +233,7 @@ namespace ScreenShotTool.Forms
                     originalImage = ImageToBitmap32bppArgb(tempImage, true);
                     if (originalImage != null)
                     {
-                        CanvasSize = originalImage.Size;
+                        UpdateCanvasSize(originalImage.Size);
                     }
                 }
                 catch
@@ -233,7 +241,7 @@ namespace ScreenShotTool.Forms
                     Debug.WriteLine("Could not load file");
 
                 }
-                FlushImages();
+                FlushImages(true);
                 CreateOverlay();
                 UpdateOverlay();
             }
@@ -452,14 +460,14 @@ namespace ScreenShotTool.Forms
             {
                 if (originalImage != null)
                 {
-                    gsblur.sourceImage = blurImage;
+                    gsblur.SourceImage = blurImage;
                 }
             }
             else if (symbol is GsDynamicImage gsdi)
             {
                 if (originalImage != null)
                 {
-                    gsdi.sourceImage = (Bitmap)originalImage;
+                    gsdi.SourceImage = (Bitmap)originalImage;
                 }
             }
         }
@@ -1248,6 +1256,7 @@ namespace ScreenShotTool.Forms
             panel.Enabled = true;
             panel.Visible = true;
             panel.Location = new Point(left, top);
+            Debug.WriteLine($"EnablePanel, top {top}: {panel.Name}, new location {panel.Location}");
             top += panel.Height + 5;
         }
 
@@ -1259,6 +1268,7 @@ namespace ScreenShotTool.Forms
 
         private void DisableAllPanels()
         {
+            panelPropertiesPosition.Location = new Point(listViewSymbols.Left, listViewSymbols.Bottom + 5);
             panelPropertiesPosition.Visible = true;
             panelPropertiesPosition.Enabled = false;
             //DisablePanel(panelPropertiesPosition);
@@ -1269,6 +1279,7 @@ namespace ScreenShotTool.Forms
             DisablePanel(panelPropertiesShadow);
             DisablePanel(panelPropertiesDelete);
             DisablePanel(panelPropertiesCrop);
+            DisablePanel(panelPropertiesBlur);
         }
 
         private void SetNumericClamp(NumericUpDown numericUpDown, int value)
@@ -1282,6 +1293,7 @@ namespace ScreenShotTool.Forms
         {
             int panelLeft = listViewSymbols.Left;
             int lastPanelBottom = listViewSymbols.Bottom;
+            Debug.WriteLine($"lastPanelBottom {lastPanelBottom}");
             if (listViewSymbols.SelectedItems.Count > 0)
             {
                 //newSymbolType = SymbolType.MoveSymbol;
@@ -1339,7 +1351,7 @@ namespace ScreenShotTool.Forms
                     }
                     else if (graphicSymbol is GsBlur)
                     {
-                        // just position shown
+                        EnablePanel(panelPropertiesBlur, panelLeft, ref lastPanelBottom);
                     }
                     else if (graphicSymbol is GsCrop)
                     {
@@ -1630,7 +1642,7 @@ namespace ScreenShotTool.Forms
                     {
                         gs.MoveTo(gs.Left - cropRect.Left, gs.Top - cropRect.Top);
                     }
-                    LoadImageFromImage(outImage);
+                    LoadImageFromImage(outImage, false);
                     gsC.showOutline = true;
                 }
                 DeleteSelectedSymbol();

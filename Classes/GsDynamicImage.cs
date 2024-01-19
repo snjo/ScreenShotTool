@@ -4,7 +4,21 @@ public class GsDynamicImage(Point startPoint, Point endPoint, Color foregroundCo
 {
     internal Point previousPosition = new(0, 0);
     internal Size previousSize = new(0, 0);
-    public Bitmap? sourceImage;
+    internal DateTime LastSourceUpdate = DateTime.MinValue;
+    private Bitmap? _sourceImage = null;
+    public Bitmap? SourceImage
+    {
+        get
+        { 
+            return _sourceImage;
+        }
+        set
+        {
+            LastSourceUpdate = DateTime.Now;
+            _sourceImage = value;
+        }
+    }
+    
 
     internal bool RectChanged(Rectangle newRect)
     {

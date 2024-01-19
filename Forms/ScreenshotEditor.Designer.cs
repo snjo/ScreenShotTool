@@ -58,8 +58,6 @@
             pictureBoxOverlay = new PictureBox();
             listViewSymbols = new ListView();
             columnHeaderType = new ColumnHeader();
-            columnHeaderX = new ColumnHeader();
-            columnHeaderY = new ColumnHeader();
             columnHeaderColor = new ColumnHeader();
             panelPropertiesPosition = new Panel();
             numericPropertiesHeight = new NumericUpDown();
@@ -97,6 +95,9 @@
             panelPropertiesText = new Panel();
             checkBoxUnderline = new CheckBox();
             checkBoxStrikeout = new CheckBox();
+            panelPropertiesHighlight = new Panel();
+            label18 = new Label();
+            comboBoxBlendMode = new ComboBox();
             checkBoxFontItalic = new CheckBox();
             checkBoxFontBold = new CheckBox();
             label16 = new Label();
@@ -104,21 +105,20 @@
             numericPropertiesFontSize = new NumericUpDown();
             comboBoxFontFamily = new ComboBox();
             panel1 = new Panel();
+            label19 = new Label();
+            checkBoxNewShadow = new CheckBox();
             label17 = new Label();
             numericBlurMosaicSize = new NumericUpDown();
-            checkBoxNewShadow = new CheckBox();
             panelPropertiesLine = new Panel();
             checkBoxPropertiesShadow = new CheckBox();
             timerAfterLoad = new System.Windows.Forms.Timer(components);
-            panelPropertiesHighlight = new Panel();
-            label18 = new Label();
-            comboBoxBlendMode = new ComboBox();
             panelPropertiesShadow = new Panel();
             panelPropertiesDelete = new Panel();
             TimerUpdateOverlay = new System.Windows.Forms.Timer(components);
             panelPropertiesCrop = new Panel();
             buttonPropertyCopyCrop = new Button();
             buttonPropertyCrop = new Button();
+            panelPropertiesBlur = new Panel();
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
@@ -136,14 +136,15 @@
             ((System.ComponentModel.ISupportInitialize)numericNewFillAlpha).BeginInit();
             panelPropertiesFill.SuspendLayout();
             panelPropertiesText.SuspendLayout();
+            panelPropertiesHighlight.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesFontSize).BeginInit();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericBlurMosaicSize).BeginInit();
             panelPropertiesLine.SuspendLayout();
-            panelPropertiesHighlight.SuspendLayout();
             panelPropertiesShadow.SuspendLayout();
             panelPropertiesDelete.SuspendLayout();
             panelPropertiesCrop.SuspendLayout();
+            panelPropertiesBlur.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
@@ -394,7 +395,7 @@
             // numericNewLineWeight
             // 
             numericNewLineWeight.AccessibleName = "New symbol line weight";
-            numericNewLineWeight.Location = new Point(306, 3);
+            numericNewLineWeight.Location = new Point(429, 4);
             numericNewLineWeight.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
             numericNewLineWeight.Name = "numericNewLineWeight";
             numericNewLineWeight.Size = new Size(66, 23);
@@ -428,11 +429,11 @@
             // listViewSymbols
             // 
             listViewSymbols.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            listViewSymbols.Columns.AddRange(new ColumnHeader[] { columnHeaderType, columnHeaderX, columnHeaderY, columnHeaderColor });
+            listViewSymbols.Columns.AddRange(new ColumnHeader[] { columnHeaderType, columnHeaderColor });
             listViewSymbols.Location = new Point(797, 61);
             listViewSymbols.MultiSelect = false;
             listViewSymbols.Name = "listViewSymbols";
-            listViewSymbols.Size = new Size(153, 160);
+            listViewSymbols.Size = new Size(153, 93);
             listViewSymbols.TabIndex = 0;
             listViewSymbols.UseCompatibleStateImageBehavior = false;
             listViewSymbols.View = View.List;
@@ -442,6 +443,10 @@
             // columnHeaderType
             // 
             columnHeaderType.Text = "Symbol";
+            // 
+            // columnHeaderColor
+            // 
+            columnHeaderColor.Text = "Color";
             // 
             // panelPropertiesPosition
             // 
@@ -455,7 +460,7 @@
             panelPropertiesPosition.Controls.Add(label3);
             panelPropertiesPosition.Controls.Add(label2);
             panelPropertiesPosition.Controls.Add(labelSymbolType);
-            panelPropertiesPosition.Location = new Point(797, 225);
+            panelPropertiesPosition.Location = new Point(797, 160);
             panelPropertiesPosition.Name = "panelPropertiesPosition";
             panelPropertiesPosition.Size = new Size(153, 81);
             panelPropertiesPosition.TabIndex = 4;
@@ -679,7 +684,7 @@
             buttonNewColorFill.AccessibleName = "New symbol fill color";
             buttonNewColorFill.BackColor = Color.LightCyan;
             buttonNewColorFill.FlatStyle = FlatStyle.Flat;
-            buttonNewColorFill.Location = new Point(181, 5);
+            buttonNewColorFill.Location = new Point(304, 5);
             buttonNewColorFill.Name = "buttonNewColorFill";
             buttonNewColorFill.Size = new Size(43, 19);
             buttonNewColorFill.TabIndex = 18;
@@ -692,7 +697,7 @@
             buttonNewColorLine.AccessibleName = "New symbol line color";
             buttonNewColorLine.BackColor = Color.Orange;
             buttonNewColorLine.FlatStyle = FlatStyle.Flat;
-            buttonNewColorLine.Location = new Point(72, 5);
+            buttonNewColorLine.Location = new Point(195, 5);
             buttonNewColorLine.Name = "buttonNewColorLine";
             buttonNewColorLine.Size = new Size(43, 19);
             buttonNewColorLine.TabIndex = 17;
@@ -703,7 +708,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(121, 5);
+            label1.Location = new Point(246, 6);
             label1.Name = "label1";
             label1.Size = new Size(54, 15);
             label1.TabIndex = 16;
@@ -712,7 +717,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(5, 5);
+            label9.Location = new Point(130, 6);
             label9.Name = "label9";
             label9.Size = new Size(61, 15);
             label9.TabIndex = 15;
@@ -721,7 +726,7 @@
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(230, 5);
+            label10.Location = new Point(355, 6);
             label10.Name = "label10";
             label10.Size = new Size(70, 15);
             label10.TabIndex = 19;
@@ -730,7 +735,7 @@
             // numericNewLineAlpha
             // 
             numericNewLineAlpha.AccessibleName = "New symbol line alpha value";
-            numericNewLineAlpha.Location = new Point(447, 3);
+            numericNewLineAlpha.Location = new Point(570, 4);
             numericNewLineAlpha.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
             numericNewLineAlpha.Name = "numericNewLineAlpha";
             numericNewLineAlpha.Size = new Size(44, 23);
@@ -740,7 +745,7 @@
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(378, 5);
+            label11.Location = new Point(503, 6);
             label11.Name = "label11";
             label11.Size = new Size(63, 15);
             label11.TabIndex = 21;
@@ -749,7 +754,7 @@
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new Point(497, 5);
+            label12.Location = new Point(622, 6);
             label12.Name = "label12";
             label12.Size = new Size(56, 15);
             label12.TabIndex = 23;
@@ -758,7 +763,7 @@
             // numericNewFillAlpha
             // 
             numericNewFillAlpha.AccessibleName = "New symbol fill alpha value";
-            numericNewFillAlpha.Location = new Point(559, 3);
+            numericNewFillAlpha.Location = new Point(682, 4);
             numericNewFillAlpha.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
             numericNewFillAlpha.Name = "numericNewFillAlpha";
             numericNewFillAlpha.Size = new Size(44, 23);
@@ -772,7 +777,7 @@
             panelPropertiesFill.Controls.Add(numericPropertiesFillAlpha);
             panelPropertiesFill.Controls.Add(label7);
             panelPropertiesFill.Controls.Add(buttonPropertiesColorFill);
-            panelPropertiesFill.Location = new Point(797, 307);
+            panelPropertiesFill.Location = new Point(797, 242);
             panelPropertiesFill.Name = "panelPropertiesFill";
             panelPropertiesFill.Size = new Size(153, 51);
             panelPropertiesFill.TabIndex = 27;
@@ -789,7 +794,7 @@
             panelPropertiesText.Controls.Add(numericPropertiesFontSize);
             panelPropertiesText.Controls.Add(comboBoxFontFamily);
             panelPropertiesText.Controls.Add(textBoxSymbolText);
-            panelPropertiesText.Location = new Point(797, 437);
+            panelPropertiesText.Location = new Point(797, 373);
             panelPropertiesText.Name = "panelPropertiesText";
             panelPropertiesText.Size = new Size(153, 144);
             panelPropertiesText.TabIndex = 28;
@@ -815,6 +820,37 @@
             checkBoxStrikeout.Text = "Strikeout";
             checkBoxStrikeout.UseVisualStyleBackColor = true;
             checkBoxStrikeout.Click += FontStyle_CheckedChanged;
+            // 
+            // panelPropertiesHighlight
+            // 
+            panelPropertiesHighlight.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            panelPropertiesHighlight.Controls.Add(label18);
+            panelPropertiesHighlight.Controls.Add(comboBoxBlendMode);
+            panelPropertiesHighlight.Location = new Point(797, 610);
+            panelPropertiesHighlight.Name = "panelPropertiesHighlight";
+            panelPropertiesHighlight.Size = new Size(153, 48);
+            panelPropertiesHighlight.TabIndex = 31;
+            panelPropertiesHighlight.Visible = false;
+            // 
+            // label18
+            // 
+            label18.AutoSize = true;
+            label18.Location = new Point(3, 4);
+            label18.Name = "label18";
+            label18.Size = new Size(117, 15);
+            label18.TabIndex = 30;
+            label18.Text = "Higlight blend mode";
+            // 
+            // comboBoxBlendMode
+            // 
+            comboBoxBlendMode.FormattingEnabled = true;
+            comboBoxBlendMode.Items.AddRange(new object[] { "Multiply", "Lighten", "Darken", "Desaturate", "Normal", "Divide", "Invert" });
+            comboBoxBlendMode.Location = new Point(3, 22);
+            comboBoxBlendMode.Name = "comboBoxBlendMode";
+            comboBoxBlendMode.Size = new Size(135, 23);
+            comboBoxBlendMode.TabIndex = 0;
+            comboBoxBlendMode.Text = "Multiply";
+            comboBoxBlendMode.SelectedIndexChanged += ComboBoxBlendMode_SelectedIndexChanged;
             // 
             // checkBoxFontItalic
             // 
@@ -880,8 +916,7 @@
             // 
             panel1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             panel1.BorderStyle = BorderStyle.FixedSingle;
-            panel1.Controls.Add(label17);
-            panel1.Controls.Add(numericBlurMosaicSize);
+            panel1.Controls.Add(label19);
             panel1.Controls.Add(checkBoxNewShadow);
             panel1.Controls.Add(numericNewFillAlpha);
             panel1.Controls.Add(label12);
@@ -898,10 +933,32 @@
             panel1.Size = new Size(951, 31);
             panel1.TabIndex = 29;
             // 
+            // label19
+            // 
+            label19.AutoSize = true;
+            label19.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label19.Location = new Point(4, 6);
+            label19.Name = "label19";
+            label19.Size = new Size(125, 15);
+            label19.TabIndex = 25;
+            label19.Text = "New symbol settings:";
+            // 
+            // checkBoxNewShadow
+            // 
+            checkBoxNewShadow.AccessibleName = "New symbol Shadow toggle";
+            checkBoxNewShadow.AutoSize = true;
+            checkBoxNewShadow.CheckAlign = ContentAlignment.MiddleRight;
+            checkBoxNewShadow.Location = new Point(732, 6);
+            checkBoxNewShadow.Name = "checkBoxNewShadow";
+            checkBoxNewShadow.Size = new Size(68, 19);
+            checkBoxNewShadow.TabIndex = 24;
+            checkBoxNewShadow.Text = "Shadow";
+            checkBoxNewShadow.UseVisualStyleBackColor = true;
+            // 
             // label17
             // 
             label17.AutoSize = true;
-            label17.Location = new Point(694, 6);
+            label17.Location = new Point(3, 6);
             label17.Name = "label17";
             label17.Size = new Size(92, 15);
             label17.TabIndex = 26;
@@ -910,27 +967,15 @@
             // numericBlurMosaicSize
             // 
             numericBlurMosaicSize.AccessibleName = "Mosaic pixel size (applies to all blur symbols)";
-            numericBlurMosaicSize.Location = new Point(792, 3);
+            numericBlurMosaicSize.Location = new Point(103, 4);
             numericBlurMosaicSize.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
             numericBlurMosaicSize.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
             numericBlurMosaicSize.Name = "numericBlurMosaicSize";
-            numericBlurMosaicSize.Size = new Size(55, 23);
+            numericBlurMosaicSize.Size = new Size(47, 23);
             numericBlurMosaicSize.TabIndex = 25;
             numericBlurMosaicSize.Value = new decimal(new int[] { 10, 0, 0, 0 });
             numericBlurMosaicSize.ValueChanged += NumericBlurMosaicSize_ValueChanged;
             numericBlurMosaicSize.Click += NumericBlurMosaicSize_Click;
-            // 
-            // checkBoxNewShadow
-            // 
-            checkBoxNewShadow.AccessibleName = "New symbol Shadow toggle";
-            checkBoxNewShadow.AutoSize = true;
-            checkBoxNewShadow.CheckAlign = ContentAlignment.MiddleRight;
-            checkBoxNewShadow.Location = new Point(609, 5);
-            checkBoxNewShadow.Name = "checkBoxNewShadow";
-            checkBoxNewShadow.Size = new Size(68, 19);
-            checkBoxNewShadow.TabIndex = 24;
-            checkBoxNewShadow.Text = "Shadow";
-            checkBoxNewShadow.UseVisualStyleBackColor = true;
             // 
             // panelPropertiesLine
             // 
@@ -941,7 +986,7 @@
             panelPropertiesLine.Controls.Add(numericPropertiesLineAlpha);
             panelPropertiesLine.Controls.Add(buttonPropertiesColorLine);
             panelPropertiesLine.Controls.Add(label8);
-            panelPropertiesLine.Location = new Point(797, 359);
+            panelPropertiesLine.Location = new Point(797, 295);
             panelPropertiesLine.Name = "panelPropertiesLine";
             panelPropertiesLine.Size = new Size(153, 77);
             panelPropertiesLine.TabIndex = 2;
@@ -963,42 +1008,11 @@
             timerAfterLoad.Interval = 50;
             timerAfterLoad.Tick += TimerAfterLoad_Tick;
             // 
-            // panelPropertiesHighlight
-            // 
-            panelPropertiesHighlight.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            panelPropertiesHighlight.Controls.Add(label18);
-            panelPropertiesHighlight.Controls.Add(comboBoxBlendMode);
-            panelPropertiesHighlight.Location = new Point(797, 582);
-            panelPropertiesHighlight.Name = "panelPropertiesHighlight";
-            panelPropertiesHighlight.Size = new Size(153, 48);
-            panelPropertiesHighlight.TabIndex = 31;
-            panelPropertiesHighlight.Visible = false;
-            // 
-            // label18
-            // 
-            label18.AutoSize = true;
-            label18.Location = new Point(3, 4);
-            label18.Name = "label18";
-            label18.Size = new Size(117, 15);
-            label18.TabIndex = 30;
-            label18.Text = "Higlight blend mode";
-            // 
-            // comboBoxBlendMode
-            // 
-            comboBoxBlendMode.FormattingEnabled = true;
-            comboBoxBlendMode.Items.AddRange(new object[] { "Multiply", "Lighten", "Darken", "Desaturate", "Normal", "Divide", "Invert" });
-            comboBoxBlendMode.Location = new Point(3, 22);
-            comboBoxBlendMode.Name = "comboBoxBlendMode";
-            comboBoxBlendMode.Size = new Size(135, 23);
-            comboBoxBlendMode.TabIndex = 0;
-            comboBoxBlendMode.Text = "Multiply";
-            comboBoxBlendMode.SelectedIndexChanged += ComboBoxBlendMode_SelectedIndexChanged;
-            // 
             // panelPropertiesShadow
             // 
             panelPropertiesShadow.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             panelPropertiesShadow.Controls.Add(checkBoxPropertiesShadow);
-            panelPropertiesShadow.Location = new Point(797, 631);
+            panelPropertiesShadow.Location = new Point(797, 519);
             panelPropertiesShadow.Name = "panelPropertiesShadow";
             panelPropertiesShadow.Size = new Size(153, 26);
             panelPropertiesShadow.TabIndex = 32;
@@ -1022,7 +1036,7 @@
             panelPropertiesCrop.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             panelPropertiesCrop.Controls.Add(buttonPropertyCopyCrop);
             panelPropertiesCrop.Controls.Add(buttonPropertyCrop);
-            panelPropertiesCrop.Location = new Point(797, 658);
+            panelPropertiesCrop.Location = new Point(797, 548);
             panelPropertiesCrop.Name = "panelPropertiesCrop";
             panelPropertiesCrop.Size = new Size(153, 28);
             panelPropertiesCrop.TabIndex = 34;
@@ -1047,14 +1061,24 @@
             buttonPropertyCrop.UseVisualStyleBackColor = true;
             buttonPropertyCrop.Click += buttonPropertyCrop_Click;
             // 
+            // panelPropertiesBlur
+            // 
+            panelPropertiesBlur.Controls.Add(label17);
+            panelPropertiesBlur.Controls.Add(numericBlurMosaicSize);
+            panelPropertiesBlur.Location = new Point(797, 578);
+            panelPropertiesBlur.Name = "panelPropertiesBlur";
+            panelPropertiesBlur.Size = new Size(153, 31);
+            panelPropertiesBlur.TabIndex = 35;
+            // 
             // ScreenshotEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(952, 722);
+            Controls.Add(panelPropertiesBlur);
             Controls.Add(panelPropertiesCrop);
-            Controls.Add(panelPropertiesDelete);
             Controls.Add(panelPropertiesHighlight);
+            Controls.Add(panelPropertiesDelete);
             Controls.Add(panelPropertiesText);
             Controls.Add(panelPropertiesLine);
             Controls.Add(panelPropertiesFill);
@@ -1096,18 +1120,20 @@
             panelPropertiesFill.PerformLayout();
             panelPropertiesText.ResumeLayout(false);
             panelPropertiesText.PerformLayout();
+            panelPropertiesHighlight.ResumeLayout(false);
+            panelPropertiesHighlight.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesFontSize).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numericBlurMosaicSize).EndInit();
             panelPropertiesLine.ResumeLayout(false);
             panelPropertiesLine.PerformLayout();
-            panelPropertiesHighlight.ResumeLayout(false);
-            panelPropertiesHighlight.PerformLayout();
             panelPropertiesShadow.ResumeLayout(false);
             panelPropertiesShadow.PerformLayout();
             panelPropertiesDelete.ResumeLayout(false);
             panelPropertiesCrop.ResumeLayout(false);
+            panelPropertiesBlur.ResumeLayout(false);
+            panelPropertiesBlur.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1133,8 +1159,6 @@
         private ToolStripMenuItem itemPasteScaled;
         private ListView listViewSymbols;
         private ColumnHeader columnHeaderType;
-        private ColumnHeader columnHeaderX;
-        private ColumnHeader columnHeaderY;
         private ColumnHeader columnHeaderColor;
         private Panel panelPropertiesPosition;
         private Label labelSymbolType;
@@ -1203,5 +1227,7 @@
         private Panel panelPropertiesCrop;
         private Button buttonPropertyCopyCrop;
         private Button buttonPropertyCrop;
+        private Panel panelPropertiesBlur;
+        private Label label19;
     }
 }
