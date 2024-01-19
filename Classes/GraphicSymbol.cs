@@ -22,6 +22,7 @@ namespace ScreenShotTool.Forms
         public bool MoveAllowed = true;
         public bool ShadowEnabled = false;
         public int ShadowDistance = 10;
+        public Rectangle ContainerBounds = new Rectangle();
         public ListViewItem? ListViewItem { get; set; }
 
         private int _x;
@@ -242,7 +243,9 @@ namespace ScreenShotTool.Forms
         {
             for (int i = 1; i <= 8; i++) // start at 1 to skip center hitbox drawing
             {
+                graphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
                 graphic.FillRectangle(HighlightBrush, GetHitbox(i));
+                graphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             }
         }
 

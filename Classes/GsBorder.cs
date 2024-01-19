@@ -1,36 +1,58 @@
-﻿namespace ScreenShotTool.Forms
+﻿namespace ScreenShotTool.Forms;
+#pragma warning disable CA1416 // Validate platform compatibility
+
+public class GsBorder : GsBoundingBox
 {
-    public class GsBorder : GsRectangle
+    private int borderWeight;
+    //private readonly int originalWidth = 0;
+    //private readonly int originalHeight = 0;
+    Pen borderPen = new Pen(Color.Black, 1);
+    public GsBorder(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight, int lineAlpha, int fillAlpha) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight, lineAlpha, fillAlpha)
     {
-        private int borderWeight;
-        private readonly int originalWidth = 0;
-        private readonly int originalHeight = 0;
-        public GsBorder(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight, int lineAlpha, int fillAlpha) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight, lineAlpha, fillAlpha)
+        Name = "Border";
+        drawLine = DrawBorder;
+        ScalingAllowed = false;
+        MoveAllowed = false;
+    }
+
+    public void DrawBorder(Pen pen, Brush b, Rectangle r, Graphics graphic)
+    {
+        Left = 0;
+        Top = 0;
+        Width = ContainerBounds.Width;
+        Height = ContainerBounds.Height;
+        borderPen.Color = ForegroundColor;
+        
+        borderPen.Width = LineWeight;
+        borderPen.Alignment = System.Drawing.Drawing2D.PenAlignment.Inset;
+        graphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+        if (LineWeight == 1)
         {
-            Name = "Border";
-            drawFill = DrawFill;
-            drawLine = DrawLine;
-            originalWidth = endPoint.X;
-            originalHeight = endPoint.Y;
-            ScalingAllowed = false;
-            MoveAllowed = false;
+            graphic.DrawRectangle(borderPen, new Rectangle(Left, Top, Width - 1, Height - 1));
         }
-
-        public override int LineWeight
+        else
         {
-            get
-            {
-                return borderWeight;
-            }
-            set
-            {
-                borderWeight = value;
-                Left = 0 + (borderWeight / 2);
-                Top = 0 + (borderWeight / 2);
+            graphic.DrawRectangle(borderPen, new Rectangle(Left, Top, Width, Height));
+        }
+        graphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+    }
 
-                Right = originalWidth - (int)Math.Ceiling(borderWeight / 2f);
-                Bottom = originalHeight - (int)Math.Ceiling(borderWeight / 2f);
-            }
+    public override int LineWeight
+    {
+        get
+        {
+            return borderWeight;
+        }
+        set
+        {
+            borderWeight = value;
+            //Left = 0 + (borderWeight / 2);
+            //Top = 0 + (borderWeight / 2);
+
+            ////Right = originalWidth - (int)Math.Ceiling(borderWeight / 2f);
+            ////Bottom = originalHeight - (int)Math.Ceiling(borderWeight / 2f);
+            //Right = ContainerBounds.Width - (int)Math.Ceiling(borderWeight / 2f);
+            //Bottom = ContainerBounds.Height - (int)Math.Ceiling(borderWeight / 2f);
         }
     }
 }

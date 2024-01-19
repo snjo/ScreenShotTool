@@ -437,8 +437,10 @@ namespace ScreenShotTool.Forms
 
         private void DrawElements(Graphics graphic, GraphicSymbol? temporarySymbol = null, bool HighlightSelected = false)
         {
+            if (originalImage == null) return;
             foreach (GraphicSymbol symbol in symbols)
             {
+                symbol.ContainerBounds = new Rectangle(0, 0, originalImage.Width, originalImage.Height);
                 InsertImagesInSymbol(symbol);
                 symbol.DrawSymbol(graphic);
             }
@@ -918,7 +920,7 @@ namespace ScreenShotTool.Forms
             }
             Point upperLeft = new(0, 0);
             Point size = new(originalImage.Width, originalImage.Height);
-            GsBorder border = new(upperLeft, size, Color.Black, Color.White, false, lineWeight, 255, 0)
+            GsBorder border = new(upperLeft, size, Color.Black, Color.White, false, 1, 255, 0)
             {
                 Name = "Border"
             };
@@ -1129,7 +1131,6 @@ namespace ScreenShotTool.Forms
         {
             if (dragMoved == false && selectedUserAction != UserActions.CreateImage) // user clicked and released mouse without moving it. Also don't update if the action is inserting an unscaled image, since the click place is different
             {
-                Debug.WriteLine("Get symbol under cursor");
                 SelectSymbolUnderCursor();
             }
 
@@ -1256,7 +1257,6 @@ namespace ScreenShotTool.Forms
             panel.Enabled = true;
             panel.Visible = true;
             panel.Location = new Point(left, top);
-            Debug.WriteLine($"EnablePanel, top {top}: {panel.Name}, new location {panel.Location}");
             top += panel.Height + 5;
         }
 
@@ -1293,7 +1293,6 @@ namespace ScreenShotTool.Forms
         {
             int panelLeft = listViewSymbols.Left;
             int lastPanelBottom = listViewSymbols.Bottom;
-            Debug.WriteLine($"lastPanelBottom {lastPanelBottom}");
             if (listViewSymbols.SelectedItems.Count > 0)
             {
                 //newSymbolType = SymbolType.MoveSymbol;
@@ -1755,7 +1754,6 @@ namespace ScreenShotTool.Forms
         private void ScreenshotEditor_Deactivate(object sender, EventArgs e)
         {
             dragStarted = false;
-            Debug.WriteLine("Editor form deactivate, setting dragStarted to False");
         }
     }
 }

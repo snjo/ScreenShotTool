@@ -27,7 +27,9 @@ public class GsCrop : GsBoundingBox
     {
         if (showOutline == false) return; 
         Rectangle BoundsOutside = new Rectangle(Bounds.Left -1, Bounds.Top -1, Bounds.Width + 1, Bounds.Height + 1);
+        graphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
         graphic.DrawRectangle(cropPenBase, BoundsOutside);
         graphic.DrawRectangle(cropPenDots, BoundsOutside);
+        graphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
     }
 }
