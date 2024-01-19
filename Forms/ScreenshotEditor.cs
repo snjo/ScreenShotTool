@@ -14,6 +14,7 @@ namespace ScreenShotTool.Forms
         //public static extern bool SetForegroundWindow(IntPtr hWnd);
 
         #region Constructor ---------------------------------------------------------------------------------
+        EditorCanvas editorCanvas = new EditorCanvas();
         Bitmap? originalImage;
         Image? overlayImage;
         Bitmap? blurImage;
@@ -479,9 +480,9 @@ namespace ScreenShotTool.Forms
             if (image != null)
             {
                 image.Dispose();
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
+                #pragma warning disable IDE0059 // Unnecessary assignment of a value
                 image = null;
-#pragma warning restore IDE0059 // Unnecessary assignment of a value
+                #pragma warning restore IDE0059 // Unnecessary assignment of a value
             }
         }
 
@@ -490,9 +491,9 @@ namespace ScreenShotTool.Forms
             if (graphics != null)
             {
                 graphics.Dispose();
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
+                #pragma warning disable IDE0059 // Unnecessary assignment of a value
                 graphics = null;
-#pragma warning restore IDE0059 // Unnecessary assignment of a value
+                #pragma warning restore IDE0059 // Unnecessary assignment of a value
             }
         }
         #endregion
@@ -846,22 +847,22 @@ namespace ScreenShotTool.Forms
             return null;
         }
 
-        private static GraphicSymbol GetSymbolFromTag(ListViewItem lvi)
-        {
-            object? tag = lvi.Tag;
-            if (tag == null)
-            {
-                throw new NullReferenceException($"ListviewItem {lvi.Name} tag is null");
-            }
-            else if (lvi.Tag is GraphicSymbol symbol)
-            {
-                return symbol;
-            }
-            else
-            {
-                throw new InvalidCastException($"ListviewItem {lvi.Name} tag is not a GraphicSymbol");
-            }
-        }
+        //private static GraphicSymbol GetSymbolFromTag(ListViewItem lvi)
+        //{
+        //    object? tag = lvi.Tag;
+        //    if (tag == null)
+        //    {
+        //        throw new NullReferenceException($"ListviewItem {lvi.Name} tag is null");
+        //    }
+        //    else if (lvi.Tag is GraphicSymbol symbol)
+        //    {
+        //        return symbol;
+        //    }
+        //    else
+        //    {
+        //        throw new InvalidCastException($"ListviewItem {lvi.Name} tag is not a GraphicSymbol");
+        //    }
+        //}
 
         #endregion
 
