@@ -42,7 +42,6 @@ public class GsBlur : GsDynamicImage
 
     private void UpdateBlurImage()
     {
-        Debug.WriteLine("UpdateBlurImage called");
         if (SourceImage == null) return;
         if (Width < 1 || Height < 1) return;
         if (blurredCrop != null)

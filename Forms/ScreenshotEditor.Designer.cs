@@ -95,15 +95,15 @@
             panelPropertiesText = new Panel();
             checkBoxUnderline = new CheckBox();
             checkBoxStrikeout = new CheckBox();
-            panelPropertiesHighlight = new Panel();
-            label18 = new Label();
-            comboBoxBlendMode = new ComboBox();
             checkBoxFontItalic = new CheckBox();
             checkBoxFontBold = new CheckBox();
             label16 = new Label();
             label15 = new Label();
             numericPropertiesFontSize = new NumericUpDown();
             comboBoxFontFamily = new ComboBox();
+            panelPropertiesHighlight = new Panel();
+            label18 = new Label();
+            comboBoxBlendMode = new ComboBox();
             panel1 = new Panel();
             label19 = new Label();
             checkBoxNewShadow = new CheckBox();
@@ -136,8 +136,8 @@
             ((System.ComponentModel.ISupportInitialize)numericNewFillAlpha).BeginInit();
             panelPropertiesFill.SuspendLayout();
             panelPropertiesText.SuspendLayout();
-            panelPropertiesHighlight.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesFontSize).BeginInit();
+            panelPropertiesHighlight.SuspendLayout();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericBlurMosaicSize).BeginInit();
             panelPropertiesLine.SuspendLayout();
@@ -821,37 +821,6 @@
             checkBoxStrikeout.UseVisualStyleBackColor = true;
             checkBoxStrikeout.Click += FontStyle_CheckedChanged;
             // 
-            // panelPropertiesHighlight
-            // 
-            panelPropertiesHighlight.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            panelPropertiesHighlight.Controls.Add(label18);
-            panelPropertiesHighlight.Controls.Add(comboBoxBlendMode);
-            panelPropertiesHighlight.Location = new Point(797, 610);
-            panelPropertiesHighlight.Name = "panelPropertiesHighlight";
-            panelPropertiesHighlight.Size = new Size(153, 48);
-            panelPropertiesHighlight.TabIndex = 31;
-            panelPropertiesHighlight.Visible = false;
-            // 
-            // label18
-            // 
-            label18.AutoSize = true;
-            label18.Location = new Point(3, 4);
-            label18.Name = "label18";
-            label18.Size = new Size(117, 15);
-            label18.TabIndex = 30;
-            label18.Text = "Higlight blend mode";
-            // 
-            // comboBoxBlendMode
-            // 
-            comboBoxBlendMode.FormattingEnabled = true;
-            comboBoxBlendMode.Items.AddRange(new object[] { "Multiply", "Lighten", "Darken", "Desaturate", "Normal", "Divide", "Invert" });
-            comboBoxBlendMode.Location = new Point(3, 22);
-            comboBoxBlendMode.Name = "comboBoxBlendMode";
-            comboBoxBlendMode.Size = new Size(135, 23);
-            comboBoxBlendMode.TabIndex = 0;
-            comboBoxBlendMode.Text = "Multiply";
-            comboBoxBlendMode.SelectedIndexChanged += ComboBoxBlendMode_SelectedIndexChanged;
-            // 
             // checkBoxFontItalic
             // 
             checkBoxFontItalic.AutoSize = true;
@@ -911,6 +880,37 @@
             comboBoxFontFamily.Size = new Size(135, 23);
             comboBoxFontFamily.TabIndex = 27;
             comboBoxFontFamily.TextChanged += ComboBoxFontFamily_ValueMemberChanged;
+            // 
+            // panelPropertiesHighlight
+            // 
+            panelPropertiesHighlight.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            panelPropertiesHighlight.Controls.Add(label18);
+            panelPropertiesHighlight.Controls.Add(comboBoxBlendMode);
+            panelPropertiesHighlight.Location = new Point(797, 610);
+            panelPropertiesHighlight.Name = "panelPropertiesHighlight";
+            panelPropertiesHighlight.Size = new Size(153, 48);
+            panelPropertiesHighlight.TabIndex = 31;
+            panelPropertiesHighlight.Visible = false;
+            // 
+            // label18
+            // 
+            label18.AutoSize = true;
+            label18.Location = new Point(3, 4);
+            label18.Name = "label18";
+            label18.Size = new Size(117, 15);
+            label18.TabIndex = 30;
+            label18.Text = "Higlight blend mode";
+            // 
+            // comboBoxBlendMode
+            // 
+            comboBoxBlendMode.FormattingEnabled = true;
+            comboBoxBlendMode.Items.AddRange(new object[] { "Multiply", "Lighten", "Darken", "Desaturate", "Normal", "Divide", "Invert" });
+            comboBoxBlendMode.Location = new Point(3, 22);
+            comboBoxBlendMode.Name = "comboBoxBlendMode";
+            comboBoxBlendMode.Size = new Size(135, 23);
+            comboBoxBlendMode.TabIndex = 0;
+            comboBoxBlendMode.Text = "Multiply";
+            comboBoxBlendMode.SelectedIndexChanged += ComboBoxBlendMode_SelectedIndexChanged;
             // 
             // panel1
             // 
@@ -975,7 +975,6 @@
             numericBlurMosaicSize.TabIndex = 25;
             numericBlurMosaicSize.Value = new decimal(new int[] { 10, 0, 0, 0 });
             numericBlurMosaicSize.ValueChanged += NumericBlurMosaicSize_ValueChanged;
-            numericBlurMosaicSize.Click += NumericBlurMosaicSize_Click;
             // 
             // panelPropertiesLine
             // 
@@ -1097,7 +1096,6 @@
             Text = "ImageEditor";
             TopMost = true;
             Deactivate += ScreenshotEditor_Deactivate;
-            Load += ScreenshotEditor_Load;
             KeyDown += ScreenshotEditor_KeyDown;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
@@ -1120,9 +1118,9 @@
             panelPropertiesFill.PerformLayout();
             panelPropertiesText.ResumeLayout(false);
             panelPropertiesText.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericPropertiesFontSize).EndInit();
             panelPropertiesHighlight.ResumeLayout(false);
             panelPropertiesHighlight.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesFontSize).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numericBlurMosaicSize).EndInit();
