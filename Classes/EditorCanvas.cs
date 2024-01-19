@@ -1,20 +1,15 @@
 ﻿using ScreenShotTool.Classes;
 using ScreenShotTool.Forms;
 using ScreenShotTool.Properties;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
-using System.Linq;
 using System.Runtime.Versioning;
-using System.Text;
-using System.Threading.Tasks;
 using static ScreenShotTool.Forms.ScreenshotEditor;
 
 namespace ScreenShotTool;
 [SupportedOSPlatform("windows")]
-public class EditorCanvas
+public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 {
     public Bitmap? SourceImage;
     Image? OverlayImage;
@@ -24,22 +19,16 @@ public class EditorCanvas
     public int LineWeight = 2;
     readonly int frameRate = Settings.Default.MaxFramerate;
     public readonly List<GraphicSymbol> symbols = [];
-    ScreenshotEditor parentEditor;
-    
+    readonly ScreenshotEditor parentEditor = parent;
+
     readonly int blurRadius = Settings.Default.BlurSampleArea;
     public int mosaicSize = Settings.Default.BlurMosaicSize;
     public bool InitialBlurComplete = false; // used to prevent blur from generating twice, when numeric is set initially
-    
+
     public int OutOfBoundsMaxPixels = 1000;
     public Size CanvasSize = new(100, 100); // will be update when the image loads
-    PictureBox pictureBox;
+    readonly PictureBox pictureBox = pictureBox;
     public GraphicSymbol? currentSelectedSymbol = null;
-
-    public EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
-    {
-        parentEditor = parent;
-        this.pictureBox = pictureBox;
-    }
 
     public void UpdateSourceImage(Bitmap bitmap)
     {
@@ -77,9 +66,9 @@ public class EditorCanvas
         if (image != null)
         {
             image.Dispose();
-            #pragma warning disable IDE0059 // Unnecessary assignment of a value
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
             image = null;
-            #pragma warning restore IDE0059 // Unnecessary assignment of a value
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
         }
     }
 
@@ -88,9 +77,9 @@ public class EditorCanvas
         if (graphics != null)
         {
             graphics.Dispose();
-            #pragma warning disable IDE0059 // Unnecessary assignment of a value
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
             graphics = null;
-            #pragma warning restore IDE0059 // Unnecessary assignment of a value
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
         }
     }
     #endregion
@@ -109,7 +98,7 @@ public class EditorCanvas
         UpdateOverlay();
     }
 
-    private Bitmap? ImageToBitmap32bppArgb(Image? img, bool disposeSource)
+    private static Bitmap? ImageToBitmap32bppArgb(Image? img, bool disposeSource)
     {
         Bitmap? clone = null;
         if (img != null)
@@ -440,7 +429,7 @@ public class EditorCanvas
 
     #region Symbols -------------------------------------------------------------------------------------
 
-    private GraphicSymbol? GetNewSymbol(object sender, Point MousePosition)
+    private GraphicSymbol? GetNewSymbol(Point MousePosition)
     {
         Point dragEnd = MousePosition;
         int lineWeight = parentEditor.GetNewSymbolProperties().lineWeight;
@@ -465,7 +454,7 @@ public class EditorCanvas
 
             Color lineColor = parentEditor.GetNewSymbolProperties().lineColor;
             Color fillColor = parentEditor.GetNewSymbolProperties().fillColor;
-                //Color.FromArgb((int)numericNewFillAlpha.Value, buttonNewColorFill.BackColor);
+            //Color.FromArgb((int)numericNewFillAlpha.Value, buttonNewColorFill.BackColor);
 
             return parentEditor.selectedUserAction switch
             {
@@ -489,9 +478,9 @@ public class EditorCanvas
         }
     }
 
-    private void CreateTempSymbol(object sender, Point MousePosition)
+    private void CreateTempSymbol(Point MousePosition)
     {
-        GraphicSymbol? tempSymbol = GetNewSymbol(sender, MousePosition);
+        GraphicSymbol? tempSymbol = GetNewSymbol(MousePosition);
         if (tempSymbol != null)
         {
             UpdateOverlay(tempSymbol, false);
@@ -612,7 +601,7 @@ public class EditorCanvas
     #region Mouse input ---------------------------------------------------------------------------------
 
     Point oldMousePosition = new(0, 0);
-    
+
     private void SetUserAction(ScreenshotEditor.UserActions action)
     {
         parentEditor.SetUserAction(action);
@@ -657,7 +646,7 @@ public class EditorCanvas
         }
     }
 
-    public void MouseMove(object sender, Point MousePosition)
+    public void MouseMove(Point MousePosition)
     {
         Debug.WriteLine($"UserAction: {parentEditor.selectedUserAction}");
         if (dragStarted == false) // don't update the selected hitbox index while a drag scale is active
@@ -673,7 +662,7 @@ public class EditorCanvas
         {
             pictureBox.Cursor = Cursors.Arrow;
         }
-        
+
         if (currentSelectedSymbol != null)
         {
 
@@ -711,7 +700,7 @@ public class EditorCanvas
 
         if (parentEditor.selectedUserAction >= ScreenshotEditor.UserActions.CreateRectangle) // any UserAction above CreateRectangle is a new symbol creation
         {
-            CreateTempSymbol(sender, MousePosition);
+            CreateTempSymbol(MousePosition);
         }
         else if (parentEditor.selectedUserAction == ScreenshotEditor.UserActions.MoveSymbol)
         {
@@ -728,7 +717,7 @@ public class EditorCanvas
     }
 
     int stackedSymbolsIndex = -1;
-    public void MouseUp(object sender, Point MousePosition)
+    public void MouseUp(Point MousePosition)
     {
         bool SymbolAllowsClickPlacement = parentEditor.selectedUserAction == ScreenshotEditor.UserActions.CreateImage || parentEditor.selectedUserAction == ScreenshotEditor.UserActions.CreateNumbered;
         //bool SymbolAllowsClickPlacement = parentEditor.selectedUserAction == ScreenshotEditor.UserActions.CreateNumbered;
@@ -747,7 +736,7 @@ public class EditorCanvas
             }
         }
 
-        GraphicSymbol? symbol = GetNewSymbol(sender, MousePosition); // checks current User Action and creates a symbol based on that
+        GraphicSymbol? symbol = GetNewSymbol(MousePosition); // checks current User Action and creates a symbol based on that
         if (symbol != null)
         {
             if (symbol.ValidSymbol)

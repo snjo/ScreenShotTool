@@ -2,7 +2,6 @@
 using ScreenShotTool.Properties;
 using System.Diagnostics;
 using System.Drawing.Imaging;
-using System.Drawing.Text;
 using System.Runtime.Versioning;
 using static ScreenShotTool.EditorCanvas;
 
@@ -13,7 +12,7 @@ public partial class ScreenshotEditor : Form
 {
 
     #region Constructor ---------------------------------------------------------------------------------
-    EditorCanvas editorCanvas;
+    readonly EditorCanvas editorCanvas;
     private List<ImageFormatDefinition> imageFormats = [];
     public readonly static int maxFontSize = 200;
     public readonly static int minimumFontSize = 5;
@@ -331,11 +330,11 @@ public partial class ScreenshotEditor : Form
     }
     private void PictureBoxOverlay_MouseMove(object sender, MouseEventArgs e)
     {
-        editorCanvas.MouseMove(sender, new Point(e.X, e.Y));
+        editorCanvas.MouseMove(new Point(e.X, e.Y));
     }
     private void PictureBoxOverlay_MouseUp(object sender, MouseEventArgs e)
     {
-        editorCanvas.MouseUp(sender, new Point(e.X, e.Y));
+        editorCanvas.MouseUp(new Point(e.X, e.Y));
     }
     #endregion
 
@@ -471,7 +470,7 @@ public partial class ScreenshotEditor : Form
         DisablePanel(panelPropertiesBlur);
     }
 
-    private void SetNumericClamp(NumericUpDown numericUpDown, int value)
+    private static void SetNumericClamp(NumericUpDown numericUpDown, int value)
     {
         numericUpDown.Value = Math.Clamp(value, numericUpDown.Minimum, numericUpDown.Maximum);
         if (value < numericUpDown.Minimum) Debug.WriteLine($"Value is below {numericUpDown.Name} Minimum");
@@ -833,7 +832,7 @@ public partial class ScreenshotEditor : Form
         }
     }
 
-    private void buttonPropertyCrop_Click(object sender, EventArgs e)
+    private void ButtonPropertyCrop_Click(object sender, EventArgs e)
     {
         if (editorCanvas.SourceImage == null) return;
         if (GetSelectedSymbol() is GsCrop gsC)
@@ -851,7 +850,7 @@ public partial class ScreenshotEditor : Form
         }
     }
 
-    private void buttonPropertyCopyCrop_Click(object sender, EventArgs e)
+    private void ButtonPropertyCopyCrop_Click(object sender, EventArgs e)
     {
         if (GetSelectedSymbol() is GsCrop gsC)
         {
@@ -980,12 +979,12 @@ public partial class ScreenshotEditor : Form
         SetUserAction(UserActions.CreateHighlight);
     }
 
-    private void buttonCrop_Click(object sender, EventArgs e)
+    private void ButtonCrop_Click(object sender, EventArgs e)
     {
         SetUserAction(UserActions.CreateCrop);
     }
 
-    private void buttonNumbered_Click(object sender, EventArgs e)
+    private void ButtonNumbered_Click(object sender, EventArgs e)
     {
         SetUserAction(UserActions.CreateNumbered);
     }

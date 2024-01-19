@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace ScreenShotTool.Forms;
+﻿namespace ScreenShotTool.Forms;
 #pragma warning disable CA1416 // Validate platform compatibility
 public class GsHighlight : GsDynamicImage
 {
@@ -19,7 +17,7 @@ public class GsHighlight : GsDynamicImage
     public void DrawFill(Pen pen, Brush fillBrush, Rectangle rect, Graphics graphic)
     {
         if (rect.Width < 1 || rect.Height < 1) return;
-        
+
         if (SourceImage != null)
         {
             if (highlightedBmp == null || RectChanged(rect) || previousColor != BackgroundColor || previousBlendMode != blendMode)
@@ -45,7 +43,8 @@ public class GsHighlight : GsDynamicImage
     private void UpdateHighlightBmp(Rectangle rect)
     {
         if (SourceImage == null) return;
-        if (highlightedBmp != null) { 
+        if (highlightedBmp != null)
+        {
             highlightedBmp.Dispose();
             highlightedBmp = null;
         }
@@ -59,23 +58,18 @@ public class GsHighlight : GsDynamicImage
         int bmpWidth = bmpRight - bmpLeft;
         int bmpHeight = bmpBottom - bmpTop;
 
-        using (var snoop = new BmpPixelSnoop(SourceImage))
+        using var snoop = new BmpPixelSnoop(SourceImage);
+        using var target = new BmpPixelSnoop(highlightedBmp);
+        for (int x = 0; x < bmpWidth; x++)
         {
-            using (var target = new BmpPixelSnoop(highlightedBmp))
+            for (int y = 0; y < bmpHeight; y++)
             {
-                //var col = snoop.GetPixel(0, 0);
-                for (int x = 0; x < bmpWidth; x++)
-                {
-                    for (int y = 0; y < bmpHeight; y++)
-                    {
-                        int sampleX = bmpLeft + x;
-                        int sampleY = bmpTop + y;
-                        if (sampleX < 0 || sampleY < 0 || sampleX >= snoop.Width || sampleY >= snoop.Height) continue;
-                        Color sourcePixel = snoop.GetPixel(sampleX, sampleY);
-                        target.SetPixel(x, y, ColorBlend.BlendColors(sourcePixel, BackgroundColor, blendMode));
+                int sampleX = bmpLeft + x;
+                int sampleY = bmpTop + y;
+                if (sampleX < 0 || sampleY < 0 || sampleX >= snoop.Width || sampleY >= snoop.Height) continue;
+                Color sourcePixel = snoop.GetPixel(sampleX, sampleY);
+                target.SetPixel(x, y, ColorBlend.BlendColors(sourcePixel, BackgroundColor, blendMode));
 
-                    }
-                }
             }
         }
     }

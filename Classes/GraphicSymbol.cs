@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using System.Drawing;
-using System.Numerics;
+﻿using System.Numerics;
 
 namespace ScreenShotTool.Forms
 {
@@ -22,7 +20,7 @@ namespace ScreenShotTool.Forms
         public bool MoveAllowed = true;
         public bool ShadowEnabled = false;
         public int ShadowDistance = 10;
-        public Rectangle ContainerBounds = new Rectangle();
+        public Rectangle ContainerBounds = new();
         public ListViewItem? ListViewItem { get; set; }
         public bool AllowClickPlacement = false;
 

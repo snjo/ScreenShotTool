@@ -9,7 +9,7 @@ public class GsDynamicImage(Point startPoint, Point endPoint, Color foregroundCo
     public Bitmap? SourceImage
     {
         get
-        { 
+        {
             return _sourceImage;
         }
         set
@@ -18,7 +18,7 @@ public class GsDynamicImage(Point startPoint, Point endPoint, Color foregroundCo
             _sourceImage = value;
         }
     }
-    
+
 
     internal bool RectChanged(Rectangle newRect)
     {

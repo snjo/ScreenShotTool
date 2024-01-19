@@ -1,5 +1,4 @@
 ﻿using ScreenShotTool.Forms;
-using System.Diagnostics;
 using Font = System.Drawing.Font;
 
 namespace ScreenShotTool.Classes;
@@ -11,10 +10,10 @@ public class GsNumbered : GraphicSymbol
     private float fontEmSize = 12f;
     private readonly FontStyle fontStyle = FontStyle.Bold;
     private Font font;
-    private SolidBrush fontBrush = new(Color.White);
-    private SolidBrush circleBrush = new(Color.Maroon);
-    public int Diameter = 30;
-    public static int DefaultRadius = 15;
+    private readonly SolidBrush fontBrush = new(Color.White);
+    private readonly SolidBrush circleBrush = new(Color.Maroon);
+    public int Diameter = 30; // update DefaultRadius if you change Diameter here
+    public static readonly int DefaultRadius = 15;
 
     public GsNumbered(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight = 1, int lineAlpha = 255, int fillAlpha = 255) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight, lineAlpha, fillAlpha)
     {
@@ -37,7 +36,7 @@ public class GsNumbered : GraphicSymbol
         SizeF sizeInPixels = graphic.MeasureString(text, font);
         int WidthToSpare = Diameter - (int)sizeInPixels.Width;
         int HeightToSpare = Diameter - (int)sizeInPixels.Height;
-        graphic.DrawString(text, font, fontBrush, new PointF(Left + offset.X + (WidthToSpare/2), Top + offset.Y + (HeightToSpare/2)));
+        graphic.DrawString(text, font, fontBrush, new PointF(Left + offset.X + (WidthToSpare / 2), Top + offset.Y + (HeightToSpare / 2)));
     }
 
     public override void DrawShadow(Graphics graphic)
@@ -50,7 +49,7 @@ public class GsNumbered : GraphicSymbol
                 graphic.FillEllipse(ShadowBrush, new Rectangle(Left + i, Top + i, Diameter, Diameter));
             }
         }
-        
+
     }
 
     private Font CreateFont()
@@ -65,7 +64,7 @@ public class GsNumbered : GraphicSymbol
             return Diameter;
         }
         set
-        { 
+        {
             Diameter = value;
         }
     }

@@ -295,7 +295,7 @@ namespace ScreenShotTool
             int widthAvailable = listViewThumbnails.Width - labelInfo.Width;
             int HeightAvailable = listViewThumbnails.Height - labelInfo.Height;
             labelInfo.Location = new Point(Math.Max(listViewThumbnails.Left + 5, widthAvailable / 2), Math.Max(listViewThumbnails.Top + 5, HeightAvailable / 2));
-            if (labelInfo.Height+5 > listViewThumbnails.Height)
+            if (labelInfo.Height + 5 > listViewThumbnails.Height)
             {
                 UpdateInfoLabelVisibility(forceHide: true);
             }
@@ -1433,7 +1433,7 @@ namespace ScreenShotTool
             OpenHelp();
         }
 
-        private void listViewThumbnails_SizeChanged(object sender, EventArgs e)
+        private void ListViewThumbnails_SizeChanged(object sender, EventArgs e)
         {
             UpdateLabelInfoPosition();
         }

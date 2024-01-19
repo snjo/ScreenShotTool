@@ -97,7 +97,7 @@
             listViewThumbnails.Size = new Size(673, 324);
             listViewThumbnails.TabIndex = 0;
             listViewThumbnails.UseCompatibleStateImageBehavior = false;
-            listViewThumbnails.SizeChanged += listViewThumbnails_SizeChanged;
+            listViewThumbnails.SizeChanged += ListViewThumbnails_SizeChanged;
             listViewThumbnails.DoubleClick += ListView1_DoubleClick;
             listViewThumbnails.KeyDown += ListView1_KeyDown;
             listViewThumbnails.MouseDown += ListViewThumbnails_MouseDown;

@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Channels;
-using System.Threading.Tasks;
-
-namespace ScreenShotTool
+﻿namespace ScreenShotTool
 {
     public class ColorBlend
     {
@@ -89,7 +80,7 @@ namespace ScreenShotTool
             return Color.FromArgb(Alpha, AverageColorChannel(color1.R, color2.R), AverageColorChannel(color1.G, color2.G), AverageColorChannel(color1.B, color2.B));
         }
 
-        public static Color Lighten(Color color1,Color color2)
+        public static Color Lighten(Color color1, Color color2)
         {
             int Alpha = CombineTransparencies(color1, color2);
             return Color.FromArgb(Alpha, Math.Max((int)color1.R, color2.R), Math.Max((int)color1.G, color2.G), Math.Max((int)color1.B, color2.B));
@@ -116,14 +107,14 @@ namespace ScreenShotTool
         public static Color Desaturate(Color color1, Color color2)
         {
             int Alpha = CombineTransparencies(color1, color2);
-            int avgColor = Math.Clamp((int)((color1.R + color1.G + color1.B) / 3f),0,255);
+            int avgColor = Math.Clamp((int)((color1.R + color1.G + color1.B) / 3f), 0, 255);
             return Color.FromArgb(Alpha, avgColor, avgColor, avgColor);
         }
 
         public static Color Invert(Color color1)
         {
             //int Alpha = CombineTransparencies(color1, color2);
-            return Color.FromArgb(color1.A, 255-color1.R, 255-color1.G, 255-color1.B);
+            return Color.FromArgb(color1.A, 255 - color1.R, 255 - color1.G, 255 - color1.B);
         }
     }
 }

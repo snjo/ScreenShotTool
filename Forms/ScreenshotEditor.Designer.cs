@@ -266,7 +266,7 @@
             buttonCrop.Size = new Size(36, 36);
             buttonCrop.TabIndex = 11;
             buttonCrop.UseVisualStyleBackColor = true;
-            buttonCrop.Click += buttonCrop_Click;
+            buttonCrop.Click += ButtonCrop_Click;
             // 
             // buttonHighlight
             // 
@@ -1050,7 +1050,7 @@
             buttonPropertyCopyCrop.TabIndex = 2;
             buttonPropertyCopyCrop.Text = "Copy crop";
             buttonPropertyCopyCrop.UseVisualStyleBackColor = true;
-            buttonPropertyCopyCrop.Click += buttonPropertyCopyCrop_Click;
+            buttonPropertyCopyCrop.Click += ButtonPropertyCopyCrop_Click;
             // 
             // buttonPropertyCrop
             // 
@@ -1060,7 +1060,7 @@
             buttonPropertyCrop.TabIndex = 1;
             buttonPropertyCrop.Text = "Crop";
             buttonPropertyCrop.UseVisualStyleBackColor = true;
-            buttonPropertyCrop.Click += buttonPropertyCrop_Click;
+            buttonPropertyCrop.Click += ButtonPropertyCrop_Click;
             // 
             // panelPropertiesBlur
             // 
@@ -1083,7 +1083,7 @@
             buttonNumbered.Size = new Size(36, 36);
             buttonNumbered.TabIndex = 12;
             buttonNumbered.UseVisualStyleBackColor = true;
-            buttonNumbered.Click += buttonNumbered_Click;
+            buttonNumbered.Click += ButtonNumbered_Click;
             // 
             // ScreenshotEditor
             // 

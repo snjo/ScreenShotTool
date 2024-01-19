@@ -15,9 +15,7 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.Drawing.Imaging;
 
 /// <summary>
@@ -48,12 +46,12 @@ using System.Drawing.Imaging;
 /// </summary>
 unsafe class BmpPixelSnoop : IDisposable
 {
-    #pragma warning disable CA1416
+#pragma warning disable CA1416
     // A reference to the bitmap to be wrapped
     private readonly Bitmap wrappedBitmap;
 
     // The bitmap's data (once it has been locked)
-    private BitmapData? data = null;    // EDITED FROM THE ORIGINAL SOURCE, added ? to avoid null warning
+    private readonly BitmapData? data = null;    // EDITED FROM THE ORIGINAL SOURCE, added ? to avoid null warning
 
     // Pointer to the first pixel
     private readonly byte* scan0;
