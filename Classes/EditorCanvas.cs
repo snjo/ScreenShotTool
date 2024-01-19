@@ -10,6 +10,7 @@ using System.Linq;
 using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
+using static ScreenShotTool.Forms.ScreenshotEditor;
 
 namespace ScreenShotTool;
 [SupportedOSPlatform("windows")]
@@ -389,15 +390,25 @@ public class EditorCanvas
 
     private void DrawElements(Graphics graphic, GraphicSymbol? temporarySymbol = null, bool HighlightSelected = false)
     {
+        int NumberedSymbolCounter = 1;
         if (SourceImage == null) return;
         foreach (GraphicSymbol symbol in symbols)
         {
+            if (symbol is GsNumbered gsNumbered)
+            {
+                gsNumbered.Number = NumberedSymbolCounter;
+                NumberedSymbolCounter++;
+            }
             symbol.ContainerBounds = new Rectangle(0, 0, SourceImage.Width, SourceImage.Height);
             InsertImagesInSymbol(symbol);
             symbol.DrawSymbol(graphic);
         }
         if (temporarySymbol != null)
         {
+            if (temporarySymbol is GsNumbered gsNumbered)
+            {
+                gsNumbered.Number = NumberedSymbolCounter;
+            }
             InsertImagesInSymbol(temporarySymbol);
             temporarySymbol?.DrawSymbol(graphic);
         }
@@ -468,6 +479,7 @@ public class EditorCanvas
                 ScreenshotEditor.UserActions.CreateBlur => new GsBlur(upperLeft, size, lineColor, fillColor),
                 ScreenshotEditor.UserActions.CreateHighlight => new GsHighlight(upperLeft, size, lineColor, Color.Yellow, false, 0, 0, fillAlpha),
                 ScreenshotEditor.UserActions.CreateCrop => new GsCrop(upperLeft, size, lineColor, fillColor),
+                ScreenshotEditor.UserActions.CreateNumbered => new GsNumbered(new Point(dragEnd.X - GsNumbered.DefaultRadius, dragEnd.Y - GsNumbered.DefaultRadius), size, lineColor, fillColor, shadow, lineWeight, lineAlpha, fillAlpha),
                 _ => null,
             };
         }
@@ -647,12 +659,21 @@ public class EditorCanvas
 
     public void MouseMove(object sender, Point MousePosition)
     {
+        Debug.WriteLine($"UserAction: {parentEditor.selectedUserAction}");
         if (dragStarted == false) // don't update the selected hitbox index while a drag scale is active
         {
             GetHitboxUnderCursor(MousePosition);
         }
 
-        pictureBox.Cursor = Cursors.Arrow;
+        if (parentEditor.selectedUserAction >= UserActions.CreateRectangle)
+        {
+            pictureBox.Cursor = Cursors.Cross;
+        }
+        else if (!dragStarted)
+        {
+            pictureBox.Cursor = Cursors.Arrow;
+        }
+        
         if (currentSelectedSymbol != null)
         {
 
@@ -709,13 +730,24 @@ public class EditorCanvas
     int stackedSymbolsIndex = -1;
     public void MouseUp(object sender, Point MousePosition)
     {
-        if (dragMoved == false && parentEditor.selectedUserAction != ScreenshotEditor.UserActions.CreateImage) // user clicked and released mouse without moving it. Also don't update if the action is inserting an unscaled image, since the click place is different
+        bool SymbolAllowsClickPlacement = parentEditor.selectedUserAction == ScreenshotEditor.UserActions.CreateImage || parentEditor.selectedUserAction == ScreenshotEditor.UserActions.CreateNumbered;
+        //bool SymbolAllowsClickPlacement = parentEditor.selectedUserAction == ScreenshotEditor.UserActions.CreateNumbered;
+
+        if (dragMoved == false) // user clicked and released mouse without moving it.
         {
-            SelectSymbolUnderCursor();
+            if (SymbolAllowsClickPlacement) // Don't switch to Select if the action is inserting an unscaled image or Number, since the click place is allowed
+            {
+                // don't change Action, keep spamming those symbols
+            }
+            else
+            {
+                // user clicked instead of dragging, switch to Select
+                SetUserAction(ScreenshotEditor.UserActions.Select);
+                SelectSymbolUnderCursor();
+            }
         }
 
-        if (SourceImage == null) return;
-        GraphicSymbol? symbol = GetNewSymbol(sender, MousePosition);
+        GraphicSymbol? symbol = GetNewSymbol(sender, MousePosition); // checks current User Action and creates a symbol based on that
         if (symbol != null)
         {
             if (symbol.ValidSymbol)
@@ -727,8 +759,13 @@ public class EditorCanvas
         parentEditor.UpdatePropertiesPanel();
         dragStarted = false;
 
-        if (parentEditor.selectedUserAction != ScreenshotEditor.UserActions.MoveSymbol)
+        if (parentEditor.selectedUserAction != ScreenshotEditor.UserActions.MoveSymbol && Settings.Default.SelectAfterPlacingSymbol)
         {
+            SetUserAction(ScreenshotEditor.UserActions.Select);
+        }
+        if (parentEditor.selectedUserAction == ScreenshotEditor.UserActions.CreateCrop || parentEditor.selectedUserAction == ScreenshotEditor.UserActions.CreateImage || parentEditor.selectedUserAction == ScreenshotEditor.UserActions.CreateImageScaled)
+        {
+            // there's no point in creating consecutive Crops, revert to Select, the same is probably true for images.
             SetUserAction(ScreenshotEditor.UserActions.Select);
         }
     }

@@ -81,6 +81,8 @@ namespace ScreenShotTool
             numericBlurMosaicSize.Value = settings.BlurMosaicSize;
             numericBlurSampleArea.Value = settings.BlurSampleArea;
 
+            checkBoxSelectAfterPlacingSymbol.Checked = settings.SelectAfterPlacingSymbol;
+
             //Tab: Hotkeys
 
             FillHotkeyGrid();
@@ -155,6 +157,8 @@ namespace ScreenShotTool
 
             settings.BlurMosaicSize = (int)numericBlurMosaicSize.Value;
             settings.BlurSampleArea = (int)numericBlurSampleArea.Value;
+
+            settings.SelectAfterPlacingSymbol = checkBoxSelectAfterPlacingSymbol.Checked;
 
             //Tab: Hotkeys
             int i = 0;

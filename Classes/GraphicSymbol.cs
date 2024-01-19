@@ -24,6 +24,7 @@ namespace ScreenShotTool.Forms
         public int ShadowDistance = 10;
         public Rectangle ContainerBounds = new Rectangle();
         public ListViewItem? ListViewItem { get; set; }
+        public bool AllowClickPlacement = false;
 
         private int _x;
         private int _y;

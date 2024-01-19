@@ -814,5 +814,17 @@ namespace ScreenShotTool.Properties {
                 this["MinimizeOnClose"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SelectAfterPlacingSymbol {
+            get {
+                return ((bool)(this["SelectAfterPlacingSymbol"]));
+            }
+            set {
+                this["SelectAfterPlacingSymbol"] = value;
+            }
+        }
     }
 }

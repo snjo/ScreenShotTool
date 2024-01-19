@@ -7,7 +7,7 @@ public class GsText : GraphicSymbol
     //public float fontSize = 10f;
     public FontStyle fontStyle = FontStyle.Regular;
     Font font;
-    public string text = "Text";
+    public string Text = "Text";
     readonly int maxFontSize;
     readonly int minFontSize;
 
@@ -52,8 +52,8 @@ public class GsText : GraphicSymbol
             //graphic.PageUnit = GraphicsUnit.Pixel;
             //StringFormat stringFormat = new StringFormat();
             //stringFormat.FormatFlags = StringFormatFlags.NoWrap;
-            graphic.DrawString(text, font, tempBrush, new PointF(Left + offset.X, Top + offset.Y));
-            SizeF sizeInPixels = graphic.MeasureString(text, font);
+            graphic.DrawString(Text, font, tempBrush, new PointF(Left + offset.X, Top + offset.Y));
+            SizeF sizeInPixels = graphic.MeasureString(Text, font);
             Width = (int)sizeInPixels.Width;
             Height = (int)sizeInPixels.Height;
         }

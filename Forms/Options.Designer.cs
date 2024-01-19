@@ -94,6 +94,7 @@
             checkBoxWindowToFile = new CheckBox();
             labelWindow = new Label();
             tabPageApplication = new TabPage();
+            checkBoxMinimizeOnClose = new CheckBox();
             label30 = new Label();
             label28 = new Label();
             label29 = new Label();
@@ -120,7 +121,7 @@
             ColumnShift = new DataGridViewCheckBoxColumn();
             ColumnWin = new DataGridViewCheckBoxColumn();
             buttonResetOptions = new Button();
-            checkBoxMinimizeOnClose = new CheckBox();
+            checkBoxSelectAfterPlacingSymbol = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
@@ -807,6 +808,7 @@
             // 
             // tabPageApplication
             // 
+            tabPageApplication.Controls.Add(checkBoxSelectAfterPlacingSymbol);
             tabPageApplication.Controls.Add(checkBoxMinimizeOnClose);
             tabPageApplication.Controls.Add(label30);
             tabPageApplication.Controls.Add(label28);
@@ -840,6 +842,16 @@
             tabPageApplication.TabIndex = 1;
             tabPageApplication.Text = "Application";
             tabPageApplication.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxMinimizeOnClose
+            // 
+            checkBoxMinimizeOnClose.AutoSize = true;
+            checkBoxMinimizeOnClose.Location = new Point(16, 50);
+            checkBoxMinimizeOnClose.Name = "checkBoxMinimizeOnClose";
+            checkBoxMinimizeOnClose.Size = new Size(184, 19);
+            checkBoxMinimizeOnClose.TabIndex = 82;
+            checkBoxMinimizeOnClose.Text = "Minimize when closing with X";
+            checkBoxMinimizeOnClose.UseVisualStyleBackColor = true;
             // 
             // label30
             // 
@@ -1074,15 +1086,15 @@
             buttonResetOptions.UseVisualStyleBackColor = true;
             buttonResetOptions.Click += ButtonResetOptions_Click;
             // 
-            // checkBoxMinimizeOnClose
+            // checkBoxSelectAfterPlacingSymbol
             // 
-            checkBoxMinimizeOnClose.AutoSize = true;
-            checkBoxMinimizeOnClose.Location = new Point(16, 50);
-            checkBoxMinimizeOnClose.Name = "checkBoxMinimizeOnClose";
-            checkBoxMinimizeOnClose.Size = new Size(184, 19);
-            checkBoxMinimizeOnClose.TabIndex = 82;
-            checkBoxMinimizeOnClose.Text = "Minimize when closing with X";
-            checkBoxMinimizeOnClose.UseVisualStyleBackColor = true;
+            checkBoxSelectAfterPlacingSymbol.AutoSize = true;
+            checkBoxSelectAfterPlacingSymbol.Location = new Point(17, 501);
+            checkBoxSelectAfterPlacingSymbol.Name = "checkBoxSelectAfterPlacingSymbol";
+            checkBoxSelectAfterPlacingSymbol.Size = new Size(374, 19);
+            checkBoxSelectAfterPlacingSymbol.TabIndex = 83;
+            checkBoxSelectAfterPlacingSymbol.Text = "After placing a symbol, change to Select (instead of placing more)";
+            checkBoxSelectAfterPlacingSymbol.UseVisualStyleBackColor = true;
             // 
             // Options
             // 
@@ -1217,5 +1229,6 @@
         private NumericUpDown numericBlurSampleArea;
         private Label label27;
         private CheckBox checkBoxMinimizeOnClose;
+        private CheckBox checkBoxSelectAfterPlacingSymbol;
     }
 }

@@ -119,6 +119,7 @@
             buttonPropertyCopyCrop = new Button();
             buttonPropertyCrop = new Button();
             panelPropertiesBlur = new Panel();
+            buttonNumbered = new Button();
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
@@ -237,6 +238,7 @@
             // 
             panelButtons.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             panelButtons.BorderStyle = BorderStyle.FixedSingle;
+            panelButtons.Controls.Add(buttonNumbered);
             panelButtons.Controls.Add(buttonCrop);
             panelButtons.Controls.Add(buttonHighlight);
             panelButtons.Controls.Add(buttonBlur);
@@ -258,7 +260,7 @@
             buttonCrop.FlatAppearance.BorderSize = 0;
             buttonCrop.FlatStyle = FlatStyle.Flat;
             buttonCrop.Image = Properties.Resources.crop;
-            buttonCrop.Location = new Point(4, 357);
+            buttonCrop.Location = new Point(4, 395);
             buttonCrop.Margin = new Padding(1);
             buttonCrop.Name = "buttonCrop";
             buttonCrop.Size = new Size(36, 36);
@@ -314,7 +316,7 @@
             buttonBorder.FlatAppearance.BorderSize = 0;
             buttonBorder.FlatStyle = FlatStyle.Flat;
             buttonBorder.Image = Properties.Resources.frame;
-            buttonBorder.Location = new Point(4, 321);
+            buttonBorder.Location = new Point(4, 359);
             buttonBorder.Margin = new Padding(1);
             buttonBorder.Name = "buttonBorder";
             buttonBorder.Size = new Size(36, 36);
@@ -1069,6 +1071,20 @@
             panelPropertiesBlur.Size = new Size(153, 31);
             panelPropertiesBlur.TabIndex = 35;
             // 
+            // buttonNumbered
+            // 
+            buttonNumbered.AccessibleName = "Crop";
+            buttonNumbered.FlatAppearance.BorderSize = 0;
+            buttonNumbered.FlatStyle = FlatStyle.Flat;
+            buttonNumbered.Image = Properties.Resources.numbered;
+            buttonNumbered.Location = new Point(4, 321);
+            buttonNumbered.Margin = new Padding(1);
+            buttonNumbered.Name = "buttonNumbered";
+            buttonNumbered.Size = new Size(36, 36);
+            buttonNumbered.TabIndex = 12;
+            buttonNumbered.UseVisualStyleBackColor = true;
+            buttonNumbered.Click += buttonNumbered_Click;
+            // 
             // ScreenshotEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1227,5 +1243,6 @@
         private Button buttonPropertyCrop;
         private Panel panelPropertiesBlur;
         private Label label19;
+        private Button buttonNumbered;
     }
 }

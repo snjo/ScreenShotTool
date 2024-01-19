@@ -22,6 +22,7 @@ public class GsImage : GraphicSymbol
             ValidSymbol = false;
         }
         ScalingAllowed = false;
+        AllowClickPlacement = true;
     }
 
     public override int Width

@@ -79,6 +79,7 @@ public partial class ScreenshotEditor : Form
         toolButtons.Add(buttonBlur);
         toolButtons.Add(buttonHighlight);
         toolButtons.Add(buttonCrop);
+        toolButtons.Add(buttonNumbered);
 
         listViewSymbols.Height = 200;
         UpdatePropertiesPanel();
@@ -94,24 +95,6 @@ public partial class ScreenshotEditor : Form
         list.Add(new ImageFormatDefinition("GIF", "*.gif", ImageFormat.Gif));
         list.Add(new ImageFormatDefinition("BMP", "*.bmp", ImageFormat.Bmp));
         return list;
-    }
-
-    public enum UserActions
-    {
-        None,
-        Select,
-        MoveSymbol,
-        ScaleSymbol,
-        CreateRectangle,
-        CreateCircle,
-        CreateLine,
-        CreateArrow,
-        CreateText,
-        CreateImage,
-        CreateImageScaled,
-        CreateBlur,
-        CreateHighlight,
-        CreateCrop
     }
 
     public void UpdateNumericLimits()
@@ -289,7 +272,26 @@ public partial class ScreenshotEditor : Form
 
     #region User Actions --------------------------------------------------------------------------------
 
-    public UserActions selectedUserAction = UserActions.None;
+    public enum UserActions
+    {
+        None,
+        Select,
+        MoveSymbol,
+        ScaleSymbol,
+        CreateRectangle,
+        CreateCircle,
+        CreateLine,
+        CreateArrow,
+        CreateText,
+        CreateImage,
+        CreateImageScaled,
+        CreateBlur,
+        CreateHighlight,
+        CreateCrop,
+        CreateNumbered
+    }
+
+    public UserActions selectedUserAction = UserActions.Select;
     public void SetUserAction(UserActions action)
     {
         selectedUserAction = action;
@@ -306,11 +308,17 @@ public partial class ScreenshotEditor : Form
         if (selectedUserAction == UserActions.CreateBlur) buttonBlur.BackColor = Color.Yellow;
         if (selectedUserAction == UserActions.CreateHighlight) buttonHighlight.BackColor = Color.Yellow;
         if (selectedUserAction == UserActions.CreateCrop) buttonCrop.BackColor = Color.Yellow;
+        if (selectedUserAction == UserActions.CreateNumbered) buttonNumbered.BackColor = Color.Yellow;
         // UserActions.CreateBorder is not in list since it happens right away without mouse drag
 
-        if (selectedUserAction != UserActions.MoveSymbol && selectedUserAction != UserActions.ScaleSymbol)
+        //if (selectedUserAction != UserActions.MoveSymbol && selectedUserAction != UserActions.ScaleSymbol)
+        if (selectedUserAction == UserActions.Select || selectedUserAction == UserActions.None)
         {
             pictureBoxOverlay.Cursor = Cursors.Arrow;
+        }
+        else if (selectedUserAction >= UserActions.CreateRectangle)
+        {
+            pictureBoxOverlay.Cursor = Cursors.Cross;
         }
         editorCanvas.UpdateOverlay();
     }
@@ -411,9 +419,18 @@ public partial class ScreenshotEditor : Form
     {
         if (listViewSymbols.SelectedItems.Count > 0)
         {
-            //SetUserAction(UserActions.MoveSymbol);
-            SetUserAction(UserActions.None);
-
+            //SetUserAction(UserActions.None);
+            if (Settings.Default.SelectAfterPlacingSymbol)
+            {
+                SetUserAction(UserActions.Select);
+            }
+            else
+            {
+                if (selectedUserAction < UserActions.CreateRectangle)
+                {
+                    SetUserAction(UserActions.Select);
+                }
+            }
         }
         else
         {
@@ -500,10 +517,10 @@ public partial class ScreenshotEditor : Form
                     numericPropertiesHeight.Enabled = false;
                     numericPropertiesLineWeight.Enabled = false;
 
-                    textBoxSymbolText.Text = gsText.text;
+                    textBoxSymbolText.Text = gsText.Text;
                     if (gsText.ListViewItem != null)
                     {
-                        gsText.ListViewItem.Text = "Text: " + gsText.text;
+                        gsText.ListViewItem.Text = "Text: " + gsText.Text;
                     }
                     numericPropertiesFontSize.Value = (int)Math.Clamp(gsText.fontEmSize, minimumFontSize, maxFontSize);
                     checkBoxFontBold.Checked = (gsText.fontStyle & FontStyle.Bold) != 0;
@@ -524,6 +541,17 @@ public partial class ScreenshotEditor : Form
                 else if (graphicSymbol is GsCrop)
                 {
                     EnablePanel(panelPropertiesCrop, panelLeft, ref lastPanelBottom);
+                }
+                else if (graphicSymbol is GsNumbered gsNumbered)
+                {
+                    EnablePanel(panelPropertiesFill, panelLeft, ref lastPanelBottom);
+                    EnablePanel(panelPropertiesLine, panelLeft, ref lastPanelBottom);
+                    EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
+                    numericPropertiesHeight.Enabled = false;
+                    if (gsNumbered.ListViewItem != null)
+                    {
+                        gsNumbered.ListViewItem.Text = "Number: " + gsNumbered.Number;
+                    }
                 }
                 else if (graphicSymbol is GsBoundingBox) // must be after all other symbols that inherit from GsBoundingBox
                 {
@@ -678,10 +706,10 @@ public partial class ScreenshotEditor : Form
         GsText? textSymbol = GetSelectedTextSymbol();
         if (textSymbol != null)
         {
-            textSymbol.text = textBoxSymbolText.Text;
+            textSymbol.Text = textBoxSymbolText.Text;
             if (textSymbol.ListViewItem != null)
             {
-                textSymbol.ListViewItem.Text = "Text: " + textSymbol.text;
+                textSymbol.ListViewItem.Text = "Text: " + textSymbol.Text;
             }
         }
         editorCanvas.UpdateOverlay();
@@ -938,6 +966,7 @@ public partial class ScreenshotEditor : Form
             Name = "Border"
         };
         AddNewSymbolToList(border);
+        SetUserAction(UserActions.Select);
         editorCanvas.UpdateOverlay();
     }
 
@@ -954,6 +983,11 @@ public partial class ScreenshotEditor : Form
     private void buttonCrop_Click(object sender, EventArgs e)
     {
         SetUserAction(UserActions.CreateCrop);
+    }
+
+    private void buttonNumbered_Click(object sender, EventArgs e)
+    {
+        SetUserAction(UserActions.CreateNumbered);
     }
 
     #endregion
