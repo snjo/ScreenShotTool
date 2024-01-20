@@ -23,13 +23,13 @@ public static class ColorTools
 
     public static Color GetTextColorFromBackground(Color backColor, Color DarkColor, Color BrightColor, float brightnessThreshold = 0.6f, int alphaThreshold = 128)
     {
-        if (ColorTools.ColorBrightness(backColor) < brightnessThreshold || backColor.A < 128)
+        if (ColorTools.ColorBrightness(backColor) < brightnessThreshold && backColor.A > alphaThreshold)
         {
-            return Color.White;
+            return BrightColor;
         }
         else
         {
-            return Color.White;
+            return DarkColor;
         }
     }
 

@@ -5,7 +5,7 @@ namespace ScreenShotTool.Forms;
 
 public class GsArrow : GsLine
 {
-    public GsArrow(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight, int lineAlpha) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight, lineAlpha)
+    public GsArrow(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight)
     {
         Name = "Arrow";
         int arrowSize = 5;

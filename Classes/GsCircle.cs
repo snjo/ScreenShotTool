@@ -2,7 +2,7 @@
 #pragma warning disable CA1416 // Validate platform compatibility
 public class GsCircle : GsBoundingBox
 {
-    public GsCircle(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight, int lineAlpha, int fillAlpha) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight, lineAlpha, fillAlpha)
+    public GsCircle(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight)
     {
         Name = "Circle";
         drawFill = DrawFill;

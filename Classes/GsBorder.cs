@@ -7,7 +7,7 @@ public class GsBorder : GsBoundingBox
     //private readonly int originalWidth = 0;
     //private readonly int originalHeight = 0;
     Pen borderPen = new Pen(Color.Black, 1);
-    public GsBorder(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight, int lineAlpha, int fillAlpha) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight, lineAlpha, fillAlpha)
+    public GsBorder(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight)
     {
         Name = "Border";
         drawLine = DrawBorder;
@@ -21,7 +21,7 @@ public class GsBorder : GsBoundingBox
         Top = 0;
         Width = ContainerBounds.Width;
         Height = ContainerBounds.Height;
-        borderPen.Color = ForegroundColor;
+        borderPen.Color = LineColor;
         
         borderPen.Width = LineWeight;
         borderPen.Alignment = System.Drawing.Drawing2D.PenAlignment.Inset;

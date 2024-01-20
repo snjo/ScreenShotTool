@@ -15,12 +15,12 @@ public class GsNumbered : GraphicSymbol
     public int Diameter = 30; // update DefaultRadius if you change Diameter here
     public int DefaultRadius = 15;
 
-    public GsNumbered(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight = 1, int lineAlpha = 255, int fillAlpha = 255) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight, lineAlpha, fillAlpha)
+    public GsNumbered(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight = 1) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight)
     {
         Name = "Number";
         font = CreateFont();
-        BackgroundColor = Color.Maroon;
-        ForegroundColor = Color.White;
+        FillColor = Color.Maroon;
+        LineColor = Color.White;
         ValidSymbol = true;
         AllowClickPlacement = true;
     }
@@ -29,8 +29,8 @@ public class GsNumbered : GraphicSymbol
     {
         fontEmSize = Diameter / 2.5f;
         font = CreateFont();
-        circleBrush.Color = BackgroundColor;
-        fontBrush.Color = ForegroundColor;
+        circleBrush.Color = FillColor;
+        fontBrush.Color = LineColor;
         string text = Number.ToString();
         graphic.FillEllipse(circleBrush, new Rectangle(Left, Top, Diameter, Diameter));
         SizeF sizeInPixels = graphic.MeasureString(text, font);

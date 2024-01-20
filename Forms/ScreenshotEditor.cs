@@ -539,15 +539,15 @@ public partial class ScreenshotEditor : Form
                 numericPropertiesWidth.Enabled = true;
                 numericPropertiesHeight.Enabled = true;
                 buttonPropertiesColorLine.Enabled = true;
-                numericPropertiesLineAlpha.Enabled = true;
+                //numericPropertiesLineAlpha.Enabled = true;
 
                 labelSymbolType.Text = "Symbol: " + graphicSymbol.Name;
                 SetNumericClamp(numericPropertiesX, graphicSymbol.Left);
                 SetNumericClamp(numericPropertiesY, graphicSymbol.Top);
                 SetNumericClamp(numericPropertiesWidth, graphicSymbol.Width);
                 SetNumericClamp(numericPropertiesHeight, graphicSymbol.Height);
-                buttonPropertiesColorLine.BackColor = graphicSymbol.ForegroundColor;
-                buttonPropertiesColorFill.BackColor = graphicSymbol.BackgroundColor;
+                buttonPropertiesColorLine.BackColor = graphicSymbol.LineColor;
+                buttonPropertiesColorFill.BackColor = graphicSymbol.FillColor;
                 numericPropertiesLineWeight.Value = graphicSymbol.LineWeight;
                 checkBoxPropertiesShadow.Checked = graphicSymbol.ShadowEnabled;
                 buttonDeleteSymbol.Tag = graphicSymbol;
@@ -618,8 +618,8 @@ public partial class ScreenshotEditor : Form
                     textBoxSymbolText.Text = "";
                 }
 
-                numericPropertiesLineAlpha.Value = graphicSymbol.lineAlpha;
-                numericPropertiesFillAlpha.Value = graphicSymbol.fillAlpha;
+                //numericPropertiesLineAlpha.Value = graphicSymbol.lineAlpha;
+                //numericPropertiesFillAlpha.Value = graphicSymbol.fillAlpha;
             }
         }
         else
@@ -660,8 +660,8 @@ public partial class ScreenshotEditor : Form
         numericPropertiesHeight.Value = 1;
         buttonPropertiesColorLine.BackColor = Color.Gray;
         buttonPropertiesColorFill.BackColor = Color.Gray;
-        numericPropertiesLineAlpha.Value = 255;
-        numericPropertiesFillAlpha.Value = 255;
+        //numericPropertiesLineAlpha.Value = 255;
+        //numericPropertiesFillAlpha.Value = 255;
         numericPropertiesLineWeight.Value = 1;
         numericPropertiesFontSize.Value = 10;
         buttonDeleteSymbol.Tag = null;
@@ -694,18 +694,18 @@ public partial class ScreenshotEditor : Form
             {
                 gs.LineWeight = (int)numericPropertiesLineWeight.Value;
             }
-            if (sender == numericPropertiesLineAlpha)
-            {
-                gs.lineAlpha = (int)numericPropertiesLineAlpha.Value;
-                gs.UpdateColors();
-                buttonPropertiesColorLine.BackColor = gs.ForegroundColor;
-            }
-            if (sender == numericPropertiesFillAlpha)
-            {
-                gs.fillAlpha = (int)numericPropertiesFillAlpha.Value;
-                gs.UpdateColors();
-                buttonPropertiesColorFill.BackColor = gs.BackgroundColor;
-            }
+            //if (sender == numericPropertiesLineAlpha)
+            //{
+            //    //gs.lineAlpha = (int)numericPropertiesLineAlpha.Value;
+            //    gs.UpdateColors();
+            //    buttonPropertiesColorLine.BackColor = gs.LineColor;
+            //}
+            //if (sender == numericPropertiesFillAlpha)
+            //{
+            //    gs.fillAlpha = (int)numericPropertiesFillAlpha.Value;
+            //    gs.UpdateColors();
+            //    buttonPropertiesColorFill.BackColor = gs.BackgroundColor;
+            //}
         }
         editorCanvas.UpdateOverlay();
     }
@@ -723,14 +723,14 @@ public partial class ScreenshotEditor : Form
                 DialogResult result = colorDialogAlpha.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    ColorTools.SetButtonColors(buttonPropertiesColorLine, colorDialogAlpha.Color);
+                    ColorTools.SetButtonColors(button, colorDialogAlpha.Color);
                     if (sender == buttonPropertiesColorLine)
                     {
-                        gs.ForegroundColor = colorDialogAlpha.Color;
+                        gs.LineColor = colorDialogAlpha.Color;
                     }
                     if (sender == buttonPropertiesColorFill)
                     {
-                        gs.BackgroundColor = colorDialogAlpha.Color;
+                        gs.FillColor = colorDialogAlpha.Color;
                     }
                 }
             }
@@ -931,23 +931,16 @@ public partial class ScreenshotEditor : Form
         }
     }
 
-    private void NewColorLine_Click(object sender, EventArgs e)
+    private void NewSymbolColor_Click(object sender, EventArgs e)
     {
-        colorDialog1.Color = ((Button)sender).BackColor;
-        DialogResult result = colorDialog1.ShowDialog();
-        if (result == DialogResult.OK)
+        if (sender is Button button)
         {
-            buttonNewColorLine.BackColor = colorDialog1.Color;
-        }
-    }
-
-    private void NewColorFill_Click(object sender, EventArgs e)
-    {
-        colorDialog1.Color = ((Button)sender).BackColor;
-        DialogResult result = colorDialog1.ShowDialog();
-        if (result == DialogResult.OK)
-        {
-            buttonNewColorFill.BackColor = colorDialog1.Color;
+            ColorDialogAlpha colorDialogAlpha = new ColorDialogAlpha(button.BackColor);
+            DialogResult result = colorDialogAlpha.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                button.BackColor = colorDialogAlpha.Color;
+            }
         }
     }
 
@@ -999,7 +992,7 @@ public partial class ScreenshotEditor : Form
         //Point size = new Point(originalImage.Width - lineWeight, originalImage.Height - lineWeight);
         Point upperLeft = new(0, 0);
         Point size = new(editorCanvas.CanvasSize.Width, editorCanvas.CanvasSize.Height);
-        GsBorder border = new(upperLeft, size, Color.Black, Color.White, false, 1, 255, 0)
+        GsBorder border = new(upperLeft, size, Color.Black, Color.White, false, 1)
         {
             Name = "Border"
         };
@@ -1032,9 +1025,9 @@ public partial class ScreenshotEditor : Form
 
     #region set and get properties --------------------------------------------------------------------------
 
-    public (int lineWeight, int lineAlpha, int fillAlpha, Color lineColor, Color fillColor, bool shadow) GetNewSymbolProperties()
+    public (int lineWeight, Color lineColor, Color fillColor, bool shadow) GetNewSymbolProperties()
     {
-        return ((int)numericNewLineWeight.Value, (int)numericNewLineAlpha.Value, (int)numericNewFillAlpha.Value, buttonNewColorLine.BackColor, buttonNewColorFill.BackColor, checkBoxNewShadow.Checked);
+        return ((int)numericNewLineWeight.Value, buttonNewColorLine.BackColor, buttonNewColorFill.BackColor, checkBoxNewShadow.Checked);
     }
 
     public ListView GetSybmolListView()

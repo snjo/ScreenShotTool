@@ -7,11 +7,11 @@ public class GsHighlight : GsDynamicImage
     public ColorBlend.BlendModes blendMode = ColorBlend.BlendModes.Multiply;
     private Color previousColor = Color.White;
     private ColorBlend.BlendModes previousBlendMode = ColorBlend.BlendModes.Multiply;
-    public GsHighlight(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadow, int lineWidth, int lineAlpha, int fillAlpha) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadow, lineWidth, lineAlpha, fillAlpha)
+    public GsHighlight(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadow, int lineWidth) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadow, lineWidth)
     {
         Name = "Highlight";
         drawFill = DrawFill;
-        base.BackgroundColor = backgroundColor;
+        base.FillColor = backgroundColor;
     }
 
     public void DrawFill(Pen pen, Brush fillBrush, Rectangle rect, Graphics graphic)
@@ -20,12 +20,12 @@ public class GsHighlight : GsDynamicImage
 
         if (SourceImage != null)
         {
-            if (highlightedBmp == null || RectChanged(rect) || previousColor != BackgroundColor || previousBlendMode != blendMode)
+            if (highlightedBmp == null || RectChanged(rect) || previousColor != FillColor || previousBlendMode != blendMode)
             {
                 UpdateHighlightBmp(rect);
                 previousPosition = new Point(rect.Left, rect.Top);
                 previousSize = new Size(rect.Width, rect.Height);
-                previousColor = BackgroundColor;
+                previousColor = FillColor;
                 previousBlendMode = blendMode;
             }
             if (highlightedBmp != null)
@@ -68,7 +68,7 @@ public class GsHighlight : GsDynamicImage
                 int sampleY = bmpTop + y;
                 if (sampleX < 0 || sampleY < 0 || sampleX >= snoop.Width || sampleY >= snoop.Height) continue;
                 Color sourcePixel = snoop.GetPixel(sampleX, sampleY);
-                target.SetPixel(x, y, ColorBlend.BlendColors(sourcePixel, BackgroundColor, blendMode));
+                target.SetPixel(x, y, ColorBlend.BlendColors(sourcePixel, FillColor, blendMode));
 
             }
         }

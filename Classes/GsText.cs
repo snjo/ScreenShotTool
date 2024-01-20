@@ -11,7 +11,7 @@ public class GsText : GraphicSymbol
     readonly int maxFontSize;
     readonly int minFontSize;
 
-    public GsText(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight, int lineAlpha) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight, lineAlpha)
+    public GsText(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled)
     {
         Name = "Text";
         Width = endPoint.X;
@@ -41,7 +41,7 @@ public class GsText : GraphicSymbol
 
     internal override void DrawShape(Graphics graphic, Pen drawPen, Brush drawBrush, Point offset, bool fill = true, bool outline = true)
     {
-        if (lineAlpha > 0)
+        if (TextColor.A > 0)
         {
             Brush tempBrush = TextBrush;
             if (drawBrush == ShadowBrush)
@@ -57,7 +57,6 @@ public class GsText : GraphicSymbol
             Width = (int)sizeInPixels.Width;
             Height = (int)sizeInPixels.Height;
         }
-
     }
 
     public override void DrawHitboxes(Graphics graphic)

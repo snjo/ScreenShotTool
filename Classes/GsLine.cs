@@ -8,7 +8,7 @@ public class GsLine : GraphicSymbol
 {
     public Point lineEnd;
 
-    public GsLine(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight, int lineAlpha) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight, lineAlpha)
+    public GsLine(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight)
     {
         Name = "Line";
         CheckValid(StartPointV2, EndPointV2);
@@ -46,7 +46,7 @@ public class GsLine : GraphicSymbol
     internal override void DrawShape(Graphics graphic, Pen drawPen, Brush drawBrush, Point offset, bool fill = true, bool outline = true)
     {
         if (LineWeight < 1) { LineWeight = 1; }
-        if (lineAlpha > 0)
+        if (LineColor.A > 0)
         {
             graphic.DrawLine(drawPen, new Point(StartPoint.X + offset.X, StartPoint.Y + offset.Y), new Point(EndPoint.X + offset.X, EndPoint.Y + offset.Y));
         }

@@ -70,28 +70,19 @@
             label3 = new Label();
             label2 = new Label();
             labelSymbolType = new Label();
-            label13 = new Label();
-            numericPropertiesLineAlpha = new NumericUpDown();
             buttonPropertiesColorLine = new Button();
             label6 = new Label();
             textBoxSymbolText = new TextBox();
-            label14 = new Label();
-            numericPropertiesFillAlpha = new NumericUpDown();
             numericPropertiesLineWeight = new NumericUpDown();
             buttonPropertiesColorFill = new Button();
             label8 = new Label();
             label7 = new Label();
             buttonDeleteSymbol = new Button();
-            colorDialog1 = new ColorDialog();
             buttonNewColorFill = new Button();
             buttonNewColorLine = new Button();
             label1 = new Label();
             label9 = new Label();
             label10 = new Label();
-            numericNewLineAlpha = new NumericUpDown();
-            label11 = new Label();
-            label12 = new Label();
-            numericNewFillAlpha = new NumericUpDown();
             panelPropertiesFill = new Panel();
             panelPropertiesText = new Panel();
             checkBoxUnderline = new CheckBox();
@@ -130,11 +121,7 @@
             ((System.ComponentModel.ISupportInitialize)numericPropertiesY).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesWidth).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesX).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesLineAlpha).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesFillAlpha).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesLineWeight).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericNewLineAlpha).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericNewFillAlpha).BeginInit();
             panelPropertiesFill.SuspendLayout();
             panelPropertiesText.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesFontSize).BeginInit();
@@ -414,7 +401,7 @@
             numericNewLineWeight.Location = new Point(429, 4);
             numericNewLineWeight.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
             numericNewLineWeight.Name = "numericNewLineWeight";
-            numericNewLineWeight.Size = new Size(66, 23);
+            numericNewLineWeight.Size = new Size(48, 23);
             numericNewLineWeight.TabIndex = 3;
             numericNewLineWeight.Value = new decimal(new int[] { 2, 0, 0, 0 });
             numericNewLineWeight.ValueChanged += NumericNewLineWeight_ValueChanged;
@@ -571,28 +558,10 @@
             labelSymbolType.TabIndex = 1;
             labelSymbolType.Text = "Symbol: ";
             // 
-            // label13
-            // 
-            label13.AutoSize = true;
-            label13.Location = new Point(3, 28);
-            label13.Name = "label13";
-            label13.Size = new Size(63, 15);
-            label13.TabIndex = 23;
-            label13.Text = "Line Alpha";
-            // 
-            // numericPropertiesLineAlpha
-            // 
-            numericPropertiesLineAlpha.Location = new Point(94, 24);
-            numericPropertiesLineAlpha.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
-            numericPropertiesLineAlpha.Name = "numericPropertiesLineAlpha";
-            numericPropertiesLineAlpha.Size = new Size(44, 23);
-            numericPropertiesLineAlpha.TabIndex = 22;
-            numericPropertiesLineAlpha.Value = new decimal(new int[] { 255, 0, 0, 0 });
-            numericPropertiesLineAlpha.ValueChanged += Numeric_ValueChanged;
-            // 
             // buttonPropertiesColorLine
             // 
             buttonPropertiesColorLine.BackColor = Color.FromArgb(0, 192, 0);
+            buttonPropertiesColorLine.FlatAppearance.BorderColor = Color.Black;
             buttonPropertiesColorLine.FlatStyle = FlatStyle.Flat;
             buttonPropertiesColorLine.Location = new Point(94, 3);
             buttonPropertiesColorLine.Name = "buttonPropertiesColorLine";
@@ -619,28 +588,9 @@
             textBoxSymbolText.TabIndex = 26;
             textBoxSymbolText.TextChanged += TextBoxSymbolText_TextChanged;
             // 
-            // label14
-            // 
-            label14.AutoSize = true;
-            label14.Location = new Point(4, 28);
-            label14.Name = "label14";
-            label14.Size = new Size(56, 15);
-            label14.TabIndex = 25;
-            label14.Text = "Fill Alpha";
-            // 
-            // numericPropertiesFillAlpha
-            // 
-            numericPropertiesFillAlpha.Location = new Point(95, 24);
-            numericPropertiesFillAlpha.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
-            numericPropertiesFillAlpha.Name = "numericPropertiesFillAlpha";
-            numericPropertiesFillAlpha.Size = new Size(44, 23);
-            numericPropertiesFillAlpha.TabIndex = 24;
-            numericPropertiesFillAlpha.Value = new decimal(new int[] { 255, 0, 0, 0 });
-            numericPropertiesFillAlpha.ValueChanged += Numeric_ValueChanged;
-            // 
             // numericPropertiesLineWeight
             // 
-            numericPropertiesLineWeight.Location = new Point(94, 49);
+            numericPropertiesLineWeight.Location = new Point(95, 25);
             numericPropertiesLineWeight.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
             numericPropertiesLineWeight.Name = "numericPropertiesLineWeight";
             numericPropertiesLineWeight.Size = new Size(43, 23);
@@ -652,6 +602,7 @@
             // buttonPropertiesColorFill
             // 
             buttonPropertiesColorFill.BackColor = Color.FromArgb(0, 192, 0);
+            buttonPropertiesColorFill.FlatAppearance.BorderColor = Color.Black;
             buttonPropertiesColorFill.FlatStyle = FlatStyle.Flat;
             buttonPropertiesColorFill.Location = new Point(95, 3);
             buttonPropertiesColorFill.Name = "buttonPropertiesColorFill";
@@ -664,7 +615,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(3, 53);
+            label8.Location = new Point(4, 29);
             label8.Name = "label8";
             label8.Size = new Size(70, 15);
             label8.TabIndex = 8;
@@ -689,15 +640,11 @@
             buttonDeleteSymbol.UseVisualStyleBackColor = true;
             buttonDeleteSymbol.Click += ButtonDeleteSymbol_Click;
             // 
-            // colorDialog1
-            // 
-            colorDialog1.AnyColor = true;
-            colorDialog1.FullOpen = true;
-            // 
             // buttonNewColorFill
             // 
             buttonNewColorFill.AccessibleName = "New symbol fill color";
             buttonNewColorFill.BackColor = Color.LightCyan;
+            buttonNewColorFill.FlatAppearance.BorderColor = Color.Black;
             buttonNewColorFill.FlatStyle = FlatStyle.Flat;
             buttonNewColorFill.Location = new Point(304, 5);
             buttonNewColorFill.Name = "buttonNewColorFill";
@@ -705,12 +652,13 @@
             buttonNewColorFill.TabIndex = 18;
             buttonNewColorFill.Tag = "FillColor";
             buttonNewColorFill.UseVisualStyleBackColor = false;
-            buttonNewColorFill.Click += NewColorFill_Click;
+            buttonNewColorFill.Click += NewSymbolColor_Click;
             // 
             // buttonNewColorLine
             // 
             buttonNewColorLine.AccessibleName = "New symbol line color";
             buttonNewColorLine.BackColor = Color.Orange;
+            buttonNewColorLine.FlatAppearance.BorderColor = Color.Black;
             buttonNewColorLine.FlatStyle = FlatStyle.Flat;
             buttonNewColorLine.Location = new Point(195, 5);
             buttonNewColorLine.Name = "buttonNewColorLine";
@@ -718,7 +666,7 @@
             buttonNewColorLine.TabIndex = 17;
             buttonNewColorLine.Tag = "LineColor";
             buttonNewColorLine.UseVisualStyleBackColor = false;
-            buttonNewColorLine.Click += NewColorLine_Click;
+            buttonNewColorLine.Click += NewSymbolColor_Click;
             // 
             // label1
             // 
@@ -747,54 +695,14 @@
             label10.TabIndex = 19;
             label10.Text = "Line Weight";
             // 
-            // numericNewLineAlpha
-            // 
-            numericNewLineAlpha.AccessibleName = "New symbol line alpha value";
-            numericNewLineAlpha.Location = new Point(570, 4);
-            numericNewLineAlpha.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
-            numericNewLineAlpha.Name = "numericNewLineAlpha";
-            numericNewLineAlpha.Size = new Size(44, 23);
-            numericNewLineAlpha.TabIndex = 20;
-            numericNewLineAlpha.Value = new decimal(new int[] { 255, 0, 0, 0 });
-            // 
-            // label11
-            // 
-            label11.AutoSize = true;
-            label11.Location = new Point(503, 6);
-            label11.Name = "label11";
-            label11.Size = new Size(63, 15);
-            label11.TabIndex = 21;
-            label11.Text = "Line Alpha";
-            // 
-            // label12
-            // 
-            label12.AutoSize = true;
-            label12.Location = new Point(622, 6);
-            label12.Name = "label12";
-            label12.Size = new Size(56, 15);
-            label12.TabIndex = 23;
-            label12.Text = "Fill Alpha";
-            // 
-            // numericNewFillAlpha
-            // 
-            numericNewFillAlpha.AccessibleName = "New symbol fill alpha value";
-            numericNewFillAlpha.Location = new Point(682, 4);
-            numericNewFillAlpha.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
-            numericNewFillAlpha.Name = "numericNewFillAlpha";
-            numericNewFillAlpha.Size = new Size(44, 23);
-            numericNewFillAlpha.TabIndex = 22;
-            numericNewFillAlpha.Value = new decimal(new int[] { 255, 0, 0, 0 });
-            // 
             // panelPropertiesFill
             // 
             panelPropertiesFill.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            panelPropertiesFill.Controls.Add(label14);
-            panelPropertiesFill.Controls.Add(numericPropertiesFillAlpha);
             panelPropertiesFill.Controls.Add(label7);
             panelPropertiesFill.Controls.Add(buttonPropertiesColorFill);
             panelPropertiesFill.Location = new Point(797, 242);
             panelPropertiesFill.Name = "panelPropertiesFill";
-            panelPropertiesFill.Size = new Size(153, 51);
+            panelPropertiesFill.Size = new Size(153, 26);
             panelPropertiesFill.TabIndex = 27;
             // 
             // panelPropertiesText
@@ -933,14 +841,10 @@
             panel1.BorderStyle = BorderStyle.FixedSingle;
             panel1.Controls.Add(label19);
             panel1.Controls.Add(checkBoxNewShadow);
-            panel1.Controls.Add(numericNewFillAlpha);
-            panel1.Controls.Add(label12);
-            panel1.Controls.Add(numericNewLineAlpha);
             panel1.Controls.Add(buttonNewColorLine);
             panel1.Controls.Add(label1);
             panel1.Controls.Add(label9);
             panel1.Controls.Add(buttonNewColorFill);
-            panel1.Controls.Add(label11);
             panel1.Controls.Add(label10);
             panel1.Controls.Add(numericNewLineWeight);
             panel1.Location = new Point(0, 27);
@@ -963,7 +867,7 @@
             checkBoxNewShadow.AccessibleName = "New symbol Shadow toggle";
             checkBoxNewShadow.AutoSize = true;
             checkBoxNewShadow.CheckAlign = ContentAlignment.MiddleRight;
-            checkBoxNewShadow.Location = new Point(732, 6);
+            checkBoxNewShadow.Location = new Point(483, 6);
             checkBoxNewShadow.Name = "checkBoxNewShadow";
             checkBoxNewShadow.Size = new Size(68, 19);
             checkBoxNewShadow.TabIndex = 24;
@@ -994,15 +898,13 @@
             // panelPropertiesLine
             // 
             panelPropertiesLine.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            panelPropertiesLine.Controls.Add(label13);
             panelPropertiesLine.Controls.Add(numericPropertiesLineWeight);
             panelPropertiesLine.Controls.Add(label6);
-            panelPropertiesLine.Controls.Add(numericPropertiesLineAlpha);
             panelPropertiesLine.Controls.Add(buttonPropertiesColorLine);
             panelPropertiesLine.Controls.Add(label8);
-            panelPropertiesLine.Location = new Point(797, 295);
+            panelPropertiesLine.Location = new Point(797, 270);
             panelPropertiesLine.Name = "panelPropertiesLine";
-            panelPropertiesLine.Size = new Size(153, 77);
+            panelPropertiesLine.Size = new Size(153, 53);
             panelPropertiesLine.TabIndex = 2;
             // 
             // checkBoxPropertiesShadow
@@ -1124,11 +1026,7 @@
             ((System.ComponentModel.ISupportInitialize)numericPropertiesY).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesWidth).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesX).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesLineAlpha).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesFillAlpha).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesLineWeight).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericNewLineAlpha).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericNewFillAlpha).EndInit();
             panelPropertiesFill.ResumeLayout(false);
             panelPropertiesFill.PerformLayout();
             panelPropertiesText.ResumeLayout(false);
@@ -1187,7 +1085,6 @@
         private NumericUpDown numericPropertiesHeight;
         private NumericUpDown numericPropertiesY;
         private NumericUpDown numericPropertiesWidth;
-        private ColorDialog colorDialog1;
         private NumericUpDown numericPropertiesLineWeight;
         private Button buttonPropertiesColorFill;
         private Button buttonPropertiesColorLine;
@@ -1198,14 +1095,6 @@
         private Label label1;
         private Label label9;
         private Label label10;
-        private NumericUpDown numericNewLineAlpha;
-        private Label label11;
-        private Label label12;
-        private NumericUpDown numericNewFillAlpha;
-        private Label label14;
-        private NumericUpDown numericPropertiesFillAlpha;
-        private Label label13;
-        private NumericUpDown numericPropertiesLineAlpha;
         private ToolStripMenuItem itemNewImage;
         private TextBox textBoxSymbolText;
         private Button buttonText;

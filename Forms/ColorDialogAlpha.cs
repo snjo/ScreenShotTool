@@ -19,7 +19,6 @@ public partial class ColorDialogAlpha : Form
     int swatchPadding = 3;
     public Color Color = Color.White;
     List<Color> colors;
-    bool starting = true;
 
     public ColorDialogAlpha(Color startColor)
     {
@@ -31,7 +30,6 @@ public partial class ColorDialogAlpha : Form
         SwatchSize.Height = (panelSwatches.Height / SwatchesVertical);
         UpateColor(this.Color);
         CreateColorSwatches();
-        starting = false;
         //Debug.WriteLine($"Swatch size: {SwatchSize}, in panelSwatches size: {panelSwatches.Size}");
     }
 

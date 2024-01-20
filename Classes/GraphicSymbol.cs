@@ -13,8 +13,8 @@ namespace ScreenShotTool.Forms
         public SolidBrush ShadowBrush = new(Color.FromArgb(20, Color.Black));
         public SolidBrush HighlightBrush = new(Color.Red);
         public Pen ShadowPen = new(Color.FromArgb(50, Color.Black));
-        public Color ForegroundColor;
-        public Color BackgroundColor;
+        public Color LineColor;
+        public Color FillColor;
         public Color TextColor;
         public bool ScalingAllowed = true;
         public bool MoveAllowed = true;
@@ -119,24 +119,20 @@ namespace ScreenShotTool.Forms
         {
             get; set;
         }
-        public int fillAlpha;
-        public int lineAlpha;
         public string Name = "Blank";
 
         public bool ValidSymbol = false;
 
-        public GraphicSymbol(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled = false, int lineWeight = 1, int lineAlpha = 255, int fillAlpha = 255)
+        public GraphicSymbol(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled = false, int lineWeight = 1)
         {
-            this.ForegroundColor = foregroundColor;
-            this.BackgroundColor = backgroundColor;
+            this.LineColor = foregroundColor;
+            this.FillColor = backgroundColor;
             this.TextColor = foregroundColor;
             this.Left = startPoint.X;
             this.Top = startPoint.Y;
             this.Right = endPoint.X;
             this.Bottom = endPoint.Y;
             this.LineWeight = lineWeight;
-            this.lineAlpha = lineAlpha;
-            this.fillAlpha = fillAlpha;
             this.ShadowEnabled = shadowEnabled;
             HighlightSymbolPen.DashPattern = [2f, 8f];
             //Hitboxes = CreateHitboxList();
@@ -144,16 +140,14 @@ namespace ScreenShotTool.Forms
 
         public GraphicSymbol(Point startPoint, Point endPoint, bool shadow = false)
         {
-            this.ForegroundColor = Color.Black;
-            this.BackgroundColor = Color.White;
+            this.LineColor = Color.Black;
+            this.FillColor = Color.White;
             this.TextColor = Color.Black;
             this.Left = startPoint.X;
             this.Top = startPoint.Y;
             this.Right = endPoint.X;
             this.Bottom = endPoint.Y;
             this.LineWeight = 1;
-            this.lineAlpha = 255;
-            this.fillAlpha = 255;
             this.ShadowEnabled = shadow;
             HighlightSymbolPen.DashPattern = [2f, 8f];
             //Hitboxes = CreateHitboxList();
@@ -250,11 +244,11 @@ namespace ScreenShotTool.Forms
 
         internal void UpdatePen()
         {
-            LineBrush = new SolidBrush(Color.FromArgb(lineAlpha, ForegroundColor.R, ForegroundColor.G, ForegroundColor.B));
+            LineBrush = new SolidBrush(LineColor);
             LinePen.Brush = LineBrush;
             LinePen.Width = LineWeight;
 
-            FillBrush = new SolidBrush(Color.FromArgb(fillAlpha, BackgroundColor.R, BackgroundColor.G, BackgroundColor.B));
+            FillBrush = new SolidBrush(FillColor);
             ShadowBrush.Color = Color.FromArgb(FillBrush.Color.A / 8, Color.Black);
             ShadowPen.Color = Color.FromArgb(LineBrush.Color.A / 8, Color.Black);
             ShadowPen.Width = LineWeight;
@@ -264,9 +258,7 @@ namespace ScreenShotTool.Forms
 
         internal void UpdateColors()
         {
-            ForegroundColor = Color.FromArgb(lineAlpha, ForegroundColor.R, ForegroundColor.G, ForegroundColor.B);
-            BackgroundColor = Color.FromArgb(fillAlpha, BackgroundColor.R, BackgroundColor.G, BackgroundColor.B);
-            TextColor = Color.FromArgb(lineAlpha, ForegroundColor.R, ForegroundColor.G, ForegroundColor.B);
+            TextColor = LineColor;
         }
 
         public virtual void Dispose()

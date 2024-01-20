@@ -433,8 +433,8 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
     {
         Point dragEnd = MousePosition;
         int lineWeight = parentEditor.GetNewSymbolProperties().lineWeight;
-        int lineAlpha = parentEditor.GetNewSymbolProperties().lineAlpha;
-        int fillAlpha = parentEditor.GetNewSymbolProperties().fillAlpha;
+        //int lineAlpha = parentEditor.GetNewSymbolProperties().lineAlpha;
+        //int fillAlpha = parentEditor.GetNewSymbolProperties().fillAlpha;
         bool shadow = parentEditor.GetNewSymbolProperties().shadow;
 
         if (dragStarted)
@@ -459,17 +459,17 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
             return parentEditor.selectedUserAction switch
             {
-                ScreenshotEditor.UserActions.CreateRectangle => new GsRectangle(upperLeft, size, lineColor, fillColor, shadow, lineWeight, lineAlpha, fillAlpha),
-                ScreenshotEditor.UserActions.CreateCircle => new GsCircle(upperLeft, size, lineColor, fillColor, shadow, lineWeight, lineAlpha, fillAlpha),
-                ScreenshotEditor.UserActions.CreateLine => new GsLine(dragStart, dragEnd, lineColor, fillColor, shadow, lineWeight, lineAlpha),
-                ScreenshotEditor.UserActions.CreateArrow => new GsArrow(dragStart, dragEnd, lineColor, fillColor, shadow, lineWeight, lineAlpha),
+                ScreenshotEditor.UserActions.CreateRectangle => new GsRectangle(upperLeft, size, lineColor, fillColor, shadow, lineWeight),
+                ScreenshotEditor.UserActions.CreateCircle => new GsCircle(upperLeft, size, lineColor, fillColor, shadow, lineWeight),
+                ScreenshotEditor.UserActions.CreateLine => new GsLine(dragStart, dragEnd, lineColor, fillColor, shadow, lineWeight),
+                ScreenshotEditor.UserActions.CreateArrow => new GsArrow(dragStart, dragEnd, lineColor, fillColor, shadow, lineWeight),
                 ScreenshotEditor.UserActions.CreateImage => new GsImage(dragEnd, new Point(1, 1), shadow),
                 ScreenshotEditor.UserActions.CreateImageScaled => new GsImageScaled(upperLeft, size, shadow),
-                ScreenshotEditor.UserActions.CreateText => new GsText(dragStart, size, lineColor, fillColor, shadow, lineWeight, lineAlpha),
+                ScreenshotEditor.UserActions.CreateText => new GsText(dragStart, size, lineColor, fillColor, shadow),
                 ScreenshotEditor.UserActions.CreateBlur => new GsBlur(upperLeft, size, lineColor, fillColor),
-                ScreenshotEditor.UserActions.CreateHighlight => new GsHighlight(upperLeft, size, lineColor, Color.Yellow, false, 0, 0, fillAlpha),
+                ScreenshotEditor.UserActions.CreateHighlight => new GsHighlight(upperLeft, size, lineColor, Color.Yellow, false, 0),
                 ScreenshotEditor.UserActions.CreateCrop => new GsCrop(upperLeft, size, lineColor, fillColor),
-                ScreenshotEditor.UserActions.CreateNumbered => new GsNumbered(new Point(dragEnd.X - (NumberedSize / 2), dragEnd.Y - (NumberedSize / 2)), new Point(NumberedSize, NumberedSize), lineColor, fillColor, shadow, lineWeight, lineAlpha, fillAlpha),
+                ScreenshotEditor.UserActions.CreateNumbered => new GsNumbered(new Point(dragEnd.X - (NumberedSize / 2), dragEnd.Y - (NumberedSize / 2)), new Point(NumberedSize, NumberedSize), lineColor, fillColor, shadow, lineWeight),
                 _ => null,
             };
         }

@@ -4,7 +4,7 @@
     {
         public delegate void DrawShapeDelegate(Pen pen, Brush brush, Rectangle rect, Graphics graphic);
 
-        public GsBoundingBox(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled = false, int lineWeight = 0, int lineAlpha = 255, int fillAlpha = 255) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight, lineAlpha, fillAlpha)
+        public GsBoundingBox(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled = false, int lineWeight = 0) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight)
         {
             Name = "Rectangle";
             Width = endPoint.X;
@@ -31,11 +31,11 @@
 
         internal override void DrawShape(Graphics graphic, Pen drawPen, Brush drawBrush, Point offset, bool fill = true, bool outline = true)
         {
-            if (fillAlpha > 0 && fill)
+            if (FillColor.A > 0 && fill)
             {
                 drawFill(drawPen, drawBrush, new Rectangle(Left + offset.X, Top + offset.Y, Width, Height), graphic);
             }
-            if (lineAlpha > 0 && LineWeight > 0 && outline)
+            if (LineColor.A > 0 && LineWeight > 0 && outline)
             {
                 drawLine(drawPen, drawBrush, new Rectangle(Left + offset.X, Top + offset.Y, Width, Height), graphic);
             }
