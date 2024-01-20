@@ -43,6 +43,7 @@
             itemPasteScaled = new ToolStripMenuItem();
             deleteOverlayElementsToolStripMenuItem = new ToolStripMenuItem();
             panelButtons = new Panel();
+            buttonNumbered = new Button();
             buttonCrop = new Button();
             buttonHighlight = new Button();
             buttonBlur = new Button();
@@ -119,7 +120,6 @@
             buttonPropertyCopyCrop = new Button();
             buttonPropertyCrop = new Button();
             panelPropertiesBlur = new Panel();
-            buttonNumbered = new Button();
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
@@ -253,6 +253,20 @@
             panelButtons.Name = "panelButtons";
             panelButtons.Size = new Size(46, 657);
             panelButtons.TabIndex = 1;
+            // 
+            // buttonNumbered
+            // 
+            buttonNumbered.AccessibleName = "Crop";
+            buttonNumbered.FlatAppearance.BorderSize = 0;
+            buttonNumbered.FlatStyle = FlatStyle.Flat;
+            buttonNumbered.Image = Properties.Resources.numbered;
+            buttonNumbered.Location = new Point(4, 321);
+            buttonNumbered.Margin = new Padding(1);
+            buttonNumbered.Name = "buttonNumbered";
+            buttonNumbered.Size = new Size(36, 36);
+            buttonNumbered.TabIndex = 12;
+            buttonNumbered.UseVisualStyleBackColor = true;
+            buttonNumbered.Click += ButtonNumbered_Click;
             // 
             // buttonCrop
             // 
@@ -440,7 +454,6 @@
             listViewSymbols.UseCompatibleStateImageBehavior = false;
             listViewSymbols.View = View.List;
             listViewSymbols.SelectedIndexChanged += ListViewSymbols_SelectedIndexChanged;
-            listViewSymbols.KeyDown += ListViewSymbols_KeyDown;
             // 
             // columnHeaderType
             // 
@@ -1070,20 +1083,6 @@
             panelPropertiesBlur.Name = "panelPropertiesBlur";
             panelPropertiesBlur.Size = new Size(153, 31);
             panelPropertiesBlur.TabIndex = 35;
-            // 
-            // buttonNumbered
-            // 
-            buttonNumbered.AccessibleName = "Crop";
-            buttonNumbered.FlatAppearance.BorderSize = 0;
-            buttonNumbered.FlatStyle = FlatStyle.Flat;
-            buttonNumbered.Image = Properties.Resources.numbered;
-            buttonNumbered.Location = new Point(4, 321);
-            buttonNumbered.Margin = new Padding(1);
-            buttonNumbered.Name = "buttonNumbered";
-            buttonNumbered.Size = new Size(36, 36);
-            buttonNumbered.TabIndex = 12;
-            buttonNumbered.UseVisualStyleBackColor = true;
-            buttonNumbered.Click += ButtonNumbered_Click;
             // 
             // ScreenshotEditor
             // 

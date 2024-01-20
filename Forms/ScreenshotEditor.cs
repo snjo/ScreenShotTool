@@ -3,6 +3,7 @@ using ScreenShotTool.Properties;
 using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
+using System.Windows.Forms;
 using static ScreenShotTool.EditorCanvas;
 
 namespace ScreenShotTool.Forms;
@@ -326,6 +327,7 @@ public partial class ScreenshotEditor : Form
     #region Mouse events --------------------------------------------------------------------------------
     private void PictureBoxOverlay_MouseDown(object sender, MouseEventArgs e)
     {
+        pictureBoxOverlay.Focus();
         editorCanvas.MouseDown(new Point(e.X, e.Y));
     }
     private void PictureBoxOverlay_MouseMove(object sender, MouseEventArgs e)
@@ -360,6 +362,21 @@ public partial class ScreenshotEditor : Form
         if ((e.KeyCode == Keys.O && e.Modifiers == Keys.Control))
         {
             OpenFileAction();
+        }
+        if (e.KeyCode == Keys.Delete)
+        {
+            // delete selected object only if focus is on the symbol list, or on the canvas
+            if (pictureBoxOverlay.Focused || listViewSymbols.Focused)
+            {
+                DeleteSelectedSymbol();
+            }
+        }
+        if (e.KeyCode == Keys.Escape)
+        {
+            editorCanvas.dragStarted = false;
+            editorCanvas.dragMoved = false;
+            editorCanvas.currentSelectedSymbol = null;
+            SetUserAction(UserActions.Select);
         }
     }
     #endregion
@@ -865,14 +882,6 @@ public partial class ScreenshotEditor : Form
                 outImage.Dispose();
                 gsC.showOutline = true;
             }
-        }
-    }
-
-    private void ListViewSymbols_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.KeyCode == Keys.Delete)
-        {
-            DeleteSelectedSymbol();
         }
     }
 

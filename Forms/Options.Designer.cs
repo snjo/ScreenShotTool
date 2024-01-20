@@ -94,6 +94,7 @@
             checkBoxWindowToFile = new CheckBox();
             labelWindow = new Label();
             tabPageApplication = new TabPage();
+            checkBoxSelectAfterPlacingSymbol = new CheckBox();
             checkBoxMinimizeOnClose = new CheckBox();
             label30 = new Label();
             label28 = new Label();
@@ -121,7 +122,6 @@
             ColumnShift = new DataGridViewCheckBoxColumn();
             ColumnWin = new DataGridViewCheckBoxColumn();
             buttonResetOptions = new Button();
-            checkBoxSelectAfterPlacingSymbol = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
@@ -843,6 +843,16 @@
             tabPageApplication.Text = "Application";
             tabPageApplication.UseVisualStyleBackColor = true;
             // 
+            // checkBoxSelectAfterPlacingSymbol
+            // 
+            checkBoxSelectAfterPlacingSymbol.AutoSize = true;
+            checkBoxSelectAfterPlacingSymbol.Location = new Point(17, 501);
+            checkBoxSelectAfterPlacingSymbol.Name = "checkBoxSelectAfterPlacingSymbol";
+            checkBoxSelectAfterPlacingSymbol.Size = new Size(374, 19);
+            checkBoxSelectAfterPlacingSymbol.TabIndex = 83;
+            checkBoxSelectAfterPlacingSymbol.Text = "After placing a symbol, change to Select (instead of placing more)";
+            checkBoxSelectAfterPlacingSymbol.UseVisualStyleBackColor = true;
+            // 
             // checkBoxMinimizeOnClose
             // 
             checkBoxMinimizeOnClose.AutoSize = true;
@@ -865,7 +875,7 @@
             // label28
             // 
             label28.AutoSize = true;
-            label28.Location = new Point(182, 414);
+            label28.Location = new Point(182, 432);
             label28.Name = "label28";
             label28.Size = new Size(244, 15);
             label28.TabIndex = 80;
@@ -892,7 +902,7 @@
             // label27
             // 
             label27.AutoSize = true;
-            label27.Location = new Point(182, 387);
+            label27.Location = new Point(182, 405);
             label27.Name = "label27";
             label27.Size = new Size(232, 15);
             label27.TabIndex = 77;
@@ -1085,16 +1095,6 @@
             buttonResetOptions.Text = "Reset options";
             buttonResetOptions.UseVisualStyleBackColor = true;
             buttonResetOptions.Click += ButtonResetOptions_Click;
-            // 
-            // checkBoxSelectAfterPlacingSymbol
-            // 
-            checkBoxSelectAfterPlacingSymbol.AutoSize = true;
-            checkBoxSelectAfterPlacingSymbol.Location = new Point(17, 501);
-            checkBoxSelectAfterPlacingSymbol.Name = "checkBoxSelectAfterPlacingSymbol";
-            checkBoxSelectAfterPlacingSymbol.Size = new Size(374, 19);
-            checkBoxSelectAfterPlacingSymbol.TabIndex = 83;
-            checkBoxSelectAfterPlacingSymbol.Text = "After placing a symbol, change to Select (instead of placing more)";
-            checkBoxSelectAfterPlacingSymbol.UseVisualStyleBackColor = true;
             // 
             // Options
             // 

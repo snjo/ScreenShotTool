@@ -648,7 +648,6 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
     public void MouseMove(Point MousePosition)
     {
-        Debug.WriteLine($"UserAction: {parentEditor.selectedUserAction}");
         if (dragStarted == false) // don't update the selected hitbox index while a drag scale is active
         {
             GetHitboxUnderCursor(MousePosition);
