@@ -323,17 +323,18 @@ namespace ScreenShotTool
 
         private void SetColor_Click(object sender, EventArgs e)
         {
-            ColorDialogAlpha dialogAlpha = new ColorDialogAlpha();
-            //DialogResult result = colorDialog1.ShowDialog();
-            DialogResult result = dialogAlpha.ShowDialog();
-            if (result == DialogResult.OK)
+            if (sender is Button button)
             {
-                if (sender is Button button)
+                ColorDialogAlpha dialogAlpha = new ColorDialogAlpha(button.BackColor);
+                //DialogResult result = colorDialog1.ShowDialog();
+                DialogResult result = dialogAlpha.ShowDialog();
+                if (result == DialogResult.OK)
                 {
+
                     Color color = dialogAlpha.Color;
                     button.BackColor = color;
                     button.Text = color.Name;
-                    if (ColorTools.ColorBrightness(color) < 0.6f) // uses the perceived brightness of the back color to flip text color
+                    if (ColorTools.ColorBrightness(color) < 0.6f && color.A > 128) // uses the perceived brightness of the back color to flip text color
                     {
                         button.ForeColor = Color.White;
                     }
@@ -341,9 +342,10 @@ namespace ScreenShotTool
                     {
                         button.ForeColor = Color.Black;
                     }
+
                 }
+                dialogAlpha.Dispose();
             }
-            dialogAlpha.Dispose();
         }
     }
 }

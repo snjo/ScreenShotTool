@@ -19,15 +19,20 @@ public partial class ColorDialogAlpha : Form
     int swatchPadding = 3;
     public Color Color = Color.White;
     List<Color> colors;
+    bool starting = true;
 
-    public ColorDialogAlpha()
+    public ColorDialogAlpha(Color startColor)
     {
+        
         InitializeComponent();
+        this.Color = startColor;
         colors = GetAllColors(false);
         SwatchSize.Width = (panelSwatches.Width / SwatchesHorizontal);
         SwatchSize.Height = (panelSwatches.Height / SwatchesVertical);
+        UpateColor(this.Color);
         CreateColorSwatches();
-        Debug.WriteLine($"Swatch size: {SwatchSize}, in panelSwatches size: {panelSwatches.Size}");
+        starting = false;
+        //Debug.WriteLine($"Swatch size: {SwatchSize}, in panelSwatches size: {panelSwatches.Size}");
     }
 
     private void CreateColorSwatches()
@@ -51,12 +56,13 @@ public partial class ColorDialogAlpha : Form
                     newColor = colors[swatchCount];
                 }
                 swatchButton.BackColor = newColor;
+                if (newColor == Color.Transparent) swatchButton.Text = "T";
                 panelSwatches.Controls.Add(swatchButton);
-                Debug.WriteLine($"Added color swatch {swatchCount}: {newColor.Name}");
+                //Debug.WriteLine($"Added color swatch {swatchCount}: {newColor.Name}");
                 swatchCount++;
             }
         }
-        Debug.WriteLine($"Added {swatchCount} swatches");
+        //Debug.WriteLine($"Added {swatchCount} swatches");
     }
 
     private static List<Color> GetAllColors(bool includeUIColors)
@@ -93,20 +99,7 @@ public partial class ColorDialogAlpha : Form
         MoveToList(colorList, rearrangedColors, Color.Blue);
         MoveToList(colorList, rearrangedColors, Color.Yellow);
         MoveToList(colorList, rearrangedColors, Color.Orange);
-        MoveToList(colorList, rearrangedColors, Color.Pink);
-        MoveToList(colorList, rearrangedColors, Color.Purple);
-        MoveColorByName(colorList, rearrangedColors, "Red");
-        MoveColorByName(colorList, rearrangedColors, "Green");
-        MoveColorByName(colorList, rearrangedColors, "Lime");
-        MoveColorByName(colorList, rearrangedColors, "Blue");
-        MoveColorByName(colorList, rearrangedColors, "Yellow");
-        MoveColorByName(colorList, rearrangedColors, "Orange");
-        MoveColorByName(colorList, rearrangedColors, "Pink");
-        MoveColorByName(colorList, rearrangedColors, "Red");
-        MoveColorByName(colorList, rearrangedColors, "Brown");
-        MoveColorByName(colorList, rearrangedColors, "Purple");
-        MoveColorByName(colorList, rearrangedColors, "Gray");
-        rearrangedColors.AddRange(colorList);
+        rearrangedColors.AddRange(OrderColorByHue(colorList));
         return rearrangedColors;
     }
 
@@ -122,6 +115,15 @@ public partial class ColorDialogAlpha : Form
         }
     }
 
+    private static List<Color> OrderColorByHue(List<Color> colors)
+    {
+        // https://stackoverflow.com/questions/62203098/c-sharp-how-do-i-order-a-list-of-colors-in-the-order-of-a-rainbow
+        var orderedColorList = colors
+            .OrderBy(color => color.GetHue())
+            .ThenBy(o => o.R * 3 + o.G * 2 + o.B * 1);
+        return orderedColorList.ToList();
+    }
+
     private static void MoveToList(List<Color> oldList, List<Color> newList, Color moveColor)
     {
         oldList.Remove(moveColor);
@@ -133,8 +135,59 @@ public partial class ColorDialogAlpha : Form
         if (sender is Button button)
         {
             Debug.WriteLine(button.BackColor);
+            UpateColor(button.BackColor);
         }
-        
+    }
+
+    private void TrackbarColorChanged(object sender, EventArgs e)
+    {
+        if (sender is TrackBar trackBar)
+        {
+            if (trackBar == trackBarAlpha)
+            {
+                numericAlpha.Value = trackBarAlpha.Value;
+            }
+            if (trackBar == trackBarRed)
+            {
+                numericRed.Value = trackBarRed.Value;
+            }
+            if (trackBar == trackBarBlue)
+            {
+                numericBlue.Value = trackBarBlue.Value;
+            }
+            if (trackBar == trackBarGreen)
+            {
+                numericGreen.Value = trackBarGreen.Value;
+            }
+        }
+    }
+
+    private void NumericColorChanged(object sender, EventArgs e)
+    {
+        UpateColor(Color.FromArgb((int)numericAlpha.Value, (int)numericRed.Value, (int)numericGreen.Value, (int)numericBlue.Value));
+    }
+
+    private void UpateColor(Color newColor)
+    {
+        //Debug.WriteLine($"Setting color: {this.Color}");
+        panelColorSampleSolid.BackColor = newColor;
+        if (newColor == Color.Transparent)
+        {
+            panelColorSampleAlpha.BackColor = Color.Transparent;
+        }
+        else
+        {
+            panelColorSampleAlpha.BackColor = Color.FromArgb(trackBarAlpha.Value, newColor);
+        }
+        trackBarAlpha.Value = newColor.A;
+        trackBarRed.Value = newColor.R;
+        trackBarGreen.Value = newColor.G;
+        trackBarBlue.Value = newColor.B;
+        numericAlpha.Value = newColor.A;
+        numericRed.Value = newColor.R;
+        numericGreen.Value = newColor.G;
+        numericBlue.Value = newColor.B;
+        Color = newColor;
     }
 
     private void buttonOK_Click(object sender, EventArgs e)

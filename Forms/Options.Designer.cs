@@ -1082,12 +1082,14 @@
             // 
             // buttonLineColor
             // 
+            buttonLineColor.BackColor = Color.Gold;
+            buttonLineColor.FlatStyle = FlatStyle.Flat;
             buttonLineColor.Location = new Point(126, 55);
             buttonLineColor.Name = "buttonLineColor";
             buttonLineColor.Size = new Size(87, 23);
             buttonLineColor.TabIndex = 100;
             buttonLineColor.Text = "Red";
-            buttonLineColor.UseVisualStyleBackColor = true;
+            buttonLineColor.UseVisualStyleBackColor = false;
             buttonLineColor.Click += SetColor_Click;
             // 
             // label35
