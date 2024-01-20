@@ -3,6 +3,7 @@ using ScreenShotTool.Classes;
 using ScreenShotTool.Forms;
 using ScreenShotTool.Properties;
 using System.Diagnostics;
+using System.Drawing;
 using System.Runtime.Versioning;
 
 namespace ScreenShotTool
@@ -80,10 +81,17 @@ namespace ScreenShotTool
 
             numericUpDownFramerate.Value = settings.MaxFramerate;
 
-            numericBlurMosaicSize.Value = settings.BlurMosaicSize;
-            numericBlurSampleArea.Value = settings.BlurSampleArea;
+            //Tab: Editor
 
             checkBoxSelectAfterPlacingSymbol.Checked = settings.SelectAfterPlacingSymbol;
+            ColorTools.SetButtonColors(buttonNumberedColor, settings.GsNumberedColor);
+            ColorTools.SetButtonColors(buttonLineColor, settings.NewSymbolLineColor);
+            ColorTools.SetButtonColors(buttonFillColor, settings.NewSymbolFillColor);
+            numericLineWeight.Value = settings.NewSymbolLineWeight;
+            numericNumberedSize.Value = settings.GsNumberedDefaultSize;
+
+            numericBlurMosaicSize.Value = settings.BlurMosaicSize;
+            numericBlurSampleArea.Value = settings.BlurSampleArea;
 
             //Tab: Hotkeys
 
@@ -157,10 +165,19 @@ namespace ScreenShotTool
 
             settings.MaxFramerate = (int)numericUpDownFramerate.Value;
 
-            settings.BlurMosaicSize = (int)numericBlurMosaicSize.Value;
-            settings.BlurSampleArea = (int)numericBlurSampleArea.Value;
+            // Tab: Editor
 
             settings.SelectAfterPlacingSymbol = checkBoxSelectAfterPlacingSymbol.Checked;
+
+            settings.NewSymbolLineColor = buttonLineColor.BackColor;
+            settings.NewSymbolFillColor = buttonFillColor.BackColor;
+            settings.NewSymbolLineWeight = (int)numericLineWeight.Value;
+
+            settings.GsNumberedColor = buttonNumberedColor.BackColor;
+            settings.GsNumberedDefaultSize = (int)numericNumberedSize.Value;
+
+            settings.BlurMosaicSize = (int)numericBlurMosaicSize.Value;
+            settings.BlurSampleArea = (int)numericBlurSampleArea.Value;
 
             //Tab: Hotkeys
             int i = 0;
@@ -332,17 +349,8 @@ namespace ScreenShotTool
                 {
 
                     Color color = dialogAlpha.Color;
-                    button.BackColor = color;
+                    ColorTools.SetButtonColors(button, color);
                     button.Text = color.Name;
-                    if (ColorTools.ColorBrightness(color) < 0.6f && color.A > 128) // uses the perceived brightness of the back color to flip text color
-                    {
-                        button.ForeColor = Color.White;
-                    }
-                    else
-                    {
-                        button.ForeColor = Color.Black;
-                    }
-
                 }
                 dialogAlpha.Dispose();
             }

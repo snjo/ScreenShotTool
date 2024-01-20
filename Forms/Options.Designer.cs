@@ -1063,6 +1063,7 @@
             // 
             // buttonFillColor
             // 
+            buttonFillColor.FlatStyle = FlatStyle.Flat;
             buttonFillColor.Location = new Point(126, 84);
             buttonFillColor.Name = "buttonFillColor";
             buttonFillColor.Size = new Size(87, 23);
@@ -1082,8 +1083,9 @@
             // 
             // buttonLineColor
             // 
-            buttonLineColor.BackColor = Color.Gold;
+            buttonLineColor.BackColor = Color.Red;
             buttonLineColor.FlatStyle = FlatStyle.Flat;
+            buttonLineColor.ForeColor = Color.White;
             buttonLineColor.Location = new Point(126, 55);
             buttonLineColor.Name = "buttonLineColor";
             buttonLineColor.Size = new Size(87, 23);
@@ -1103,12 +1105,15 @@
             // 
             // buttonNumberedColor
             // 
+            buttonNumberedColor.BackColor = Color.Maroon;
+            buttonNumberedColor.FlatStyle = FlatStyle.Flat;
+            buttonNumberedColor.ForeColor = Color.White;
             buttonNumberedColor.Location = new Point(126, 196);
             buttonNumberedColor.Name = "buttonNumberedColor";
             buttonNumberedColor.Size = new Size(87, 23);
             buttonNumberedColor.TabIndex = 98;
             buttonNumberedColor.Text = "Maroon";
-            buttonNumberedColor.UseVisualStyleBackColor = true;
+            buttonNumberedColor.UseVisualStyleBackColor = false;
             buttonNumberedColor.Click += SetColor_Click;
             // 
             // label34

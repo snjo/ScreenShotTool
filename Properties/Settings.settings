@@ -209,5 +209,14 @@
     <Setting Name="GsNumberedColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">Maroon</Value>
     </Setting>
+    <Setting Name="NewSymbolLineColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Red</Value>
+    </Setting>
+    <Setting Name="NewSymbolFillColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Transparent</Value>
+    </Setting>
+    <Setting Name="NewSymbolLineWeight" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">2</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

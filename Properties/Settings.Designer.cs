@@ -850,5 +850,41 @@ namespace ScreenShotTool.Properties {
                 this["GsNumberedColor"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Red")]
+        public global::System.Drawing.Color NewSymbolLineColor {
+            get {
+                return ((global::System.Drawing.Color)(this["NewSymbolLineColor"]));
+            }
+            set {
+                this["NewSymbolLineColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Transparent")]
+        public global::System.Drawing.Color NewSymbolFillColor {
+            get {
+                return ((global::System.Drawing.Color)(this["NewSymbolFillColor"]));
+            }
+            set {
+                this["NewSymbolFillColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int NewSymbolLineWeight {
+            get {
+                return ((int)(this["NewSymbolLineWeight"]));
+            }
+            set {
+                this["NewSymbolLineWeight"] = value;
+            }
+        }
     }
 }

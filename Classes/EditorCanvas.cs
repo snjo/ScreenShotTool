@@ -21,7 +21,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
     public readonly List<GraphicSymbol> symbols = [];
     readonly ScreenshotEditor parentEditor = parent;
 
-    readonly int blurRadius = Settings.Default.BlurSampleArea;
+    public int blurRadius = Settings.Default.BlurSampleArea;
     public int mosaicSize = Settings.Default.BlurMosaicSize;
     public bool InitialBlurComplete = false; // used to prevent blur from generating twice, when numeric is set initially
 

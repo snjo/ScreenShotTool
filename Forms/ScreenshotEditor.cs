@@ -66,7 +66,7 @@ public partial class ScreenshotEditor : Form
         numericPropertiesFontSize.Minimum = minimumFontSize;
         numericPropertiesFontSize.Value = startingFontSize;
         DisableAllPanels();
-        numericBlurMosaicSize.Value = editorCanvas.mosaicSize;
+        numericBlurMosaicSize.Value = Settings.Default.BlurMosaicSize;
         timerAfterLoad.Start(); // turns off TopMost shortly after Load. Without TopMost the Window opens behind other forms (why? who can say)
 
         toolButtons.Add(buttonSelect);
@@ -82,6 +82,11 @@ public partial class ScreenshotEditor : Form
         toolButtons.Add(buttonNumbered);
 
         listViewSymbols.Height = 200;
+
+        ColorTools.SetButtonColors(buttonNewColorFill, Settings.Default.NewSymbolFillColor);
+        ColorTools.SetButtonColors(buttonNewColorLine, Settings.Default.NewSymbolLineColor);
+        numericNewLineWeight.Value = Settings.Default.NewSymbolLineWeight;
+
         UpdatePropertiesPanel();
         this.pictureBoxOverlay.MouseWheel += PictureBoxOverlay_MouseWheel;
     }
@@ -707,29 +712,30 @@ public partial class ScreenshotEditor : Form
 
     private void ColorChangeClick(object sender, EventArgs e)
     {
-        if (listViewSymbols.SelectedItems.Count > 0)
+        if (sender is Button button)
         {
-            ListViewItem item = listViewSymbols.SelectedItems[0];
-            if (item.Tag is not GraphicSymbol gs) return;
-
-            colorDialog1.Color = ((Button)sender).BackColor;
-            DialogResult result = colorDialog1.ShowDialog();
-            if (result == DialogResult.OK)
+            if (listViewSymbols.SelectedItems.Count > 0)
             {
-                if (sender == buttonPropertiesColorLine)
-                {
-                    buttonPropertiesColorLine.BackColor = colorDialog1.Color;
-                    gs.ForegroundColor = colorDialog1.Color;
+                ListViewItem item = listViewSymbols.SelectedItems[0];
+                if (item.Tag is not GraphicSymbol gs) return;
 
-                }
-                if (sender == buttonPropertiesColorFill)
+                ColorDialogAlpha colorDialogAlpha = new ColorDialogAlpha(button.BackColor);
+                DialogResult result = colorDialogAlpha.ShowDialog();
+                if (result == DialogResult.OK)
                 {
-                    buttonPropertiesColorFill.BackColor = colorDialog1.Color;
-                    gs.BackgroundColor = colorDialog1.Color;
+                    ColorTools.SetButtonColors(buttonPropertiesColorLine, colorDialogAlpha.Color);
+                    if (sender == buttonPropertiesColorLine)
+                    {
+                        gs.ForegroundColor = colorDialogAlpha.Color;
+                    }
+                    if (sender == buttonPropertiesColorFill)
+                    {
+                        gs.BackgroundColor = colorDialogAlpha.Color;
+                    }
                 }
             }
+            editorCanvas.UpdateOverlay();
         }
-        editorCanvas.UpdateOverlay();
     }
 
     private void NumericBlurMosaicSize_ValueChanged(object sender, EventArgs e)
