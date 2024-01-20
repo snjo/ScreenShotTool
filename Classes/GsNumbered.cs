@@ -1,4 +1,5 @@
 ﻿using ScreenShotTool.Forms;
+using ScreenShotTool.Properties;
 using Font = System.Drawing.Font;
 
 namespace ScreenShotTool.Classes;
@@ -19,8 +20,8 @@ public class GsNumbered : GraphicSymbol
     {
         Name = "Number";
         font = CreateFont();
-        FillColor = Color.Maroon;
-        LineColor = Color.White;
+        FillColor = Settings.Default.GsNumberedColor; //Color.Maroon;
+        LineColor = ColorTools.GetTextColorFromBackground(FillColor);
         ValidSymbol = true;
         AllowClickPlacement = true;
     }

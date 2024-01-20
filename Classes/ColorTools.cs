@@ -33,9 +33,13 @@ public static class ColorTools
         }
     }
 
-    public static void SetButtonColors(Button button, Color BackColor)
+    public static void SetButtonColors(Button button, Color BackColor, bool setColorName = false)
     {
         button.BackColor = BackColor;
         button.ForeColor = ColorTools.GetTextColorFromBackground(BackColor);
+        if (setColorName)
+        { 
+            button.Text = BackColor.Name;
+        }
     }
 }

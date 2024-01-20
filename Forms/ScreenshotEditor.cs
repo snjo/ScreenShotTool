@@ -546,8 +546,10 @@ public partial class ScreenshotEditor : Form
                 SetNumericClamp(numericPropertiesY, graphicSymbol.Top);
                 SetNumericClamp(numericPropertiesWidth, graphicSymbol.Width);
                 SetNumericClamp(numericPropertiesHeight, graphicSymbol.Height);
-                buttonPropertiesColorLine.BackColor = graphicSymbol.LineColor;
-                buttonPropertiesColorFill.BackColor = graphicSymbol.FillColor;
+                ColorTools.SetButtonColors(buttonPropertiesColorLine, graphicSymbol.LineColor);
+                ColorTools.SetButtonColors(buttonPropertiesColorFill, graphicSymbol.FillColor);
+                //buttonPropertiesColorLine.BackColor = graphicSymbol.LineColor;
+                //buttonPropertiesColorFill.BackColor = graphicSymbol.FillColor;
                 numericPropertiesLineWeight.Value = graphicSymbol.LineWeight;
                 checkBoxPropertiesShadow.Checked = graphicSymbol.ShadowEnabled;
                 buttonDeleteSymbol.Tag = graphicSymbol;
@@ -658,8 +660,10 @@ public partial class ScreenshotEditor : Form
         numericPropertiesY.Value = 0;
         numericPropertiesWidth.Value = 1;
         numericPropertiesHeight.Value = 1;
-        buttonPropertiesColorLine.BackColor = Color.Gray;
-        buttonPropertiesColorFill.BackColor = Color.Gray;
+        ColorTools.SetButtonColors(buttonPropertiesColorLine, Color.Gray);
+        ColorTools.SetButtonColors(buttonPropertiesColorFill, Color.Gray);
+        //buttonPropertiesColorLine.BackColor = Color.Gray;
+        //buttonPropertiesColorFill.BackColor = Color.Gray;
         //numericPropertiesLineAlpha.Value = 255;
         //numericPropertiesFillAlpha.Value = 255;
         numericPropertiesLineWeight.Value = 1;
@@ -939,7 +943,8 @@ public partial class ScreenshotEditor : Form
             DialogResult result = colorDialogAlpha.ShowDialog();
             if (result == DialogResult.OK)
             {
-                button.BackColor = colorDialogAlpha.Color;
+                ColorTools.SetButtonColors(button, colorDialogAlpha.Color);
+                //button.BackColor = colorDialogAlpha.Color;
             }
         }
     }

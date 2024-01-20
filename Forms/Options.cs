@@ -84,9 +84,9 @@ namespace ScreenShotTool
             //Tab: Editor
 
             checkBoxSelectAfterPlacingSymbol.Checked = settings.SelectAfterPlacingSymbol;
-            ColorTools.SetButtonColors(buttonNumberedColor, settings.GsNumberedColor);
-            ColorTools.SetButtonColors(buttonLineColor, settings.NewSymbolLineColor);
-            ColorTools.SetButtonColors(buttonFillColor, settings.NewSymbolFillColor);
+            ColorTools.SetButtonColors(buttonNumberedColor, settings.GsNumberedColor, true);
+            ColorTools.SetButtonColors(buttonLineColor, settings.NewSymbolLineColor, true);
+            ColorTools.SetButtonColors(buttonFillColor, settings.NewSymbolFillColor, true);
             numericLineWeight.Value = settings.NewSymbolLineWeight;
             numericNumberedSize.Value = settings.GsNumberedDefaultSize;
 
@@ -349,7 +349,7 @@ namespace ScreenShotTool
                 {
 
                     Color color = dialogAlpha.Color;
-                    ColorTools.SetButtonColors(button, color);
+                    ColorTools.SetButtonColors(button, color, true);
                     button.Text = color.Name;
                 }
                 dialogAlpha.Dispose();

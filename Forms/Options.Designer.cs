@@ -1054,6 +1054,7 @@
             // 
             numericLineWeight.Increment = new decimal(new int[] { 5, 0, 0, 0 });
             numericLineWeight.Location = new Point(126, 113);
+            numericLineWeight.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
             numericLineWeight.Name = "numericLineWeight";
             numericLineWeight.Size = new Size(54, 23);
             numericLineWeight.TabIndex = 103;
