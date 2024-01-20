@@ -1,4 +1,6 @@
 ﻿using Hotkeys;
+using ScreenShotTool.Classes;
+using ScreenShotTool.Forms;
 using ScreenShotTool.Properties;
 using System.Diagnostics;
 using System.Runtime.Versioning;
@@ -317,6 +319,31 @@ namespace ScreenShotTool
         private void TextBoxFilename_TextChanged(object sender, EventArgs e)
         {
             labelFileNameResult.Text = mainForm.ComposeFileName(textBoxFilename.Text, "Title");
+        }
+
+        private void SetColor_Click(object sender, EventArgs e)
+        {
+            ColorDialogAlpha dialogAlpha = new ColorDialogAlpha();
+            //DialogResult result = colorDialog1.ShowDialog();
+            DialogResult result = dialogAlpha.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                if (sender is Button button)
+                {
+                    Color color = dialogAlpha.Color;
+                    button.BackColor = color;
+                    button.Text = color.Name;
+                    if (ColorTools.ColorBrightness(color) < 0.6f) // uses the perceived brightness of the back color to flip text color
+                    {
+                        button.ForeColor = Color.White;
+                    }
+                    else
+                    {
+                        button.ForeColor = Color.Black;
+                    }
+                }
+            }
+            dialogAlpha.Dispose();
         }
     }
 }

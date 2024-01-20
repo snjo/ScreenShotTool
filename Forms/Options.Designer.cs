@@ -94,16 +94,7 @@
             checkBoxWindowToFile = new CheckBox();
             labelWindow = new Label();
             tabPageApplication = new TabPage();
-            checkBoxSelectAfterPlacingSymbol = new CheckBox();
             checkBoxMinimizeOnClose = new CheckBox();
-            label30 = new Label();
-            label28 = new Label();
-            label29 = new Label();
-            numericBlurSampleArea = new NumericUpDown();
-            label27 = new Label();
-            label26 = new Label();
-            numericBlurMosaicSize = new NumericUpDown();
-            label25 = new Label();
             label24 = new Label();
             label13 = new Label();
             label17 = new Label();
@@ -121,7 +112,30 @@
             ColumnAlt = new DataGridViewCheckBoxColumn();
             ColumnShift = new DataGridViewCheckBoxColumn();
             ColumnWin = new DataGridViewCheckBoxColumn();
+            tabPageEditor = new TabPage();
+            label37 = new Label();
+            numericLineWeight = new NumericUpDown();
+            buttonFillColor = new Button();
+            label36 = new Label();
+            buttonLineColor = new Button();
+            label35 = new Label();
+            buttonNumberedColor = new Button();
+            label34 = new Label();
+            label33 = new Label();
+            label32 = new Label();
+            label31 = new Label();
+            numericNumberedSize = new NumericUpDown();
+            checkBoxSelectAfterPlacingSymbol = new CheckBox();
+            label30 = new Label();
+            label28 = new Label();
+            label29 = new Label();
+            numericBlurSampleArea = new NumericUpDown();
+            label27 = new Label();
+            label26 = new Label();
+            numericBlurMosaicSize = new NumericUpDown();
+            label25 = new Label();
             buttonResetOptions = new Button();
+            colorDialog1 = new ColorDialog();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
@@ -136,11 +150,14 @@
             ((System.ComponentModel.ISupportInitialize)numericUpDownCounter).BeginInit();
             tabPageModes.SuspendLayout();
             tabPageApplication.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericBlurSampleArea).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericBlurMosaicSize).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownFramerate).BeginInit();
             tabPageHotkeys.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)HotkeyGrid).BeginInit();
+            tabPageEditor.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericLineWeight).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericNumberedSize).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericBlurSampleArea).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericBlurMosaicSize).BeginInit();
             SuspendLayout();
             // 
             // checkBoxTrim
@@ -464,6 +481,7 @@
             tabControl1.Controls.Add(tabPageModes);
             tabControl1.Controls.Add(tabPageApplication);
             tabControl1.Controls.Add(tabPageHotkeys);
+            tabControl1.Controls.Add(tabPageEditor);
             tabControl1.Location = new Point(3, 5);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
@@ -808,16 +826,7 @@
             // 
             // tabPageApplication
             // 
-            tabPageApplication.Controls.Add(checkBoxSelectAfterPlacingSymbol);
             tabPageApplication.Controls.Add(checkBoxMinimizeOnClose);
-            tabPageApplication.Controls.Add(label30);
-            tabPageApplication.Controls.Add(label28);
-            tabPageApplication.Controls.Add(label29);
-            tabPageApplication.Controls.Add(numericBlurSampleArea);
-            tabPageApplication.Controls.Add(label27);
-            tabPageApplication.Controls.Add(label26);
-            tabPageApplication.Controls.Add(numericBlurMosaicSize);
-            tabPageApplication.Controls.Add(label25);
             tabPageApplication.Controls.Add(label24);
             tabPageApplication.Controls.Add(label13);
             tabPageApplication.Controls.Add(label17);
@@ -843,16 +852,6 @@
             tabPageApplication.Text = "Application";
             tabPageApplication.UseVisualStyleBackColor = true;
             // 
-            // checkBoxSelectAfterPlacingSymbol
-            // 
-            checkBoxSelectAfterPlacingSymbol.AutoSize = true;
-            checkBoxSelectAfterPlacingSymbol.Location = new Point(17, 501);
-            checkBoxSelectAfterPlacingSymbol.Name = "checkBoxSelectAfterPlacingSymbol";
-            checkBoxSelectAfterPlacingSymbol.Size = new Size(374, 19);
-            checkBoxSelectAfterPlacingSymbol.TabIndex = 83;
-            checkBoxSelectAfterPlacingSymbol.Text = "After placing a symbol, change to Select (instead of placing more)";
-            checkBoxSelectAfterPlacingSymbol.UseVisualStyleBackColor = true;
-            // 
             // checkBoxMinimizeOnClose
             // 
             checkBoxMinimizeOnClose.AutoSize = true;
@@ -862,80 +861,6 @@
             checkBoxMinimizeOnClose.TabIndex = 82;
             checkBoxMinimizeOnClose.Text = "Minimize when closing with X";
             checkBoxMinimizeOnClose.UseVisualStyleBackColor = true;
-            // 
-            // label30
-            // 
-            label30.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
-            label30.Location = new Point(17, 458);
-            label30.Name = "label30";
-            label30.Size = new Size(435, 40);
-            label30.TabIndex = 81;
-            label30.Text = "A blur image is generated when loading an image in the editor. If the settings are too aggressive, it will take longer to open the editor or image";
-            // 
-            // label28
-            // 
-            label28.AutoSize = true;
-            label28.Location = new Point(182, 432);
-            label28.Name = "label28";
-            label28.Size = new Size(244, 15);
-            label28.TabIndex = 80;
-            label28.Text = "pixels (lower is faster, but less accurate color)";
-            // 
-            // label29
-            // 
-            label29.AutoSize = true;
-            label29.Location = new Point(17, 432);
-            label29.Name = "label29";
-            label29.Size = new Size(94, 15);
-            label29.TabIndex = 79;
-            label29.Text = "Blur sample area";
-            // 
-            // numericBlurSampleArea
-            // 
-            numericBlurSampleArea.Location = new Point(123, 430);
-            numericBlurSampleArea.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
-            numericBlurSampleArea.Name = "numericBlurSampleArea";
-            numericBlurSampleArea.Size = new Size(54, 23);
-            numericBlurSampleArea.TabIndex = 78;
-            numericBlurSampleArea.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            // 
-            // label27
-            // 
-            label27.AutoSize = true;
-            label27.Location = new Point(182, 405);
-            label27.Name = "label27";
-            label27.Size = new Size(232, 15);
-            label27.TabIndex = 77;
-            label27.Text = "pixels (higher is faster, adjustable in editor)";
-            // 
-            // label26
-            // 
-            label26.AutoSize = true;
-            label26.Location = new Point(17, 405);
-            label26.Name = "label26";
-            label26.Size = new Size(91, 15);
-            label26.TabIndex = 76;
-            label26.Text = "Blur mosaic size";
-            // 
-            // numericBlurMosaicSize
-            // 
-            numericBlurMosaicSize.Location = new Point(123, 403);
-            numericBlurMosaicSize.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
-            numericBlurMosaicSize.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
-            numericBlurMosaicSize.Name = "numericBlurMosaicSize";
-            numericBlurMosaicSize.Size = new Size(54, 23);
-            numericBlurMosaicSize.TabIndex = 75;
-            numericBlurMosaicSize.Value = new decimal(new int[] { 8, 0, 0, 0 });
-            // 
-            // label25
-            // 
-            label25.AutoSize = true;
-            label25.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label25.Location = new Point(6, 377);
-            label25.Name = "label25";
-            label25.Size = new Size(87, 15);
-            label25.TabIndex = 74;
-            label25.Text = "Editor settings";
             // 
             // label24
             // 
@@ -959,7 +884,7 @@
             // label17
             // 
             label17.AutoSize = true;
-            label17.Location = new Point(182, 286);
+            label17.Location = new Point(182, 304);
             label17.Name = "label17";
             label17.Size = new Size(23, 15);
             label17.TabIndex = 71;
@@ -1085,6 +1010,238 @@
             ColumnWin.Name = "ColumnWin";
             ColumnWin.Width = 50;
             // 
+            // tabPageEditor
+            // 
+            tabPageEditor.Controls.Add(label37);
+            tabPageEditor.Controls.Add(numericLineWeight);
+            tabPageEditor.Controls.Add(buttonFillColor);
+            tabPageEditor.Controls.Add(label36);
+            tabPageEditor.Controls.Add(buttonLineColor);
+            tabPageEditor.Controls.Add(label35);
+            tabPageEditor.Controls.Add(buttonNumberedColor);
+            tabPageEditor.Controls.Add(label34);
+            tabPageEditor.Controls.Add(label33);
+            tabPageEditor.Controls.Add(label32);
+            tabPageEditor.Controls.Add(label31);
+            tabPageEditor.Controls.Add(numericNumberedSize);
+            tabPageEditor.Controls.Add(checkBoxSelectAfterPlacingSymbol);
+            tabPageEditor.Controls.Add(label30);
+            tabPageEditor.Controls.Add(label28);
+            tabPageEditor.Controls.Add(label29);
+            tabPageEditor.Controls.Add(numericBlurSampleArea);
+            tabPageEditor.Controls.Add(label27);
+            tabPageEditor.Controls.Add(label26);
+            tabPageEditor.Controls.Add(numericBlurMosaicSize);
+            tabPageEditor.Controls.Add(label25);
+            tabPageEditor.Location = new Point(4, 24);
+            tabPageEditor.Name = "tabPageEditor";
+            tabPageEditor.Padding = new Padding(3);
+            tabPageEditor.Size = new Size(482, 569);
+            tabPageEditor.TabIndex = 4;
+            tabPageEditor.Text = "Editor";
+            tabPageEditor.UseVisualStyleBackColor = true;
+            // 
+            // label37
+            // 
+            label37.AutoSize = true;
+            label37.Location = new Point(23, 115);
+            label37.Name = "label37";
+            label37.Size = new Size(70, 15);
+            label37.TabIndex = 104;
+            label37.Text = "Line Weight";
+            // 
+            // numericLineWeight
+            // 
+            numericLineWeight.Increment = new decimal(new int[] { 5, 0, 0, 0 });
+            numericLineWeight.Location = new Point(126, 113);
+            numericLineWeight.Maximum = new decimal(new int[] { 150, 0, 0, 0 });
+            numericLineWeight.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
+            numericLineWeight.Name = "numericLineWeight";
+            numericLineWeight.Size = new Size(54, 23);
+            numericLineWeight.TabIndex = 103;
+            numericLineWeight.Value = new decimal(new int[] { 30, 0, 0, 0 });
+            // 
+            // buttonFillColor
+            // 
+            buttonFillColor.Location = new Point(126, 84);
+            buttonFillColor.Name = "buttonFillColor";
+            buttonFillColor.Size = new Size(87, 23);
+            buttonFillColor.TabIndex = 102;
+            buttonFillColor.Text = "Transparent";
+            buttonFillColor.UseVisualStyleBackColor = true;
+            buttonFillColor.Click += SetColor_Click;
+            // 
+            // label36
+            // 
+            label36.AutoSize = true;
+            label36.Location = new Point(23, 88);
+            label36.Name = "label36";
+            label36.Size = new Size(92, 15);
+            label36.TabIndex = 101;
+            label36.Text = "Fill color default";
+            // 
+            // buttonLineColor
+            // 
+            buttonLineColor.Location = new Point(126, 55);
+            buttonLineColor.Name = "buttonLineColor";
+            buttonLineColor.Size = new Size(87, 23);
+            buttonLineColor.TabIndex = 100;
+            buttonLineColor.Text = "Red";
+            buttonLineColor.UseVisualStyleBackColor = true;
+            buttonLineColor.Click += SetColor_Click;
+            // 
+            // label35
+            // 
+            label35.AutoSize = true;
+            label35.Location = new Point(23, 59);
+            label35.Name = "label35";
+            label35.Size = new Size(99, 15);
+            label35.TabIndex = 99;
+            label35.Text = "Line color default";
+            // 
+            // buttonNumberedColor
+            // 
+            buttonNumberedColor.Location = new Point(126, 196);
+            buttonNumberedColor.Name = "buttonNumberedColor";
+            buttonNumberedColor.Size = new Size(87, 23);
+            buttonNumberedColor.TabIndex = 98;
+            buttonNumberedColor.Text = "Maroon";
+            buttonNumberedColor.UseVisualStyleBackColor = true;
+            buttonNumberedColor.Click += SetColor_Click;
+            // 
+            // label34
+            // 
+            label34.AutoSize = true;
+            label34.Location = new Point(17, 200);
+            label34.Name = "label34";
+            label34.Size = new Size(67, 15);
+            label34.TabIndex = 97;
+            label34.Text = "Circle color";
+            // 
+            // label33
+            // 
+            label33.AutoSize = true;
+            label33.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label33.Location = new Point(6, 231);
+            label33.Name = "label33";
+            label33.Size = new Size(79, 15);
+            label33.TabIndex = 96;
+            label33.Text = "Blur / Mosaic";
+            // 
+            // label32
+            // 
+            label32.AutoSize = true;
+            label32.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label32.Location = new Point(6, 145);
+            label32.Name = "label32";
+            label32.Size = new Size(102, 15);
+            label32.TabIndex = 95;
+            label32.Text = "Number markers";
+            // 
+            // label31
+            // 
+            label31.AutoSize = true;
+            label31.Location = new Point(17, 167);
+            label31.Name = "label31";
+            label31.Size = new Size(59, 15);
+            label31.TabIndex = 94;
+            label31.Text = "Circle size";
+            // 
+            // numericNumberedSize
+            // 
+            numericNumberedSize.Increment = new decimal(new int[] { 5, 0, 0, 0 });
+            numericNumberedSize.Location = new Point(126, 165);
+            numericNumberedSize.Maximum = new decimal(new int[] { 150, 0, 0, 0 });
+            numericNumberedSize.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
+            numericNumberedSize.Name = "numericNumberedSize";
+            numericNumberedSize.Size = new Size(54, 23);
+            numericNumberedSize.TabIndex = 93;
+            numericNumberedSize.Value = new decimal(new int[] { 30, 0, 0, 0 });
+            // 
+            // checkBoxSelectAfterPlacingSymbol
+            // 
+            checkBoxSelectAfterPlacingSymbol.AutoSize = true;
+            checkBoxSelectAfterPlacingSymbol.Location = new Point(23, 33);
+            checkBoxSelectAfterPlacingSymbol.Name = "checkBoxSelectAfterPlacingSymbol";
+            checkBoxSelectAfterPlacingSymbol.Size = new Size(374, 19);
+            checkBoxSelectAfterPlacingSymbol.TabIndex = 92;
+            checkBoxSelectAfterPlacingSymbol.Text = "After placing a symbol, change to Select (instead of placing more)";
+            checkBoxSelectAfterPlacingSymbol.UseVisualStyleBackColor = true;
+            // 
+            // label30
+            // 
+            label30.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
+            label30.Location = new Point(14, 307);
+            label30.Name = "label30";
+            label30.Size = new Size(435, 56);
+            label30.TabIndex = 91;
+            label30.Text = "A blur image is generated when loading an image in the editor, or changing the mosaic size. If the settings are too aggressive, it will take longer to open the editor or update the image";
+            // 
+            // label28
+            // 
+            label28.AutoSize = true;
+            label28.Location = new Point(185, 283);
+            label28.Name = "label28";
+            label28.Size = new Size(244, 15);
+            label28.TabIndex = 90;
+            label28.Text = "pixels (lower is faster, but less accurate color)";
+            // 
+            // label29
+            // 
+            label29.AutoSize = true;
+            label29.Location = new Point(14, 283);
+            label29.Name = "label29";
+            label29.Size = new Size(94, 15);
+            label29.TabIndex = 89;
+            label29.Text = "Blur sample area";
+            // 
+            // numericBlurSampleArea
+            // 
+            numericBlurSampleArea.Location = new Point(126, 281);
+            numericBlurSampleArea.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
+            numericBlurSampleArea.Name = "numericBlurSampleArea";
+            numericBlurSampleArea.Size = new Size(54, 23);
+            numericBlurSampleArea.TabIndex = 88;
+            numericBlurSampleArea.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
+            // label27
+            // 
+            label27.AutoSize = true;
+            label27.Location = new Point(185, 256);
+            label27.Name = "label27";
+            label27.Size = new Size(232, 15);
+            label27.TabIndex = 87;
+            label27.Text = "pixels (higher is faster, adjustable in editor)";
+            // 
+            // label26
+            // 
+            label26.AutoSize = true;
+            label26.Location = new Point(14, 256);
+            label26.Name = "label26";
+            label26.Size = new Size(91, 15);
+            label26.TabIndex = 86;
+            label26.Text = "Blur mosaic size";
+            // 
+            // numericBlurMosaicSize
+            // 
+            numericBlurMosaicSize.Location = new Point(126, 254);
+            numericBlurMosaicSize.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
+            numericBlurMosaicSize.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
+            numericBlurMosaicSize.Name = "numericBlurMosaicSize";
+            numericBlurMosaicSize.Size = new Size(54, 23);
+            numericBlurMosaicSize.TabIndex = 85;
+            numericBlurMosaicSize.Value = new decimal(new int[] { 8, 0, 0, 0 });
+            // 
+            // label25
+            // 
+            label25.AutoSize = true;
+            label25.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label25.Location = new Point(6, 15);
+            label25.Name = "label25";
+            label25.Size = new Size(120, 15);
+            label25.TabIndex = 84;
+            label25.Text = "Placing new symbols";
+            // 
             // buttonResetOptions
             // 
             buttonResetOptions.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
@@ -1095,6 +1252,10 @@
             buttonResetOptions.Text = "Reset options";
             buttonResetOptions.UseVisualStyleBackColor = true;
             buttonResetOptions.Click += ButtonResetOptions_Click;
+            // 
+            // colorDialog1
+            // 
+            colorDialog1.FullOpen = true;
             // 
             // Options
             // 
@@ -1127,11 +1288,15 @@
             tabPageModes.PerformLayout();
             tabPageApplication.ResumeLayout(false);
             tabPageApplication.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numericBlurSampleArea).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericBlurMosaicSize).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownFramerate).EndInit();
             tabPageHotkeys.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)HotkeyGrid).EndInit();
+            tabPageEditor.ResumeLayout(false);
+            tabPageEditor.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericLineWeight).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericNumberedSize).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericBlurSampleArea).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericBlurMosaicSize).EndInit();
             ResumeLayout(false);
         }
 
@@ -1220,15 +1385,29 @@
         private Label label17;
         private Label label12;
         private NumericUpDown numericUpDownFramerate;
-        private Label label26;
-        private NumericUpDown numericBlurMosaicSize;
-        private Label label25;
+        private CheckBox checkBoxMinimizeOnClose;
+        private TabPage tabPageEditor;
+        private Label label33;
+        private Label label32;
+        private Label label31;
+        private NumericUpDown numericNumberedSize;
+        private CheckBox checkBoxSelectAfterPlacingSymbol;
         private Label label30;
         private Label label28;
         private Label label29;
         private NumericUpDown numericBlurSampleArea;
         private Label label27;
-        private CheckBox checkBoxMinimizeOnClose;
-        private CheckBox checkBoxSelectAfterPlacingSymbol;
+        private Label label26;
+        private NumericUpDown numericBlurMosaicSize;
+        private Label label25;
+        private Button buttonNumberedColor;
+        private Label label34;
+        private Label label37;
+        private NumericUpDown numericLineWeight;
+        private Button buttonFillColor;
+        private Label label36;
+        private Button buttonLineColor;
+        private Label label35;
+        private ColorDialog colorDialog1;
     }
 }

@@ -13,7 +13,7 @@ public class GsNumbered : GraphicSymbol
     private readonly SolidBrush fontBrush = new(Color.White);
     private readonly SolidBrush circleBrush = new(Color.Maroon);
     public int Diameter = 30; // update DefaultRadius if you change Diameter here
-    public static readonly int DefaultRadius = 15;
+    public int DefaultRadius = 15;
 
     public GsNumbered(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight = 1, int lineAlpha = 255, int fillAlpha = 255) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight, lineAlpha, fillAlpha)
     {

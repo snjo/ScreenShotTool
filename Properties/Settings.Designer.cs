@@ -826,5 +826,29 @@ namespace ScreenShotTool.Properties {
                 this["SelectAfterPlacingSymbol"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        public int GsNumberedDefaultSize {
+            get {
+                return ((int)(this["GsNumberedDefaultSize"]));
+            }
+            set {
+                this["GsNumberedDefaultSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Maroon")]
+        public global::System.Drawing.Color GsNumberedColor {
+            get {
+                return ((global::System.Drawing.Color)(this["GsNumberedColor"]));
+            }
+            set {
+                this["GsNumberedColor"] = value;
+            }
+        }
     }
 }

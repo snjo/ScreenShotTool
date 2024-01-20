@@ -455,6 +455,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
             Color lineColor = parentEditor.GetNewSymbolProperties().lineColor;
             Color fillColor = parentEditor.GetNewSymbolProperties().fillColor;
             //Color.FromArgb((int)numericNewFillAlpha.Value, buttonNewColorFill.BackColor);
+            int NumberedSize = Settings.Default.GsNumberedDefaultSize;
 
             return parentEditor.selectedUserAction switch
             {
@@ -468,7 +469,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
                 ScreenshotEditor.UserActions.CreateBlur => new GsBlur(upperLeft, size, lineColor, fillColor),
                 ScreenshotEditor.UserActions.CreateHighlight => new GsHighlight(upperLeft, size, lineColor, Color.Yellow, false, 0, 0, fillAlpha),
                 ScreenshotEditor.UserActions.CreateCrop => new GsCrop(upperLeft, size, lineColor, fillColor),
-                ScreenshotEditor.UserActions.CreateNumbered => new GsNumbered(new Point(dragEnd.X - GsNumbered.DefaultRadius, dragEnd.Y - GsNumbered.DefaultRadius), size, lineColor, fillColor, shadow, lineWeight, lineAlpha, fillAlpha),
+                ScreenshotEditor.UserActions.CreateNumbered => new GsNumbered(new Point(dragEnd.X - (NumberedSize / 2), dragEnd.Y - (NumberedSize / 2)), new Point(NumberedSize, NumberedSize), lineColor, fillColor, shadow, lineWeight, lineAlpha, fillAlpha),
                 _ => null,
             };
         }

@@ -83,6 +83,7 @@ public partial class ScreenshotEditor : Form
 
         listViewSymbols.Height = 200;
         UpdatePropertiesPanel();
+        this.pictureBoxOverlay.MouseWheel += PictureBoxOverlay_MouseWheel;
     }
 
     private List<ImageFormatDefinition> CreateImageFormatsList()
@@ -327,12 +328,13 @@ public partial class ScreenshotEditor : Form
     #region Mouse events --------------------------------------------------------------------------------
     private void PictureBoxOverlay_MouseDown(object sender, MouseEventArgs e)
     {
+        //Debug.WriteLine($"MouseDown {e.Button}");
         pictureBoxOverlay.Focus();
         if (e.Button == MouseButtons.Left)
         {
             editorCanvas.MouseDown(new Point(e.X, e.Y));
         }
-        else
+        else if (e.Button == MouseButtons.Right)
         {
             CancelAction();
         }
@@ -344,6 +346,16 @@ public partial class ScreenshotEditor : Form
     private void PictureBoxOverlay_MouseUp(object sender, MouseEventArgs e)
     {
         editorCanvas.MouseUp(new Point(e.X, e.Y));
+    }
+
+    private void PictureBoxOverlay_MouseWheel(object? sender, MouseEventArgs e)
+    {
+        Debug.WriteLine($"Mousewheel: {e.Delta}");
+        if (editorCanvas.dragStarted && e.Delta != 0)
+        {
+            int change = e.Delta > 0 ? 1 : -1;
+            SetNumericClamp(numericNewLineWeight, (int)numericNewLineWeight.Value + change);
+        }
     }
     #endregion
 
