@@ -718,8 +718,17 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
     int stackedSymbolsIndex = -1;
     public void MouseUp(Point MousePosition)
     {
+        //Debug.WriteLine($"Mouse up, dragStarted: {dragStarted}, dragMoved: {dragMoved}, UserAction: {parentEditor.selectedUserAction}");
+        if (dragStarted == false) // don't bother with symbol stuff when a drag was cancelled or not actually started
+        {
+            Debug.WriteLine($"Mouse up, dragStarted: {dragStarted}, cancelling any symbol placement");
+            UpdateOverlay();
+            parentEditor.UpdatePropertiesPanel();
+            return;
+        }
+
+        Debug.WriteLine($"Mouse up, dragStarted: {dragStarted}, placing symbol based on userAction: {parentEditor.selectedUserAction}");
         bool SymbolAllowsClickPlacement = parentEditor.selectedUserAction == ScreenshotEditor.UserActions.CreateImage || parentEditor.selectedUserAction == ScreenshotEditor.UserActions.CreateNumbered;
-        //bool SymbolAllowsClickPlacement = parentEditor.selectedUserAction == ScreenshotEditor.UserActions.CreateNumbered;
 
         if (dragMoved == false) // user clicked and released mouse without moving it.
         {

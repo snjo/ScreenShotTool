@@ -328,7 +328,14 @@ public partial class ScreenshotEditor : Form
     private void PictureBoxOverlay_MouseDown(object sender, MouseEventArgs e)
     {
         pictureBoxOverlay.Focus();
-        editorCanvas.MouseDown(new Point(e.X, e.Y));
+        if (e.Button == MouseButtons.Left)
+        {
+            editorCanvas.MouseDown(new Point(e.X, e.Y));
+        }
+        else
+        {
+            CancelAction();
+        }
     }
     private void PictureBoxOverlay_MouseMove(object sender, MouseEventArgs e)
     {
@@ -373,11 +380,16 @@ public partial class ScreenshotEditor : Form
         }
         if (e.KeyCode == Keys.Escape)
         {
-            editorCanvas.dragStarted = false;
-            editorCanvas.dragMoved = false;
-            editorCanvas.currentSelectedSymbol = null;
-            SetUserAction(UserActions.Select);
+            CancelAction();
         }
+    }
+
+    private void CancelAction()
+    {
+        editorCanvas.dragStarted = false;
+        editorCanvas.dragMoved = false;
+        //if (deselectSymbol) editorCanvas.currentSelectedSymbol = null;
+        SetUserAction(UserActions.Select);
     }
     #endregion
 
