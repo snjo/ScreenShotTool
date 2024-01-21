@@ -83,8 +83,8 @@ public partial class ScreenshotEditor : Form
 
         listViewSymbols.Height = 200;
 
-        ColorTools.SetButtonColors(buttonNewColorFill, Settings.Default.NewSymbolFillColor);
-        ColorTools.SetButtonColors(buttonNewColorLine, Settings.Default.NewSymbolLineColor);
+        ColorTools.SetButtonColors(buttonNewColorFill, Settings.Default.NewSymbolFillColor, "X");
+        ColorTools.SetButtonColors(buttonNewColorLine, Settings.Default.NewSymbolLineColor, "X");
         numericNewLineWeight.Value = Settings.Default.NewSymbolLineWeight;
 
         UpdatePropertiesPanel();
@@ -546,8 +546,8 @@ public partial class ScreenshotEditor : Form
                 SetNumericClamp(numericPropertiesY, graphicSymbol.Top);
                 SetNumericClamp(numericPropertiesWidth, graphicSymbol.Width);
                 SetNumericClamp(numericPropertiesHeight, graphicSymbol.Height);
-                ColorTools.SetButtonColors(buttonPropertiesColorLine, graphicSymbol.LineColor);
-                ColorTools.SetButtonColors(buttonPropertiesColorFill, graphicSymbol.FillColor);
+                ColorTools.SetButtonColors(buttonPropertiesColorLine, graphicSymbol.LineColor, "X");
+                ColorTools.SetButtonColors(buttonPropertiesColorFill, graphicSymbol.FillColor, "X");
                 //buttonPropertiesColorLine.BackColor = graphicSymbol.LineColor;
                 //buttonPropertiesColorFill.BackColor = graphicSymbol.FillColor;
                 numericPropertiesLineWeight.Value = graphicSymbol.LineWeight;
@@ -660,8 +660,8 @@ public partial class ScreenshotEditor : Form
         numericPropertiesY.Value = 0;
         numericPropertiesWidth.Value = 1;
         numericPropertiesHeight.Value = 1;
-        ColorTools.SetButtonColors(buttonPropertiesColorLine, Color.Gray);
-        ColorTools.SetButtonColors(buttonPropertiesColorFill, Color.Gray);
+        ColorTools.SetButtonColors(buttonPropertiesColorLine, Color.Gray, "X");
+        ColorTools.SetButtonColors(buttonPropertiesColorFill, Color.Gray, "X");
         //buttonPropertiesColorLine.BackColor = Color.Gray;
         //buttonPropertiesColorFill.BackColor = Color.Gray;
         //numericPropertiesLineAlpha.Value = 255;
@@ -727,7 +727,7 @@ public partial class ScreenshotEditor : Form
                 DialogResult result = colorDialogAlpha.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    ColorTools.SetButtonColors(button, colorDialogAlpha.Color);
+                    ColorTools.SetButtonColors(button, colorDialogAlpha.Color, "X");
                     if (sender == buttonPropertiesColorLine)
                     {
                         gs.LineColor = colorDialogAlpha.Color;
@@ -737,6 +737,7 @@ public partial class ScreenshotEditor : Form
                         gs.FillColor = colorDialogAlpha.Color;
                     }
                 }
+                colorDialogAlpha.Dispose();
             }
             editorCanvas.UpdateOverlay();
         }
@@ -943,9 +944,10 @@ public partial class ScreenshotEditor : Form
             DialogResult result = colorDialogAlpha.ShowDialog();
             if (result == DialogResult.OK)
             {
-                ColorTools.SetButtonColors(button, colorDialogAlpha.Color);
+                ColorTools.SetButtonColors(button, colorDialogAlpha.Color, "X");
                 //button.BackColor = colorDialogAlpha.Color;
             }
+            colorDialogAlpha.Dispose();
         }
     }
 

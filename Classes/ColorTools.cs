@@ -42,4 +42,25 @@ public static class ColorTools
             button.Text = BackColor.Name;
         }
     }
+
+    public static void SetButtonColors(Button button, Color BackColor, string transparentName, bool setColorName = false)
+    {
+        button.BackColor = BackColor;
+        button.ForeColor = ColorTools.GetTextColorFromBackground(BackColor);
+        if (BackColor == Color.Transparent)
+        {
+            button.Text = transparentName;
+        }
+        else
+        {
+            if (setColorName)
+            {
+                button.Text = BackColor.Name;
+            }
+            else
+            {
+                button.Text = "";
+            }
+        }
+    }
 }

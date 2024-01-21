@@ -132,7 +132,7 @@ public partial class ColorDialogAlpha : Form
     {
         if (sender is Button button)
         {
-            Debug.WriteLine(button.BackColor);
+            //Debug.WriteLine(button.BackColor);
             UpateColor(button.BackColor);
         }
     }

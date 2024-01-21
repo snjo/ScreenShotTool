@@ -28,12 +28,12 @@ namespace ScreenShotTool
 
             textBoxFilename.Text = settings.Filename;
             comboBoxFileExtension.Text = settings.FileExtension;
-            numericUpDownJpegQuality.Value = settings.JpegQuality;
+            numericUpDownJpegQuality.SetValueClamped(settings.JpegQuality);
 
             textBoxAlternateTitle.Text = settings.AlternateTitle;
-            numericUpDownTitleMaxLength.Value = settings.TitleMaxLength;
+            numericUpDownTitleMaxLength.SetValueClamped(settings.TitleMaxLength);
             textBoxSplitString.Text = settings.SplitTitleString;
-            numericUpDownSplitIndex.Value = settings.SplitTitleIndex;
+            numericUpDownSplitIndex.SetValueClamped(settings.SplitTitleIndex);
 
             checkBoxTrim.Checked = settings.TrimChecked;
             trimTop.Value = settings.TrimTop;
@@ -41,7 +41,7 @@ namespace ScreenShotTool
             trimLeft.Value = settings.TrimLeft;
             trimRight.Value = settings.TrimRight;
 
-            numericUpDownCounter.Value = settings.Counter;
+            numericUpDownCounter.SetValueClamped(settings.Counter);
 
             //Tab: Modes
             checkBoxRegionComplete.Checked = settings.RegionCompletesOnMouseRelease;
@@ -76,10 +76,10 @@ namespace ScreenShotTool
             checkBoxTrayTooltipWarning.Checked = settings.AllowTrayTooltipWarning;
 
             checkBoxCropThumbnails.Checked = settings.CropThumbnails;
-            numericThumbWidth.Value = settings.ThumbnailWidth;
-            numericThumbHeight.Value = settings.ThumbnailHeight;
+            numericThumbWidth.SetValueClamped(settings.ThumbnailWidth);
+            numericThumbHeight.SetValueClamped(settings.ThumbnailHeight);
 
-            numericUpDownFramerate.Value = settings.MaxFramerate;
+            numericUpDownFramerate.SetValueClamped(settings.MaxFramerate);
 
             //Tab: Editor
 
@@ -87,11 +87,11 @@ namespace ScreenShotTool
             ColorTools.SetButtonColors(buttonNumberedColor, settings.GsNumberedColor, true);
             ColorTools.SetButtonColors(buttonLineColor, settings.NewSymbolLineColor, true);
             ColorTools.SetButtonColors(buttonFillColor, settings.NewSymbolFillColor, true);
-            numericLineWeight.Value = settings.NewSymbolLineWeight;
-            numericNumberedSize.Value = settings.GsNumberedDefaultSize;
+            numericLineWeight.SetValueClamped(settings.NewSymbolLineWeight);
+            numericNumberedSize.SetValueClamped(settings.GsNumberedDefaultSize);
 
-            numericBlurMosaicSize.Value = settings.BlurMosaicSize;
-            numericBlurSampleArea.Value = settings.BlurSampleArea;
+            numericBlurMosaicSize.SetValueClamped(settings.BlurMosaicSize);
+            numericBlurSampleArea.SetValueClamped(settings.BlurSampleArea);
 
             //Tab: Hotkeys
 
@@ -120,15 +120,15 @@ namespace ScreenShotTool
             settings.JpegQuality = (long)numericUpDownJpegQuality.Value;
 
             settings.AlternateTitle = textBoxAlternateTitle.Text;
-            settings.TitleMaxLength = (int)numericUpDownTitleMaxLength.Value;
+            settings.TitleMaxLength = numericUpDownTitleMaxLength.ValueInt();
             settings.SplitTitleString = textBoxSplitString.Text;
-            settings.SplitTitleIndex = (int)numericUpDownSplitIndex.Value;
+            settings.SplitTitleIndex = numericUpDownSplitIndex.ValueInt();
 
             settings.TrimChecked = checkBoxTrim.Checked;
-            settings.TrimTop = (int)trimTop.Value;
-            settings.TrimBottom = (int)trimBottom.Value;
-            settings.TrimLeft = (int)trimLeft.Value;
-            settings.TrimRight = (int)trimRight.Value;
+            settings.TrimTop = trimTop.ValueInt();
+            settings.TrimBottom = trimBottom.ValueInt();
+            settings.TrimLeft = trimLeft.ValueInt();
+            settings.TrimRight = trimRight.ValueInt();
 
 
             mainForm.SetCounter((int)numericUpDownCounter.Value, false);
@@ -157,13 +157,13 @@ namespace ScreenShotTool
             settings.StartHidden = checkBoxStartHidden.Checked;
             settings.MinimizeOnClose = checkBoxMinimizeOnClose.Checked;
             settings.CropThumbnails = checkBoxCropThumbnails.Checked;
-            settings.ThumbnailWidth = (int)numericThumbWidth.Value;
-            settings.ThumbnailHeight = (int)numericThumbHeight.Value;
+            settings.ThumbnailWidth = numericThumbWidth.ValueInt();
+            settings.ThumbnailHeight = numericThumbHeight.ValueInt();
             settings.AllowTrayTooltipInfoCapture = checkBoxTrayTooltipInfoCapture.Checked;
             settings.AllowTrayTooltipInfoFolder = checkBoxTrayTooltipInfoFolder.Checked;
             settings.AllowTrayTooltipWarning = checkBoxTrayTooltipWarning.Checked;
 
-            settings.MaxFramerate = (int)numericUpDownFramerate.Value;
+            settings.MaxFramerate = numericUpDownFramerate.ValueInt();
 
             // Tab: Editor
 
@@ -171,13 +171,13 @@ namespace ScreenShotTool
 
             settings.NewSymbolLineColor = buttonLineColor.BackColor;
             settings.NewSymbolFillColor = buttonFillColor.BackColor;
-            settings.NewSymbolLineWeight = (int)numericLineWeight.Value;
+            settings.NewSymbolLineWeight = numericLineWeight.ValueInt();
 
             settings.GsNumberedColor = buttonNumberedColor.BackColor;
-            settings.GsNumberedDefaultSize = (int)numericNumberedSize.Value;
+            settings.GsNumberedDefaultSize = numericNumberedSize.ValueInt();
 
-            settings.BlurMosaicSize = (int)numericBlurMosaicSize.Value;
-            settings.BlurSampleArea = (int)numericBlurSampleArea.Value;
+            settings.BlurMosaicSize = numericBlurMosaicSize.ValueInt();
+            settings.BlurSampleArea = numericBlurSampleArea.ValueInt();
 
             //Tab: Hotkeys
             int i = 0;

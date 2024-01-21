@@ -14,11 +14,12 @@ public class GsNumbered : GraphicSymbol
     private readonly SolidBrush fontBrush = new(Color.White);
     private readonly SolidBrush circleBrush = new(Color.Maroon);
     public int Diameter = 30; // update DefaultRadius if you change Diameter here
-    public int DefaultRadius = 15;
+    //public int DefaultRadius = 15;
 
     public GsNumbered(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight = 1) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight)
     {
         Name = "Number";
+        Diameter = Settings.Default.GsNumberedDefaultSize;
         font = CreateFont();
         FillColor = Settings.Default.GsNumberedColor; //Color.Maroon;
         LineColor = ColorTools.GetTextColorFromBackground(FillColor);
@@ -44,7 +45,7 @@ public class GsNumbered : GraphicSymbol
     {
         if (ShadowEnabled)
         {
-            for (int i = 1; i < ShadowDistance && i < DefaultRadius / 2; i++)
+            for (int i = 1; i < ShadowDistance && i < Diameter / 4; i++)
             {
                 // fill
                 graphic.FillEllipse(ShadowBrush, new Rectangle(Left + i, Top + i, Diameter, Diameter));

@@ -903,7 +903,7 @@
             // 
             numericUpDownFramerate.Increment = new decimal(new int[] { 5, 0, 0, 0 });
             numericUpDownFramerate.Location = new Point(123, 302);
-            numericUpDownFramerate.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
+            numericUpDownFramerate.Maximum = new decimal(new int[] { 120, 0, 0, 0 });
             numericUpDownFramerate.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
             numericUpDownFramerate.Name = "numericUpDownFramerate";
             numericUpDownFramerate.Size = new Size(54, 23);
@@ -1052,7 +1052,6 @@
             // 
             // numericLineWeight
             // 
-            numericLineWeight.Increment = new decimal(new int[] { 5, 0, 0, 0 });
             numericLineWeight.Location = new Point(126, 113);
             numericLineWeight.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
             numericLineWeight.Name = "numericLineWeight";
@@ -1157,8 +1156,7 @@
             // 
             numericNumberedSize.Increment = new decimal(new int[] { 5, 0, 0, 0 });
             numericNumberedSize.Location = new Point(126, 165);
-            numericNumberedSize.Maximum = new decimal(new int[] { 150, 0, 0, 0 });
-            numericNumberedSize.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
+            numericNumberedSize.Minimum = new decimal(new int[] { 20, 0, 0, 0 });
             numericNumberedSize.Name = "numericNumberedSize";
             numericNumberedSize.Size = new Size(54, 23);
             numericNumberedSize.TabIndex = 93;
