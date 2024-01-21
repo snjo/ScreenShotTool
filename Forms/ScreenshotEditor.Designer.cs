@@ -106,6 +106,8 @@
             timerAfterLoad = new System.Windows.Forms.Timer(components);
             panelPropertiesShadow = new Panel();
             panelPropertiesDelete = new Panel();
+            buttonToBack = new Button();
+            buttonToFront = new Button();
             TimerUpdateOverlay = new System.Windows.Forms.Timer(components);
             panelPropertiesCrop = new Panel();
             buttonPropertyCopyCrop = new Button();
@@ -632,7 +634,7 @@
             // 
             // buttonDeleteSymbol
             // 
-            buttonDeleteSymbol.Location = new Point(3, 1);
+            buttonDeleteSymbol.Location = new Point(4, 32);
             buttonDeleteSymbol.Name = "buttonDeleteSymbol";
             buttonDeleteSymbol.Size = new Size(94, 23);
             buttonDeleteSymbol.TabIndex = 0;
@@ -809,7 +811,7 @@
             panelPropertiesHighlight.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             panelPropertiesHighlight.Controls.Add(label18);
             panelPropertiesHighlight.Controls.Add(comboBoxBlendMode);
-            panelPropertiesHighlight.Location = new Point(797, 610);
+            panelPropertiesHighlight.Location = new Point(797, 578);
             panelPropertiesHighlight.Name = "panelPropertiesHighlight";
             panelPropertiesHighlight.Size = new Size(153, 47);
             panelPropertiesHighlight.TabIndex = 31;
@@ -928,7 +930,7 @@
             // 
             panelPropertiesShadow.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             panelPropertiesShadow.Controls.Add(checkBoxPropertiesShadow);
-            panelPropertiesShadow.Location = new Point(797, 519);
+            panelPropertiesShadow.Location = new Point(797, 486);
             panelPropertiesShadow.Name = "panelPropertiesShadow";
             panelPropertiesShadow.Size = new Size(153, 26);
             panelPropertiesShadow.TabIndex = 32;
@@ -936,11 +938,33 @@
             // panelPropertiesDelete
             // 
             panelPropertiesDelete.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            panelPropertiesDelete.Controls.Add(buttonToBack);
+            panelPropertiesDelete.Controls.Add(buttonToFront);
             panelPropertiesDelete.Controls.Add(buttonDeleteSymbol);
-            panelPropertiesDelete.Location = new Point(797, 691);
+            panelPropertiesDelete.Location = new Point(797, 650);
             panelPropertiesDelete.Name = "panelPropertiesDelete";
-            panelPropertiesDelete.Size = new Size(153, 25);
+            panelPropertiesDelete.Size = new Size(153, 60);
             panelPropertiesDelete.TabIndex = 33;
+            // 
+            // buttonToBack
+            // 
+            buttonToBack.Location = new Point(70, 3);
+            buttonToBack.Name = "buttonToBack";
+            buttonToBack.Size = new Size(69, 23);
+            buttonToBack.TabIndex = 2;
+            buttonToBack.Text = "To Back";
+            buttonToBack.UseVisualStyleBackColor = true;
+            buttonToBack.Click += buttonToBack_Click;
+            // 
+            // buttonToFront
+            // 
+            buttonToFront.Location = new Point(4, 3);
+            buttonToFront.Name = "buttonToFront";
+            buttonToFront.Size = new Size(65, 23);
+            buttonToFront.TabIndex = 1;
+            buttonToFront.Text = "To Front";
+            buttonToFront.UseVisualStyleBackColor = true;
+            buttonToFront.Click += buttonToFront_Click;
             // 
             // TimerUpdateOverlay
             // 
@@ -952,7 +976,7 @@
             panelPropertiesCrop.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             panelPropertiesCrop.Controls.Add(buttonPropertyCopyCrop);
             panelPropertiesCrop.Controls.Add(buttonPropertyCrop);
-            panelPropertiesCrop.Location = new Point(797, 548);
+            panelPropertiesCrop.Location = new Point(797, 515);
             panelPropertiesCrop.Name = "panelPropertiesCrop";
             panelPropertiesCrop.Size = new Size(153, 28);
             panelPropertiesCrop.TabIndex = 34;
@@ -981,7 +1005,7 @@
             // 
             panelPropertiesBlur.Controls.Add(label17);
             panelPropertiesBlur.Controls.Add(numericBlurMosaicSize);
-            panelPropertiesBlur.Location = new Point(797, 578);
+            panelPropertiesBlur.Location = new Point(797, 546);
             panelPropertiesBlur.Name = "panelPropertiesBlur";
             panelPropertiesBlur.Size = new Size(153, 28);
             panelPropertiesBlur.TabIndex = 35;
@@ -1132,5 +1156,7 @@
         private Panel panelPropertiesBlur;
         private Label label19;
         private Button buttonNumbered;
+        private Button buttonToBack;
+        private Button buttonToFront;
     }
 }

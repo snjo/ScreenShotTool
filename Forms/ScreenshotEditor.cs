@@ -399,6 +399,20 @@ public partial class ScreenshotEditor : Form
         {
             CancelAction();
         }
+        if (e.KeyCode == Keys.Up)
+        {
+            if (listViewSymbols.SelectedItems.Count > 0)
+            {
+                MoveSymbolToFront(listViewSymbols.SelectedItems[0]);
+            }
+        }
+        if (e.KeyCode == Keys.Down)
+        {
+            if (listViewSymbols.SelectedItems.Count > 0)
+            {
+                MoveSymbolToBack(listViewSymbols.SelectedItems[0]);
+            }
+        }
     }
 
     private void CancelAction()
@@ -440,12 +454,22 @@ public partial class ScreenshotEditor : Form
 
     #region Symbol Properties panel ---------------------------------------------------------------------
 
-    public void AddNewSymbolToList(GraphicSymbol symbol)
+    public void AddNewSymbolToList(GraphicSymbol symbol, int index = -1)
     {
         if (symbol != null)
         {
-            editorCanvas.symbols.Add(symbol);
-            ListViewItem newItem = listViewSymbols.Items.Add(symbol.Name);
+            ListViewItem newItem;
+            if (index == -1)
+            {
+                //editorCanvas.symbols.Add(symbol);
+                newItem = listViewSymbols.Items.Add(symbol.Name);
+            }
+            else
+            {
+                //editorCanvas.symbols.Insert(index, symbol);
+                newItem = listViewSymbols.Items.Insert(index, symbol.Name);
+            }
+
             newItem.Text = symbol.Name;
             newItem.Tag = symbol;
             symbol.ListViewItem = newItem;
@@ -638,19 +662,44 @@ public partial class ScreenshotEditor : Form
 
     private void DeleteSelectedSymbol()
     {
-        if (listViewSymbols.SelectedItems.Count > 0)
+        GraphicSymbol? gs = GetSelectedSymbol();
+        if (gs != null)
         {
-            ListViewItem item = listViewSymbols.SelectedItems[0];
-            if (buttonDeleteSymbol.Tag is GraphicSymbol gs)
+            if (gs.ListViewItem != null)
             {
-                listViewSymbols.Items.Remove(item);
-                gs.Dispose();
-                editorCanvas.symbols.Remove(gs);
+                listViewSymbols.Items.Remove(gs.ListViewItem);
             }
+            gs.Dispose();
+            //editorCanvas.symbols.Remove(gs);   
             listViewSymbols.Update();
             ClearPropertyPanelValues();
             editorCanvas.UpdateOverlay();
         }
+    }
+
+    private void MoveSymbolToFront(ListViewItem item)
+    {
+        listViewSymbols.Items.Remove(item);
+        listViewSymbols.Items.Add(item);
+        listViewSymbols.Update();
+        listViewSymbols.Items[^1].Selected = true;
+    }
+
+    private void MoveSymbolToBack(ListViewItem item)
+    {
+        listViewSymbols.Items.Remove(item);
+        listViewSymbols.Items.Insert(0, item);
+        listViewSymbols.Update();
+        listViewSymbols.Items[0].Selected = true;
+    }
+
+    private ListViewItem? GetSelecteListItem()
+    {
+        if (listViewSymbols.SelectedItems.Count > 0)
+        {
+            return listViewSymbols.SelectedItems[0];
+        }
+        else return null;
     }
 
     public void ClearPropertyPanelValues()
@@ -1037,7 +1086,7 @@ public partial class ScreenshotEditor : Form
         return ((int)numericNewLineWeight.Value, buttonNewColorLine.BackColor, buttonNewColorFill.BackColor, checkBoxNewShadow.Checked);
     }
 
-    public ListView GetSybmolListView()
+    public ListView GetSymbolListView()
     {
         return listViewSymbols;
     }
@@ -1047,4 +1096,19 @@ public partial class ScreenshotEditor : Form
         numericNewLineWeight.Value = value;
     }
     #endregion
+
+    private void buttonToFront_Click(object sender, EventArgs e)
+    {
+        if (listViewSymbols.SelectedItems.Count > 0)
+        {
+            MoveSymbolToFront(listViewSymbols.SelectedItems[0]);
+        }
+    }
+    private void buttonToBack_Click(object sender, EventArgs e)
+    {
+        if (listViewSymbols.SelectedItems.Count > 0)
+        {
+            MoveSymbolToBack(listViewSymbols.SelectedItems[0]);
+        }
+    }
 }

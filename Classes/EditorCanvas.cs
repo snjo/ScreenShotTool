@@ -18,7 +18,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
     public int ArrowWeight = 5;
     public int LineWeight = 2;
     readonly int frameRate = Settings.Default.MaxFramerate;
-    public readonly List<GraphicSymbol> symbols = [];
+    
     readonly ScreenshotEditor parentEditor = parent;
 
     public int blurRadius = Settings.Default.BlurSampleArea;
@@ -33,6 +33,22 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
     public void UpdateSourceImage(Bitmap bitmap)
     {
         SourceImage = bitmap;
+    }
+
+    public List<GraphicSymbol> symbols
+    {
+        get
+        {
+            List<GraphicSymbol> gsList = new();
+            foreach (ListViewItem lvi in parentEditor.GetSymbolListView().Items)
+            {
+                if (lvi.Tag is GraphicSymbol gs)
+                {
+                    gsList.Add(gs);
+                }
+            }
+            return gsList;
+        }
     }
 
     #region Create and destroy --------------------------------------------------------------------------
@@ -52,12 +68,12 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
     public void DeleteAllSymbols()
     {
         parentEditor.DeleteListViewSymbols();
-        foreach (GraphicSymbol symbol in symbols)
-        {
-            parentEditor.ClearPropertyPanelValues();
-            symbol.Dispose();
-        }
-        symbols.Clear();
+        //foreach (GraphicSymbol symbol in symbols)
+        //{
+        //    parentEditor.ClearPropertyPanelValues();
+        //    symbol.Dispose();
+        //}
+        //symbols.Clear();
         UpdateOverlay();
     }
 
@@ -540,7 +556,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
             // empty stack
             stackedSymbolsIndex = -1;
             //previousTopmostSymbol = null;
-            parentEditor.GetSybmolListView().SelectedItems.Clear();
+            parentEditor.GetSymbolListView().SelectedItems.Clear();
             currentSelectedSymbol = null;
         }
         else
@@ -553,18 +569,18 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
             if (symbolsUnderCursor.Count > 0)
             {
                 currentSelectedSymbol = symbolsUnderCursor[Math.Clamp(stackedSymbolsIndex, 0, symbolsUnderCursor.Count - 1)];
-                parentEditor.GetSybmolListView().SelectedItems.Clear();
+                parentEditor.GetSymbolListView().SelectedItems.Clear();
                 ListViewItem? listFromSymbol = GetListItemFromSymbol(currentSelectedSymbol);
                 int selectedIndex = listFromSymbol != null ? listFromSymbol.Index : -1;
-                if (selectedIndex > -1 && selectedIndex < parentEditor.GetSybmolListView().Items.Count)
+                if (selectedIndex > -1 && selectedIndex < parentEditor.GetSymbolListView().Items.Count)
                 {
-                    parentEditor.GetSybmolListView().Items[selectedIndex].Selected = true;
+                    parentEditor.GetSymbolListView().Items[selectedIndex].Selected = true;
                 }
                 stackedSymbolsIndex--;
             }
             else
             {
-                parentEditor.GetSybmolListView().SelectedItems.Clear();
+                parentEditor.GetSymbolListView().SelectedItems.Clear();
                 currentSelectedSymbol = null;
                 stackedSymbolsIndex = -1;
             }
@@ -587,7 +603,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
     private ListViewItem? GetListItemFromSymbol(GraphicSymbol symbol)
     {
-        foreach (ListViewItem lvi in parentEditor.GetSybmolListView().Items)
+        foreach (ListViewItem lvi in parentEditor.GetSymbolListView().Items)
         {
             if (lvi.Tag == symbol)
             {
