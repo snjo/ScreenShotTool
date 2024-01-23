@@ -346,7 +346,8 @@ public partial class ScreenshotEditor : Form
     }
     private void PictureBoxOverlay_MouseMove(object sender, MouseEventArgs e)
     {
-        editorCanvas.MouseMove(new Point(e.X, e.Y));
+        bool shiftHeld = ModifierKeys == Keys.Shift;
+        editorCanvas.MouseMove(new Point(e.X, e.Y), shiftHeld);
     }
     private void PictureBoxOverlay_MouseUp(object sender, MouseEventArgs e)
     {
@@ -365,6 +366,12 @@ public partial class ScreenshotEditor : Form
     #endregion
 
     #region Key input -----------------------------------------------------------------------------------
+
+    public bool GetShift()
+    {
+        return ModifierKeys == Keys.Shift;
+    }
+
     private void ScreenshotEditor_KeyDown(object sender, KeyEventArgs e)
     {
         if (e.KeyCode == Keys.V && e.Modifiers == Keys.Control)
@@ -387,31 +394,47 @@ public partial class ScreenshotEditor : Form
         {
             OpenFileAction();
         }
-        if (e.KeyCode == Keys.Delete)
+        if (e.KeyCode == Keys.Escape)
         {
-            // delete selected object only if focus is on the symbol list, or on the canvas
-            if (pictureBoxOverlay.Focused || listViewSymbols.Focused)
+            CancelAction();
+            if (GetSelectedSymbol() is GsCrop crop)
             {
                 DeleteSelectedSymbol();
             }
         }
-        if (e.KeyCode == Keys.Escape)
-        {
-            CancelAction();
-        }
-        if (e.KeyCode == Keys.Up)
+
+        // Only do these if there's a selected symbol, AND focus is on the canvas or symbol list
+        if (pictureBoxOverlay.Focused || listViewSymbols.Focused)
         {
             if (listViewSymbols.SelectedItems.Count > 0)
             {
-                MoveSymbolToFront(listViewSymbols.SelectedItems[0]);
-            }
-        }
-        if (e.KeyCode == Keys.Down)
-        {
-            if (listViewSymbols.SelectedItems.Count > 0)
-            {
-                MoveSymbolToBack(listViewSymbols.SelectedItems[0]);
-            }
+                if (e.KeyCode == Keys.Up)
+                {
+                    if (listViewSymbols.SelectedItems.Count > 0)
+                    {
+                        MoveSymbolToFront(listViewSymbols.SelectedItems[0]);
+                    }
+
+                }
+                if (e.KeyCode == Keys.Down)
+                {
+                    if (listViewSymbols.SelectedItems.Count > 0)
+                    {
+                        MoveSymbolToBack(listViewSymbols.SelectedItems[0]);
+                    }
+                }
+                if (e.KeyCode == Keys.Delete)
+                {
+                    DeleteSelectedSymbol();       
+                }
+                if (e.KeyCode == Keys.Enter) // Confirm default action on selected symbol
+                {
+                    if (GetSelectedSymbol() is GsCrop crop && editorCanvas.SourceImage != null)
+                    {
+                        CropImageAction(editorCanvas.SourceImage, crop);
+                    }
+                }
+            } 
         }
     }
 
@@ -938,17 +961,22 @@ public partial class ScreenshotEditor : Form
         if (editorCanvas.SourceImage == null) return;
         if (GetSelectedSymbol() is GsCrop gsC)
         {
-            gsC.showOutline = false;
-            Rectangle cropRect = gsC.Bounds;
-            Bitmap outImage = CropImage(editorCanvas.SourceImage, cropRect);
-            foreach (GraphicSymbol gs in editorCanvas.symbols)
-            {
-                gs.MoveTo(gs.Left - cropRect.Left, gs.Top - cropRect.Top);
-            }
-            editorCanvas.LoadImageFromImage(outImage, false);
-            gsC.showOutline = true;
-            DeleteSelectedSymbol();
+            CropImageAction(editorCanvas.SourceImage, gsC);
         }
+    }
+
+    private void CropImageAction(Bitmap image, GsCrop gsC)
+    {
+        gsC.showOutline = false;
+        Rectangle cropRect = gsC.Bounds;
+        Bitmap outImage = CropImage(image, cropRect);
+        foreach (GraphicSymbol gs in editorCanvas.symbols)
+        {
+            gs.MoveTo(gs.Left - cropRect.Left, gs.Top - cropRect.Top);
+        }
+        editorCanvas.LoadImageFromImage(outImage, false);
+        gsC.showOutline = true;
+        DeleteSelectedSymbol();
     }
 
     private void ButtonPropertyCopyCrop_Click(object sender, EventArgs e)

@@ -2,6 +2,7 @@
 using ScreenShotTool.Forms;
 using ScreenShotTool.Properties;
 using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Runtime.Versioning;
@@ -445,13 +446,29 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
     #region Symbols -------------------------------------------------------------------------------------
 
-    private GraphicSymbol? GetNewSymbol(Point MousePosition)
+    private Point RestrainToSquare(Point dragStart, Point dragEnd)
+    {
+        Point size = dragEnd.Subtract(dragStart);
+        int width = Math.Abs(size.X);
+        int height = Math.Abs(size.Y);
+        int xFlip = size.X < 0 ? -1 : 1;
+        int yFlip = size.Y < 0 ? -1 : 1;
+        int squareSide = Math.Min(width, height);
+        return new Point(dragStart.X + (xFlip * squareSide), dragStart.Y + (yFlip * squareSide));
+    }
+
+    private GraphicSymbol? GetNewSymbol(Point MousePosition, bool SquareBounds)
     {
         Point dragEnd = MousePosition;
         int lineWeight = parentEditor.GetNewSymbolProperties().lineWeight;
         //int lineAlpha = parentEditor.GetNewSymbolProperties().lineAlpha;
         //int fillAlpha = parentEditor.GetNewSymbolProperties().fillAlpha;
         bool shadow = parentEditor.GetNewSymbolProperties().shadow;
+
+        if (SquareBounds)
+        {
+            dragEnd = RestrainToSquare(dragStart, dragEnd);
+        }
 
         if (dragStarted)
         {
@@ -497,7 +514,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
     private void CreateTempSymbol(Point MousePosition)
     {
-        GraphicSymbol? tempSymbol = GetNewSymbol(MousePosition);
+        GraphicSymbol? tempSymbol = GetNewSymbol(MousePosition, parentEditor.GetShift());
         if (tempSymbol != null)
         {
             UpdateOverlay(tempSymbol, false);
@@ -663,7 +680,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         }
     }
 
-    public void MouseMove(Point MousePosition)
+    public void MouseMove(Point MousePosition, bool SquareBounds)
     {
         if (dragStarted == false) // don't update the selected hitbox index while a drag scale is active
         {
@@ -761,7 +778,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
             }
         }
 
-        GraphicSymbol? symbol = GetNewSymbol(MousePosition); // checks current User Action and creates a symbol based on that
+        GraphicSymbol? symbol = GetNewSymbol(MousePosition, parentEditor.GetShift()); // checks current User Action and creates a symbol based on that
         if (symbol != null)
         {
             if (symbol.ValidSymbol)
