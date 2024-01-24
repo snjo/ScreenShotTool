@@ -55,6 +55,7 @@ namespace ScreenShotTool
                 checkBoxRegionToEditor.Enabled = false;
             }
             checkBoxMaskRegion.Checked = settings.MaskRegion;
+            checkBoxRegionCaptureUseAllScreens.Checked = settings.RegionCaptureUseAllScreens;
 
             checkBoxWindowToFile.Checked = settings.WindowToFile;
             checkBoxWindowToClipboard.Checked = settings.WindowToClipboard;
@@ -140,6 +141,7 @@ namespace ScreenShotTool
             settings.RegionToEditor = checkBoxRegionToEditor.Checked;
             settings.RegionCompletesOnMouseRelease = checkBoxRegionComplete.Checked;
             settings.MaskRegion = checkBoxMaskRegion.Checked;
+            settings.RegionCaptureUseAllScreens = checkBoxRegionCaptureUseAllScreens.Checked;
 
             settings.WindowToFile = checkBoxWindowToFile.Checked;
             settings.WindowToClipboard = checkBoxWindowToClipboard.Checked;

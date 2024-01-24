@@ -47,6 +47,7 @@
             labelColorSolid = new Label();
             label4 = new Label();
             panelSwatches = new Panel();
+            buttonColorPicker = new Button();
             ((System.ComponentModel.ISupportInitialize)trackBarRed).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericRed).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericBlue).BeginInit();
@@ -237,11 +238,22 @@
             panelSwatches.Size = new Size(354, 237);
             panelSwatches.TabIndex = 22;
             // 
+            // buttonColorPicker
+            // 
+            buttonColorPicker.Location = new Point(16, 387);
+            buttonColorPicker.Name = "buttonColorPicker";
+            buttonColorPicker.Size = new Size(75, 50);
+            buttonColorPicker.TabIndex = 23;
+            buttonColorPicker.Text = "Color picker";
+            buttonColorPicker.UseVisualStyleBackColor = true;
+            buttonColorPicker.Click += buttonColorPicker_Click;
+            // 
             // ColorDialogAlpha
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(379, 450);
+            Controls.Add(buttonColorPicker);
             Controls.Add(panelSwatches);
             Controls.Add(label4);
             Controls.Add(labelColorSolid);
@@ -296,5 +308,6 @@
         private Label labelColorSolid;
         private Label label4;
         private Panel panelSwatches;
+        private Button buttonColorPicker;
     }
 }

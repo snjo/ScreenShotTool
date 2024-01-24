@@ -1,8 +1,8 @@
 ﻿using System.Numerics;
 
-namespace ScreenShotTool.Classes;
+namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
-
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
 public static class ExtensionMethods
 {
     public static Point Subtract(this Point point1, Point point2)
@@ -37,6 +37,33 @@ public static class ExtensionMethods
         else
         {
             return true;
+        }
+    }
+
+    public static void DisposeAndNull(this Image? image)
+    {
+        if (image != null)
+        {
+            image.Dispose();
+            image = null;
+        }
+    }
+
+    public static void DisposeAndNull(this Bitmap? image)
+    {
+        if (image != null)
+        {
+            image.Dispose();
+            image = null;
+        }
+    }
+
+    public static void DisposeAndNull(this Graphics? graphic)
+    {
+        if (graphic != null)
+        {
+            graphic.Dispose();
+            graphic = null;
         }
     }
 }

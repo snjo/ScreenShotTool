@@ -136,6 +136,7 @@
             label25 = new Label();
             buttonResetOptions = new Button();
             colorDialog1 = new ColorDialog();
+            checkBoxRegionCaptureUseAllScreens = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
@@ -618,6 +619,7 @@
             // 
             // tabPageModes
             // 
+            tabPageModes.Controls.Add(checkBoxRegionCaptureUseAllScreens);
             tabPageModes.Controls.Add(checkBoxAllScreensToEditor);
             tabPageModes.Controls.Add(checkBoxScreenToEditor);
             tabPageModes.Controls.Add(checkBoxWindowToEditor);
@@ -646,7 +648,7 @@
             // checkBoxAllScreensToEditor
             // 
             checkBoxAllScreensToEditor.AutoSize = true;
-            checkBoxAllScreensToEditor.Location = new Point(24, 431);
+            checkBoxAllScreensToEditor.Location = new Point(24, 452);
             checkBoxAllScreensToEditor.Name = "checkBoxAllScreensToEditor";
             checkBoxAllScreensToEditor.Size = new Size(102, 19);
             checkBoxAllScreensToEditor.TabIndex = 72;
@@ -656,7 +658,7 @@
             // checkBoxScreenToEditor
             // 
             checkBoxScreenToEditor.AutoSize = true;
-            checkBoxScreenToEditor.Location = new Point(24, 331);
+            checkBoxScreenToEditor.Location = new Point(24, 352);
             checkBoxScreenToEditor.Name = "checkBoxScreenToEditor";
             checkBoxScreenToEditor.Size = new Size(102, 19);
             checkBoxScreenToEditor.TabIndex = 71;
@@ -666,7 +668,7 @@
             // checkBoxWindowToEditor
             // 
             checkBoxWindowToEditor.AutoSize = true;
-            checkBoxWindowToEditor.Location = new Point(24, 231);
+            checkBoxWindowToEditor.Location = new Point(24, 252);
             checkBoxWindowToEditor.Name = "checkBoxWindowToEditor";
             checkBoxWindowToEditor.Size = new Size(102, 19);
             checkBoxWindowToEditor.TabIndex = 70;
@@ -707,7 +709,7 @@
             // checkBoxAllScreensToClipboard
             // 
             checkBoxAllScreensToClipboard.AutoSize = true;
-            checkBoxAllScreensToClipboard.Location = new Point(24, 406);
+            checkBoxAllScreensToClipboard.Location = new Point(24, 427);
             checkBoxAllScreensToClipboard.Name = "checkBoxAllScreensToClipboard";
             checkBoxAllScreensToClipboard.Size = new Size(123, 19);
             checkBoxAllScreensToClipboard.TabIndex = 30;
@@ -717,7 +719,7 @@
             // checkBoxAllScreensToFile
             // 
             checkBoxAllScreensToFile.AutoSize = true;
-            checkBoxAllScreensToFile.Location = new Point(24, 381);
+            checkBoxAllScreensToFile.Location = new Point(24, 402);
             checkBoxAllScreensToFile.Name = "checkBoxAllScreensToFile";
             checkBoxAllScreensToFile.Size = new Size(85, 19);
             checkBoxAllScreensToFile.TabIndex = 29;
@@ -728,7 +730,7 @@
             // 
             label10.AutoSize = true;
             label10.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label10.Location = new Point(6, 363);
+            label10.Location = new Point(6, 384);
             label10.Name = "label10";
             label10.Size = new Size(106, 15);
             label10.TabIndex = 9;
@@ -737,7 +739,7 @@
             // checkBoxScreenToClipboard
             // 
             checkBoxScreenToClipboard.AutoSize = true;
-            checkBoxScreenToClipboard.Location = new Point(24, 306);
+            checkBoxScreenToClipboard.Location = new Point(24, 327);
             checkBoxScreenToClipboard.Name = "checkBoxScreenToClipboard";
             checkBoxScreenToClipboard.Size = new Size(123, 19);
             checkBoxScreenToClipboard.TabIndex = 28;
@@ -747,7 +749,7 @@
             // checkBoxScreenToFile
             // 
             checkBoxScreenToFile.AutoSize = true;
-            checkBoxScreenToFile.Location = new Point(24, 281);
+            checkBoxScreenToFile.Location = new Point(24, 302);
             checkBoxScreenToFile.Name = "checkBoxScreenToFile";
             checkBoxScreenToFile.Size = new Size(85, 19);
             checkBoxScreenToFile.TabIndex = 27;
@@ -758,7 +760,7 @@
             // 
             label11.AutoSize = true;
             label11.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label11.Location = new Point(6, 263);
+            label11.Location = new Point(6, 284);
             label11.Name = "label11";
             label11.Size = new Size(130, 15);
             label11.TabIndex = 6;
@@ -797,7 +799,7 @@
             // checkBoxWindowToClipboard
             // 
             checkBoxWindowToClipboard.AutoSize = true;
-            checkBoxWindowToClipboard.Location = new Point(24, 206);
+            checkBoxWindowToClipboard.Location = new Point(24, 227);
             checkBoxWindowToClipboard.Name = "checkBoxWindowToClipboard";
             checkBoxWindowToClipboard.Size = new Size(123, 19);
             checkBoxWindowToClipboard.TabIndex = 26;
@@ -807,7 +809,7 @@
             // checkBoxWindowToFile
             // 
             checkBoxWindowToFile.AutoSize = true;
-            checkBoxWindowToFile.Location = new Point(24, 181);
+            checkBoxWindowToFile.Location = new Point(24, 202);
             checkBoxWindowToFile.Name = "checkBoxWindowToFile";
             checkBoxWindowToFile.Size = new Size(85, 19);
             checkBoxWindowToFile.TabIndex = 25;
@@ -818,7 +820,7 @@
             // 
             labelWindow.AutoSize = true;
             labelWindow.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            labelWindow.Location = new Point(6, 161);
+            labelWindow.Location = new Point(6, 182);
             labelWindow.Name = "labelWindow";
             labelWindow.Size = new Size(91, 15);
             labelWindow.TabIndex = 0;
@@ -1261,6 +1263,16 @@
             // 
             colorDialog1.FullOpen = true;
             // 
+            // checkBoxRegionCaptureUseAllScreens
+            // 
+            checkBoxRegionCaptureUseAllScreens.AutoSize = true;
+            checkBoxRegionCaptureUseAllScreens.Location = new Point(24, 155);
+            checkBoxRegionCaptureUseAllScreens.Name = "checkBoxRegionCaptureUseAllScreens";
+            checkBoxRegionCaptureUseAllScreens.Size = new Size(406, 19);
+            checkBoxRegionCaptureUseAllScreens.TabIndex = 73;
+            checkBoxRegionCaptureUseAllScreens.Text = "Use all screens during region capture (instead of the one the cursor is in)";
+            checkBoxRegionCaptureUseAllScreens.UseVisualStyleBackColor = true;
+            // 
             // Options
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1413,5 +1425,6 @@
         private Button buttonLineColor;
         private Label label35;
         private ColorDialog colorDialog1;
+        private CheckBox checkBoxRegionCaptureUseAllScreens;
     }
 }

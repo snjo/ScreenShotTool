@@ -886,5 +886,17 @@ namespace ScreenShotTool.Properties {
                 this["NewSymbolLineWeight"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool RegionCaptureUseAllScreens {
+            get {
+                return ((bool)(this["RegionCaptureUseAllScreens"]));
+            }
+            set {
+                this["RegionCaptureUseAllScreens"] = value;
+            }
+        }
     }
 }

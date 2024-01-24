@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScreenShotTool.Properties;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -22,7 +23,7 @@ public partial class ColorDialogAlpha : Form
 
     public ColorDialogAlpha(Color startColor)
     {
-        
+
         InitializeComponent();
         this.Color = startColor;
         colors = GetAllColors(false);
@@ -103,7 +104,7 @@ public partial class ColorDialogAlpha : Form
 
     private static void MoveColorByName(List<Color> oldList, List<Color> newList, string name)
     {
-        for (int i = oldList.Count-1; i > -1; i--)
+        for (int i = oldList.Count - 1; i > -1; i--)
         {
             Color color = oldList[i];
             if (color.Name.Contains(name))
@@ -195,6 +196,32 @@ public partial class ColorDialogAlpha : Form
 
     private void buttonCancel_Click(object sender, EventArgs e)
     {
-        DialogResult= DialogResult.Cancel;
+        DialogResult = DialogResult.Cancel;
+    }
+
+    private void buttonColorPicker_Click(object sender, EventArgs e)
+    {
+        //ImageView imgView = ImageView.CreateUsingCurrentScreen(ImageView.ViewerMode.colorPicker);
+        ImageView imgView = ImageView.CreateUsingAllScreens(ImageView.ViewerMode.colorPicker);
+        {
+            //Location = new Point(screen.Bounds.X, screen.Bounds.Y),
+            //CompleteCaptureOnMouseRelease = settings.RegionCompletesOnMouseRelease,
+            //SaveToFile = settings.RegionToFile,
+            //SendToEditor = settings.RegionToEditor,
+            //SendToClipboard = settings.RegionToClipboard,
+        };
+        imgView.SetImage();
+        DialogResult result = imgView.ShowDialog();
+        if (result == DialogResult.OK || result == DialogResult.Yes)
+        {
+            if (imgView.PickedColor != Color.Empty)
+            {
+                UpateColor(imgView.PickedColor);
+            }
+            else
+            {
+                Debug.WriteLine("Picked color is empty");
+            }
+        }
     }
 }

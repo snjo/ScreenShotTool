@@ -65,7 +65,6 @@
             pictureBoxDraw.Size = new Size(100, 57);
             pictureBoxDraw.TabIndex = 1;
             pictureBoxDraw.TabStop = false;
-            pictureBoxDraw.Click += PictureBoxDraw_Click;
             pictureBoxDraw.MouseDown += PictureBoxDraw_MouseDown;
             pictureBoxDraw.MouseLeave += PictureBoxDraw_MouseLeave;
             pictureBoxDraw.MouseMove += PictureBoxDraw_MouseMove;
@@ -78,14 +77,13 @@
             AutoScroll = true;
             ClientSize = new Size(800, 510);
             Controls.Add(panel1);
-            Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            Font = new Font("Segoe UI", 10F);
             FormBorderStyle = FormBorderStyle.None;
             Icon = (Icon)resources.GetObject("$this.Icon");
             KeyPreview = true;
             Name = "ImageView";
             StartPosition = FormStartPosition.Manual;
             Text = "ImageView";
-            WindowState = FormWindowState.Maximized;
             FormClosing += ImageView_FormClosing;
             Load += ImageView_Load;
             KeyDown += ImageView_KeyDown;
@@ -97,9 +95,8 @@
         }
 
         #endregion
-
-        private PictureBox pictureBoxScreenshot;
         private Panel panel1;
-        private PictureBox pictureBoxDraw;
+        public PictureBox pictureBoxDraw;
+        public PictureBox pictureBoxScreenshot;
     }
 }

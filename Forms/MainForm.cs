@@ -261,7 +261,7 @@ namespace ScreenShotTool
             {
                 DestinationFolder = ComposeFileName(settings.Foldername, "Region");
                 DestinationFileName = ComposeFileName(settings.Filename, "Region");
-                savedToFile = CaptureRegion(DestinationFolder, DestinationFileName + DestinationFileExtension, DestinationFormat);
+                savedToFile = CaptureRegion(DestinationFolder, DestinationFileName + DestinationFileExtension, DestinationFormat, settings.RegionCaptureUseAllScreens);
             }
 
             if (settings.Filename.Contains("$c") && savedToFile)
@@ -639,19 +639,36 @@ namespace ScreenShotTool
             }
         }
 
-        public bool CaptureRegion(string folder, string filename, ImageFormat format)
+        public bool CaptureRegion(string folder, string filename, ImageFormat format, bool useAllScreens)
         {
             bool saved = false;
-            Screen screen = Screen.FromPoint(Cursor.Position);
-            Bitmap bmp = GetScreenImage(screen);
-            ImageView imgView = new ImageView(ImageView.ViewerMode.cropCapture, screen, bmp)
+            //Screen screen = Screen.FromPoint(Cursor.Position);
+            //Bitmap bmp = GetScreenImage(screen);
+            ImageView imgView;
+
+            if (useAllScreens)
             {
-                Location = new Point(screen.Bounds.X, screen.Bounds.Y),
-                CompleteCaptureOnMoureRelease = settings.RegionCompletesOnMouseRelease,
-                SaveToFile = settings.RegionToFile,
-                SendToEditor = settings.RegionToEditor,
-                SendToClipboard = settings.RegionToClipboard,
-            };
+                imgView = ImageView.CreateUsingAllScreens(ImageView.ViewerMode.cropCapture);
+            }
+            else
+            {
+                imgView = ImageView.CreateUsingCurrentScreen(ImageView.ViewerMode.cropCapture);
+            }
+
+            imgView.CompleteCaptureOnMouseRelease = settings.RegionCompletesOnMouseRelease;
+            imgView.SaveToFile = settings.RegionToFile;
+            imgView.SendToEditor = settings.RegionToEditor;
+            imgView.SendToClipboard = settings.RegionToClipboard;
+
+            //ImageView imgView = new ImageView(ImageView.ViewerMode.cropCapture, screen.Bounds, bmp)
+            //{
+            //    Location = new Point(screen.Bounds.X, screen.Bounds.Y),
+            //    CompleteCaptureOnMouseRelease = settings.RegionCompletesOnMouseRelease,
+            //    SaveToFile = settings.RegionToFile,
+            //    SendToEditor = settings.RegionToEditor,
+            //    SendToClipboard = settings.RegionToClipboard,
+            //};
+
             imgView.SetImage();
             DialogResult result = imgView.ShowDialog();
             if (result == DialogResult.Yes) // Yes means save to file
