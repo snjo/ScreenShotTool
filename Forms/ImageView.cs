@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+using System.Windows.Forms;
 
 namespace ScreenShotTool
 {
@@ -39,6 +40,7 @@ namespace ScreenShotTool
         public Color maskColor = Color.FromArgb(120, 0, 0, 0);
         public Color textColor = Color.LightGreen;
         Rectangle regionRect = new();
+        ImageViewModule module;
 
         bool isClosing = false; // if true, don't update the view, prevent referencing disposed images.
 
@@ -48,16 +50,34 @@ namespace ScreenShotTool
             Position,
             Size
         }
+
+        public enum ViewerMode
+        {
+            None,
+            cropCapture,
+            colorPicker
+        }
+        private ViewerMode viewerMode;
+
         private AdjustMode adjustMode = AdjustMode.Size;
 
         [LibraryImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static partial bool SetForegroundWindow(IntPtr hWnd);
 
-        public ImageView(bool startCropping, Screen activeScreen, Bitmap? image)
+        public ImageView(ViewerMode mode, Screen activeScreen, Bitmap? image)
         {
             frameRate = Settings.Default.MaxFramerate;
             InitializeComponent();
+            viewerMode = mode;
+            if (viewerMode == ViewerMode.cropCapture)
+            {
+                module = new ImageViewModule();
+            }
+            else if (viewerMode == ViewerMode.colorPicker)
+            {
+
+            }
 
             brushZoomRegion = new SolidBrush(lineColor);
             brushFill = new SolidBrush(maskColor);
@@ -69,10 +89,7 @@ namespace ScreenShotTool
             zoomRegionPen = new Pen(brushZoomRegion);
 
             this.screen = activeScreen;
-            if (startCropping)
-            {
-                StartInCropMode = true;
-            }
+            
             if (image != null)
             {
                 ImageSource = image;
@@ -100,6 +117,25 @@ namespace ScreenShotTool
         }
 
         private void ImageView_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (viewerMode == ViewerMode.cropCapture)
+            {
+                HandleKeysCaptureMode(e);
+            }
+            if (viewerMode == ViewerMode.colorPicker)
+            {
+                HandleKeysColorPicker(e);
+            }
+
+            UpdateOverlay();
+        }
+
+        private void HandleKeysColorPicker(KeyEventArgs e)
+        {
+
+        }
+
+        private void HandleKeysCaptureMode(KeyEventArgs e)
         {
             if (e.Modifiers == Keys.Shift)
             {
@@ -132,6 +168,10 @@ namespace ScreenShotTool
                     DisposeAllImages();
                     DialogResult = DialogResult.No;
                 }
+                else
+                {
+                    Debug.WriteLine("Can't copy image, ImageResult is null");
+                }
             }
             else if (e.KeyCode == Keys.E)
             {
@@ -141,6 +181,10 @@ namespace ScreenShotTool
                     isClosing = true;
                     DisposeSourceImage();
                     DialogResult = DialogResult.No;
+                }
+                else
+                {
+                    Debug.WriteLine("Can't start editor, ImageResult is null");
                 }
             }
             else if (e.KeyCode == Keys.S)
@@ -204,8 +248,6 @@ namespace ScreenShotTool
                     AdjustRegion(0, 1);
                 }
             }
-
-            UpdateOverlay();
         }
 
         private static void OpenImageInEditor(Image img)
@@ -272,6 +314,33 @@ namespace ScreenShotTool
 
         private void PictureBoxDraw_MouseDown(object sender, MouseEventArgs e)
         {
+            if (viewerMode == ViewerMode.cropCapture)
+            {
+                CaptureMouseDown();
+            }
+            else if (viewerMode == ViewerMode.colorPicker)
+            {
+
+            }
+        }
+
+        
+
+        private void PictureBoxDraw_MouseUp(object sender, MouseEventArgs e)
+        {
+            mouseDrag = false;
+            if (viewerMode == ViewerMode.cropCapture)
+            {
+                CaptureMouseUp();
+            }
+            else if (viewerMode == ViewerMode.colorPicker)
+            {
+
+            }
+        }
+
+        private void CaptureMouseDown()
+        {
             regionRect = new Rectangle();
             DisposeAndNull(screenSizedBitmap);
             screenSizedBitmap = new Bitmap(this.Width, this.Height);
@@ -281,10 +350,8 @@ namespace ScreenShotTool
             mouseDrag = true;
         }
 
-        private void PictureBoxDraw_MouseUp(object sender, MouseEventArgs e)
+        private void CaptureMouseUp()
         {
-            mouseDrag = false;
-
             CloneRegionImage();
 
             if (CompleteCaptureOnMoureRelease)
@@ -366,8 +433,14 @@ namespace ScreenShotTool
             if (ts.Milliseconds >= MilliSecondsPerFrame)
             {
                 DisposeAndNull(tempImage);
-                //tempImage = DrawOverlay(pictureBoxDraw.Image, true, true);
-                tempImage = DrawOverlay(true, true);
+                if (viewerMode == ViewerMode.cropCapture)
+                {
+                    tempImage = DrawOverlayCaptureCrop(true, true);
+                }
+                else if (viewerMode == ViewerMode.colorPicker)
+                {
+                    //tempImage = DrawOverlayColorPicker();
+                }
                 pictureBoxDraw.Image = tempImage;
                 LastFrame = DateTime.Now;
             }
@@ -378,9 +451,9 @@ namespace ScreenShotTool
             if (image != null)
             {
                 image.Dispose();
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
+                #pragma warning disable IDE0059 // Unnecessary assignment of a value
                 image = null;
-#pragma warning restore IDE0059 // Unnecessary assignment of a value
+                #pragma warning restore IDE0059 // Unnecessary assignment of a value
             }
         }
 
@@ -389,16 +462,21 @@ namespace ScreenShotTool
             if (graphic != null)
             {
                 graphic.Dispose();
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
+                #pragma warning disable IDE0059 // Unnecessary assignment of a value
                 graphic = null;
-#pragma warning restore IDE0059 // Unnecessary assignment of a value
+                #pragma warning restore IDE0059 // Unnecessary assignment of a value
             }
         }
+
+        //private Bitmap DrawOverlayColorPicker()
+        //{
+        //
+        //}
 
         Graphics? drawGraphic;
         Bitmap? DrawOutputBmp;
         //private Image DrawOverlay(Image outputImage, bool drawSquare, bool drawText, bool drawZoom = true)
-        private Image DrawOverlay(bool drawSquare, bool drawText, bool drawZoom = true)
+        private Bitmap DrawOverlayCaptureCrop(bool drawSquare, bool drawText, bool drawZoom = true)
         {
             //outputImage.Dispose();
             DisposeAndNull(DrawOutputBmp);

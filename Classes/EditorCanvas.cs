@@ -221,12 +221,13 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
     public Bitmap? AssembleImageForSaveOrCopy()
     {
+        UpdateOverlay(highlightSelected: false);
         if (SourceImage == null) return null;
         Bitmap outImage = new(SourceImage);
         Graphics saveGraphic = Graphics.FromImage(outImage);
         saveGraphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
         saveGraphic.TextRenderingHint = TextRenderingHint.AntiAlias;
-        DrawElements(saveGraphic);
+        DrawElements(saveGraphic, ShowNonOutputWidgets: false);
         Clipboard.SetImage(outImage);
         saveGraphic.Dispose();
         return outImage;
@@ -342,7 +343,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
     DateTime LastFrame = DateTime.Now;
     int skippedUpdates = 0;
-    public bool UpdateOverlay(GraphicSymbol? temporarySymbol = null, bool forceUpdate = true)
+    public bool UpdateOverlay(GraphicSymbol? temporarySymbol = null, bool forceUpdate = true, bool highlightSelected = true)
     {
         //Stopwatch sw = Stopwatch.StartNew();
         float MilliSecondsPerFrame = (1f / frameRate) * 1000;
@@ -360,7 +361,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         if (OverlayImage != null && overlayGraphics != null)
         {
             pictureBox.Image.Dispose();
-            pictureBox.Image = DrawOverlay(temporarySymbol); ;
+            pictureBox.Image = DrawOverlay(temporarySymbol, highlightSelected); ;
         }
         //sw.Stop();
         //Debug.WriteLine($"MS since last frame: {ts.Milliseconds}");
@@ -369,7 +370,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
     }
 
     Bitmap? imageInProgress;
-    private Bitmap DrawOverlay(GraphicSymbol? temporarySymbol = null)
+    private Bitmap DrawOverlay(GraphicSymbol? temporarySymbol = null, bool highlightSelected = true)
     {
         DisposeAndNull(imageInProgress);
         //Bitmap img;
@@ -389,7 +390,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         overlayGraphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
         overlayGraphics.TextRenderingHint = TextRenderingHint.AntiAlias;
 
-        DrawElements(overlayGraphics, temporarySymbol, HighlightSelected: true);
+        DrawElements(overlayGraphics, temporarySymbol, ShowNonOutputWidgets: highlightSelected);
 
         return imageInProgress;
     }
@@ -407,12 +408,16 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         return bmp;
     }
 
-    private void DrawElements(Graphics graphic, GraphicSymbol? temporarySymbol = null, bool HighlightSelected = false)
+    private void DrawElements(Graphics graphic, GraphicSymbol? temporarySymbol = null, bool ShowNonOutputWidgets = false)
     {
         int NumberedSymbolCounter = 1;
         if (SourceImage == null) return;
         foreach (GraphicSymbol symbol in symbols)
         {
+            if (ShowNonOutputWidgets == false && symbol is GsCrop)
+            {
+                continue;
+            }
             if (symbol is GsDynamicImage gsDn)
             {
                 if (gsDn is GsBlur gsBlur)
@@ -431,7 +436,6 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
                 NumberedSymbolCounter++;
             }
             symbol.ContainerBounds = new Rectangle(0, 0, SourceImage.Width, SourceImage.Height);
-            //InsertImagesInSymbol(symbol);
             symbol.DrawSymbol(graphic);
         }
         if (temporarySymbol != null)
@@ -455,7 +459,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
             //InsertImagesInSymbol(temporarySymbol);
             temporarySymbol?.DrawSymbol(graphic);
         }
-        if (HighlightSelected)
+        if (ShowNonOutputWidgets)
         {
             GraphicSymbol? selectedSymbol = parentEditor.GetSelectedSymbol();
             selectedSymbol?.DrawHitboxes(graphic);

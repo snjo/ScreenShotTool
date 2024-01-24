@@ -644,7 +644,7 @@ namespace ScreenShotTool
             bool saved = false;
             Screen screen = Screen.FromPoint(Cursor.Position);
             Bitmap bmp = GetScreenImage(screen);
-            ImageView imgView = new ImageView(true, screen, bmp)
+            ImageView imgView = new ImageView(ImageView.ViewerMode.cropCapture, screen, bmp)
             {
                 Location = new Point(screen.Bounds.X, screen.Bounds.Y),
                 CompleteCaptureOnMoureRelease = settings.RegionCompletesOnMouseRelease,
