@@ -278,7 +278,6 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         Stopwatch sw = new(); // for measuring the time it takes to create the blur image
         sw.Start();
         DisposeAndNull(blurImage);
-        mosaicSize = blurPixelSize;//(int)numericBlurMosaicSize.Value;
 
         blurImage = new Bitmap(sourceBitmap.Width, sourceBitmap.Height);
         Graphics graphics = Graphics.FromImage(blurImage);

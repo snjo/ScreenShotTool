@@ -821,8 +821,8 @@ public partial class ScreenshotEditor : Form
     {
         if (editorCanvas.InitialBlurComplete)
         {
-            //editorCanvas.CreateBlurImage((int)numericBlurMosaicSize.Value, editorCanvas.SourceImage);
-            //editorCanvas.UpdateOverlay();
+            editorCanvas.mosaicSize = numericBlurMosaicSize.ValueInt();
+            editorCanvas.UpdateOverlay();
         }
     }
 
