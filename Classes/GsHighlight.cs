@@ -1,4 +1,6 @@
-﻿namespace ScreenShotTool.Forms;
+﻿using System.Diagnostics;
+
+namespace ScreenShotTool.Forms;
 #pragma warning disable CA1416 // Validate platform compatibility
 public class GsHighlight : GsDynamicImage
 {
@@ -7,6 +9,7 @@ public class GsHighlight : GsDynamicImage
     public ColorBlend.BlendModes blendMode = ColorBlend.BlendModes.Multiply;
     private Color previousColor = Color.White;
     private ColorBlend.BlendModes previousBlendMode = ColorBlend.BlendModes.Multiply;
+    DateTime lastLocalUpdate = DateTime.MinValue;
     public GsHighlight(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadow, int lineWidth) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadow, lineWidth)
     {
         Name = "Highlight";
@@ -20,9 +23,11 @@ public class GsHighlight : GsDynamicImage
 
         if (SourceImage != null)
         {
-            if (highlightedBmp == null || RectChanged(rect) || previousColor != FillColor || previousBlendMode != blendMode)
+            if (highlightedBmp == null || RectChanged(rect) || previousColor != FillColor || previousBlendMode != blendMode || lastLocalUpdate < LastSourceUpdate)
             {
+                //Debug.WriteLine($"highlight update, Last source: {LastSourceUpdate.Millisecond}, local: {lastLocalUpdate.Millisecond}");
                 UpdateHighlightBmp(rect);
+                lastLocalUpdate = DateTime.Now;
                 previousPosition = new Point(rect.Left, rect.Top);
                 previousSize = new Size(rect.Width, rect.Height);
                 previousColor = FillColor;

@@ -413,6 +413,7 @@ public partial class ScreenshotEditor : Form
                     if (listViewSymbols.SelectedItems.Count > 0)
                     {
                         MoveSymbolToFront(listViewSymbols.SelectedItems[0]);
+                        editorCanvas.UpdateOverlay();
                     }
 
                 }
@@ -421,6 +422,7 @@ public partial class ScreenshotEditor : Form
                     if (listViewSymbols.SelectedItems.Count > 0)
                     {
                         MoveSymbolToBack(listViewSymbols.SelectedItems[0]);
+                        editorCanvas.UpdateOverlay();
                     }
                 }
                 if (e.KeyCode == Keys.Delete)
@@ -819,8 +821,8 @@ public partial class ScreenshotEditor : Form
     {
         if (editorCanvas.InitialBlurComplete)
         {
-            editorCanvas.CreateBlurImage((int)numericBlurMosaicSize.Value);
-            editorCanvas.UpdateOverlay();
+            //editorCanvas.CreateBlurImage((int)numericBlurMosaicSize.Value, editorCanvas.SourceImage);
+            //editorCanvas.UpdateOverlay();
         }
     }
 

@@ -28,6 +28,13 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
     public int OutOfBoundsMaxPixels = 1000;
     public Size CanvasSize = new(100, 100); // will be update when the image loads
+    public Rectangle CanvasRect
+    {
+        get
+        {
+            return new Rectangle(0,0, CanvasSize.Width, CanvasSize.Height);
+        }
+    }
     readonly PictureBox pictureBox = pictureBox;
     public GraphicSymbol? currentSelectedSymbol = null;
 
@@ -243,7 +250,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
             overlayGraphics?.Dispose();
             OverlayImage = new Bitmap(SourceImage.Width, SourceImage.Height);
             overlayGraphics = Graphics.FromImage(OverlayImage);
-            blurImage = CreateBlurImage(mosaicSize);
+            //blurImage = CreateBlurImage(mosaicSize, SourceImage, CanvasRect);
 
             //overlayGraphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 
@@ -261,9 +268,9 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         }
     }
 
-    public Bitmap CreateBlurImage(int blurPixelSize)
+    public Bitmap CreateBlurImage(int blurPixelSize, Bitmap? sourceBitmap, Rectangle blurBounds)
     {
-        if (SourceImage == null)
+        if (sourceBitmap == null)
         {
             Debug.WriteLine("Couldn't create blur image, originalImage is null");
             return new Bitmap(100, 100);
@@ -273,27 +280,32 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         DisposeAndNull(blurImage);
         mosaicSize = blurPixelSize;//(int)numericBlurMosaicSize.Value;
 
-        blurImage = new Bitmap(SourceImage.Width, SourceImage.Height);
+        blurImage = new Bitmap(sourceBitmap.Width, sourceBitmap.Height);
         Graphics graphics = Graphics.FromImage(blurImage);
         Color pixelColor = Color.Black;
         SolidBrush blurBrush = new(pixelColor);
 
-        using (var snoop = new BmpPixelSnoop((Bitmap)SourceImage))
+        
+
+        using (var snoop = new BmpPixelSnoop((Bitmap)sourceBitmap))
         {
-            for (int x = 0; x < SourceImage.Width; x += mosaicSize)
+            int tilesDrawn = 0;
+            for (int x = Math.Max(0, blurBounds.Left); x < sourceBitmap.Width && x < blurBounds.Right; x += mosaicSize)
             {
-                for (int y = 0; y < SourceImage.Height; y += mosaicSize)
+                for (int y = Math.Max(0, blurBounds.Top); y < sourceBitmap.Height && y < blurBounds.Bottom; y += mosaicSize)
                 {
                     pixelColor = SamplePixelArea(snoop, blurRadius, x + blurRadius, y + blurRadius);
                     blurBrush.Color = pixelColor;
                     graphics.FillRectangle(blurBrush, new Rectangle(x, y, mosaicSize, mosaicSize));
+                    tilesDrawn++;
                 }
             }
+            //Debug.WriteLine($"Mosaic, drew {tilesDrawn} tiles, inside {blurBounds}");
         }
 
         graphics.Dispose();
         sw.Stop();
-        Debug.WriteLine($"Blur took {sw.ElapsedMilliseconds}");
+        //Debug.WriteLine($"Blur took {sw.ElapsedMilliseconds}");
 
         InitialBlurComplete = true;
         return blurImage;
@@ -357,28 +369,30 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         return true;
     }
 
+    Bitmap? imageInProgress;
     private Bitmap DrawOverlay(GraphicSymbol? temporarySymbol = null)
     {
-        Bitmap img;
+        DisposeAndNull(imageInProgress);
+        //Bitmap img;
         if (SourceImage != null)
         {
-            img = CropImage((Bitmap)SourceImage, new Rectangle(0, 0, SourceImage.Width, SourceImage.Height));
+            imageInProgress = CropImage((Bitmap)SourceImage, new Rectangle(0, 0, SourceImage.Width, SourceImage.Height));
         }
         else
         {
             Debug.WriteLine("Couldn't create correct overlay image, originalImage is null");
-            img = new Bitmap(100, 100);
+            imageInProgress = new Bitmap(100, 100);
         }
         DisposeAndNull(overlayGraphics);
 
-        overlayGraphics = Graphics.FromImage(img);
+        overlayGraphics = Graphics.FromImage(imageInProgress);
 
         overlayGraphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
         overlayGraphics.TextRenderingHint = TextRenderingHint.AntiAlias;
 
         DrawElements(overlayGraphics, temporarySymbol, HighlightSelected: true);
 
-        return img;
+        return imageInProgress;
     }
 
     public static Bitmap CropImage(Bitmap img, Rectangle cropArea)
@@ -400,13 +414,25 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         if (SourceImage == null) return;
         foreach (GraphicSymbol symbol in symbols)
         {
+            if (symbol is GsDynamicImage gsDn)
+            {
+                if (gsDn is GsBlur gsBlur)
+                {
+                    DisposeAndNull(gsBlur.SourceImage);
+                    gsBlur.SourceImage = CreateBlurImage(mosaicSize, imageInProgress, gsBlur.Bounds);
+                }
+                else
+                {
+                    gsDn.SourceImage = imageInProgress;
+                }
+            }
             if (symbol is GsNumbered gsNumbered)
             {
                 gsNumbered.Number = NumberedSymbolCounter;
                 NumberedSymbolCounter++;
             }
             symbol.ContainerBounds = new Rectangle(0, 0, SourceImage.Width, SourceImage.Height);
-            InsertImagesInSymbol(symbol);
+            //InsertImagesInSymbol(symbol);
             symbol.DrawSymbol(graphic);
         }
         if (temporarySymbol != null)
@@ -415,7 +441,19 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
             {
                 gsNumbered.Number = NumberedSymbolCounter;
             }
-            InsertImagesInSymbol(temporarySymbol);
+            if (temporarySymbol is GsDynamicImage gsDn)
+            {
+                if (gsDn is GsBlur gsBlur)
+                {
+                    DisposeAndNull(gsBlur.SourceImage);
+                    gsBlur.SourceImage = CreateBlurImage(mosaicSize, imageInProgress, gsBlur.Bounds);
+                }
+                else
+                {
+                    gsDn.SourceImage = imageInProgress;
+                }
+            }
+            //InsertImagesInSymbol(temporarySymbol);
             temporarySymbol?.DrawSymbol(graphic);
         }
         if (HighlightSelected)
@@ -517,7 +555,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         GraphicSymbol? tempSymbol = GetNewSymbol(MousePosition, parentEditor.GetShift());
         if (tempSymbol != null)
         {
-            UpdateOverlay(tempSymbol, false);
+            UpdateOverlay(tempSymbol, forceUpdate: false);
             tempSymbol.Dispose();
         }
     }
@@ -738,12 +776,12 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         else if (parentEditor.selectedUserAction == ScreenshotEditor.UserActions.MoveSymbol)
         {
             MoveSymbol(MousePosition);
-            UpdateOverlay(null, false);
+            UpdateOverlay(null, forceUpdate: false);//, forceUpdateDynamicImages: false);
         }
         else if (parentEditor.selectedUserAction == ScreenshotEditor.UserActions.ScaleSymbol)
         {
             ScaleSymbol(MousePosition);
-            UpdateOverlay(null, false);
+            UpdateOverlay(null, false);//, forceUpdateDynamicImages: false);
         }
 
         oldMousePosition = MousePosition;
@@ -751,8 +789,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
     int stackedSymbolsIndex = -1;
     public void MouseUp(Point MousePosition)
-    {
-        //Debug.WriteLine($"Mouse up, dragStarted: {dragStarted}, dragMoved: {dragMoved}, UserAction: {parentEditor.selectedUserAction}");
+    {     
         if (dragStarted == false) // don't bother with symbol stuff when a drag was cancelled or not actually started
         {
             //Debug.WriteLine($"Mouse up, dragStarted: {dragStarted}, cancelling any symbol placement");
