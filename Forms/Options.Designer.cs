@@ -75,6 +75,7 @@
             numericUpDownCounter = new NumericUpDown();
             buttonResetCounter = new Button();
             tabPageModes = new TabPage();
+            checkBoxRegionCaptureUseAllScreens = new CheckBox();
             checkBoxAllScreensToEditor = new CheckBox();
             checkBoxScreenToEditor = new CheckBox();
             checkBoxWindowToEditor = new CheckBox();
@@ -136,7 +137,7 @@
             label25 = new Label();
             buttonResetOptions = new Button();
             colorDialog1 = new ColorDialog();
-            checkBoxRegionCaptureUseAllScreens = new CheckBox();
+            checkBoxAutorun = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
@@ -410,7 +411,7 @@
             // checkBoxCropThumbnails
             // 
             checkBoxCropThumbnails.AutoSize = true;
-            checkBoxCropThumbnails.Location = new Point(17, 194);
+            checkBoxCropThumbnails.Location = new Point(17, 222);
             checkBoxCropThumbnails.Name = "checkBoxCropThumbnails";
             checkBoxCropThumbnails.Size = new Size(234, 19);
             checkBoxCropThumbnails.TabIndex = 24;
@@ -419,7 +420,7 @@
             // 
             // numericThumbWidth
             // 
-            numericThumbWidth.Location = new Point(123, 214);
+            numericThumbWidth.Location = new Point(123, 242);
             numericThumbWidth.Maximum = new decimal(new int[] { 256, 0, 0, 0 });
             numericThumbWidth.Minimum = new decimal(new int[] { 20, 0, 0, 0 });
             numericThumbWidth.Name = "numericThumbWidth";
@@ -429,7 +430,7 @@
             // 
             // numericThumbHeight
             // 
-            numericThumbHeight.Location = new Point(123, 242);
+            numericThumbHeight.Location = new Point(123, 270);
             numericThumbHeight.Maximum = new decimal(new int[] { 256, 0, 0, 0 });
             numericThumbHeight.Minimum = new decimal(new int[] { 20, 0, 0, 0 });
             numericThumbHeight.Name = "numericThumbHeight";
@@ -440,7 +441,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(17, 216);
+            label8.Location = new Point(17, 244);
             label8.Name = "label8";
             label8.Size = new Size(99, 15);
             label8.TabIndex = 53;
@@ -449,7 +450,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(17, 244);
+            label9.Location = new Point(17, 272);
             label9.Name = "label9";
             label9.Size = new Size(103, 15);
             label9.TabIndex = 54;
@@ -458,7 +459,7 @@
             // checkBoxTrayTooltipInfoCapture
             // 
             checkBoxTrayTooltipInfoCapture.AutoSize = true;
-            checkBoxTrayTooltipInfoCapture.Location = new Point(17, 93);
+            checkBoxTrayTooltipInfoCapture.Location = new Point(17, 121);
             checkBoxTrayTooltipInfoCapture.Name = "checkBoxTrayTooltipInfoCapture";
             checkBoxTrayTooltipInfoCapture.Size = new Size(211, 19);
             checkBoxTrayTooltipInfoCapture.TabIndex = 21;
@@ -468,7 +469,7 @@
             // checkBoxTrayTooltipWarning
             // 
             checkBoxTrayTooltipWarning.AutoSize = true;
-            checkBoxTrayTooltipWarning.Location = new Point(17, 143);
+            checkBoxTrayTooltipWarning.Location = new Point(17, 171);
             checkBoxTrayTooltipWarning.Name = "checkBoxTrayTooltipWarning";
             checkBoxTrayTooltipWarning.Size = new Size(176, 19);
             checkBoxTrayTooltipWarning.TabIndex = 23;
@@ -644,6 +645,16 @@
             tabPageModes.TabIndex = 3;
             tabPageModes.Text = "Modes";
             tabPageModes.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxRegionCaptureUseAllScreens
+            // 
+            checkBoxRegionCaptureUseAllScreens.AutoSize = true;
+            checkBoxRegionCaptureUseAllScreens.Location = new Point(24, 155);
+            checkBoxRegionCaptureUseAllScreens.Name = "checkBoxRegionCaptureUseAllScreens";
+            checkBoxRegionCaptureUseAllScreens.Size = new Size(406, 19);
+            checkBoxRegionCaptureUseAllScreens.TabIndex = 73;
+            checkBoxRegionCaptureUseAllScreens.Text = "Use all screens during region capture (instead of the one the cursor is in)";
+            checkBoxRegionCaptureUseAllScreens.UseVisualStyleBackColor = true;
             // 
             // checkBoxAllScreensToEditor
             // 
@@ -828,6 +839,7 @@
             // 
             // tabPageApplication
             // 
+            tabPageApplication.Controls.Add(checkBoxAutorun);
             tabPageApplication.Controls.Add(checkBoxMinimizeOnClose);
             tabPageApplication.Controls.Add(label24);
             tabPageApplication.Controls.Add(label13);
@@ -868,7 +880,7 @@
             // 
             label24.AutoSize = true;
             label24.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label24.Location = new Point(6, 280);
+            label24.Location = new Point(6, 308);
             label24.Name = "label24";
             label24.Size = new Size(80, 15);
             label24.TabIndex = 73;
@@ -877,7 +889,7 @@
             // label13
             // 
             label13.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
-            label13.Location = new Point(17, 328);
+            label13.Location = new Point(17, 356);
             label13.Name = "label13";
             label13.Size = new Size(435, 40);
             label13.TabIndex = 72;
@@ -886,7 +898,7 @@
             // label17
             // 
             label17.AutoSize = true;
-            label17.Location = new Point(182, 304);
+            label17.Location = new Point(182, 332);
             label17.Name = "label17";
             label17.Size = new Size(23, 15);
             label17.TabIndex = 71;
@@ -895,7 +907,7 @@
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new Point(17, 304);
+            label12.Location = new Point(17, 332);
             label12.Name = "label12";
             label12.Size = new Size(84, 15);
             label12.TabIndex = 70;
@@ -904,7 +916,7 @@
             // numericUpDownFramerate
             // 
             numericUpDownFramerate.Increment = new decimal(new int[] { 5, 0, 0, 0 });
-            numericUpDownFramerate.Location = new Point(123, 302);
+            numericUpDownFramerate.Location = new Point(123, 330);
             numericUpDownFramerate.Maximum = new decimal(new int[] { 120, 0, 0, 0 });
             numericUpDownFramerate.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
             numericUpDownFramerate.Name = "numericUpDownFramerate";
@@ -916,7 +928,7 @@
             // 
             label16.AutoSize = true;
             label16.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label16.Location = new Point(6, 176);
+            label16.Location = new Point(6, 204);
             label16.Name = "label16";
             label16.Size = new Size(70, 15);
             label16.TabIndex = 63;
@@ -926,7 +938,7 @@
             // 
             label15.AutoSize = true;
             label15.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label15.Location = new Point(6, 75);
+            label15.Location = new Point(6, 103);
             label15.Name = "label15";
             label15.Size = new Size(73, 15);
             label15.TabIndex = 62;
@@ -945,7 +957,7 @@
             // checkBoxTrayTooltipInfoFolder
             // 
             checkBoxTrayTooltipInfoFolder.AutoSize = true;
-            checkBoxTrayTooltipInfoFolder.Location = new Point(17, 118);
+            checkBoxTrayTooltipInfoFolder.Location = new Point(17, 146);
             checkBoxTrayTooltipInfoFolder.Name = "checkBoxTrayTooltipInfoFolder";
             checkBoxTrayTooltipInfoFolder.Size = new Size(237, 19);
             checkBoxTrayTooltipInfoFolder.TabIndex = 22;
@@ -1263,15 +1275,15 @@
             // 
             colorDialog1.FullOpen = true;
             // 
-            // checkBoxRegionCaptureUseAllScreens
+            // checkBoxAutorun
             // 
-            checkBoxRegionCaptureUseAllScreens.AutoSize = true;
-            checkBoxRegionCaptureUseAllScreens.Location = new Point(24, 155);
-            checkBoxRegionCaptureUseAllScreens.Name = "checkBoxRegionCaptureUseAllScreens";
-            checkBoxRegionCaptureUseAllScreens.Size = new Size(406, 19);
-            checkBoxRegionCaptureUseAllScreens.TabIndex = 73;
-            checkBoxRegionCaptureUseAllScreens.Text = "Use all screens during region capture (instead of the one the cursor is in)";
-            checkBoxRegionCaptureUseAllScreens.UseVisualStyleBackColor = true;
+            checkBoxAutorun.AutoSize = true;
+            checkBoxAutorun.Location = new Point(16, 75);
+            checkBoxAutorun.Name = "checkBoxAutorun";
+            checkBoxAutorun.Size = new Size(208, 19);
+            checkBoxAutorun.TabIndex = 83;
+            checkBoxAutorun.Text = "Start program on Windows startup";
+            checkBoxAutorun.UseVisualStyleBackColor = true;
             // 
             // Options
             // 
@@ -1426,5 +1438,6 @@
         private Label label35;
         private ColorDialog colorDialog1;
         private CheckBox checkBoxRegionCaptureUseAllScreens;
+        private CheckBox checkBoxAutorun;
     }
 }
