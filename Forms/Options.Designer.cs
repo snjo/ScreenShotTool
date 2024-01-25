@@ -95,6 +95,7 @@
             checkBoxWindowToFile = new CheckBox();
             labelWindow = new Label();
             tabPageApplication = new TabPage();
+            checkBoxAutorun = new CheckBox();
             checkBoxMinimizeOnClose = new CheckBox();
             label24 = new Label();
             label13 = new Label();
@@ -137,7 +138,6 @@
             label25 = new Label();
             buttonResetOptions = new Button();
             colorDialog1 = new ColorDialog();
-            checkBoxAutorun = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
@@ -479,9 +479,9 @@
             // tabControl1
             // 
             tabControl1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            tabControl1.Controls.Add(tabPageOutput);
-            tabControl1.Controls.Add(tabPageModes);
             tabControl1.Controls.Add(tabPageApplication);
+            tabControl1.Controls.Add(tabPageModes);
+            tabControl1.Controls.Add(tabPageOutput);
             tabControl1.Controls.Add(tabPageHotkeys);
             tabControl1.Controls.Add(tabPageEditor);
             tabControl1.Location = new Point(3, 5);
@@ -865,6 +865,16 @@
             tabPageApplication.TabIndex = 1;
             tabPageApplication.Text = "Application";
             tabPageApplication.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxAutorun
+            // 
+            checkBoxAutorun.AutoSize = true;
+            checkBoxAutorun.Location = new Point(16, 75);
+            checkBoxAutorun.Name = "checkBoxAutorun";
+            checkBoxAutorun.Size = new Size(208, 19);
+            checkBoxAutorun.TabIndex = 83;
+            checkBoxAutorun.Text = "Start program on Windows startup";
+            checkBoxAutorun.UseVisualStyleBackColor = true;
             // 
             // checkBoxMinimizeOnClose
             // 
@@ -1274,16 +1284,6 @@
             // colorDialog1
             // 
             colorDialog1.FullOpen = true;
-            // 
-            // checkBoxAutorun
-            // 
-            checkBoxAutorun.AutoSize = true;
-            checkBoxAutorun.Location = new Point(16, 75);
-            checkBoxAutorun.Name = "checkBoxAutorun";
-            checkBoxAutorun.Size = new Size(208, 19);
-            checkBoxAutorun.TabIndex = 83;
-            checkBoxAutorun.Text = "Start program on Windows startup";
-            checkBoxAutorun.UseVisualStyleBackColor = true;
             // 
             // Options
             // 
