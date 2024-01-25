@@ -540,9 +540,9 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
                 ScreenshotEditor.UserActions.CreateImage => new GsImage(dragEnd, new Point(1, 1), shadow),
                 ScreenshotEditor.UserActions.CreateImageScaled => new GsImageScaled(upperLeft, size, shadow),
                 ScreenshotEditor.UserActions.CreateText => new GsText(dragStart, size, lineColor, fillColor, shadow),
-                ScreenshotEditor.UserActions.CreateBlur => new GsBlur(upperLeft, size, lineColor, fillColor),
+                ScreenshotEditor.UserActions.CreateBlur => new GsBlur(upperLeft, size, Color.Red, Color.White), // set fill color to a solid, so it isn't skipped in rendering
                 ScreenshotEditor.UserActions.CreateHighlight => new GsHighlight(upperLeft, size, lineColor, Color.Yellow, false, 0),
-                ScreenshotEditor.UserActions.CreateCrop => new GsCrop(upperLeft, size, lineColor, fillColor),
+                ScreenshotEditor.UserActions.CreateCrop => new GsCrop(upperLeft, size, Color.Black, Color.White), // set line/fill color to a solid, so it isn't skipped in rendering
                 ScreenshotEditor.UserActions.CreateNumbered => new GsNumbered(new Point(dragEnd.X - (NumberedSize / 2), dragEnd.Y - (NumberedSize / 2)), new Point(NumberedSize, NumberedSize), lineColor, fillColor, shadow, lineWeight),
                 _ => null,
             };

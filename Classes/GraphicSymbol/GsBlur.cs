@@ -1,4 +1,6 @@
-﻿namespace ScreenShotTool.Forms;
+﻿using System.Diagnostics;
+
+namespace ScreenShotTool.Forms;
 #pragma warning disable CA1416 // Validate platform compatibility
 public class GsBlur : GsDynamicImage
 {
