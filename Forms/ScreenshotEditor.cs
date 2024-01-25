@@ -384,7 +384,15 @@ public partial class ScreenshotEditor : Form
         }
         if ((e.KeyCode == Keys.C && e.Modifiers == Keys.Control))
         {
-            CopyToClipboard();
+            if (GetSelectedSymbol() is GsCrop gsC)
+            {
+                CopySelectionToClipboard(gsC);
+                DeleteSelectedSymbol();
+            }
+            else
+            {
+                CopyToClipboard();
+            }
         }
         if ((e.KeyCode == Keys.S && e.Modifiers == Keys.Control))
         {
@@ -985,17 +993,22 @@ public partial class ScreenshotEditor : Form
     {
         if (GetSelectedSymbol() is GsCrop gsC)
         {
-            gsC.showOutline = false;
-            Bitmap? assembled = editorCanvas.AssembleImageForSaveOrCopy();
-            if (assembled != null)
-            {
-                Rectangle cropRect = gsC.Bounds;
-                Bitmap outImage = EditorCanvas.CropImage(assembled, cropRect);
-                assembled.Dispose();
-                Clipboard.SetImage(outImage);
-                outImage.Dispose();
-                gsC.showOutline = true;
-            }
+            CopySelectionToClipboard(gsC);
+        }
+    }
+
+    private void CopySelectionToClipboard(GsCrop gsC)
+    {
+        gsC.showOutline = false;
+        Bitmap? assembled = editorCanvas.AssembleImageForSaveOrCopy();
+        if (assembled != null)
+        {
+            Rectangle cropRect = gsC.Bounds;
+            Bitmap outImage = EditorCanvas.CropImage(assembled, cropRect);
+            assembled.Dispose();
+            Clipboard.SetImage(outImage);
+            outImage.Dispose();
+            gsC.showOutline = true;
         }
     }
 

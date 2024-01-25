@@ -634,7 +634,7 @@
             // 
             // buttonDeleteSymbol
             // 
-            buttonDeleteSymbol.Location = new Point(4, 32);
+            buttonDeleteSymbol.Location = new Point(4, 28);
             buttonDeleteSymbol.Name = "buttonDeleteSymbol";
             buttonDeleteSymbol.Size = new Size(94, 23);
             buttonDeleteSymbol.TabIndex = 0;
@@ -811,7 +811,7 @@
             panelPropertiesHighlight.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             panelPropertiesHighlight.Controls.Add(label18);
             panelPropertiesHighlight.Controls.Add(comboBoxBlendMode);
-            panelPropertiesHighlight.Location = new Point(797, 578);
+            panelPropertiesHighlight.Location = new Point(797, 597);
             panelPropertiesHighlight.Name = "panelPropertiesHighlight";
             panelPropertiesHighlight.Size = new Size(153, 47);
             panelPropertiesHighlight.TabIndex = 31;
@@ -930,7 +930,7 @@
             // 
             panelPropertiesShadow.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             panelPropertiesShadow.Controls.Add(checkBoxPropertiesShadow);
-            panelPropertiesShadow.Location = new Point(797, 486);
+            panelPropertiesShadow.Location = new Point(797, 481);
             panelPropertiesShadow.Name = "panelPropertiesShadow";
             panelPropertiesShadow.Size = new Size(153, 26);
             panelPropertiesShadow.TabIndex = 32;
@@ -943,7 +943,7 @@
             panelPropertiesDelete.Controls.Add(buttonDeleteSymbol);
             panelPropertiesDelete.Location = new Point(797, 650);
             panelPropertiesDelete.Name = "panelPropertiesDelete";
-            panelPropertiesDelete.Size = new Size(153, 60);
+            panelPropertiesDelete.Size = new Size(153, 55);
             panelPropertiesDelete.TabIndex = 33;
             // 
             // buttonToBack
@@ -976,28 +976,28 @@
             panelPropertiesCrop.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             panelPropertiesCrop.Controls.Add(buttonPropertyCopyCrop);
             panelPropertiesCrop.Controls.Add(buttonPropertyCrop);
-            panelPropertiesCrop.Location = new Point(797, 515);
+            panelPropertiesCrop.Location = new Point(797, 508);
             panelPropertiesCrop.Name = "panelPropertiesCrop";
-            panelPropertiesCrop.Size = new Size(153, 28);
+            panelPropertiesCrop.Size = new Size(153, 54);
             panelPropertiesCrop.TabIndex = 34;
             // 
             // buttonPropertyCopyCrop
             // 
-            buttonPropertyCopyCrop.Location = new Point(63, 2);
+            buttonPropertyCopyCrop.Location = new Point(3, 2);
             buttonPropertyCopyCrop.Name = "buttonPropertyCopyCrop";
-            buttonPropertyCopyCrop.Size = new Size(75, 23);
+            buttonPropertyCopyCrop.Size = new Size(95, 23);
             buttonPropertyCopyCrop.TabIndex = 2;
-            buttonPropertyCopyCrop.Text = "Copy crop";
+            buttonPropertyCopyCrop.Text = "Copy selection";
             buttonPropertyCopyCrop.UseVisualStyleBackColor = true;
             buttonPropertyCopyCrop.Click += ButtonPropertyCopyCrop_Click;
             // 
             // buttonPropertyCrop
             // 
-            buttonPropertyCrop.Location = new Point(3, 3);
+            buttonPropertyCrop.Location = new Point(4, 27);
             buttonPropertyCrop.Name = "buttonPropertyCrop";
-            buttonPropertyCrop.Size = new Size(53, 23);
+            buttonPropertyCrop.Size = new Size(94, 23);
             buttonPropertyCrop.TabIndex = 1;
-            buttonPropertyCrop.Text = "Crop";
+            buttonPropertyCrop.Text = "Crop image";
             buttonPropertyCrop.UseVisualStyleBackColor = true;
             buttonPropertyCrop.Click += ButtonPropertyCrop_Click;
             // 
@@ -1005,7 +1005,7 @@
             // 
             panelPropertiesBlur.Controls.Add(label17);
             panelPropertiesBlur.Controls.Add(numericBlurMosaicSize);
-            panelPropertiesBlur.Location = new Point(797, 546);
+            panelPropertiesBlur.Location = new Point(798, 570);
             panelPropertiesBlur.Name = "panelPropertiesBlur";
             panelPropertiesBlur.Size = new Size(153, 28);
             panelPropertiesBlur.TabIndex = 35;
