@@ -64,16 +64,18 @@
             checkBoxTrayTooltipInfoCapture = new CheckBox();
             checkBoxTrayTooltipWarning = new CheckBox();
             tabControl1 = new TabControl();
-            tabPageOutput = new TabPage();
-            labelFileNameResult = new Label();
-            label23 = new Label();
-            label22 = new Label();
-            label21 = new Label();
-            label20 = new Label();
-            label19 = new Label();
-            label18 = new Label();
-            numericUpDownCounter = new NumericUpDown();
-            buttonResetCounter = new Button();
+            tabPageApplication = new TabPage();
+            checkBoxAutorun = new CheckBox();
+            checkBoxMinimizeOnClose = new CheckBox();
+            label24 = new Label();
+            label13 = new Label();
+            label17 = new Label();
+            label12 = new Label();
+            numericUpDownFramerate = new NumericUpDown();
+            label16 = new Label();
+            label15 = new Label();
+            label14 = new Label();
+            checkBoxTrayTooltipInfoFolder = new CheckBox();
             tabPageModes = new TabPage();
             checkBoxRegionCaptureUseAllScreens = new CheckBox();
             checkBoxAllScreensToEditor = new CheckBox();
@@ -94,18 +96,16 @@
             checkBoxWindowToClipboard = new CheckBox();
             checkBoxWindowToFile = new CheckBox();
             labelWindow = new Label();
-            tabPageApplication = new TabPage();
-            checkBoxAutorun = new CheckBox();
-            checkBoxMinimizeOnClose = new CheckBox();
-            label24 = new Label();
-            label13 = new Label();
-            label17 = new Label();
-            label12 = new Label();
-            numericUpDownFramerate = new NumericUpDown();
-            label16 = new Label();
-            label15 = new Label();
-            label14 = new Label();
-            checkBoxTrayTooltipInfoFolder = new CheckBox();
+            tabPageOutput = new TabPage();
+            labelFileNameResult = new Label();
+            label23 = new Label();
+            label22 = new Label();
+            label21 = new Label();
+            label20 = new Label();
+            label19 = new Label();
+            label18 = new Label();
+            numericUpDownCounter = new NumericUpDown();
+            buttonResetCounter = new Button();
             tabPageHotkeys = new TabPage();
             HotkeyGrid = new DataGridView();
             ColumnFunction = new DataGridViewTextBoxColumn();
@@ -115,6 +115,7 @@
             ColumnShift = new DataGridViewCheckBoxColumn();
             ColumnWin = new DataGridViewCheckBoxColumn();
             tabPageEditor = new TabPage();
+            checkBoxSelectAfterFreehand = new CheckBox();
             label37 = new Label();
             numericLineWeight = new NumericUpDown();
             buttonFillColor = new Button();
@@ -148,11 +149,11 @@
             ((System.ComponentModel.ISupportInitialize)numericThumbWidth).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericThumbHeight).BeginInit();
             tabControl1.SuspendLayout();
-            tabPageOutput.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDownCounter).BeginInit();
-            tabPageModes.SuspendLayout();
             tabPageApplication.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDownFramerate).BeginInit();
+            tabPageModes.SuspendLayout();
+            tabPageOutput.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownCounter).BeginInit();
             tabPageHotkeys.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)HotkeyGrid).BeginInit();
             tabPageEditor.SuspendLayout();
@@ -490,133 +491,142 @@
             tabControl1.Size = new Size(490, 597);
             tabControl1.TabIndex = 1;
             // 
-            // tabPageOutput
+            // tabPageApplication
             // 
-            tabPageOutput.Controls.Add(labelFileNameResult);
-            tabPageOutput.Controls.Add(label23);
-            tabPageOutput.Controls.Add(label22);
-            tabPageOutput.Controls.Add(label21);
-            tabPageOutput.Controls.Add(label20);
-            tabPageOutput.Controls.Add(label19);
-            tabPageOutput.Controls.Add(label18);
-            tabPageOutput.Controls.Add(numericUpDownCounter);
-            tabPageOutput.Controls.Add(buttonResetCounter);
-            tabPageOutput.Controls.Add(textBoxFolder);
-            tabPageOutput.Controls.Add(textBoxSplitString);
-            tabPageOutput.Controls.Add(numericUpDownJpegQuality);
-            tabPageOutput.Controls.Add(numericUpDownSplitIndex);
-            tabPageOutput.Controls.Add(checkBoxTrim);
-            tabPageOutput.Controls.Add(label1);
-            tabPageOutput.Controls.Add(trimTop);
-            tabPageOutput.Controls.Add(label6);
-            tabPageOutput.Controls.Add(trimBottom);
-            tabPageOutput.Controls.Add(label7);
-            tabPageOutput.Controls.Add(trimRight);
-            tabPageOutput.Controls.Add(label5);
-            tabPageOutput.Controls.Add(trimLeft);
-            tabPageOutput.Controls.Add(buttonSelectFolder);
-            tabPageOutput.Controls.Add(numericUpDownTitleMaxLength);
-            tabPageOutput.Controls.Add(label4);
-            tabPageOutput.Controls.Add(textBoxFilename);
-            tabPageOutput.Controls.Add(comboBoxFileExtension);
-            tabPageOutput.Controls.Add(label3);
-            tabPageOutput.Controls.Add(buttonBrowseFolder);
-            tabPageOutput.Controls.Add(textBoxAlternateTitle);
-            tabPageOutput.Controls.Add(label2);
-            tabPageOutput.Location = new Point(4, 24);
-            tabPageOutput.Name = "tabPageOutput";
-            tabPageOutput.Padding = new Padding(3);
-            tabPageOutput.Size = new Size(482, 569);
-            tabPageOutput.TabIndex = 0;
-            tabPageOutput.Text = "Capture Output";
-            tabPageOutput.UseVisualStyleBackColor = true;
+            tabPageApplication.Controls.Add(checkBoxAutorun);
+            tabPageApplication.Controls.Add(checkBoxMinimizeOnClose);
+            tabPageApplication.Controls.Add(label24);
+            tabPageApplication.Controls.Add(label13);
+            tabPageApplication.Controls.Add(label17);
+            tabPageApplication.Controls.Add(label12);
+            tabPageApplication.Controls.Add(numericUpDownFramerate);
+            tabPageApplication.Controls.Add(label16);
+            tabPageApplication.Controls.Add(label15);
+            tabPageApplication.Controls.Add(label14);
+            tabPageApplication.Controls.Add(checkBoxTrayTooltipInfoFolder);
+            tabPageApplication.Controls.Add(checkBoxStartHidden);
+            tabPageApplication.Controls.Add(label9);
+            tabPageApplication.Controls.Add(checkBoxTrayTooltipWarning);
+            tabPageApplication.Controls.Add(label8);
+            tabPageApplication.Controls.Add(checkBoxTrayTooltipInfoCapture);
+            tabPageApplication.Controls.Add(numericThumbHeight);
+            tabPageApplication.Controls.Add(checkBoxCropThumbnails);
+            tabPageApplication.Controls.Add(numericThumbWidth);
+            tabPageApplication.Location = new Point(4, 24);
+            tabPageApplication.Name = "tabPageApplication";
+            tabPageApplication.Padding = new Padding(3);
+            tabPageApplication.Size = new Size(482, 569);
+            tabPageApplication.TabIndex = 1;
+            tabPageApplication.Text = "Application";
+            tabPageApplication.UseVisualStyleBackColor = true;
             // 
-            // labelFileNameResult
+            // checkBoxAutorun
             // 
-            labelFileNameResult.AutoSize = true;
-            labelFileNameResult.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
-            labelFileNameResult.Location = new Point(18, 109);
-            labelFileNameResult.Name = "labelFileNameResult";
-            labelFileNameResult.Size = new Size(90, 15);
-            labelFileNameResult.TabIndex = 57;
-            labelFileNameResult.Text = "File name result";
+            checkBoxAutorun.AutoSize = true;
+            checkBoxAutorun.Location = new Point(16, 75);
+            checkBoxAutorun.Name = "checkBoxAutorun";
+            checkBoxAutorun.Size = new Size(208, 19);
+            checkBoxAutorun.TabIndex = 83;
+            checkBoxAutorun.Text = "Start program on Windows startup";
+            checkBoxAutorun.UseVisualStyleBackColor = true;
             // 
-            // label23
+            // checkBoxMinimizeOnClose
             // 
-            label23.AutoSize = true;
-            label23.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
-            label23.Location = new Point(88, 317);
-            label23.Name = "label23";
-            label23.Size = new Size(120, 15);
-            label23.TabIndex = 56;
-            label23.Text = "(0 is the first element)";
+            checkBoxMinimizeOnClose.AutoSize = true;
+            checkBoxMinimizeOnClose.Location = new Point(16, 50);
+            checkBoxMinimizeOnClose.Name = "checkBoxMinimizeOnClose";
+            checkBoxMinimizeOnClose.Size = new Size(184, 19);
+            checkBoxMinimizeOnClose.TabIndex = 82;
+            checkBoxMinimizeOnClose.Text = "Minimize when closing with X";
+            checkBoxMinimizeOnClose.UseVisualStyleBackColor = true;
             // 
-            // label22
+            // label24
             // 
-            label22.AutoSize = true;
-            label22.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
-            label22.Location = new Point(156, 407);
-            label22.Name = "label22";
-            label22.Size = new Size(35, 15);
-            label22.TabIndex = 55;
-            label22.Text = "Right";
+            label24.AutoSize = true;
+            label24.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label24.Location = new Point(6, 308);
+            label24.Name = "label24";
+            label24.Size = new Size(80, 15);
+            label24.TabIndex = 73;
+            label24.Text = "Performance";
             // 
-            // label21
+            // label13
             // 
-            label21.AutoSize = true;
-            label21.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
-            label21.Location = new Point(18, 411);
-            label21.Name = "label21";
-            label21.Size = new Size(27, 15);
-            label21.TabIndex = 54;
-            label21.Text = "Left";
+            label13.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
+            label13.Location = new Point(17, 356);
+            label13.Name = "label13";
+            label13.Size = new Size(435, 40);
+            label13.TabIndex = 72;
+            label13.Text = "Used in Region capture and Editor. If the framerate is higher than your sytem can handle, there will be additional lag to catch up.";
             // 
-            // label20
+            // label17
             // 
-            label20.AutoSize = true;
-            label20.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
-            label20.Location = new Point(88, 436);
-            label20.Name = "label20";
-            label20.Size = new Size(44, 15);
-            label20.TabIndex = 53;
-            label20.Text = "Bottom";
+            label17.AutoSize = true;
+            label17.Location = new Point(182, 332);
+            label17.Name = "label17";
+            label17.Size = new Size(23, 15);
+            label17.TabIndex = 71;
+            label17.Text = "fps";
             // 
-            // label19
+            // label12
             // 
-            label19.AutoSize = true;
-            label19.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
-            label19.Location = new Point(88, 382);
-            label19.Name = "label19";
-            label19.Size = new Size(26, 15);
-            label19.TabIndex = 52;
-            label19.Text = "Top";
+            label12.AutoSize = true;
+            label12.Location = new Point(17, 332);
+            label12.Name = "label12";
+            label12.Size = new Size(84, 15);
+            label12.TabIndex = 70;
+            label12.Text = "Max framerate";
             // 
-            // label18
+            // numericUpDownFramerate
             // 
-            label18.AutoSize = true;
-            label18.Location = new Point(6, 496);
-            label18.Name = "label18";
-            label18.Size = new Size(204, 15);
-            label18.TabIndex = 51;
-            label18.Text = "Counter number used by $c / ${num}";
+            numericUpDownFramerate.Increment = new decimal(new int[] { 5, 0, 0, 0 });
+            numericUpDownFramerate.Location = new Point(123, 330);
+            numericUpDownFramerate.Maximum = new decimal(new int[] { 120, 0, 0, 0 });
+            numericUpDownFramerate.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
+            numericUpDownFramerate.Name = "numericUpDownFramerate";
+            numericUpDownFramerate.Size = new Size(54, 23);
+            numericUpDownFramerate.TabIndex = 69;
+            numericUpDownFramerate.Value = new decimal(new int[] { 30, 0, 0, 0 });
             // 
-            // numericUpDownCounter
+            // label16
             // 
-            numericUpDownCounter.Location = new Point(6, 514);
-            numericUpDownCounter.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
-            numericUpDownCounter.Name = "numericUpDownCounter";
-            numericUpDownCounter.Size = new Size(70, 23);
-            numericUpDownCounter.TabIndex = 25;
+            label16.AutoSize = true;
+            label16.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label16.Location = new Point(6, 204);
+            label16.Name = "label16";
+            label16.Size = new Size(70, 15);
+            label16.TabIndex = 63;
+            label16.Text = "Thumbnails";
             // 
-            // buttonResetCounter
+            // label15
             // 
-            buttonResetCounter.Location = new Point(82, 514);
-            buttonResetCounter.Name = "buttonResetCounter";
-            buttonResetCounter.Size = new Size(142, 23);
-            buttonResetCounter.TabIndex = 26;
-            buttonResetCounter.Text = "Reset Counter number";
-            buttonResetCounter.UseVisualStyleBackColor = true;
-            buttonResetCounter.Click += ButtonResetCounter_Click;
+            label15.AutoSize = true;
+            label15.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label15.Location = new Point(6, 103);
+            label15.Name = "label15";
+            label15.Size = new Size(73, 15);
+            label15.TabIndex = 62;
+            label15.Text = "System tray";
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label14.Location = new Point(5, 7);
+            label14.Name = "label14";
+            label14.Size = new Size(130, 15);
+            label14.TabIndex = 61;
+            label14.Text = "Startup and shutdown";
+            // 
+            // checkBoxTrayTooltipInfoFolder
+            // 
+            checkBoxTrayTooltipInfoFolder.AutoSize = true;
+            checkBoxTrayTooltipInfoFolder.Location = new Point(17, 146);
+            checkBoxTrayTooltipInfoFolder.Name = "checkBoxTrayTooltipInfoFolder";
+            checkBoxTrayTooltipInfoFolder.Size = new Size(237, 19);
+            checkBoxTrayTooltipInfoFolder.TabIndex = 22;
+            checkBoxTrayTooltipInfoFolder.Text = "System tray tooltip when creating folder";
+            checkBoxTrayTooltipInfoFolder.UseVisualStyleBackColor = true;
             // 
             // tabPageModes
             // 
@@ -837,142 +847,133 @@
             labelWindow.TabIndex = 0;
             labelWindow.Text = "Mode: Window";
             // 
-            // tabPageApplication
+            // tabPageOutput
             // 
-            tabPageApplication.Controls.Add(checkBoxAutorun);
-            tabPageApplication.Controls.Add(checkBoxMinimizeOnClose);
-            tabPageApplication.Controls.Add(label24);
-            tabPageApplication.Controls.Add(label13);
-            tabPageApplication.Controls.Add(label17);
-            tabPageApplication.Controls.Add(label12);
-            tabPageApplication.Controls.Add(numericUpDownFramerate);
-            tabPageApplication.Controls.Add(label16);
-            tabPageApplication.Controls.Add(label15);
-            tabPageApplication.Controls.Add(label14);
-            tabPageApplication.Controls.Add(checkBoxTrayTooltipInfoFolder);
-            tabPageApplication.Controls.Add(checkBoxStartHidden);
-            tabPageApplication.Controls.Add(label9);
-            tabPageApplication.Controls.Add(checkBoxTrayTooltipWarning);
-            tabPageApplication.Controls.Add(label8);
-            tabPageApplication.Controls.Add(checkBoxTrayTooltipInfoCapture);
-            tabPageApplication.Controls.Add(numericThumbHeight);
-            tabPageApplication.Controls.Add(checkBoxCropThumbnails);
-            tabPageApplication.Controls.Add(numericThumbWidth);
-            tabPageApplication.Location = new Point(4, 24);
-            tabPageApplication.Name = "tabPageApplication";
-            tabPageApplication.Padding = new Padding(3);
-            tabPageApplication.Size = new Size(482, 569);
-            tabPageApplication.TabIndex = 1;
-            tabPageApplication.Text = "Application";
-            tabPageApplication.UseVisualStyleBackColor = true;
+            tabPageOutput.Controls.Add(labelFileNameResult);
+            tabPageOutput.Controls.Add(label23);
+            tabPageOutput.Controls.Add(label22);
+            tabPageOutput.Controls.Add(label21);
+            tabPageOutput.Controls.Add(label20);
+            tabPageOutput.Controls.Add(label19);
+            tabPageOutput.Controls.Add(label18);
+            tabPageOutput.Controls.Add(numericUpDownCounter);
+            tabPageOutput.Controls.Add(buttonResetCounter);
+            tabPageOutput.Controls.Add(textBoxFolder);
+            tabPageOutput.Controls.Add(textBoxSplitString);
+            tabPageOutput.Controls.Add(numericUpDownJpegQuality);
+            tabPageOutput.Controls.Add(numericUpDownSplitIndex);
+            tabPageOutput.Controls.Add(checkBoxTrim);
+            tabPageOutput.Controls.Add(label1);
+            tabPageOutput.Controls.Add(trimTop);
+            tabPageOutput.Controls.Add(label6);
+            tabPageOutput.Controls.Add(trimBottom);
+            tabPageOutput.Controls.Add(label7);
+            tabPageOutput.Controls.Add(trimRight);
+            tabPageOutput.Controls.Add(label5);
+            tabPageOutput.Controls.Add(trimLeft);
+            tabPageOutput.Controls.Add(buttonSelectFolder);
+            tabPageOutput.Controls.Add(numericUpDownTitleMaxLength);
+            tabPageOutput.Controls.Add(label4);
+            tabPageOutput.Controls.Add(textBoxFilename);
+            tabPageOutput.Controls.Add(comboBoxFileExtension);
+            tabPageOutput.Controls.Add(label3);
+            tabPageOutput.Controls.Add(buttonBrowseFolder);
+            tabPageOutput.Controls.Add(textBoxAlternateTitle);
+            tabPageOutput.Controls.Add(label2);
+            tabPageOutput.Location = new Point(4, 24);
+            tabPageOutput.Name = "tabPageOutput";
+            tabPageOutput.Padding = new Padding(3);
+            tabPageOutput.Size = new Size(482, 569);
+            tabPageOutput.TabIndex = 0;
+            tabPageOutput.Text = "Capture Output";
+            tabPageOutput.UseVisualStyleBackColor = true;
             // 
-            // checkBoxAutorun
+            // labelFileNameResult
             // 
-            checkBoxAutorun.AutoSize = true;
-            checkBoxAutorun.Location = new Point(16, 75);
-            checkBoxAutorun.Name = "checkBoxAutorun";
-            checkBoxAutorun.Size = new Size(208, 19);
-            checkBoxAutorun.TabIndex = 83;
-            checkBoxAutorun.Text = "Start program on Windows startup";
-            checkBoxAutorun.UseVisualStyleBackColor = true;
+            labelFileNameResult.AutoSize = true;
+            labelFileNameResult.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
+            labelFileNameResult.Location = new Point(18, 109);
+            labelFileNameResult.Name = "labelFileNameResult";
+            labelFileNameResult.Size = new Size(90, 15);
+            labelFileNameResult.TabIndex = 57;
+            labelFileNameResult.Text = "File name result";
             // 
-            // checkBoxMinimizeOnClose
+            // label23
             // 
-            checkBoxMinimizeOnClose.AutoSize = true;
-            checkBoxMinimizeOnClose.Location = new Point(16, 50);
-            checkBoxMinimizeOnClose.Name = "checkBoxMinimizeOnClose";
-            checkBoxMinimizeOnClose.Size = new Size(184, 19);
-            checkBoxMinimizeOnClose.TabIndex = 82;
-            checkBoxMinimizeOnClose.Text = "Minimize when closing with X";
-            checkBoxMinimizeOnClose.UseVisualStyleBackColor = true;
+            label23.AutoSize = true;
+            label23.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
+            label23.Location = new Point(88, 317);
+            label23.Name = "label23";
+            label23.Size = new Size(120, 15);
+            label23.TabIndex = 56;
+            label23.Text = "(0 is the first element)";
             // 
-            // label24
+            // label22
             // 
-            label24.AutoSize = true;
-            label24.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label24.Location = new Point(6, 308);
-            label24.Name = "label24";
-            label24.Size = new Size(80, 15);
-            label24.TabIndex = 73;
-            label24.Text = "Performance";
+            label22.AutoSize = true;
+            label22.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
+            label22.Location = new Point(156, 407);
+            label22.Name = "label22";
+            label22.Size = new Size(35, 15);
+            label22.TabIndex = 55;
+            label22.Text = "Right";
             // 
-            // label13
+            // label21
             // 
-            label13.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
-            label13.Location = new Point(17, 356);
-            label13.Name = "label13";
-            label13.Size = new Size(435, 40);
-            label13.TabIndex = 72;
-            label13.Text = "Used in Region capture and Editor. If the framerate is higher than your sytem can handle, there will be additional lag to catch up.";
+            label21.AutoSize = true;
+            label21.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
+            label21.Location = new Point(18, 411);
+            label21.Name = "label21";
+            label21.Size = new Size(27, 15);
+            label21.TabIndex = 54;
+            label21.Text = "Left";
             // 
-            // label17
+            // label20
             // 
-            label17.AutoSize = true;
-            label17.Location = new Point(182, 332);
-            label17.Name = "label17";
-            label17.Size = new Size(23, 15);
-            label17.TabIndex = 71;
-            label17.Text = "fps";
+            label20.AutoSize = true;
+            label20.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
+            label20.Location = new Point(88, 436);
+            label20.Name = "label20";
+            label20.Size = new Size(44, 15);
+            label20.TabIndex = 53;
+            label20.Text = "Bottom";
             // 
-            // label12
+            // label19
             // 
-            label12.AutoSize = true;
-            label12.Location = new Point(17, 332);
-            label12.Name = "label12";
-            label12.Size = new Size(84, 15);
-            label12.TabIndex = 70;
-            label12.Text = "Max framerate";
+            label19.AutoSize = true;
+            label19.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
+            label19.Location = new Point(88, 382);
+            label19.Name = "label19";
+            label19.Size = new Size(26, 15);
+            label19.TabIndex = 52;
+            label19.Text = "Top";
             // 
-            // numericUpDownFramerate
+            // label18
             // 
-            numericUpDownFramerate.Increment = new decimal(new int[] { 5, 0, 0, 0 });
-            numericUpDownFramerate.Location = new Point(123, 330);
-            numericUpDownFramerate.Maximum = new decimal(new int[] { 120, 0, 0, 0 });
-            numericUpDownFramerate.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
-            numericUpDownFramerate.Name = "numericUpDownFramerate";
-            numericUpDownFramerate.Size = new Size(54, 23);
-            numericUpDownFramerate.TabIndex = 69;
-            numericUpDownFramerate.Value = new decimal(new int[] { 30, 0, 0, 0 });
+            label18.AutoSize = true;
+            label18.Location = new Point(6, 496);
+            label18.Name = "label18";
+            label18.Size = new Size(204, 15);
+            label18.TabIndex = 51;
+            label18.Text = "Counter number used by $c / ${num}";
             // 
-            // label16
+            // numericUpDownCounter
             // 
-            label16.AutoSize = true;
-            label16.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label16.Location = new Point(6, 204);
-            label16.Name = "label16";
-            label16.Size = new Size(70, 15);
-            label16.TabIndex = 63;
-            label16.Text = "Thumbnails";
+            numericUpDownCounter.Location = new Point(6, 514);
+            numericUpDownCounter.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            numericUpDownCounter.Name = "numericUpDownCounter";
+            numericUpDownCounter.Size = new Size(70, 23);
+            numericUpDownCounter.TabIndex = 25;
             // 
-            // label15
+            // buttonResetCounter
             // 
-            label15.AutoSize = true;
-            label15.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label15.Location = new Point(6, 103);
-            label15.Name = "label15";
-            label15.Size = new Size(73, 15);
-            label15.TabIndex = 62;
-            label15.Text = "System tray";
-            // 
-            // label14
-            // 
-            label14.AutoSize = true;
-            label14.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label14.Location = new Point(5, 7);
-            label14.Name = "label14";
-            label14.Size = new Size(130, 15);
-            label14.TabIndex = 61;
-            label14.Text = "Startup and shutdown";
-            // 
-            // checkBoxTrayTooltipInfoFolder
-            // 
-            checkBoxTrayTooltipInfoFolder.AutoSize = true;
-            checkBoxTrayTooltipInfoFolder.Location = new Point(17, 146);
-            checkBoxTrayTooltipInfoFolder.Name = "checkBoxTrayTooltipInfoFolder";
-            checkBoxTrayTooltipInfoFolder.Size = new Size(237, 19);
-            checkBoxTrayTooltipInfoFolder.TabIndex = 22;
-            checkBoxTrayTooltipInfoFolder.Text = "System tray tooltip when creating folder";
-            checkBoxTrayTooltipInfoFolder.UseVisualStyleBackColor = true;
+            buttonResetCounter.Location = new Point(82, 514);
+            buttonResetCounter.Name = "buttonResetCounter";
+            buttonResetCounter.Size = new Size(142, 23);
+            buttonResetCounter.TabIndex = 26;
+            buttonResetCounter.Text = "Reset Counter number";
+            buttonResetCounter.UseVisualStyleBackColor = true;
+            buttonResetCounter.Click += ButtonResetCounter_Click;
             // 
             // tabPageHotkeys
             // 
@@ -1036,6 +1037,7 @@
             // 
             // tabPageEditor
             // 
+            tabPageEditor.Controls.Add(checkBoxSelectAfterFreehand);
             tabPageEditor.Controls.Add(label37);
             tabPageEditor.Controls.Add(numericLineWeight);
             tabPageEditor.Controls.Add(buttonFillColor);
@@ -1065,10 +1067,20 @@
             tabPageEditor.Text = "Editor";
             tabPageEditor.UseVisualStyleBackColor = true;
             // 
+            // checkBoxSelectAfterFreehand
+            // 
+            checkBoxSelectAfterFreehand.AutoSize = true;
+            checkBoxSelectAfterFreehand.Location = new Point(43, 55);
+            checkBoxSelectAfterFreehand.Name = "checkBoxSelectAfterFreehand";
+            checkBoxSelectAfterFreehand.Size = new Size(272, 19);
+            checkBoxSelectAfterFreehand.TabIndex = 105;
+            checkBoxSelectAfterFreehand.Text = "After drawing a freehand line, change to Select";
+            checkBoxSelectAfterFreehand.UseVisualStyleBackColor = true;
+            // 
             // label37
             // 
             label37.AutoSize = true;
-            label37.Location = new Point(23, 115);
+            label37.Location = new Point(23, 143);
             label37.Name = "label37";
             label37.Size = new Size(70, 15);
             label37.TabIndex = 104;
@@ -1076,7 +1088,7 @@
             // 
             // numericLineWeight
             // 
-            numericLineWeight.Location = new Point(126, 113);
+            numericLineWeight.Location = new Point(126, 141);
             numericLineWeight.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
             numericLineWeight.Name = "numericLineWeight";
             numericLineWeight.Size = new Size(54, 23);
@@ -1086,7 +1098,7 @@
             // buttonFillColor
             // 
             buttonFillColor.FlatStyle = FlatStyle.Flat;
-            buttonFillColor.Location = new Point(126, 84);
+            buttonFillColor.Location = new Point(126, 112);
             buttonFillColor.Name = "buttonFillColor";
             buttonFillColor.Size = new Size(87, 23);
             buttonFillColor.TabIndex = 102;
@@ -1097,7 +1109,7 @@
             // label36
             // 
             label36.AutoSize = true;
-            label36.Location = new Point(23, 88);
+            label36.Location = new Point(23, 116);
             label36.Name = "label36";
             label36.Size = new Size(92, 15);
             label36.TabIndex = 101;
@@ -1108,7 +1120,7 @@
             buttonLineColor.BackColor = Color.Red;
             buttonLineColor.FlatStyle = FlatStyle.Flat;
             buttonLineColor.ForeColor = Color.White;
-            buttonLineColor.Location = new Point(126, 55);
+            buttonLineColor.Location = new Point(126, 83);
             buttonLineColor.Name = "buttonLineColor";
             buttonLineColor.Size = new Size(87, 23);
             buttonLineColor.TabIndex = 100;
@@ -1119,7 +1131,7 @@
             // label35
             // 
             label35.AutoSize = true;
-            label35.Location = new Point(23, 59);
+            label35.Location = new Point(23, 87);
             label35.Name = "label35";
             label35.Size = new Size(99, 15);
             label35.TabIndex = 99;
@@ -1130,7 +1142,7 @@
             buttonNumberedColor.BackColor = Color.Maroon;
             buttonNumberedColor.FlatStyle = FlatStyle.Flat;
             buttonNumberedColor.ForeColor = Color.White;
-            buttonNumberedColor.Location = new Point(126, 196);
+            buttonNumberedColor.Location = new Point(126, 224);
             buttonNumberedColor.Name = "buttonNumberedColor";
             buttonNumberedColor.Size = new Size(87, 23);
             buttonNumberedColor.TabIndex = 98;
@@ -1141,7 +1153,7 @@
             // label34
             // 
             label34.AutoSize = true;
-            label34.Location = new Point(17, 200);
+            label34.Location = new Point(17, 228);
             label34.Name = "label34";
             label34.Size = new Size(67, 15);
             label34.TabIndex = 97;
@@ -1151,7 +1163,7 @@
             // 
             label33.AutoSize = true;
             label33.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label33.Location = new Point(6, 231);
+            label33.Location = new Point(6, 259);
             label33.Name = "label33";
             label33.Size = new Size(79, 15);
             label33.TabIndex = 96;
@@ -1161,7 +1173,7 @@
             // 
             label32.AutoSize = true;
             label32.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label32.Location = new Point(6, 145);
+            label32.Location = new Point(6, 173);
             label32.Name = "label32";
             label32.Size = new Size(102, 15);
             label32.TabIndex = 95;
@@ -1170,7 +1182,7 @@
             // label31
             // 
             label31.AutoSize = true;
-            label31.Location = new Point(17, 167);
+            label31.Location = new Point(17, 195);
             label31.Name = "label31";
             label31.Size = new Size(59, 15);
             label31.TabIndex = 94;
@@ -1179,7 +1191,7 @@
             // numericNumberedSize
             // 
             numericNumberedSize.Increment = new decimal(new int[] { 5, 0, 0, 0 });
-            numericNumberedSize.Location = new Point(126, 165);
+            numericNumberedSize.Location = new Point(126, 193);
             numericNumberedSize.Minimum = new decimal(new int[] { 20, 0, 0, 0 });
             numericNumberedSize.Name = "numericNumberedSize";
             numericNumberedSize.Size = new Size(54, 23);
@@ -1195,11 +1207,12 @@
             checkBoxSelectAfterPlacingSymbol.TabIndex = 92;
             checkBoxSelectAfterPlacingSymbol.Text = "After placing a symbol, change to Select (instead of placing more)";
             checkBoxSelectAfterPlacingSymbol.UseVisualStyleBackColor = true;
+            checkBoxSelectAfterPlacingSymbol.CheckedChanged += checkBoxSelectAfterPlacingSymbol_CheckedChanged;
             // 
             // label30
             // 
             label30.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
-            label30.Location = new Point(14, 307);
+            label30.Location = new Point(14, 335);
             label30.Name = "label30";
             label30.Size = new Size(435, 56);
             label30.TabIndex = 91;
@@ -1208,7 +1221,7 @@
             // label28
             // 
             label28.AutoSize = true;
-            label28.Location = new Point(185, 283);
+            label28.Location = new Point(185, 311);
             label28.Name = "label28";
             label28.Size = new Size(244, 15);
             label28.TabIndex = 90;
@@ -1217,7 +1230,7 @@
             // label29
             // 
             label29.AutoSize = true;
-            label29.Location = new Point(14, 283);
+            label29.Location = new Point(14, 311);
             label29.Name = "label29";
             label29.Size = new Size(94, 15);
             label29.TabIndex = 89;
@@ -1225,7 +1238,7 @@
             // 
             // numericBlurSampleArea
             // 
-            numericBlurSampleArea.Location = new Point(126, 281);
+            numericBlurSampleArea.Location = new Point(126, 309);
             numericBlurSampleArea.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
             numericBlurSampleArea.Name = "numericBlurSampleArea";
             numericBlurSampleArea.Size = new Size(54, 23);
@@ -1235,7 +1248,7 @@
             // label27
             // 
             label27.AutoSize = true;
-            label27.Location = new Point(185, 256);
+            label27.Location = new Point(185, 284);
             label27.Name = "label27";
             label27.Size = new Size(232, 15);
             label27.TabIndex = 87;
@@ -1244,7 +1257,7 @@
             // label26
             // 
             label26.AutoSize = true;
-            label26.Location = new Point(14, 256);
+            label26.Location = new Point(14, 284);
             label26.Name = "label26";
             label26.Size = new Size(91, 15);
             label26.TabIndex = 86;
@@ -1252,7 +1265,7 @@
             // 
             // numericBlurMosaicSize
             // 
-            numericBlurMosaicSize.Location = new Point(126, 254);
+            numericBlurMosaicSize.Location = new Point(126, 282);
             numericBlurMosaicSize.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
             numericBlurMosaicSize.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
             numericBlurMosaicSize.Name = "numericBlurMosaicSize";
@@ -1309,14 +1322,14 @@
             ((System.ComponentModel.ISupportInitialize)numericThumbWidth).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericThumbHeight).EndInit();
             tabControl1.ResumeLayout(false);
-            tabPageOutput.ResumeLayout(false);
-            tabPageOutput.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDownCounter).EndInit();
-            tabPageModes.ResumeLayout(false);
-            tabPageModes.PerformLayout();
             tabPageApplication.ResumeLayout(false);
             tabPageApplication.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDownFramerate).EndInit();
+            tabPageModes.ResumeLayout(false);
+            tabPageModes.PerformLayout();
+            tabPageOutput.ResumeLayout(false);
+            tabPageOutput.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownCounter).EndInit();
             tabPageHotkeys.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)HotkeyGrid).EndInit();
             tabPageEditor.ResumeLayout(false);
@@ -1439,5 +1452,6 @@
         private ColorDialog colorDialog1;
         private CheckBox checkBoxRegionCaptureUseAllScreens;
         private CheckBox checkBoxAutorun;
+        private CheckBox checkBoxSelectAfterFreehand;
     }
 }

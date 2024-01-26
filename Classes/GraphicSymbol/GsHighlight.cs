@@ -5,7 +5,7 @@ namespace ScreenShotTool;
 public class GsHighlight : GsDynamicImage
 {
     //public Bitmap? originalImage;
-    Bitmap? highlightedBmp;
+    private Bitmap? highlightedBmp;
     public ColorBlend.BlendModes blendMode = ColorBlend.BlendModes.Multiply;
     private Color previousColor = Color.White;
     private ColorBlend.BlendModes previousBlendMode = ColorBlend.BlendModes.Multiply;
@@ -48,11 +48,7 @@ public class GsHighlight : GsDynamicImage
     private void UpdateHighlightBmp(Rectangle rect)
     {
         if (SourceImage == null) return;
-        if (highlightedBmp != null)
-        {
-            highlightedBmp.Dispose();
-            highlightedBmp = null;
-        }
+        highlightedBmp.DisposeAndNull();
         highlightedBmp = new Bitmap(rect.Width, rect.Height);
         //int bmpLeft = Math.Max(0, Left);
         //int bmpTop = Math.Max(0, Top);
@@ -77,6 +73,12 @@ public class GsHighlight : GsDynamicImage
 
             }
         }
+    }
+
+    public override void Dispose()
+    {
+        highlightedBmp.DisposeAndNull();
+        base.Dispose();
     }
 }
 

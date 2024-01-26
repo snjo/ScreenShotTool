@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,35 +11,40 @@ namespace ScreenShotTool;
 public class GsDrawing : GraphicSymbol
 {
     public Bitmap? drawing;
+    bool drawingIsCloned = false;
+    bool temp = true;
 
-    public GsDrawing(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled = false, int lineWeight = 1) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight)
+    private GsDrawing(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled = false, int lineWeight = 1) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight)
     {
         ValidSymbol = true;
         Name = "Freehand";
+        ScalingAllowed = false;
+        
     }
 
-    public static GsDrawing Create(Point TopLeft, Point BottomRight, Bitmap? image, bool temp)
+    //public static GsDrawing Create(Point TopLeft, Point BottomRight, Bitmap? image, bool temp, Color lineColor)
+    public static GsDrawing Create(Point TopLeft, Point BottomRight, FreehandDrawing? drawing, bool temp, Color lineColor)
     {
         //string suffix = temp ? "(temp)" : ("OK");
-        if (image != null)
+        if (drawing != null)
         {
-            //try
-            //{
-                GsDrawing newSymbol = new GsDrawing(TopLeft, new Point(image.Width, image.Height), Color.Red, Color.Green, false, 1);
-                if (temp)
-                {
-                    newSymbol.drawing = image;
-                }
-                else
-                {
-                    newSymbol.drawing = image.Clone(new Rectangle(0, 0, image.Width, image.Height), System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                }
-                return newSymbol;
-            //}
-            //catch
-            //{
-            //    Debug.WriteLine("GsDrawing.Create Exception");
-            //}
+            GsDrawing newSymbol = new GsDrawing(TopLeft, new Point(drawing.Bitmap.Width, drawing.Bitmap.Height), lineColor, Color.Empty, false, 1);
+            if (temp)
+            {
+                newSymbol.drawing = drawing.Bitmap;
+                newSymbol.drawingIsCloned = false;
+            }
+            else
+            {
+                newSymbol.drawing = EditorCanvas.CropImage(drawing.Bitmap, drawing.Contents);
+                newSymbol.Left = drawing.Contents.Left;
+                newSymbol.Top = drawing.Contents.Top;
+                newSymbol.Width = drawing.Contents.Width;
+                newSymbol.Height = drawing.Contents.Height;
+                newSymbol.drawingIsCloned = true;
+            }
+            newSymbol.temp = temp;
+            return newSymbol;
         }
 
         GsDrawing badSymbol = new GsDrawing(new Point(0,0), new Point(10,10), Color.Red, Color.Green, false, 1);
@@ -63,12 +69,11 @@ public class GsDrawing : GraphicSymbol
 
     public override void Dispose()
     {
-        //Debug.WriteLine("Disposing GsDrawing");
-        // don't dispose the drawing, it's used by the temp image process outside.
+        // don't dispose the drawing, if it's used by the temp image process outside.
+        if (drawingIsCloned && temp == false)
+        {
+            drawing.DisposeAndNull();
+        }
+        base.Dispose();
     }
-
-    //internal override void DrawShape(Graphics graphic, Pen drawPen, Brush drawBrush, Point offset, bool fill = false, bool outline = true)
-    //{
-
-    //}
 }

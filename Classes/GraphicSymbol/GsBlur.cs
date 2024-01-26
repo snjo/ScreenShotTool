@@ -66,5 +66,11 @@ public class GsBlur : GsDynamicImage
         }
         return bmp;
     }
+
+    public override void Dispose()
+    {
+        blurredCrop.DisposeAndNull();
+        base.Dispose();
+    }
 }
 

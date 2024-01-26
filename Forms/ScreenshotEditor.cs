@@ -240,6 +240,13 @@ public partial class ScreenshotEditor : Form
 
     public void DeleteListViewSymbols()
     {
+        foreach (ListViewItem item in listViewSymbols.Items)
+        {
+            if (item.Tag is GraphicSymbol gs)
+            {
+                gs.Dispose();
+            }
+        }
         listViewSymbols.Items.Clear();
     }
 
@@ -516,6 +523,7 @@ public partial class ScreenshotEditor : Form
             newItem.Text = symbol.Name;
             newItem.Tag = symbol;
             symbol.ListViewItem = newItem;
+
             listViewSymbols.Update();
             if (listViewSymbols.Items.Count > 0)
             {
@@ -531,8 +539,16 @@ public partial class ScreenshotEditor : Form
     {
         if (listViewSymbols.SelectedItems.Count > 0)
         {
+            bool allowSelect = true;
+            if (selectedUserAction == UserActions.DrawFreehand)
+            {
+                if (Settings.Default.SelectAfterFreehand == false)
+                {
+                    allowSelect = false;
+                }
+            }
             //SetUserAction(UserActions.None);
-            if (Settings.Default.SelectAfterPlacingSymbol)
+            if (Settings.Default.SelectAfterPlacingSymbol && allowSelect) // special exception for freehand draw multiple lines
             {
                 SetUserAction(UserActions.Select);
             }

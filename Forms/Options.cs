@@ -87,6 +87,9 @@ namespace ScreenShotTool
             //Tab: Editor
 
             checkBoxSelectAfterPlacingSymbol.Checked = settings.SelectAfterPlacingSymbol;
+            checkBoxSelectAfterFreehand.Enabled = checkBoxSelectAfterPlacingSymbol.Checked;
+            checkBoxSelectAfterFreehand.Checked = settings.SelectAfterFreehand;
+
             ColorTools.SetButtonColors(buttonNumberedColor, settings.GsNumberedColor, true);
             ColorTools.SetButtonColors(buttonLineColor, settings.NewSymbolLineColor, true);
             ColorTools.SetButtonColors(buttonFillColor, settings.NewSymbolFillColor, true);
@@ -181,6 +184,7 @@ namespace ScreenShotTool
             // Tab: Editor
 
             settings.SelectAfterPlacingSymbol = checkBoxSelectAfterPlacingSymbol.Checked;
+            settings.SelectAfterFreehand = checkBoxSelectAfterFreehand.Checked;
 
             settings.NewSymbolLineColor = buttonLineColor.BackColor;
             settings.NewSymbolFillColor = buttonFillColor.BackColor;
@@ -366,6 +370,18 @@ namespace ScreenShotTool
                     button.Text = color.Name;
                 }
                 dialogAlpha.Dispose();
+            }
+        }
+
+        private void checkBoxSelectAfterPlacingSymbol_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxSelectAfterPlacingSymbol.Checked)
+            {
+                checkBoxSelectAfterFreehand.Enabled = true;
+            }
+            else
+            {
+                checkBoxSelectAfterFreehand.Enabled = false;
             }
         }
     }

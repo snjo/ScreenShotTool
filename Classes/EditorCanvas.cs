@@ -404,7 +404,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
         using (Graphics gph = Graphics.FromImage(bmp))
         {
-            gph.FillRectangle(new SolidBrush(Color.Black), new Rectangle(0, 0, 100, 100));
+            //gph.FillRectangle(new SolidBrush(Color.Black), new Rectangle(0, 0, 100, 100));
             gph.DrawImage(img, new Rectangle(0, 0, bmp.Width, bmp.Height), cropArea, GraphicsUnit.Pixel);
         }
         return bmp;
@@ -461,9 +461,11 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
             if (temporarySymbol is GsDrawing gsDrawing)
             {
                 //Debug.WriteLine($"DrawElements temp, gsDrawing drawing exists: {gsDrawing.drawing != null}");
-                freehandBitmap = drawOnFreehandImage(MousePositionLocal, gsDrawing.LineWeight, gsDrawing.LineColor);
-                gsDrawing.drawing = freehandBitmap;
-                //Debug.WriteLine("freehand assigned, " + freehandBitmap.Width);
+                drawOnFreehandImage(MousePositionLocal, LineWeight, gsDrawing.LineColor);
+                if (freehandDrawing != null)
+                {
+                    gsDrawing.drawing = freehandDrawing.Bitmap;
+                }
             }
             temporarySymbol?.DrawSymbol(graphic);
         }
@@ -495,17 +497,23 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
     #region Drawing Freehand ----------------------------------------------------------------------------
 
-    Bitmap? freehandBitmap = null;
+    //Bitmap? freehandBitmap = null;
+    //Graphics? freehandGraphics;
     Pen freehandPen = new Pen(Color.Red, 3);
+    FreehandDrawing? freehandDrawing;
     Point oldFreehandPosition = Point.Empty;
-    Graphics? freehandGraphics;
     bool freehandInProgress = false;
     
     private Bitmap drawOnFreehandImage(Point point, int lineWidth, Color color)
     {
-        if (freehandBitmap == null || freehandGraphics == null)
+        freehandPen.Width = lineWidth;
+        freehandPen.Color = color;
+        freehandPen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
+        freehandPen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
+        if (freehandDrawing == null)
         {
-            CreateFreehandBitmap();
+            freehandDrawing = new FreehandDrawing(CanvasRect.Width, CanvasRect.Height);
+            //freehandDrawing.Pen = freehandPen;
         }
         if (freehandInProgress == false)
         {
@@ -513,24 +521,22 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
             freehandInProgress = true;
         }
 
-        freehandGraphics.DrawLine(freehandPen, oldFreehandPosition, point);
+        freehandDrawing.DrawLine(freehandPen, oldFreehandPosition, point);
         oldFreehandPosition = point;
-        //Debug.WriteLine($"drawOnFreehandImage: image exists: {freehandBitmap != null}, w:{freehandBitmap.Width}");
-
-        return freehandBitmap;
+        return freehandDrawing.Bitmap;
     }
 
-    private void CreateFreehandBitmap()
-    {
-        freehandBitmap.DisposeAndNull();
+    //private void CreateFreehandBitmap()
+    //{
+    //    freehandBitmap.DisposeAndNull();
 
-        freehandBitmap = new Bitmap(CanvasRect.Width, CanvasRect.Height);
-        freehandPen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
-        freehandPen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
-        oldFreehandPosition = new Point(0,0); // todo fix
-        freehandGraphics = Graphics.FromImage(freehandBitmap);
-        freehandInProgress = false;
-    }
+    //    freehandBitmap = new Bitmap(CanvasRect.Width, CanvasRect.Height);
+    //    freehandPen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
+    //    freehandPen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
+    //    oldFreehandPosition = new Point(0,0); // todo fix
+    //    freehandGraphics = Graphics.FromImage(freehandBitmap);
+    //    freehandInProgress = false;
+    //}
 
     #endregion
 
@@ -580,8 +586,6 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
             //Color.FromArgb((int)numericNewFillAlpha.Value, buttonNewColorFill.BackColor);
             int NumberedSize = Settings.Default.GsNumberedDefaultSize;
 
-           
-
             return parentEditor.selectedUserAction switch
             {
                 ScreenshotEditor.UserActions.CreateRectangle => new GsRectangle(upperLeft, size, lineColor, fillColor, shadow, lineWeight),
@@ -595,7 +599,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
                 ScreenshotEditor.UserActions.CreateHighlight => new GsHighlight(upperLeft, size, lineColor, Color.Yellow, false, 0),
                 ScreenshotEditor.UserActions.CreateCrop => new GsCrop(upperLeft, size, Color.Black, Color.White), // set line/fill color to a solid, so it isn't skipped in rendering
                 ScreenshotEditor.UserActions.CreateNumbered => new GsNumbered(new Point(dragEnd.X - (NumberedSize / 2), dragEnd.Y - (NumberedSize / 2)), new Point(NumberedSize, NumberedSize), lineColor, fillColor, shadow, lineWeight),
-                ScreenshotEditor.UserActions.DrawFreehand => GsDrawing.Create(new Point(0,0),new Point(CanvasRect.Width, CanvasRect.Height),freehandBitmap, temp),//new GsDrawing(new Point(0,0), new Point(CanvasRect.Right, CanvasRect.Bottom), lineColor, fillColor, false, lineWeight),
+                ScreenshotEditor.UserActions.DrawFreehand => GsDrawing.Create(new Point(0,0),new Point(CanvasRect.Width, CanvasRect.Height),freehandDrawing, temp, lineColor),//new GsDrawing(new Point(0,0), new Point(CanvasRect.Right, CanvasRect.Bottom), lineColor, fillColor, false, lineWeight),
                 _ => null,
             };
         }
@@ -886,33 +890,47 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         GraphicSymbol? symbol = GetNewSymbol(MousePositionLocal, parentEditor.GetShift(), false); // checks current User Action and creates a symbol based on that
         if (symbol != null)
         {
+            
             if (symbol.ValidSymbol)
             {
-                parentEditor.AddNewSymbolToList(symbol);
+                parentEditor.AddNewSymbolToList(symbol);   
             }
         }
+
+        
         UpdateOverlay();
         parentEditor.UpdatePropertiesPanel();
         dragStarted = false;
 
-        if (parentEditor.selectedUserAction != ScreenshotEditor.UserActions.MoveSymbol && Settings.Default.SelectAfterPlacingSymbol)
+        if (parentEditor.selectedUserAction == UserActions.DrawFreehand) // add options to disable multi draw lines?
         {
+            Debug.WriteLine("Continue drawing");
+            freehandInProgress = false;
+        }
+        else if (parentEditor.selectedUserAction != ScreenshotEditor.UserActions.MoveSymbol && Settings.Default.SelectAfterPlacingSymbol)
+        {
+            Debug.WriteLine("Stop drawing");
             SetUserAction(ScreenshotEditor.UserActions.Select);
         }
+
+        if (freehandDrawing != null)
+        {
+            freehandDrawing.Dispose();
+            freehandDrawing = null;
+        }
+        freehandInProgress = false;
+
+
         if (parentEditor.selectedUserAction == ScreenshotEditor.UserActions.CreateCrop || parentEditor.selectedUserAction == ScreenshotEditor.UserActions.CreateImage || parentEditor.selectedUserAction == ScreenshotEditor.UserActions.CreateImageScaled)
         {
             // there's no point in creating consecutive Crops, revert to Select, the same is probably true for images.
             SetUserAction(ScreenshotEditor.UserActions.Select);
         }
-        CreateFreehandBitmap();
-        //freehandBitmap.DisposeAndNull();
-        //freehandGraphics.DisposeAndNull();
-
     }
 
     #endregion
 
-    #region Move and Scale ------------------------------------------------------------------------------
+        #region Move and Scale ------------------------------------------------------------------------------
 
     private void MoveSymbol(Point MousePosition)
     {

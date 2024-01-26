@@ -3,7 +3,7 @@
 namespace ScreenShotTool
 {
 #pragma warning disable CA1416 // Validate platform compatibility
-    public class GraphicSymbol
+    public class GraphicSymbol : IDisposable
     {
         public Pen LinePen = new(Color.Gray);
         public Pen HighlightSymbolPen = new(Color.Red);

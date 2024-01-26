@@ -898,5 +898,17 @@ namespace ScreenShotTool.Properties {
                 this["RegionCaptureUseAllScreens"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SelectAfterFreehand {
+            get {
+                return ((bool)(this["SelectAfterFreehand"]));
+            }
+            set {
+                this["SelectAfterFreehand"] = value;
+            }
+        }
     }
 }
