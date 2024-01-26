@@ -1,7 +1,6 @@
-﻿using ScreenShotTool.Classes;
-using System.Numerics;
+﻿using System.Numerics;
 
-namespace ScreenShotTool.Forms;
+namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
 
 public class GsLine : GraphicSymbol

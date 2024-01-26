@@ -127,8 +127,8 @@
   <data name="blur1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\img\blur.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="toolRectangle" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\img\toolRectangle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="toolText" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\toolText.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="toolEllipse" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\img\toolEllipse.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -136,14 +136,17 @@
   <data name="crop" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\img\crop.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="toolArrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\img\toolArrow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="toolRectangle2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\toolRectangle2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="highlight" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\img\highlight.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="toolRectangle2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\img\toolRectangle2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="numbered" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\numbered.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolRectangle" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\toolRectangle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="frame" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\img\frame.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -154,13 +157,13 @@
   <data name="blur" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\img\blur.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="toolText" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\img\toolText.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="toolArrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\toolArrow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="cursor select" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\img\cursor select.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="numbered" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\img\numbered.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="pencil" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\pencil.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

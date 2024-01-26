@@ -2,7 +2,7 @@
 using ScreenShotTool.Properties;
 using Font = System.Drawing.Font;
 
-namespace ScreenShotTool.Classes;
+namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
 public class GsNumbered : GraphicSymbol
 {

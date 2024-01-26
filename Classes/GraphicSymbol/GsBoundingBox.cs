@@ -1,4 +1,4 @@
-﻿namespace ScreenShotTool.Forms
+﻿namespace ScreenShotTool
 {
     public class GsBoundingBox : GraphicSymbol
     {

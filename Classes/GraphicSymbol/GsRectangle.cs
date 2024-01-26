@@ -1,4 +1,4 @@
-﻿namespace ScreenShotTool.Forms;
+﻿namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
 
 public class GsRectangle : GsBoundingBox

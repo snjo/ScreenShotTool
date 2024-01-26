@@ -1,9 +1,9 @@
-﻿namespace ScreenShotTool.Forms;
+﻿namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
 
 public class GsImage : GraphicSymbol
 {
-    readonly Image? image;
+    readonly Bitmap? image;
     bool isDisposed = false;
 
     public GsImage(Point startPoint, Point endPoint, bool shadow) : base(startPoint, endPoint, shadow)
@@ -11,7 +11,7 @@ public class GsImage : GraphicSymbol
         Name = "Image";
         if (image == null)
         {
-            image = Clipboard.GetImage();
+            image = (Bitmap?)Clipboard.GetImage();
         }
         if (image != null)
         {

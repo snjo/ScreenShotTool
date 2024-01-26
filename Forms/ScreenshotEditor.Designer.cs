@@ -43,6 +43,7 @@
             itemPasteScaled = new ToolStripMenuItem();
             deleteOverlayElementsToolStripMenuItem = new ToolStripMenuItem();
             panelButtons = new Panel();
+            buttonDraw = new Button();
             buttonNumbered = new Button();
             buttonCrop = new Button();
             buttonHighlight = new Button();
@@ -227,6 +228,7 @@
             // 
             panelButtons.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             panelButtons.BorderStyle = BorderStyle.FixedSingle;
+            panelButtons.Controls.Add(buttonDraw);
             panelButtons.Controls.Add(buttonNumbered);
             panelButtons.Controls.Add(buttonCrop);
             panelButtons.Controls.Add(buttonHighlight);
@@ -243,13 +245,27 @@
             panelButtons.Size = new Size(46, 657);
             panelButtons.TabIndex = 1;
             // 
+            // buttonDraw
+            // 
+            buttonDraw.AccessibleName = "Draw freehand";
+            buttonDraw.FlatAppearance.BorderSize = 0;
+            buttonDraw.FlatStyle = FlatStyle.Flat;
+            buttonDraw.Image = Properties.Resources.pencil;
+            buttonDraw.Location = new Point(4, 241);
+            buttonDraw.Margin = new Padding(1);
+            buttonDraw.Name = "buttonDraw";
+            buttonDraw.Size = new Size(36, 36);
+            buttonDraw.TabIndex = 13;
+            buttonDraw.UseVisualStyleBackColor = true;
+            buttonDraw.Click += buttonDraw_Click;
+            // 
             // buttonNumbered
             // 
-            buttonNumbered.AccessibleName = "Crop";
+            buttonNumbered.AccessibleName = "Number markers";
             buttonNumbered.FlatAppearance.BorderSize = 0;
             buttonNumbered.FlatStyle = FlatStyle.Flat;
             buttonNumbered.Image = Properties.Resources.numbered;
-            buttonNumbered.Location = new Point(4, 321);
+            buttonNumbered.Location = new Point(4, 355);
             buttonNumbered.Margin = new Padding(1);
             buttonNumbered.Name = "buttonNumbered";
             buttonNumbered.Size = new Size(36, 36);
@@ -263,7 +279,7 @@
             buttonCrop.FlatAppearance.BorderSize = 0;
             buttonCrop.FlatStyle = FlatStyle.Flat;
             buttonCrop.Image = Properties.Resources.crop;
-            buttonCrop.Location = new Point(4, 395);
+            buttonCrop.Location = new Point(4, 429);
             buttonCrop.Margin = new Padding(1);
             buttonCrop.Name = "buttonCrop";
             buttonCrop.Size = new Size(36, 36);
@@ -277,7 +293,7 @@
             buttonHighlight.FlatAppearance.BorderSize = 0;
             buttonHighlight.FlatStyle = FlatStyle.Flat;
             buttonHighlight.Image = Properties.Resources.highlight1;
-            buttonHighlight.Location = new Point(4, 283);
+            buttonHighlight.Location = new Point(4, 317);
             buttonHighlight.Margin = new Padding(1);
             buttonHighlight.Name = "buttonHighlight";
             buttonHighlight.Size = new Size(36, 36);
@@ -291,7 +307,7 @@
             buttonBlur.FlatAppearance.BorderSize = 0;
             buttonBlur.FlatStyle = FlatStyle.Flat;
             buttonBlur.Image = Properties.Resources.blur1;
-            buttonBlur.Location = new Point(4, 245);
+            buttonBlur.Location = new Point(4, 279);
             buttonBlur.Margin = new Padding(1);
             buttonBlur.Name = "buttonBlur";
             buttonBlur.Size = new Size(36, 36);
@@ -319,7 +335,7 @@
             buttonBorder.FlatAppearance.BorderSize = 0;
             buttonBorder.FlatStyle = FlatStyle.Flat;
             buttonBorder.Image = Properties.Resources.frame;
-            buttonBorder.Location = new Point(4, 359);
+            buttonBorder.Location = new Point(4, 393);
             buttonBorder.Margin = new Padding(1);
             buttonBorder.Name = "buttonBorder";
             buttonBorder.Size = new Size(36, 36);
@@ -1158,5 +1174,6 @@
         private Button buttonNumbered;
         private Button buttonToBack;
         private Button buttonToFront;
+        private Button buttonDraw;
     }
 }

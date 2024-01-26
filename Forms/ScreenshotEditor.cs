@@ -1,5 +1,4 @@
-﻿using ScreenShotTool.Classes;
-using ScreenShotTool.Properties;
+﻿using ScreenShotTool.Properties;
 using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
@@ -80,6 +79,7 @@ public partial class ScreenshotEditor : Form
         toolButtons.Add(buttonHighlight);
         toolButtons.Add(buttonCrop);
         toolButtons.Add(buttonNumbered);
+        toolButtons.Add(buttonDraw);
 
         listViewSymbols.Height = 200;
 
@@ -294,7 +294,8 @@ public partial class ScreenshotEditor : Form
         CreateBlur,
         CreateHighlight,
         CreateCrop,
-        CreateNumbered
+        CreateNumbered,
+        DrawFreehand,
     }
 
     public UserActions selectedUserAction = UserActions.Select;
@@ -315,6 +316,7 @@ public partial class ScreenshotEditor : Form
         if (selectedUserAction == UserActions.CreateHighlight) buttonHighlight.BackColor = Color.Yellow;
         if (selectedUserAction == UserActions.CreateCrop) buttonCrop.BackColor = Color.Yellow;
         if (selectedUserAction == UserActions.CreateNumbered) buttonNumbered.BackColor = Color.Yellow;
+        if (selectedUserAction == UserActions.DrawFreehand) buttonDraw.BackColor = Color.Yellow;
         // UserActions.CreateBorder is not in list since it happens right away without mouse drag
 
         //if (selectedUserAction != UserActions.MoveSymbol && selectedUserAction != UserActions.ScaleSymbol)
@@ -331,27 +333,35 @@ public partial class ScreenshotEditor : Form
     #endregion
 
     #region Mouse events --------------------------------------------------------------------------------
+    
+    Point MousePositionLocal = Point.Empty;
     private void PictureBoxOverlay_MouseDown(object sender, MouseEventArgs e)
     {
+        MousePositionLocal = new Point(e.X, e.Y);
         //Debug.WriteLine($"MouseDown {e.Button}");
         pictureBoxOverlay.Focus();
         if (e.Button == MouseButtons.Left)
         {
-            editorCanvas.MouseDown(new Point(e.X, e.Y));
+            editorCanvas.MouseDown(MousePositionLocal);
         }
         else if (e.Button == MouseButtons.Right)
         {
             CancelAction();
         }
     }
+
+    
     private void PictureBoxOverlay_MouseMove(object sender, MouseEventArgs e)
     {
+        MousePositionLocal = new Point(e.X, e.Y);
         bool shiftHeld = ModifierKeys == Keys.Shift;
-        editorCanvas.MouseMove(new Point(e.X, e.Y), shiftHeld);
+        editorCanvas.MouseMove(MousePositionLocal, shiftHeld);
+        
     }
     private void PictureBoxOverlay_MouseUp(object sender, MouseEventArgs e)
     {
-        editorCanvas.MouseUp(new Point(e.X, e.Y));
+        MousePositionLocal = new Point(e.X, e.Y);
+        editorCanvas.MouseUp(MousePositionLocal);
     }
 
     private void PictureBoxOverlay_MouseWheel(object? sender, MouseEventArgs e)
@@ -435,7 +445,7 @@ public partial class ScreenshotEditor : Form
                 }
                 if (e.KeyCode == Keys.Delete)
                 {
-                    DeleteSelectedSymbol();       
+                    DeleteSelectedSymbol();
                 }
                 if (e.KeyCode == Keys.Enter) // Confirm default action on selected symbol
                 {
@@ -444,7 +454,7 @@ public partial class ScreenshotEditor : Form
                         CropImageAction(editorCanvas.SourceImage, crop);
                     }
                 }
-            } 
+            }
         }
     }
 
@@ -1118,6 +1128,11 @@ public partial class ScreenshotEditor : Form
     private void ButtonNumbered_Click(object sender, EventArgs e)
     {
         SetUserAction(UserActions.CreateNumbered);
+    }
+
+    private void buttonDraw_Click(object sender, EventArgs e)
+    {
+        SetUserAction(UserActions.DrawFreehand);
     }
 
     #endregion

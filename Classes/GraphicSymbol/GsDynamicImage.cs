@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace ScreenShotTool.Forms;
+namespace ScreenShotTool;
 
 public class GsDynamicImage(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled = false, int lineWeight = 0) : GsBoundingBox(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight)
 {

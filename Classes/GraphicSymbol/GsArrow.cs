@@ -1,6 +1,6 @@
 ﻿using System.Drawing.Drawing2D;
 
-namespace ScreenShotTool.Forms;
+namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
 
 public class GsArrow : GsLine

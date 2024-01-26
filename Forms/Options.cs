@@ -1,5 +1,4 @@
 ﻿using Hotkeys;
-using ScreenShotTool.Classes;
 using ScreenShotTool.Forms;
 using ScreenShotTool.Properties;
 using System.Diagnostics;

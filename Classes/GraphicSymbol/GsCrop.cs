@@ -1,6 +1,4 @@
-﻿using ScreenShotTool.Forms;
-
-namespace ScreenShotTool;
+﻿namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
 
 public class GsCrop : GsBoundingBox
