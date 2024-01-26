@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
-using System.Windows.Forms;
 using static ScreenShotTool.EditorCanvas;
 
 namespace ScreenShotTool.Forms;
@@ -244,7 +243,7 @@ public partial class ScreenshotEditor : Form
         {
             if (item.Tag is GraphicSymbol gs)
             {
-                gs.Dispose();
+                gs.DisposeImages();
             }
         }
         listViewSymbols.Items.Clear();
@@ -340,7 +339,7 @@ public partial class ScreenshotEditor : Form
     #endregion
 
     #region Mouse events --------------------------------------------------------------------------------
-    
+
     Point MousePositionLocal = Point.Empty;
     private void PictureBoxOverlay_MouseDown(object sender, MouseEventArgs e)
     {
@@ -357,13 +356,13 @@ public partial class ScreenshotEditor : Form
         }
     }
 
-    
+
     private void PictureBoxOverlay_MouseMove(object sender, MouseEventArgs e)
     {
         MousePositionLocal = new Point(e.X, e.Y);
         bool shiftHeld = ModifierKeys == Keys.Shift;
-        editorCanvas.MouseMove(MousePositionLocal, shiftHeld);
-        
+        editorCanvas.MouseMove(MousePositionLocal);
+
     }
     private void PictureBoxOverlay_MouseUp(object sender, MouseEventArgs e)
     {
@@ -391,6 +390,12 @@ public partial class ScreenshotEditor : Form
 
     private void ScreenshotEditor_KeyDown(object sender, KeyEventArgs e)
     {
+        if (e.KeyCode == Keys.G && e.Modifiers == Keys.Control)
+        {
+            GC.Collect(); // Garbage collection for testing purposes to identify memory leaks
+            GC.WaitForPendingFinalizers();
+        }
+
         if (e.KeyCode == Keys.V && e.Modifiers == Keys.Control)
         {
             PasteIntoImage();
@@ -728,7 +733,7 @@ public partial class ScreenshotEditor : Form
             {
                 listViewSymbols.Items.Remove(gs.ListViewItem);
             }
-            gs.Dispose();
+            gs.DisposeImages();
             //editorCanvas.symbols.Remove(gs);   
             listViewSymbols.Update();
             ClearPropertyPanelValues();
@@ -1006,7 +1011,7 @@ public partial class ScreenshotEditor : Form
         gsC.showOutline = false;
         Rectangle cropRect = gsC.Bounds;
         Bitmap outImage = CropImage(image, cropRect);
-        foreach (GraphicSymbol gs in editorCanvas.symbols)
+        foreach (GraphicSymbol gs in editorCanvas.Symbols)
         {
             gs.MoveTo(gs.Left - cropRect.Left, gs.Top - cropRect.Top);
         }

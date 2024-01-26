@@ -1,14 +1,5 @@
-﻿using ScreenShotTool.Properties;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace ScreenShotTool.Forms;
 #pragma warning disable CA1416 // Validate platform compatibility
@@ -67,38 +58,46 @@ public partial class ColorDialogAlpha : Form
     private static List<Color> GetAllColors(bool includeUIColors)
     {
         List<Color> colorList = new List<Color>();
+        List<Color> rearrangedColors = new List<Color>();
         ColorConverter converter = new ColorConverter();
         int colorCount = 0;
-        foreach (Color color in converter.GetStandardValues())
+        var StandardValues = converter.GetStandardValues();
+        if (StandardValues != null)
         {
-            if (includeUIColors == false)
+            foreach (Color color in StandardValues)
             {
-                if (color.Name.Contains("Active")) continue;
-                if (color.Name.Contains("Inactive")) continue;
-                if (color.Name.Contains("Control")) continue;
-                if (color.Name.Contains("Button")) continue;
-                if (color.Name.Contains("Gradient")) continue;
-                if (color.Name.Contains("Text")) continue;
-                if (color.Name.Contains("Menu")) continue;
-                if (color.Name.Contains("Desktop")) continue;
-                if (color.Name.Contains("Window")) continue;
+                if (includeUIColors == false)
+                {
+                    if (color.Name.Contains("Active")) continue;
+                    if (color.Name.Contains("Inactive")) continue;
+                    if (color.Name.Contains("Control")) continue;
+                    if (color.Name.Contains("Button")) continue;
+                    if (color.Name.Contains("Gradient")) continue;
+                    if (color.Name.Contains("Text")) continue;
+                    if (color.Name.Contains("Menu")) continue;
+                    if (color.Name.Contains("Desktop")) continue;
+                    if (color.Name.Contains("Window")) continue;
+                }
+                colorList.Add(color);
+                colorCount++;
             }
-            colorList.Add(color);
-            colorCount++;
+            MoveToList(colorList, rearrangedColors, Color.Transparent);
+            MoveToList(colorList, rearrangedColors, Color.Black);
+            MoveToList(colorList, rearrangedColors, Color.White);
+            MoveToList(colorList, rearrangedColors, Color.LightGray);
+            MoveToList(colorList, rearrangedColors, Color.Gray);
+            MoveToList(colorList, rearrangedColors, Color.DarkGray);
+            MoveToList(colorList, rearrangedColors, Color.Red);
+            MoveToList(colorList, rearrangedColors, Color.Green);
+            MoveToList(colorList, rearrangedColors, Color.Blue);
+            MoveToList(colorList, rearrangedColors, Color.Yellow);
+            MoveToList(colorList, rearrangedColors, Color.Orange);
+            rearrangedColors.AddRange(OrderColorByHue(colorList));
         }
-        List<Color> rearrangedColors = new List<Color>();
-        MoveToList(colorList, rearrangedColors, Color.Transparent);
-        MoveToList(colorList, rearrangedColors, Color.Black);
-        MoveToList(colorList, rearrangedColors, Color.White);
-        MoveToList(colorList, rearrangedColors, Color.LightGray);
-        MoveToList(colorList, rearrangedColors, Color.Gray);
-        MoveToList(colorList, rearrangedColors, Color.DarkGray);
-        MoveToList(colorList, rearrangedColors, Color.Red);
-        MoveToList(colorList, rearrangedColors, Color.Green);
-        MoveToList(colorList, rearrangedColors, Color.Blue);
-        MoveToList(colorList, rearrangedColors, Color.Yellow);
-        MoveToList(colorList, rearrangedColors, Color.Orange);
-        rearrangedColors.AddRange(OrderColorByHue(colorList));
+        else
+        {
+            Debug.WriteLine("GetStandardValues returned empty list");
+        }
         return rearrangedColors;
     }
 

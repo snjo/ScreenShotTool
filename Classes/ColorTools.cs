@@ -38,7 +38,7 @@ public static class ColorTools
         button.BackColor = BackColor;
         button.ForeColor = ColorTools.GetTextColorFromBackground(BackColor);
         if (setColorName)
-        { 
+        {
             button.Text = BackColor.Name;
         }
     }

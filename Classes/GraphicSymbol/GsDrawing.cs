@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ScreenShotTool;
+﻿namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
 public class GsDrawing : GraphicSymbol
 {
@@ -19,7 +11,7 @@ public class GsDrawing : GraphicSymbol
         ValidSymbol = true;
         Name = "Freehand";
         ScalingAllowed = false;
-        
+
     }
 
     //public static GsDrawing Create(Point TopLeft, Point BottomRight, Bitmap? image, bool temp, Color lineColor)
@@ -47,12 +39,12 @@ public class GsDrawing : GraphicSymbol
             return newSymbol;
         }
 
-        GsDrawing badSymbol = new GsDrawing(new Point(0,0), new Point(10,10), Color.Red, Color.Green, false, 1);
+        GsDrawing badSymbol = new GsDrawing(new Point(0, 0), new Point(10, 10), Color.Red, Color.Green, false, 1);
         badSymbol.ValidSymbol = false;
         //badSymbol.Name = $"Freehand error {suffix}";
         //Debug.WriteLine($"GsDrawing.Create: can't create valid symbol, image is null, temp: {temp}");
         return badSymbol;
-        
+
     }
 
     public override void DrawSymbol(Graphics graphic)
@@ -67,13 +59,13 @@ public class GsDrawing : GraphicSymbol
         }
     }
 
-    public override void Dispose()
+    public override void DisposeImages()
     {
         // don't dispose the drawing, if it's used by the temp image process outside.
         if (drawingIsCloned && temp == false)
         {
             drawing.DisposeAndNull();
         }
-        base.Dispose();
+        base.DisposeImages();
     }
 }

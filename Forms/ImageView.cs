@@ -2,11 +2,8 @@
 using ScreenShotTool.Properties;
 using System.Diagnostics;
 using System.Drawing.Imaging;
-using System.Drawing.Text;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using System.Windows.Forms;
 
 namespace ScreenShotTool
 {
@@ -165,14 +162,14 @@ namespace ScreenShotTool
             imageEditor.Show();
         }
 
-        
+
 
         private void PictureBoxDraw_MouseDown(object sender, MouseEventArgs e)
         {
             module.MouseDown(e);
         }
 
-        
+
 
         private void PictureBoxDraw_MouseUp(object sender, MouseEventArgs e)
         {

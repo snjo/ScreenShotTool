@@ -1,11 +1,5 @@
 ﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Runtime.Versioning;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Autorun;
 [SupportedOSPlatform("windows")]
@@ -37,8 +31,8 @@ public static class Autorun
                 key.SetValue(ApplicationName, "\"" + Application.ExecutablePath + "\"");
             }
         }
-    }    
-    
+    }
+
     public static void Disable(string ApplicationName)
     {
         using (RegistryKey? key = Registry.CurrentUser.OpenSubKey(autoStartKey, true))

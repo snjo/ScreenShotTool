@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace ScreenShotTool;
+﻿namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
 public class GsBlur : GsDynamicImage
 {
@@ -67,10 +65,10 @@ public class GsBlur : GsDynamicImage
         return bmp;
     }
 
-    public override void Dispose()
+    public override void DisposeImages()
     {
         blurredCrop.DisposeAndNull();
-        base.Dispose();
+        base.DisposeImages();
     }
 }
 

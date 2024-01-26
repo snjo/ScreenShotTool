@@ -2,7 +2,6 @@
 using ScreenShotTool.Forms;
 using ScreenShotTool.Properties;
 using System.Diagnostics;
-using System.Drawing;
 using System.Runtime.Versioning;
 
 namespace ScreenShotTool

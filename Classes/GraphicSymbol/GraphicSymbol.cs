@@ -261,8 +261,44 @@ namespace ScreenShotTool
             TextColor = LineColor;
         }
 
-        public virtual void Dispose()
+        public virtual void DisposeImages()
         {
+        }
+
+        private bool disposed = false;
+        public void Dispose()
+        {
+            
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                disposed = true;
+
+                if (disposing)
+                {
+                    // Clean up managed resources, like files or GDI objects
+                    DisposeImages();
+                    LinePen.Dispose();
+                    HighlightSymbolPen.Dispose();
+                    LineBrush.Dispose();
+                    FillBrush.Dispose();
+                    TextBrush.Dispose();
+                    ShadowBrush.Dispose();
+                    HighlightBrush.Dispose();
+                    ShadowPen.Dispose();
+                }
+
+                // Clean up unmanaged resources, like COM components
+            }
+        }
+
+        ~GraphicSymbol() // the finalizer
+        {
+            Dispose(false);
         }
     }
 }

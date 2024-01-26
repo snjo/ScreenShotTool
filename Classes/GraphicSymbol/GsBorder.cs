@@ -22,7 +22,7 @@ public class GsBorder : GsBoundingBox
         Width = ContainerBounds.Width;
         Height = ContainerBounds.Height;
         borderPen.Color = LineColor;
-        
+
         borderPen.Width = LineWeight;
         borderPen.Alignment = System.Drawing.Drawing2D.PenAlignment.Inset;
         graphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;

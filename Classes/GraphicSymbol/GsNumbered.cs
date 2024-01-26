@@ -1,5 +1,4 @@
-﻿using ScreenShotTool.Forms;
-using ScreenShotTool.Properties;
+﻿using ScreenShotTool.Properties;
 using Font = System.Drawing.Font;
 
 namespace ScreenShotTool;

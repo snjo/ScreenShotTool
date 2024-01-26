@@ -76,7 +76,7 @@ public class GsImage : GraphicSymbol
         }
     }
 
-    public override void Dispose()
+    public override void DisposeImages()
     {
         isDisposed = true;
         image?.Dispose();

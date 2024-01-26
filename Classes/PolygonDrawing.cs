@@ -1,10 +1,10 @@
-﻿namespace ScreenShotTool;
+﻿using System.Drawing;
+
+namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
 
-public class FreehandDrawing
+public class PolygonDrawing
 {
-    public Bitmap Bitmap;
-    private Graphics graphics;
     public Point Location = new Point(0, 0);
     public Size Size;
     private bool noPixelsSet = true;
@@ -12,14 +12,13 @@ public class FreehandDrawing
     public int RightMostPixel = 0;
     public int TopMostPixel = 0;
     public int BottomMostPixel = 0;
-    //public Pen Pen;
-    public FreehandDrawing(int Width, int Height)
+
+    public List<Point> PointList = new();
+    public Pen pen;
+
+    public PolygonDrawing(Pen pen)
     {
-        //Debug.WriteLine("Create Freehand");
-        this.Bitmap = new Bitmap(Width, Height);
-        graphics = Graphics.FromImage(this.Bitmap);
-        Size = new Size(Width, Height);
-        //this.Pen = pen;
+        this.pen = pen;
     }
 
     private void UpdateContentBounds(Pen pen, Point point)
@@ -46,11 +45,17 @@ public class FreehandDrawing
         }
     }
 
-    public void DrawLine(Pen pen, Point point1, Point point2)
+    public void AddLine(Point point1, Point point2)
     {
         UpdateContentBounds(pen, point1);
         UpdateContentBounds(pen, point2);
-        graphics.DrawLine(pen, point1, point2);
+        PointList.Add(point1);
+    }
+
+    public void AddPoint(Point point)
+    {
+        UpdateContentBounds(pen, point);
+        PointList.Add(point);
     }
 
     public Rectangle Contents
@@ -61,8 +66,14 @@ public class FreehandDrawing
         }
     }
 
-    public void Dispose()
+    public Bitmap ToBitmap()
     {
-        this.Bitmap.Dispose();
+        Bitmap bitmap = new Bitmap(Contents.Width, Contents.Height);
+        Graphics graphics = Graphics.FromImage(bitmap);
+
+        graphics.DrawLines(pen, PointList.ToArray());
+
+        graphics.Dispose();
+        return bitmap;
     }
 }

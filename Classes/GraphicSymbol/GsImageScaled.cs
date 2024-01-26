@@ -53,7 +53,7 @@ public class GsImageScaled : GraphicSymbol
         }
     }
 
-    public override void Dispose()
+    public override void DisposeImages()
     {
         image?.Dispose();
     }
