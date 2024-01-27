@@ -13,7 +13,7 @@ public class GsDrawing : GraphicSymbol
     {
         ValidSymbol = true;
         Name = "Freehand";
-        ScalingAllowed = false;
+        //ScalingAllowed = false;
     }
 
     public static GsDrawing Create(Point TopLeft, Point BottomRight, PolygonDrawing? newPolygon, bool temp, Color lineColor)
@@ -62,7 +62,8 @@ public class GsDrawing : GraphicSymbol
             }
             else
             {
-                graphic.DrawImageUnscaled(drawing, new Point(Left, Top));
+                //graphic.DrawImageUnscaled(drawing, new Point(Left, Top));
+                graphic.DrawImage(drawing, Left, Top, Width, Height);
             }
         }
     }
