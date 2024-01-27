@@ -1,10 +1,12 @@
-﻿using System.Drawing;
+﻿using System.Diagnostics;
+using System.Drawing;
 
 namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
 
 public class PolygonDrawing
 {
+    Bitmap? bitmap;
     public Point Location = new Point(0, 0);
     public Size Size;
     private bool noPixelsSet = true;
@@ -12,6 +14,7 @@ public class PolygonDrawing
     public int RightMostPixel = 0;
     public int TopMostPixel = 0;
     public int BottomMostPixel = 0;
+    DateTime lastUpdate = DateTime.MinValue;
 
     public List<Point> PointList = new();
     public Pen pen;
@@ -68,12 +71,34 @@ public class PolygonDrawing
 
     public Bitmap ToBitmap()
     {
-        Bitmap bitmap = new Bitmap(Contents.Width, Contents.Height);
-        Graphics graphics = Graphics.FromImage(bitmap);
+        TimeSpan ts = DateTime.Now - lastUpdate;
+        //Debug.WriteLine($"* {ts.Milliseconds} ms since last ToBitmap");
+        lastUpdate = DateTime.Now;
+        bitmap.DisposeAndNull();
+        bitmap = new Bitmap(Math.Max(1,Contents.Width), Math.Max(1,Contents.Height));
+        using (Graphics graphics = Graphics.FromImage(bitmap))
+        {
+            graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            //graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+            //Debug.WriteLine($"{LeftMostPixel} in Polygon.ToBitmap");
+            Point[] offsetPoints = new Point[PointList.Count];
+            for (int i = 0; i < PointList.Count; i++)
+            {
+                offsetPoints[i] = new Point(PointList[i].X - LeftMostPixel, PointList[i].Y - TopMostPixel);
+            }
 
-        graphics.DrawLines(pen, PointList.ToArray());
+            if (offsetPoints.Length > 1)
+            {
+                //Debug.WriteLine($"Point 0: {offsetPoints[0]}, 1: {offsetPoints[1]}");
+                graphics.DrawLines(pen, offsetPoints);
+            }
+        }
 
-        graphics.Dispose();
         return bitmap;
+    }
+
+    public void Dispose()
+    {
+
     }
 }

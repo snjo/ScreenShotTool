@@ -530,7 +530,7 @@ public partial class ScreenshotEditor : Form
             symbol.ListViewItem = newItem;
 
             listViewSymbols.Update();
-            if (listViewSymbols.Items.Count > 0)
+            if (listViewSymbols.Items.Count > 0 && selectedUserAction != UserActions.DrawFreehand)
             {
                 listViewSymbols.Items[^1].Focused = true; // ^1 is listViewSymbols.Items.Count - 1, https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-8.0/ranges
                 listViewSymbols.Items[^1].Selected = true;
