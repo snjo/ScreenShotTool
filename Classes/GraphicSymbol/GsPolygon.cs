@@ -56,12 +56,13 @@ public class GsPolygon : GraphicSymbol
             if (isTemporarySymbol)
             {
                 // don't move the symbol around during drawing
-                Polygon.Draw(graphic); 
+                //Polygon.Draw(graphic, 0, 0, Polygon.Contents.Width, Polygon.Contents.Height);
+                Polygon.Draw(graphic, 0, 0, false, 0, 0);
             }
             else
             {
                 // move the symbol into new place if it's moved from drawn location
-                Polygon.Draw(graphic, Left - Polygon.LeftMostPixel, Top - Polygon.TopMostPixel);
+                Polygon.Draw(graphic, Left - Polygon.LeftMostPixel, Top - Polygon.TopMostPixel, true, Width, Height);
             }
         }
     }

@@ -75,18 +75,30 @@ public class PolygonDrawing
         bitmap = new Bitmap(Math.Max(1,Contents.Width), Math.Max(1,Contents.Height));
         using (Graphics graphics = Graphics.FromImage(bitmap))
         {
-            Draw(graphics, -LeftMostPixel, -TopMostPixel);
+            Draw(graphics, -LeftMostPixel, -TopMostPixel, false, Contents.Width, Contents.Height);
         }
         return bitmap;
     }
 
-    public void Draw(Graphics graphics, int offsetX = 0, int offsetY = 0)
+    public void Draw(Graphics graphics, int offsetX, int offsetY, bool scale, float Width, float Height)
     {
         graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
         Point[] offsetPoints = new Point[PointList.Count];
+        float scaleWidth = Width / Contents.Width;
+        float scaleHeight = Height / Contents.Height;
         for (int i = 0; i < PointList.Count; i++)
         {
-            offsetPoints[i] = new Point(PointList[i].X + offsetX, PointList[i].Y + offsetY);
+            if (scale)
+            {
+                Point zeroed = PointList[i].Subtract(new Point(Contents.Left, Contents.Top));
+                Point scaledPoint = new Point((int)(zeroed.X * scaleWidth), (int)(zeroed.Y * scaleHeight));
+                offsetPoints[i] = scaledPoint.Add(new Point(offsetX, offsetY)).Add(new Point(Contents.Left, Contents.Top));
+            }
+            else
+            {
+                offsetPoints[i] = PointList[i].Add(new Point(offsetX, offsetY));
+            }
+            
         }
 
         if (offsetPoints.Length > 1)

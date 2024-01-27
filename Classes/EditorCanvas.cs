@@ -820,19 +820,23 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         }
         if (SourceImage == null) return;
 
-        if (parentEditor.selectedUserAction >= ScreenshotEditor.UserActions.CreateRectangle) // any UserAction above CreateRectangle is a new symbol creation
+        // added dragStarted check, seems OK
+        if (dragStarted)
         {
-            CreateTempSymbol(MousePosition);
-        }
-        else if (parentEditor.selectedUserAction == ScreenshotEditor.UserActions.MoveSymbol)
-        {
-            MoveSymbol(MousePosition);
-            UpdateOverlay(null, forceUpdate: false);
-        }
-        else if (parentEditor.selectedUserAction == ScreenshotEditor.UserActions.ScaleSymbol)
-        {
-            ScaleSymbol(MousePosition);
-            UpdateOverlay(null, false);
+            if (parentEditor.selectedUserAction >= ScreenshotEditor.UserActions.CreateRectangle) // any UserAction above CreateRectangle is a new symbol creation
+            {
+                CreateTempSymbol(MousePosition);
+            }
+            else if (parentEditor.selectedUserAction == ScreenshotEditor.UserActions.MoveSymbol)
+            {
+                MoveSymbol(MousePosition);
+                UpdateOverlay(null, forceUpdate: false);
+            }
+            else if (parentEditor.selectedUserAction == ScreenshotEditor.UserActions.ScaleSymbol)
+            {
+                ScaleSymbol(MousePosition);
+                UpdateOverlay(null, false);
+            }
         }
 
         oldMousePosition = MousePosition;
