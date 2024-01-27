@@ -21,45 +21,51 @@ public class GsImage : GraphicSymbol
         {
             ValidSymbol = false;
         }
-        ScalingAllowed = false;
+        //ScalingAllowed = false;
         AllowClickPlacement = true;
-    }
-
-    public override int Width
-    {
-        get
+        if (image != null)
         {
-            if (isDisposed == false && image != null)
-            {
-                return image.Width;
-            }
-            else
-            {
-                return base.Width;
-            }
+            Width = image.Width;
+            Height = image.Height;
         }
     }
 
-    public override int Height
-    {
-        get
-        {
-            if (isDisposed == false && image != null)
-            {
-                return image.Height;
-            }
-            else
-            {
-                return base.Height;
-            }
-        }
-    }
+    //public override int Width
+    //{
+    //    get
+    //    {
+    //        if (isDisposed == false && image != null)
+    //        {
+    //            return image.Width;
+    //        }
+    //        else
+    //        {
+    //            return base.Width;
+    //        }
+    //    }
+    //}
+
+    //public override int Height
+    //{
+    //    get
+    //    {
+    //        if (isDisposed == false && image != null)
+    //        {
+    //            return image.Height;
+    //        }
+    //        else
+    //        {
+    //            return base.Height;
+    //        }
+    //    }
+    //}
 
     internal override void DrawShape(Graphics graphic, Pen drawPen, Brush drawBrush, Point offset, bool fill = true, bool outline = true)
     {
         if (image != null && isDisposed == false)
         {
-            graphic.DrawImageUnscaled(image, Left, Top);
+            //graphic.DrawImageUnscaled(image, Left, Top);
+            graphic.DrawImage(image, Left, Top, Width, Height);
         }
     }
 
