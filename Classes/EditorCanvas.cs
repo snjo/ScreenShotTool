@@ -446,10 +446,15 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
             }
             if (temporarySymbol is GsDrawing gsDrawing)
             {
-                Bitmap tempPolygonBmp = 
-                    DrawOnFreehandImage(MousePositionLocal, LineWeight, gsDrawing.LineColor);
+                Bitmap tempPolygonBmp = DrawOnFreehandImage(MousePositionLocal, LineWeight, gsDrawing.LineColor);
                 gsDrawing.drawing?.Dispose();
                 gsDrawing.drawing = tempPolygonBmp;
+
+            }
+            if (temporarySymbol is GsPolygon gsPolygon)
+            {
+                DrawOnPolygon(MousePositionLocal, LineWeight, gsPolygon.LineColor);
+                //gsPolygon.Polygon = tempPolygonBmp;
 
             }
             temporarySymbol?.DrawSymbol(graphic);
@@ -508,6 +513,26 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         return polygonDrawing.ToBitmap();
     }
 
+    private void DrawOnPolygon(Point point, int lineWidth, Color color)
+    {
+        freehandPen.Width = lineWidth;
+        freehandPen.Color = color;
+        freehandPen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
+        freehandPen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
+        if (polygonDrawing == null)
+        {
+            polygonDrawing = new PolygonDrawing(freehandPen);
+        }
+        if (freehandInProgress == false)
+        {
+            oldFreehandPosition = MousePositionLocal;
+            freehandInProgress = true;
+        }
+
+        polygonDrawing.AddPoint(point);
+        oldFreehandPosition = point;
+    }
+
     #endregion
 
     #region Symbols -------------------------------------------------------------------------------------
@@ -563,7 +588,8 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
                 ScreenshotEditor.UserActions.CreateHighlight => new GsHighlight(upperLeft, size, lineColor, Color.Yellow, false, 0),
                 ScreenshotEditor.UserActions.CreateCrop => new GsCrop(upperLeft, size, Color.Black, Color.White), // set line/fill color to a solid, so it isn't skipped in rendering
                 ScreenshotEditor.UserActions.CreateNumbered => new GsNumbered(new Point(dragEnd.X - (NumberedSize / 2), dragEnd.Y - (NumberedSize / 2)), new Point(NumberedSize, NumberedSize), lineColor, fillColor, shadow, lineWeight),
-                ScreenshotEditor.UserActions.DrawFreehand => GsDrawing.Create(new Point(0,0), new Point(CanvasRect.Width, CanvasRect.Height), polygonDrawing, temp, lineColor),//new GsDrawing(new Point(0,0), new Point(CanvasRect.Right, CanvasRect.Bottom), lineColor, fillColor, false, lineWeight),
+                //ScreenshotEditor.UserActions.DrawFreehand => GsDrawing.Create(new Point(0,0), new Point(CanvasRect.Width, CanvasRect.Height), polygonDrawing, temp, lineColor),
+                ScreenshotEditor.UserActions.DrawFreehand => GsPolygon.Create(new Point(0,0), polygonDrawing, temp, lineColor, lineWeight),
                 _ => null,
             };
         }

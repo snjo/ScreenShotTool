@@ -692,6 +692,11 @@ public partial class ScreenshotEditor : Form
                 {
                     EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
                 }
+                else if (graphicSymbol is GsPolygon)
+                {
+                    EnablePanel(panelPropertiesLine, panelLeft, ref lastPanelBottom);
+                    EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
+                }
                 else if (graphicSymbol is GsBoundingBox) // must be after all other symbols that inherit from GsBoundingBox
                 {
                     EnablePanel(panelPropertiesFill, panelLeft, ref lastPanelBottom);

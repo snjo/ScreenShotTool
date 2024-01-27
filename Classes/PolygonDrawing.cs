@@ -71,30 +71,28 @@ public class PolygonDrawing
 
     public Bitmap ToBitmap()
     {
-        TimeSpan ts = DateTime.Now - lastUpdate;
-        //Debug.WriteLine($"* {ts.Milliseconds} ms since last ToBitmap");
-        lastUpdate = DateTime.Now;
         bitmap.DisposeAndNull();
         bitmap = new Bitmap(Math.Max(1,Contents.Width), Math.Max(1,Contents.Height));
         using (Graphics graphics = Graphics.FromImage(bitmap))
         {
-            graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            //graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
-            //Debug.WriteLine($"{LeftMostPixel} in Polygon.ToBitmap");
-            Point[] offsetPoints = new Point[PointList.Count];
-            for (int i = 0; i < PointList.Count; i++)
-            {
-                offsetPoints[i] = new Point(PointList[i].X - LeftMostPixel, PointList[i].Y - TopMostPixel);
-            }
+            Draw(graphics, -LeftMostPixel, -TopMostPixel);
+        }
+        return bitmap;
+    }
 
-            if (offsetPoints.Length > 1)
-            {
-                //Debug.WriteLine($"Point 0: {offsetPoints[0]}, 1: {offsetPoints[1]}");
-                graphics.DrawLines(pen, offsetPoints);
-            }
+    public void Draw(Graphics graphics, int offsetX = 0, int offsetY = 0)
+    {
+        graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+        Point[] offsetPoints = new Point[PointList.Count];
+        for (int i = 0; i < PointList.Count; i++)
+        {
+            offsetPoints[i] = new Point(PointList[i].X + offsetX, PointList[i].Y + offsetY);
         }
 
-        return bitmap;
+        if (offsetPoints.Length > 1)
+        {
+            graphics.DrawLines(pen, offsetPoints);
+        }
     }
 
     public void Dispose()
