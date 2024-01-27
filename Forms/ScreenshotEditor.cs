@@ -688,6 +688,10 @@ public partial class ScreenshotEditor : Form
                         gsNumbered.ListViewItem.Text = "Number: " + gsNumbered.Number;
                     }
                 }
+                else if (graphicSymbol is GsImage || graphicSymbol is GsImageScaled)
+                {
+                    EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
+                }
                 else if (graphicSymbol is GsBoundingBox) // must be after all other symbols that inherit from GsBoundingBox
                 {
                     EnablePanel(panelPropertiesFill, panelLeft, ref lastPanelBottom);
