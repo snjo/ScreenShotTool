@@ -217,8 +217,8 @@
             // 
             itemPasteScaled.Name = "itemPasteScaled";
             itemPasteScaled.Size = new Size(190, 22);
-            itemPasteScaled.Text = "Paste (&Scaled)";
-            itemPasteScaled.Click += ItemPasteScaled_Click;
+            itemPasteScaled.Text = "Paste from file";
+            itemPasteScaled.Click += ItemPasteFromFile;
             // 
             // deleteOverlayElementsToolStripMenuItem
             // 

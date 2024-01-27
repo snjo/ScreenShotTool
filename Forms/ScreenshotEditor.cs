@@ -14,12 +14,13 @@ public partial class ScreenshotEditor : Form
 
     #region Constructor ---------------------------------------------------------------------------------
     readonly EditorCanvas editorCanvas;
-    private List<ImageFormatDefinition> imageFormats = [];
     public readonly static int maxFontSize = 200;
     public readonly static int minimumFontSize = 5;
     public readonly static int startingFontSize = 10;
     readonly List<Button> toolButtons = [];
     public SharedBitmap copiedBitmap = new SharedBitmap();
+    string filterLoadImage = "Images|*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp|PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|All files|*.*";
+    string filterSaveImage = "PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|All files|*.*";
 
     public ScreenshotEditor()
     {
@@ -62,7 +63,6 @@ public partial class ScreenshotEditor : Form
     private void SetupEditor()
     {
         FillFontFamilyBox();
-        imageFormats = CreateImageFormatsList();
         numericPropertiesFontSize.Maximum = maxFontSize;
         numericPropertiesFontSize.Minimum = minimumFontSize;
         numericPropertiesFontSize.Value = startingFontSize;
@@ -91,18 +91,6 @@ public partial class ScreenshotEditor : Form
 
         UpdatePropertiesPanel();
         this.pictureBoxOverlay.MouseWheel += PictureBoxOverlay_MouseWheel;
-    }
-
-    private List<ImageFormatDefinition> CreateImageFormatsList()
-    {
-        List<ImageFormatDefinition> list = [];
-        list.Add(new ImageFormatDefinition("All files", "*.*", ImageFormat.Png));
-        list.Add(new ImageFormatDefinition("Images (*.png,*.jpg,*.jpeg,*.gif,*.bmp,*.webp)", "(*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp)", ImageFormat.Png));
-        list.Add(new ImageFormatDefinition("PNG", "*.png", ImageFormat.Png));
-        list.Add(new ImageFormatDefinition("JPG", "*.jpg", ImageFormat.Jpeg));
-        list.Add(new ImageFormatDefinition("GIF", "*.gif", ImageFormat.Gif));
-        list.Add(new ImageFormatDefinition("BMP", "*.bmp", ImageFormat.Bmp));
-        return list;
     }
 
     public void UpdateNumericLimits()
@@ -153,7 +141,7 @@ public partial class ScreenshotEditor : Form
     {
         FileDialog fileDialog = new OpenFileDialog
         {
-            Filter = "Images (*.png,*.jpg,*.jpeg,*.gif,*.bmp,*.webp)|(*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp)|PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|All files|*.*"
+            Filter = "Images|*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp|PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|All files|*.*"
         };
         DialogResult result = fileDialog.ShowDialog();
         if (result == DialogResult.OK)
@@ -171,36 +159,18 @@ public partial class ScreenshotEditor : Form
     {
         FileDialog fileDialog = new SaveFileDialog();
 
-        string filter = "";
-        for (int i = 0; i < imageFormats.Count; i++)
-        {
-            filter += imageFormats[i].FilterString;
-            if (i < imageFormats.Count - 1)
-                filter += "|";
-        }
+        string filter = filterSaveImage;
+
 
         fileDialog.Filter = filter;
         fileDialog.FileName = "";
-        fileDialog.FilterIndex = 3;
+        fileDialog.FilterIndex = 1;
         DialogResult result = fileDialog.ShowDialog();
         if (result == DialogResult.OK)
         {
             string filename = fileDialog.FileName;
-            ImageFormat imgFormat = ImageFormat.Png;
-            int selectedFormat = fileDialog.FilterIndex - 1; // filter start with 1, correcting to 0-based
-            if (selectedFormat < 2) // all or multi-filter images
-            {
-                imgFormat = ImageFormatFromExtension(filename);
-                Debug.WriteLine($"Guessed file format from file name ({filename}): {imgFormat} ");
-            }
-            else
-            {
-                if (selectedFormat < imageFormats.Count)
-                {
-                    imgFormat = imageFormats[selectedFormat].Format;
-                    Debug.WriteLine($"Using format from index {selectedFormat}: {imgFormat} ");
-                }
-            }
+            ImageFormat imgFormat = ImageFormatFromExtension(filename);
+            Debug.WriteLine($"Guessed file format from file name ({filename}): {imgFormat} ");
             SaveImage(fileDialog.FileName, imgFormat);
         }
     }
@@ -265,6 +235,68 @@ public partial class ScreenshotEditor : Form
     private void PasteIntoThisImage_Click(object sender, EventArgs e)
     {
         PasteIntoImage();
+    }
+
+    private void ItemPasteFromFile(object sender, EventArgs e)
+    {
+        Point location = MousePositionLocal;
+        bool badLocation = false;
+        if (location.X < 0 || location.X > editorCanvas.CanvasRect.Width - 10)
+        {
+            badLocation = true;
+        }
+        if (location.Y < 0 || location.Y > editorCanvas.CanvasRect.Height - 10)
+        {
+            badLocation = true;
+        }
+        if (badLocation)
+        {
+            location = new Point(10, 10);
+        }
+
+        Image? loadedImage = null;
+
+        FileDialog fileDialog = new OpenFileDialog
+        {
+            //Filter = "Images (*.png,*.jpg,*.jpeg,*.gif,*.bmp,*.webp)|(*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp;)|PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|All files|*.*"
+            Filter = filterLoadImage
+        };
+        DialogResult result = fileDialog.ShowDialog();
+        if (result == DialogResult.OK)
+        {
+            try
+            {
+
+                Image? tempImage = null;
+                using (FileStream stream = new(fileDialog.FileName, FileMode.Open))
+                {
+                    tempImage = Image.FromStream(stream);
+                }
+
+                loadedImage = ImageToBitmap32bppArgb(tempImage, true);
+
+                //loadedImage = Bitmap.FromFile(fileDialog.FileName);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Couldn't load file.\n" + ex.Message);
+                loadedImage = null;
+            }
+        }
+        
+        if (loadedImage != null)
+        {
+            GsImage gsImage = GsImage.Create(location, (Bitmap)loadedImage);//GsImage.Create(location, copiedBitmap, true);
+            if (gsImage.ValidSymbol)
+            {
+                AddNewSymbolToList(gsImage);
+            }
+            else
+            {
+                gsImage.Dispose();
+            }
+        }
+        editorCanvas.UpdateOverlay();
     }
 
     private void ItemPasteScaled_Click(object sender, EventArgs e)
@@ -510,7 +542,7 @@ public partial class ScreenshotEditor : Form
         }
         if (location.Y < 0 || location.Y > editorCanvas.CanvasRect.Height - 10)
         {
-              badLocation = true;
+            badLocation = true;
         }
         if (badLocation)
         {

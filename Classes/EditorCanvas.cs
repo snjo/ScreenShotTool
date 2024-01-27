@@ -117,7 +117,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         UpdateOverlay();
     }
 
-    private static Bitmap? ImageToBitmap32bppArgb(Image? img, bool disposeSource)
+    public static Bitmap? ImageToBitmap32bppArgb(Image? img, bool disposeSource)
     {
         Bitmap? clone = null;
         if (img != null)

@@ -10,6 +10,16 @@ public class GsImage : GraphicSymbol
     Bitmap? image;
     //bool isDisposed = false;
 
+    public static GsImage Create(Point startPoint, Bitmap bitmap)
+    {
+        GsImage gsImage = new GsImage(startPoint, Point.Empty, false);
+        gsImage.image = bitmap;
+        gsImage.Width = bitmap.Width;
+        gsImage.Height = bitmap.Height;
+        gsImage.ValidSymbol = true;
+        return gsImage;
+    }
+
     public static GsImage Create(Point startPoint, SharedBitmap copiedImage, bool checkClipboard)
     {
         bool useClipboard = true;
