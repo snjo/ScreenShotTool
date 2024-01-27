@@ -2,15 +2,16 @@
 #pragma warning disable CA1416 // Validate platform compatibility
 public partial class NewImagePrompt : Form
 {
-    public Color color = Color.White;
-    public int imageWidth = 500;
-    public int imageHeight = 500;
+    public Color BackgroundColor = Color.White;
+    public int ImageWidth = 500;
+    public int ImageHeight = 500;
 
     public NewImagePrompt()
     {
         InitializeComponent();
-        numericWidth.Value = imageWidth;
-        numericHeight.Value = imageHeight;
+        numericWidth.Value = ImageWidth;
+        numericHeight.Value = ImageHeight;
+        ColorTools.SetButtonColors(buttonColor, BackgroundColor, true);
     }
 
     private void SelectColor_Click(object sender, EventArgs e)
@@ -20,8 +21,9 @@ public partial class NewImagePrompt : Form
         //DialogResult result = colorDialog1.ShowDialog();
         if (result == DialogResult.OK)
         {
-            buttonColor.BackColor = colorDialogAlpha.Color;
-            color = colorDialogAlpha.Color;
+            //buttonColor.BackColor = colorDialogAlpha.Color;
+            ColorTools.SetButtonColors(buttonColor, colorDialogAlpha.Color, true);
+            BackgroundColor = colorDialogAlpha.Color;
         }
     }
 
@@ -33,7 +35,7 @@ public partial class NewImagePrompt : Form
     private void ButtonOK_Click(object sender, EventArgs e)
     {
         DialogResult = DialogResult.OK;
-        imageWidth = (int)numericWidth.Value;
-        imageHeight = (int)numericHeight.Value;
+        ImageWidth = (int)numericWidth.Value;
+        ImageHeight = (int)numericHeight.Value;
     }
 }

@@ -310,7 +310,7 @@ public partial class ScreenshotEditor : Form
         DialogResult result = imagePrompt.ShowDialog();
         if (result == DialogResult.OK)
         {
-            editorCanvas.CreateNewImage(imagePrompt.imageWidth, imagePrompt.imageHeight, imagePrompt.color);
+            editorCanvas.CreateNewImage(imagePrompt.ImageWidth, imagePrompt.ImageHeight, imagePrompt.BackgroundColor);
         }
         imagePrompt.Dispose();
     }

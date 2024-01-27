@@ -15,9 +15,8 @@ public class GsPolygon : GraphicSymbol
 
     public GsPolygon(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight)
     {
-        DateTime creation = DateTime.Now;
         ValidSymbol = true;
-        Name = $"Polygon {creation.Second} {creation.Millisecond}";
+        Name = "Freehand Curve";
     }
 
     public static GsPolygon Create(Point TopLeft, PolygonDrawing? newPolygon, bool isTemporarySymbol, Color lineColor, Color fillColor, int lineWeight, bool shadow)
