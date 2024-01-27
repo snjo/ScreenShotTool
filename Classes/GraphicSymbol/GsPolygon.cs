@@ -11,6 +11,7 @@ public class GsPolygon : GraphicSymbol
 {
     PolygonDrawing? Polygon;
     bool isTemporarySymbol = false;
+    public bool closedCurve = false;
 
     public GsPolygon(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight)
     {
@@ -19,16 +20,17 @@ public class GsPolygon : GraphicSymbol
         Name = $"Polygon {creation.Second} {creation.Millisecond}";
     }
 
-    public static GsPolygon Create(Point TopLeft, PolygonDrawing? newPolygon, bool isTemporarySymbol, Color lineColor, int lineWeight)
+    public static GsPolygon Create(Point TopLeft, PolygonDrawing? newPolygon, bool isTemporarySymbol, Color lineColor, Color fillColor, int lineWeight, bool shadow)
     {
         if (newPolygon != null)
         {
-            GsPolygon newSymbol = new GsPolygon(TopLeft, new Point(newPolygon.Contents.Width, newPolygon.Contents.Height), lineColor, Color.Empty, false, lineWeight);
+            GsPolygon newSymbol = new GsPolygon(TopLeft, new Point(newPolygon.Contents.Width, newPolygon.Contents.Height), lineColor, fillColor, false, lineWeight);
             if (isTemporarySymbol)
             {
                 newSymbol.Polygon = newPolygon;
                 //newSymbol.Left = newPolygon.LeftMostPixel;
                 //newSymbol.Top = newPolygon.TopMostPixel;
+                newSymbol.ShadowEnabled = shadow;
             }
             else
             {
@@ -37,32 +39,81 @@ public class GsPolygon : GraphicSymbol
                 newSymbol.Top = newPolygon.Contents.Top;
                 newSymbol.Width = newPolygon.Contents.Width;
                 newSymbol.Height = newPolygon.Contents.Height;
+                newSymbol.ShadowEnabled = shadow;
             }
+            newSymbol.LinePen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
+            newSymbol.LinePen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
+            newSymbol.LinePen.MiterLimit = lineWeight;
+            newSymbol.LinePen.LineJoin = System.Drawing.Drawing2D.LineJoin.Round;
             newSymbol.isTemporarySymbol = isTemporarySymbol;
             return newSymbol;
         }
 
         GsPolygon badSymbol = new GsPolygon(new Point(0, 0), new Point(10, 10), Color.Red, Color.Green, false, 1);
         badSymbol.ValidSymbol = false;
+
         return badSymbol;
     }
 
     public override void DrawSymbol(Graphics graphic)
     {
+        UpdateColors();
+        UpdatePen();
+        DrawShadow(graphic);
+        DrawShape(graphic, LinePen, FillBrush, new Point(0, 0), true, true);
+    }
+
+
+    internal override void UpdatePen()
+    {
+        //LineBrush = new SolidBrush(LineColor);
+        //LinePen.Brush = LineBrush;
+        LinePen.Color = LineColor;
+        LinePen.Width = LineWeight;
+
+        FillBrush = new SolidBrush(FillColor);
+        ShadowBrush.Color = Color.FromArgb(FillBrush.Color.A / 8, Color.Black);
+        ShadowPen.Color = Color.FromArgb(LineBrush.Color.A / 8, Color.Black);
+        ShadowPen.Width = LineWeight;
+
+        TextBrush.Color = TextColor;
+    }
+
+    internal override void DrawShape(Graphics graphic, Pen drawPen, Brush drawBrush, Point offset, bool fill = true, bool outline = true)
+    {   
         if (Polygon != null)
-        {
-            Polygon.pen.Color = LineColor;
-            Polygon.pen.Width = LineWeight;
+        {       
             if (isTemporarySymbol)
             {
                 // don't move the symbol around during drawing
-                //Polygon.Draw(graphic, 0, 0, Polygon.Contents.Width, Polygon.Contents.Height);
-                Polygon.Draw(graphic, 0, 0, false, 0, 0);
+                Polygon.Draw(graphic, drawPen, drawBrush, offset.X, offset.Y, false, 0, 0);
             }
             else
             {
                 // move the symbol into new place if it's moved from drawn location
-                Polygon.Draw(graphic, Left - Polygon.LeftMostPixel, Top - Polygon.TopMostPixel, true, Width, Height);
+                Polygon.Draw(graphic, drawPen, drawBrush, Left - Polygon.LeftMostPixel + offset.X, Top - Polygon.TopMostPixel + offset.Y, true, Width, Height, closedCurve);
+            }
+        }
+    }
+
+    public override void DrawShadow(Graphics graphic)
+    {
+        if (ShadowEnabled)
+        {
+            
+            if (closedCurve)
+            {
+                for (int i = 1; i < ShadowDistance; i++)
+                {
+                    DrawShape(graphic, ShadowPen, ShadowBrush, new Point(i, i));
+                }
+            }
+            else
+            {
+                for (int i = 1; i < ShadowDistance && i < LineWeight; i++)
+                {
+                    DrawShape(graphic, ShadowPen, ShadowBrush, new Point(i, i));
+                }
             }
         }
     }

@@ -13,13 +13,15 @@ public partial class NewImagePrompt : Form
         numericHeight.Value = imageHeight;
     }
 
-    private void Button1_Click(object sender, EventArgs e)
+    private void SelectColor_Click(object sender, EventArgs e)
     {
-        DialogResult result = colorDialog1.ShowDialog();
+        ColorDialogAlpha colorDialogAlpha = new ColorDialogAlpha(Color.White);
+        DialogResult result = colorDialogAlpha.ShowDialog();
+        //DialogResult result = colorDialog1.ShowDialog();
         if (result == DialogResult.OK)
         {
-            buttonColor.BackColor = colorDialog1.Color;
-            color = colorDialog1.Color;
+            buttonColor.BackColor = colorDialogAlpha.Color;
+            color = colorDialogAlpha.Color;
         }
     }
 

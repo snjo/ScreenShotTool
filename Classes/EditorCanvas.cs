@@ -223,7 +223,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         saveGraphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
         saveGraphic.TextRenderingHint = TextRenderingHint.AntiAlias;
         DrawElements(saveGraphic, ShowNonOutputWidgets: false);
-        Clipboard.SetImage(outImage);
+        //Clipboard.SetImage(outImage);
         saveGraphic.Dispose();
         return outImage;
     }
@@ -365,7 +365,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         //Bitmap img;
         if (SourceImage != null)
         {
-            imageInProgress = CropImage((Bitmap)SourceImage, new Rectangle(0, 0, SourceImage.Width, SourceImage.Height));
+            imageInProgress = CopyImage(SourceImage);
         }
         else
         {
@@ -386,6 +386,19 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
     public static Bitmap CropImage(Bitmap img, Rectangle cropArea)
     {
+        //https://www.codingdefined.com/2015/04/solved-bitmapclone-out-of-memory.html
+        Bitmap bmp = new(cropArea.Width, cropArea.Height);
+
+        using (Graphics gph = Graphics.FromImage(bmp))
+        {
+            gph.DrawImage(img, new Rectangle(0, 0, bmp.Width, bmp.Height), cropArea, GraphicsUnit.Pixel);
+        }
+        return bmp;
+    }
+
+    public static Bitmap CopyImage(Bitmap img)
+    {
+        Rectangle cropArea = new Rectangle(0, 0, img.Width, img.Height);
         //https://www.codingdefined.com/2015/04/solved-bitmapclone-out-of-memory.html
         Bitmap bmp = new(cropArea.Width, cropArea.Height);
 
@@ -581,15 +594,14 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
                 ScreenshotEditor.UserActions.CreateCircle => new GsCircle(upperLeft, size, lineColor, fillColor, shadow, lineWeight),
                 ScreenshotEditor.UserActions.CreateLine => new GsLine(dragStart, dragEnd, lineColor, fillColor, shadow, lineWeight),
                 ScreenshotEditor.UserActions.CreateArrow => new GsArrow(dragStart, dragEnd, lineColor, fillColor, shadow, lineWeight),
-                ScreenshotEditor.UserActions.CreateImage => new GsImage(dragEnd, new Point(1, 1), shadow),
+                //ScreenshotEditor.UserActions.CreateImage => GsImage.Create(dragEnd, parentEditor.copiedBitmap, true),
                 ScreenshotEditor.UserActions.CreateImageScaled => new GsImageScaled(upperLeft, size, shadow),
                 ScreenshotEditor.UserActions.CreateText => new GsText(dragStart, size, lineColor, fillColor, shadow),
                 ScreenshotEditor.UserActions.CreateBlur => new GsBlur(upperLeft, size, Color.Red, Color.White), // set fill color to a solid, so it isn't skipped in rendering
                 ScreenshotEditor.UserActions.CreateHighlight => new GsHighlight(upperLeft, size, lineColor, Color.Yellow, false, 0),
                 ScreenshotEditor.UserActions.CreateCrop => new GsCrop(upperLeft, size, Color.Black, Color.White), // set line/fill color to a solid, so it isn't skipped in rendering
                 ScreenshotEditor.UserActions.CreateNumbered => new GsNumbered(new Point(dragEnd.X - (NumberedSize / 2), dragEnd.Y - (NumberedSize / 2)), new Point(NumberedSize, NumberedSize), lineColor, fillColor, shadow, lineWeight),
-                //ScreenshotEditor.UserActions.DrawFreehand => GsDrawing.Create(new Point(0,0), new Point(CanvasRect.Width, CanvasRect.Height), polygonDrawing, temp, lineColor),
-                ScreenshotEditor.UserActions.DrawFreehand => GsPolygon.Create(new Point(0,0), polygonDrawing, temp, lineColor, lineWeight),
+                ScreenshotEditor.UserActions.DrawFreehand => GsPolygon.Create(new Point(0,0), polygonDrawing, temp, lineColor, fillColor, lineWeight, shadow),
                 _ => null,
             };
         }
@@ -606,7 +618,8 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         if (tempSymbol != null)
         {
             UpdateOverlay(tempSymbol, forceUpdate: false);
-            tempSymbol.DisposeImages();
+            //tempSymbol.DisposeImages();
+            tempSymbol.Dispose();
         }
     }
 

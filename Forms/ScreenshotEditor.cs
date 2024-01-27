@@ -1,5 +1,7 @@
-﻿using ScreenShotTool.Properties;
+﻿using ScreenShotTool.Classes;
+using ScreenShotTool.Properties;
 using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
 using static ScreenShotTool.EditorCanvas;
@@ -17,6 +19,7 @@ public partial class ScreenshotEditor : Form
     public readonly static int minimumFontSize = 5;
     public readonly static int startingFontSize = 10;
     readonly List<Button> toolButtons = [];
+    public SharedBitmap copiedBitmap = new SharedBitmap();
 
     public ScreenshotEditor()
     {
@@ -486,6 +489,9 @@ public partial class ScreenshotEditor : Form
         Bitmap? result = editorCanvas.AssembleImageForSaveOrCopy();
         if (result != null)
         {
+            //copiedBitmap.DisposeImage();
+            copiedBitmap.SetImage(CopyImage(result)); // disposes and refills
+            Debug.WriteLine($"Set copiedImage to result {copiedBitmap.Width}");
             Clipboard.SetImage(result);
             result.Dispose();
         }
@@ -493,9 +499,34 @@ public partial class ScreenshotEditor : Form
 
     private void PasteIntoImage()
     {
-        SetUserAction(UserActions.CreateImage);
-        editorCanvas.dragStarted = true;
-        editorCanvas.dragStart = new Point(0, 0);
+        //SetUserAction(UserActions.CreateImage);
+        //editorCanvas.dragStarted = true;
+        //editorCanvas.dragStart = new Point(0, 0);
+        Point location = MousePositionLocal;
+        bool badLocation = false;
+        if (location.X < 0 || location.X > editorCanvas.CanvasRect.Width - 10)
+        {
+            badLocation = true;
+        }
+        if (location.Y < 0 || location.Y > editorCanvas.CanvasRect.Height - 10)
+        {
+              badLocation = true;
+        }
+        if (badLocation)
+        {
+            location = new Point(10, 10);
+        }
+
+        GsImage gsImage = GsImage.Create(location, copiedBitmap, true);
+        if (gsImage.ValidSymbol)
+        {
+            AddNewSymbolToList(gsImage);
+        }
+        else
+        {
+            gsImage.Dispose();
+        }
+
         editorCanvas.UpdateOverlay();
     }
 
@@ -602,6 +633,7 @@ public partial class ScreenshotEditor : Form
         DisablePanel(panelPropertiesDelete);
         DisablePanel(panelPropertiesCrop);
         DisablePanel(panelPropertiesBlur);
+        DisablePanel(panelPropertiesFillShape);
     }
 
     private static void SetNumericClamp(NumericUpDown numericUpDown, int value)
@@ -692,10 +724,13 @@ public partial class ScreenshotEditor : Form
                 {
                     EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
                 }
-                else if (graphicSymbol is GsPolygon)
+                else if (graphicSymbol is GsPolygon gsP)
                 {
                     EnablePanel(panelPropertiesLine, panelLeft, ref lastPanelBottom);
+                    EnablePanel(panelPropertiesFillShape, panelLeft, ref lastPanelBottom);
+                    EnablePanel(panelPropertiesFill, panelLeft, ref lastPanelBottom);
                     EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
+                    checkBoxPropertiesFillShape.Checked = gsP.closedCurve;
                 }
                 else if (graphicSymbol is GsBoundingBox) // must be after all other symbols that inherit from GsBoundingBox
                 {
@@ -974,6 +1009,19 @@ public partial class ScreenshotEditor : Form
         editorCanvas.UpdateOverlay();
     }
 
+    private void checkBoxPropertiesFillShape_Click(object sender, EventArgs e)
+    {
+        GraphicSymbol? symbol = GetSelectedSymbol();
+        if (symbol != null)
+        {
+            if (symbol is GsPolygon gsP)
+            {
+                gsP.closedCurve = checkBoxPropertiesFillShape.Checked;
+            }
+        }
+        editorCanvas.UpdateOverlay();
+    }
+
     public GraphicSymbol? GetSelectedSymbol()
     {
         if (listViewSymbols.SelectedItems.Count > 0)
@@ -1046,6 +1094,8 @@ public partial class ScreenshotEditor : Form
             Rectangle cropRect = gsC.Bounds;
             Bitmap outImage = EditorCanvas.CropImage(assembled, cropRect);
             assembled.Dispose();
+            copiedBitmap.DisposeImage();
+            copiedBitmap.SetImage(CopyImage(outImage));
             Clipboard.SetImage(outImage);
             outImage.Dispose();
             gsC.showOutline = true;

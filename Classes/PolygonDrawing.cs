@@ -75,14 +75,19 @@ public class PolygonDrawing
         bitmap = new Bitmap(Math.Max(1,Contents.Width), Math.Max(1,Contents.Height));
         using (Graphics graphics = Graphics.FromImage(bitmap))
         {
-            Draw(graphics, -LeftMostPixel, -TopMostPixel, false, Contents.Width, Contents.Height);
+            //Draw(graphics, pen, -LeftMostPixel, -TopMostPixel, false, Contents.Width, Contents.Height);
         }
         return bitmap;
     }
 
-    public void Draw(Graphics graphics, int offsetX, int offsetY, bool scale, float Width, float Height)
+    public void Draw(Graphics graphics, Pen drawPen, Brush drawBrush, int offsetX, int offsetY, bool scale, float Width, float Height, bool closed = false)
     {
         graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+        //Pen tempPen = new Pen(drawPen.Color, drawPen.Width);
+        //tempPen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
+        //tempPen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
+        //tempPen.MiterLimit = tempPen.Width;
+        //tempPen.LineJoin = System.Drawing.Drawing2D.LineJoin.Round;
         Point[] offsetPoints = new Point[PointList.Count];
         float scaleWidth = Width / Contents.Width;
         float scaleHeight = Height / Contents.Height;
@@ -101,9 +106,25 @@ public class PolygonDrawing
             
         }
 
-        if (offsetPoints.Length > 1)
+        if (closed)
         {
-            graphics.DrawLines(pen, offsetPoints);
+            if (offsetPoints.Length > 2)
+            {
+                graphics.FillClosedCurve(drawBrush, offsetPoints, System.Drawing.Drawing2D.FillMode.Winding, 0.5f);
+                if (drawPen.Width > 0)
+                {
+                    graphics.DrawClosedCurve(drawPen, offsetPoints, 0.5f, System.Drawing.Drawing2D.FillMode.Winding);
+                }
+            }
+        }
+        else
+        {
+            if (offsetPoints.Length > 1)
+            {
+                graphics.DrawCurve(drawPen, offsetPoints);
+                //graphics.DrawLines(tempPen, offsetPoints);
+                //tempPen.Dispose();
+            }
         }
     }
 

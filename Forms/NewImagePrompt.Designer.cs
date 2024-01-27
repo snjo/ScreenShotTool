@@ -97,7 +97,7 @@
             buttonColor.Size = new Size(103, 24);
             buttonColor.TabIndex = 5;
             buttonColor.UseVisualStyleBackColor = false;
-            buttonColor.Click += Button1_Click;
+            buttonColor.Click += SelectColor_Click;
             // 
             // buttonOK
             // 

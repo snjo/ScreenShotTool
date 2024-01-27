@@ -242,7 +242,7 @@ namespace ScreenShotTool
             }
         }
 
-        internal void UpdatePen()
+        internal virtual void UpdatePen()
         {
             LineBrush = new SolidBrush(LineColor);
             LinePen.Brush = LineBrush;
@@ -266,9 +266,8 @@ namespace ScreenShotTool
         }
 
         private bool disposed = false;
-        public void Dispose()
+        public virtual void Dispose()
         {
-            
             Dispose(true);
         }
 
