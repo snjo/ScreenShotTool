@@ -80,7 +80,7 @@ public class PolygonDrawing
         return bitmap;
     }
 
-    public void Draw(Graphics graphics, Pen drawPen, Brush drawBrush, int offsetX, int offsetY, bool scale, float Width, float Height, bool closed = false)
+    public void Draw(Graphics graphics, Pen drawPen, Brush drawBrush, int offsetX, int offsetY, bool scale, float Width, float Height, bool closed = false, bool fill = false, float curveTension = 0.5f)
     {
         graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
         //Pen tempPen = new Pen(drawPen.Color, drawPen.Width);
@@ -106,24 +106,24 @@ public class PolygonDrawing
             
         }
 
-        if (closed)
+        if (fill)
         {
             if (offsetPoints.Length > 2)
             {
-                graphics.FillClosedCurve(drawBrush, offsetPoints, System.Drawing.Drawing2D.FillMode.Winding, 0.5f);
-                if (drawPen.Width > 0)
-                {
-                    graphics.DrawClosedCurve(drawPen, offsetPoints, 0.5f, System.Drawing.Drawing2D.FillMode.Winding);
-                }
+                graphics.FillClosedCurve(drawBrush, offsetPoints, System.Drawing.Drawing2D.FillMode.Winding, curveTension);
+
             }
         }
-        else
+
+        if (drawPen.Width > 0)
         {
-            if (offsetPoints.Length > 1)
+            if (closed && offsetPoints.Length > 2)
+            {
+                graphics.DrawClosedCurve(drawPen, offsetPoints, curveTension, System.Drawing.Drawing2D.FillMode.Winding);
+            }
+            else if (offsetPoints.Length > 1)
             {
                 graphics.DrawCurve(drawPen, offsetPoints);
-                //graphics.DrawLines(tempPen, offsetPoints);
-                //tempPen.Dispose();
             }
         }
     }

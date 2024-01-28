@@ -82,6 +82,7 @@ public partial class ScreenshotEditor : Form
         toolButtons.Add(buttonCrop);
         toolButtons.Add(buttonNumbered);
         toolButtons.Add(buttonDraw);
+        toolButtons.Add(buttonFilledCurve);
 
         listViewSymbols.Height = 200;
 
@@ -283,7 +284,7 @@ public partial class ScreenshotEditor : Form
                 loadedImage = null;
             }
         }
-        
+
         if (loadedImage != null)
         {
             GsImage gsImage = GsImage.Create(location, (Bitmap)loadedImage);//GsImage.Create(location, copiedBitmap, true);
@@ -337,27 +338,30 @@ public partial class ScreenshotEditor : Form
         CreateCrop,
         CreateNumbered,
         DrawFreehand,
+        DrawFilledCurve,
     }
 
     public UserActions selectedUserAction = UserActions.Select;
     public void SetUserAction(UserActions action)
     {
+        Color buttonSelectedColor = Color.PaleTurquoise;
         selectedUserAction = action;
         foreach (Button b in toolButtons)
         {
             b.BackColor = Color.Transparent;
         }
-        if (selectedUserAction == UserActions.Select) buttonSelect.BackColor = Color.Yellow;
-        if (selectedUserAction == UserActions.CreateRectangle) buttonRectangle.BackColor = Color.Yellow;
-        if (selectedUserAction == UserActions.CreateCircle) buttonCircle.BackColor = Color.Yellow;
-        if (selectedUserAction == UserActions.CreateLine) buttonLine.BackColor = Color.Yellow;
-        if (selectedUserAction == UserActions.CreateArrow) buttonArrow.BackColor = Color.Yellow;
-        if (selectedUserAction == UserActions.CreateText) buttonText.BackColor = Color.Yellow;
-        if (selectedUserAction == UserActions.CreateBlur) buttonBlur.BackColor = Color.Yellow;
-        if (selectedUserAction == UserActions.CreateHighlight) buttonHighlight.BackColor = Color.Yellow;
-        if (selectedUserAction == UserActions.CreateCrop) buttonCrop.BackColor = Color.Yellow;
-        if (selectedUserAction == UserActions.CreateNumbered) buttonNumbered.BackColor = Color.Yellow;
-        if (selectedUserAction == UserActions.DrawFreehand) buttonDraw.BackColor = Color.Yellow;
+        if (selectedUserAction == UserActions.Select) buttonSelect.BackColor = buttonSelectedColor;
+        if (selectedUserAction == UserActions.CreateRectangle) buttonRectangle.BackColor = buttonSelectedColor;
+        if (selectedUserAction == UserActions.CreateCircle) buttonCircle.BackColor = buttonSelectedColor;
+        if (selectedUserAction == UserActions.CreateLine) buttonLine.BackColor = buttonSelectedColor;
+        if (selectedUserAction == UserActions.CreateArrow) buttonArrow.BackColor = buttonSelectedColor;
+        if (selectedUserAction == UserActions.CreateText) buttonText.BackColor = buttonSelectedColor;
+        if (selectedUserAction == UserActions.CreateBlur) buttonBlur.BackColor = buttonSelectedColor;
+        if (selectedUserAction == UserActions.CreateHighlight) buttonHighlight.BackColor = buttonSelectedColor;
+        if (selectedUserAction == UserActions.CreateCrop) buttonCrop.BackColor = buttonSelectedColor;
+        if (selectedUserAction == UserActions.CreateNumbered) buttonNumbered.BackColor = buttonSelectedColor;
+        if (selectedUserAction == UserActions.DrawFreehand) buttonDraw.BackColor = buttonSelectedColor;
+        if (selectedUserAction == UserActions.DrawFilledCurve) buttonFilledCurve.BackColor = buttonSelectedColor;
         // UserActions.CreateBorder is not in list since it happens right away without mouse drag
 
         //if (selectedUserAction != UserActions.MoveSymbol && selectedUserAction != UserActions.ScaleSymbol)
@@ -665,7 +669,7 @@ public partial class ScreenshotEditor : Form
         DisablePanel(panelPropertiesDelete);
         DisablePanel(panelPropertiesCrop);
         DisablePanel(panelPropertiesBlur);
-        DisablePanel(panelPropertiesFillShape);
+        DisablePanel(panelPropertiesPolygon);
     }
 
     private static void SetNumericClamp(NumericUpDown numericUpDown, int value)
@@ -758,11 +762,12 @@ public partial class ScreenshotEditor : Form
                 }
                 else if (graphicSymbol is GsPolygon gsP)
                 {
-                    EnablePanel(panelPropertiesLine, panelLeft, ref lastPanelBottom);
-                    EnablePanel(panelPropertiesFillShape, panelLeft, ref lastPanelBottom);
                     EnablePanel(panelPropertiesFill, panelLeft, ref lastPanelBottom);
+                    EnablePanel(panelPropertiesLine, panelLeft, ref lastPanelBottom);
+                    EnablePanel(panelPropertiesPolygon, panelLeft, ref lastPanelBottom);
                     EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
-                    checkBoxPropertiesFillShape.Checked = gsP.closedCurve;
+                    checkBoxPropertiesCloseCurve.Checked = gsP.closedCurve;
+                    numericPropertiesCurveTension.Value = (decimal)gsP.curveTension;
                 }
                 else if (graphicSymbol is GsBoundingBox) // must be after all other symbols that inherit from GsBoundingBox
                 {
@@ -1041,14 +1046,14 @@ public partial class ScreenshotEditor : Form
         editorCanvas.UpdateOverlay();
     }
 
-    private void checkBoxPropertiesFillShape_Click(object sender, EventArgs e)
+    private void checkBoxPropertiesCloseCurve_Click(object sender, EventArgs e)
     {
         GraphicSymbol? symbol = GetSelectedSymbol();
         if (symbol != null)
         {
             if (symbol is GsPolygon gsP)
             {
-                gsP.closedCurve = checkBoxPropertiesFillShape.Checked;
+                gsP.closedCurve = checkBoxPropertiesCloseCurve.Checked;
             }
         }
         editorCanvas.UpdateOverlay();
@@ -1131,6 +1136,15 @@ public partial class ScreenshotEditor : Form
             Clipboard.SetImage(outImage);
             outImage.Dispose();
             gsC.showOutline = true;
+        }
+    }
+
+    private void numericPropertiesCurveTension_ValueChanged(object sender, EventArgs e)
+    {
+        if (GetSelectedSymbol() is GsPolygon gsP)
+        {
+            gsP.curveTension = (float)numericPropertiesCurveTension.Value;
+            editorCanvas.UpdateOverlay();
         }
     }
 
@@ -1245,6 +1259,11 @@ public partial class ScreenshotEditor : Form
     private void buttonDraw_Click(object sender, EventArgs e)
     {
         SetUserAction(UserActions.DrawFreehand);
+    }
+
+    private void buttonFillCurve_Click(object sender, EventArgs e)
+    {
+        SetUserAction(UserActions.DrawFilledCurve);
     }
 
     #endregion

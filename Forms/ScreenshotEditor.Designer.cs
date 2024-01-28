@@ -43,6 +43,7 @@
             itemPasteScaled = new ToolStripMenuItem();
             deleteOverlayElementsToolStripMenuItem = new ToolStripMenuItem();
             panelButtons = new Panel();
+            buttonFilledCurve = new Button();
             buttonDraw = new Button();
             buttonNumbered = new Button();
             buttonCrop = new Button();
@@ -114,8 +115,11 @@
             buttonPropertyCopyCrop = new Button();
             buttonPropertyCrop = new Button();
             panelPropertiesBlur = new Panel();
-            panelPropertiesFillShape = new Panel();
-            checkBoxPropertiesFillShape = new CheckBox();
+            panelPropertiesPolygon = new Panel();
+            labelCurveTension = new Label();
+            numericPropertiesCurveTension = new NumericUpDown();
+            checkBoxPropertiesCloseCurve = new CheckBox();
+            toolTip1 = new ToolTip(components);
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
@@ -138,7 +142,8 @@
             panelPropertiesDelete.SuspendLayout();
             panelPropertiesCrop.SuspendLayout();
             panelPropertiesBlur.SuspendLayout();
-            panelPropertiesFillShape.SuspendLayout();
+            panelPropertiesPolygon.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericPropertiesCurveTension).BeginInit();
             SuspendLayout();
             // 
             // menuStrip1
@@ -231,6 +236,7 @@
             // 
             panelButtons.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             panelButtons.BorderStyle = BorderStyle.FixedSingle;
+            panelButtons.Controls.Add(buttonFilledCurve);
             panelButtons.Controls.Add(buttonDraw);
             panelButtons.Controls.Add(buttonNumbered);
             panelButtons.Controls.Add(buttonCrop);
@@ -248,9 +254,25 @@
             panelButtons.Size = new Size(46, 667);
             panelButtons.TabIndex = 1;
             // 
+            // buttonFilledCurve
+            // 
+            buttonFilledCurve.AccessibleName = "Closed curve";
+            buttonFilledCurve.FlatAppearance.BorderSize = 0;
+            buttonFilledCurve.FlatStyle = FlatStyle.Flat;
+            buttonFilledCurve.Image = Properties.Resources.fillCurve;
+            buttonFilledCurve.Location = new Point(4, 279);
+            buttonFilledCurve.Margin = new Padding(1);
+            buttonFilledCurve.Name = "buttonFilledCurve";
+            buttonFilledCurve.Size = new Size(36, 36);
+            buttonFilledCurve.TabIndex = 14;
+            toolTip1.SetToolTip(buttonFilledCurve, "Closed curve");
+            buttonFilledCurve.UseVisualStyleBackColor = true;
+            buttonFilledCurve.Click += buttonFillCurve_Click;
+            // 
             // buttonDraw
             // 
-            buttonDraw.AccessibleName = "Draw freehand";
+            buttonDraw.AccessibleDescription = "Draw lines, cancel with right click or Escape";
+            buttonDraw.AccessibleName = "Freehand curve";
             buttonDraw.FlatAppearance.BorderSize = 0;
             buttonDraw.FlatStyle = FlatStyle.Flat;
             buttonDraw.Image = Properties.Resources.pencil;
@@ -259,6 +281,7 @@
             buttonDraw.Name = "buttonDraw";
             buttonDraw.Size = new Size(36, 36);
             buttonDraw.TabIndex = 13;
+            toolTip1.SetToolTip(buttonDraw, "Freenhand lines. To stop, Right Click or press Cancel");
             buttonDraw.UseVisualStyleBackColor = true;
             buttonDraw.Click += buttonDraw_Click;
             // 
@@ -268,11 +291,12 @@
             buttonNumbered.FlatAppearance.BorderSize = 0;
             buttonNumbered.FlatStyle = FlatStyle.Flat;
             buttonNumbered.Image = Properties.Resources.numbered;
-            buttonNumbered.Location = new Point(4, 355);
+            buttonNumbered.Location = new Point(4, 393);
             buttonNumbered.Margin = new Padding(1);
             buttonNumbered.Name = "buttonNumbered";
             buttonNumbered.Size = new Size(36, 36);
             buttonNumbered.TabIndex = 12;
+            toolTip1.SetToolTip(buttonNumbered, "Number markers (Automatically increments number)");
             buttonNumbered.UseVisualStyleBackColor = true;
             buttonNumbered.Click += ButtonNumbered_Click;
             // 
@@ -282,11 +306,12 @@
             buttonCrop.FlatAppearance.BorderSize = 0;
             buttonCrop.FlatStyle = FlatStyle.Flat;
             buttonCrop.Image = Properties.Resources.crop;
-            buttonCrop.Location = new Point(4, 429);
+            buttonCrop.Location = new Point(4, 467);
             buttonCrop.Margin = new Padding(1);
             buttonCrop.Name = "buttonCrop";
             buttonCrop.Size = new Size(36, 36);
             buttonCrop.TabIndex = 11;
+            toolTip1.SetToolTip(buttonCrop, "Crop or Copy region");
             buttonCrop.UseVisualStyleBackColor = true;
             buttonCrop.Click += ButtonCrop_Click;
             // 
@@ -296,11 +321,12 @@
             buttonHighlight.FlatAppearance.BorderSize = 0;
             buttonHighlight.FlatStyle = FlatStyle.Flat;
             buttonHighlight.Image = Properties.Resources.highlight1;
-            buttonHighlight.Location = new Point(4, 317);
+            buttonHighlight.Location = new Point(4, 355);
             buttonHighlight.Margin = new Padding(1);
             buttonHighlight.Name = "buttonHighlight";
             buttonHighlight.Size = new Size(36, 36);
             buttonHighlight.TabIndex = 10;
+            toolTip1.SetToolTip(buttonHighlight, "Highlighter");
             buttonHighlight.UseVisualStyleBackColor = true;
             buttonHighlight.Click += ButtonHighlight_Click;
             // 
@@ -310,11 +336,12 @@
             buttonBlur.FlatAppearance.BorderSize = 0;
             buttonBlur.FlatStyle = FlatStyle.Flat;
             buttonBlur.Image = Properties.Resources.blur1;
-            buttonBlur.Location = new Point(4, 279);
+            buttonBlur.Location = new Point(4, 317);
             buttonBlur.Margin = new Padding(1);
             buttonBlur.Name = "buttonBlur";
             buttonBlur.Size = new Size(36, 36);
             buttonBlur.TabIndex = 9;
+            toolTip1.SetToolTip(buttonBlur, "Mosaic blur (obscure a region)");
             buttonBlur.UseVisualStyleBackColor = true;
             buttonBlur.Click += ButtonBlur_Click;
             // 
@@ -329,6 +356,7 @@
             buttonSelect.Name = "buttonSelect";
             buttonSelect.Size = new Size(36, 36);
             buttonSelect.TabIndex = 8;
+            toolTip1.SetToolTip(buttonSelect, "Select (right click or Escape when drawing to switch to select)");
             buttonSelect.UseVisualStyleBackColor = true;
             buttonSelect.Click += ButtonSelect_Click;
             // 
@@ -338,11 +366,12 @@
             buttonBorder.FlatAppearance.BorderSize = 0;
             buttonBorder.FlatStyle = FlatStyle.Flat;
             buttonBorder.Image = Properties.Resources.frame;
-            buttonBorder.Location = new Point(4, 393);
+            buttonBorder.Location = new Point(4, 431);
             buttonBorder.Margin = new Padding(1);
             buttonBorder.Name = "buttonBorder";
             buttonBorder.Size = new Size(36, 36);
             buttonBorder.TabIndex = 6;
+            toolTip1.SetToolTip(buttonBorder, "Frame (adds a line around the image)");
             buttonBorder.UseVisualStyleBackColor = true;
             buttonBorder.Click += ButtonBorder_Click;
             // 
@@ -357,6 +386,7 @@
             buttonText.Name = "buttonText";
             buttonText.Size = new Size(36, 36);
             buttonText.TabIndex = 5;
+            toolTip1.SetToolTip(buttonText, "Text");
             buttonText.UseVisualStyleBackColor = true;
             buttonText.Click += ButtonNewText_Click;
             // 
@@ -371,6 +401,7 @@
             buttonArrow.Name = "buttonArrow";
             buttonArrow.Size = new Size(36, 36);
             buttonArrow.TabIndex = 4;
+            toolTip1.SetToolTip(buttonArrow, "Arrow");
             buttonArrow.UseVisualStyleBackColor = true;
             buttonArrow.Click += ButtonArrow_Click;
             // 
@@ -385,6 +416,7 @@
             buttonLine.Name = "buttonLine";
             buttonLine.Size = new Size(36, 36);
             buttonLine.TabIndex = 2;
+            toolTip1.SetToolTip(buttonLine, "Line");
             buttonLine.UseVisualStyleBackColor = true;
             buttonLine.Click += ButtonLine_Click;
             // 
@@ -399,6 +431,7 @@
             buttonCircle.Name = "buttonCircle";
             buttonCircle.Size = new Size(36, 36);
             buttonCircle.TabIndex = 1;
+            toolTip1.SetToolTip(buttonCircle, "Circle / Ellipse");
             buttonCircle.UseVisualStyleBackColor = true;
             buttonCircle.Click += ButtonCircle_Click;
             // 
@@ -413,6 +446,7 @@
             buttonRectangle.Name = "buttonRectangle";
             buttonRectangle.Size = new Size(36, 36);
             buttonRectangle.TabIndex = 0;
+            toolTip1.SetToolTip(buttonRectangle, "Rectangle");
             buttonRectangle.UseVisualStyleBackColor = true;
             buttonRectangle.Click += ButtonRectangle_Click;
             // 
@@ -424,6 +458,7 @@
             numericNewLineWeight.Name = "numericNewLineWeight";
             numericNewLineWeight.Size = new Size(48, 23);
             numericNewLineWeight.TabIndex = 3;
+            toolTip1.SetToolTip(numericNewLineWeight, "Set line width for the next created symbol");
             numericNewLineWeight.Value = new decimal(new int[] { 2, 0, 0, 0 });
             numericNewLineWeight.ValueChanged += NumericNewLineWeight_ValueChanged;
             // 
@@ -483,7 +518,7 @@
             panelPropertiesPosition.Controls.Add(label3);
             panelPropertiesPosition.Controls.Add(label2);
             panelPropertiesPosition.Controls.Add(labelSymbolType);
-            panelPropertiesPosition.Location = new Point(797, 147);
+            panelPropertiesPosition.Location = new Point(797, 141);
             panelPropertiesPosition.Name = "panelPropertiesPosition";
             panelPropertiesPosition.Size = new Size(153, 78);
             panelPropertiesPosition.TabIndex = 4;
@@ -497,6 +532,7 @@
             numericPropertiesHeight.Size = new Size(43, 23);
             numericPropertiesHeight.TabIndex = 12;
             numericPropertiesHeight.Tag = "Height";
+            toolTip1.SetToolTip(numericPropertiesHeight, "Height");
             numericPropertiesHeight.Value = new decimal(new int[] { 1, 0, 0, 0 });
             numericPropertiesHeight.ValueChanged += Numeric_ValueChanged;
             // 
@@ -509,6 +545,7 @@
             numericPropertiesY.Size = new Size(43, 23);
             numericPropertiesY.TabIndex = 11;
             numericPropertiesY.Tag = "Y";
+            toolTip1.SetToolTip(numericPropertiesY, "Y position (upper left)");
             numericPropertiesY.ValueChanged += Numeric_ValueChanged;
             // 
             // numericPropertiesWidth
@@ -520,6 +557,7 @@
             numericPropertiesWidth.Size = new Size(43, 23);
             numericPropertiesWidth.TabIndex = 10;
             numericPropertiesWidth.Tag = "Width";
+            toolTip1.SetToolTip(numericPropertiesWidth, "Width");
             numericPropertiesWidth.Value = new decimal(new int[] { 1, 0, 0, 0 });
             numericPropertiesWidth.ValueChanged += Numeric_ValueChanged;
             // 
@@ -532,6 +570,7 @@
             numericPropertiesX.Size = new Size(43, 23);
             numericPropertiesX.TabIndex = 9;
             numericPropertiesX.Tag = "X";
+            toolTip1.SetToolTip(numericPropertiesX, "X position (upper left)");
             numericPropertiesX.ValueChanged += Numeric_ValueChanged;
             // 
             // label5
@@ -589,6 +628,7 @@
             buttonPropertiesColorLine.Size = new Size(60, 23);
             buttonPropertiesColorLine.TabIndex = 13;
             buttonPropertiesColorLine.Tag = "LineColor";
+            toolTip1.SetToolTip(buttonPropertiesColorLine, "Set line color on the currently selected symbol");
             buttonPropertiesColorLine.UseVisualStyleBackColor = false;
             buttonPropertiesColorLine.Click += ColorChangeClick;
             // 
@@ -617,6 +657,7 @@
             numericPropertiesLineWeight.Size = new Size(43, 23);
             numericPropertiesLineWeight.TabIndex = 15;
             numericPropertiesLineWeight.Tag = "LineWeight";
+            toolTip1.SetToolTip(numericPropertiesLineWeight, "Line width / weight");
             numericPropertiesLineWeight.Value = new decimal(new int[] { 1, 0, 0, 0 });
             numericPropertiesLineWeight.ValueChanged += Numeric_ValueChanged;
             // 
@@ -630,6 +671,7 @@
             buttonPropertiesColorFill.Size = new Size(60, 23);
             buttonPropertiesColorFill.TabIndex = 14;
             buttonPropertiesColorFill.Tag = "FillColor";
+            toolTip1.SetToolTip(buttonPropertiesColorFill, "Set fill color on the currently selected symbol");
             buttonPropertiesColorFill.UseVisualStyleBackColor = false;
             buttonPropertiesColorFill.Click += ColorChangeClick;
             // 
@@ -638,9 +680,9 @@
             label8.AutoSize = true;
             label8.Location = new Point(4, 32);
             label8.Name = "label8";
-            label8.Size = new Size(70, 15);
+            label8.Size = new Size(64, 15);
             label8.TabIndex = 8;
-            label8.Text = "Line Weigth";
+            label8.Text = "Line Width";
             // 
             // label7
             // 
@@ -658,6 +700,7 @@
             buttonDeleteSymbol.Size = new Size(94, 23);
             buttonDeleteSymbol.TabIndex = 0;
             buttonDeleteSymbol.Text = "Delete Symbol";
+            toolTip1.SetToolTip(buttonDeleteSymbol, "Delete the selected symbol (Hotkey: Delete)");
             buttonDeleteSymbol.UseVisualStyleBackColor = true;
             buttonDeleteSymbol.Click += ButtonDeleteSymbol_Click;
             // 
@@ -672,6 +715,7 @@
             buttonNewColorFill.Size = new Size(60, 23);
             buttonNewColorFill.TabIndex = 18;
             buttonNewColorFill.Tag = "FillColor";
+            toolTip1.SetToolTip(buttonNewColorFill, "Set fill color for the next created symbol");
             buttonNewColorFill.UseVisualStyleBackColor = false;
             buttonNewColorFill.Click += NewSymbolColor_Click;
             // 
@@ -686,6 +730,7 @@
             buttonNewColorLine.Size = new Size(60, 23);
             buttonNewColorLine.TabIndex = 17;
             buttonNewColorLine.Tag = "LineColor";
+            toolTip1.SetToolTip(buttonNewColorLine, "Set line color or text color for the next created symbol");
             buttonNewColorLine.UseVisualStyleBackColor = false;
             buttonNewColorLine.Click += NewSymbolColor_Click;
             // 
@@ -712,16 +757,16 @@
             label10.AutoSize = true;
             label10.Location = new Point(389, 6);
             label10.Name = "label10";
-            label10.Size = new Size(70, 15);
+            label10.Size = new Size(64, 15);
             label10.TabIndex = 19;
-            label10.Text = "Line Weight";
+            label10.Text = "Line Width";
             // 
             // panelPropertiesFill
             // 
             panelPropertiesFill.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             panelPropertiesFill.Controls.Add(label7);
             panelPropertiesFill.Controls.Add(buttonPropertiesColorFill);
-            panelPropertiesFill.Location = new Point(797, 229);
+            panelPropertiesFill.Location = new Point(797, 218);
             panelPropertiesFill.Name = "panelPropertiesFill";
             panelPropertiesFill.Size = new Size(153, 27);
             panelPropertiesFill.TabIndex = 27;
@@ -738,7 +783,7 @@
             panelPropertiesText.Controls.Add(numericPropertiesFontSize);
             panelPropertiesText.Controls.Add(comboBoxFontFamily);
             panelPropertiesText.Controls.Add(textBoxSymbolText);
-            panelPropertiesText.Location = new Point(797, 323);
+            panelPropertiesText.Location = new Point(797, 300);
             panelPropertiesText.Name = "panelPropertiesText";
             panelPropertiesText.Size = new Size(153, 144);
             panelPropertiesText.TabIndex = 28;
@@ -830,7 +875,7 @@
             panelPropertiesHighlight.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             panelPropertiesHighlight.Controls.Add(label18);
             panelPropertiesHighlight.Controls.Add(comboBoxBlendMode);
-            panelPropertiesHighlight.Location = new Point(797, 584);
+            panelPropertiesHighlight.Location = new Point(797, 552);
             panelPropertiesHighlight.Name = "panelPropertiesHighlight";
             panelPropertiesHighlight.Size = new Size(153, 47);
             panelPropertiesHighlight.TabIndex = 31;
@@ -854,6 +899,7 @@
             comboBoxBlendMode.Size = new Size(135, 23);
             comboBoxBlendMode.TabIndex = 0;
             comboBoxBlendMode.Text = "Multiply";
+            toolTip1.SetToolTip(comboBoxBlendMode, "Changes how the higlighter color affects the undelying image. Multiply or Darken is usually the best choice");
             comboBoxBlendMode.SelectedIndexChanged += ComboBoxBlendMode_SelectedIndexChanged;
             // 
             // panel1
@@ -893,6 +939,7 @@
             checkBoxNewShadow.Size = new Size(68, 19);
             checkBoxNewShadow.TabIndex = 24;
             checkBoxNewShadow.Text = "Shadow";
+            toolTip1.SetToolTip(checkBoxNewShadow, "Enable shadows for the next created symbol");
             checkBoxNewShadow.UseVisualStyleBackColor = true;
             // 
             // label17
@@ -913,6 +960,7 @@
             numericBlurMosaicSize.Name = "numericBlurMosaicSize";
             numericBlurMosaicSize.Size = new Size(47, 23);
             numericBlurMosaicSize.TabIndex = 25;
+            toolTip1.SetToolTip(numericBlurMosaicSize, "The size of the mosaic tiles in pixels. Larger tiles obscures the underlying contents more");
             numericBlurMosaicSize.Value = new decimal(new int[] { 10, 0, 0, 0 });
             numericBlurMosaicSize.ValueChanged += NumericBlurMosaicSize_ValueChanged;
             // 
@@ -923,7 +971,7 @@
             panelPropertiesLine.Controls.Add(label6);
             panelPropertiesLine.Controls.Add(buttonPropertiesColorLine);
             panelPropertiesLine.Controls.Add(label8);
-            panelPropertiesLine.Location = new Point(797, 261);
+            panelPropertiesLine.Location = new Point(797, 245);
             panelPropertiesLine.Name = "panelPropertiesLine";
             panelPropertiesLine.Size = new Size(153, 55);
             panelPropertiesLine.TabIndex = 2;
@@ -937,6 +985,7 @@
             checkBoxPropertiesShadow.Size = new Size(68, 19);
             checkBoxPropertiesShadow.TabIndex = 30;
             checkBoxPropertiesShadow.Text = "Shadow";
+            toolTip1.SetToolTip(checkBoxPropertiesShadow, "Draws a dark semi-transparent shadow untderneath the symbol");
             checkBoxPropertiesShadow.UseVisualStyleBackColor = true;
             checkBoxPropertiesShadow.Click += CheckBoxPropertiesShadow_Click;
             // 
@@ -949,7 +998,7 @@
             // 
             panelPropertiesShadow.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             panelPropertiesShadow.Controls.Add(checkBoxPropertiesShadow);
-            panelPropertiesShadow.Location = new Point(797, 468);
+            panelPropertiesShadow.Location = new Point(797, 444);
             panelPropertiesShadow.Name = "panelPropertiesShadow";
             panelPropertiesShadow.Size = new Size(153, 26);
             panelPropertiesShadow.TabIndex = 32;
@@ -960,7 +1009,7 @@
             panelPropertiesDelete.Controls.Add(buttonToBack);
             panelPropertiesDelete.Controls.Add(buttonToFront);
             panelPropertiesDelete.Controls.Add(buttonDeleteSymbol);
-            panelPropertiesDelete.Location = new Point(797, 637);
+            panelPropertiesDelete.Location = new Point(797, 599);
             panelPropertiesDelete.Name = "panelPropertiesDelete";
             panelPropertiesDelete.Size = new Size(153, 55);
             panelPropertiesDelete.TabIndex = 33;
@@ -972,6 +1021,7 @@
             buttonToBack.Size = new Size(69, 23);
             buttonToBack.TabIndex = 2;
             buttonToBack.Text = "To Back";
+            toolTip1.SetToolTip(buttonToBack, "Moves the selected symbol so it appears behind any other symbol");
             buttonToBack.UseVisualStyleBackColor = true;
             buttonToBack.Click += buttonToBack_Click;
             // 
@@ -982,6 +1032,7 @@
             buttonToFront.Size = new Size(65, 23);
             buttonToFront.TabIndex = 1;
             buttonToFront.Text = "To Front";
+            toolTip1.SetToolTip(buttonToFront, "Moves the selected symbol so it appears in front of any other symbol");
             buttonToFront.UseVisualStyleBackColor = true;
             buttonToFront.Click += buttonToFront_Click;
             // 
@@ -995,7 +1046,7 @@
             panelPropertiesCrop.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             panelPropertiesCrop.Controls.Add(buttonPropertyCopyCrop);
             panelPropertiesCrop.Controls.Add(buttonPropertyCrop);
-            panelPropertiesCrop.Location = new Point(797, 495);
+            panelPropertiesCrop.Location = new Point(797, 470);
             panelPropertiesCrop.Name = "panelPropertiesCrop";
             panelPropertiesCrop.Size = new Size(153, 54);
             panelPropertiesCrop.TabIndex = 34;
@@ -1007,6 +1058,7 @@
             buttonPropertyCopyCrop.Size = new Size(95, 23);
             buttonPropertyCopyCrop.TabIndex = 2;
             buttonPropertyCopyCrop.Text = "Copy selection";
+            toolTip1.SetToolTip(buttonPropertyCopyCrop, "Copy the selected region to the clipboard (Hotkey: Ctrl+C)");
             buttonPropertyCopyCrop.UseVisualStyleBackColor = true;
             buttonPropertyCopyCrop.Click += ButtonPropertyCopyCrop_Click;
             // 
@@ -1017,6 +1069,7 @@
             buttonPropertyCrop.Size = new Size(94, 23);
             buttonPropertyCrop.TabIndex = 1;
             buttonPropertyCrop.Text = "Crop image";
+            toolTip1.SetToolTip(buttonPropertyCrop, "Crop the image to the selected region. all symbols remain (Hotkey: Enter)");
             buttonPropertyCrop.UseVisualStyleBackColor = true;
             buttonPropertyCrop.Click += ButtonPropertyCrop_Click;
             // 
@@ -1024,36 +1077,68 @@
             // 
             panelPropertiesBlur.Controls.Add(label17);
             panelPropertiesBlur.Controls.Add(numericBlurMosaicSize);
-            panelPropertiesBlur.Location = new Point(798, 547);
+            panelPropertiesBlur.Location = new Point(797, 524);
             panelPropertiesBlur.Name = "panelPropertiesBlur";
             panelPropertiesBlur.Size = new Size(153, 28);
             panelPropertiesBlur.TabIndex = 35;
             // 
-            // panelPropertiesFillShape
+            // panelPropertiesPolygon
             // 
-            panelPropertiesFillShape.Controls.Add(checkBoxPropertiesFillShape);
-            panelPropertiesFillShape.Location = new Point(797, 698);
-            panelPropertiesFillShape.Name = "panelPropertiesFillShape";
-            panelPropertiesFillShape.Size = new Size(153, 26);
-            panelPropertiesFillShape.TabIndex = 36;
+            panelPropertiesPolygon.Controls.Add(labelCurveTension);
+            panelPropertiesPolygon.Controls.Add(numericPropertiesCurveTension);
+            panelPropertiesPolygon.Controls.Add(checkBoxPropertiesCloseCurve);
+            panelPropertiesPolygon.Location = new Point(797, 654);
+            panelPropertiesPolygon.Name = "panelPropertiesPolygon";
+            panelPropertiesPolygon.Size = new Size(153, 51);
+            panelPropertiesPolygon.TabIndex = 36;
             // 
-            // checkBoxPropertiesFillShape
+            // labelCurveTension
             // 
-            checkBoxPropertiesFillShape.AutoSize = true;
-            checkBoxPropertiesFillShape.Location = new Point(3, 4);
-            checkBoxPropertiesFillShape.Name = "checkBoxPropertiesFillShape";
-            checkBoxPropertiesFillShape.Size = new Size(75, 19);
-            checkBoxPropertiesFillShape.TabIndex = 0;
-            checkBoxPropertiesFillShape.Text = "Fill shape";
-            checkBoxPropertiesFillShape.UseVisualStyleBackColor = true;
-            checkBoxPropertiesFillShape.Click += checkBoxPropertiesFillShape_Click;
+            labelCurveTension.AutoSize = true;
+            labelCurveTension.Location = new Point(4, 26);
+            labelCurveTension.Name = "labelCurveTension";
+            labelCurveTension.Size = new Size(80, 15);
+            labelCurveTension.TabIndex = 2;
+            labelCurveTension.Text = "Curve tension";
+            // 
+            // numericPropertiesCurveTension
+            // 
+            numericPropertiesCurveTension.DecimalPlaces = 1;
+            numericPropertiesCurveTension.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numericPropertiesCurveTension.Location = new Point(89, 24);
+            numericPropertiesCurveTension.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
+            numericPropertiesCurveTension.Name = "numericPropertiesCurveTension";
+            numericPropertiesCurveTension.Size = new Size(49, 23);
+            numericPropertiesCurveTension.TabIndex = 1;
+            toolTip1.SetToolTip(numericPropertiesCurveTension, "0-1. Higher values are smoother, but can make bulges when closing curves");
+            numericPropertiesCurveTension.Value = new decimal(new int[] { 5, 0, 0, 65536 });
+            numericPropertiesCurveTension.ValueChanged += numericPropertiesCurveTension_ValueChanged;
+            // 
+            // checkBoxPropertiesCloseCurve
+            // 
+            checkBoxPropertiesCloseCurve.AutoSize = true;
+            checkBoxPropertiesCloseCurve.Location = new Point(3, 4);
+            checkBoxPropertiesCloseCurve.Name = "checkBoxPropertiesCloseCurve";
+            checkBoxPropertiesCloseCurve.Size = new Size(89, 19);
+            checkBoxPropertiesCloseCurve.TabIndex = 0;
+            checkBoxPropertiesCloseCurve.Text = "Close Curve";
+            toolTip1.SetToolTip(checkBoxPropertiesCloseCurve, "Draws a line between the first and last point of the curve");
+            checkBoxPropertiesCloseCurve.UseVisualStyleBackColor = true;
+            checkBoxPropertiesCloseCurve.Click += checkBoxPropertiesCloseCurve_Click;
+            // 
+            // toolTip1
+            // 
+            toolTip1.AutomaticDelay = 200;
+            toolTip1.AutoPopDelay = 3000;
+            toolTip1.InitialDelay = 200;
+            toolTip1.ReshowDelay = 40;
             // 
             // ScreenshotEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(952, 732);
-            Controls.Add(panelPropertiesFillShape);
+            Controls.Add(panelPropertiesPolygon);
             Controls.Add(panelPropertiesBlur);
             Controls.Add(panelPropertiesCrop);
             Controls.Add(panelPropertiesHighlight);
@@ -1108,8 +1193,9 @@
             panelPropertiesCrop.ResumeLayout(false);
             panelPropertiesBlur.ResumeLayout(false);
             panelPropertiesBlur.PerformLayout();
-            panelPropertiesFillShape.ResumeLayout(false);
-            panelPropertiesFillShape.PerformLayout();
+            panelPropertiesPolygon.ResumeLayout(false);
+            panelPropertiesPolygon.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericPropertiesCurveTension).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1200,7 +1286,11 @@
         private Button buttonToBack;
         private Button buttonToFront;
         private Button buttonDraw;
-        private Panel panelPropertiesFillShape;
-        private CheckBox checkBoxPropertiesFillShape;
+        private Panel panelPropertiesPolygon;
+        private CheckBox checkBoxPropertiesCloseCurve;
+        private Button buttonFilledCurve;
+        private Label labelCurveTension;
+        private NumericUpDown numericPropertiesCurveTension;
+        private ToolTip toolTip1;
     }
 }

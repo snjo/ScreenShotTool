@@ -601,7 +601,8 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
                 ScreenshotEditor.UserActions.CreateHighlight => new GsHighlight(upperLeft, size, lineColor, Color.Yellow, false, 0),
                 ScreenshotEditor.UserActions.CreateCrop => new GsCrop(upperLeft, size, Color.Black, Color.White), // set line/fill color to a solid, so it isn't skipped in rendering
                 ScreenshotEditor.UserActions.CreateNumbered => new GsNumbered(new Point(dragEnd.X - (NumberedSize / 2), dragEnd.Y - (NumberedSize / 2)), new Point(NumberedSize, NumberedSize), lineColor, fillColor, shadow, lineWeight),
-                ScreenshotEditor.UserActions.DrawFreehand => GsPolygon.Create(new Point(0,0), polygonDrawing, temp, lineColor, fillColor, lineWeight, shadow),
+                ScreenshotEditor.UserActions.DrawFreehand => GsPolygon.Create(new Point(0,0), polygonDrawing, temp, lineColor, Color.Transparent, lineWeight, shadow, false),
+                ScreenshotEditor.UserActions.DrawFilledCurve => GsPolygon.Create(new Point(0, 0), polygonDrawing, temp, lineColor, fillColor, lineWeight, shadow, true),
                 _ => null,
             };
         }

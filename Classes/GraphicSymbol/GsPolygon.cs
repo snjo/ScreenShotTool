@@ -12,6 +12,8 @@ public class GsPolygon : GraphicSymbol
     PolygonDrawing? Polygon;
     bool isTemporarySymbol = false;
     public bool closedCurve = false;
+    public float curveTension = 0.5f;
+    //public bool fillCurve = false;
 
     public GsPolygon(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight)
     {
@@ -19,7 +21,7 @@ public class GsPolygon : GraphicSymbol
         Name = "Freehand Curve";
     }
 
-    public static GsPolygon Create(Point TopLeft, PolygonDrawing? newPolygon, bool isTemporarySymbol, Color lineColor, Color fillColor, int lineWeight, bool shadow)
+    public static GsPolygon Create(Point TopLeft, PolygonDrawing? newPolygon, bool isTemporarySymbol, Color lineColor, Color fillColor, int lineWeight, bool shadow, bool closedCurve)
     {
         if (newPolygon != null)
         {
@@ -45,6 +47,8 @@ public class GsPolygon : GraphicSymbol
             newSymbol.LinePen.MiterLimit = lineWeight;
             newSymbol.LinePen.LineJoin = System.Drawing.Drawing2D.LineJoin.Round;
             newSymbol.isTemporarySymbol = isTemporarySymbol;
+            newSymbol.closedCurve = closedCurve;
+            //newSymbol.fillCurve = fillColor.A > 0;
             return newSymbol;
         }
 
@@ -81,16 +85,17 @@ public class GsPolygon : GraphicSymbol
     internal override void DrawShape(Graphics graphic, Pen drawPen, Brush drawBrush, Point offset, bool fill = true, bool outline = true)
     {   
         if (Polygon != null)
-        {       
+        {
+            bool fillCurve = FillColor.A > 0;
             if (isTemporarySymbol)
             {
                 // don't move the symbol around during drawing
-                Polygon.Draw(graphic, drawPen, drawBrush, offset.X, offset.Y, false, 0, 0);
+                Polygon.Draw(graphic, drawPen, drawBrush, offset.X, offset.Y, false, 0, 0, closedCurve, fillCurve, curveTension);
             }
             else
             {
                 // move the symbol into new place if it's moved from drawn location
-                Polygon.Draw(graphic, drawPen, drawBrush, Left - Polygon.LeftMostPixel + offset.X, Top - Polygon.TopMostPixel + offset.Y, true, Width, Height, closedCurve);
+                Polygon.Draw(graphic, drawPen, drawBrush, Left - Polygon.LeftMostPixel + offset.X, Top - Polygon.TopMostPixel + offset.Y, true, Width, Height, closedCurve, fillCurve, curveTension);
             }
         }
     }
