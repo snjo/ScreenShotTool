@@ -1207,7 +1207,7 @@
             checkBoxSelectAfterPlacingSymbol.TabIndex = 92;
             checkBoxSelectAfterPlacingSymbol.Text = "After placing a symbol, change to Select (instead of placing more)";
             checkBoxSelectAfterPlacingSymbol.UseVisualStyleBackColor = true;
-            checkBoxSelectAfterPlacingSymbol.CheckedChanged += checkBoxSelectAfterPlacingSymbol_CheckedChanged;
+            checkBoxSelectAfterPlacingSymbol.CheckedChanged += CheckBoxSelectAfterPlacingSymbol_CheckedChanged;
             // 
             // label30
             // 

@@ -101,17 +101,17 @@ public partial class ColorDialogAlpha : Form
         return rearrangedColors;
     }
 
-    private static void MoveColorByName(List<Color> oldList, List<Color> newList, string name)
-    {
-        for (int i = oldList.Count - 1; i > -1; i--)
-        {
-            Color color = oldList[i];
-            if (color.Name.Contains(name))
-            {
-                MoveToList(oldList, newList, color);
-            }
-        }
-    }
+    //private static void MoveColorByName(List<Color> oldList, List<Color> newList, string name)
+    //{
+    //    for (int i = oldList.Count - 1; i > -1; i--)
+    //    {
+    //        Color color = oldList[i];
+    //        if (color.Name.Contains(name))
+    //        {
+    //            MoveToList(oldList, newList, color);
+    //        }
+    //    }
+    //}
 
     private static List<Color> OrderColorByHue(List<Color> colors)
     {
@@ -188,17 +188,17 @@ public partial class ColorDialogAlpha : Form
         Color = newColor;
     }
 
-    private void buttonOK_Click(object sender, EventArgs e)
+    private void ButtonOK_Click(object sender, EventArgs e)
     {
         DialogResult = DialogResult.OK;
     }
 
-    private void buttonCancel_Click(object sender, EventArgs e)
+    private void ButtonCancel_Click(object sender, EventArgs e)
     {
         DialogResult = DialogResult.Cancel;
     }
 
-    private void buttonColorPicker_Click(object sender, EventArgs e)
+    private void ButtonColorPicker_Click(object sender, EventArgs e)
     {
         //ImageView imgView = ImageView.CreateUsingCurrentScreen(ImageView.ViewerMode.colorPicker);
         ImageView imgView = ImageView.CreateUsingAllScreens(ImageView.ViewerMode.colorPicker);

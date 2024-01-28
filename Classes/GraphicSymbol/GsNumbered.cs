@@ -28,7 +28,7 @@ public class GsNumbered : GraphicSymbol
 
     public static GsNumbered Create(Point startPoint, int Size, bool shadow)
     {
-        GsNumbered newSymbol = new GsNumbered(startPoint, new Point(Size,Size), Color.Black, Color.Gray, shadow); // these colors aren't used
+        GsNumbered newSymbol = new GsNumbered(startPoint, new Point(Size, Size), Color.Black, Color.Gray, shadow); // these colors aren't used
         return newSymbol;
     }
 

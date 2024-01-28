@@ -372,7 +372,7 @@ namespace ScreenShotTool
             }
         }
 
-        private void checkBoxSelectAfterPlacingSymbol_CheckedChanged(object sender, EventArgs e)
+        private void CheckBoxSelectAfterPlacingSymbol_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBoxSelectAfterPlacingSymbol.Checked)
             {

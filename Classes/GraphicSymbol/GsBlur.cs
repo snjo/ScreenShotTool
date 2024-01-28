@@ -20,8 +20,10 @@ public class GsBlur : GsDynamicImage
         {
             lineColor = Color.Red;
         }
-        GsBlur newSymbol = new GsBlur(startPoint, endPoint, lineColor, Color.White);
-        newSymbol.isTempSymbol = temp;
+        GsBlur newSymbol = new GsBlur(startPoint, endPoint, lineColor, Color.White)
+        {
+            isTempSymbol = temp
+        };
         return newSymbol;
     }
 
@@ -49,7 +51,7 @@ public class GsBlur : GsDynamicImage
                 // draw this outline during creation with temp symbol, line will be transparent after permanent symbol is created
                 graphic.DrawRectangle(LinePen, Left, Top, Width, Height);
             }
-            
+
         }
     }
 

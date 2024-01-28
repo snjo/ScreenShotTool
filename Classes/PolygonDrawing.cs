@@ -1,10 +1,7 @@
-﻿using System.Diagnostics;
-using System.Drawing;
-
-namespace ScreenShotTool;
+﻿namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
 
-public class PolygonDrawing
+public class PolygonDrawing(Pen pen)
 {
     Bitmap? bitmap;
     public Point Location = new Point(0, 0);
@@ -14,15 +11,10 @@ public class PolygonDrawing
     public int RightMostPixel = 0;
     public int TopMostPixel = 0;
     public int BottomMostPixel = 0;
-    DateTime lastUpdate = DateTime.MinValue;
+    //DateTime lastUpdate = DateTime.MinValue;
 
     public List<Point> PointList = new();
-    public Pen pen;
-
-    public PolygonDrawing(Pen pen)
-    {
-        this.pen = pen;
-    }
+    public Pen pen = pen;
 
     private void UpdateContentBounds(Pen pen, Point point)
     {
@@ -72,7 +64,7 @@ public class PolygonDrawing
     public Bitmap ToBitmap()
     {
         bitmap.DisposeAndNull();
-        bitmap = new Bitmap(Math.Max(1,Contents.Width), Math.Max(1,Contents.Height));
+        bitmap = new Bitmap(Math.Max(1, Contents.Width), Math.Max(1, Contents.Height));
         using (Graphics graphics = Graphics.FromImage(bitmap))
         {
             //Draw(graphics, pen, -LeftMostPixel, -TopMostPixel, false, Contents.Width, Contents.Height);
@@ -103,7 +95,7 @@ public class PolygonDrawing
             {
                 offsetPoints[i] = PointList[i].Add(new Point(offsetX, offsetY));
             }
-            
+
         }
 
         if (fill)

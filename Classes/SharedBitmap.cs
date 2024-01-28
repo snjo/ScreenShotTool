@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 
 namespace ScreenShotTool.Classes
 {
@@ -34,11 +29,11 @@ namespace ScreenShotTool.Classes
         }
 
         public Bitmap? GetBitmap()
-        { 
+        {
             if (!isDisposed) return bitmap;
             return null;
         }
-        
+
         public void DisposeImage()
         {
             Debug.WriteLine("Dispose shared bitmap");

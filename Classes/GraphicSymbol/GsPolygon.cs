@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ScreenShotTool;
+﻿namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
 public class GsPolygon : GraphicSymbol
 {
@@ -52,8 +45,10 @@ public class GsPolygon : GraphicSymbol
             return newSymbol;
         }
 
-        GsPolygon badSymbol = new GsPolygon(new Point(0, 0), new Point(10, 10), Color.Red, Color.Green, false, 1);
-        badSymbol.ValidSymbol = false;
+        GsPolygon badSymbol = new(new Point(0, 0), new Point(10, 10), Color.Red, Color.Green, false, 1)
+        {
+            ValidSymbol = false
+        };
 
         return badSymbol;
     }
@@ -83,7 +78,7 @@ public class GsPolygon : GraphicSymbol
     }
 
     internal override void DrawShape(Graphics graphic, Pen drawPen, Brush drawBrush, Point offset, bool fill = true, bool outline = true)
-    {   
+    {
         if (Polygon != null)
         {
             bool fillCurve = FillColor.A > 0;
@@ -104,7 +99,7 @@ public class GsPolygon : GraphicSymbol
     {
         if (ShadowEnabled)
         {
-            
+
             if (closedCurve)
             {
                 for (int i = 1; i < ShadowDistance; i++)

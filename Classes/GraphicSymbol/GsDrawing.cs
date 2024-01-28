@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace ScreenShotTool;
+﻿namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
 public class GsDrawing : GraphicSymbol
 {

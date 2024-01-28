@@ -269,7 +269,7 @@
             buttonFilledCurve.TabIndex = 14;
             toolTip1.SetToolTip(buttonFilledCurve, "Closed curve");
             buttonFilledCurve.UseVisualStyleBackColor = true;
-            buttonFilledCurve.Click += buttonFillCurve_Click;
+            buttonFilledCurve.Click += ButtonFillCurve_Click;
             // 
             // buttonDraw
             // 
@@ -285,7 +285,7 @@
             buttonDraw.TabIndex = 13;
             toolTip1.SetToolTip(buttonDraw, "Freenhand lines. To stop, Right Click or press Cancel");
             buttonDraw.UseVisualStyleBackColor = true;
-            buttonDraw.Click += buttonDraw_Click;
+            buttonDraw.Click += ButtonDraw_Click;
             // 
             // buttonNumbered
             // 
@@ -1025,7 +1025,7 @@
             buttonToBack.Text = "To Back";
             toolTip1.SetToolTip(buttonToBack, "Moves the selected symbol so it appears behind any other symbol");
             buttonToBack.UseVisualStyleBackColor = true;
-            buttonToBack.Click += buttonToBack_Click;
+            buttonToBack.Click += ButtonToBack_Click;
             // 
             // buttonToFront
             // 
@@ -1036,7 +1036,7 @@
             buttonToFront.Text = "To Front";
             toolTip1.SetToolTip(buttonToFront, "Moves the selected symbol so it appears in front of any other symbol");
             buttonToFront.UseVisualStyleBackColor = true;
-            buttonToFront.Click += buttonToFront_Click;
+            buttonToFront.Click += ButtonToFront_Click;
             // 
             // TimerUpdateOverlay
             // 
@@ -1114,7 +1114,7 @@
             numericPropertiesCurveTension.TabIndex = 1;
             toolTip1.SetToolTip(numericPropertiesCurveTension, "0-1. Higher values are smoother, but can make bulges when closing curves");
             numericPropertiesCurveTension.Value = new decimal(new int[] { 5, 0, 0, 65536 });
-            numericPropertiesCurveTension.ValueChanged += numericPropertiesCurveTension_ValueChanged;
+            numericPropertiesCurveTension.ValueChanged += NumericPropertiesCurveTension_ValueChanged;
             // 
             // checkBoxPropertiesCloseCurve
             // 
@@ -1126,7 +1126,7 @@
             checkBoxPropertiesCloseCurve.Text = "Close Curve";
             toolTip1.SetToolTip(checkBoxPropertiesCloseCurve, "Draws a line between the first and last point of the curve");
             checkBoxPropertiesCloseCurve.UseVisualStyleBackColor = true;
-            checkBoxPropertiesCloseCurve.Click += checkBoxPropertiesCloseCurve_Click;
+            checkBoxPropertiesCloseCurve.Click += CheckBoxPropertiesCloseCurve_Click;
             // 
             // toolTip1
             // 
@@ -1148,7 +1148,7 @@
             buttonStickers.TabIndex = 15;
             toolTip1.SetToolTip(buttonStickers, "Stickers and cursors");
             buttonStickers.UseVisualStyleBackColor = true;
-            buttonStickers.Click += buttonStickers_Click;
+            buttonStickers.Click += ButtonStickers_Click;
             // 
             // ScreenshotEditor
             // 

@@ -1,7 +1,5 @@
 ﻿using ScreenShotTool.Classes;
 using System.Diagnostics;
-using System.Net;
-using static ScreenShotTool.ColorBlend;
 
 namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
@@ -15,11 +13,13 @@ public class GsImage : GraphicSymbol
 
     public static GsImage Create(Point startPoint, Bitmap bitmap)
     {
-        GsImage gsImage = new GsImage(startPoint, Point.Empty, false);
-        gsImage.image = bitmap;
-        gsImage.Width = bitmap.Width;
-        gsImage.Height = bitmap.Height;
-        gsImage.ValidSymbol = true;
+        GsImage gsImage = new GsImage(startPoint, Point.Empty, false)
+        {
+            image = bitmap,
+            Width = bitmap.Width,
+            Height = bitmap.Height,
+            ValidSymbol = true
+        };
         return gsImage;
     }
 
@@ -30,15 +30,15 @@ public class GsImage : GraphicSymbol
 
         Image? clipboardImage = null;
         if (checkClipboard)
-        { 
+        {
             clipboardImage = Clipboard.GetImage();
         }
 
         Debug.WriteLine($"GsImage.Create, copiedImage disposed: {copiedImage.isDisposed}");
-        
+
         if (copiedImage.isDisposed == false)
         {
-            
+
             if (clipboardImage != null)
             {
                 int clipWidth = clipboardImage.Width;
@@ -59,7 +59,7 @@ public class GsImage : GraphicSymbol
                     useClipboard = false;
                 }
             }
-            
+
         }
         else
         {
@@ -80,7 +80,7 @@ public class GsImage : GraphicSymbol
         //if (clipboardImage != null) // TODO remove, insert else above
         {
             //Debug.WriteLine("GsImage.Create: use clipboard image");
-            gsImage.image = (Bitmap)clipboardImage;            
+            gsImage.image = (Bitmap)clipboardImage;
         }
         else
         {

@@ -1,7 +1,6 @@
 ﻿using ScreenShotTool.Forms;
 using ScreenShotTool.Properties;
 using System.Diagnostics;
-using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Runtime.Versioning;
@@ -550,7 +549,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
     #region Symbols -------------------------------------------------------------------------------------
 
-    private Point RestrainToSquare(Point dragStart, Point dragEnd)
+    private static Point RestrainToSquare(Point dragStart, Point dragEnd)
     {
         Point size = dragEnd.Subtract(dragStart);
         int width = Math.Abs(size.X);
@@ -617,7 +616,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
                 ScreenshotEditor.UserActions.CreateHighlight => new GsHighlight(upperLeft, size, lineColor, Color.Yellow, false, 0),
                 ScreenshotEditor.UserActions.CreateCrop => new GsCrop(upperLeft, size, Color.Black, Color.White), // set line/fill color to a solid, so it isn't skipped in rendering
                 ScreenshotEditor.UserActions.CreateNumbered => GsNumbered.Create(new Point(dragEnd.X - (NumberedSize / 2), dragEnd.Y - (NumberedSize / 2)), NumberedSize, shadow),
-                ScreenshotEditor.UserActions.DrawFreehand => GsPolygon.Create(new Point(0,0), polygonDrawing, temp, lineColorForceVisible, Color.Transparent, Math.Max(1,lineWeight), shadow, false),
+                ScreenshotEditor.UserActions.DrawFreehand => GsPolygon.Create(new Point(0, 0), polygonDrawing, temp, lineColorForceVisible, Color.Transparent, Math.Max(1, lineWeight), shadow, false),
                 ScreenshotEditor.UserActions.DrawFilledCurve => GsPolygon.Create(new Point(0, 0), polygonDrawing, temp, lineColor, fillColor, lineWeightForceVisible, shadow, false),
                 _ => null,
             };
@@ -630,7 +629,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
     private void CreateTempSymbol(Point MousePosition)
     {
-        GraphicSymbol? tempSymbol = GetNewSymbol(MousePosition, parentEditor.GetShift(), true);
+        GraphicSymbol? tempSymbol = GetNewSymbol(MousePosition, ScreenshotEditor.GetShift(), true);
 
         if (tempSymbol != null)
         {
@@ -899,7 +898,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
             }
         }
 
-        GraphicSymbol? symbol = GetNewSymbol(MousePositionLocal, parentEditor.GetShift(), false); // checks current User Action and creates a symbol based on that
+        GraphicSymbol? symbol = GetNewSymbol(MousePositionLocal, ScreenshotEditor.GetShift(), false); // checks current User Action and creates a symbol based on that
         if (symbol != null)
         {
 

@@ -1,5 +1,4 @@
 ﻿using ScreenShotTool.Forms;
-using System.Net;
 
 namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility

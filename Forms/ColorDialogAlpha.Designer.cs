@@ -67,7 +67,7 @@
             buttonOK.TabIndex = 0;
             buttonOK.Text = "OK";
             buttonOK.UseVisualStyleBackColor = true;
-            buttonOK.Click += buttonOK_Click;
+            buttonOK.Click += ButtonOK_Click;
             // 
             // buttonCancel
             // 
@@ -78,7 +78,7 @@
             buttonCancel.TabIndex = 1;
             buttonCancel.Text = "Cancel";
             buttonCancel.UseVisualStyleBackColor = true;
-            buttonCancel.Click += buttonCancel_Click;
+            buttonCancel.Click += ButtonCancel_Click;
             // 
             // trackBarRed
             // 
@@ -246,7 +246,7 @@
             buttonColorPicker.TabIndex = 23;
             buttonColorPicker.Text = "Color picker";
             buttonColorPicker.UseVisualStyleBackColor = true;
-            buttonColorPicker.Click += buttonColorPicker_Click;
+            buttonColorPicker.Click += ButtonColorPicker_Click;
             // 
             // ColorDialogAlpha
             // 

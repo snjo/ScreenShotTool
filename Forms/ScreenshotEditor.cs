@@ -1,7 +1,6 @@
 ﻿using ScreenShotTool.Classes;
 using ScreenShotTool.Properties;
 using System.Diagnostics;
-using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
 using static ScreenShotTool.EditorCanvas;
@@ -259,19 +258,18 @@ public partial class ScreenshotEditor : Form
 
     private bool InsertImageFromFileDialog(Point location, string Folder = "")
     {
-        bool InsertSuccessful = false;
+        bool InsertSuccessful;
 
         FileDialog fileDialog = new OpenFileDialog
         {
-            //Filter = "Images (*.png,*.jpg,*.jpeg,*.gif,*.bmp,*.webp)|(*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp;)|PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|All files|*.*"
             Filter = filterLoadImage
         };
         if (Folder.Length > 0 && Directory.Exists(Folder))
         {
             Debug.WriteLine($"Setting InitialDirectory {Folder}");
             fileDialog.InitialDirectory = Folder;
-            fileDialog.RestoreDirectory = true;
-            fileDialog.AutoUpgradeEnabled = true;
+            //fileDialog.RestoreDirectory = true;
+            //fileDialog.AutoUpgradeEnabled = true;
         }
         else
         {
@@ -293,7 +291,7 @@ public partial class ScreenshotEditor : Form
 
     private bool InsertImageFromFile(Point location, string fileName)
     {
-        Image? loadedImage = null;
+        Image? loadedImage;
         try
         {
 
@@ -308,7 +306,6 @@ public partial class ScreenshotEditor : Form
         catch (Exception ex)
         {
             MessageBox.Show("Couldn't load file.\n" + ex.Message);
-            loadedImage = null;
             return false;
         }
 
@@ -423,9 +420,8 @@ public partial class ScreenshotEditor : Form
     private void PictureBoxOverlay_MouseMove(object sender, MouseEventArgs e)
     {
         MousePositionLocal = new Point(e.X, e.Y);
-        bool shiftHeld = ModifierKeys == Keys.Shift;
+        //bool shiftHeld = ModifierKeys == Keys.Shift;
         editorCanvas.MouseMove(MousePositionLocal);
-
     }
     private void PictureBoxOverlay_MouseUp(object sender, MouseEventArgs e)
     {
@@ -446,7 +442,7 @@ public partial class ScreenshotEditor : Form
 
     #region Key input -----------------------------------------------------------------------------------
 
-    public bool GetShift()
+    public static bool GetShift()
     {
         return ModifierKeys == Keys.Shift;
     }
@@ -486,7 +482,7 @@ public partial class ScreenshotEditor : Form
         if (e.KeyCode == Keys.Escape)
         {
             CancelAction();
-            if (GetSelectedSymbol() is GsCrop crop)
+            if (GetSelectedSymbol() is GsCrop)
             {
                 DeleteSelectedSymbol();
             }
@@ -1060,7 +1056,7 @@ public partial class ScreenshotEditor : Form
         editorCanvas.UpdateOverlay();
     }
 
-    private void checkBoxPropertiesCloseCurve_Click(object sender, EventArgs e)
+    private void CheckBoxPropertiesCloseCurve_Click(object sender, EventArgs e)
     {
         GraphicSymbol? symbol = GetSelectedSymbol();
         if (symbol != null)
@@ -1153,7 +1149,7 @@ public partial class ScreenshotEditor : Form
         }
     }
 
-    private void numericPropertiesCurveTension_ValueChanged(object sender, EventArgs e)
+    private void NumericPropertiesCurveTension_ValueChanged(object sender, EventArgs e)
     {
         if (GetSelectedSymbol() is GsPolygon gsP)
         {
@@ -1265,7 +1261,7 @@ public partial class ScreenshotEditor : Form
         SetUserAction(UserActions.CreateCrop);
     }
 
-    private void buttonStickers_Click(object sender, EventArgs e)
+    private void ButtonStickers_Click(object sender, EventArgs e)
     {
         string stickerFolder = Path.GetFullPath(@".\img\stickers");
         InsertImageFromFileDialog(new Point(editorCanvas.CanvasSize.Width / 2, editorCanvas.CanvasSize.Height / 2), stickerFolder);
@@ -1276,12 +1272,12 @@ public partial class ScreenshotEditor : Form
         SetUserAction(UserActions.CreateNumbered);
     }
 
-    private void buttonDraw_Click(object sender, EventArgs e)
+    private void ButtonDraw_Click(object sender, EventArgs e)
     {
         SetUserAction(UserActions.DrawFreehand);
     }
 
-    private void buttonFillCurve_Click(object sender, EventArgs e)
+    private void ButtonFillCurve_Click(object sender, EventArgs e)
     {
         SetUserAction(UserActions.DrawFilledCurve);
     }
@@ -1306,14 +1302,14 @@ public partial class ScreenshotEditor : Form
     }
     #endregion
 
-    private void buttonToFront_Click(object sender, EventArgs e)
+    private void ButtonToFront_Click(object sender, EventArgs e)
     {
         if (listViewSymbols.SelectedItems.Count > 0)
         {
             MoveSymbolToFront(listViewSymbols.SelectedItems[0]);
         }
     }
-    private void buttonToBack_Click(object sender, EventArgs e)
+    private void ButtonToBack_Click(object sender, EventArgs e)
     {
         if (listViewSymbols.SelectedItems.Count > 0)
         {
