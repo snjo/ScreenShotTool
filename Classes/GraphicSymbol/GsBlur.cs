@@ -5,11 +5,24 @@ public class GsBlur : GsDynamicImage
     //public Bitmap? blurredImage;
     private Bitmap? blurredCrop;
     DateTime? lastLocalImageUpdate;
+    bool isTempSymbol = false;
 
-    public GsBlur(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor) : base(startPoint, endPoint, foregroundColor, backgroundColor)
+    private GsBlur(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor) : base(startPoint, endPoint, foregroundColor, backgroundColor)
     {
         Name = "Blur";
         drawFill = DrawFill;
+    }
+
+    public static GsBlur Create(Point startPoint, Point endPoint, bool temp)
+    {
+        Color lineColor = Color.Transparent;
+        if (temp)
+        {
+            lineColor = Color.Red;
+        }
+        GsBlur newSymbol = new GsBlur(startPoint, endPoint, lineColor, Color.White);
+        newSymbol.isTempSymbol = temp;
+        return newSymbol;
     }
 
     public void DrawFill(Pen pen, Brush fillBrush, Rectangle rect, Graphics graphic)
@@ -30,6 +43,13 @@ public class GsBlur : GsDynamicImage
             {
                 graphic.DrawImage(blurredCrop, Left, Top, Width, Height);
             }
+
+            if (isTempSymbol)
+            {
+                // draw this outline during creation with temp symbol, line will be transparent after permanent symbol is created
+                graphic.DrawRectangle(LinePen, Left, Top, Width, Height);
+            }
+            
         }
     }
 

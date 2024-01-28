@@ -15,7 +15,7 @@ public class GsNumbered : GraphicSymbol
     public int Diameter = 30; // update DefaultRadius if you change Diameter here
     //public int DefaultRadius = 15;
 
-    public GsNumbered(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight = 1) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight)
+    private GsNumbered(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight = 1) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight)
     {
         Name = "Number";
         Diameter = Settings.Default.GsNumberedDefaultSize;
@@ -24,6 +24,12 @@ public class GsNumbered : GraphicSymbol
         LineColor = ColorTools.GetTextColorFromBackground(FillColor);
         ValidSymbol = true;
         AllowClickPlacement = true;
+    }
+
+    public static GsNumbered Create(Point startPoint, int Size, bool shadow)
+    {
+        GsNumbered newSymbol = new GsNumbered(startPoint, new Point(Size,Size), Color.Black, Color.Gray, shadow); // these colors aren't used
+        return newSymbol;
     }
 
     internal override void DrawShape(Graphics graphic, Pen drawPen, Brush drawBrush, Point offset, bool fill = true, bool outline = true)

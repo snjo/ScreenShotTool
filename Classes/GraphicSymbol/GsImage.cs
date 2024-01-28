@@ -1,6 +1,7 @@
 ﻿using ScreenShotTool.Classes;
 using System.Diagnostics;
 using System.Net;
+using static ScreenShotTool.ColorBlend;
 
 namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
@@ -8,6 +9,8 @@ namespace ScreenShotTool;
 public class GsImage : GraphicSymbol
 {
     Bitmap? image;
+    Bitmap? shadowImage;
+    bool useAdvancedShadow = true;
     //bool isDisposed = false;
 
     public static GsImage Create(Point startPoint, Bitmap bitmap)
@@ -115,17 +118,67 @@ public class GsImage : GraphicSymbol
     {
         if (ShadowEnabled)
         {
-            for (int i = 1; i < ShadowDistance; i++)
+            int smallestSide = Math.Min(Width, Height);
+            int adjustedShadowDistance = Math.Min(ShadowDistance, smallestSide / 10);
+            // fill
+            if (useAdvancedShadow) // alpha based shadow, worse performance
             {
-                // fill
-                graphic.FillRectangle(ShadowBrush, new Rectangle(Left + i, Top + i, Width, Height));
+                if (shadowImage == null && image != null)
+                {
+                    try
+                    {
+                        shadowImage = CreateAlphaShadow(image); //new Bitmap(image.Width, image.Height);
+                    }
+                    catch
+                    {
+                        useAdvancedShadow = false;
+                        DrawSimpleShadow(graphic, adjustedShadowDistance);
+                    }
+
+                }
+                if (shadowImage != null)
+                {
+                    graphic.DrawImage(shadowImage, new Rectangle(Left + adjustedShadowDistance, Top + adjustedShadowDistance, Width, Height));
+                }
+            }
+            else
+            {
+                DrawSimpleShadow(graphic, adjustedShadowDistance);
             }
         }
+    }
+
+    private void DrawSimpleShadow(Graphics graphic, int adjustedShadowDistance)
+    {
+        for (int i = 1; i < adjustedShadowDistance; i++)
+        {
+            graphic.FillRectangle(ShadowBrush, new Rectangle(Left + i, Top + i, Width, Height));
+        }
+    }
+
+    private static Bitmap CreateAlphaShadow(Bitmap source)
+    {
+        Bitmap shadow = new Bitmap(source.Width, source.Height);
+        using (Graphics g = Graphics.FromImage(shadow))
+        {
+            using var snoop = new BmpPixelSnoop(source);
+            using var target = new BmpPixelSnoop(shadow);
+            for (int x = 0; x < source.Width; x++)
+            {
+                for (int y = 0; y < source.Height; y++)
+                {
+                    Color sourcePixel = snoop.GetPixel(x, y);
+                    target.SetPixel(x, y, Color.FromArgb((int)(sourcePixel.A * 0.2f), Color.Black));
+                }
+            }
+        }
+        return shadow;
     }
 
     public override void DisposeImages()
     {
         image?.DisposeAndNull();
+        shadowImage?.DisposeAndNull();
     }
 }
 

@@ -121,11 +121,17 @@
   <data name="icon256" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\img\icon256.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="fillCurve" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\fillCurve.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="highlight1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\img\highlight.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="blur1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\img\blur.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolEllipse" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\toolEllipse.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="numbered" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\img\numbered.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -142,17 +148,14 @@
   <data name="highlight" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\img\highlight.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="frame" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\img\frame.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="cursor select" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\img\cursor select.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="toolArrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\toolArrow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="toolRectangle" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\img\toolRectangle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="toolEllipse" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\img\toolEllipse.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="frame" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\frame.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="toolLine" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\img\toolLine.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -163,10 +166,10 @@
   <data name="toolText" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\img\toolText.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="toolArrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\img\toolArrow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="cursor select" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\cursor select.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="fillCurve" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\img\fillCurve.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="star" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\star.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

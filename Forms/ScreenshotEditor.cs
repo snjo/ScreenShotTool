@@ -254,36 +254,64 @@ public partial class ScreenshotEditor : Form
         {
             location = new Point(10, 10);
         }
+        InsertImageFromFileDialog(location);
+    }
 
-        Image? loadedImage = null;
+    private bool InsertImageFromFileDialog(Point location, string Folder = "")
+    {
+        bool InsertSuccessful = false;
 
         FileDialog fileDialog = new OpenFileDialog
         {
             //Filter = "Images (*.png,*.jpg,*.jpeg,*.gif,*.bmp,*.webp)|(*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp;)|PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|All files|*.*"
             Filter = filterLoadImage
         };
-        DialogResult result = fileDialog.ShowDialog();
-        if (result == DialogResult.OK)
+        if (Folder.Length > 0 && Directory.Exists(Folder))
         {
-            try
-            {
-
-                Image? tempImage = null;
-                using (FileStream stream = new(fileDialog.FileName, FileMode.Open))
-                {
-                    tempImage = Image.FromStream(stream);
-                }
-
-                loadedImage = ImageToBitmap32bppArgb(tempImage, true);
-
-                //loadedImage = Bitmap.FromFile(fileDialog.FileName);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Couldn't load file.\n" + ex.Message);
-                loadedImage = null;
-            }
+            Debug.WriteLine($"Setting InitialDirectory {Folder}");
+            fileDialog.InitialDirectory = Folder;
+            fileDialog.RestoreDirectory = true;
+            fileDialog.AutoUpgradeEnabled = true;
         }
+        else
+        {
+            Debug.WriteLine($"Folder {Folder}, length {Folder.Length}, exists: {Directory.Exists(Folder)}");
+        }
+        DialogResult result = fileDialog.ShowDialog();
+        string fileName = fileDialog.FileName;
+        fileDialog.Dispose();
+
+        if (result != DialogResult.OK)
+        {
+            return false;
+        }
+
+        InsertSuccessful = InsertImageFromFile(location, fileName);
+
+        return InsertSuccessful;
+    }
+
+    private bool InsertImageFromFile(Point location, string fileName)
+    {
+        Image? loadedImage = null;
+        try
+        {
+
+            Image? tempImage = null;
+            using (FileStream stream = new(fileName, FileMode.Open))
+            {
+                tempImage = Image.FromStream(stream);
+            }
+
+            loadedImage = ImageToBitmap32bppArgb(tempImage, true);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Couldn't load file.\n" + ex.Message);
+            loadedImage = null;
+            return false;
+        }
+
 
         if (loadedImage != null)
         {
@@ -295,14 +323,11 @@ public partial class ScreenshotEditor : Form
             else
             {
                 gsImage.Dispose();
+                return false;
             }
         }
         editorCanvas.UpdateOverlay();
-    }
-
-    private void ItemPasteScaled_Click(object sender, EventArgs e)
-    {
-        PasteIntoImageScaled();
+        return true;
     }
 
     private void ItemNewImage_Click(object sender, EventArgs e)
@@ -332,7 +357,6 @@ public partial class ScreenshotEditor : Form
         CreateArrow,
         CreateText,
         CreateImage,
-        CreateImageScaled,
         CreateBlur,
         CreateHighlight,
         CreateCrop,
@@ -438,10 +462,6 @@ public partial class ScreenshotEditor : Form
         if (e.KeyCode == Keys.V && e.Modifiers == Keys.Control)
         {
             PasteIntoImage();
-        }
-        if (e.KeyCode == Keys.V && e.Modifiers == (Keys.Control | Keys.Shift))
-        {
-            PasteIntoImageScaled();
         }
         if ((e.KeyCode == Keys.C && e.Modifiers == Keys.Control))
         {
@@ -563,12 +583,6 @@ public partial class ScreenshotEditor : Form
             gsImage.Dispose();
         }
 
-        editorCanvas.UpdateOverlay();
-    }
-
-    private void PasteIntoImageScaled()
-    {
-        SetUserAction(UserActions.CreateImageScaled);
         editorCanvas.UpdateOverlay();
     }
 
@@ -756,7 +770,7 @@ public partial class ScreenshotEditor : Form
                         gsNumbered.ListViewItem.Text = "Number: " + gsNumbered.Number;
                     }
                 }
-                else if (graphicSymbol is GsImage || graphicSymbol is GsImageScaled)
+                else if (graphicSymbol is GsImage)
                 {
                     EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
                 }
@@ -1249,6 +1263,12 @@ public partial class ScreenshotEditor : Form
     private void ButtonCrop_Click(object sender, EventArgs e)
     {
         SetUserAction(UserActions.CreateCrop);
+    }
+
+    private void buttonStickers_Click(object sender, EventArgs e)
+    {
+        string stickerFolder = Path.GetFullPath(@".\img\stickers");
+        InsertImageFromFileDialog(new Point(editorCanvas.CanvasSize.Width / 2, editorCanvas.CanvasSize.Height / 2), stickerFolder);
     }
 
     private void ButtonNumbered_Click(object sender, EventArgs e)

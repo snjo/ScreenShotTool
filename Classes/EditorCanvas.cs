@@ -586,23 +586,39 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
             Color lineColor = parentEditor.GetNewSymbolProperties().lineColor;
             Color fillColor = parentEditor.GetNewSymbolProperties().fillColor;
+
+            // Check that the symbol won't be drawn invisible
+
+            Color lineColorForceVisible = lineColor;
+            if (lineColor == Color.Transparent) // used for things without a fill option, always show SOMETHING
+            {
+                lineColorForceVisible = Color.Black;
+            }
+            if (lineColor == Color.Transparent && fillColor == Color.Transparent) // used for things with fill option, always show SOMETHING
+            {
+                lineColor = Color.Black;
+            }
+            int lineWeightForceVisible = lineWeight;
+            if (fillColor == Color.Transparent && lineWeight < 1)
+            {
+                lineWeightForceVisible = 1;
+            }
+
             int NumberedSize = Settings.Default.GsNumberedDefaultSize;
 
             return parentEditor.selectedUserAction switch
             {
-                ScreenshotEditor.UserActions.CreateRectangle => new GsRectangle(upperLeft, size, lineColor, fillColor, shadow, lineWeight),
-                ScreenshotEditor.UserActions.CreateCircle => new GsCircle(upperLeft, size, lineColor, fillColor, shadow, lineWeight),
-                ScreenshotEditor.UserActions.CreateLine => new GsLine(dragStart, dragEnd, lineColor, fillColor, shadow, lineWeight),
-                ScreenshotEditor.UserActions.CreateArrow => new GsArrow(dragStart, dragEnd, lineColor, fillColor, shadow, lineWeight),
-                //ScreenshotEditor.UserActions.CreateImage => GsImage.Create(dragEnd, parentEditor.copiedBitmap, true),
-                ScreenshotEditor.UserActions.CreateImageScaled => new GsImageScaled(upperLeft, size, shadow),
+                ScreenshotEditor.UserActions.CreateRectangle => new GsRectangle(upperLeft, size, lineColor, fillColor, shadow, lineWeightForceVisible),
+                ScreenshotEditor.UserActions.CreateCircle => new GsCircle(upperLeft, size, lineColor, fillColor, shadow, lineWeightForceVisible),
+                ScreenshotEditor.UserActions.CreateLine => new GsLine(dragStart, dragEnd, lineColorForceVisible, fillColor, shadow, lineWeightForceVisible),
+                ScreenshotEditor.UserActions.CreateArrow => new GsArrow(dragStart, dragEnd, lineColorForceVisible, fillColor, shadow, lineWeightForceVisible),
                 ScreenshotEditor.UserActions.CreateText => new GsText(dragStart, size, lineColor, fillColor, shadow),
-                ScreenshotEditor.UserActions.CreateBlur => new GsBlur(upperLeft, size, Color.Red, Color.White), // set fill color to a solid, so it isn't skipped in rendering
+                ScreenshotEditor.UserActions.CreateBlur => GsBlur.Create(upperLeft, size, temp),
                 ScreenshotEditor.UserActions.CreateHighlight => new GsHighlight(upperLeft, size, lineColor, Color.Yellow, false, 0),
                 ScreenshotEditor.UserActions.CreateCrop => new GsCrop(upperLeft, size, Color.Black, Color.White), // set line/fill color to a solid, so it isn't skipped in rendering
-                ScreenshotEditor.UserActions.CreateNumbered => new GsNumbered(new Point(dragEnd.X - (NumberedSize / 2), dragEnd.Y - (NumberedSize / 2)), new Point(NumberedSize, NumberedSize), lineColor, fillColor, shadow, lineWeight),
-                ScreenshotEditor.UserActions.DrawFreehand => GsPolygon.Create(new Point(0,0), polygonDrawing, temp, lineColor, Color.Transparent, lineWeight, shadow, false),
-                ScreenshotEditor.UserActions.DrawFilledCurve => GsPolygon.Create(new Point(0, 0), polygonDrawing, temp, lineColor, fillColor, lineWeight, shadow, true),
+                ScreenshotEditor.UserActions.CreateNumbered => GsNumbered.Create(new Point(dragEnd.X - (NumberedSize / 2), dragEnd.Y - (NumberedSize / 2)), NumberedSize, shadow),
+                ScreenshotEditor.UserActions.DrawFreehand => GsPolygon.Create(new Point(0,0), polygonDrawing, temp, lineColorForceVisible, Color.Transparent, Math.Max(1,lineWeight), shadow, false),
+                ScreenshotEditor.UserActions.DrawFilledCurve => GsPolygon.Create(new Point(0, 0), polygonDrawing, temp, lineColor, fillColor, lineWeightForceVisible, shadow, false),
                 _ => null,
             };
         }
@@ -917,7 +933,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
         freehandInProgress = false;
 
-        if (parentEditor.selectedUserAction == ScreenshotEditor.UserActions.CreateCrop || parentEditor.selectedUserAction == ScreenshotEditor.UserActions.CreateImage || parentEditor.selectedUserAction == ScreenshotEditor.UserActions.CreateImageScaled)
+        if (parentEditor.selectedUserAction == ScreenshotEditor.UserActions.CreateCrop || parentEditor.selectedUserAction == ScreenshotEditor.UserActions.CreateImage)
         {
             // there's no point in creating consecutive Crops, revert to Select, the same is probably true for images.
             SetUserAction(ScreenshotEditor.UserActions.Select);

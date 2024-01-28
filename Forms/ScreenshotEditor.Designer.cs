@@ -120,6 +120,7 @@
             numericPropertiesCurveTension = new NumericUpDown();
             checkBoxPropertiesCloseCurve = new CheckBox();
             toolTip1 = new ToolTip(components);
+            buttonStickers = new Button();
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
@@ -236,6 +237,7 @@
             // 
             panelButtons.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             panelButtons.BorderStyle = BorderStyle.FixedSingle;
+            panelButtons.Controls.Add(buttonStickers);
             panelButtons.Controls.Add(buttonFilledCurve);
             panelButtons.Controls.Add(buttonDraw);
             panelButtons.Controls.Add(buttonNumbered);
@@ -1133,6 +1135,21 @@
             toolTip1.InitialDelay = 200;
             toolTip1.ReshowDelay = 40;
             // 
+            // buttonStickers
+            // 
+            buttonStickers.AccessibleName = "Stickers";
+            buttonStickers.FlatAppearance.BorderSize = 0;
+            buttonStickers.FlatStyle = FlatStyle.Flat;
+            buttonStickers.Image = Properties.Resources.star;
+            buttonStickers.Location = new Point(4, 505);
+            buttonStickers.Margin = new Padding(1);
+            buttonStickers.Name = "buttonStickers";
+            buttonStickers.Size = new Size(36, 36);
+            buttonStickers.TabIndex = 15;
+            toolTip1.SetToolTip(buttonStickers, "Stickers and cursors");
+            buttonStickers.UseVisualStyleBackColor = true;
+            buttonStickers.Click += buttonStickers_Click;
+            // 
             // ScreenshotEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1292,5 +1309,6 @@
         private Label labelCurveTension;
         private NumericUpDown numericPropertiesCurveTension;
         private ToolTip toolTip1;
+        private Button buttonStickers;
     }
 }

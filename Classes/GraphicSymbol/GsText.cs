@@ -1,4 +1,5 @@
 ﻿using ScreenShotTool.Forms;
+using System.Net;
 
 namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
@@ -28,7 +29,7 @@ public class GsText : GraphicSymbol
         fontEmSize = Math.Clamp((Math.Abs(Width) + Math.Abs(Height)) / 4f, minFontSize, maxFontSize);
         font = CreateFont();
         ScalingAllowed = false;
-
+        FillColor = foregroundColor;
     }
 
     private Font CreateFont()
@@ -59,6 +60,12 @@ public class GsText : GraphicSymbol
             Width = (int)sizeInPixels.Width;
             Height = (int)sizeInPixels.Height;
         }
+    }
+
+    internal override void UpdatePen()
+    {
+        FillColor = LineColor; // ensures that shadows are drawn based on the correct alpha
+        base.UpdatePen();
     }
 
     public override void DrawHitboxes(Graphics graphic)
