@@ -20,6 +20,9 @@ namespace ScreenShotTool
         public bool MoveAllowed = true;
         public bool ShadowEnabled = false;
         public int ShadowDistance = 10;
+
+        public float Rotation = 0f;
+        public bool RotationAllowed = false;
         public Rectangle ContainerBounds = new();
         public ListViewItem? ListViewItem { get; set; }
         public bool AllowClickPlacement = false;

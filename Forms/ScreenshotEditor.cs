@@ -680,6 +680,7 @@ public partial class ScreenshotEditor : Form
         DisablePanel(panelPropertiesCrop);
         DisablePanel(panelPropertiesBlur);
         DisablePanel(panelPropertiesPolygon);
+        DisablePanel(panelPropertiesAngle);
     }
 
     private static void SetNumericClamp(NumericUpDown numericUpDown, int value)
@@ -766,9 +767,11 @@ public partial class ScreenshotEditor : Form
                         gsNumbered.ListViewItem.Text = "Number: " + gsNumbered.Number;
                     }
                 }
-                else if (graphicSymbol is GsImage)
+                else if (graphicSymbol is GsImage gsI)
                 {
+                    EnablePanel(panelPropertiesAngle, panelLeft, ref lastPanelBottom);
                     EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
+                    numericPropertiesRotation.Value = (decimal)gsI.Rotation;
                 }
                 else if (graphicSymbol is GsPolygon gsP)
                 {
@@ -1158,6 +1161,18 @@ public partial class ScreenshotEditor : Form
         }
     }
 
+    private void numericPropertiesRotation_ValueChanged(object sender, EventArgs e)
+    {
+        if (GetSelectedSymbol() is GraphicSymbol gs)
+        {
+            //if (gs.RotationAllowed)
+            //{
+                gs.Rotation = (float)numericPropertiesRotation.Value;
+            //}
+            editorCanvas.UpdateOverlay();
+        }
+    }
+
     #endregion
 
     #region Top toolbar, new Symbol settings ------------------------------------------------------------
@@ -1316,4 +1331,6 @@ public partial class ScreenshotEditor : Form
             MoveSymbolToBack(listViewSymbols.SelectedItems[0]);
         }
     }
+
+
 }

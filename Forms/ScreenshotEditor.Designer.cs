@@ -121,6 +121,9 @@
             numericPropertiesCurveTension = new NumericUpDown();
             checkBoxPropertiesCloseCurve = new CheckBox();
             toolTip1 = new ToolTip(components);
+            panelPropertiesAngle = new Panel();
+            labelRotation = new Label();
+            numericPropertiesRotation = new NumericUpDown();
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
@@ -145,6 +148,8 @@
             panelPropertiesBlur.SuspendLayout();
             panelPropertiesPolygon.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesCurveTension).BeginInit();
+            panelPropertiesAngle.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericPropertiesRotation).BeginInit();
             SuspendLayout();
             // 
             // menuStrip1
@@ -152,7 +157,7 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, editToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(952, 24);
+            menuStrip1.Size = new Size(1126, 24);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -253,7 +258,7 @@
             panelButtons.Controls.Add(buttonRectangle);
             panelButtons.Location = new Point(0, 61);
             panelButtons.Name = "panelButtons";
-            panelButtons.Size = new Size(46, 667);
+            panelButtons.Size = new Size(46, 709);
             panelButtons.TabIndex = 1;
             // 
             // buttonStickers
@@ -487,7 +492,7 @@
             panelImage.Controls.Add(pictureBoxOverlay);
             panelImage.Location = new Point(49, 61);
             panelImage.Name = "panelImage";
-            panelImage.Size = new Size(745, 667);
+            panelImage.Size = new Size(919, 709);
             panelImage.TabIndex = 3;
             // 
             // pictureBoxOverlay
@@ -506,7 +511,7 @@
             // 
             listViewSymbols.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             listViewSymbols.Columns.AddRange(new ColumnHeader[] { columnHeaderType, columnHeaderColor });
-            listViewSymbols.Location = new Point(797, 61);
+            listViewSymbols.Location = new Point(971, 61);
             listViewSymbols.MultiSelect = false;
             listViewSymbols.Name = "listViewSymbols";
             listViewSymbols.Size = new Size(153, 80);
@@ -535,7 +540,7 @@
             panelPropertiesPosition.Controls.Add(label3);
             panelPropertiesPosition.Controls.Add(label2);
             panelPropertiesPosition.Controls.Add(labelSymbolType);
-            panelPropertiesPosition.Location = new Point(797, 141);
+            panelPropertiesPosition.Location = new Point(971, 147);
             panelPropertiesPosition.Name = "panelPropertiesPosition";
             panelPropertiesPosition.Size = new Size(153, 78);
             panelPropertiesPosition.TabIndex = 4;
@@ -783,7 +788,7 @@
             panelPropertiesFill.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             panelPropertiesFill.Controls.Add(label7);
             panelPropertiesFill.Controls.Add(buttonPropertiesColorFill);
-            panelPropertiesFill.Location = new Point(797, 218);
+            panelPropertiesFill.Location = new Point(971, 224);
             panelPropertiesFill.Name = "panelPropertiesFill";
             panelPropertiesFill.Size = new Size(153, 27);
             panelPropertiesFill.TabIndex = 27;
@@ -800,7 +805,7 @@
             panelPropertiesText.Controls.Add(numericPropertiesFontSize);
             panelPropertiesText.Controls.Add(comboBoxFontFamily);
             panelPropertiesText.Controls.Add(textBoxSymbolText);
-            panelPropertiesText.Location = new Point(797, 300);
+            panelPropertiesText.Location = new Point(971, 306);
             panelPropertiesText.Name = "panelPropertiesText";
             panelPropertiesText.Size = new Size(153, 144);
             panelPropertiesText.TabIndex = 28;
@@ -892,7 +897,7 @@
             panelPropertiesHighlight.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             panelPropertiesHighlight.Controls.Add(label18);
             panelPropertiesHighlight.Controls.Add(comboBoxBlendMode);
-            panelPropertiesHighlight.Location = new Point(797, 552);
+            panelPropertiesHighlight.Location = new Point(971, 558);
             panelPropertiesHighlight.Name = "panelPropertiesHighlight";
             panelPropertiesHighlight.Size = new Size(153, 47);
             panelPropertiesHighlight.TabIndex = 31;
@@ -933,7 +938,7 @@
             panel1.Controls.Add(numericNewLineWeight);
             panel1.Location = new Point(0, 27);
             panel1.Name = "panel1";
-            panel1.Size = new Size(951, 31);
+            panel1.Size = new Size(1125, 31);
             panel1.TabIndex = 29;
             // 
             // label19
@@ -988,7 +993,7 @@
             panelPropertiesLine.Controls.Add(label6);
             panelPropertiesLine.Controls.Add(buttonPropertiesColorLine);
             panelPropertiesLine.Controls.Add(label8);
-            panelPropertiesLine.Location = new Point(797, 245);
+            panelPropertiesLine.Location = new Point(971, 251);
             panelPropertiesLine.Name = "panelPropertiesLine";
             panelPropertiesLine.Size = new Size(153, 55);
             panelPropertiesLine.TabIndex = 2;
@@ -1015,7 +1020,7 @@
             // 
             panelPropertiesShadow.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             panelPropertiesShadow.Controls.Add(checkBoxPropertiesShadow);
-            panelPropertiesShadow.Location = new Point(797, 444);
+            panelPropertiesShadow.Location = new Point(971, 450);
             panelPropertiesShadow.Name = "panelPropertiesShadow";
             panelPropertiesShadow.Size = new Size(153, 26);
             panelPropertiesShadow.TabIndex = 32;
@@ -1026,7 +1031,7 @@
             panelPropertiesDelete.Controls.Add(buttonToBack);
             panelPropertiesDelete.Controls.Add(buttonToFront);
             panelPropertiesDelete.Controls.Add(buttonDeleteSymbol);
-            panelPropertiesDelete.Location = new Point(797, 599);
+            panelPropertiesDelete.Location = new Point(971, 605);
             panelPropertiesDelete.Name = "panelPropertiesDelete";
             panelPropertiesDelete.Size = new Size(153, 55);
             panelPropertiesDelete.TabIndex = 33;
@@ -1063,7 +1068,7 @@
             panelPropertiesCrop.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             panelPropertiesCrop.Controls.Add(buttonPropertyCopyCrop);
             panelPropertiesCrop.Controls.Add(buttonPropertyCrop);
-            panelPropertiesCrop.Location = new Point(797, 470);
+            panelPropertiesCrop.Location = new Point(971, 476);
             panelPropertiesCrop.Name = "panelPropertiesCrop";
             panelPropertiesCrop.Size = new Size(153, 54);
             panelPropertiesCrop.TabIndex = 34;
@@ -1092,19 +1097,21 @@
             // 
             // panelPropertiesBlur
             // 
+            panelPropertiesBlur.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             panelPropertiesBlur.Controls.Add(label17);
             panelPropertiesBlur.Controls.Add(numericBlurMosaicSize);
-            panelPropertiesBlur.Location = new Point(797, 524);
+            panelPropertiesBlur.Location = new Point(971, 530);
             panelPropertiesBlur.Name = "panelPropertiesBlur";
             panelPropertiesBlur.Size = new Size(153, 28);
             panelPropertiesBlur.TabIndex = 35;
             // 
             // panelPropertiesPolygon
             // 
+            panelPropertiesPolygon.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             panelPropertiesPolygon.Controls.Add(labelCurveTension);
             panelPropertiesPolygon.Controls.Add(numericPropertiesCurveTension);
             panelPropertiesPolygon.Controls.Add(checkBoxPropertiesCloseCurve);
-            panelPropertiesPolygon.Location = new Point(797, 654);
+            panelPropertiesPolygon.Location = new Point(971, 660);
             panelPropertiesPolygon.Name = "panelPropertiesPolygon";
             panelPropertiesPolygon.Size = new Size(153, 51);
             panelPropertiesPolygon.TabIndex = 36;
@@ -1150,11 +1157,40 @@
             toolTip1.InitialDelay = 200;
             toolTip1.ReshowDelay = 40;
             // 
+            // panelPropertiesAngle
+            // 
+            panelPropertiesAngle.Controls.Add(labelRotation);
+            panelPropertiesAngle.Controls.Add(numericPropertiesRotation);
+            panelPropertiesAngle.Location = new Point(971, 711);
+            panelPropertiesAngle.Name = "panelPropertiesAngle";
+            panelPropertiesAngle.Size = new Size(153, 33);
+            panelPropertiesAngle.TabIndex = 37;
+            // 
+            // labelRotation
+            // 
+            labelRotation.AutoSize = true;
+            labelRotation.Location = new Point(4, 8);
+            labelRotation.Name = "labelRotation";
+            labelRotation.Size = new Size(52, 15);
+            labelRotation.TabIndex = 1;
+            labelRotation.Text = "Rotation";
+            // 
+            // numericPropertiesRotation
+            // 
+            numericPropertiesRotation.DecimalPlaces = 1;
+            numericPropertiesRotation.Location = new Point(89, 6);
+            numericPropertiesRotation.Maximum = new decimal(new int[] { 360, 0, 0, 0 });
+            numericPropertiesRotation.Name = "numericPropertiesRotation";
+            numericPropertiesRotation.Size = new Size(50, 23);
+            numericPropertiesRotation.TabIndex = 0;
+            numericPropertiesRotation.ValueChanged += numericPropertiesRotation_ValueChanged;
+            // 
             // ScreenshotEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(952, 732);
+            ClientSize = new Size(1126, 774);
+            Controls.Add(panelPropertiesAngle);
             Controls.Add(panelPropertiesPolygon);
             Controls.Add(panelPropertiesBlur);
             Controls.Add(panelPropertiesCrop);
@@ -1213,6 +1249,9 @@
             panelPropertiesPolygon.ResumeLayout(false);
             panelPropertiesPolygon.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesCurveTension).EndInit();
+            panelPropertiesAngle.ResumeLayout(false);
+            panelPropertiesAngle.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericPropertiesRotation).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1310,5 +1349,8 @@
         private NumericUpDown numericPropertiesCurveTension;
         private ToolTip toolTip1;
         private Button buttonStickers;
+        private Panel panelPropertiesAngle;
+        private Label labelRotation;
+        private NumericUpDown numericPropertiesRotation;
     }
 }
