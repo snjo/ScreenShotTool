@@ -166,18 +166,15 @@ namespace ScreenShotTool
 
         public virtual void DrawShadow(Graphics graphic)
         {
+            int largestSide = Math.Max(Width, Height);
+            int adjustedShadowDistance = Math.Min(ShadowDistance, largestSide / 5);
             if (ShadowEnabled)
             {
-                for (int i = 1; i < ShadowDistance; i++)
-                {
-                    // fill
-                    DrawShape(graphic, ShadowPen, ShadowBrush, new Point(i, i), true, false);
-                }
-                for (int i = 1; i < ShadowDistance && i < LineWeight; i++)
-                {
-                    // line
-                    DrawShape(graphic, ShadowPen, ShadowBrush, new Point(i, i), false, true);
-                }
+                //fill
+                DrawShape(graphic, ShadowPen, ShadowBrush, new Point(adjustedShadowDistance, adjustedShadowDistance), true, false);
+                
+                // line
+                DrawShape(graphic, ShadowPen, ShadowBrush, new Point(adjustedShadowDistance, adjustedShadowDistance), false, true);
             }
         }
 
@@ -252,8 +249,8 @@ namespace ScreenShotTool
             LinePen.Width = LineWeight;
 
             FillBrush = new SolidBrush(FillColor);
-            ShadowBrush.Color = Color.FromArgb(FillBrush.Color.A / 8, Color.Black);
-            ShadowPen.Color = Color.FromArgb(LineBrush.Color.A / 8, Color.Black);
+            ShadowBrush.Color = Color.FromArgb(FillBrush.Color.A / 5, Color.Black);
+            ShadowPen.Color = Color.FromArgb(LineBrush.Color.A / 5, Color.Black);
             ShadowPen.Width = LineWeight;
 
             TextBrush.Color = TextColor;

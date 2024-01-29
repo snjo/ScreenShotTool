@@ -100,19 +100,32 @@ public class GsPolygon : GraphicSymbol
         if (ShadowEnabled)
         {
 
-            if (closedCurve)
+            //if (closedCurve)
+            //{
+            //    for (int i = 1; i < ShadowDistance; i++)
+            //    {
+            //        DrawShape(graphic, ShadowPen, ShadowBrush, new Point(i, i));
+            //    }
+            //}
+            //else
+            //{
+            //    for (int i = 1; i < ShadowDistance && i < LineWeight; i++)
+            //    {
+            //        DrawShape(graphic, ShadowPen, ShadowBrush, new Point(i, i));
+            //    }
+            //}
+            
+            
+            if (FillColor.A > 0)
             {
-                for (int i = 1; i < ShadowDistance; i++)
-                {
-                    DrawShape(graphic, ShadowPen, ShadowBrush, new Point(i, i));
-                }
+                int largestSide = Math.Max(Width, Height);
+                int adjustedShadowDistanceFill = Math.Min(ShadowDistance, largestSide / 5);
+                DrawShape(graphic, ShadowPen, ShadowBrush, new Point(adjustedShadowDistanceFill, adjustedShadowDistanceFill));
             }
             else
             {
-                for (int i = 1; i < ShadowDistance && i < LineWeight; i++)
-                {
-                    DrawShape(graphic, ShadowPen, ShadowBrush, new Point(i, i));
-                }
+                int adjustedShadowDistanceLine = Math.Max(2, Math.Min(ShadowDistance, (int)(LineWeight * 0.75f)));
+                DrawShape(graphic, ShadowPen, ShadowBrush, new Point(adjustedShadowDistanceLine, adjustedShadowDistanceLine));
             }
         }
     }

@@ -55,10 +55,8 @@ public class GsLine : GraphicSymbol
     {
         if (ShadowEnabled)
         {
-            for (int i = 1; i < ShadowDistance && i < LineWeight; i++)
-            {
-                DrawShape(graphic, ShadowPen, ShadowBrush, new Point(i, i));
-            }
+            int adjustedShadowDistance = Math.Max(2, Math.Min(ShadowDistance, (int)(LineWeight * 0.75f)));
+            DrawShape(graphic, ShadowPen, ShadowBrush, new Point(adjustedShadowDistance, adjustedShadowDistance));
         }
     }
 

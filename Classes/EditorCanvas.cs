@@ -456,13 +456,12 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
                     gsDynamicImage.SourceImage = imageInProgress;
                 }
             }
-            if (temporarySymbol is GsDrawing gsDrawing)
-            {
-                Bitmap tempPolygonBmp = DrawOnFreehandImage(MousePositionLocal, LineWeight, gsDrawing.LineColor);
-                gsDrawing.drawing?.Dispose();
-                gsDrawing.drawing = tempPolygonBmp;
-
-            }
+            //if (temporarySymbol is GsDrawing gsDrawing)
+            //{
+            //    Bitmap tempPolygonBmp = DrawOnFreehandImage(MousePositionLocal, LineWeight, gsDrawing.LineColor);
+            //    gsDrawing.drawing?.Dispose();
+            //    gsDrawing.drawing = tempPolygonBmp;
+            //}
             if (temporarySymbol is GsPolygon gsPolygon)
             {
                 DrawOnPolygon(MousePositionLocal, LineWeight, gsPolygon.LineColor);

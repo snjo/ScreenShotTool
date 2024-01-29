@@ -50,11 +50,13 @@ public class GsNumbered : GraphicSymbol
     {
         if (ShadowEnabled)
         {
-            for (int i = 1; i < ShadowDistance && i < Diameter / 4; i++)
-            {
-                // fill
-                graphic.FillEllipse(ShadowBrush, new Rectangle(Left + i, Top + i, Diameter, Diameter));
-            }
+            //for (int i = 1; i < ShadowDistance && i < Diameter / 4; i++)
+            //{
+            //    // fill
+            //    graphic.FillEllipse(ShadowBrush, new Rectangle(Left + i, Top + i, Diameter, Diameter));
+            //}
+            int adjustedShadowDistance = Math.Min(ShadowDistance, Width / 5);
+            graphic.FillEllipse(ShadowBrush, new Rectangle(Left + adjustedShadowDistance, Top + adjustedShadowDistance, Diameter, Diameter));
         }
 
     }

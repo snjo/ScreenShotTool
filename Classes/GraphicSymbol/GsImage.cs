@@ -22,7 +22,6 @@ public class GsImage : GraphicSymbol
     int RotatedWidthOverflow;
     int RotatedHeightOverflow;
     public Rectangle RotatedBounds;
-    //bool isDisposed = false;
 
     public static GsImage Create(Point startPoint, Bitmap bitmap)
     {
@@ -45,7 +44,8 @@ public class GsImage : GraphicSymbol
 
         Image? clipboardImage = null;
         if (checkClipboard)
-        {
+        {            
+            // clipboard data is non-alpha 32bppRGB, so only simple shadows will be used
             clipboardImage = Clipboard.GetImage();
         }
 
@@ -64,13 +64,13 @@ public class GsImage : GraphicSymbol
 
                 if (clipWidth != copiedWidth || clipHeight != copiedHeight)
                 {
-                    //Debug.WriteLine("GsImage.Create: clipboard data is different, use clipboard");
+                    //clipboard data is different, use clipboard
                     copiedImage.DisposeImage();
                     useClipboard = true;
                 }
                 else
                 {
-                    //Debug.WriteLine("GsImage.Create: clipboard data is same, use internal with alpha");
+                    //clipboard data is same, use internal with alpha
                     useClipboard = false;
                 }
             }
@@ -127,29 +127,25 @@ public class GsImage : GraphicSymbol
         UpdateRotatedBounds();
         if (Rotation != 0 && image != null)
         {
-            if (Rotation != oldRotation || Width != oldWidth || Height != oldHeight)
-            {
-                CreateRotatedImage(image);
-                oldRotation = Rotation;
-                oldHeight = Height;
-                oldWidth = Width;
-            }
+            CreateRotatedImage(image);
         }
         UpdateShadows();
+        oldRotation = Rotation;
+        oldHeight = Height;
+        oldWidth = Width;
         DrawShadow(graphic);
         DrawShape(graphic, LinePen, FillBrush, new Point(0, 0), true, true);
     }
 
     internal override void DrawShape(Graphics graphic, Pen drawPen, Brush drawBrush, Point offset, bool fill = true, bool outline = true)
     {
-        if (image != null)// && isDisposed == false)
+        if (image != null)
         {
             if (Rotation != 0)
             {
                 if (rotatedImage != null)
                 {
-                    graphic.DrawImage(rotatedImage, RotatedBounds.Left, RotatedBounds.Top, RotatedBounds.Width, RotatedBounds.Height);
-                    //UpdateCorners();                    
+                    graphic.DrawImage(rotatedImage, RotatedBounds.Left, RotatedBounds.Top, RotatedBounds.Width, RotatedBounds.Height);                  
                 }
             }
             else
@@ -161,32 +157,34 @@ public class GsImage : GraphicSymbol
 
     private void CreateRotatedImage(Bitmap image)
     {
-        //Bitmap tempRotated = new Bitmap(image.Width, image.Height);
-        Bitmap tempRotated = new Bitmap(RotatedBounds.Width, RotatedBounds.Height);
-        using (Graphics rotateG = Graphics.FromImage(tempRotated))
+        if (Rotation != oldRotation || Width != oldWidth || Height != oldHeight)
         {
-            rotateG.ResetTransform();
-            float pivotX = RotatedBounds.Width / 2;
-            float pivotY = RotatedBounds.Height / 2;
+            Bitmap tempRotated = new Bitmap(RotatedBounds.Width, RotatedBounds.Height);
+            using (Graphics rotateG = Graphics.FromImage(tempRotated))
+            {
+                rotateG.ResetTransform();
+                float pivotX = RotatedBounds.Width / 2;
+                float pivotY = RotatedBounds.Height / 2;
 
-            rotateG.TranslateTransform(pivotX, pivotY);
-            rotateG.RotateTransform(Rotation);
-            rotateG.TranslateTransform(-pivotX, -pivotY);
-            //rotateG.DrawImage(image, 0, 0, Width, Height);
-            rotateG.DrawImage(image, RotatedWidthOverflow, RotatedHeightOverflow, Width, Height);
+                rotateG.TranslateTransform(pivotX, pivotY);
+                rotateG.RotateTransform(Rotation);
+                rotateG.TranslateTransform(-pivotX, -pivotY);
+                rotateG.DrawImage(image, RotatedWidthOverflow, RotatedHeightOverflow, Width, Height);
+            }
+            rotatedImage.DisposeAndNull();
+            rotatedImage = tempRotated;
         }
-        rotatedImage.DisposeAndNull();
-        rotatedImage = tempRotated;
+    }
+
+    public override void DrawHitboxes(Graphics graphic)
+    {
+        base.DrawHitboxes(graphic);
+        //draws a box around the rotated image when selected
+        graphic.DrawLines(HighlightSymbolPen, new Point[] { corner1, corner2, corner3, corner4, corner1 });
     }
 
     private void UpdateRotatedBounds()
     {
-        if (Rotation == 0)
-        {
-            RotatedBounds = Bounds;
-        }
-        else
-        {
             UpdateCorners();
             int minX = Math.Min(corner1.X, corner2.X);
             minX = Math.Min(minX, corner3.X);
@@ -197,7 +195,6 @@ public class GsImage : GraphicSymbol
             minY = Math.Min(minY, corner4.Y);
             RotatedHeightOverflow = Top - minY;
             RotatedBounds = new Rectangle(Left - RotatedWidthOverflow, Top - RotatedHeightOverflow, Width + (RotatedWidthOverflow * 2), Height + (RotatedHeightOverflow * 2));
-        }
     }
 
     private void UpdateCorners()
@@ -213,8 +210,8 @@ public class GsImage : GraphicSymbol
 
     private Point getCorner(float pivotX, float pivotY, float cornerX, float cornerY, double angle)
     {
+        //modified from https://jsfiddle.net/w8r/9rnnk545/
         double radians = (Math.PI / 180) * angle;
-        //https://jsfiddle.net/w8r/9rnnk545/
         double x, y, distance, diffX, diffY;
 
         /// get distance from center to point
@@ -234,38 +231,42 @@ public class GsImage : GraphicSymbol
 
     public void UpdateShadows()
     {
+        if (image == null)
+        {
+            return;
+        }
+        if (image.PixelFormat != System.Drawing.Imaging.PixelFormat.Format32bppArgb)
+        {
+            //no need for checking alpha shadows on an opaque image
+            useAdvancedShadow = false;
+        }
         if (ShadowEnabled && useAdvancedShadow)
         {
-            Debug.WriteLine("Update Shadows");
             if (Rotation == 0)
             {
-                Debug.WriteLine("Update Shadows, rotation is none");
-                if (shadowImage == null && image != null)
+                if (shadowImage == null)
                 {
                     try
                     {
                         shadowImage.DisposeAndNull();
-                        shadowImage = CreateAlphaShadow(image); //new Bitmap(image.Width, image.Height);   
+                        shadowImage = CreateAlphaShadow(image);  
                     }
                     catch
                     {
                         useAdvancedShadow = false;
-                        //DrawSimpleShadow(graphic, adjustedShadowDistance);
                     }
                 }
             }
-            else 
+            else
             {
-                Debug.WriteLine("Update Shadows, rotation is " + Rotation);
-                //if (Rotation != oldRotation || Width != oldWidth || Height != oldHeight)
-                //{
-                    Debug.WriteLine("Udate shadow at angle" + Rotation);
+                if (Rotation != oldRotation || Width != oldWidth || Height != oldHeight)
+                {
                     shadowImage.DisposeAndNull();
                     if (rotatedImage != null)
                     {
                         shadowImage = CreateAlphaShadow(rotatedImage);
                     }
-                //}
+                }
             }
             
         }
@@ -276,13 +277,15 @@ public class GsImage : GraphicSymbol
         int smallestSide = Math.Min(Width, Height);
         int adjustedShadowDistance = Math.Min(ShadowDistance, smallestSide / 10);
         if (ShadowEnabled)
-        {    
-            if (shadowImage != null)
+        {
+            if (useAdvancedShadow)
             {
-                //graphic.DrawImage(shadowImage, new Rectangle(Left + adjustedShadowDistance, Top + adjustedShadowDistance, Width, Height));
-                graphic.DrawImage(shadowImage, new Rectangle(RotatedBounds.Left + adjustedShadowDistance, RotatedBounds.Top + adjustedShadowDistance, RotatedBounds.Width, RotatedBounds.Height));
+                if (shadowImage != null)
+                {
+                    graphic.DrawImage(shadowImage, new Rectangle(RotatedBounds.Left + adjustedShadowDistance, RotatedBounds.Top + adjustedShadowDistance, RotatedBounds.Width, RotatedBounds.Height));
+                }
             }
-            else if (Rotation == 0)
+            else
             {
                 DrawSimpleShadow(graphic, adjustedShadowDistance);
             }
@@ -291,14 +294,18 @@ public class GsImage : GraphicSymbol
 
     private void DrawSimpleShadow(Graphics graphic, int adjustedShadowDistance)
     {
-        for (int i = 1; i < adjustedShadowDistance; i++)
+        Point[] shadowPoints = new[] { corner1, corner2, corner3, corner4, corner1 };
+        for (int i = 0; i < shadowPoints.Length; i++)
         {
-            graphic.FillRectangle(ShadowBrush, new Rectangle(Left + i, Top + i, Width, Height));
+            shadowPoints[i] = shadowPoints[i].Add(new Point(adjustedShadowDistance, adjustedShadowDistance));
         }
+        graphic.FillPolygon(ShadowBrush, shadowPoints);
     }
 
+    
     private static Bitmap CreateAlphaShadow(Bitmap source)
     {
+        //don't use this on non-32bppARGB, bmppixelsnoop doesn't support it.
         Bitmap shadow = new Bitmap(source.Width, source.Height);
         using (Graphics g = Graphics.FromImage(shadow))
         {
