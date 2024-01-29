@@ -1,9 +1,12 @@
-﻿namespace ScreenShotTool;
+﻿using System.Data.SqlTypes;
+using System.Diagnostics;
+using System.Numerics;
+
+namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
 
 public class PolygonDrawing(Pen pen)
 {
-    Bitmap? bitmap;
     public Point Location = new Point(0, 0);
     public Size Size;
     private bool noPixelsSet = true;
@@ -11,7 +14,6 @@ public class PolygonDrawing(Pen pen)
     public int RightMostPixel = 0;
     public int TopMostPixel = 0;
     public int BottomMostPixel = 0;
-    //DateTime lastUpdate = DateTime.MinValue;
 
     public List<Point> PointList = new();
     public Pen pen = pen;
@@ -61,26 +63,12 @@ public class PolygonDrawing(Pen pen)
         }
     }
 
-    public Bitmap ToBitmap()
-    {
-        bitmap.DisposeAndNull();
-        bitmap = new Bitmap(Math.Max(1, Contents.Width), Math.Max(1, Contents.Height));
-        using (Graphics graphics = Graphics.FromImage(bitmap))
-        {
-            //Draw(graphics, pen, -LeftMostPixel, -TopMostPixel, false, Contents.Width, Contents.Height);
-        }
-        return bitmap;
-    }
-
     public void Draw(Graphics graphics, Pen drawPen, Brush drawBrush, int offsetX, int offsetY, bool scale, float Width, float Height, bool closed = false, bool fill = false, float curveTension = 0.5f)
     {
         graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-        //Pen tempPen = new Pen(drawPen.Color, drawPen.Width);
-        //tempPen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
-        //tempPen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
-        //tempPen.MiterLimit = tempPen.Width;
-        //tempPen.LineJoin = System.Drawing.Drawing2D.LineJoin.Round;
-        Point[] offsetPoints = new Point[PointList.Count];
+        int pointsToAdd = 4; // add points between first and last for closed or fill, reduce bulges
+        List<Point> offsetPoints = new();
+        List<Point> deBulgedPoints = new();
         float scaleWidth = Width / Contents.Width;
         float scaleHeight = Height / Contents.Height;
         for (int i = 0; i < PointList.Count; i++)
@@ -89,35 +77,56 @@ public class PolygonDrawing(Pen pen)
             {
                 Point zeroed = PointList[i].Subtract(new Point(Contents.Left, Contents.Top));
                 Point scaledPoint = new Point((int)(zeroed.X * scaleWidth), (int)(zeroed.Y * scaleHeight));
-                offsetPoints[i] = scaledPoint.Add(new Point(offsetX, offsetY)).Add(new Point(Contents.Left, Contents.Top));
+                offsetPoints.Add(scaledPoint.Addition(new Point(offsetX, offsetY)).Addition(new Point(Contents.Left, Contents.Top)));
             }
             else
             {
-                offsetPoints[i] = PointList[i].Add(new Point(offsetX, offsetY));
+                offsetPoints.Add(PointList[i].Addition(new Point(offsetX, offsetY)));
             }
+        }
 
+        if (closed || fill) // test modulo
+        {
+            // add that extra points to reduce bulges at start and end
+            Point first = offsetPoints.First();
+            Point last = offsetPoints.Last();
+            float increment = 1f / (pointsToAdd + 1);
+            deBulgedPoints = offsetPoints.ToList();
+            for (int i = 1; i <= pointsToAdd; i++)
+            {
+                float t = 1 - (increment * i);
+                deBulgedPoints.Add(GetPointAlongLine(first, last, t));
+            }
+            
         }
 
         if (fill)
         {
-            if (offsetPoints.Length > 2)
+            if (offsetPoints.Count > 2)
             {
-                graphics.FillClosedCurve(drawBrush, offsetPoints, System.Drawing.Drawing2D.FillMode.Winding, curveTension);
+                graphics.FillClosedCurve(drawBrush, deBulgedPoints.ToArray(), System.Drawing.Drawing2D.FillMode.Winding, curveTension);
 
             }
         }
 
         if (drawPen.Width > 0)
         {
-            if (closed && offsetPoints.Length > 2)
+            if (closed && offsetPoints.Count > 2)
             {
-                graphics.DrawClosedCurve(drawPen, offsetPoints, curveTension, System.Drawing.Drawing2D.FillMode.Winding);
+                graphics.DrawClosedCurve(drawPen, deBulgedPoints.ToArray(), curveTension, System.Drawing.Drawing2D.FillMode.Winding);
             }
-            else if (offsetPoints.Length > 1)
+            else if (offsetPoints.Count > 1)
             {
-                graphics.DrawCurve(drawPen, offsetPoints);
+                graphics.DrawCurve(drawPen, offsetPoints.ToArray());
             }
         }
+    }
+
+    private Point GetPointAlongLine(Point start, Point end, float t)
+    {
+        Vector2 vector = new Vector2(end.X - start.X, end.Y - start.Y);
+        Point offset = new Point((int)(vector.X * t), (int)(vector.Y * t));
+        return start.Addition(offset);
     }
 
     public void Dispose()

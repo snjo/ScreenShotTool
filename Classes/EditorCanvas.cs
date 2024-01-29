@@ -456,12 +456,6 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
                     gsDynamicImage.SourceImage = imageInProgress;
                 }
             }
-            //if (temporarySymbol is GsDrawing gsDrawing)
-            //{
-            //    Bitmap tempPolygonBmp = DrawOnFreehandImage(MousePositionLocal, LineWeight, gsDrawing.LineColor);
-            //    gsDrawing.drawing?.Dispose();
-            //    gsDrawing.drawing = tempPolygonBmp;
-            //}
             if (temporarySymbol is GsPolygon gsPolygon)
             {
                 DrawOnPolygon(MousePositionLocal, LineWeight, gsPolygon.LineColor);
@@ -503,26 +497,26 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
     Point oldFreehandPosition = Point.Empty;
     bool freehandInProgress = false;
 
-    private Bitmap DrawOnFreehandImage(Point point, int lineWidth, Color color)
-    {
-        freehandPen.Width = lineWidth;
-        freehandPen.Color = color;
-        freehandPen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
-        freehandPen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
-        if (polygonDrawing == null)
-        {
-            polygonDrawing = new PolygonDrawing(freehandPen);
-        }
-        if (freehandInProgress == false)
-        {
-            oldFreehandPosition = MousePositionLocal;
-            freehandInProgress = true;
-        }
+    //private Bitmap DrawOnFreehandImage(Point point, int lineWidth, Color color)
+    //{
+    //    freehandPen.Width = lineWidth;
+    //    freehandPen.Color = color;
+    //    freehandPen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
+    //    freehandPen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
+    //    if (polygonDrawing == null)
+    //    {
+    //        polygonDrawing = new PolygonDrawing(freehandPen);
+    //    }
+    //    if (freehandInProgress == false)
+    //    {
+    //        oldFreehandPosition = MousePositionLocal;
+    //        freehandInProgress = true;
+    //    }
 
-        polygonDrawing.AddPoint(point);
-        oldFreehandPosition = point;
-        return polygonDrawing.ToBitmap();
-    }
+    //    polygonDrawing.AddPoint(point);
+    //    oldFreehandPosition = point;
+    //    return polygonDrawing.ToBitmap();
+    //}
 
     private void DrawOnPolygon(Point point, int lineWidth, Color color)
     {

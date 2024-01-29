@@ -297,7 +297,7 @@ public class GsImage : GraphicSymbol
         Point[] shadowPoints = new[] { corner1, corner2, corner3, corner4, corner1 };
         for (int i = 0; i < shadowPoints.Length; i++)
         {
-            shadowPoints[i] = shadowPoints[i].Add(new Point(adjustedShadowDistance, adjustedShadowDistance));
+            shadowPoints[i] = shadowPoints[i].Addition(new Point(adjustedShadowDistance, adjustedShadowDistance));
         }
         graphic.FillPolygon(ShadowBrush, shadowPoints);
     }

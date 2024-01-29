@@ -10,7 +10,7 @@ public static class ExtensionMethods
         return new Point(point1.X - point2.X, point1.Y - point2.Y);
     }
 
-    public static Point Add(this Point point1, Point point2)
+    public static Point Addition(this Point point1, Point point2)
     {
         return new Point(point1.X + point2.X, point1.Y + point2.Y);
     }
