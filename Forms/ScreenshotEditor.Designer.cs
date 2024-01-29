@@ -43,6 +43,7 @@
             itemPasteScaled = new ToolStripMenuItem();
             deleteOverlayElementsToolStripMenuItem = new ToolStripMenuItem();
             panelButtons = new Panel();
+            buttonStickers = new Button();
             buttonFilledCurve = new Button();
             buttonDraw = new Button();
             buttonNumbered = new Button();
@@ -120,7 +121,6 @@
             numericPropertiesCurveTension = new NumericUpDown();
             checkBoxPropertiesCloseCurve = new CheckBox();
             toolTip1 = new ToolTip(components);
-            buttonStickers = new Button();
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
@@ -256,9 +256,24 @@
             panelButtons.Size = new Size(46, 667);
             panelButtons.TabIndex = 1;
             // 
+            // buttonStickers
+            // 
+            buttonStickers.AccessibleName = "Stickers";
+            buttonStickers.FlatAppearance.BorderSize = 0;
+            buttonStickers.FlatStyle = FlatStyle.Flat;
+            buttonStickers.Image = Properties.Resources.star;
+            buttonStickers.Location = new Point(4, 505);
+            buttonStickers.Margin = new Padding(1);
+            buttonStickers.Name = "buttonStickers";
+            buttonStickers.Size = new Size(36, 36);
+            buttonStickers.TabIndex = 15;
+            toolTip1.SetToolTip(buttonStickers, "Stickers and cursors");
+            buttonStickers.UseVisualStyleBackColor = true;
+            buttonStickers.Click += ButtonStickers_Click;
+            // 
             // buttonFilledCurve
             // 
-            buttonFilledCurve.AccessibleName = "Closed curve";
+            buttonFilledCurve.AccessibleName = "Filled curve";
             buttonFilledCurve.FlatAppearance.BorderSize = 0;
             buttonFilledCurve.FlatStyle = FlatStyle.Flat;
             buttonFilledCurve.Image = Properties.Resources.fillCurve;
@@ -267,7 +282,7 @@
             buttonFilledCurve.Name = "buttonFilledCurve";
             buttonFilledCurve.Size = new Size(36, 36);
             buttonFilledCurve.TabIndex = 14;
-            toolTip1.SetToolTip(buttonFilledCurve, "Closed curve");
+            toolTip1.SetToolTip(buttonFilledCurve, "Filled curve");
             buttonFilledCurve.UseVisualStyleBackColor = true;
             buttonFilledCurve.Click += ButtonFillCurve_Click;
             // 
@@ -1135,21 +1150,6 @@
             toolTip1.InitialDelay = 200;
             toolTip1.ReshowDelay = 40;
             // 
-            // buttonStickers
-            // 
-            buttonStickers.AccessibleName = "Stickers";
-            buttonStickers.FlatAppearance.BorderSize = 0;
-            buttonStickers.FlatStyle = FlatStyle.Flat;
-            buttonStickers.Image = Properties.Resources.star;
-            buttonStickers.Location = new Point(4, 505);
-            buttonStickers.Margin = new Padding(1);
-            buttonStickers.Name = "buttonStickers";
-            buttonStickers.Size = new Size(36, 36);
-            buttonStickers.TabIndex = 15;
-            toolTip1.SetToolTip(buttonStickers, "Stickers and cursors");
-            buttonStickers.UseVisualStyleBackColor = true;
-            buttonStickers.Click += ButtonStickers_Click;
-            // 
             // ScreenshotEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1175,7 +1175,7 @@
             MainMenuStrip = menuStrip1;
             MinimumSize = new Size(700, 550);
             Name = "ScreenshotEditor";
-            Text = "ImageEditor";
+            Text = "Screenshot Tool Editor";
             TopMost = true;
             Deactivate += ScreenshotEditor_Deactivate;
             KeyDown += ScreenshotEditor_KeyDown;
