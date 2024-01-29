@@ -1,4 +1,5 @@
-﻿namespace ScreenShotTool;
+﻿
+namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
 
 public class GsCrop : GsBoundingBox
@@ -16,8 +17,9 @@ public class GsCrop : GsBoundingBox
         LineWeight = 1;
     }
 
-    internal void DrawLine(Pen pen, Brush b, Rectangle r, Graphics graphic)
+    internal void DrawLine(Pen pen, Brush b, Rectangle r, Graphics graphic, bool enabled = true)
     {
+        if (!enabled) { return; }
         if (showOutline == false) return;
         Rectangle BoundsOutside = new Rectangle(Bounds.Left - 1, Bounds.Top - 1, Bounds.Width + 1, Bounds.Height + 1);
         graphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;

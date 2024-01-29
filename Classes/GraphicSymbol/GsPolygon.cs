@@ -6,7 +6,6 @@ public class GsPolygon : GraphicSymbol
     bool isTemporarySymbol = false;
     public bool closedCurve = false;
     public float curveTension = 0.5f;
-    //public bool fillCurve = false;
 
     public GsPolygon(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled, int lineWeight) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight)
     {
@@ -85,12 +84,12 @@ public class GsPolygon : GraphicSymbol
             if (isTemporarySymbol)
             {
                 // don't move the symbol around during drawing
-                Polygon.Draw(graphic, drawPen, drawBrush, offset.X, offset.Y, false, 0, 0, closedCurve, fillCurve, curveTension);
+                Polygon.Draw(graphic, drawPen, drawBrush, offset.X, offset.Y, false, 0, 0, closedCurve, fillCurve, curveTension, outline);
             }
             else
             {
                 // move the symbol into new place if it's moved from drawn location
-                Polygon.Draw(graphic, drawPen, drawBrush, Left - Polygon.LeftMostPixel + offset.X, Top - Polygon.TopMostPixel + offset.Y, true, Width, Height, closedCurve, fillCurve, curveTension);
+                Polygon.Draw(graphic, drawPen, drawBrush, Left - Polygon.LeftMostPixel + offset.X, Top - Polygon.TopMostPixel + offset.Y, true, Width, Height, closedCurve, fillCurve, curveTension, outline);
             }
         }
     }
@@ -99,28 +98,12 @@ public class GsPolygon : GraphicSymbol
     {
         if (ShadowEnabled)
         {
-
-            //if (closedCurve)
-            //{
-            //    for (int i = 1; i < ShadowDistance; i++)
-            //    {
-            //        DrawShape(graphic, ShadowPen, ShadowBrush, new Point(i, i));
-            //    }
-            //}
-            //else
-            //{
-            //    for (int i = 1; i < ShadowDistance && i < LineWeight; i++)
-            //    {
-            //        DrawShape(graphic, ShadowPen, ShadowBrush, new Point(i, i));
-            //    }
-            //}
-            
-            
             if (FillColor.A > 0)
             {
+                bool DrawShadowLine = (FillColor.A < 128);
                 int largestSide = Math.Max(Width, Height);
                 int adjustedShadowDistanceFill = Math.Min(ShadowDistance, largestSide / 5);
-                DrawShape(graphic, ShadowPen, ShadowBrush, new Point(adjustedShadowDistanceFill, adjustedShadowDistanceFill));
+                DrawShape(graphic, ShadowPen, ShadowBrush, new Point(adjustedShadowDistanceFill, adjustedShadowDistanceFill), true, DrawShadowLine);
             }
             else
             {

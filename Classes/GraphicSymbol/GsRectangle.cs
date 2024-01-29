@@ -11,15 +11,17 @@ public class GsRectangle : GsBoundingBox
     }
 
 
-    public static void DrawLine(Pen pen, Brush lineBrush, Rectangle rect, Graphics graphic)
+    public static void DrawLine(Pen pen, Brush lineBrush, Rectangle rect, Graphics graphic, bool enabled = true)
     {
+        if (!enabled) { return; }
         graphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
         graphic.DrawRectangle(pen, rect);
         graphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
     }
 
-    public static void DrawFill(Pen pen, Brush fillBrush, Rectangle rect, Graphics graphic)
+    public static void DrawFill(Pen pen, Brush fillBrush, Rectangle rect, Graphics graphic, bool enabled = true)
     {
+        if (!enabled) { return; }
         graphic.FillRectangle(fillBrush, rect);
     }
 }

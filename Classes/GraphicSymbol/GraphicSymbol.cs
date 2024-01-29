@@ -172,9 +172,10 @@ namespace ScreenShotTool
             {
                 //fill
                 DrawShape(graphic, ShadowPen, ShadowBrush, new Point(adjustedShadowDistance, adjustedShadowDistance), true, false);
-                
+
+                bool DrawShadowLine = (FillColor.A < 128);
                 // line
-                DrawShape(graphic, ShadowPen, ShadowBrush, new Point(adjustedShadowDistance, adjustedShadowDistance), false, true);
+                DrawShape(graphic, ShadowPen, ShadowBrush, new Point(adjustedShadowDistance, adjustedShadowDistance), false, DrawShadowLine);
             }
         }
 

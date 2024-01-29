@@ -63,7 +63,7 @@ public class PolygonDrawing(Pen pen)
         }
     }
 
-    public void Draw(Graphics graphics, Pen drawPen, Brush drawBrush, int offsetX, int offsetY, bool scale, float Width, float Height, bool closed = false, bool fill = false, float curveTension = 0.5f)
+    public void Draw(Graphics graphics, Pen drawPen, Brush drawBrush, int offsetX, int offsetY, bool scale, float Width, float Height, bool closed = false, bool fill = false, float curveTension = 0.5f, bool outline = true)
     {
         graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
         int pointsToAdd = 4; // add points between first and last for closed or fill, reduce bulges
@@ -109,7 +109,7 @@ public class PolygonDrawing(Pen pen)
             }
         }
 
-        if (drawPen.Width > 0)
+        if (drawPen.Width > 0 && outline)
         {
             if (closed && offsetPoints.Count > 2)
             {

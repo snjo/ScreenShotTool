@@ -15,8 +15,9 @@ public class GsHighlight : GsDynamicImage
         base.FillColor = backgroundColor;
     }
 
-    public void DrawFill(Pen pen, Brush fillBrush, Rectangle rect, Graphics graphic)
+    public void DrawFill(Pen pen, Brush fillBrush, Rectangle rect, Graphics graphic, bool enabled = true)
     {
+        if (!enabled) { return; }
         if (rect.Width < 1 || rect.Height < 1) return;
 
         if (SourceImage != null)

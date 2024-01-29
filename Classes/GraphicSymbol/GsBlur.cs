@@ -27,8 +27,9 @@ public class GsBlur : GsDynamicImage
         return newSymbol;
     }
 
-    public void DrawFill(Pen pen, Brush fillBrush, Rectangle rect, Graphics graphic)
+    public void DrawFill(Pen pen, Brush fillBrush, Rectangle rect, Graphics graphic, bool enabled = true)
     {
+        if (!enabled) { return; }
         if (SourceImage == null)
         {
             graphic.DrawRectangle(LinePen, Left, Top, Width, Height);

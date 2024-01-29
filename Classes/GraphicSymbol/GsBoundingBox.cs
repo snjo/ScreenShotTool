@@ -2,7 +2,7 @@
 {
     public class GsBoundingBox : GraphicSymbol
     {
-        public delegate void DrawShapeDelegate(Pen pen, Brush brush, Rectangle rect, Graphics graphic);
+        public delegate void DrawShapeDelegate(Pen pen, Brush brush, Rectangle rect, Graphics graphic, bool enabled = true);
 
         public GsBoundingBox(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled = false, int lineWeight = 0) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled, lineWeight)
         {
@@ -33,17 +33,17 @@
         {
             if (FillColor.A > 0 && fill)
             {
-                drawFill(drawPen, drawBrush, new Rectangle(Left + offset.X, Top + offset.Y, Width, Height), graphic);
+                drawFill(drawPen, drawBrush, new Rectangle(Left + offset.X, Top + offset.Y, Width, Height), graphic, fill);
             }
             if (LineColor.A > 0 && LineWeight > 0 && outline)
             {
-                drawLine(drawPen, drawBrush, new Rectangle(Left + offset.X, Top + offset.Y, Width, Height), graphic);
+                drawLine(drawPen, drawBrush, new Rectangle(Left + offset.X, Top + offset.Y, Width, Height), graphic, outline);
             }
         }
 
         internal DrawShapeDelegate drawLine = NoDrawing;
         internal DrawShapeDelegate drawFill = NoDrawing;
-        public static void NoDrawing(Pen pen, Brush b, Rectangle r, Graphics graphic)
+        public static void NoDrawing(Pen pen, Brush b, Rectangle r, Graphics graphic, bool enabled = true)
         {
         }
     }

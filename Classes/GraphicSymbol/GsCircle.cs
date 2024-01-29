@@ -9,13 +9,15 @@ public class GsCircle : GsBoundingBox
         drawLine = DrawLine;
     }
 
-    public static void DrawLine(Pen pen, Brush lineBrush, Rectangle rect, Graphics graphic)
+    public static void DrawLine(Pen pen, Brush lineBrush, Rectangle rect, Graphics graphic, bool enabled = true)
     {
+        if (!enabled) { return; }
         graphic.DrawEllipse(pen, rect);
     }
 
-    public static void DrawFill(Pen pen, Brush fillBrush, Rectangle rect, Graphics graphic)
+    public static void DrawFill(Pen pen, Brush fillBrush, Rectangle rect, Graphics graphic, bool enabled = true)
     {
+        if (!enabled) { return; }
         graphic.FillEllipse(fillBrush, rect);
     }
 }

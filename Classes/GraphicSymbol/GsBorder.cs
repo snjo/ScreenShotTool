@@ -15,8 +15,9 @@ public class GsBorder : GsBoundingBox
         MoveAllowed = false;
     }
 
-    public void DrawBorder(Pen pen, Brush b, Rectangle r, Graphics graphic)
+    public void DrawBorder(Pen pen, Brush b, Rectangle r, Graphics graphic, bool enabled = true)
     {
+        if (!enabled) { return; }
         Left = 0;
         Top = 0;
         Width = ContainerBounds.Width;
