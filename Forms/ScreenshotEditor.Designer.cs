@@ -1179,7 +1179,8 @@
             // 
             numericPropertiesRotation.DecimalPlaces = 1;
             numericPropertiesRotation.Location = new Point(89, 6);
-            numericPropertiesRotation.Maximum = new decimal(new int[] { 360, 0, 0, 0 });
+            numericPropertiesRotation.Maximum = new decimal(new int[] { 361, 0, 0, 0 });
+            numericPropertiesRotation.Minimum = new decimal(new int[] { 360, 0, 0, int.MinValue });
             numericPropertiesRotation.Name = "numericPropertiesRotation";
             numericPropertiesRotation.Size = new Size(50, 23);
             numericPropertiesRotation.TabIndex = 0;

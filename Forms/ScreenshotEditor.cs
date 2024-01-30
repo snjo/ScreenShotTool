@@ -683,7 +683,7 @@ public partial class ScreenshotEditor : Form
         DisablePanel(panelPropertiesAngle);
     }
 
-    private static void SetNumericClamp(NumericUpDown numericUpDown, int value)
+    private static void SetNumericClamp(NumericUpDown numericUpDown, decimal value)
     {
         numericUpDown.Value = Math.Clamp(value, numericUpDown.Minimum, numericUpDown.Maximum);
         if (value < numericUpDown.Minimum) Debug.WriteLine($"Value is below {numericUpDown.Name} Minimum");
@@ -1163,12 +1163,11 @@ public partial class ScreenshotEditor : Form
 
     private void numericPropertiesRotation_ValueChanged(object sender, EventArgs e)
     {
+        SetNumericClamp(numericPropertiesRotation, numericPropertiesRotation.Value % 360);
         if (GetSelectedSymbol() is GraphicSymbol gs)
         {
-            //if (gs.RotationAllowed)
-            //{
-                gs.Rotation = (float)numericPropertiesRotation.Value;
-            //}
+            gs.Rotation = (float)numericPropertiesRotation.Value;
+            
             editorCanvas.UpdateOverlay();
         }
     }
