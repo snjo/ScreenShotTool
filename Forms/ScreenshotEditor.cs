@@ -1,8 +1,11 @@
 ﻿using ScreenShotTool.Classes;
 using ScreenShotTool.Properties;
+using System;
 using System.Diagnostics;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Runtime.Versioning;
+using System.Windows.Forms;
 using static ScreenShotTool.EditorCanvas;
 
 namespace ScreenShotTool.Forms;
@@ -289,7 +292,7 @@ public partial class ScreenshotEditor : Form
         return InsertSuccessful;
     }
 
-    private bool InsertImageFromFile(Point location, string fileName)
+    private bool InsertImageFromFile(Point location, string fileName, bool center = false)
     {
         Image? loadedImage;
         try
@@ -313,6 +316,11 @@ public partial class ScreenshotEditor : Form
         if (loadedImage != null)
         {
             GsImage gsImage = GsImage.Create(location, (Bitmap)loadedImage);//GsImage.Create(location, copiedBitmap, true);
+            if (center)
+            {
+                gsImage.Left -= gsImage.Width / 2;
+                gsImage.Top -= gsImage.Height / 2;
+            }
             if (gsImage.ValidSymbol)
             {
                 AddNewSymbolToList(gsImage);
@@ -1373,6 +1381,43 @@ public partial class ScreenshotEditor : Form
     private void numericPropertiesHeight_KeyPress(object sender, KeyPressEventArgs e)
     {
         SupressEnterDing(e);
+    }
+    #endregion
+
+    #region Drag and Drop -------------------------------------------------------------------------------
+
+    private void ScreenshotEditor_DragEnter(object sender, DragEventArgs e)
+    {
+        if (e.Data == null) return;
+        if (e.Data.GetDataPresent(DataFormats.FileDrop))
+        {
+            e.Effect = DragDropEffects.Copy;
+        }
+        else
+        {
+            e.Effect = DragDropEffects.None;
+        }
+    }
+
+    private void ScreenshotEditor_DragDrop(object sender, DragEventArgs e)
+    {
+        if (e.Data == null) return;
+        IDataObject dataObject = (IDataObject)e.Data;
+        var dropObject = dataObject.GetData(DataFormats.FileDrop, false);
+        if (dropObject != null)
+        {
+            string[] filePaths = (string[])dropObject;
+            for (int i = 0; i < filePaths.Length; i++)
+            {
+                Point dropOffset = new Point(i * 20, i * 20);
+                Point dropLocation = pictureBoxOverlay.PointToClient(new Point(e.X, e.Y)).Addition(dropOffset);
+                if (pictureBoxOverlay.Bounds.Contains(dropLocation) == false)
+                {
+                    dropLocation = new Point(pictureBoxOverlay.Width /2, pictureBoxOverlay.Height / 2).Addition(dropOffset);
+                }
+                InsertImageFromFile(dropLocation, filePaths[i], center: true);
+            }
+        }
     }
     #endregion
 }

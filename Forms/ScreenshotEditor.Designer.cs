@@ -1194,6 +1194,7 @@
             // 
             // ScreenshotEditor
             // 
+            AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1126, 774);
@@ -1221,6 +1222,8 @@
             Text = "Screenshot Tool Editor";
             TopMost = true;
             Deactivate += ScreenshotEditor_Deactivate;
+            DragDrop += ScreenshotEditor_DragDrop;
+            DragEnter += ScreenshotEditor_DragEnter;
             KeyDown += ScreenshotEditor_KeyDown;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
