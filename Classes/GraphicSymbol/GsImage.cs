@@ -12,6 +12,7 @@ public class GsImage : GraphicSymbol
     Bitmap? rotatedImage;
     Bitmap? shadowImage;
     bool useAdvancedShadow = true;
+    bool oldShadowEnabled = false;
     float oldRotation = 0f;
     int oldWidth = 0;
     int oldHeight = 0;
@@ -133,6 +134,7 @@ public class GsImage : GraphicSymbol
         oldRotation = Rotation;
         oldHeight = Height;
         oldWidth = Width;
+        oldShadowEnabled = ShadowEnabled;
         DrawShadow(graphic);
         DrawShape(graphic, LinePen, FillBrush, new Point(0, 0), true, true);
     }
@@ -242,33 +244,22 @@ public class GsImage : GraphicSymbol
         }
         if (ShadowEnabled && useAdvancedShadow)
         {
-            if (Rotation == 0)
+            if (shadowImage == null || Rotation != oldRotation || Width != oldWidth || Height != oldHeight || oldShadowEnabled != ShadowEnabled)
             {
-                if (shadowImage == null)
+                shadowImage.DisposeAndNull();
+                if (Rotation == 0)
                 {
-                    try
-                    {
-                        shadowImage.DisposeAndNull();
-                        shadowImage = CreateAlphaShadow(image);  
-                    }
-                    catch
-                    {
-                        useAdvancedShadow = false;
-                    }
+                    shadowImage = CreateAlphaShadow(image);
+                }
+                else if (rotatedImage != null)
+                {
+                    shadowImage = CreateAlphaShadow(rotatedImage);
+                }
+                else
+                {
+                    Debug.WriteLine("Couldn't create shadow, rotatedImage is null");
                 }
             }
-            else
-            {
-                if (Rotation != oldRotation || Width != oldWidth || Height != oldHeight)
-                {
-                    shadowImage.DisposeAndNull();
-                    if (rotatedImage != null)
-                    {
-                        shadowImage = CreateAlphaShadow(rotatedImage);
-                    }
-                }
-            }
-            
         }
     }
 
