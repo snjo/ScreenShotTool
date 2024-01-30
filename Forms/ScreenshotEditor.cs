@@ -523,6 +523,8 @@ public partial class ScreenshotEditor : Form
                 }
             }
         }
+        //e.Handled = true;
+        //e.SuppressKeyPress = true;
     }
 
     private void CancelAction()
@@ -771,7 +773,7 @@ public partial class ScreenshotEditor : Form
                 {
                     EnablePanel(panelPropertiesAngle, panelLeft, ref lastPanelBottom);
                     EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
-                    numericPropertiesRotation.Value = (decimal)gsI.Rotation;
+                    SetNumericClamp(numericPropertiesRotation, (decimal)gsI.Rotation % 360);
                 }
                 else if (graphicSymbol is GsPolygon gsP)
                 {
@@ -1167,8 +1169,23 @@ public partial class ScreenshotEditor : Form
         if (GetSelectedSymbol() is GraphicSymbol gs)
         {
             gs.Rotation = (float)numericPropertiesRotation.Value;
-            
+
             editorCanvas.UpdateOverlay();
+        }
+    }
+
+    private void ButtonToFront_Click(object sender, EventArgs e)
+    {
+        if (listViewSymbols.SelectedItems.Count > 0)
+        {
+            MoveSymbolToFront(listViewSymbols.SelectedItems[0]);
+        }
+    }
+    private void ButtonToBack_Click(object sender, EventArgs e)
+    {
+        if (listViewSymbols.SelectedItems.Count > 0)
+        {
+            MoveSymbolToBack(listViewSymbols.SelectedItems[0]);
         }
     }
 
@@ -1316,20 +1333,46 @@ public partial class ScreenshotEditor : Form
     }
     #endregion
 
-    private void ButtonToFront_Click(object sender, EventArgs e)
+    #region NumericUpDowns Supress ding
+
+    private static void SupressEnterDing(KeyPressEventArgs e)
     {
-        if (listViewSymbols.SelectedItems.Count > 0)
+        if (e.KeyChar == (char)Keys.Enter)
         {
-            MoveSymbolToFront(listViewSymbols.SelectedItems[0]);
-        }
-    }
-    private void ButtonToBack_Click(object sender, EventArgs e)
-    {
-        if (listViewSymbols.SelectedItems.Count > 0)
-        {
-            MoveSymbolToBack(listViewSymbols.SelectedItems[0]);
+            e.Handled = true;
+            e.KeyChar = '0';
+            // this character doesn't actually get sent, since it's after Handled, but will prevent the keypress reacting to Enter, since it no longer is Enter
         }
     }
 
+    private void numericPropertiesRotation_KeyPress(object sender, KeyPressEventArgs e)
+    {
+        SupressEnterDing(e);
+    }
 
+    private void numericNewLineWeight_KeyPress(object sender, KeyPressEventArgs e)
+    {
+        SupressEnterDing(e);
+    }
+
+    private void numericPropertiesX_KeyPress(object sender, KeyPressEventArgs e)
+    {
+        SupressEnterDing(e);
+    }
+
+    private void numericPropertiesY_KeyPress(object sender, KeyPressEventArgs e)
+    {
+        SupressEnterDing(e);
+    }
+
+    private void numericPropertiesWidth_KeyPress(object sender, KeyPressEventArgs e)
+    {
+        SupressEnterDing(e);
+    }
+
+    private void numericPropertiesHeight_KeyPress(object sender, KeyPressEventArgs e)
+    {
+        SupressEnterDing(e);
+    }
+    #endregion
 }

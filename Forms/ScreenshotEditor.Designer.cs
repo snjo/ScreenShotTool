@@ -483,6 +483,7 @@
             toolTip1.SetToolTip(numericNewLineWeight, "Set line width for the next created symbol");
             numericNewLineWeight.Value = new decimal(new int[] { 2, 0, 0, 0 });
             numericNewLineWeight.ValueChanged += NumericNewLineWeight_ValueChanged;
+            numericNewLineWeight.KeyPress += numericNewLineWeight_KeyPress;
             // 
             // panelImage
             // 
@@ -557,6 +558,7 @@
             toolTip1.SetToolTip(numericPropertiesHeight, "Height");
             numericPropertiesHeight.Value = new decimal(new int[] { 1, 0, 0, 0 });
             numericPropertiesHeight.ValueChanged += Numeric_ValueChanged;
+            numericPropertiesHeight.KeyPress += numericPropertiesHeight_KeyPress;
             // 
             // numericPropertiesY
             // 
@@ -569,6 +571,7 @@
             numericPropertiesY.Tag = "Y";
             toolTip1.SetToolTip(numericPropertiesY, "Y position (upper left)");
             numericPropertiesY.ValueChanged += Numeric_ValueChanged;
+            numericPropertiesY.KeyPress += numericPropertiesY_KeyPress;
             // 
             // numericPropertiesWidth
             // 
@@ -582,6 +585,7 @@
             toolTip1.SetToolTip(numericPropertiesWidth, "Width");
             numericPropertiesWidth.Value = new decimal(new int[] { 1, 0, 0, 0 });
             numericPropertiesWidth.ValueChanged += Numeric_ValueChanged;
+            numericPropertiesWidth.KeyPress += numericPropertiesWidth_KeyPress;
             // 
             // numericPropertiesX
             // 
@@ -594,6 +598,7 @@
             numericPropertiesX.Tag = "X";
             toolTip1.SetToolTip(numericPropertiesX, "X position (upper left)");
             numericPropertiesX.ValueChanged += Numeric_ValueChanged;
+            numericPropertiesX.KeyPress += numericPropertiesX_KeyPress;
             // 
             // label5
             // 
@@ -1179,12 +1184,13 @@
             // 
             numericPropertiesRotation.DecimalPlaces = 1;
             numericPropertiesRotation.Location = new Point(89, 6);
-            numericPropertiesRotation.Maximum = new decimal(new int[] { 361, 0, 0, 0 });
-            numericPropertiesRotation.Minimum = new decimal(new int[] { 360, 0, 0, int.MinValue });
+            numericPropertiesRotation.Maximum = new decimal(new int[] { 720, 0, 0, 0 });
+            numericPropertiesRotation.Minimum = new decimal(new int[] { 720, 0, 0, int.MinValue });
             numericPropertiesRotation.Name = "numericPropertiesRotation";
             numericPropertiesRotation.Size = new Size(50, 23);
             numericPropertiesRotation.TabIndex = 0;
             numericPropertiesRotation.ValueChanged += numericPropertiesRotation_ValueChanged;
+            numericPropertiesRotation.KeyPress += numericPropertiesRotation_KeyPress;
             // 
             // ScreenshotEditor
             // 
