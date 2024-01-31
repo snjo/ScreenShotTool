@@ -652,10 +652,10 @@ public partial class ScreenshotEditor : Form
             if (listViewSymbols.Items.Count > 0 && selectedUserAction != UserActions.DrawFreehand)
             {
                 listViewSymbols.SelectedItems.Clear();
-                listViewSymbols.Items[^1].Focused = true; // ^1 is listViewSymbols.Items.Count - 1, https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-8.0/ranges
                 listViewSymbols.Items[^1].Selected = true;
-                listViewSymbols.Items[^1].EnsureVisible();
-                listViewSymbols.Select();
+                //listViewSymbols.Items[^1].Focused = true;
+                //listViewSymbols.Items[^1].EnsureVisible();
+                //listViewSymbols.Select();
             }
         }
     }
@@ -672,7 +672,6 @@ public partial class ScreenshotEditor : Form
                     allowSelect = false;
                 }
             }
-            //SetUserAction(UserActions.None);
             if (Settings.Default.SelectAfterPlacingSymbol && allowSelect) // special exception for freehand draw multiple lines
             {
                 SetUserAction(UserActions.Select);
