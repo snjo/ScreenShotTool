@@ -1,6 +1,7 @@
 ﻿using ScreenShotTool.Forms;
 using ScreenShotTool.Properties;
 using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Runtime.Versioning;
@@ -542,15 +543,42 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
     #region Symbols -------------------------------------------------------------------------------------
 
-    private static Point RestrainToSquare(Point dragStart, Point dragEnd)
+    //private static Point RestrainToSquare(Point dragStart, Point dragEnd)
+    //{
+    //    Size size = (Size)dragEnd.Subtract(dragStart);
+    //    int width = Math.Abs(size.Width);
+    //    int height = Math.Abs(size.Height);
+    //    int xFlip = size.Width < 0 ? -1 : 1;
+    //    int yFlip = size.Height < 0 ? -1 : 1;
+    //    int squareSide = Math.Min(width, height);
+    //    return new Point(dragStart.X + (xFlip * squareSide), dragStart.Y + (yFlip * squareSide));
+    //}
+
+    private static Point RestrainProportions(Point symbolLocation, Point MousePosition, Size originalSize)
     {
-        Point size = dragEnd.Subtract(dragStart);
-        int width = Math.Abs(size.X);
-        int height = Math.Abs(size.Y);
-        int xFlip = size.X < 0 ? -1 : 1;
-        int yFlip = size.Y < 0 ? -1 : 1;
-        int squareSide = Math.Min(width, height);
-        return new Point(dragStart.X + (xFlip * squareSide), dragStart.Y + (yFlip * squareSide));
+        float aspectRatio;
+        if (originalSize.Width == 0 || originalSize.Height == 0)
+        {
+            aspectRatio = 1; // avoid div0
+        }
+        else
+        {
+            aspectRatio = (float)originalSize.Width / (float)originalSize.Height;
+        }
+        Size dragSize = (Size)MousePosition.Subtract(symbolLocation);
+        int width = Math.Abs(dragSize.Width);
+        int height = Math.Abs(dragSize.Height);
+        int xFlip = dragSize.Width < 0 ? -1 : 1;
+        int yFlip = dragSize.Height < 0 ? -1 : 1;
+        int dominantSide = Math.Max(width, height);
+        if (aspectRatio > 1) // scale side by * or / aspect ratio based on what's the longest side
+        {
+            return new Point((int)(symbolLocation.X + xFlip * dominantSide), (int)(symbolLocation.Y + yFlip * dominantSide / aspectRatio));
+        }
+        else
+        {
+            return new Point((int)(symbolLocation.X + xFlip * dominantSide * aspectRatio), (int)(symbolLocation.Y + yFlip * dominantSide));
+        }
     }
 
     private GraphicSymbol? GetNewSymbol(Point MousePosition, bool SquareBounds, bool temp)
@@ -561,7 +589,8 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
         if (SquareBounds)
         {
-            dragEnd = RestrainToSquare(dragStart, dragEnd);
+            //dragEnd = RestrainToSquare(dragStart, dragEnd);
+            dragEnd = RestrainProportions(dragStart, dragEnd, new Size(1,1)); // size is 1:1, ration is 1, meaning square
         }
 
         if (dragStarted)
@@ -754,6 +783,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
     public bool dragMoved = false;
     public Point dragStart = new(0, 0);
     Point dragStartOffsetFromSymbolCenter = new(0, 0);
+    Size currentScaleProportion = new Size(1,1);
 
     public void MouseDown(Point MousePosition)
     {
@@ -777,6 +807,14 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
             else if (selectedHitboxIndex > HitboxDirection.Center)
             {
                 SetUserAction(ScreenshotEditor.UserActions.ScaleSymbol);
+                if (currentSelectedSymbol != null)
+                {
+                    currentScaleProportion = currentSelectedSymbol.Bounds.Size;
+                }
+                else
+                {
+                    currentScaleProportion = new Size(1, 1);
+                }
             }
             else
             {
@@ -856,7 +894,46 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
             }
             else if (parentEditor.selectedUserAction == ScreenshotEditor.UserActions.ScaleSymbol)
             {
-                ScaleSymbol(MousePosition);
+                if (GetShift() && currentSelectedSymbol != null)
+                {
+                    bool restrain = true;
+                    Point anchor = new Point(currentSelectedSymbol.Bounds.Left, currentSelectedSymbol.Bounds.Top);
+                    if (selectedHitboxIndex == HitboxDirection.SE)
+                    {
+                        anchor = new Point(currentSelectedSymbol.Bounds.Left, currentSelectedSymbol.Bounds.Top);
+                    }
+                    else if (selectedHitboxIndex == HitboxDirection.NW)
+                    {
+                        anchor = new Point(currentSelectedSymbol.Bounds.Right, currentSelectedSymbol.Bounds.Bottom);
+                    }
+                    else if (selectedHitboxIndex == HitboxDirection.SW)
+                    {
+                        anchor = new Point(currentSelectedSymbol.Bounds.Right, currentSelectedSymbol.Bounds.Top);
+                    }
+                    else if (selectedHitboxIndex == HitboxDirection.NE)
+                    {
+                        anchor = new Point(currentSelectedSymbol.Bounds.Left, currentSelectedSymbol.Bounds.Bottom);
+                    }
+                    else
+                    {
+                        restrain = false;
+                    }
+
+                    if (restrain)
+                    {
+                        Point restrainedPosition = RestrainProportions(anchor, MousePosition, currentScaleProportion);
+                        ScaleSymbol(restrainedPosition);
+                    }
+                    else
+                    {
+                        ScaleSymbol(MousePosition);
+                    }
+                    
+                }
+                else
+                {
+                    ScaleSymbol(MousePosition);
+                }
                 UpdateOverlay(null, false);
             }
         }
