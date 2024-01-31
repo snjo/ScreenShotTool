@@ -9,6 +9,7 @@ public partial class NewImagePrompt : Form
     public NewImagePrompt()
     {
         InitializeComponent();
+        Font = new Font(this.Font.FontFamily, 9);
         numericWidth.Value = ImageWidth;
         numericHeight.Value = ImageHeight;
         ColorTools.SetButtonColors(buttonColor, BackgroundColor, true);

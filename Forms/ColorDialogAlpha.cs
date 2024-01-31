@@ -16,6 +16,7 @@ public partial class ColorDialogAlpha : Form
     {
 
         InitializeComponent();
+        Font = new Font(this.Font.FontFamily, 9);
         this.Color = startColor;
         colors = GetAllColors(false);
         SwatchSize.Width = (panelSwatches.Width / SwatchesHorizontal);

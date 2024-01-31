@@ -5,6 +5,7 @@ public partial class TextWindow : Form
     public TextWindow(string text)
     {
         InitializeComponent();
+        Font = new Font(this.Font.FontFamily, 9);
         textBox1.Text = text;
     }
 

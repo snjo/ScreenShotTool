@@ -8,6 +8,7 @@ namespace ScreenShotTool
         public About()
         {
             InitializeComponent();
+            Font = new Font(this.Font.FontFamily, 9);
             labelVersion.Text = "Version " + ProductVersion;
         }
 

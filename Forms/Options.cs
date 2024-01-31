@@ -16,6 +16,7 @@ namespace ScreenShotTool
         public Options(MainForm parent)
         {
             InitializeComponent();
+            Font = new Font(this.Font.FontFamily, 9);
             mainForm = parent;
             FillSettings();
         }

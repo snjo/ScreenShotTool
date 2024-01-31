@@ -10,6 +10,7 @@
         public HelpForm()
         {
             InitializeComponent();
+            Font = new Font(this.Font.FontFamily, 9);
             OpenFile(FileName);
         }
 

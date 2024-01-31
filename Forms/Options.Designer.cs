@@ -143,6 +143,7 @@
             label25 = new Label();
             buttonResetOptions = new Button();
             colorDialog1 = new ColorDialog();
+            panel1 = new Panel();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
@@ -165,6 +166,7 @@
             ((System.ComponentModel.ISupportInitialize)numericNumberedSize).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericBlurSampleArea).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericBlurMosaicSize).BeginInit();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // checkBoxTrim
@@ -189,8 +191,7 @@
             // 
             // buttonHelp
             // 
-            buttonHelp.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            buttonHelp.Location = new Point(13, 608);
+            buttonHelp.Location = new Point(4, 4);
             buttonHelp.Name = "buttonHelp";
             buttonHelp.Size = new Size(54, 23);
             buttonHelp.TabIndex = 90;
@@ -290,8 +291,7 @@
             // 
             // buttonOK
             // 
-            buttonOK.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonOK.Location = new Point(410, 608);
+            buttonOK.Location = new Point(397, 4);
             buttonOK.Name = "buttonOK";
             buttonOK.Size = new Size(75, 23);
             buttonOK.TabIndex = 94;
@@ -301,8 +301,7 @@
             // 
             // buttonApply
             // 
-            buttonApply.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonApply.Location = new Point(329, 608);
+            buttonApply.Location = new Point(316, 4);
             buttonApply.Name = "buttonApply";
             buttonApply.Size = new Size(75, 23);
             buttonApply.TabIndex = 93;
@@ -312,8 +311,7 @@
             // 
             // buttonCancel
             // 
-            buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonCancel.Location = new Point(248, 608);
+            buttonCancel.Location = new Point(235, 4);
             buttonCancel.Name = "buttonCancel";
             buttonCancel.Size = new Size(75, 23);
             buttonCancel.TabIndex = 92;
@@ -483,20 +481,21 @@
             // 
             // tabControl1
             // 
-            tabControl1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             tabControl1.Controls.Add(tabPageApplication);
             tabControl1.Controls.Add(tabPageModes);
             tabControl1.Controls.Add(tabPageOutput);
             tabControl1.Controls.Add(tabPageHotkeys);
             tabControl1.Controls.Add(tabPageEditor);
-            tabControl1.Location = new Point(3, 5);
+            tabControl1.Dock = DockStyle.Top;
+            tabControl1.Location = new Point(0, 0);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(490, 597);
+            tabControl1.Size = new Size(495, 606);
             tabControl1.TabIndex = 1;
             // 
             // tabPageApplication
             // 
+            tabPageApplication.AutoScroll = true;
             tabPageApplication.Controls.Add(checkBoxAutorun);
             tabPageApplication.Controls.Add(checkBoxMinimizeOnClose);
             tabPageApplication.Controls.Add(label24);
@@ -519,7 +518,7 @@
             tabPageApplication.Location = new Point(4, 24);
             tabPageApplication.Name = "tabPageApplication";
             tabPageApplication.Padding = new Padding(3);
-            tabPageApplication.Size = new Size(482, 569);
+            tabPageApplication.Size = new Size(487, 578);
             tabPageApplication.TabIndex = 1;
             tabPageApplication.Text = "Application";
             tabPageApplication.UseVisualStyleBackColor = true;
@@ -634,6 +633,7 @@
             // 
             // tabPageModes
             // 
+            tabPageModes.AutoScroll = true;
             tabPageModes.Controls.Add(checkBoxRegionCaptureUseAllScreens);
             tabPageModes.Controls.Add(checkBoxAllScreensToEditor);
             tabPageModes.Controls.Add(checkBoxScreenToEditor);
@@ -655,7 +655,7 @@
             tabPageModes.Controls.Add(labelWindow);
             tabPageModes.Location = new Point(4, 24);
             tabPageModes.Name = "tabPageModes";
-            tabPageModes.Size = new Size(482, 569);
+            tabPageModes.Size = new Size(487, 578);
             tabPageModes.TabIndex = 3;
             tabPageModes.Text = "Modes";
             tabPageModes.UseVisualStyleBackColor = true;
@@ -853,6 +853,7 @@
             // 
             // tabPageOutput
             // 
+            tabPageOutput.AutoScroll = true;
             tabPageOutput.Controls.Add(labelFileNameResult);
             tabPageOutput.Controls.Add(label23);
             tabPageOutput.Controls.Add(label22);
@@ -887,7 +888,7 @@
             tabPageOutput.Location = new Point(4, 24);
             tabPageOutput.Name = "tabPageOutput";
             tabPageOutput.Padding = new Padding(3);
-            tabPageOutput.Size = new Size(482, 569);
+            tabPageOutput.Size = new Size(487, 578);
             tabPageOutput.TabIndex = 0;
             tabPageOutput.Text = "Capture Output";
             tabPageOutput.UseVisualStyleBackColor = true;
@@ -981,11 +982,12 @@
             // 
             // tabPageHotkeys
             // 
+            tabPageHotkeys.AutoScroll = true;
             tabPageHotkeys.Controls.Add(HotkeyGrid);
             tabPageHotkeys.Location = new Point(4, 24);
             tabPageHotkeys.Name = "tabPageHotkeys";
             tabPageHotkeys.Padding = new Padding(3);
-            tabPageHotkeys.Size = new Size(482, 569);
+            tabPageHotkeys.Size = new Size(487, 578);
             tabPageHotkeys.TabIndex = 2;
             tabPageHotkeys.Text = "Hotkeys";
             tabPageHotkeys.UseVisualStyleBackColor = true;
@@ -993,13 +995,13 @@
             // HotkeyGrid
             // 
             HotkeyGrid.AllowUserToAddRows = false;
-            HotkeyGrid.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             HotkeyGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             HotkeyGrid.Columns.AddRange(new DataGridViewColumn[] { ColumnFunction, ColumnKey, ColumnCtrl, ColumnAlt, ColumnShift, ColumnWin });
-            HotkeyGrid.Location = new Point(6, 6);
+            HotkeyGrid.Dock = DockStyle.Fill;
+            HotkeyGrid.Location = new Point(3, 3);
             HotkeyGrid.Name = "HotkeyGrid";
             HotkeyGrid.RowHeadersVisible = false;
-            HotkeyGrid.Size = new Size(470, 443);
+            HotkeyGrid.Size = new Size(481, 572);
             HotkeyGrid.TabIndex = 20;
             // 
             // ColumnFunction
@@ -1041,6 +1043,7 @@
             // 
             // tabPageEditor
             // 
+            tabPageEditor.AutoScroll = true;
             tabPageEditor.Controls.Add(buttonSelectStickerFolder);
             tabPageEditor.Controls.Add(label39);
             tabPageEditor.Controls.Add(textBoxStickerFolder);
@@ -1070,7 +1073,7 @@
             tabPageEditor.Location = new Point(4, 24);
             tabPageEditor.Name = "tabPageEditor";
             tabPageEditor.Padding = new Padding(3);
-            tabPageEditor.Size = new Size(482, 569);
+            tabPageEditor.Size = new Size(487, 578);
             tabPageEditor.TabIndex = 4;
             tabPageEditor.Text = "Editor";
             tabPageEditor.UseVisualStyleBackColor = true;
@@ -1329,8 +1332,7 @@
             // 
             // buttonResetOptions
             // 
-            buttonResetOptions.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            buttonResetOptions.Location = new Point(73, 608);
+            buttonResetOptions.Location = new Point(64, 4);
             buttonResetOptions.Name = "buttonResetOptions";
             buttonResetOptions.Size = new Size(97, 23);
             buttonResetOptions.TabIndex = 91;
@@ -1342,17 +1344,26 @@
             // 
             colorDialog1.FullOpen = true;
             // 
+            // panel1
+            // 
+            panel1.Controls.Add(buttonApply);
+            panel1.Controls.Add(buttonResetOptions);
+            panel1.Controls.Add(buttonOK);
+            panel1.Controls.Add(buttonCancel);
+            panel1.Controls.Add(buttonHelp);
+            panel1.Dock = DockStyle.Bottom;
+            panel1.Location = new Point(0, 608);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(495, 31);
+            panel1.TabIndex = 95;
+            // 
             // Options
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(495, 639);
-            Controls.Add(buttonResetOptions);
+            Controls.Add(panel1);
             Controls.Add(tabControl1);
-            Controls.Add(buttonCancel);
-            Controls.Add(buttonApply);
-            Controls.Add(buttonOK);
-            Controls.Add(buttonHelp);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Options";
             Text = "Options";
@@ -1382,6 +1393,7 @@
             ((System.ComponentModel.ISupportInitialize)numericNumberedSize).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericBlurSampleArea).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericBlurMosaicSize).EndInit();
+            panel1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -1501,5 +1513,6 @@
         private TextBox textBoxStickerFolder;
         private Label label38;
         private Button buttonSelectStickerFolder;
+        private Panel panel1;
     }
 }

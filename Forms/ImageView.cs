@@ -92,6 +92,7 @@ namespace ScreenShotTool
             this.ScreenBounds = screenBounds;
             frameRate = Settings.Default.MaxFramerate;
             InitializeComponent();
+            Font = new Font(this.Font.FontFamily, 10);
 
             viewerMode = mode;
             if (viewerMode == ViewerMode.cropCapture)
