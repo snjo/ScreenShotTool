@@ -40,7 +40,13 @@ namespace ScreenShotTool
 
         public static ImageView CreateUsingCurrentScreen(ViewerMode mode)
         {
-            Rectangle screenBounds = Screen.FromPoint(Cursor.Position).Bounds;
+            Screen screen = Screen.FromPoint(Cursor.Position);
+            Rectangle screenBounds = screen.Bounds;
+            //if (screenBounds.Height == 960)
+            //{
+            //    screenBounds.Height = 1440;
+            //    screenBounds.Width = 2560;
+            //}
             Bitmap bmp = GetScreenImage(screenBounds);
             ImageView result = new ImageView(mode, screenBounds, bmp)
             {
@@ -49,6 +55,8 @@ namespace ScreenShotTool
                 Location = new Point(screenBounds.X, screenBounds.Y),
                 Size = screenBounds.Size,
             };
+            //Debug.WriteLine($"Screen bounds: {screenBounds}, dpi:{result.DeviceDpi}, {screen}");
+            //Debug.WriteLine($"DPI? { DPIUtil.GetDpi(result, Cursor.Position)}, scale {DPIUtil.ScaleFactor(result, Cursor.Position)}");
             return result;
         }
 

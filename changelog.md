@@ -1,10 +1,13 @@
 ﻿## Changelog
 
+## TODO:
+- text multi line
+- Undo?
+
 ## 1.8
 
 #### Editor
-- New Stickers button, easily insert emojis, cursors etc from a preset folder.
-	(this folder can be changed in Options
+- New Stickers button, easily insert emojis, cursors etc from a preset folder. (this folder can be changed in Options)
 - Drag and drop images into editor
 - Image symbols can be rotated
 - Changed shadow rendering, supports images with alpha

@@ -69,7 +69,7 @@ public class CaptureModule : ImageViewModule
         SendToEditor = parentForm.SendToEditor;
         ScreenBounds = screenBounds;
 
-        Debug.WriteLine($"Screenbounds: {ScreenBounds}");
+        //Debug.WriteLine($"Screenbounds: {ScreenBounds}");
     }
 
     public override void HandleKeys(KeyEventArgs e)
