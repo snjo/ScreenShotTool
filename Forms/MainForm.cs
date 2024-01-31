@@ -60,6 +60,7 @@ namespace ScreenShotTool
         public MainForm()
         {
             InitializeComponent();
+            Font = new Font(this.Font.FontFamily, 9);
             UpgradeSettings();
             LoadHotkeysFromSettings();
 

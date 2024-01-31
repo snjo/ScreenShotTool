@@ -64,6 +64,7 @@ public partial class ScreenshotEditor : Form
 
     private void SetupEditor()
     {
+        Font = new Font(Font.FontFamily, 9);
         FillFontFamilyBox();
         numericPropertiesFontSize.Maximum = maxFontSize;
         numericPropertiesFontSize.Minimum = minimumFontSize;
@@ -1141,11 +1142,11 @@ public partial class ScreenshotEditor : Form
         if (listViewSymbols.SelectedItems.Count > 0)
         {
             var items = listViewSymbols.SelectedItems;
-            
+
             if (items != null && items.Count > 0)
             {
                 List<ListViewItem> listViewItems = items.Cast<ListViewItem>().ToList();
-                
+
                 foreach (var item in listViewItems)
                 {
                     if (item.Tag is GraphicSymbol gs)
@@ -1508,12 +1509,23 @@ public partial class ScreenshotEditor : Form
         {
             if (editorCanvas.currentSelectedSymbol is GsImage gsI)
             {
-                if (gsI.image != null) {
+                if (gsI.image != null)
+                {
                     gsI.Width = gsI.image.Width;
                     gsI.Height = gsI.image.Height;
                     editorCanvas.UpdateOverlay();
                 }
             }
         }
+    }
+
+    private void panel1_Paint(object sender, PaintEventArgs e)
+    {
+
+    }
+
+    private void checkBoxPropertiesShadow_CheckedChanged(object sender, EventArgs e)
+    {
+
     }
 }
