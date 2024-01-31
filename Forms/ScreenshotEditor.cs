@@ -455,6 +455,11 @@ public partial class ScreenshotEditor : Form
         return ModifierKeys == Keys.Shift;
     }
 
+    public static bool GetControl()
+    {
+        return ModifierKeys == Keys.Control;
+    }
+
     private void ScreenshotEditor_KeyDown(object sender, KeyEventArgs e)
     {
         if (e.KeyCode == Keys.G && e.Modifiers == Keys.Control)
@@ -469,10 +474,10 @@ public partial class ScreenshotEditor : Form
         }
         if ((e.KeyCode == Keys.C && e.Modifiers == Keys.Control))
         {
-            if (GetSelectedSymbol() is GsCrop gsC)
+            if (GetSelectedSymbolFirst() is GsCrop gsC)
             {
                 CopySelectionToClipboard(gsC);
-                DeleteSelectedSymbol();
+                DeleteSelectedSymbol(gsC);
             }
             else
             {
@@ -490,9 +495,48 @@ public partial class ScreenshotEditor : Form
         if (e.KeyCode == Keys.Escape)
         {
             CancelAction();
-            if (GetSelectedSymbol() is GsCrop)
+            if (GetSelectedSymbolFirst() is GsCrop gsC)
             {
-                DeleteSelectedSymbol();
+                DeleteSelectedSymbol(gsC);
+            }
+        }
+
+        // Only do these if there's a selected symbol, AND focus is on the canvas. Not used if the list is focused, since arrow keys etc. alters the selection
+        if (pictureBoxOverlay.Focused)
+        {
+            int inputMultiplied = GetShift() ? 10 : 1;
+            if (e.KeyCode == Keys.Home)
+            {
+                if (listViewSymbols.SelectedItems.Count > 0)
+                {
+                    MoveSymbolToFront(listViewSymbols.SelectedItems[0]);
+                    editorCanvas.UpdateOverlay();
+                }
+
+            }
+            if (e.KeyCode == Keys.End)
+            {
+                if (listViewSymbols.SelectedItems.Count > 0)
+                {
+                    MoveSymbolToBack(listViewSymbols.SelectedItems[0]);
+                    editorCanvas.UpdateOverlay();
+                }
+            }
+            if (e.KeyCode == Keys.Left)
+            {
+                MoveSelectedSymbols(-1 * inputMultiplied, 0);
+            }
+            if (e.KeyCode == Keys.Right)
+            {
+                MoveSelectedSymbols(1 * inputMultiplied, 0);
+            }
+            if (e.KeyCode == Keys.Up)
+            {
+                MoveSelectedSymbols(0, -1 * inputMultiplied);
+            }
+            if (e.KeyCode == Keys.Down)
+            {
+                MoveSelectedSymbols(0, 1 * inputMultiplied);
             }
         }
 
@@ -501,30 +545,13 @@ public partial class ScreenshotEditor : Form
         {
             if (listViewSymbols.SelectedItems.Count > 0)
             {
-                if (e.KeyCode == Keys.Up)
-                {
-                    if (listViewSymbols.SelectedItems.Count > 0)
-                    {
-                        MoveSymbolToFront(listViewSymbols.SelectedItems[0]);
-                        editorCanvas.UpdateOverlay();
-                    }
-
-                }
-                if (e.KeyCode == Keys.Down)
-                {
-                    if (listViewSymbols.SelectedItems.Count > 0)
-                    {
-                        MoveSymbolToBack(listViewSymbols.SelectedItems[0]);
-                        editorCanvas.UpdateOverlay();
-                    }
-                }
                 if (e.KeyCode == Keys.Delete)
                 {
-                    DeleteSelectedSymbol();
+                    DeleteSelectedSymbols();
                 }
                 if (e.KeyCode == Keys.Enter) // Confirm default action on selected symbol
                 {
-                    if (GetSelectedSymbol() is GsCrop crop && editorCanvas.SourceImage != null)
+                    if (GetSelectedSymbolFirst() is GsCrop crop && editorCanvas.SourceImage != null)
                     {
                         CropImageAction(editorCanvas.SourceImage, crop);
                     }
@@ -624,6 +651,7 @@ public partial class ScreenshotEditor : Form
             listViewSymbols.Update();
             if (listViewSymbols.Items.Count > 0 && selectedUserAction != UserActions.DrawFreehand)
             {
+                listViewSymbols.SelectedItems.Clear();
                 listViewSymbols.Items[^1].Focused = true; // ^1 is listViewSymbols.Items.Count - 1, https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-8.0/ranges
                 listViewSymbols.Items[^1].Selected = true;
                 listViewSymbols.Items[^1].EnsureVisible();
@@ -695,7 +723,7 @@ public partial class ScreenshotEditor : Form
         DisablePanel(panelPropertiesCrop);
         DisablePanel(panelPropertiesBlur);
         DisablePanel(panelPropertiesPolygon);
-        DisablePanel(panelPropertiesAngle);
+        DisablePanel(panelPropertiesImage);
     }
 
     private static void SetNumericClamp(NumericUpDown numericUpDown, decimal value)
@@ -784,7 +812,7 @@ public partial class ScreenshotEditor : Form
                 }
                 else if (graphicSymbol is GsImage gsI)
                 {
-                    EnablePanel(panelPropertiesAngle, panelLeft, ref lastPanelBottom);
+                    EnablePanel(panelPropertiesImage, panelLeft, ref lastPanelBottom);
                     EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
                     SetNumericClamp(numericPropertiesRotation, (decimal)gsI.Rotation % 360);
                 }
@@ -830,12 +858,21 @@ public partial class ScreenshotEditor : Form
 
     private void ButtonDeleteSymbol_Click(object sender, EventArgs e)
     {
-        DeleteSelectedSymbol();
+        DeleteSelectedSymbols();
     }
 
-    private void DeleteSelectedSymbol()
+    private void DeleteSelectedSymbols()
     {
-        GraphicSymbol? gs = GetSelectedSymbol();
+        List<GraphicSymbol> symbols = GetSelectedSymbols();
+        foreach (GraphicSymbol symbol in symbols)
+        {
+            DeleteSelectedSymbol(symbol);
+        }
+    }
+
+    private void DeleteSelectedSymbol(GraphicSymbol gs)
+    {
+        //GraphicSymbol? gs = GetSelectedSymbolFirst();
         if (gs != null)
         {
             if (gs.ListViewItem != null)
@@ -864,6 +901,18 @@ public partial class ScreenshotEditor : Form
         listViewSymbols.Items.Insert(0, item);
         listViewSymbols.Update();
         listViewSymbols.Items[0].Selected = true;
+    }
+
+    private void MoveSelectedSymbols(int X, int Y)
+    {
+        foreach (ListViewItem item in listViewSymbols.SelectedItems)
+        {
+            if (item.Tag is GraphicSymbol gs)
+            {
+                gs.Move(X, Y);
+            }
+        }
+        editorCanvas.UpdateOverlay();
     }
 
     private ListViewItem? GetSelecteListItem()
@@ -1066,7 +1115,7 @@ public partial class ScreenshotEditor : Form
 
     private void CheckBoxPropertiesShadow_Click(object sender, EventArgs e)
     {
-        GraphicSymbol? symbol = GetSelectedSymbol();
+        GraphicSymbol? symbol = GetSelectedSymbolFirst();
         if (symbol != null)
         {
             symbol.ShadowEnabled = checkBoxPropertiesShadow.Checked;
@@ -1076,7 +1125,7 @@ public partial class ScreenshotEditor : Form
 
     private void CheckBoxPropertiesCloseCurve_Click(object sender, EventArgs e)
     {
-        GraphicSymbol? symbol = GetSelectedSymbol();
+        GraphicSymbol? symbol = GetSelectedSymbolFirst();
         if (symbol != null)
         {
             if (symbol is GsPolygon gsP)
@@ -1087,23 +1136,42 @@ public partial class ScreenshotEditor : Form
         editorCanvas.UpdateOverlay();
     }
 
-    public GraphicSymbol? GetSelectedSymbol()
+    public List<GraphicSymbol> GetSelectedSymbols()
     {
+        List<GraphicSymbol> symbols = new List<GraphicSymbol>();
         if (listViewSymbols.SelectedItems.Count > 0)
         {
-            ListViewItem item = listViewSymbols.SelectedItems[0];
-            if (item.Tag is GraphicSymbol gs)
+            var items = listViewSymbols.SelectedItems;
+            
+            if (items != null && items.Count > 0)
             {
-                editorCanvas.currentSelectedSymbol = gs;
-                return gs;
+                List<ListViewItem> listViewItems = items.Cast<ListViewItem>().ToList();
+                
+                foreach (var item in listViewItems)
+                {
+                    if (item.Tag is GraphicSymbol gs)
+                    {
+                        symbols.Add(gs);
+                    }
+                }
             }
         }
-        return null;
+        return symbols;
+    }
+
+    public GraphicSymbol? GetSelectedSymbolFirst()
+    {
+        List<GraphicSymbol> symbols = GetSelectedSymbols();
+        if (symbols.Count > 0)
+        {
+            return symbols[0];
+        }
+        else return null;
     }
 
     private GsText? GetSelectedTextSymbol()
     {
-        if (GetSelectedSymbol() is GsText gs) return gs;
+        if (GetSelectedSymbolFirst() is GsText gs) return gs;
         return null;
     }
 
@@ -1122,7 +1190,7 @@ public partial class ScreenshotEditor : Form
     private void ButtonPropertyCrop_Click(object sender, EventArgs e)
     {
         if (editorCanvas.SourceImage == null) return;
-        if (GetSelectedSymbol() is GsCrop gsC)
+        if (GetSelectedSymbolFirst() is GsCrop gsC)
         {
             CropImageAction(editorCanvas.SourceImage, gsC);
         }
@@ -1139,12 +1207,12 @@ public partial class ScreenshotEditor : Form
         }
         editorCanvas.LoadImageFromImage(outImage, false);
         gsC.showOutline = true;
-        DeleteSelectedSymbol();
+        DeleteSelectedSymbol(gsC);
     }
 
     private void ButtonPropertyCopyCrop_Click(object sender, EventArgs e)
     {
-        if (GetSelectedSymbol() is GsCrop gsC)
+        if (GetSelectedSymbolFirst() is GsCrop gsC)
         {
             CopySelectionToClipboard(gsC);
         }
@@ -1169,7 +1237,7 @@ public partial class ScreenshotEditor : Form
 
     private void NumericPropertiesCurveTension_ValueChanged(object sender, EventArgs e)
     {
-        if (GetSelectedSymbol() is GsPolygon gsP)
+        if (GetSelectedSymbolFirst() is GsPolygon gsP)
         {
             gsP.curveTension = (float)numericPropertiesCurveTension.Value;
             editorCanvas.UpdateOverlay();
@@ -1179,7 +1247,7 @@ public partial class ScreenshotEditor : Form
     private void numericPropertiesRotation_ValueChanged(object sender, EventArgs e)
     {
         SetNumericClamp(numericPropertiesRotation, numericPropertiesRotation.Value % 360);
-        if (GetSelectedSymbol() is GraphicSymbol gs)
+        if (GetSelectedSymbolFirst() is GraphicSymbol gs)
         {
             gs.Rotation = (float)numericPropertiesRotation.Value;
 
@@ -1428,10 +1496,25 @@ public partial class ScreenshotEditor : Form
             Point dropLocation = location.Addition(dropOffset);
             if (pictureBoxOverlay.Bounds.Contains(dropLocation) == false)
             {
-                dropLocation = new Point(pictureBoxOverlay.Width /2, pictureBoxOverlay.Height / 2).Addition(dropOffset);
+                dropLocation = new Point(pictureBoxOverlay.Width / 2, pictureBoxOverlay.Height / 2).Addition(dropOffset);
             }
             InsertImageFromFile(dropLocation, fileNames[i], center: true);
         }
     }
     #endregion
+
+    private void buttonResetImageSize_Click(object sender, EventArgs e)
+    {
+        if (editorCanvas.currentSelectedSymbol != null)
+        {
+            if (editorCanvas.currentSelectedSymbol is GsImage gsI)
+            {
+                if (gsI.image != null) {
+                    gsI.Width = gsI.image.Width;
+                    gsI.Height = gsI.image.Height;
+                    editorCanvas.UpdateOverlay();
+                }
+            }
+        }
+    }
 }

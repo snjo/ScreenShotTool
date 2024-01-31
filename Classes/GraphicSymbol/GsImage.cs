@@ -8,7 +8,7 @@ namespace ScreenShotTool;
 
 public class GsImage : GraphicSymbol
 {
-    Bitmap? image;
+    public Bitmap? image;
     Bitmap? rotatedImage;
     Bitmap? shadowImage;
     bool useAdvancedShadow = true;

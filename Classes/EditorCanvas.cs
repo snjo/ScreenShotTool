@@ -37,7 +37,19 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         }
     }
     readonly PictureBox pictureBox = pictureBox;
-    public GraphicSymbol? currentSelectedSymbol = null;
+    
+    //public GraphicSymbol? currentSelectedSymbol = null;
+    public GraphicSymbol? currentSelectedSymbol
+    {
+        get 
+        { 
+            GraphicSymbol? symbol = parentEditor.GetSelectedSymbolFirst();
+            if (symbol != null)
+                return symbol;
+            else
+                return null;
+        }
+    }
 
     public void UpdateSourceImage(Bitmap bitmap)
     {
@@ -415,7 +427,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         if (SourceImage == null) return;
         foreach (GraphicSymbol symbol in Symbols)
         {
-            if (ShowNonOutputWidgets == false && symbol is GsCrop)
+            if (ShowNonOutputWidgets == false && symbol is GsCrop) // don't show Crop in renders where no highlighting should be visible, like save or copy
             {
                 continue;
             }
@@ -436,7 +448,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
                 gsNumbered.Number = NumberedSymbolCounter;
                 NumberedSymbolCounter++;
             }
-            symbol.ContainerBounds = new Rectangle(0, 0, SourceImage.Width, SourceImage.Height);
+            symbol.ContainerBounds = new Rectangle(0, 0, SourceImage.Width, SourceImage.Height); // used by Border symbol
             symbol.DrawSymbol(graphic);
         }
         if (temporarySymbol != null)
@@ -467,8 +479,11 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         }
         if (ShowNonOutputWidgets)
         {
-            GraphicSymbol? selectedSymbol = parentEditor.GetSelectedSymbol();
-            selectedSymbol?.DrawHitboxes(graphic);
+            List<GraphicSymbol> symbols = parentEditor.GetSelectedSymbols();
+            foreach (GraphicSymbol symbol in symbols)
+            {
+                symbol.DrawHitboxes(graphic);
+            }
         }
     }
 
@@ -542,17 +557,6 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
     #endregion
 
     #region Symbols -------------------------------------------------------------------------------------
-
-    //private static Point RestrainToSquare(Point dragStart, Point dragEnd)
-    //{
-    //    Size size = (Size)dragEnd.Subtract(dragStart);
-    //    int width = Math.Abs(size.Width);
-    //    int height = Math.Abs(size.Height);
-    //    int xFlip = size.Width < 0 ? -1 : 1;
-    //    int yFlip = size.Height < 0 ? -1 : 1;
-    //    int squareSide = Math.Min(width, height);
-    //    return new Point(dragStart.X + (xFlip * squareSide), dragStart.Y + (yFlip * squareSide));
-    //}
 
     private static Point RestrainProportions(Point symbolLocation, Point MousePosition, Size originalSize)
     {
@@ -680,28 +684,29 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
     }
     HitboxDirection selectedHitboxIndex = HitboxDirection.None;
 
-    private void GetHitboxUnderCursor(Point MousePosition)
+    private void GetHitboxUnderCursor(Point MousePosition, GraphicSymbol symbol)
     {
-        if (currentSelectedSymbol != null)
-        {
-            selectedHitboxIndex = HitboxDirection.None;
+        //if (currentSelectedSymbol != null)
+        //{
+            //selectedHitboxIndex = HitboxDirection.None;
             for (int i = 1; i <= 8; i++) // all scaling hitboxec, not center
             {
-                if (currentSelectedSymbol.GetHitbox(i).Contains(MousePosition.X, MousePosition.Y))
+                if (symbol != currentSelectedSymbol) { break; }
+            
+                if (symbol.GetHitbox(i).Contains(MousePosition.X, MousePosition.Y))
                 {
                     selectedHitboxIndex = (HitboxDirection)i;
-
                     break;
                 }
             }
             if (selectedHitboxIndex == HitboxDirection.None)
             {
-                if (currentSelectedSymbol.GetHitbox(0).Contains(MousePosition.X, MousePosition.Y))
+                if (symbol.GetHitbox(0).Contains(MousePosition.X, MousePosition.Y))
                 {
                     selectedHitboxIndex = HitboxDirection.Center;
                 }
             }
-        }
+        //}
     }
 
     private void SelectSymbolUnderCursor()
@@ -712,7 +717,6 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
             // empty stack
             stackedSymbolsIndex = -1;
             parentEditor.GetSymbolListView().SelectedItems.Clear();
-            currentSelectedSymbol = null;
         }
         else
         {
@@ -723,20 +727,22 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
             if (symbolsUnderCursor.Count > 0)
             {
-                currentSelectedSymbol = symbolsUnderCursor[Math.Clamp(stackedSymbolsIndex, 0, symbolsUnderCursor.Count - 1)];
-                parentEditor.GetSymbolListView().SelectedItems.Clear();
-                ListViewItem? listFromSymbol = GetListItemFromSymbol(currentSelectedSymbol);
+                GraphicSymbol stackSymbol = symbolsUnderCursor[Math.Clamp(stackedSymbolsIndex, 0, symbolsUnderCursor.Count - 1)];
+                if (GetControl() != true)
+                {
+                    parentEditor.GetSymbolListView().SelectedItems.Clear();
+                }
+                ListViewItem? listFromSymbol = GetListItemFromSymbol(stackSymbol);
                 int selectedIndex = listFromSymbol != null ? listFromSymbol.Index : -1;
                 if (selectedIndex > -1 && selectedIndex < parentEditor.GetSymbolListView().Items.Count)
                 {
-                    parentEditor.GetSymbolListView().Items[selectedIndex].Selected = true;
+                    parentEditor.GetSymbolListView().Items[selectedIndex].Selected = !parentEditor.GetSymbolListView().Items[selectedIndex].Selected;
                 }
                 stackedSymbolsIndex--;
             }
             else
             {
                 parentEditor.GetSymbolListView().SelectedItems.Clear();
-                currentSelectedSymbol = null;
                 stackedSymbolsIndex = -1;
             }
         }
@@ -782,8 +788,9 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
     public bool dragStarted = false;
     public bool dragMoved = false;
     public Point dragStart = new(0, 0);
-    Point dragStartOffsetFromSymbolCenter = new(0, 0);
+    //Point dragStartOffsetFromSymbolCenter = new(0, 0);
     Size currentScaleProportion = new Size(1,1);
+    List<Point> selectedMoveSymbolOffsets = new List<Point>();
 
     public void MouseDown(Point MousePosition)
     {
@@ -792,12 +799,24 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         dragStarted = true;
         dragMoved = false;
         dragStart = MousePosition;
-        if (currentSelectedSymbol != null)
+
+        selectedMoveSymbolOffsets.Clear();
+        foreach (GraphicSymbol symbol in parentEditor.GetSelectedSymbols())
         {
-            dragStartOffsetFromSymbolCenter = MousePosition.Subtract(currentSelectedSymbol.Position);
+            selectedMoveSymbolOffsets.Add(MousePosition.Subtract(symbol.Position));
         }
 
-        GetHitboxUnderCursor(MousePosition);
+        //if (currentSelectedSymbol != null)
+        //{
+        //    dragStartOffsetFromSymbolCenter = MousePosition.Subtract(currentSelectedSymbol.Position);
+        //}
+
+        selectedHitboxIndex = HitboxDirection.None;
+        foreach (GraphicSymbol symbol in parentEditor.GetSelectedSymbols())
+        {
+            GetHitboxUnderCursor(MousePosition, symbol);
+        }
+
         if (parentEditor.selectedUserAction < ScreenshotEditor.UserActions.CreateRectangle) // action is none, move or scale
         {
             if (selectedHitboxIndex == HitboxDirection.Center)
@@ -833,7 +852,11 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         MousePositionLocal = MousePosition;
         if (dragStarted == false) // don't update the selected hitbox index while a drag scale is active
         {
-            GetHitboxUnderCursor(MousePosition);
+            selectedHitboxIndex = HitboxDirection.None;
+            foreach (GraphicSymbol symbol in parentEditor.GetSelectedSymbols())
+            {
+                GetHitboxUnderCursor(MousePosition, symbol);
+            }
         }
 
         if (parentEditor.selectedUserAction >= UserActions.CreateRectangle)
@@ -889,7 +912,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
             }
             else if (parentEditor.selectedUserAction == ScreenshotEditor.UserActions.MoveSymbol)
             {
-                MoveSymbol(MousePosition);
+                MoveSymbols(MousePosition);
                 UpdateOverlay(null, forceUpdate: false);
             }
             else if (parentEditor.selectedUserAction == ScreenshotEditor.UserActions.ScaleSymbol)
@@ -1013,17 +1036,31 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
     #region Move and Scale ------------------------------------------------------------------------------
 
-    private void MoveSymbol(Point MousePosition)
+    private void MoveSymbols(Point MousePosition)
     {
-        if (currentSelectedSymbol == null) return;
-
-        if (currentSelectedSymbol.MoveAllowed && dragStarted)
+        //selectedMoveSymbolOffsets
+        List<GraphicSymbol> symbols = parentEditor.GetSelectedSymbols();
+        for (int i = 0; i < symbols.Count; i++)
         {
+            MoveSymbol(MousePosition, symbols[i], selectedMoveSymbolOffsets[i]);
+        }
+    }
+
+    private void MoveSymbol(Point MousePosition, GraphicSymbol symbol, Point offset)
+    {
+        if (symbol == null) return;
+
+        if (symbol.MoveAllowed && dragStarted)
+        {
+            //Point newPos = new(
+            //    Math.Clamp(MousePosition.X - dragStartOffsetFromSymbolCenter.X, -OutOfBoundsMaxPixels, CanvasSize.Width + OutOfBoundsMaxPixels),
+            //    Math.Clamp(MousePosition.Y - dragStartOffsetFromSymbolCenter.Y, -OutOfBoundsMaxPixels, CanvasSize.Height + OutOfBoundsMaxPixels)
+            //);            
             Point newPos = new(
-                Math.Clamp(MousePosition.X - dragStartOffsetFromSymbolCenter.X, -OutOfBoundsMaxPixels, CanvasSize.Width + OutOfBoundsMaxPixels),
-                Math.Clamp(MousePosition.Y - dragStartOffsetFromSymbolCenter.Y, -OutOfBoundsMaxPixels, CanvasSize.Height + OutOfBoundsMaxPixels)
+                Math.Clamp(MousePosition.X - offset.X, -OutOfBoundsMaxPixels, CanvasSize.Width + OutOfBoundsMaxPixels),
+                Math.Clamp(MousePosition.Y - offset.Y, -OutOfBoundsMaxPixels, CanvasSize.Height + OutOfBoundsMaxPixels)
             );
-            currentSelectedSymbol.MoveTo(newPos.X, newPos.Y);
+            symbol.MoveTo(newPos.X, newPos.Y);
         }
     }
 

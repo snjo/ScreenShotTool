@@ -121,7 +121,8 @@
             numericPropertiesCurveTension = new NumericUpDown();
             checkBoxPropertiesCloseCurve = new CheckBox();
             toolTip1 = new ToolTip(components);
-            panelPropertiesAngle = new Panel();
+            panelPropertiesImage = new Panel();
+            buttonResetImageSize = new Button();
             labelRotation = new Label();
             numericPropertiesRotation = new NumericUpDown();
             menuStrip1.SuspendLayout();
@@ -148,7 +149,7 @@
             panelPropertiesBlur.SuspendLayout();
             panelPropertiesPolygon.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesCurveTension).BeginInit();
-            panelPropertiesAngle.SuspendLayout();
+            panelPropertiesImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesRotation).BeginInit();
             SuspendLayout();
             // 
@@ -513,7 +514,6 @@
             listViewSymbols.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             listViewSymbols.Columns.AddRange(new ColumnHeader[] { columnHeaderType, columnHeaderColor });
             listViewSymbols.Location = new Point(971, 61);
-            listViewSymbols.MultiSelect = false;
             listViewSymbols.Name = "listViewSymbols";
             listViewSymbols.Size = new Size(153, 80);
             listViewSymbols.TabIndex = 0;
@@ -548,7 +548,7 @@
             // 
             // numericPropertiesHeight
             // 
-            numericPropertiesHeight.Location = new Point(94, 53);
+            numericPropertiesHeight.Location = new Point(107, 53);
             numericPropertiesHeight.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             numericPropertiesHeight.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numericPropertiesHeight.Name = "numericPropertiesHeight";
@@ -562,7 +562,7 @@
             // 
             // numericPropertiesY
             // 
-            numericPropertiesY.Location = new Point(94, 24);
+            numericPropertiesY.Location = new Point(107, 24);
             numericPropertiesY.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             numericPropertiesY.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
             numericPropertiesY.Name = "numericPropertiesY";
@@ -603,7 +603,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(74, 55);
+            label5.Location = new Point(82, 55);
             label5.Name = "label5";
             label5.Size = new Size(16, 15);
             label5.TabIndex = 5;
@@ -621,7 +621,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(74, 26);
+            label3.Location = new Point(82, 26);
             label3.Name = "label3";
             label3.Size = new Size(14, 15);
             label3.TabIndex = 3;
@@ -650,7 +650,7 @@
             buttonPropertiesColorLine.BackColor = Color.FromArgb(0, 192, 0);
             buttonPropertiesColorLine.FlatAppearance.BorderColor = Color.Black;
             buttonPropertiesColorLine.FlatStyle = FlatStyle.Flat;
-            buttonPropertiesColorLine.Location = new Point(79, 2);
+            buttonPropertiesColorLine.Location = new Point(90, 2);
             buttonPropertiesColorLine.Name = "buttonPropertiesColorLine";
             buttonPropertiesColorLine.Size = new Size(60, 23);
             buttonPropertiesColorLine.TabIndex = 13;
@@ -672,13 +672,13 @@
             // 
             textBoxSymbolText.Location = new Point(4, 23);
             textBoxSymbolText.Name = "textBoxSymbolText";
-            textBoxSymbolText.Size = new Size(135, 23);
+            textBoxSymbolText.Size = new Size(146, 23);
             textBoxSymbolText.TabIndex = 26;
             textBoxSymbolText.TextChanged += TextBoxSymbolText_TextChanged;
             // 
             // numericPropertiesLineWeight
             // 
-            numericPropertiesLineWeight.Location = new Point(95, 30);
+            numericPropertiesLineWeight.Location = new Point(107, 30);
             numericPropertiesLineWeight.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
             numericPropertiesLineWeight.Name = "numericPropertiesLineWeight";
             numericPropertiesLineWeight.Size = new Size(43, 23);
@@ -693,7 +693,7 @@
             buttonPropertiesColorFill.BackColor = Color.FromArgb(0, 192, 0);
             buttonPropertiesColorFill.FlatAppearance.BorderColor = Color.Black;
             buttonPropertiesColorFill.FlatStyle = FlatStyle.Flat;
-            buttonPropertiesColorFill.Location = new Point(79, 2);
+            buttonPropertiesColorFill.Location = new Point(90, 2);
             buttonPropertiesColorFill.Name = "buttonPropertiesColorFill";
             buttonPropertiesColorFill.Size = new Size(60, 23);
             buttonPropertiesColorFill.TabIndex = 14;
@@ -818,7 +818,7 @@
             // checkBoxUnderline
             // 
             checkBoxUnderline.AutoSize = true;
-            checkBoxUnderline.Location = new Point(73, 121);
+            checkBoxUnderline.Location = new Point(76, 121);
             checkBoxUnderline.Name = "checkBoxUnderline";
             checkBoxUnderline.Size = new Size(77, 19);
             checkBoxUnderline.TabIndex = 34;
@@ -829,7 +829,7 @@
             // checkBoxStrikeout
             // 
             checkBoxStrikeout.AutoSize = true;
-            checkBoxStrikeout.Location = new Point(3, 121);
+            checkBoxStrikeout.Location = new Point(6, 121);
             checkBoxStrikeout.Name = "checkBoxStrikeout";
             checkBoxStrikeout.Size = new Size(73, 19);
             checkBoxStrikeout.TabIndex = 33;
@@ -840,7 +840,7 @@
             // checkBoxFontItalic
             // 
             checkBoxFontItalic.AutoSize = true;
-            checkBoxFontItalic.Location = new Point(73, 102);
+            checkBoxFontItalic.Location = new Point(76, 102);
             checkBoxFontItalic.Name = "checkBoxFontItalic";
             checkBoxFontItalic.Size = new Size(51, 19);
             checkBoxFontItalic.TabIndex = 32;
@@ -851,7 +851,7 @@
             // checkBoxFontBold
             // 
             checkBoxFontBold.AutoSize = true;
-            checkBoxFontBold.Location = new Point(3, 102);
+            checkBoxFontBold.Location = new Point(6, 102);
             checkBoxFontBold.Name = "checkBoxFontBold";
             checkBoxFontBold.Size = new Size(50, 19);
             checkBoxFontBold.TabIndex = 31;
@@ -879,7 +879,7 @@
             // 
             // numericPropertiesFontSize
             // 
-            numericPropertiesFontSize.Location = new Point(74, 51);
+            numericPropertiesFontSize.Location = new Point(85, 51);
             numericPropertiesFontSize.Maximum = new decimal(new int[] { 200, 0, 0, 0 });
             numericPropertiesFontSize.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
             numericPropertiesFontSize.Name = "numericPropertiesFontSize";
@@ -893,7 +893,7 @@
             comboBoxFontFamily.FormattingEnabled = true;
             comboBoxFontFamily.Location = new Point(3, 77);
             comboBoxFontFamily.Name = "comboBoxFontFamily";
-            comboBoxFontFamily.Size = new Size(135, 23);
+            comboBoxFontFamily.Size = new Size(147, 23);
             comboBoxFontFamily.TabIndex = 27;
             comboBoxFontFamily.TextChanged += ComboBoxFontFamily_ValueMemberChanged;
             // 
@@ -923,7 +923,7 @@
             comboBoxBlendMode.Items.AddRange(new object[] { "Multiply", "Lighten", "Darken", "Desaturate", "Normal", "Divide", "Invert" });
             comboBoxBlendMode.Location = new Point(3, 22);
             comboBoxBlendMode.Name = "comboBoxBlendMode";
-            comboBoxBlendMode.Size = new Size(135, 23);
+            comboBoxBlendMode.Size = new Size(147, 23);
             comboBoxBlendMode.TabIndex = 0;
             comboBoxBlendMode.Text = "Multiply";
             toolTip1.SetToolTip(comboBoxBlendMode, "Changes how the higlighter color affects the undelying image. Multiply or Darken is usually the best choice");
@@ -981,7 +981,7 @@
             // numericBlurMosaicSize
             // 
             numericBlurMosaicSize.AccessibleName = "Mosaic pixel size (applies to all blur symbols)";
-            numericBlurMosaicSize.Location = new Point(92, 3);
+            numericBlurMosaicSize.Location = new Point(103, 3);
             numericBlurMosaicSize.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
             numericBlurMosaicSize.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
             numericBlurMosaicSize.Name = "numericBlurMosaicSize";
@@ -1007,7 +1007,7 @@
             // 
             checkBoxPropertiesShadow.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             checkBoxPropertiesShadow.AutoSize = true;
-            checkBoxPropertiesShadow.Location = new Point(3, 4);
+            checkBoxPropertiesShadow.Location = new Point(6, 4);
             checkBoxPropertiesShadow.Name = "checkBoxPropertiesShadow";
             checkBoxPropertiesShadow.Size = new Size(68, 19);
             checkBoxPropertiesShadow.TabIndex = 30;
@@ -1134,7 +1134,7 @@
             // 
             numericPropertiesCurveTension.DecimalPlaces = 1;
             numericPropertiesCurveTension.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numericPropertiesCurveTension.Location = new Point(89, 24);
+            numericPropertiesCurveTension.Location = new Point(101, 24);
             numericPropertiesCurveTension.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
             numericPropertiesCurveTension.Name = "numericPropertiesCurveTension";
             numericPropertiesCurveTension.Size = new Size(49, 23);
@@ -1146,7 +1146,7 @@
             // checkBoxPropertiesCloseCurve
             // 
             checkBoxPropertiesCloseCurve.AutoSize = true;
-            checkBoxPropertiesCloseCurve.Location = new Point(3, 4);
+            checkBoxPropertiesCloseCurve.Location = new Point(7, 4);
             checkBoxPropertiesCloseCurve.Name = "checkBoxPropertiesCloseCurve";
             checkBoxPropertiesCloseCurve.Size = new Size(89, 19);
             checkBoxPropertiesCloseCurve.TabIndex = 0;
@@ -1162,19 +1162,30 @@
             toolTip1.InitialDelay = 200;
             toolTip1.ReshowDelay = 40;
             // 
-            // panelPropertiesAngle
+            // panelPropertiesImage
             // 
-            panelPropertiesAngle.Controls.Add(labelRotation);
-            panelPropertiesAngle.Controls.Add(numericPropertiesRotation);
-            panelPropertiesAngle.Location = new Point(971, 711);
-            panelPropertiesAngle.Name = "panelPropertiesAngle";
-            panelPropertiesAngle.Size = new Size(153, 33);
-            panelPropertiesAngle.TabIndex = 37;
+            panelPropertiesImage.Controls.Add(buttonResetImageSize);
+            panelPropertiesImage.Controls.Add(labelRotation);
+            panelPropertiesImage.Controls.Add(numericPropertiesRotation);
+            panelPropertiesImage.Location = new Point(971, 711);
+            panelPropertiesImage.Name = "panelPropertiesImage";
+            panelPropertiesImage.Size = new Size(153, 56);
+            panelPropertiesImage.TabIndex = 37;
+            // 
+            // buttonResetImageSize
+            // 
+            buttonResetImageSize.Location = new Point(4, 3);
+            buttonResetImageSize.Name = "buttonResetImageSize";
+            buttonResetImageSize.Size = new Size(94, 23);
+            buttonResetImageSize.TabIndex = 2;
+            buttonResetImageSize.Text = "Reset size";
+            buttonResetImageSize.UseVisualStyleBackColor = true;
+            buttonResetImageSize.Click += buttonResetImageSize_Click;
             // 
             // labelRotation
             // 
             labelRotation.AutoSize = true;
-            labelRotation.Location = new Point(4, 8);
+            labelRotation.Location = new Point(4, 31);
             labelRotation.Name = "labelRotation";
             labelRotation.Size = new Size(52, 15);
             labelRotation.TabIndex = 1;
@@ -1183,7 +1194,7 @@
             // numericPropertiesRotation
             // 
             numericPropertiesRotation.DecimalPlaces = 1;
-            numericPropertiesRotation.Location = new Point(89, 6);
+            numericPropertiesRotation.Location = new Point(100, 29);
             numericPropertiesRotation.Maximum = new decimal(new int[] { 720, 0, 0, 0 });
             numericPropertiesRotation.Minimum = new decimal(new int[] { 720, 0, 0, int.MinValue });
             numericPropertiesRotation.Name = "numericPropertiesRotation";
@@ -1198,7 +1209,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1126, 774);
-            Controls.Add(panelPropertiesAngle);
+            Controls.Add(panelPropertiesImage);
             Controls.Add(panelPropertiesPolygon);
             Controls.Add(panelPropertiesBlur);
             Controls.Add(panelPropertiesCrop);
@@ -1259,8 +1270,8 @@
             panelPropertiesPolygon.ResumeLayout(false);
             panelPropertiesPolygon.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesCurveTension).EndInit();
-            panelPropertiesAngle.ResumeLayout(false);
-            panelPropertiesAngle.PerformLayout();
+            panelPropertiesImage.ResumeLayout(false);
+            panelPropertiesImage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesRotation).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -1359,8 +1370,9 @@
         private NumericUpDown numericPropertiesCurveTension;
         private ToolTip toolTip1;
         private Button buttonStickers;
-        private Panel panelPropertiesAngle;
+        private Panel panelPropertiesImage;
         private Label labelRotation;
         private NumericUpDown numericPropertiesRotation;
+        private Button buttonResetImageSize;
     }
 }
