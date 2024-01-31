@@ -323,7 +323,7 @@ public partial class ScreenshotEditor : Form
             }
             if (gsImage.ValidSymbol)
             {
-                AddNewSymbolToList(gsImage);
+                AddNewSymbolToList(gsImage, -1, fileName);
             }
             else
             {
@@ -596,7 +596,7 @@ public partial class ScreenshotEditor : Form
 
     #region Symbol Properties panel ---------------------------------------------------------------------
 
-    public void AddNewSymbolToList(GraphicSymbol symbol, int index = -1)
+    public void AddNewSymbolToList(GraphicSymbol symbol, int index = -1, string name = "")
     {
         if (symbol != null)
         {
@@ -615,6 +615,11 @@ public partial class ScreenshotEditor : Form
             newItem.Text = symbol.Name;
             newItem.Tag = symbol;
             symbol.ListViewItem = newItem;
+            if (name.Length > 0)
+            {
+                symbol.Name = Path.GetFileNameWithoutExtension(name);
+                newItem.Text = Path.GetFileNameWithoutExtension(name);
+            }
 
             listViewSymbols.Update();
             if (listViewSymbols.Items.Count > 0 && selectedUserAction != UserActions.DrawFreehand)
@@ -1386,6 +1391,19 @@ public partial class ScreenshotEditor : Form
 
     #region Drag and Drop -------------------------------------------------------------------------------
 
+    private List<string> GetDroppedFileNames(DragEventArgs e)
+    {
+        if (e.Data == null) return [];
+        string[]? fileNames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
+        if (fileNames == null) return [];
+        return [.. fileNames];
+    }
+
+    private Point GetDropLocation(DragEventArgs e, Control control)
+    {
+        return control.PointToClient(new Point(e.X, e.Y));
+    }
+
     private void ScreenshotEditor_DragEnter(object sender, DragEventArgs e)
     {
         if (e.Data == null) return;
@@ -1402,21 +1420,17 @@ public partial class ScreenshotEditor : Form
     private void ScreenshotEditor_DragDrop(object sender, DragEventArgs e)
     {
         if (e.Data == null) return;
-        IDataObject dataObject = (IDataObject)e.Data;
-        var dropObject = dataObject.GetData(DataFormats.FileDrop, false);
-        if (dropObject != null)
+        List<string> fileNames = GetDroppedFileNames(e);
+        Point location = GetDropLocation(e, pictureBoxOverlay);
+        for (int i = 0; i < fileNames.Count; i++)
         {
-            string[] filePaths = (string[])dropObject;
-            for (int i = 0; i < filePaths.Length; i++)
+            Point dropOffset = new Point(i * 20, i * 20);
+            Point dropLocation = location.Addition(dropOffset);
+            if (pictureBoxOverlay.Bounds.Contains(dropLocation) == false)
             {
-                Point dropOffset = new Point(i * 20, i * 20);
-                Point dropLocation = pictureBoxOverlay.PointToClient(new Point(e.X, e.Y)).Addition(dropOffset);
-                if (pictureBoxOverlay.Bounds.Contains(dropLocation) == false)
-                {
-                    dropLocation = new Point(pictureBoxOverlay.Width /2, pictureBoxOverlay.Height / 2).Addition(dropOffset);
-                }
-                InsertImageFromFile(dropLocation, filePaths[i], center: true);
+                dropLocation = new Point(pictureBoxOverlay.Width /2, pictureBoxOverlay.Height / 2).Addition(dropOffset);
             }
+            InsertImageFromFile(dropLocation, fileNames[i], center: true);
         }
     }
     #endregion
