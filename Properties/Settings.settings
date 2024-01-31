@@ -224,5 +224,8 @@
     <Setting Name="SelectAfterFreehand" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="StickerFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">.\img\stickers</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

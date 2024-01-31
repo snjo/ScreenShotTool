@@ -98,6 +98,8 @@ namespace ScreenShotTool
             numericBlurMosaicSize.SetValueClamped(settings.BlurMosaicSize);
             numericBlurSampleArea.SetValueClamped(settings.BlurSampleArea);
 
+            textBoxStickerFolder.Text = settings.StickerFolder;
+
             //Tab: Hotkeys
 
             FillHotkeyGrid();
@@ -194,6 +196,8 @@ namespace ScreenShotTool
 
             settings.BlurMosaicSize = numericBlurMosaicSize.ValueInt();
             settings.BlurSampleArea = numericBlurSampleArea.ValueInt();
+
+            settings.StickerFolder = textBoxStickerFolder.Text;
 
             //Tab: Hotkeys
             int i = 0;
@@ -382,6 +386,14 @@ namespace ScreenShotTool
             {
                 checkBoxSelectAfterFreehand.Enabled = false;
             }
+        }
+
+        private void buttonSelectStickerFolder_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog dialog = new();
+            dialog.ShowDialog();
+            textBoxStickerFolder.Text = dialog.SelectedPath;
+            dialog.Dispose();
         }
     }
 }

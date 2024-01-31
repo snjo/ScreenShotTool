@@ -115,6 +115,10 @@
             ColumnShift = new DataGridViewCheckBoxColumn();
             ColumnWin = new DataGridViewCheckBoxColumn();
             tabPageEditor = new TabPage();
+            buttonSelectStickerFolder = new Button();
+            label39 = new Label();
+            textBoxStickerFolder = new TextBox();
+            label38 = new Label();
             checkBoxSelectAfterFreehand = new CheckBox();
             label37 = new Label();
             numericLineWeight = new NumericUpDown();
@@ -1037,6 +1041,10 @@
             // 
             // tabPageEditor
             // 
+            tabPageEditor.Controls.Add(buttonSelectStickerFolder);
+            tabPageEditor.Controls.Add(label39);
+            tabPageEditor.Controls.Add(textBoxStickerFolder);
+            tabPageEditor.Controls.Add(label38);
             tabPageEditor.Controls.Add(checkBoxSelectAfterFreehand);
             tabPageEditor.Controls.Add(label37);
             tabPageEditor.Controls.Add(numericLineWeight);
@@ -1066,6 +1074,42 @@
             tabPageEditor.TabIndex = 4;
             tabPageEditor.Text = "Editor";
             tabPageEditor.UseVisualStyleBackColor = true;
+            // 
+            // buttonSelectStickerFolder
+            // 
+            buttonSelectStickerFolder.Location = new Point(376, 409);
+            buttonSelectStickerFolder.Name = "buttonSelectStickerFolder";
+            buttonSelectStickerFolder.Size = new Size(75, 23);
+            buttonSelectStickerFolder.TabIndex = 109;
+            buttonSelectStickerFolder.Text = "Select";
+            buttonSelectStickerFolder.UseVisualStyleBackColor = true;
+            buttonSelectStickerFolder.Click += buttonSelectStickerFolder_Click;
+            // 
+            // label39
+            // 
+            label39.AutoSize = true;
+            label39.Location = new Point(17, 412);
+            label39.Name = "label39";
+            label39.Size = new Size(76, 15);
+            label39.TabIndex = 108;
+            label39.Text = "Sticker folder";
+            // 
+            // textBoxStickerFolder
+            // 
+            textBoxStickerFolder.Location = new Point(99, 409);
+            textBoxStickerFolder.Name = "textBoxStickerFolder";
+            textBoxStickerFolder.Size = new Size(271, 23);
+            textBoxStickerFolder.TabIndex = 107;
+            // 
+            // label38
+            // 
+            label38.AutoSize = true;
+            label38.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label38.Location = new Point(6, 391);
+            label38.Name = "label38";
+            label38.Size = new Size(52, 15);
+            label38.TabIndex = 106;
+            label38.Text = "Stickers";
             // 
             // checkBoxSelectAfterFreehand
             // 
@@ -1453,5 +1497,9 @@
         private CheckBox checkBoxRegionCaptureUseAllScreens;
         private CheckBox checkBoxAutorun;
         private CheckBox checkBoxSelectAfterFreehand;
+        private Label label39;
+        private TextBox textBoxStickerFolder;
+        private Label label38;
+        private Button buttonSelectStickerFolder;
     }
 }

@@ -910,5 +910,17 @@ namespace ScreenShotTool.Properties {
                 this["SelectAfterFreehand"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(".\\img\\stickers")]
+        public string StickerFolder {
+            get {
+                return ((string)(this["StickerFolder"]));
+            }
+            set {
+                this["StickerFolder"] = value;
+            }
+        }
     }
 }

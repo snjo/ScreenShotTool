@@ -1307,7 +1307,7 @@ public partial class ScreenshotEditor : Form
 
     private void ButtonStickers_Click(object sender, EventArgs e)
     {
-        string stickerFolder = Path.GetFullPath(@".\img\stickers");
+        string stickerFolder = Path.GetFullPath(Settings.Default.StickerFolder);
         InsertImageFromFileDialog(new Point(editorCanvas.CanvasSize.Width / 2, editorCanvas.CanvasSize.Height / 2), stickerFolder);
     }
 
