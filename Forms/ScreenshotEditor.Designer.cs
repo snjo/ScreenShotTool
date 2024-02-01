@@ -129,6 +129,7 @@
             timerAfterLoad = new System.Windows.Forms.Timer(components);
             TimerUpdateOverlay = new System.Windows.Forms.Timer(components);
             toolTip1 = new ToolTip(components);
+            toolStripMenuItem1 = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
@@ -170,7 +171,7 @@
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { itemNewImage, itemSave, itemLoadFromFile, itemLoadFromClipboard, itemExit });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { itemNewImage, itemSave, itemLoadFromFile, toolStripMenuItem1, itemLoadFromClipboard, itemExit });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "File";
@@ -1262,6 +1263,13 @@
             toolTip1.InitialDelay = 200;
             toolTip1.ReshowDelay = 40;
             // 
+            // toolStripMenuItem1
+            // 
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new Size(184, 22);
+            toolStripMenuItem1.Text = "Print...";
+            toolStripMenuItem1.Click += toolStripMenuItem1_Click;
+            // 
             // ScreenshotEditor
             // 
             AllowDrop = true;
@@ -1426,5 +1434,6 @@
         private Panel panel3;
         private Splitter splitter1;
         private Splitter splitter2;
+        private ToolStripMenuItem toolStripMenuItem1;
     }
 }

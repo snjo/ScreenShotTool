@@ -3,6 +3,7 @@
 ## TODO:
 - text multi line
 - Undo?
+- PDF support for acp?
 
 ## 1.8
 
