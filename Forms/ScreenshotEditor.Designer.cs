@@ -58,7 +58,7 @@
             buttonCircle = new Button();
             buttonRectangle = new Button();
             numericNewLineWeight = new NumericUpDown();
-            panelImage = new Panel();
+            panelImage = new PanelNoScrollOnFocus();
             pictureBoxOverlay = new PictureBox();
             listViewSymbols = new ListView();
             columnHeaderType = new ColumnHeader();
@@ -164,7 +164,7 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, editToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(1167, 24);
+            menuStrip1.Size = new Size(898, 24);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -265,7 +265,7 @@
             panelButtons.Dock = DockStyle.Left;
             panelButtons.Location = new Point(0, 0);
             panelButtons.Name = "panelButtons";
-            panelButtons.Size = new Size(46, 822);
+            panelButtons.Size = new Size(46, 558);
             panelButtons.TabIndex = 1;
             // 
             // buttonStickers
@@ -496,12 +496,11 @@
             // 
             panelImage.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             panelImage.AutoScroll = true;
-            panelImage.AutoSize = true;
             panelImage.BackColor = SystemColors.ControlDark;
             panelImage.Controls.Add(pictureBoxOverlay);
-            panelImage.Location = new Point(58, 34);
+            panelImage.Location = new Point(49, 34);
             panelImage.Name = "panelImage";
-            panelImage.Size = new Size(908, 785);
+            panelImage.Size = new Size(649, 521);
             panelImage.TabIndex = 3;
             // 
             // pictureBoxOverlay
@@ -510,7 +509,6 @@
             pictureBoxOverlay.Location = new Point(0, 0);
             pictureBoxOverlay.Name = "pictureBoxOverlay";
             pictureBoxOverlay.Size = new Size(500, 500);
-            pictureBoxOverlay.SizeMode = PictureBoxSizeMode.AutoSize;
             pictureBoxOverlay.TabIndex = 1;
             pictureBoxOverlay.TabStop = false;
             pictureBoxOverlay.MouseDown += PictureBoxOverlay_MouseDown;
@@ -538,6 +536,7 @@
             // 
             // panelPropertiesPosition
             // 
+            panelPropertiesPosition.BorderStyle = BorderStyle.FixedSingle;
             panelPropertiesPosition.Controls.Add(numericPropertiesHeight);
             panelPropertiesPosition.Controls.Add(numericPropertiesY);
             panelPropertiesPosition.Controls.Add(numericPropertiesWidth);
@@ -549,7 +548,7 @@
             panelPropertiesPosition.Controls.Add(labelSymbolType);
             panelPropertiesPosition.Location = new Point(3, 91);
             panelPropertiesPosition.Name = "panelPropertiesPosition";
-            panelPropertiesPosition.Size = new Size(170, 78);
+            panelPropertiesPosition.Size = new Size(170, 80);
             panelPropertiesPosition.TabIndex = 4;
             // 
             // numericPropertiesHeight
@@ -796,15 +795,17 @@
             // 
             // panelPropertiesFill
             // 
+            panelPropertiesFill.BorderStyle = BorderStyle.FixedSingle;
             panelPropertiesFill.Controls.Add(label7);
             panelPropertiesFill.Controls.Add(buttonPropertiesColorFill);
             panelPropertiesFill.Location = new Point(3, 382);
             panelPropertiesFill.Name = "panelPropertiesFill";
-            panelPropertiesFill.Size = new Size(170, 27);
+            panelPropertiesFill.Size = new Size(170, 29);
             panelPropertiesFill.TabIndex = 27;
             // 
             // panelPropertiesText
             // 
+            panelPropertiesText.BorderStyle = BorderStyle.FixedSingle;
             panelPropertiesText.Controls.Add(checkBoxUnderline);
             panelPropertiesText.Controls.Add(checkBoxStrikeout);
             panelPropertiesText.Controls.Add(checkBoxFontItalic);
@@ -903,11 +904,12 @@
             // 
             // panelPropertiesHighlight
             // 
+            panelPropertiesHighlight.BorderStyle = BorderStyle.FixedSingle;
             panelPropertiesHighlight.Controls.Add(label18);
             panelPropertiesHighlight.Controls.Add(comboBoxBlendMode);
             panelPropertiesHighlight.Location = new Point(3, 472);
             panelPropertiesHighlight.Name = "panelPropertiesHighlight";
-            panelPropertiesHighlight.Size = new Size(170, 47);
+            panelPropertiesHighlight.Size = new Size(170, 49);
             panelPropertiesHighlight.TabIndex = 31;
             panelPropertiesHighlight.Visible = false;
             // 
@@ -944,16 +946,16 @@
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(0, 24);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1167, 824);
+            panel1.Size = new Size(898, 560);
             panel1.TabIndex = 29;
             panel1.Paint += panel1_Paint;
             // 
             // splitter2
             // 
             splitter2.Dock = DockStyle.Right;
-            splitter2.Location = new Point(972, 32);
+            splitter2.Location = new Point(700, 32);
             splitter2.Name = "splitter2";
-            splitter2.Size = new Size(3, 790);
+            splitter2.Size = new Size(3, 526);
             splitter2.TabIndex = 41;
             splitter2.TabStop = false;
             // 
@@ -961,7 +963,7 @@
             // 
             splitter1.Location = new Point(46, 32);
             splitter1.Name = "splitter1";
-            splitter1.Size = new Size(10, 790);
+            splitter1.Size = new Size(3, 526);
             splitter1.TabIndex = 40;
             splitter1.TabStop = false;
             // 
@@ -978,7 +980,7 @@
             panel3.Dock = DockStyle.Top;
             panel3.Location = new Point(46, 0);
             panel3.Name = "panel3";
-            panel3.Size = new Size(929, 32);
+            panel3.Size = new Size(657, 32);
             panel3.TabIndex = 39;
             // 
             // label19
@@ -1006,6 +1008,7 @@
             // 
             // panel2
             // 
+            panel2.AutoScroll = true;
             panel2.Controls.Add(listViewSymbols);
             panel2.Controls.Add(panelPropertiesImage);
             panel2.Controls.Add(panelPropertiesPosition);
@@ -1019,13 +1022,14 @@
             panel2.Controls.Add(panelPropertiesCrop);
             panel2.Controls.Add(panelPropertiesBlur);
             panel2.Dock = DockStyle.Right;
-            panel2.Location = new Point(975, 0);
+            panel2.Location = new Point(703, 0);
             panel2.Name = "panel2";
-            panel2.Size = new Size(190, 822);
+            panel2.Size = new Size(193, 558);
             panel2.TabIndex = 38;
             // 
             // panelPropertiesImage
             // 
+            panelPropertiesImage.BorderStyle = BorderStyle.FixedSingle;
             panelPropertiesImage.Controls.Add(buttonResetImageSize);
             panelPropertiesImage.Controls.Add(labelRotation);
             panelPropertiesImage.Controls.Add(numericPropertiesRotation);
@@ -1067,6 +1071,7 @@
             // 
             // panelPropertiesPolygon
             // 
+            panelPropertiesPolygon.BorderStyle = BorderStyle.FixedSingle;
             panelPropertiesPolygon.Controls.Add(labelCurveTension);
             panelPropertiesPolygon.Controls.Add(numericPropertiesCurveTension);
             panelPropertiesPolygon.Controls.Add(checkBoxPropertiesCloseCurve);
@@ -1111,17 +1116,19 @@
             // 
             // panelPropertiesLine
             // 
+            panelPropertiesLine.BorderStyle = BorderStyle.FixedSingle;
             panelPropertiesLine.Controls.Add(numericPropertiesLineWeight);
             panelPropertiesLine.Controls.Add(label6);
             panelPropertiesLine.Controls.Add(buttonPropertiesColorLine);
             panelPropertiesLine.Controls.Add(label8);
             panelPropertiesLine.Location = new Point(3, 175);
             panelPropertiesLine.Name = "panelPropertiesLine";
-            panelPropertiesLine.Size = new Size(170, 55);
+            panelPropertiesLine.Size = new Size(170, 57);
             panelPropertiesLine.TabIndex = 2;
             // 
             // panelPropertiesDelete
             // 
+            panelPropertiesDelete.BorderStyle = BorderStyle.FixedSingle;
             panelPropertiesDelete.Controls.Add(buttonToBack);
             panelPropertiesDelete.Controls.Add(buttonToFront);
             panelPropertiesDelete.Controls.Add(buttonDeleteSymbol);
@@ -1154,6 +1161,7 @@
             // 
             // panelPropertiesShadow
             // 
+            panelPropertiesShadow.BorderStyle = BorderStyle.FixedSingle;
             panelPropertiesShadow.Controls.Add(checkBoxPropertiesShadow);
             panelPropertiesShadow.Location = new Point(3, 411);
             panelPropertiesShadow.Name = "panelPropertiesShadow";
@@ -1175,6 +1183,7 @@
             // 
             // panelPropertiesCrop
             // 
+            panelPropertiesCrop.BorderStyle = BorderStyle.FixedSingle;
             panelPropertiesCrop.Controls.Add(buttonPropertyCopyCrop);
             panelPropertiesCrop.Controls.Add(buttonPropertyCrop);
             panelPropertiesCrop.Location = new Point(3, 695);
@@ -1206,11 +1215,12 @@
             // 
             // panelPropertiesBlur
             // 
+            panelPropertiesBlur.BorderStyle = BorderStyle.FixedSingle;
             panelPropertiesBlur.Controls.Add(label17);
             panelPropertiesBlur.Controls.Add(numericBlurMosaicSize);
             panelPropertiesBlur.Location = new Point(3, 440);
             panelPropertiesBlur.Name = "panelPropertiesBlur";
-            panelPropertiesBlur.Size = new Size(170, 28);
+            panelPropertiesBlur.Size = new Size(170, 30);
             panelPropertiesBlur.TabIndex = 35;
             // 
             // label17
@@ -1257,7 +1267,7 @@
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1167, 848);
+            ClientSize = new Size(898, 584);
             Controls.Add(panel1);
             Controls.Add(menuStrip1);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -1276,7 +1286,6 @@
             panelButtons.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).EndInit();
             panelImage.ResumeLayout(false);
-            panelImage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxOverlay).EndInit();
             panelPropertiesPosition.ResumeLayout(false);
             panelPropertiesPosition.PerformLayout();
@@ -1293,7 +1302,6 @@
             panelPropertiesHighlight.ResumeLayout(false);
             panelPropertiesHighlight.PerformLayout();
             panel1.ResumeLayout(false);
-            panel1.PerformLayout();
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
             panel2.ResumeLayout(false);
@@ -1322,7 +1330,8 @@
         private Panel panelButtons;
         private ToolStripMenuItem fileToolStripMenuItem;
         private ToolStripMenuItem editToolStripMenuItem;
-        private Panel panelImage;
+        //private Panel panelImage;
+        private PanelNoScrollOnFocus panelImage;
         private ToolStripMenuItem itemSave;
         private ToolStripMenuItem itemLoadFromFile;
         private ToolStripMenuItem itemExit;

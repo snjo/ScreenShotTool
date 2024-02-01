@@ -700,7 +700,7 @@ public partial class ScreenshotEditor : Form
         panel.Enabled = true;
         panel.Visible = true;
         panel.Location = new Point(left, top);
-        top += panel.Height + 5;
+        top += panel.Height + 3;
     }
 
     private static void DisablePanel(Panel panel)
@@ -736,7 +736,7 @@ public partial class ScreenshotEditor : Form
     public void UpdatePropertiesPanel()
     {
         int panelLeft = listViewSymbols.Left;
-        int lastPanelBottom = listViewSymbols.Bottom;
+        int lastPanelBottom = listViewSymbols.Bottom + 3;
         if (listViewSymbols.SelectedItems.Count > 0)
         {
             ListViewItem item = listViewSymbols.SelectedItems[0];
