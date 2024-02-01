@@ -80,7 +80,6 @@
             // 
             // textBoxLog
             // 
-            textBoxLog.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             textBoxLog.Location = new Point(12, 369);
             textBoxLog.Multiline = true;
             textBoxLog.Name = "textBoxLog";
@@ -90,7 +89,6 @@
             // 
             // listViewThumbnails
             // 
-            listViewThumbnails.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             listViewThumbnails.ContextMenuStrip = contextMenuListView;
             listViewThumbnails.Location = new Point(12, 27);
             listViewThumbnails.Name = "listViewThumbnails";
@@ -239,14 +237,14 @@
             // 
             // labelShowLog
             // 
-            labelShowLog.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             labelShowLog.AutoSize = true;
-            labelShowLog.Location = new Point(239, 351);
+            labelShowLog.Font = new Font("Segoe UI", 7F);
+            labelShowLog.Location = new Point(242, 354);
             labelShowLog.Name = "labelShowLog";
-            labelShowLog.Size = new Size(52, 15);
+            labelShowLog.Size = new Size(42, 12);
             labelShowLog.TabIndex = 35;
             labelShowLog.Text = "Hide log";
-            labelShowLog.Click += Label1_Click;
+            labelShowLog.Click += LabelShowLog_Click;
             // 
             // menuStrip1
             // 

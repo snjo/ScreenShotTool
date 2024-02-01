@@ -1225,7 +1225,7 @@ namespace ScreenShotTool
 
         #endregion
 
-        private void Label1_Click(object sender, EventArgs e)
+        private void LabelShowLog_Click(object sender, EventArgs e)
         {
             showLog = !showLog;
             UpdateLogVisible();
@@ -1242,11 +1242,11 @@ namespace ScreenShotTool
             if (showLog)
             {
                 labelShowLog.Text = "Hide log";
-                labelShowLog.Location = new Point((internalCenter) - (labelShowLog.Width / 2), internalHeight - logHeight - labelShowLog.Height - 5);
-                textBoxLog.Visible = true;
-                textBoxLog.Location = new Point(logMargin, internalHeight - logHeight);
-                textBoxLog.Size = new Size(internalWidth - (logMargin * 2), logHeight - 5);
                 listViewThumbnails.Size = new Size(internalWidth - (logMargin * 2), internalHeight - logHeight - labelShowLog.Height - 40);
+                labelShowLog.Location = new Point((internalCenter) - (labelShowLog.Width / 2), internalHeight - logHeight - labelShowLog.Height - 5);
+                textBoxLog.Location = new Point(logMargin, internalHeight - logHeight);
+                textBoxLog.Visible = true;
+                textBoxLog.Size = new Size(internalWidth - (logMargin * 2), logHeight - 5);
             }
             else
             {
