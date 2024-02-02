@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -23,14 +24,15 @@ public partial class PrintDialog : Form
     public float MarginTop;
     public float MarginRight;
     public float MarginBottom;
-    public float ImageScale;
+    //public float ImageScale;
     public bool FitToPage;
     private System.Drawing.Bitmap? image;
     string preferredPaperSize = "A4"; // set with settings later?
+    bool creationComplete = false;
 
     private Print printer;
 
-    public PrintDialog(Print print, Bitmap? image)
+    public PrintDialog(Print print, Bitmap? image, float marginLeft = 5f, float marginRight = 5f, float marginTop = 5f, float marginBottom = 5f)
     {
         InitializeComponent();
         printer = print;
@@ -54,49 +56,80 @@ public partial class PrintDialog : Form
             PaperSize = firstPaper;
         }
 
-        ImageScale = 100f;
+        //ImageScale = 100f;
         this.image = image;
+        //MarginLeft = marginLeft;
+        //MarginRight = marginRight;
+        //MarginTop = marginTop;
+        //MarginBottom = marginBottom;
+        numericMarginLeft.Value = (decimal)marginLeft;
+        numericMarginRight.Value = (decimal)marginRight;
+        numericMarginTop.Value = (decimal)marginTop;
+        numericMarginBottom.Value = (decimal)marginBottom;
+        creationComplete = true;
+        UpdatePrinterValues();
         UpdatePreview();
     }
 
-    
+    private void UpdatePrinterValues()
+    {
+        if (creationComplete == false) return;
+        printer.MarginLeftPercent = (float)numericMarginLeft.Value;
+        printer.MarginRightPercent = (float)numericMarginRight.Value;
+        printer.MarginTopPercent = (float)numericMarginTop.Value;
+        printer.MarginBottomPercent = (float)numericMarginBottom.Value;
+        //printer.DPI = (float)numericDPI.Value;
+        printer.FitToPage = checkBoxFitToPage.Checked;
+        printer.ImageScale = (float)numericImageScale.Value;
+        if (printer.SelectPrinter(PrinterName) == false)
+        {
+            Debug.WriteLine($"Invalid printer name {PrinterName}, not set");
+        }
+        PaperSize? paperSize = printer.GetPaperSizeByName(PaperSize);
+        if (paperSize != null )
+        {
+            printer.PaperSize = paperSize;
+            Debug.WriteLine($"Paper size = {printer.PaperSize.PaperName}");
+        }
+        else
+        {
+            Debug.WriteLine("Invalind paper size");
+        }
+    }
 
     private void UpdatePreview()
     {
+        UpdatePrinterValues();
         if (image != null)
         {
             pictureBoxPreview.Image.DisposeAndNull();
-            pictureBoxPreview.Image = printer.CreatePrintImage(image, pictureBoxPreview.Size, ImageScale, FitToPage);
+            pictureBoxPreview.Image = printer.CreatePrintImage(image, pictureBoxPreview.Size, preview: true);
         }
     }
 
     private void comboBoxPrinters_TextChanged(object sender, EventArgs e)
     {
         PrinterName = comboBoxPrinters.Text;
+        UpdatePreview();
     }
 
     private void comboBoxPaper_TextChanged(object sender, EventArgs e)
     {
         PaperSize = comboBoxPaper.Text;
+        UpdatePreview();
     }
-    private void UpdateMargins(object sender, EventArgs e)
+    private void NumericChanged(object sender, EventArgs e)
     {
-        printer.MarginLeftPercent = (float)numericMarginLeft.Value;
-        printer.MarginRightPercent = (float)numericMarginRight.Value;
-        printer.MarginTopPercent = (float)numericMarginTop.Value;
-        printer.MarginBottomPercent = (float)numericMarginBottom.Value;
         UpdatePreview();
     }
 
     private void numericImageScale_ValueChanged(object sender, EventArgs e)
     {
-        ImageScale = (float)numericImageScale.Value;
         UpdatePreview();
     }
 
     private void checkBoxFitToPage_CheckedChanged(object sender, EventArgs e)
     {
-        FitToPage = checkBoxFitToPage.Checked;
         UpdatePreview();
     }
 }

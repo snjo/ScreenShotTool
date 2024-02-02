@@ -66,6 +66,7 @@
             // 
             // comboBoxPrinters
             // 
+            comboBoxPrinters.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxPrinters.FormattingEnabled = true;
             comboBoxPrinters.Location = new Point(108, 18);
             comboBoxPrinters.Name = "comboBoxPrinters";
@@ -84,6 +85,7 @@
             // 
             // comboBoxPaper
             // 
+            comboBoxPaper.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxPaper.FormattingEnabled = true;
             comboBoxPaper.Location = new Point(108, 53);
             comboBoxPaper.Name = "comboBoxPaper";
@@ -103,18 +105,20 @@
             // numericMarginLeft
             // 
             numericMarginLeft.Location = new Point(108, 106);
+            numericMarginLeft.Maximum = new decimal(new int[] { 45, 0, 0, 0 });
             numericMarginLeft.Name = "numericMarginLeft";
             numericMarginLeft.Size = new Size(66, 23);
             numericMarginLeft.TabIndex = 5;
-            numericMarginLeft.ValueChanged += UpdateMargins;
+            numericMarginLeft.ValueChanged += NumericChanged;
             // 
             // numericMarginTop
             // 
             numericMarginTop.Location = new Point(108, 132);
+            numericMarginTop.Maximum = new decimal(new int[] { 45, 0, 0, 0 });
             numericMarginTop.Name = "numericMarginTop";
             numericMarginTop.Size = new Size(66, 23);
             numericMarginTop.TabIndex = 7;
-            numericMarginTop.ValueChanged += UpdateMargins;
+            numericMarginTop.ValueChanged += NumericChanged;
             // 
             // label4
             // 
@@ -147,16 +151,19 @@
             // 
             // numericImageScale
             // 
-            numericImageScale.Location = new Point(101, 197);
+            numericImageScale.Location = new Point(108, 174);
+            numericImageScale.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+            numericImageScale.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
             numericImageScale.Name = "numericImageScale";
             numericImageScale.Size = new Size(66, 23);
             numericImageScale.TabIndex = 10;
+            numericImageScale.Value = new decimal(new int[] { 300, 0, 0, 0 });
             numericImageScale.ValueChanged += numericImageScale_ValueChanged;
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(12, 199);
+            label5.Location = new Point(12, 176);
             label5.Name = "label5";
             label5.Size = new Size(70, 15);
             label5.TabIndex = 11;
@@ -165,11 +172,13 @@
             // checkBoxFitToPage
             // 
             checkBoxFitToPage.AutoSize = true;
-            checkBoxFitToPage.Location = new Point(12, 172);
+            checkBoxFitToPage.Checked = true;
+            checkBoxFitToPage.CheckState = CheckState.Checked;
+            checkBoxFitToPage.Location = new Point(12, 203);
             checkBoxFitToPage.Name = "checkBoxFitToPage";
-            checkBoxFitToPage.Size = new Size(82, 19);
+            checkBoxFitToPage.Size = new Size(116, 19);
             checkBoxFitToPage.TabIndex = 12;
-            checkBoxFitToPage.Text = "Fit to Page";
+            checkBoxFitToPage.Text = "Shrink to fit page";
             checkBoxFitToPage.UseVisualStyleBackColor = true;
             checkBoxFitToPage.CheckedChanged += checkBoxFitToPage_CheckedChanged;
             // 
@@ -185,18 +194,20 @@
             // numericMarginRight
             // 
             numericMarginRight.Location = new Point(246, 106);
+            numericMarginRight.Maximum = new decimal(new int[] { 45, 0, 0, 0 });
             numericMarginRight.Name = "numericMarginRight";
             numericMarginRight.Size = new Size(66, 23);
             numericMarginRight.TabIndex = 14;
-            numericMarginRight.ValueChanged += UpdateMargins;
+            numericMarginRight.ValueChanged += NumericChanged;
             // 
             // numericMarginBottom
             // 
             numericMarginBottom.Location = new Point(246, 132);
+            numericMarginBottom.Maximum = new decimal(new int[] { 45, 0, 0, 0 });
             numericMarginBottom.Name = "numericMarginBottom";
             numericMarginBottom.Size = new Size(66, 23);
             numericMarginBottom.TabIndex = 16;
-            numericMarginBottom.ValueChanged += UpdateMargins;
+            numericMarginBottom.ValueChanged += NumericChanged;
             // 
             // label7
             // 

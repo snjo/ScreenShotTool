@@ -1540,7 +1540,8 @@ public partial class ScreenshotEditor : Form
             DialogResult result = printDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                print.SelectPrinter(printDialog.PrinterName);
+                //print.SelectPrinter(printDialog.PrinterName);
+                
                 //print.
                 print.PrintImage(outImage);
             }
