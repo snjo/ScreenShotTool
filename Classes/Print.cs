@@ -25,7 +25,6 @@ public class Print
     public float MarginRightPercent = 5f;
     public float MarginTopPercent = 5f;
     public float MarginBottomPercent = 5f;
-    //public float DPI = 100;
     public float ImageScale = 100;
     public bool FitToPage = true;
 
@@ -41,8 +40,6 @@ public class Print
         {
             printDocument.DefaultPageSettings.PaperSize = sizeA4;
         }
-        //printDocument.PrinterSettings.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);
-        //printDocument.DefaultPageSettings.PrinterResolution.Kind = PrinterResolutionKind.Low;
     }
 
 
@@ -68,10 +65,6 @@ public class Print
         return GetPrintersByWildcard("PDF");
     }
 
-    /// <summary>
-    /// Gets the size of the selected paper
-    /// </summary>
-    /// <returns>Paper size in hundreths of an inch</returns>
     public PaperSize PaperSize
     {
         get
@@ -83,14 +76,6 @@ public class Print
             printDocument.DefaultPageSettings.PaperSize = value;
         }
     }
-    
-    //public Size GetCurrentPaperSizeInPixels()
-    //{
-    //    SizeF sizeInHundredthsInches = GetCurrentPaperSize();
-    //    SizeF sizeInInches = new SizeF(sizeInHundredthsInches.Width / 100f, sizeInHundredthsInches.Height / 100f);
-    //    return new Size(Size.wi)
-    //}
-
 
     public List<PaperSize> GetPaperSizes()
     {
@@ -153,9 +138,7 @@ public class Print
     public void PrintImage(Bitmap image)
     {
         imageToPrint = image;
-        Debug.WriteLine($"Printing image {imageToPrint.Width}x{imageToPrint.Height} to printer {printDocument.PrinterSettings.PrinterName}");
         printDocument.PrintPage += new PrintPageEventHandler(PrintPageImage);
-        //printDocument.PrinterSettings.
         printDocument.Print();
     }
 
@@ -180,7 +163,6 @@ public class Print
         float bottom = (canvasSize.Height * (MarginBottomPercent / 100f));
         RectangleF marginRect = new RectangleF(left, top, canvasSize.Width - right - left, canvasSize.Height - bottom - top);
         SizeF imgDrawSize = new SizeF(image.Size.Width / outputRatio * scale, image.Size.Height / outputRatio * scale);
-        Debug.WriteLine($"imgDrawSize: {imgDrawSize}");
         float imageRatio = imgDrawSize.Width / imgDrawSize.Height;
         if (FitToPage)
         {
@@ -211,8 +193,6 @@ public class Print
         }
         float leftMargin = ev.MarginBounds.Left;
         float topMargin = ev.MarginBounds.Top;
-        Debug.WriteLine($"Printing page {imageToPrint.Width}x{imageToPrint.Height} to printer {printDocument.PrinterSettings.PrinterName}");
-        Debug.WriteLine($"DPI X:{ev.Graphics.DpiX} Y: {ev.Graphics.DpiY}, W {ev.PageBounds.Width} H {ev.PageBounds.Height}");
         float areaX = (int)printDocument.DefaultPageSettings.PrintableArea.Width;
         float areaY = (int)printDocument.DefaultPageSettings.PrintableArea.Height;
         int dpiX = printDocument.DefaultPageSettings.PrinterResolution.X;
@@ -220,11 +200,6 @@ public class Print
         float resX = areaX * dpiX / 100f;
         float resY = areaY * dpiY / 100f;
 
-        Debug.WriteLine(
-            $"area X {areaX} Y {areaY}\n" +
-            $"dpi  X {dpiX} Y {dpiY}\n" +
-            $"res  X {resX} Y {resY}\n" +
-            $"with default {printDocument.DefaultPageSettings.PrinterResolution}");
         Bitmap imageOut = CreatePrintImage(imageToPrint, new SizeF(resX, resY), preview: false, dpiX);
         ev.Graphics.DrawImage(imageOut, new Rectangle(0, 0, ev.PageBounds.Width, ev.PageBounds.Height));
         imageOut.Dispose();

@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
+﻿using System.Diagnostics;
 using System.Drawing.Printing;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Net.Mime.MediaTypeNames;
-using Image = System.Drawing.Image;
+
 
 namespace ScreenShotTool.Forms;
 #pragma warning disable CA1416 // Validate platform compatibility
@@ -20,13 +9,8 @@ public partial class PrintDialog : Form
 {
     public string PrinterName;
     public string PaperSize;
-    public float MarginLeft;
-    public float MarginTop;
-    public float MarginRight;
-    public float MarginBottom;
-    //public float ImageScale;
     public bool FitToPage;
-    private System.Drawing.Bitmap? image;
+    private Bitmap? image;
     string preferredPaperSize = "A4"; // set with settings later?
     bool creationComplete = false;
 
@@ -36,16 +20,10 @@ public partial class PrintDialog : Form
     {
         InitializeComponent();
         printer = print;
-        //MarginLeft = print.MarginLeftPercent;
-        //MarginTop = print.MarginTopPercent;
-        //MarginRight = print.MarginRightPercent;
-        //MarginBottom = print.MarginBottomPercent;
         PrinterName = print.GetDefaultPrinterName();
         comboBoxPrinters.Items.AddRange(print.InstalledPrinters.ToArray());
         comboBoxPrinters.Text = PrinterName;
         UpdatePaperList();
-        //comboBoxPaper.Items.Clear();
-        //comboBoxPaper.Items.AddRange(print.GetPaperSizeNames().ToArray());
         if (print.GetPaperSizeNames().Contains(preferredPaperSize))
         {
             comboBoxPaper.Text = preferredPaperSize; // set with settings later?
@@ -58,12 +36,7 @@ public partial class PrintDialog : Form
             PaperSize = firstPaper;
         }
 
-        //ImageScale = 100f;
         this.image = image;
-        //MarginLeft = marginLeft;
-        //MarginRight = marginRight;
-        //MarginTop = marginTop;
-        //MarginBottom = marginBottom;
         numericMarginLeft.Value = (decimal)marginLeft;
         numericMarginRight.Value = (decimal)marginRight;
         numericMarginTop.Value = (decimal)marginTop;
@@ -89,7 +62,6 @@ public partial class PrintDialog : Form
         printer.MarginRightPercent = (float)numericMarginRight.Value;
         printer.MarginTopPercent = (float)numericMarginTop.Value;
         printer.MarginBottomPercent = (float)numericMarginBottom.Value;
-        //printer.DPI = (float)numericDPI.Value;
         printer.FitToPage = checkBoxFitToPage.Checked;
         printer.ImageScale = (float)numericImageScale.Value;
         
@@ -101,7 +73,7 @@ public partial class PrintDialog : Form
         }
         else
         {
-            Debug.WriteLine("Invalind paper size");
+            Debug.WriteLine("Invalid paper size");
         }
     }
 
