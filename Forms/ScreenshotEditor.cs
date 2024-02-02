@@ -1531,17 +1531,19 @@ public partial class ScreenshotEditor : Form
 
     private void toolStripMenuItem1_Click(object sender, EventArgs e)
     {
-        //PDF.Save("test.pdf");
-        Print print = new Print();
-        //pdfSaver.SelectPrinter("Microsoft Print to PDF");
-        foreach (string printer in print.InstalledPrinters)
-        {
-            Debug.WriteLine(printer);
-        }
         Bitmap? outImage = editorCanvas.AssembleImageForSaveOrCopy();
         if (outImage != null)
         {
-            print.PrintImage(outImage);
+            Print print = new Print();
+            //print.PrintImage(outImage);
+            PrintDialog printDialog = new PrintDialog(print, outImage);
+            DialogResult result = printDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                print.SelectPrinter(printDialog.PrinterName);
+                //print.
+                print.PrintImage(outImage);
+            }
         }
     }
 }

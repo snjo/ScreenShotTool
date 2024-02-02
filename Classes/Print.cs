@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing.Printing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,6 +21,10 @@ public class Print
     public Font Font;
     private StreamReader? streamToPrint;
     private PaperSize? sizeA4;
+    public float MarginLeftPercent = 10f;
+    public float MarginRightPercent = 5f;
+    public float MarginTopPercent = 5f;
+    public float MarginBottomPercent = 5f;
 
     public Print()
     {
@@ -58,6 +63,24 @@ public class Print
         return GetPrintersByWildcard("PDF");
     }
 
+    /// <summary>
+    /// Gets the size of the selected paper
+    /// </summary>
+    /// <returns>Paper size in hundreths of an inch</returns>
+    public SizeF GetCurrentPaperSize()
+    {
+        PaperSize size = printDocument.DefaultPageSettings.PaperSize;
+        return new SizeF(size.Width, size.Height);
+    }
+    
+    //public Size GetCurrentPaperSizeInPixels()
+    //{
+    //    SizeF sizeInHundredthsInches = GetCurrentPaperSize();
+    //    SizeF sizeInInches = new SizeF(sizeInHundredthsInches.Width / 100f, sizeInHundredthsInches.Height / 100f);
+    //    return new Size(Size.wi)
+    //}
+
+
     public List<PaperSize> GetPaperSizes()
     {
         List<PaperSize> paperSizes = new();
@@ -72,7 +95,7 @@ public class Print
         foreach (PaperSize paperSize in paperSizes)
         {
             paperSizeNames.Add(paperSize.PaperName);
-            Debug.WriteLine(paperSize.PaperName);
+            //Debug.WriteLine(paperSize.PaperName);
         }
         return paperSizeNames;
     }
@@ -123,6 +146,42 @@ public class Print
         printDocument.PrintPage += new PrintPageEventHandler(PrintPageImage);
         //printDocument.PrinterSettings.
         printDocument.Print();
+    }
+
+    public Bitmap CreatePrintImage(Bitmap image, Size canvasSize, float imageScale, bool fitToPage)
+    {
+        SizeF paperSize = GetCurrentPaperSize();
+        float previewRatio = (float)canvasSize.Width / (float)paperSize.Width;
+        Debug.WriteLine($"Preview ratio: {previewRatio}, canvas: {canvasSize}, paperSize{paperSize}");
+        float paperRatio = paperSize.Width / paperSize.Height;
+        Bitmap previewImage = new Bitmap(canvasSize.Width, canvasSize.Height);
+        Graphics graphics = Graphics.FromImage(previewImage);
+
+        int left = (int)(canvasSize.Width * (MarginLeftPercent / 100));
+        int right = (int)(canvasSize.Width * (MarginRightPercent / 100));
+        int top = (int)(canvasSize.Height * (MarginTopPercent / 100));
+        int bottom = (int)(canvasSize.Height * (MarginBottomPercent / 100));
+        Rectangle marginRect = new Rectangle(left, top, canvasSize.Width - right - left, canvasSize.Height - bottom - top);
+        SizeF imgDrawSize = new SizeF(image.Size.Width * previewRatio * imageScale / 100f, image.Size.Height * previewRatio * imageScale / 100f);
+        float imageRatio = imgDrawSize.Width / imgDrawSize.Height;
+        if (fitToPage)
+        {
+            if (imgDrawSize.Width > marginRect.Width)
+            {
+
+                imgDrawSize.Width = marginRect.Width;
+                imgDrawSize.Height = imgDrawSize.Width / imageRatio;
+            }
+            if (imgDrawSize.Height > marginRect.Height)
+            {
+                imgDrawSize.Height = marginRect.Height;
+                imgDrawSize.Width = imgDrawSize.Height * imageRatio;
+            }
+        }
+
+        graphics.DrawImage(image, new Rectangle(left, top, (int)imgDrawSize.Width, (int)imgDrawSize.Height));
+        graphics.Dispose();
+        return previewImage;
     }
 
     private void PrintPageImage(object sender, PrintPageEventArgs ev)
