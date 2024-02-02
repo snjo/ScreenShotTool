@@ -72,7 +72,7 @@
             comboBoxPrinters.Name = "comboBoxPrinters";
             comboBoxPrinters.Size = new Size(147, 23);
             comboBoxPrinters.TabIndex = 1;
-            comboBoxPrinters.TextChanged += comboBoxPrinters_TextChanged;
+            comboBoxPrinters.SelectedIndexChanged += comboBoxPrinters_SelectedIndexChanged;
             // 
             // label2
             // 
@@ -91,7 +91,7 @@
             comboBoxPaper.Name = "comboBoxPaper";
             comboBoxPaper.Size = new Size(147, 23);
             comboBoxPaper.TabIndex = 3;
-            comboBoxPaper.TextChanged += comboBoxPaper_TextChanged;
+            comboBoxPaper.SelectedIndexChanged += comboBoxPaper_SelectedIndexChanged;
             // 
             // label3
             // 

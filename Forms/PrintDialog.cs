@@ -43,7 +43,9 @@ public partial class PrintDialog : Form
         PrinterName = print.GetDefaultPrinterName();
         comboBoxPrinters.Items.AddRange(print.InstalledPrinters.ToArray());
         comboBoxPrinters.Text = PrinterName;
-        comboBoxPaper.Items.AddRange(print.GetPaperSizeNames().ToArray());
+        UpdatePaperList();
+        //comboBoxPaper.Items.Clear();
+        //comboBoxPaper.Items.AddRange(print.GetPaperSizeNames().ToArray());
         if (print.GetPaperSizeNames().Contains(preferredPaperSize))
         {
             comboBoxPaper.Text = preferredPaperSize; // set with settings later?
@@ -71,6 +73,15 @@ public partial class PrintDialog : Form
         UpdatePreview();
     }
 
+    private void ChangePrinter(string printerName)
+    {
+        PrinterName = printerName;
+        if (printer.SelectPrinter(PrinterName) == false)
+        {
+            Debug.WriteLine($"Invalid printer name {PrinterName}, not set");
+        }
+    }
+
     private void UpdatePrinterValues()
     {
         if (creationComplete == false) return;
@@ -81,12 +92,9 @@ public partial class PrintDialog : Form
         //printer.DPI = (float)numericDPI.Value;
         printer.FitToPage = checkBoxFitToPage.Checked;
         printer.ImageScale = (float)numericImageScale.Value;
-        if (printer.SelectPrinter(PrinterName) == false)
-        {
-            Debug.WriteLine($"Invalid printer name {PrinterName}, not set");
-        }
-        PaperSize? paperSize = printer.GetPaperSizeByName(PaperSize);
-        if (paperSize != null )
+        
+        PaperSize? paperSize = printer.GetPaperSizeByName(comboBoxPaper.Text);
+        if (paperSize != null)
         {
             printer.PaperSize = paperSize;
             Debug.WriteLine($"Paper size = {printer.PaperSize.PaperName}");
@@ -107,17 +115,6 @@ public partial class PrintDialog : Form
         }
     }
 
-    private void comboBoxPrinters_TextChanged(object sender, EventArgs e)
-    {
-        PrinterName = comboBoxPrinters.Text;
-        UpdatePreview();
-    }
-
-    private void comboBoxPaper_TextChanged(object sender, EventArgs e)
-    {
-        PaperSize = comboBoxPaper.Text;
-        UpdatePreview();
-    }
     private void NumericChanged(object sender, EventArgs e)
     {
         UpdatePreview();
@@ -130,6 +127,50 @@ public partial class PrintDialog : Form
 
     private void checkBoxFitToPage_CheckedChanged(object sender, EventArgs e)
     {
+        UpdatePreview();
+    }
+
+    private void comboBoxPrinters_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        ChangePrinter(comboBoxPrinters.Text);
+        UpdatePaperList();
+
+        UpdatePreview();
+    }
+
+    private void UpdatePaperList()
+    {
+        string previousPaper = comboBoxPaper.Text;
+        comboBoxPaper.Items.Clear();
+        List<string> paperNames = printer.GetPaperSizeNames();
+        comboBoxPaper.Items.AddRange(paperNames.ToArray());
+        bool foundPaperMatch = false;
+        for (int i = 0; i < paperNames.Count; i++)
+        {
+            if (paperNames[i] == previousPaper)
+            {
+                comboBoxPaper.SelectedIndex = i;
+                foundPaperMatch = true;
+                break;
+            }
+        }
+        if (!foundPaperMatch)
+        {
+            int indexA4 = paperNames.IndexOf("A4");
+            if (indexA4 != -1)
+            {
+                comboBoxPaper.SelectedIndex = indexA4;
+            }
+            else
+            {
+                comboBoxPaper.SelectedIndex = 0;
+            }
+        }
+    }
+
+    private void comboBoxPaper_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        PaperSize = comboBoxPaper.Text;
         UpdatePreview();
     }
 }
