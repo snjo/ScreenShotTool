@@ -1532,8 +1532,16 @@ public partial class ScreenshotEditor : Form
     private void toolStripMenuItem1_Click(object sender, EventArgs e)
     {
         //PDF.Save("test.pdf");
-        PDF pdfSaver = new PDF();
-        pdfSaver.SelectPrinter("Microsoft Print to PDF");
-        pdfSaver.SaveTextFileToPDF(@"C:\temp\MyFile.txt");
+        Print print = new Print();
+        //pdfSaver.SelectPrinter("Microsoft Print to PDF");
+        foreach (string printer in print.InstalledPrinters)
+        {
+            Debug.WriteLine(printer);
+        }
+        Bitmap? outImage = editorCanvas.AssembleImageForSaveOrCopy();
+        if (outImage != null)
+        {
+            print.PrintImage(outImage);
+        }
     }
 }
