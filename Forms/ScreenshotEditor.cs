@@ -21,8 +21,6 @@ public partial class ScreenshotEditor : Form
     public readonly static int startingFontSize = 10;
     readonly List<Button> toolButtons = [];
     public SharedBitmap copiedBitmap = new SharedBitmap();
-    //public static string filterLoadImage = "Images|*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp|PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|All files|*.*";
-    //public static string filterSaveImage = "PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|PDF|*.pdf|All files|*.*";
 
     public ScreenshotEditor()
     {
@@ -145,7 +143,7 @@ public partial class ScreenshotEditor : Form
     {
         FileDialog fileDialog = new OpenFileDialog
         {
-            Filter = "Images|*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp|PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|All files|*.*"
+            Filter = ImageOutput.FilterLoadImage
         };
         DialogResult result = fileDialog.ShowDialog();
         if (result == DialogResult.OK)

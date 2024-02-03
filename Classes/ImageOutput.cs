@@ -13,8 +13,8 @@ namespace ScreenShotTool;
 public static class ImageOutput
 {
     public static string SupportedImageFormatExtensions = ".png .jpg .jpeg .bmp .gif .webp .tiff .tif";
-    public static string FilterLoadImage = "Images|*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp|PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|All files|*.*";
-    public static string FilterSaveImage = "PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|PDF|*.pdf|All files|*.*";
+    public static string FilterLoadImage = "Images|*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.tif;*.tiff;*.webp|PNG|*.png|JPG|*.jpg;*.jpeg|GIF|*.gif|BMP|*.bmp|Tiff|*.tif;*.tiff|Webp|*.webp|All files|*.*";
+    public static string FilterSaveImage = "PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|PDF|*.pdf|Tiff|*.tif|Webp|*.webp|All files|*.*";
 
     public static (bool result, int filtexIndex) SaveWithDialog(Bitmap outImage, string filter, string filenameSuggestion = "", int filterIndex = 1)
     {
