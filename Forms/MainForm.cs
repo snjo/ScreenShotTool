@@ -462,10 +462,19 @@ namespace ScreenShotTool
                 return;
             }
 
+            Image thumbImg;
+            if (Path.GetExtension(DestinationFileName) == ".pdf")
+            {
+                thumbImg = ResizeImage(bitmap, settings.ThumbnailWidth, settings.ThumbnailHeight, Settings.Default.CropThumbnails, Resources.pdf);
+            }
+            else
+            {
+                thumbImg = ResizeImage(bitmap, settings.ThumbnailWidth, settings.ThumbnailHeight, Settings.Default.CropThumbnails);
+            }
 
             //int width = imageList.ImageSize.Width;
 
-            Image thumbImg = ResizeImage(bitmap, settings.ThumbnailWidth, settings.ThumbnailHeight, Settings.Default.CropThumbnails);
+            
             imageList.Images.Add(thumbImg);
             thumbImg.Dispose();
             ListViewItem thumb = listViewThumbnails.Items.Add(DestinationFileName);
@@ -482,7 +491,7 @@ namespace ScreenShotTool
         /// <param name="height">The height to resize to.</param>
         /// <param name="crop">Crop the image</param>
         /// <returns>The resized image.</returns>
-        public static Bitmap ResizeImage(Image image, int width, int height, bool crop = false)
+        public static Bitmap ResizeImage(Image image, int width, int height, bool crop = false, Bitmap? fileTypeIcon = null)
         {
             //https://stackoverflow.com/questions/1922040/how-to-resize-an-image-c-sharp
             //Debug.WriteLine("Resizing image from: " + image.Width + "x" + image.Height + " to " + width + "x" + height);
@@ -505,15 +514,19 @@ namespace ScreenShotTool
 
             using (var graphics = Graphics.FromImage(destImage))
             {
-                graphics.CompositingMode = CompositingMode.SourceCopy;
-                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                //graphics.CompositingMode = CompositingMode.SourceCopy;
+                //graphics.CompositingQuality = CompositingQuality.HighQuality;
+                //graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+                //graphics.SmoothingMode = SmoothingMode.HighQuality;
+                //graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
                 using var wrapMode = new ImageAttributes();
                 wrapMode.SetWrapMode(WrapMode.TileFlipXY);
                 graphics.DrawImage(cropped, destRect, 0, 0, cropped.Width, cropped.Height, GraphicsUnit.Pixel, wrapMode);
+                if (fileTypeIcon != null)
+                {
+                    graphics.DrawImageUnscaled(fileTypeIcon, 0, 0);
+                }
             }
 
             Debug.WriteLine("Resize image returns:" + destImage.Width + "x" + destImage.Height);
@@ -789,7 +802,12 @@ namespace ScreenShotTool
             {
                 try
                 {
-                    if (format == ImageFormat.Jpeg)
+                    if (Path.GetExtension(filename).ToLowerInvariant() == ".pdf")
+                    {
+                        Debug.WriteLine("SaveBitmap: Saving to PDF instead of image");
+                        SaveToPdf.Save(folder + "\\" + filename, capture, margins: 20f, imageScale: 0.87f);
+                    }
+                    else if (format == ImageFormat.Jpeg)
                     {
                         SaveJpeg(folder + "\\" + filename, capture, settings.JpegQuality);
                     }

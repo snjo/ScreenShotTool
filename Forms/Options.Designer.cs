@@ -211,7 +211,7 @@
             // comboBoxFileExtension
             // 
             comboBoxFileExtension.FormattingEnabled = true;
-            comboBoxFileExtension.Items.AddRange(new object[] { ".png", ".jpg", ".gif", ".bmp", ".tiff" });
+            comboBoxFileExtension.Items.AddRange(new object[] { ".png", ".jpg", ".gif", ".bmp", ".tiff", ".pdf" });
             comboBoxFileExtension.Location = new Point(304, 77);
             comboBoxFileExtension.Name = "comboBoxFileExtension";
             comboBoxFileExtension.Size = new Size(53, 23);
