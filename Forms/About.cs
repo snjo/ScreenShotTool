@@ -12,7 +12,7 @@ namespace ScreenShotTool
             labelVersion.Text = "Version " + ProductVersion;
         }
 
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             MainForm.OpenLink("https://github.com/snjo/ScreenShotTool/");
         }

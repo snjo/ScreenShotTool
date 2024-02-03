@@ -1086,7 +1086,7 @@
             buttonSelectStickerFolder.TabIndex = 109;
             buttonSelectStickerFolder.Text = "Select";
             buttonSelectStickerFolder.UseVisualStyleBackColor = true;
-            buttonSelectStickerFolder.Click += buttonSelectStickerFolder_Click;
+            buttonSelectStickerFolder.Click += ButtonSelectStickerFolder_Click;
             // 
             // label39
             // 

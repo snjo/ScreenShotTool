@@ -72,7 +72,7 @@
             comboBoxPrinters.Name = "comboBoxPrinters";
             comboBoxPrinters.Size = new Size(147, 23);
             comboBoxPrinters.TabIndex = 1;
-            comboBoxPrinters.SelectedIndexChanged += comboBoxPrinters_SelectedIndexChanged;
+            comboBoxPrinters.SelectedIndexChanged += ComboBoxPrinters_SelectedIndexChanged;
             // 
             // label2
             // 
@@ -91,7 +91,7 @@
             comboBoxPaper.Name = "comboBoxPaper";
             comboBoxPaper.Size = new Size(147, 23);
             comboBoxPaper.TabIndex = 3;
-            comboBoxPaper.SelectedIndexChanged += comboBoxPaper_SelectedIndexChanged;
+            comboBoxPaper.SelectedIndexChanged += ComboBoxPaper_SelectedIndexChanged;
             // 
             // label3
             // 
@@ -158,7 +158,7 @@
             numericImageScale.Size = new Size(66, 23);
             numericImageScale.TabIndex = 10;
             numericImageScale.Value = new decimal(new int[] { 300, 0, 0, 0 });
-            numericImageScale.ValueChanged += numericImageScale_ValueChanged;
+            numericImageScale.ValueChanged += NumericImageScale_ValueChanged;
             // 
             // label5
             // 
@@ -180,7 +180,7 @@
             checkBoxFitToPage.TabIndex = 12;
             checkBoxFitToPage.Text = "Shrink to fit page";
             checkBoxFitToPage.UseVisualStyleBackColor = true;
-            checkBoxFitToPage.CheckedChanged += checkBoxFitToPage_CheckedChanged;
+            checkBoxFitToPage.CheckedChanged += CheckBoxFitToPage_CheckedChanged;
             // 
             // label6
             // 

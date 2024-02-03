@@ -58,7 +58,7 @@ namespace ScreenShotTool
             Debug.WriteLine($"Screen bounds: {screenBounds}, dpi:{result.DeviceDpi}, {screen}");
             Debug.WriteLine($"Virtual {SystemInformation.VirtualScreen.Size}");
             Debug.WriteLine($"Monitor count: {SystemInformation.MonitorCount}, primary {SystemInformation.PrimaryMonitorSize}");
-            
+
             //Debug.WriteLine($"DPI? { DPIUtil.GetDpi(result, Cursor.Position)}, scale {DPIUtil.ScaleFactor(result, Cursor.Position)}");
             return result;
         }

@@ -106,7 +106,7 @@
             contextMenuListView.Items.AddRange(new ToolStripItem[] { itemOpenImage, itemOpenFolder, itemDeleteFile, itemRemove, copyToClipboardToolStripMenuItem, copyFileToolStripMenuItem, editImageToolStripMenuItem, convertFileFormatToolStripMenuItem });
             contextMenuListView.Name = "contextMenuListView";
             contextMenuListView.Size = new Size(239, 202);
-            contextMenuListView.Opening += contextMenuListView_Opening;
+            contextMenuListView.Opening += ContextMenuListView_Opening;
             // 
             // itemOpenImage
             // 

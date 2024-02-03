@@ -11,7 +11,7 @@ namespace ScreenShotTool
     {
         readonly MainForm mainForm;
         readonly Settings settings = Settings.Default;
-        string ApplicationName = "Screenshot Tool";
+        readonly string ApplicationName = "Screenshot Tool";
 
         public Options(MainForm parent)
         {
@@ -363,7 +363,7 @@ namespace ScreenShotTool
         {
             if (sender is Button button)
             {
-                ColorDialogAlpha dialogAlpha = new ColorDialogAlpha(button.BackColor);
+                ColorDialogAlpha dialogAlpha = new(button.BackColor);
                 //DialogResult result = colorDialog1.ShowDialog();
                 DialogResult result = dialogAlpha.ShowDialog();
                 if (result == DialogResult.OK)
@@ -389,7 +389,7 @@ namespace ScreenShotTool
             }
         }
 
-        private void buttonSelectStickerFolder_Click(object sender, EventArgs e)
+        private void ButtonSelectStickerFolder_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog dialog = new();
             dialog.ShowDialog();

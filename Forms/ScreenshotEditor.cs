@@ -1,11 +1,7 @@
 ﻿using ScreenShotTool.Classes;
 using ScreenShotTool.Properties;
-using System;
 using System.Diagnostics;
-using System.Drawing.Imaging;
-using System.IO;
 using System.Runtime.Versioning;
-using System.Windows.Forms;
 using static ScreenShotTool.EditorCanvas;
 
 namespace ScreenShotTool.Forms;
@@ -20,7 +16,7 @@ public partial class ScreenshotEditor : Form
     public readonly static int minimumFontSize = 5;
     public readonly static int startingFontSize = 10;
     readonly List<Button> toolButtons = [];
-    public SharedBitmap copiedBitmap = new SharedBitmap();
+    public SharedBitmap copiedBitmap = new();
 
     public ScreenshotEditor()
     {
@@ -950,7 +946,7 @@ public partial class ScreenshotEditor : Form
                 ListViewItem item = listViewSymbols.SelectedItems[0];
                 if (item.Tag is not GraphicSymbol gs) return;
 
-                ColorDialogAlpha colorDialogAlpha = new ColorDialogAlpha(button.BackColor);
+                ColorDialogAlpha colorDialogAlpha = new(button.BackColor);
                 DialogResult result = colorDialogAlpha.ShowDialog();
                 if (result == DialogResult.OK)
                 {
@@ -1022,7 +1018,7 @@ public partial class ScreenshotEditor : Form
     readonly Dictionary<string, FontFamily> fontDictionary = [];
     private void FillFontFamilyBox()
     {
-        List<FontFamily> fontList = FontFamily.Families.ToList();
+        List<FontFamily> fontList = [.. FontFamily.Families];
         List<string> fontNames = [];
 
         foreach (FontFamily font in fontList)
@@ -1094,7 +1090,7 @@ public partial class ScreenshotEditor : Form
 
     public List<GraphicSymbol> GetSelectedSymbols()
     {
-        List<GraphicSymbol> symbols = new List<GraphicSymbol>();
+        List<GraphicSymbol> symbols = [];
         if (listViewSymbols.SelectedItems.Count > 0)
         {
             var items = listViewSymbols.SelectedItems;
@@ -1133,7 +1129,7 @@ public partial class ScreenshotEditor : Form
 
     private void ComboBoxBlendMode_SelectedIndexChanged(object sender, EventArgs e)
     {
-        if (editorCanvas.currentSelectedSymbol is GsHighlight gshl)
+        if (editorCanvas.CurrentSelectedSymbol is GsHighlight gshl)
         {
             if (Enum.TryParse(comboBoxBlendMode.Text, out ColorBlend.BlendModes newBlend))
             {
@@ -1200,7 +1196,7 @@ public partial class ScreenshotEditor : Form
         }
     }
 
-    private void numericPropertiesRotation_ValueChanged(object sender, EventArgs e)
+    private void NumericPropertiesRotation_ValueChanged(object sender, EventArgs e)
     {
         SetNumericClamp(numericPropertiesRotation, numericPropertiesRotation.Value % 360);
         if (GetSelectedSymbolFirst() is GraphicSymbol gs)
@@ -1246,7 +1242,7 @@ public partial class ScreenshotEditor : Form
     {
         if (sender is Button button)
         {
-            ColorDialogAlpha colorDialogAlpha = new ColorDialogAlpha(button.BackColor);
+            ColorDialogAlpha colorDialogAlpha = new(button.BackColor);
             DialogResult result = colorDialogAlpha.ShowDialog();
             if (result == DialogResult.OK)
             {
@@ -1382,32 +1378,32 @@ public partial class ScreenshotEditor : Form
         }
     }
 
-    private void numericPropertiesRotation_KeyPress(object sender, KeyPressEventArgs e)
+    private void NumericPropertiesRotation_KeyPress(object sender, KeyPressEventArgs e)
     {
         SupressEnterDing(e);
     }
 
-    private void numericNewLineWeight_KeyPress(object sender, KeyPressEventArgs e)
+    private void NumericNewLineWeight_KeyPress(object sender, KeyPressEventArgs e)
     {
         SupressEnterDing(e);
     }
 
-    private void numericPropertiesX_KeyPress(object sender, KeyPressEventArgs e)
+    private void NumericPropertiesX_KeyPress(object sender, KeyPressEventArgs e)
     {
         SupressEnterDing(e);
     }
 
-    private void numericPropertiesY_KeyPress(object sender, KeyPressEventArgs e)
+    private void NumericPropertiesY_KeyPress(object sender, KeyPressEventArgs e)
     {
         SupressEnterDing(e);
     }
 
-    private void numericPropertiesWidth_KeyPress(object sender, KeyPressEventArgs e)
+    private void NumericPropertiesWidth_KeyPress(object sender, KeyPressEventArgs e)
     {
         SupressEnterDing(e);
     }
 
-    private void numericPropertiesHeight_KeyPress(object sender, KeyPressEventArgs e)
+    private void NumericPropertiesHeight_KeyPress(object sender, KeyPressEventArgs e)
     {
         SupressEnterDing(e);
     }
@@ -1418,12 +1414,11 @@ public partial class ScreenshotEditor : Form
     private List<string> GetDroppedFileNames(DragEventArgs e)
     {
         if (e.Data == null) return [];
-        string[]? fileNames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
-        if (fileNames == null) return [];
+        if (e.Data.GetData(DataFormats.FileDrop, true) is not string[] fileNames) return [];
         return [.. fileNames];
     }
 
-    private Point GetDropLocation(DragEventArgs e, Control control)
+    private static Point GetDropLocation(DragEventArgs e, Control control)
     {
         return control.PointToClient(new Point(e.X, e.Y));
     }
@@ -1448,7 +1443,7 @@ public partial class ScreenshotEditor : Form
         Point location = GetDropLocation(e, pictureBoxOverlay);
         for (int i = 0; i < fileNames.Count; i++)
         {
-            Point dropOffset = new Point(i * 20, i * 20);
+            Point dropOffset = new(i * 20, i * 20);
             Point dropLocation = location.Addition(dropOffset);
             if (pictureBoxOverlay.Bounds.Contains(dropLocation) == false)
             {
@@ -1459,11 +1454,11 @@ public partial class ScreenshotEditor : Form
     }
     #endregion
 
-    private void buttonResetImageSize_Click(object sender, EventArgs e)
+    private void ButtonResetImageSize_Click(object sender, EventArgs e)
     {
-        if (editorCanvas.currentSelectedSymbol != null)
+        if (editorCanvas.CurrentSelectedSymbol != null)
         {
-            if (editorCanvas.currentSelectedSymbol is GsImage gsI)
+            if (editorCanvas.CurrentSelectedSymbol is GsImage gsI)
             {
                 if (gsI.image != null)
                 {
@@ -1475,29 +1470,24 @@ public partial class ScreenshotEditor : Form
         }
     }
 
-    private void panel1_Paint(object sender, PaintEventArgs e)
+    private void CheckBoxPropertiesShadow_CheckedChanged(object sender, EventArgs e)
     {
 
     }
 
-    private void checkBoxPropertiesShadow_CheckedChanged(object sender, EventArgs e)
-    {
-
-    }
-
-    private void toolStripMenuItem1_Click(object sender, EventArgs e)
+    private void ToolStripMenuItem1_Click(object sender, EventArgs e)
     {
         Bitmap? outImage = editorCanvas.AssembleImageForSaveOrCopy();
         if (outImage != null)
         {
-            Print print = new Print();
+            Print print = new();
             //print.PrintImage(outImage);
-            PrintDialog printDialog = new PrintDialog(print, outImage);
+            PrintDialog printDialog = new(print, outImage);
             DialogResult result = printDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
                 //print.SelectPrinter(printDialog.PrinterName);
-                
+
                 //print.
                 print.PrintImage(outImage);
             }

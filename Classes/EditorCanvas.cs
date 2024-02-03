@@ -1,7 +1,6 @@
 ﻿using ScreenShotTool.Forms;
 using ScreenShotTool.Properties;
 using System.Diagnostics;
-using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Runtime.Versioning;
@@ -37,12 +36,12 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         }
     }
     readonly PictureBox pictureBox = pictureBox;
-    
+
     //public GraphicSymbol? currentSelectedSymbol = null;
-    public GraphicSymbol? currentSelectedSymbol
+    public GraphicSymbol? CurrentSelectedSymbol
     {
-        get 
-        { 
+        get
+        {
             GraphicSymbol? symbol = parentEditor.GetSelectedSymbolFirst();
             if (symbol != null)
                 return symbol;
@@ -60,7 +59,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
     {
         get
         {
-            List<GraphicSymbol> gsList = new();
+            List<GraphicSymbol> gsList = [];
             foreach (ListViewItem lvi in parentEditor.GetSymbolListView().Items)
             {
                 if (lvi.Tag is GraphicSymbol gs)
@@ -410,7 +409,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
     public static Bitmap CopyImage(Bitmap img)
     {
-        Rectangle cropArea = new Rectangle(0, 0, img.Width, img.Height);
+        Rectangle cropArea = new(0, 0, img.Width, img.Height);
         //https://www.codingdefined.com/2015/04/solved-bitmapclone-out-of-memory.html
         Bitmap bmp = new(cropArea.Width, cropArea.Height);
 
@@ -508,7 +507,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
     #region Drawing Freehand ----------------------------------------------------------------------------
 
-    Pen freehandPen = new Pen(Color.Red, 3);
+    Pen freehandPen = new(Color.Red, 3);
     PolygonDrawing? polygonDrawing;
     Point oldFreehandPosition = Point.Empty;
     bool freehandInProgress = false;
@@ -594,7 +593,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         if (SquareBounds)
         {
             //dragEnd = RestrainToSquare(dragStart, dragEnd);
-            dragEnd = RestrainProportions(dragStart, dragEnd, new Size(1,1)); // size is 1:1, ration is 1, meaning square
+            dragEnd = RestrainProportions(dragStart, dragEnd, new Size(1, 1)); // size is 1:1, ration is 1, meaning square
         }
 
         if (dragStarted)
@@ -688,24 +687,24 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
     {
         //if (currentSelectedSymbol != null)
         //{
-            //selectedHitboxIndex = HitboxDirection.None;
-            for (int i = 1; i <= 8; i++) // all scaling hitboxec, not center
+        //selectedHitboxIndex = HitboxDirection.None;
+        for (int i = 1; i <= 8; i++) // all scaling hitboxec, not center
+        {
+            if (symbol != CurrentSelectedSymbol) { break; }
+
+            if (symbol.GetHitbox(i).Contains(MousePosition.X, MousePosition.Y))
             {
-                if (symbol != currentSelectedSymbol) { break; }
-            
-                if (symbol.GetHitbox(i).Contains(MousePosition.X, MousePosition.Y))
-                {
-                    selectedHitboxIndex = (HitboxDirection)i;
-                    break;
-                }
+                selectedHitboxIndex = (HitboxDirection)i;
+                break;
             }
-            if (selectedHitboxIndex == HitboxDirection.None)
+        }
+        if (selectedHitboxIndex == HitboxDirection.None)
+        {
+            if (symbol.GetHitbox(0).Contains(MousePosition.X, MousePosition.Y))
             {
-                if (symbol.GetHitbox(0).Contains(MousePosition.X, MousePosition.Y))
-                {
-                    selectedHitboxIndex = HitboxDirection.Center;
-                }
+                selectedHitboxIndex = HitboxDirection.Center;
             }
+        }
         //}
     }
 
@@ -789,8 +788,8 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
     public bool dragMoved = false;
     public Point dragStart = new(0, 0);
     //Point dragStartOffsetFromSymbolCenter = new(0, 0);
-    Size currentScaleProportion = new Size(1,1);
-    List<Point> selectedMoveSymbolOffsets = new List<Point>();
+    Size currentScaleProportion = new(1, 1);
+    List<Point> selectedMoveSymbolOffsets = [];
 
     public void MouseDown(Point MousePosition)
     {
@@ -826,9 +825,9 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
             else if (selectedHitboxIndex > HitboxDirection.Center)
             {
                 SetUserAction(ScreenshotEditor.UserActions.ScaleSymbol);
-                if (currentSelectedSymbol != null)
+                if (CurrentSelectedSymbol != null)
                 {
-                    currentScaleProportion = currentSelectedSymbol.Bounds.Size;
+                    currentScaleProportion = CurrentSelectedSymbol.Bounds.Size;
                 }
                 else
                 {
@@ -868,17 +867,17 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
             pictureBox.Cursor = Cursors.Arrow;
         }
 
-        if (currentSelectedSymbol != null)
+        if (CurrentSelectedSymbol != null)
         {
 
-            if (currentSelectedSymbol.MoveAllowed)
+            if (CurrentSelectedSymbol.MoveAllowed)
             {
                 if (selectedHitboxIndex == HitboxDirection.Center)
                 {
                     pictureBox.Cursor = Cursors.SizeAll;
                 }
             }
-            if (currentSelectedSymbol.ScalingAllowed)
+            if (CurrentSelectedSymbol.ScalingAllowed)
             {
                 switch (selectedHitboxIndex)
                 {
@@ -888,7 +887,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
                     case HitboxDirection.N: case HitboxDirection.S: pictureBox.Cursor = Cursors.SizeNS; break;
                 }
             }
-            if (currentSelectedSymbol is GsLine)
+            if (CurrentSelectedSymbol is GsLine)
             {
                 if ((int)selectedHitboxIndex == 1 || (int)selectedHitboxIndex == 2)
                 {
@@ -917,25 +916,25 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
             }
             else if (parentEditor.selectedUserAction == ScreenshotEditor.UserActions.ScaleSymbol)
             {
-                if (GetShift() && currentSelectedSymbol != null)
+                if (GetShift() && CurrentSelectedSymbol != null)
                 {
                     bool restrain = true;
-                    Point anchor = new Point(currentSelectedSymbol.Bounds.Left, currentSelectedSymbol.Bounds.Top);
+                    Point anchor = new(CurrentSelectedSymbol.Bounds.Left, CurrentSelectedSymbol.Bounds.Top);
                     if (selectedHitboxIndex == HitboxDirection.SE)
                     {
-                        anchor = new Point(currentSelectedSymbol.Bounds.Left, currentSelectedSymbol.Bounds.Top);
+                        anchor = new Point(CurrentSelectedSymbol.Bounds.Left, CurrentSelectedSymbol.Bounds.Top);
                     }
                     else if (selectedHitboxIndex == HitboxDirection.NW)
                     {
-                        anchor = new Point(currentSelectedSymbol.Bounds.Right, currentSelectedSymbol.Bounds.Bottom);
+                        anchor = new Point(CurrentSelectedSymbol.Bounds.Right, CurrentSelectedSymbol.Bounds.Bottom);
                     }
                     else if (selectedHitboxIndex == HitboxDirection.SW)
                     {
-                        anchor = new Point(currentSelectedSymbol.Bounds.Right, currentSelectedSymbol.Bounds.Top);
+                        anchor = new Point(CurrentSelectedSymbol.Bounds.Right, CurrentSelectedSymbol.Bounds.Top);
                     }
                     else if (selectedHitboxIndex == HitboxDirection.NE)
                     {
-                        anchor = new Point(currentSelectedSymbol.Bounds.Left, currentSelectedSymbol.Bounds.Bottom);
+                        anchor = new Point(CurrentSelectedSymbol.Bounds.Left, CurrentSelectedSymbol.Bounds.Bottom);
                     }
                     else
                     {
@@ -951,7 +950,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
                     {
                         ScaleSymbol(MousePosition);
                     }
-                    
+
                 }
                 else
                 {
@@ -1066,37 +1065,37 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
     private void ScaleSymbol(Point MousePosition)
     {
-        if (currentSelectedSymbol == null) return;
+        if (CurrentSelectedSymbol == null) return;
         if (dragStarted == false) return;
 
-        if (currentSelectedSymbol is GsLine)
+        if (CurrentSelectedSymbol is GsLine)
         {
             if ((int)selectedHitboxIndex == 1)
             {
-                currentSelectedSymbol.StartPoint = MousePosition;
+                CurrentSelectedSymbol.StartPoint = MousePosition;
             }
             if ((int)selectedHitboxIndex == 2)
             {
-                currentSelectedSymbol.EndPoint = MousePosition;
+                CurrentSelectedSymbol.EndPoint = MousePosition;
             }
         }
-        else if (currentSelectedSymbol.ScalingAllowed)
+        else if (CurrentSelectedSymbol.ScalingAllowed)
         {
             if (selectedHitboxIndex == HitboxDirection.W || selectedHitboxIndex == HitboxDirection.NW || selectedHitboxIndex == HitboxDirection.SW)
             {
-                currentSelectedSymbol.MoveLeftEdgeTo(MousePosition.X);
+                CurrentSelectedSymbol.MoveLeftEdgeTo(MousePosition.X);
             }
             if (selectedHitboxIndex == HitboxDirection.E || selectedHitboxIndex == HitboxDirection.NE || selectedHitboxIndex == HitboxDirection.SE)
             {
-                currentSelectedSymbol.MoveRightEdgeTo(MousePosition.X);
+                CurrentSelectedSymbol.MoveRightEdgeTo(MousePosition.X);
             }
             if (selectedHitboxIndex == HitboxDirection.N || selectedHitboxIndex == HitboxDirection.NE || selectedHitboxIndex == HitboxDirection.NW)
             {
-                currentSelectedSymbol.MoveTopEdgeTo(MousePosition.Y);
+                CurrentSelectedSymbol.MoveTopEdgeTo(MousePosition.Y);
             }
             if (selectedHitboxIndex == HitboxDirection.S || selectedHitboxIndex == HitboxDirection.SE || selectedHitboxIndex == HitboxDirection.SW)
             {
-                currentSelectedSymbol.MoveBottomEdgeTo(MousePosition.Y);
+                CurrentSelectedSymbol.MoveBottomEdgeTo(MousePosition.Y);
             }
         }
     }

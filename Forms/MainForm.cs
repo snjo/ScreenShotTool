@@ -802,7 +802,7 @@ public partial class MainForm : Form
         {
             try
             {
-                if (Path.GetExtension(filename).ToLowerInvariant() == ".pdf")
+                if (Path.GetExtension(filename).Equals(".pdf", StringComparison.OrdinalIgnoreCase))
                 {
                     Debug.WriteLine("SaveBitmap: Saving to PDF instead of image");
                     SaveToPdf.Save(folder + "\\" + filename, capture, margins: 20f, imageScale: 0.87f);
@@ -1486,7 +1486,7 @@ public partial class MainForm : Form
 
             if (item.Tag is string filename)
             {
-                if (Path.GetExtension(filename).ToLowerInvariant() == ".pdf")
+                if (Path.GetExtension(filename).Equals(".pdf", StringComparison.OrdinalIgnoreCase))
                 {
                     Debug.WriteLine("Skipping pdf file");
                     skippedPDF = true;
@@ -1520,12 +1520,12 @@ public partial class MainForm : Form
         }
     }
 
-    private void contextMenuListView_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+    private void ContextMenuListView_Opening(object sender, System.ComponentModel.CancelEventArgs e)
     {
         if (!contextMenuListView.Visible) return;
         bool convertableImages = false;
 
-        if (listViewThumbnails.SelectedItems.Count > 0 )
+        if (listViewThumbnails.SelectedItems.Count > 0)
         {
             for (int i = 0; i < listViewThumbnails.SelectedItems.Count; i++)
             {
@@ -1540,8 +1540,8 @@ public partial class MainForm : Form
                     }
                     if (i == 0)
                     {
-                            copyToClipboardToolStripMenuItem.Enabled = isImage;
-                            editImageToolStripMenuItem.Enabled = isImage;
+                        copyToClipboardToolStripMenuItem.Enabled = isImage;
+                        editImageToolStripMenuItem.Enabled = isImage;
                     }
                 }
             }

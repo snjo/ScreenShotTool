@@ -17,7 +17,7 @@ public partial class NewImagePrompt : Form
 
     private void SelectColor_Click(object sender, EventArgs e)
     {
-        ColorDialogAlpha colorDialogAlpha = new ColorDialogAlpha(Color.White);
+        ColorDialogAlpha colorDialogAlpha = new(Color.White);
         DialogResult result = colorDialogAlpha.ShowDialog();
         //DialogResult result = colorDialog1.ShowDialog();
         if (result == DialogResult.OK)

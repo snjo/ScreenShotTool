@@ -35,6 +35,7 @@
             itemNewImage = new ToolStripMenuItem();
             itemSave = new ToolStripMenuItem();
             itemLoadFromFile = new ToolStripMenuItem();
+            toolStripMenuItem1 = new ToolStripMenuItem();
             itemLoadFromClipboard = new ToolStripMenuItem();
             itemExit = new ToolStripMenuItem();
             editToolStripMenuItem = new ToolStripMenuItem();
@@ -129,7 +130,6 @@
             timerAfterLoad = new System.Windows.Forms.Timer(components);
             TimerUpdateOverlay = new System.Windows.Forms.Timer(components);
             toolTip1 = new ToolTip(components);
-            toolStripMenuItem1 = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
@@ -196,6 +196,13 @@
             itemLoadFromFile.Size = new Size(184, 22);
             itemLoadFromFile.Text = "&Open...";
             itemLoadFromFile.Click += LoadToolStripMenuItem_Click;
+            // 
+            // toolStripMenuItem1
+            // 
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new Size(184, 22);
+            toolStripMenuItem1.Text = "Print...";
+            toolStripMenuItem1.Click += ToolStripMenuItem1_Click;
             // 
             // itemLoadFromClipboard
             // 
@@ -491,7 +498,7 @@
             toolTip1.SetToolTip(numericNewLineWeight, "Set line width for the next created symbol");
             numericNewLineWeight.Value = new decimal(new int[] { 2, 0, 0, 0 });
             numericNewLineWeight.ValueChanged += NumericNewLineWeight_ValueChanged;
-            numericNewLineWeight.KeyPress += numericNewLineWeight_KeyPress;
+            numericNewLineWeight.KeyPress += NumericNewLineWeight_KeyPress;
             // 
             // panelImage
             // 
@@ -564,7 +571,7 @@
             toolTip1.SetToolTip(numericPropertiesHeight, "Height");
             numericPropertiesHeight.Value = new decimal(new int[] { 1, 0, 0, 0 });
             numericPropertiesHeight.ValueChanged += Numeric_ValueChanged;
-            numericPropertiesHeight.KeyPress += numericPropertiesHeight_KeyPress;
+            numericPropertiesHeight.KeyPress += NumericPropertiesHeight_KeyPress;
             // 
             // numericPropertiesY
             // 
@@ -577,7 +584,7 @@
             numericPropertiesY.Tag = "Y";
             toolTip1.SetToolTip(numericPropertiesY, "Y position (upper left)");
             numericPropertiesY.ValueChanged += Numeric_ValueChanged;
-            numericPropertiesY.KeyPress += numericPropertiesY_KeyPress;
+            numericPropertiesY.KeyPress += NumericPropertiesY_KeyPress;
             // 
             // numericPropertiesWidth
             // 
@@ -591,7 +598,7 @@
             toolTip1.SetToolTip(numericPropertiesWidth, "Width");
             numericPropertiesWidth.Value = new decimal(new int[] { 1, 0, 0, 0 });
             numericPropertiesWidth.ValueChanged += Numeric_ValueChanged;
-            numericPropertiesWidth.KeyPress += numericPropertiesWidth_KeyPress;
+            numericPropertiesWidth.KeyPress += NumericPropertiesWidth_KeyPress;
             // 
             // numericPropertiesX
             // 
@@ -604,7 +611,7 @@
             numericPropertiesX.Tag = "X";
             toolTip1.SetToolTip(numericPropertiesX, "X position (upper left)");
             numericPropertiesX.ValueChanged += Numeric_ValueChanged;
-            numericPropertiesX.KeyPress += numericPropertiesX_KeyPress;
+            numericPropertiesX.KeyPress += NumericPropertiesX_KeyPress;
             // 
             // label5
             // 
@@ -949,7 +956,6 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(898, 560);
             panel1.TabIndex = 29;
-            panel1.Paint += panel1_Paint;
             // 
             // splitter2
             // 
@@ -1047,7 +1053,7 @@
             buttonResetImageSize.TabIndex = 2;
             buttonResetImageSize.Text = "Reset size";
             buttonResetImageSize.UseVisualStyleBackColor = true;
-            buttonResetImageSize.Click += buttonResetImageSize_Click;
+            buttonResetImageSize.Click += ButtonResetImageSize_Click;
             // 
             // labelRotation
             // 
@@ -1067,8 +1073,8 @@
             numericPropertiesRotation.Name = "numericPropertiesRotation";
             numericPropertiesRotation.Size = new Size(50, 23);
             numericPropertiesRotation.TabIndex = 0;
-            numericPropertiesRotation.ValueChanged += numericPropertiesRotation_ValueChanged;
-            numericPropertiesRotation.KeyPress += numericPropertiesRotation_KeyPress;
+            numericPropertiesRotation.ValueChanged += NumericPropertiesRotation_ValueChanged;
+            numericPropertiesRotation.KeyPress += NumericPropertiesRotation_KeyPress;
             // 
             // panelPropertiesPolygon
             // 
@@ -1179,7 +1185,7 @@
             checkBoxPropertiesShadow.Text = "Shadow";
             toolTip1.SetToolTip(checkBoxPropertiesShadow, "Draws a dark semi-transparent shadow untderneath the symbol");
             checkBoxPropertiesShadow.UseVisualStyleBackColor = true;
-            checkBoxPropertiesShadow.CheckedChanged += checkBoxPropertiesShadow_CheckedChanged;
+            checkBoxPropertiesShadow.CheckedChanged += CheckBoxPropertiesShadow_CheckedChanged;
             checkBoxPropertiesShadow.Click += CheckBoxPropertiesShadow_Click;
             // 
             // panelPropertiesCrop
@@ -1262,13 +1268,6 @@
             toolTip1.AutoPopDelay = 3000;
             toolTip1.InitialDelay = 200;
             toolTip1.ReshowDelay = 40;
-            // 
-            // toolStripMenuItem1
-            // 
-            toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(184, 22);
-            toolStripMenuItem1.Text = "Print...";
-            toolStripMenuItem1.Click += toolStripMenuItem1_Click;
             // 
             // ScreenshotEditor
             // 

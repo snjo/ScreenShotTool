@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Drawing.Printing;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 #pragma warning disable CA1416 // Validate platform compatibility
 namespace ScreenShotTool;
@@ -15,8 +9,8 @@ namespace ScreenShotTool;
 public class Print
 {
     private PrintDocument printDocument;
-    public List<string> InstalledPrinters = new();
-    public List<string> PdfPrinters = new();
+    public List<string> InstalledPrinters = [];
+    public List<string> PdfPrinters = [];
     readonly string DefaultPrinter;
     public Font Font;
     private StreamReader? streamToPrint;
@@ -49,9 +43,9 @@ public class Print
         return printDocument.PrinterSettings.IsValid;
     }
 
-    public string GetDefaultPrinterName()
+    public static string GetDefaultPrinterName()
     {
-        PrinterSettings settings = new PrinterSettings();
+        PrinterSettings settings = new();
         return settings.PrinterName;
     }
 
@@ -80,7 +74,7 @@ public class Print
     public List<PaperSize> GetPaperSizes()
     {
         List<PaperSize> paperSizes = new();
-        paperSizes =  printDocument.PrinterSettings.PaperSizes.Cast<PaperSize>().ToList();
+        paperSizes = printDocument.PrinterSettings.PaperSizes.Cast<PaperSize>().ToList();
         return paperSizes;
     }
 
@@ -149,24 +143,22 @@ public class Print
 
     public Rectangle CalculateImageDrawSize(Bitmap image, SizeF canvasSize, bool preview, float dpi = 600)
     {
-        //float HardDPI = 600;
         float scale = ImageScale / 100f;
-        
-        SizeF paperSizePixels = new SizeF(PaperSize.Width * dpi / 100f, PaperSize.Height * dpi / 100f);
+
+        SizeF paperSizePixels = new(PaperSize.Width * dpi / 100f, PaperSize.Height * dpi / 100f);
         float outputRatio = 1;
         if (preview)
         {
             outputRatio = paperSizePixels.Width / canvasSize.Width;
         }
-        float paperRatio = paperSizePixels.Width / paperSizePixels.Height;
-       
+
 
         float left = (canvasSize.Width * (MarginLeftPercent / 100f));
         float right = (canvasSize.Width * (MarginRightPercent / 100f));
         float top = (canvasSize.Height * (MarginTopPercent / 100f));
         float bottom = (canvasSize.Height * (MarginBottomPercent / 100f));
-        RectangleF marginRect = new RectangleF(left, top, canvasSize.Width - right - left, canvasSize.Height - bottom - top);
-        SizeF imgDrawSize = new SizeF(image.Size.Width / outputRatio * scale, image.Size.Height / outputRatio * scale);
+        RectangleF marginRect = new(left, top, canvasSize.Width - right - left, canvasSize.Height - bottom - top);
+        SizeF imgDrawSize = new(image.Size.Width / outputRatio * scale, image.Size.Height / outputRatio * scale);
         float imageRatio = imgDrawSize.Width / imgDrawSize.Height;
         if (FitToPage)
         {
@@ -188,7 +180,7 @@ public class Print
 
     public Bitmap CreatePreviewImage(Bitmap image, SizeF canvasSize, float dpi = 600)
     {
-        Bitmap outputImage = new Bitmap((int)canvasSize.Width, (int)canvasSize.Height);
+        Bitmap outputImage = new((int)canvasSize.Width, (int)canvasSize.Height);
         Graphics graphics = Graphics.FromImage(outputImage);
         Rectangle drawRectangle = CalculateImageDrawSize(image, canvasSize, true, dpi);
         graphics.DrawImage(image, drawRectangle);
@@ -203,8 +195,8 @@ public class Print
             Debug.WriteLine("PrintPageToText: ev Graphics or image is null");
             return;
         }
-        float leftMargin = ev.MarginBounds.Left;
-        float topMargin = ev.MarginBounds.Top;
+        //float leftMargin = ev.MarginBounds.Left;
+        //float topMargin = ev.MarginBounds.Top;
         float areaX = (int)printDocument.DefaultPageSettings.PrintableArea.Width;
         float areaY = (int)printDocument.DefaultPageSettings.PrintableArea.Height;
         int dpiX = printDocument.DefaultPageSettings.PrinterResolution.X;
@@ -218,19 +210,18 @@ public class Print
         int top = (int)(drawRectangle.Top * scaleToPageY);
         int width = (int)(drawRectangle.Width * scaleToPageX);
         int height = (int)(drawRectangle.Height * scaleToPageY);
-        Rectangle drawRectangleScaled = new Rectangle(left, top, width, height);
-        //Debug.WriteLine($"draw rect {drawRectangle}, scaled {drawRectangleScaled} \nresX{resX}, resY{resY}, scaleToPage {scaleToPageX}x{scaleToPageY}");
+        Rectangle drawRectangleScaled = new(left, top, width, height);
 
         // upscale image to reduce noise, 2 seems sufficient
-        Bitmap scaledBitmap = ScaleBitmap(imageToPrint, 2, true); // scaling the source up reduces jpeg style compression artifacts
+        Bitmap scaledBitmap = ScaleBitmap(imageToPrint, 2, true);
         ev.Graphics.DrawImage(scaledBitmap, drawRectangleScaled);
         scaledBitmap.Dispose();
         ev.HasMorePages = false;
     }
 
-    private Bitmap ScaleBitmap(Bitmap image, int scaleFactor, bool pixelPerfect)
+    private static Bitmap ScaleBitmap(Bitmap image, int scaleFactor, bool pixelPerfect)
     {
-        Bitmap scaledBitmap = new Bitmap(image.Width * scaleFactor, image.Height * scaleFactor);
+        Bitmap scaledBitmap = new(image.Width * scaleFactor, image.Height * scaleFactor);
         Graphics g = Graphics.FromImage(scaledBitmap);
         if (pixelPerfect)
         {
@@ -252,10 +243,10 @@ public class Print
     {
         try
         {
-            streamToPrint = new StreamReader (file);
+            streamToPrint = new StreamReader(file);
             try
             {
-                printDocument.PrintPage += new PrintPageEventHandler (PrintPageText);
+                printDocument.PrintPage += new PrintPageEventHandler(PrintPageText);
                 printDocument.Print();
             }
             finally
@@ -286,16 +277,15 @@ public class Print
 
         //ev.PageSettings.PaperSize = printDocument.PrinterSettings.PaperSizes.
 
-        float linesPerPage = 0;
-        float yPos = 0;
+        float yPos;
         int count = 0;
         float leftMargin = ev.MarginBounds.Left;
         float topMargin = ev.MarginBounds.Top;
         string? line = null;
-        
+
         Graphics graphics = ev.Graphics;
         // Calculate the number of lines per page.
-        linesPerPage = ev.MarginBounds.Height / Font.GetHeight(graphics);
+        float linesPerPage = ev.MarginBounds.Height / Font.GetHeight(graphics);
 
         // Print each line of the file.
         while (count < linesPerPage &&

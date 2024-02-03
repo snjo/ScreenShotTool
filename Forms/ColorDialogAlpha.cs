@@ -5,12 +5,12 @@ namespace ScreenShotTool.Forms;
 #pragma warning disable CA1416 // Validate platform compatibility
 public partial class ColorDialogAlpha : Form
 {
-    int SwatchesHorizontal = 15;
-    int SwatchesVertical = 10;
+    readonly int SwatchesHorizontal = 15;
+    readonly int SwatchesVertical = 10;
     Size SwatchSize = new(20, 20);
-    int swatchPadding = 3;
+    readonly int swatchPadding = 3;
     public Color Color = Color.White;
-    List<Color> colors;
+    readonly List<Color> colors;
 
     public ColorDialogAlpha(Color startColor)
     {
@@ -58,9 +58,9 @@ public partial class ColorDialogAlpha : Form
 
     private static List<Color> GetAllColors(bool includeUIColors)
     {
-        List<Color> colorList = new List<Color>();
-        List<Color> rearrangedColors = new List<Color>();
-        ColorConverter converter = new ColorConverter();
+        List<Color> colorList = [];
+        List<Color> rearrangedColors = [];
+        ColorConverter converter = new();
         int colorCount = 0;
         var StandardValues = converter.GetStandardValues();
         if (StandardValues != null)
@@ -120,7 +120,7 @@ public partial class ColorDialogAlpha : Form
         var orderedColorList = colors
             .OrderBy(color => color.GetHue())
             .ThenBy(o => o.R * 3 + o.G * 2 + o.B * 1);
-        return orderedColorList.ToList();
+        return [.. orderedColorList];
     }
 
     private static void MoveToList(List<Color> oldList, List<Color> newList, Color moveColor)

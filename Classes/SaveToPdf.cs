@@ -1,12 +1,6 @@
 ﻿using PdfSharp.Drawing;
 using PdfSharp.Pdf;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing.Printing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
@@ -20,7 +14,7 @@ public static class SaveToPdf
         string fileName = Path.GetFileName(filePath);
         string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
 
-        PdfDocument document = new PdfDocument();
+        PdfDocument document = new();
         document.Info.Title = fileNameWithoutExtension;
         document.Info.Subject = "Image from Screenshot Tool";
         //document.Info.CreationDate = DateTime.Now;
@@ -33,9 +27,9 @@ public static class SaveToPdf
         Debug.WriteLine($"pageSize {gfx.PageSize}");
         double insideWidth = gfx.PageSize.Width - (margins * 2f);
         double insideHeight = gfx.PageSize.Width - (margins * 2f);
-        RectangleF drawSize = CalculateImageDrawSize(ximg, new RectangleF(0, 0, (float)insideWidth, (float)insideHeight), imageScale);
+        RectangleF drawSize = CalculateImageDrawSize(ximg, new(0, 0, (float)insideWidth, (float)insideHeight), imageScale);
         Debug.WriteLine($"margins {margins}");
-        RectangleF finalRect = new RectangleF(margins, margins, drawSize.Width, drawSize.Height);
+        RectangleF finalRect = new(margins, margins, drawSize.Width, drawSize.Height);
         Debug.WriteLine($"Draw to rectangle {finalRect}");
         gfx.DrawImage(ximg, finalRect);
 
@@ -45,7 +39,7 @@ public static class SaveToPdf
         //  XStringFormats.Center);
 
 
-        
+
         try
         {
             document.Save(filePath);
@@ -54,12 +48,12 @@ public static class SaveToPdf
         catch (Exception e)
         {
             Debug.WriteLine($"Couldn't save to file {filePath}, \n {e.Message}");
-        }   
+        }
     }
 
     public static RectangleF CalculateImageDrawSize(XImage image, RectangleF marginRect, float scale)
     {
-        SizeF imgDrawSize = new SizeF((float)image.Size.Width * scale, (float)image.Size.Height * scale);
+        SizeF imgDrawSize = new((float)image.Size.Width * scale, (float)image.Size.Height * scale);
         float imageRatio = imgDrawSize.Width / imgDrawSize.Height;
 
         if (imgDrawSize.Width > marginRect.Width)
@@ -74,7 +68,7 @@ public static class SaveToPdf
             imgDrawSize.Height = marginRect.Height;
             imgDrawSize.Width = imgDrawSize.Height * imageRatio;
         }
-        
+
         Debug.WriteLine($"imgDrawSize {imgDrawSize}");
         return new RectangleF(0f, 0f, imgDrawSize.Width, imgDrawSize.Height);
     }

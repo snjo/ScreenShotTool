@@ -10,18 +10,18 @@ public partial class PrintDialog : Form
     public string PrinterName;
     public string PaperSize;
     public bool FitToPage;
-    private Bitmap? image;
-    string preferredPaperSize = "A4"; // set with settings later?
-    bool creationComplete = false;
+    private readonly Bitmap? image;
+    readonly string preferredPaperSize = "A4"; // set with settings later?
+    readonly bool creationComplete = false;
 
-    private Print printer;
+    private readonly Print printer;
 
     public PrintDialog(Print print, Bitmap? image, float marginLeft = 5f, float marginRight = 5f, float marginTop = 5f, float marginBottom = 5f)
     {
         InitializeComponent();
         Font = new Font(this.Font.FontFamily, 9);
         printer = print;
-        PrinterName = print.GetDefaultPrinterName();
+        PrinterName = Print.GetDefaultPrinterName();
         comboBoxPrinters.Items.AddRange(print.InstalledPrinters.ToArray());
         comboBoxPrinters.Text = PrinterName;
         UpdatePaperList();
@@ -65,7 +65,7 @@ public partial class PrintDialog : Form
         printer.MarginBottomPercent = (float)numericMarginBottom.Value;
         printer.FitToPage = checkBoxFitToPage.Checked;
         printer.ImageScale = (float)numericImageScale.Value;
-        
+
         PaperSize? paperSize = printer.GetPaperSizeByName(comboBoxPaper.Text);
         if (paperSize != null)
         {
@@ -93,17 +93,17 @@ public partial class PrintDialog : Form
         UpdatePreview();
     }
 
-    private void numericImageScale_ValueChanged(object sender, EventArgs e)
+    private void NumericImageScale_ValueChanged(object sender, EventArgs e)
     {
         UpdatePreview();
     }
 
-    private void checkBoxFitToPage_CheckedChanged(object sender, EventArgs e)
+    private void CheckBoxFitToPage_CheckedChanged(object sender, EventArgs e)
     {
         UpdatePreview();
     }
 
-    private void comboBoxPrinters_SelectedIndexChanged(object sender, EventArgs e)
+    private void ComboBoxPrinters_SelectedIndexChanged(object sender, EventArgs e)
     {
         ChangePrinter(comboBoxPrinters.Text);
         UpdatePaperList();
@@ -141,7 +141,7 @@ public partial class PrintDialog : Form
         }
     }
 
-    private void comboBoxPaper_SelectedIndexChanged(object sender, EventArgs e)
+    private void ComboBoxPaper_SelectedIndexChanged(object sender, EventArgs e)
     {
         PaperSize = comboBoxPaper.Text;
         UpdatePreview();

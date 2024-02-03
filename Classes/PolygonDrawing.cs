@@ -1,13 +1,11 @@
-﻿using System.Data.SqlTypes;
-using System.Diagnostics;
-using System.Numerics;
+﻿using System.Numerics;
 
 namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
 
 public class PolygonDrawing(Pen pen)
 {
-    public Point Location = new Point(0, 0);
+    public Point Location = new(0, 0);
     public Size Size;
     private bool noPixelsSet = true;
     public int LeftMostPixel = 0;
@@ -15,7 +13,7 @@ public class PolygonDrawing(Pen pen)
     public int TopMostPixel = 0;
     public int BottomMostPixel = 0;
 
-    public List<Point> PointList = new();
+    public List<Point> PointList = [];
     public Pen pen = pen;
 
     private void UpdateContentBounds(Pen pen, Point point)
@@ -67,8 +65,8 @@ public class PolygonDrawing(Pen pen)
     {
         graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
         int pointsToAdd = 4; // add points between first and last for closed or fill, reduce bulges
-        List<Point> offsetPoints = new();
-        List<Point> deBulgedPoints = new();
+        List<Point> offsetPoints = [];
+        List<Point> deBulgedPoints = [];
         float scaleWidth = Width / Contents.Width;
         float scaleHeight = Height / Contents.Height;
         for (int i = 0; i < PointList.Count; i++)
@@ -76,7 +74,7 @@ public class PolygonDrawing(Pen pen)
             if (scale)
             {
                 Point zeroed = PointList[i].Subtract(new Point(Contents.Left, Contents.Top));
-                Point scaledPoint = new Point((int)(zeroed.X * scaleWidth), (int)(zeroed.Y * scaleHeight));
+                Point scaledPoint = new((int)(zeroed.X * scaleWidth), (int)(zeroed.Y * scaleHeight));
                 offsetPoints.Add(scaledPoint.Addition(new Point(offsetX, offsetY)).Addition(new Point(Contents.Left, Contents.Top)));
             }
             else
@@ -97,7 +95,7 @@ public class PolygonDrawing(Pen pen)
                 float t = 1 - (increment * i);
                 deBulgedPoints.Add(GetPointAlongLine(first, last, t));
             }
-            
+
         }
 
         if (fill)
@@ -122,10 +120,10 @@ public class PolygonDrawing(Pen pen)
         }
     }
 
-    private Point GetPointAlongLine(Point start, Point end, float t)
+    private static Point GetPointAlongLine(Point start, Point end, float t)
     {
-        Vector2 vector = new Vector2(end.X - start.X, end.Y - start.Y);
-        Point offset = new Point((int)(vector.X * t), (int)(vector.Y * t));
+        Vector2 vector = new(end.X - start.X, end.Y - start.Y);
+        Point offset = new((int)(vector.X * t), (int)(vector.Y * t));
         return start.Addition(offset);
     }
 

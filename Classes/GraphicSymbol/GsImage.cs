@@ -1,7 +1,5 @@
 ﻿using ScreenShotTool.Classes;
 using System.Diagnostics;
-using System.Drawing;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
@@ -45,7 +43,7 @@ public class GsImage : GraphicSymbol
 
         Image? clipboardImage = null;
         if (checkClipboard)
-        {            
+        {
             // clipboard data is non-alpha 32bppRGB, so only simple shadows will be used
             clipboardImage = Clipboard.GetImage();
         }
@@ -147,7 +145,7 @@ public class GsImage : GraphicSymbol
             {
                 if (rotatedImage != null)
                 {
-                    graphic.DrawImage(rotatedImage, RotatedBounds.Left, RotatedBounds.Top, RotatedBounds.Width, RotatedBounds.Height);                  
+                    graphic.DrawImage(rotatedImage, RotatedBounds.Left, RotatedBounds.Top, RotatedBounds.Width, RotatedBounds.Height);
                 }
             }
             else
@@ -187,16 +185,16 @@ public class GsImage : GraphicSymbol
 
     private void UpdateRotatedBounds()
     {
-            UpdateCorners();
-            int minX = Math.Min(corner1.X, corner2.X);
-            minX = Math.Min(minX, corner3.X);
-            minX = Math.Min(minX, corner4.X);
-            RotatedWidthOverflow = Left - minX;
-            int minY = Math.Min(corner1.Y, corner2.Y);
-            minY = Math.Min(minY, corner3.Y);
-            minY = Math.Min(minY, corner4.Y);
-            RotatedHeightOverflow = Top - minY;
-            RotatedBounds = new Rectangle(Left - RotatedWidthOverflow, Top - RotatedHeightOverflow, Width + (RotatedWidthOverflow * 2), Height + (RotatedHeightOverflow * 2));
+        UpdateCorners();
+        int minX = Math.Min(corner1.X, corner2.X);
+        minX = Math.Min(minX, corner3.X);
+        minX = Math.Min(minX, corner4.X);
+        RotatedWidthOverflow = Left - minX;
+        int minY = Math.Min(corner1.Y, corner2.Y);
+        minY = Math.Min(minY, corner3.Y);
+        minY = Math.Min(minY, corner4.Y);
+        RotatedHeightOverflow = Top - minY;
+        RotatedBounds = new Rectangle(Left - RotatedWidthOverflow, Top - RotatedHeightOverflow, Width + (RotatedWidthOverflow * 2), Height + (RotatedHeightOverflow * 2));
     }
 
     private void UpdateCorners()
@@ -228,7 +226,7 @@ public class GsImage : GraphicSymbol
         x = pivotX + distance * Math.Cos(radians);
         y = pivotY + distance * Math.Sin(radians);
 
-        return new Point((int)x,(int)y);
+        return new Point((int)x, (int)y);
     }
 
     public void UpdateShadows()
@@ -293,7 +291,7 @@ public class GsImage : GraphicSymbol
         graphic.FillPolygon(ShadowBrush, shadowPoints);
     }
 
-    
+
     private static Bitmap CreateAlphaShadow(Bitmap source)
     {
         //don't use this on non-32bppARGB, bmppixelsnoop doesn't support it.
