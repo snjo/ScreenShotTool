@@ -83,7 +83,7 @@ public partial class PrintDialog : Form
         if (image != null)
         {
             pictureBoxPreview.Image.DisposeAndNull();
-            pictureBoxPreview.Image = printer.CreatePrintImage(image, pictureBoxPreview.Size, preview: true);
+            pictureBoxPreview.Image = printer.CreatePreviewImage(image, pictureBoxPreview.Size);
         }
     }
 

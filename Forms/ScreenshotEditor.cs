@@ -1545,6 +1545,7 @@ public partial class ScreenshotEditor : Form
                 //print.
                 print.PrintImage(outImage);
             }
+            print.Dispose();
         }
     }
 }

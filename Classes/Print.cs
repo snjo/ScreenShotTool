@@ -142,7 +142,12 @@ public class Print
         printDocument.Print();
     }
 
-    public Bitmap CreatePrintImage(Bitmap image, SizeF canvasSize, bool preview, float dpi = 600)
+    public void Dispose()
+    {
+        imageToPrint?.Dispose();
+    }
+
+    public Rectangle CalculateImageDrawSize(Bitmap image, SizeF canvasSize, bool preview, float dpi = 600)
     {
         //float HardDPI = 600;
         float scale = ImageScale / 100f;
@@ -154,8 +159,7 @@ public class Print
             outputRatio = paperSizePixels.Width / canvasSize.Width;
         }
         float paperRatio = paperSizePixels.Width / paperSizePixels.Height;
-        Bitmap previewImage = new Bitmap((int)canvasSize.Width, (int)canvasSize.Height);
-        Graphics graphics = Graphics.FromImage(previewImage);
+       
 
         float left = (canvasSize.Width * (MarginLeftPercent / 100f));
         float right = (canvasSize.Width * (MarginRightPercent / 100f));
@@ -178,10 +182,18 @@ public class Print
                 imgDrawSize.Width = imgDrawSize.Height * imageRatio;
             }
         }
+        Debug.WriteLine($"imgDrawSize {imgDrawSize}");
+        return new Rectangle((int)left, (int)top, (int)imgDrawSize.Width, (int)imgDrawSize.Height);
+    }
 
-        graphics.DrawImage(image, new Rectangle((int)left, (int)top, (int)imgDrawSize.Width, (int)imgDrawSize.Height));
+    public Bitmap CreatePreviewImage(Bitmap image, SizeF canvasSize, float dpi = 600)
+    {
+        Bitmap outputImage = new Bitmap((int)canvasSize.Width, (int)canvasSize.Height);
+        Graphics graphics = Graphics.FromImage(outputImage);
+        Rectangle drawRectangle = CalculateImageDrawSize(image, canvasSize, true, dpi);
+        graphics.DrawImage(image, drawRectangle);
         graphics.Dispose();
-        return previewImage;
+        return outputImage;
     }
 
     private void PrintPageImage(object sender, PrintPageEventArgs ev)
@@ -199,11 +211,41 @@ public class Print
         int dpiY = printDocument.DefaultPageSettings.PrinterResolution.Y;
         float resX = areaX * dpiX / 100f;
         float resY = areaY * dpiY / 100f;
+        float scaleToPageX = areaX / resX;
+        float scaleToPageY = areaY / resY;
+        Rectangle drawRectangle = CalculateImageDrawSize(imageToPrint, new SizeF(resX, resY), preview: false, dpiX);
+        int left = (int)(drawRectangle.Left * scaleToPageX);
+        int top = (int)(drawRectangle.Top * scaleToPageY);
+        int width = (int)(drawRectangle.Width * scaleToPageX);
+        int height = (int)(drawRectangle.Height * scaleToPageY);
+        Rectangle drawRectangleScaled = new Rectangle(left, top, width, height);
+        //Debug.WriteLine($"draw rect {drawRectangle}, scaled {drawRectangleScaled} \nresX{resX}, resY{resY}, scaleToPage {scaleToPageX}x{scaleToPageY}");
 
-        Bitmap imageOut = CreatePrintImage(imageToPrint, new SizeF(resX, resY), preview: false, dpiX);
-        ev.Graphics.DrawImage(imageOut, new Rectangle(0, 0, ev.PageBounds.Width, ev.PageBounds.Height));
-        imageOut.Dispose();
+        // upscale image to reduce noise, 2 seems sufficient
+        Bitmap scaledBitmap = ScaleBitmap(imageToPrint, 2, true); // scaling the source up reduces jpeg style compression artifacts
+        ev.Graphics.DrawImage(scaledBitmap, drawRectangleScaled);
+        scaledBitmap.Dispose();
         ev.HasMorePages = false;
+    }
+
+    private Bitmap ScaleBitmap(Bitmap image, int scaleFactor, bool pixelPerfect)
+    {
+        Bitmap scaledBitmap = new Bitmap(image.Width * scaleFactor, image.Height * scaleFactor);
+        Graphics g = Graphics.FromImage(scaledBitmap);
+        if (pixelPerfect)
+        {
+            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+        }
+        else
+        {
+            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+        }
+        g.DrawImage(image, new Rectangle(0, 0, scaledBitmap.Width, scaledBitmap.Height));
+        g.Dispose();
+        //Debug.WriteLine($"Scaled bmp from {image.Size} to {scaledBitmap.Size}");
+        return scaledBitmap;
     }
 
     public void PrintTextFile(string file)//printButton_Click(object sender, EventArgs e)
