@@ -21,8 +21,8 @@ public partial class ScreenshotEditor : Form
     public readonly static int startingFontSize = 10;
     readonly List<Button> toolButtons = [];
     public SharedBitmap copiedBitmap = new SharedBitmap();
-    string filterLoadImage = "Images|*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp|PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|All files|*.*";
-    string filterSaveImage = "PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|PDF|*.pdf|All files|*.*";
+    public static string filterLoadImage = "Images|*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp|PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|All files|*.*";
+    public static string filterSaveImage = "PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|PDF|*.pdf|All files|*.*";
 
     public ScreenshotEditor()
     {
@@ -159,67 +159,14 @@ public partial class ScreenshotEditor : Form
         SaveFileAction();
     }
 
+
     private void SaveFileAction()
     {
-        FileDialog fileDialog = new SaveFileDialog();
-
-        string filter = filterSaveImage;
-
-
-        fileDialog.Filter = filter;
-        fileDialog.FileName = "";
-        fileDialog.FilterIndex = 1;
-        DialogResult result = fileDialog.ShowDialog();
-        if (result == DialogResult.OK)
-        {
-            string filename = fileDialog.FileName;
-            if (Path.GetExtension(filename).ToLowerInvariant() == ".pdf")
-            {
-                Bitmap? outImage = editorCanvas.AssembleImageForSaveOrCopy();
-                if (outImage != null)
-                {
-                    Debug.WriteLine($"Saving to PDF {filename}");
-                    SaveToPdf.Save(filename, outImage, margins: 20f, imageScale: 0.87f); // 0.87 seems to match real pixels to a 100% zoom in Adobe Reader.
-                }
-                outImage?.Dispose();
-            }
-            else
-            {
-                ImageFormat imgFormat = ImageFormatFromExtension(filename);
-                Debug.WriteLine($"Guessed file format from file name ({filename}): {imgFormat} ");
-                SaveImage(fileDialog.FileName, imgFormat);
-            }
-        }
-    }
-
-    private void SaveImage(string filename, ImageFormat imgFormat)
-    {
-        Debug.WriteLine($"Saving image {filename} with format {imgFormat}");
         Bitmap? outImage = editorCanvas.AssembleImageForSaveOrCopy();
-
-        if (outImage != null && imgFormat == ImageFormat.Jpeg)
+        if (outImage != null)
         {
-            MainForm.SaveJpeg(filename, (Bitmap)outImage, Settings.Default.JpegQuality);
-            outImage.Dispose();
+            ImageOutput.SaveWithDialog(outImage, filterSaveImage);
         }
-        else if (outImage != null)
-        {
-            outImage.Save(filename, imgFormat);
-            outImage.Dispose();
-        }
-    }
-
-    private static ImageFormat ImageFormatFromExtension(string filename)
-    {
-        string extension = Path.GetExtension(filename).ToLowerInvariant();
-        return extension switch
-        {
-            ".png" => ImageFormat.Png,
-            ".jpg" => ImageFormat.Jpeg,
-            ".bmp" => ImageFormat.Bmp,
-            ".gif" => ImageFormat.Gif,
-            _ => ImageFormat.Png,
-        };
     }
 
     private void DeleteOverlayElementsToolStripMenuItem_Click(object sender, EventArgs e)

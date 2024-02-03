@@ -73,6 +73,7 @@
             websiteToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             labelInfo = new Label();
+            convertToPDFOrOtherFormatToolStripMenuItem = new ToolStripMenuItem();
             contextMenuListView.SuspendLayout();
             contextMenuSysTray.SuspendLayout();
             menuStrip1.SuspendLayout();
@@ -102,56 +103,56 @@
             // 
             // contextMenuListView
             // 
-            contextMenuListView.Items.AddRange(new ToolStripItem[] { itemOpenImage, itemOpenFolder, itemDeleteFile, itemRemove, copyToClipboardToolStripMenuItem, copyFileToolStripMenuItem, editImageToolStripMenuItem });
+            contextMenuListView.Items.AddRange(new ToolStripItem[] { itemOpenImage, itemOpenFolder, itemDeleteFile, itemRemove, copyToClipboardToolStripMenuItem, copyFileToolStripMenuItem, editImageToolStripMenuItem, convertToPDFOrOtherFormatToolStripMenuItem });
             contextMenuListView.Name = "contextMenuListView";
-            contextMenuListView.Size = new Size(199, 158);
+            contextMenuListView.Size = new Size(239, 202);
             // 
             // itemOpenImage
             // 
             itemOpenImage.Name = "itemOpenImage";
-            itemOpenImage.Size = new Size(198, 22);
+            itemOpenImage.Size = new Size(238, 22);
             itemOpenImage.Text = "&Open Image";
             itemOpenImage.Click += ItemOpenImage_Click;
             // 
             // itemOpenFolder
             // 
             itemOpenFolder.Name = "itemOpenFolder";
-            itemOpenFolder.Size = new Size(198, 22);
+            itemOpenFolder.Size = new Size(238, 22);
             itemOpenFolder.Text = "Open &Folder in Explorer";
             itemOpenFolder.Click += ItemOpenFolder_Click;
             // 
             // itemDeleteFile
             // 
             itemDeleteFile.Name = "itemDeleteFile";
-            itemDeleteFile.Size = new Size(198, 22);
+            itemDeleteFile.Size = new Size(238, 22);
             itemDeleteFile.Text = "&Delete File";
             itemDeleteFile.Click += ItemDeleteFile_Click;
             // 
             // itemRemove
             // 
             itemRemove.Name = "itemRemove";
-            itemRemove.Size = new Size(198, 22);
+            itemRemove.Size = new Size(238, 22);
             itemRemove.Text = "&Remove (don't delete)";
             itemRemove.Click += ItemRemove_Click;
             // 
             // copyToClipboardToolStripMenuItem
             // 
             copyToClipboardToolStripMenuItem.Name = "copyToClipboardToolStripMenuItem";
-            copyToClipboardToolStripMenuItem.Size = new Size(198, 22);
+            copyToClipboardToolStripMenuItem.Size = new Size(238, 22);
             copyToClipboardToolStripMenuItem.Text = "&Copy to Clipboard";
             copyToClipboardToolStripMenuItem.Click += CopyToClipboardToolStripMenuItem_Click;
             // 
             // copyFileToolStripMenuItem
             // 
             copyFileToolStripMenuItem.Name = "copyFileToolStripMenuItem";
-            copyFileToolStripMenuItem.Size = new Size(198, 22);
+            copyFileToolStripMenuItem.Size = new Size(238, 22);
             copyFileToolStripMenuItem.Text = "Co&py Files";
             copyFileToolStripMenuItem.Click += CopyFileToolStripMenuItem_Click;
             // 
             // editImageToolStripMenuItem
             // 
             editImageToolStripMenuItem.Name = "editImageToolStripMenuItem";
-            editImageToolStripMenuItem.Size = new Size(198, 22);
+            editImageToolStripMenuItem.Size = new Size(238, 22);
             editImageToolStripMenuItem.Text = "&Edit Image";
             editImageToolStripMenuItem.Click += EditImageFromFile_Click;
             // 
@@ -390,6 +391,13 @@
             labelInfo.TabIndex = 37;
             labelInfo.Text = "To take a screenshot use hotkeys";
             // 
+            // convertToPDFOrOtherFormatToolStripMenuItem
+            // 
+            convertToPDFOrOtherFormatToolStripMenuItem.Name = "convertToPDFOrOtherFormatToolStripMenuItem";
+            convertToPDFOrOtherFormatToolStripMenuItem.Size = new Size(238, 22);
+            convertToPDFOrOtherFormatToolStripMenuItem.Text = "Convert to PDF or other format";
+            convertToPDFOrOtherFormatToolStripMenuItem.Click += ConvertFileFormat_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -461,5 +469,6 @@
         private ToolStripMenuItem openEditorToolStripMenuItem;
         private ToolStripMenuItem editorToolStripMenuItem;
         private ToolStripMenuItem helpToolStripMenuItem;
+        private ToolStripMenuItem convertToPDFOrOtherFormatToolStripMenuItem;
     }
 }
