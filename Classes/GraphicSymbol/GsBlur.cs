@@ -1,11 +1,13 @@
-﻿namespace ScreenShotTool;
+﻿using ScreenShotTool.Properties;
+using System.Diagnostics;
+
+namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
 public class GsBlur : GsDynamicImage
 {
-    //public Bitmap? blurredImage;
-    private Bitmap? blurredCrop;
-    DateTime? lastLocalImageUpdate;
     bool isTempSymbol = false;
+    public int BlurRadius = 1;
+    public int MosaicSize = 10;
 
     private GsBlur(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor) : base(startPoint, endPoint, foregroundColor, backgroundColor)
     {
@@ -13,16 +15,18 @@ public class GsBlur : GsDynamicImage
         drawFill = DrawFill;
     }
 
-    public static GsBlur Create(Point startPoint, Point endPoint, bool temp)
+    public static GsBlur Create(Point startPoint, Point endPoint, bool temp, int mosaicSize, int blurRadius)
     {
         Color lineColor = Color.Transparent;
         if (temp)
         {
             lineColor = Color.Red;
         }
-        GsBlur newSymbol = new GsBlur(startPoint, endPoint, lineColor, Color.White)
+        GsBlur newSymbol = new (startPoint, endPoint, lineColor, Color.White)
         {
-            isTempSymbol = temp
+            isTempSymbol = temp,
+            MosaicSize = mosaicSize,
+            BlurRadius = blurRadius,
         };
         return newSymbol;
     }
@@ -36,15 +40,9 @@ public class GsBlur : GsDynamicImage
         }
         else
         {
-            if (RectChanged(rect) || blurredCrop == null || LastSourceUpdate > lastLocalImageUpdate)
+            if (SourceImage != null)
             {
-                UpdateBlurImage();
-                previousPosition = new Point(rect.Left, rect.Top);
-                previousSize = new Size(rect.Width, rect.Height);
-            }
-            if (blurredCrop != null)
-            {
-                graphic.DrawImage(blurredCrop, Left, Top, Width, Height);
+                graphic.DrawImage(SourceImage, Bounds, Bounds, GraphicsUnit.Pixel);
             }
 
             if (isTempSymbol)
@@ -59,19 +57,6 @@ public class GsBlur : GsDynamicImage
     public override void DrawShadow(Graphics graphic)
     {
         // no shadow
-    }
-
-    private void UpdateBlurImage()
-    {
-        if (SourceImage == null) return;
-        if (Width < 1 || Height < 1) return;
-        if (blurredCrop != null)
-        {
-            blurredCrop.Dispose();
-            blurredCrop = null;
-        }
-        blurredCrop = CropImage(SourceImage, new Rectangle(Left, Top, Width, Height));
-        lastLocalImageUpdate = DateTime.Now;
     }
 
     readonly Brush blackBrush = new SolidBrush(Color.Black);
@@ -90,7 +75,7 @@ public class GsBlur : GsDynamicImage
 
     public override void DisposeImages()
     {
-        blurredCrop.DisposeAndNull();
+        SourceImage.DisposeAndNull();
         base.DisposeImages();
     }
 }

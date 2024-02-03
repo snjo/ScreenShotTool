@@ -10,24 +10,23 @@ namespace ScreenShotTool;
 [SupportedOSPlatform("windows")]
 public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 {
+    readonly ScreenshotEditor parentEditor = parent;
+    readonly PictureBox pictureBox = pictureBox;
     public Bitmap? SourceImage;
     Image? OverlayImage;
-    Bitmap? blurImage;
+    //Bitmap? blurImage;
     Graphics? overlayGraphics;
     public int ArrowWeight = 5;
     public int LineWeight = 2;
     readonly int frameRate = Settings.Default.MaxFramerate;
     Point MousePositionLocal = Point.Empty;
 
-
-    readonly ScreenshotEditor parentEditor = parent;
-
-    public int blurRadius = Settings.Default.BlurSampleArea;
-    public int mosaicSize = Settings.Default.BlurMosaicSize;
-    public bool InitialBlurComplete = false; // used to prevent blur from generating twice, when numeric is set initially
+    public int BlurRadius = Settings.Default.BlurSampleArea;
+    public int MosaicSize = Settings.Default.BlurMosaicSize;
+    //public bool InitialBlurComplete = false; // used to prevent blur from generating twice, when numeric is set initially
 
     public int OutOfBoundsMaxPixels = 1000;
-    public Size CanvasSize = new(100, 100); // will be update when the image loads
+    public Size CanvasSize = new(100, 100); // will be updated when the image loads
     public Rectangle CanvasRect
     {
         get
@@ -35,9 +34,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
             return new Rectangle(0, 0, CanvasSize.Width, CanvasSize.Height);
         }
     }
-    readonly PictureBox pictureBox = pictureBox;
-
-    //public GraphicSymbol? currentSelectedSymbol = null;
+    
     public GraphicSymbol? CurrentSelectedSymbol
     {
         get
@@ -76,9 +73,9 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
     public void FlushImages(bool deleteSymbols = false)
     {
         // used at the end of each Load/Create image
-        DisposeAndNull(overlayGraphics);
-        DisposeAndNull(OverlayImage);
-        DisposeAndNull(blurImage);
+        overlayGraphics.DisposeAndNull();
+        OverlayImage.DisposeAndNull();
+        //blurImage.DisposeAndNull();
         if (deleteSymbols)
         {
             DeleteAllSymbols();
@@ -91,34 +88,13 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         UpdateOverlay();
     }
 
-    private static void DisposeAndNull(Image? image)
-    {
-        if (image != null)
-        {
-            image.Dispose();
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
-            image = null;
-#pragma warning restore IDE0059 // Unnecessary assignment of a value
-        }
-    }
-
-    private static void DisposeAndNull(Graphics? graphics)
-    {
-        if (graphics != null)
-        {
-            graphics.Dispose();
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
-            graphics = null;
-#pragma warning restore IDE0059 // Unnecessary assignment of a value
-        }
-    }
     #endregion
 
     #region Load and Save -------------------------------------------------------------------------------
 
     internal void CreateNewImage(int Width, int Height, Color color)
     {
-        DisposeAndNull(SourceImage);
+        SourceImage.DisposeAndNull();
         SourceImage = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
         UpdateCanvasSize(SourceImage.Size);
         Graphics g = Graphics.FromImage(SourceImage);
@@ -128,30 +104,12 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         UpdateOverlay();
     }
 
-    public static Bitmap? ImageToBitmap32bppArgb(Image? img, bool disposeSource)
-    {
-        Bitmap? clone = null;
-        if (img != null)
-        {
-            clone = new Bitmap(img.Width, img.Height, PixelFormat.Format32bppArgb);
-            using (Graphics gr = Graphics.FromImage(clone))
-            {
-                gr.DrawImage(img, new Rectangle(0, 0, clone.Width, clone.Height));
-            }
-            if (disposeSource)
-            {
-                img.Dispose();
-            }
-        }
-        return clone;
-    }
-
     public void LoadImageFromClipboard()
     {
         try
         {
-            DisposeAndNull(SourceImage);
-            SourceImage = ImageToBitmap32bppArgb(Clipboard.GetImage(), true); //(Bitmap)Clipboard.GetImage(); 
+            SourceImage.DisposeAndNull();
+            SourceImage = ImageProcessing.ImageToBitmap32bppArgb(Clipboard.GetImage(), true); //(Bitmap)Clipboard.GetImage(); 
             if (SourceImage != null)
             {
                 UpdateCanvasSize(SourceImage.Size);
@@ -175,8 +133,8 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
     public void LoadImageFromImage(Image image, bool deleteAllSymbols)
     {
-        DisposeAndNull(SourceImage);
-        SourceImage = ImageToBitmap32bppArgb(image, true);
+        SourceImage.DisposeAndNull();
+        SourceImage = ImageProcessing.ImageToBitmap32bppArgb(image, true);
         if (SourceImage != null)
         {
             UpdateCanvasSize(SourceImage.Size);
@@ -207,8 +165,8 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
                 {
                     tempImage = Image.FromStream(stream);
                 }
-                DisposeAndNull(SourceImage);
-                SourceImage = ImageToBitmap32bppArgb(tempImage, true);
+                SourceImage.DisposeAndNull();
+                SourceImage = ImageProcessing.ImageToBitmap32bppArgb(tempImage, true);
                 if (SourceImage != null)
                 {
                     UpdateCanvasSize(SourceImage.Size);
@@ -270,76 +228,6 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         }
     }
 
-    public Bitmap CreateBlurImage(int blurPixelSize, Bitmap? sourceBitmap, Rectangle blurBounds)
-    {
-        if (sourceBitmap == null)
-        {
-            Debug.WriteLine("Couldn't create blur image, originalImage is null");
-            return new Bitmap(100, 100);
-        }
-        Stopwatch sw = new(); // for measuring the time it takes to create the blur image
-        sw.Start();
-        DisposeAndNull(blurImage);
-
-        blurImage = new Bitmap(sourceBitmap.Width, sourceBitmap.Height);
-        Graphics graphics = Graphics.FromImage(blurImage);
-        Color pixelColor = Color.Black;
-        SolidBrush blurBrush = new(pixelColor);
-
-
-
-        using (var snoop = new BmpPixelSnoop((Bitmap)sourceBitmap))
-        {
-            int tilesDrawn = 0;
-            for (int x = Math.Max(0, blurBounds.Left); x < sourceBitmap.Width && x < blurBounds.Right; x += blurPixelSize)
-            {
-                for (int y = Math.Max(0, blurBounds.Top); y < sourceBitmap.Height && y < blurBounds.Bottom; y += blurPixelSize)
-                {
-                    pixelColor = SamplePixelArea(snoop, blurRadius, x + blurRadius, y + blurRadius);
-                    blurBrush.Color = pixelColor;
-                    graphics.FillRectangle(blurBrush, new Rectangle(x, y, blurPixelSize, blurPixelSize));
-                    tilesDrawn++;
-                }
-            }
-            //Debug.WriteLine($"Mosaic, drew {tilesDrawn} tiles, inside {blurBounds}");
-        }
-
-        graphics.Dispose();
-        sw.Stop();
-        //Debug.WriteLine($"Blur took {sw.ElapsedMilliseconds}");
-
-        InitialBlurComplete = true;
-        return blurImage;
-    }
-
-    private static Color SamplePixelArea(BmpPixelSnoop sourceImage, int blurRadius, int x, int y)
-    {
-        Color sampleColor;
-        Color pixelColor;
-        int sampleX;
-        int sampleY;
-        int R = 0;
-        int G = 0;
-        int B = 0;
-        int samples = 0;
-        for (int i = -blurRadius; i <= blurRadius; i++)
-        {
-            for (int j = -blurRadius; j <= blurRadius; j++)
-            {
-                sampleX = x + i;
-                sampleY = y + j;
-                sampleX = Math.Clamp(sampleX, 0, sourceImage.Width - 1);
-                sampleY = Math.Clamp(sampleY, 0, sourceImage.Height - 1);
-                sampleColor = sourceImage.GetPixel(sampleX, sampleY);
-                R += sampleColor.R;
-                G += sampleColor.G;
-                B += sampleColor.B;
-                samples++;
-            }
-        }
-        pixelColor = Color.FromArgb(R / samples, G / samples, B / samples);
-        return pixelColor;
-    }
 
     DateTime LastFrame = DateTime.Now;
     int skippedUpdates = 0;
@@ -372,18 +260,18 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
     Bitmap? imageInProgress;
     private Bitmap DrawOverlay(GraphicSymbol? temporarySymbol = null, bool highlightSelected = true)
     {
-        DisposeAndNull(imageInProgress);
+        imageInProgress.DisposeAndNull();
         //Bitmap img;
         if (SourceImage != null)
         {
-            imageInProgress = CopyImage(SourceImage);
+            imageInProgress = ImageProcessing.CopyImage(SourceImage);
         }
         else
         {
             Debug.WriteLine("Couldn't create correct overlay image, originalImage is null");
             imageInProgress = new Bitmap(100, 100);
         }
-        DisposeAndNull(overlayGraphics);
+        overlayGraphics.DisposeAndNull();
 
         overlayGraphics = Graphics.FromImage(imageInProgress);
 
@@ -393,31 +281,6 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         DrawElements(overlayGraphics, temporarySymbol, ShowNonOutputWidgets: highlightSelected);
 
         return imageInProgress;
-    }
-
-    public static Bitmap CropImage(Bitmap img, Rectangle cropArea)
-    {
-        //https://www.codingdefined.com/2015/04/solved-bitmapclone-out-of-memory.html
-        Bitmap bmp = new(cropArea.Width, cropArea.Height);
-
-        using (Graphics gph = Graphics.FromImage(bmp))
-        {
-            gph.DrawImage(img, new Rectangle(0, 0, bmp.Width, bmp.Height), cropArea, GraphicsUnit.Pixel);
-        }
-        return bmp;
-    }
-
-    public static Bitmap CopyImage(Bitmap img)
-    {
-        Rectangle cropArea = new(0, 0, img.Width, img.Height);
-        //https://www.codingdefined.com/2015/04/solved-bitmapclone-out-of-memory.html
-        Bitmap bmp = new(cropArea.Width, cropArea.Height);
-
-        using (Graphics gph = Graphics.FromImage(bmp))
-        {
-            gph.DrawImage(img, new Rectangle(0, 0, bmp.Width, bmp.Height), cropArea, GraphicsUnit.Pixel);
-        }
-        return bmp;
     }
 
     private void DrawElements(Graphics graphic, GraphicSymbol? temporarySymbol = null, bool ShowNonOutputWidgets = false)
@@ -434,8 +297,9 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
             {
                 if (gsDn is GsBlur gsBlur)
                 {
-                    DisposeAndNull(gsBlur.SourceImage);
-                    gsBlur.SourceImage = CreateBlurImage(mosaicSize, imageInProgress, gsBlur.Bounds);
+                    gsBlur.SourceImage.DisposeAndNull();
+                    gsBlur.SourceImage = ImageProcessing.CreateBlurImage(imageInProgress, gsBlur.MosaicSize, gsBlur.Bounds, gsBlur.BlurRadius);
+                    //InitialBlurComplete = true;
                 }
                 else
                 {
@@ -460,8 +324,9 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
             {
                 if (gsDynamicImage is GsBlur gsBlur)
                 {
-                    DisposeAndNull(gsBlur.SourceImage);
-                    gsBlur.SourceImage = CreateBlurImage(mosaicSize, imageInProgress, gsBlur.Bounds);
+                    gsBlur.SourceImage.DisposeAndNull();
+                    gsBlur.SourceImage = ImageProcessing.CreateBlurImage(imageInProgress, gsBlur.MosaicSize, gsBlur.Bounds, BlurRadius);
+                    //InitialBlurComplete = true;
                 }
                 else
                 {
@@ -485,53 +350,14 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
             }
         }
     }
-
-    private void InsertImagesInSymbol(GraphicSymbol symbol)
-    {
-        if (symbol is GsBlur gsblur)
-        {
-            if (SourceImage != null)
-            {
-                gsblur.SourceImage = blurImage;
-            }
-        }
-        else if (symbol is GsDynamicImage gsdi)
-        {
-            if (SourceImage != null)
-            {
-                gsdi.SourceImage = (Bitmap)SourceImage;
-            }
-        }
-    }
     #endregion
 
     #region Drawing Freehand ----------------------------------------------------------------------------
 
-    Pen freehandPen = new(Color.Red, 3);
+    readonly Pen freehandPen = new(Color.Red, 3);
     PolygonDrawing? polygonDrawing;
     Point oldFreehandPosition = Point.Empty;
     bool freehandInProgress = false;
-
-    //private Bitmap DrawOnFreehandImage(Point point, int lineWidth, Color color)
-    //{
-    //    freehandPen.Width = lineWidth;
-    //    freehandPen.Color = color;
-    //    freehandPen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
-    //    freehandPen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
-    //    if (polygonDrawing == null)
-    //    {
-    //        polygonDrawing = new PolygonDrawing(freehandPen);
-    //    }
-    //    if (freehandInProgress == false)
-    //    {
-    //        oldFreehandPosition = MousePositionLocal;
-    //        freehandInProgress = true;
-    //    }
-
-    //    polygonDrawing.AddPoint(point);
-    //    oldFreehandPosition = point;
-    //    return polygonDrawing.ToBitmap();
-    //}
 
     private void DrawOnPolygon(Point point, int lineWidth, Color color)
     {
@@ -557,32 +383,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
     #region Symbols -------------------------------------------------------------------------------------
 
-    private static Point RestrainProportions(Point symbolLocation, Point MousePosition, Size originalSize)
-    {
-        float aspectRatio;
-        if (originalSize.Width == 0 || originalSize.Height == 0)
-        {
-            aspectRatio = 1; // avoid div0
-        }
-        else
-        {
-            aspectRatio = (float)originalSize.Width / (float)originalSize.Height;
-        }
-        Size dragSize = (Size)MousePosition.Subtract(symbolLocation);
-        int width = Math.Abs(dragSize.Width);
-        int height = Math.Abs(dragSize.Height);
-        int xFlip = dragSize.Width < 0 ? -1 : 1;
-        int yFlip = dragSize.Height < 0 ? -1 : 1;
-        int dominantSide = Math.Max(width, height);
-        if (aspectRatio > 1) // scale side by * or / aspect ratio based on what's the longest side
-        {
-            return new Point((int)(symbolLocation.X + xFlip * dominantSide), (int)(symbolLocation.Y + yFlip * dominantSide / aspectRatio));
-        }
-        else
-        {
-            return new Point((int)(symbolLocation.X + xFlip * dominantSide * aspectRatio), (int)(symbolLocation.Y + yFlip * dominantSide));
-        }
-    }
+
 
     private GraphicSymbol? GetNewSymbol(Point MousePosition, bool SquareBounds, bool temp)
     {
@@ -592,8 +393,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
         if (SquareBounds)
         {
-            //dragEnd = RestrainToSquare(dragStart, dragEnd);
-            dragEnd = RestrainProportions(dragStart, dragEnd, new Size(1, 1)); // size is 1:1, ration is 1, meaning square
+            dragEnd = SymbolProcessing.RestrainProportions(dragStart, dragEnd, new Size(1, 1)); // size is 1:1, ration is 1, meaning square
         }
 
         if (dragStarted)
@@ -637,7 +437,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
                 ScreenshotEditor.UserActions.CreateLine => new GsLine(dragStart, dragEnd, lineColorForceVisible, fillColor, shadow, lineWeightForceVisible),
                 ScreenshotEditor.UserActions.CreateArrow => new GsArrow(dragStart, dragEnd, lineColorForceVisible, fillColor, shadow, lineWeightForceVisible),
                 ScreenshotEditor.UserActions.CreateText => new GsText(dragStart, size, lineColor, fillColor, shadow),
-                ScreenshotEditor.UserActions.CreateBlur => GsBlur.Create(upperLeft, size, temp),
+                ScreenshotEditor.UserActions.CreateBlur => GsBlur.Create(upperLeft, size, temp, MosaicSize, BlurRadius),
                 ScreenshotEditor.UserActions.CreateHighlight => new GsHighlight(upperLeft, size, lineColor, Color.Yellow, false, 0),
                 ScreenshotEditor.UserActions.CreateCrop => new GsCrop(upperLeft, size, Color.Black, Color.White), // set line/fill color to a solid, so it isn't skipped in rendering
                 ScreenshotEditor.UserActions.CreateNumbered => GsNumbered.Create(new Point(dragEnd.X - (NumberedSize / 2), dragEnd.Y - (NumberedSize / 2)), NumberedSize, shadow),
@@ -659,7 +459,6 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         if (tempSymbol != null)
         {
             UpdateOverlay(tempSymbol, forceUpdate: false);
-            //tempSymbol.DisposeImages();
             tempSymbol.Dispose();
         }
     }
@@ -685,10 +484,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
     private void GetHitboxUnderCursor(Point MousePosition, GraphicSymbol symbol)
     {
-        //if (currentSelectedSymbol != null)
-        //{
-        //selectedHitboxIndex = HitboxDirection.None;
-        for (int i = 1; i <= 8; i++) // all scaling hitboxec, not center
+        for (int i = 1; i <= 8; i++) // all Scaling hitboxes (corner and edge), not center
         {
             if (symbol != CurrentSelectedSymbol) { break; }
 
@@ -787,9 +583,8 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
     public bool dragStarted = false;
     public bool dragMoved = false;
     public Point dragStart = new(0, 0);
-    //Point dragStartOffsetFromSymbolCenter = new(0, 0);
     Size currentScaleProportion = new(1, 1);
-    List<Point> selectedMoveSymbolOffsets = [];
+    readonly List<Point> selectedMoveSymbolOffsets = [];
 
     public void MouseDown(Point MousePosition)
     {
@@ -804,11 +599,6 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         {
             selectedMoveSymbolOffsets.Add(MousePosition.Subtract(symbol.Position));
         }
-
-        //if (currentSelectedSymbol != null)
-        //{
-        //    dragStartOffsetFromSymbolCenter = MousePosition.Subtract(currentSelectedSymbol.Position);
-        //}
 
         selectedHitboxIndex = HitboxDirection.None;
         foreach (GraphicSymbol symbol in parentEditor.GetSelectedSymbols())
@@ -902,7 +692,6 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         }
         if (SourceImage == null) return;
 
-        // added dragStarted check, seems OK
         if (dragStarted)
         {
             if (parentEditor.selectedUserAction >= ScreenshotEditor.UserActions.CreateRectangle) // any UserAction above CreateRectangle is a new symbol creation
@@ -943,7 +732,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
                     if (restrain)
                     {
-                        Point restrainedPosition = RestrainProportions(anchor, MousePosition, currentScaleProportion);
+                        Point restrainedPosition = SymbolProcessing.RestrainProportions(anchor, MousePosition, currentScaleProportion);
                         ScaleSymbol(restrainedPosition);
                     }
                     else
@@ -1037,7 +826,6 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
     private void MoveSymbols(Point MousePosition)
     {
-        //selectedMoveSymbolOffsets
         List<GraphicSymbol> symbols = parentEditor.GetSelectedSymbols();
         for (int i = 0; i < symbols.Count; i++)
         {

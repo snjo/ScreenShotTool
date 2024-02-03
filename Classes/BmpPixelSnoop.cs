@@ -75,11 +75,11 @@ unsafe class BmpPixelSnoop : IDisposable
     /// <param name="bitmap">The bitmap to snoop</param>
     public BmpPixelSnoop(Bitmap bitmap)
     {
-        wrappedBitmap = bitmap ?? throw new ArgumentException("Bitmap parameter cannot be null", "bitmap");
+        wrappedBitmap = bitmap ?? throw new ArgumentException("Bitmap parameter cannot be null", nameof(bitmap));
 
         // Currently works only for: PixelFormat.Format32bppArgb
         if (wrappedBitmap.PixelFormat != PixelFormat.Format32bppArgb)
-            throw new System.ArgumentException("Only PixelFormat.Format32bppArgb is supported", "bitmap");
+            throw new System.ArgumentException("Only PixelFormat.Format32bppArgb is supported", nameof(bitmap));
 
         // Record the width & height
         width = wrappedBitmap.Width;
