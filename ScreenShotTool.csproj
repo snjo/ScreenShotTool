@@ -354,6 +354,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="PDFsharp-GDI" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="MarkdownToRtf">
       <HintPath>..\MarkdownToRtf\MarkdownToRtf\bin\Debug\net8.0\MarkdownToRtf.dll</HintPath>
     </Reference>

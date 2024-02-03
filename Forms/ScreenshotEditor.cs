@@ -22,7 +22,7 @@ public partial class ScreenshotEditor : Form
     readonly List<Button> toolButtons = [];
     public SharedBitmap copiedBitmap = new SharedBitmap();
     string filterLoadImage = "Images|*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp|PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|All files|*.*";
-    string filterSaveImage = "PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|All files|*.*";
+    string filterSaveImage = "PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|PDF|*.pdf|All files|*.*";
 
     public ScreenshotEditor()
     {
@@ -173,9 +173,22 @@ public partial class ScreenshotEditor : Form
         if (result == DialogResult.OK)
         {
             string filename = fileDialog.FileName;
-            ImageFormat imgFormat = ImageFormatFromExtension(filename);
-            Debug.WriteLine($"Guessed file format from file name ({filename}): {imgFormat} ");
-            SaveImage(fileDialog.FileName, imgFormat);
+            if (Path.GetExtension(filename).ToLowerInvariant() == ".pdf")
+            {
+                Bitmap? outImage = editorCanvas.AssembleImageForSaveOrCopy();
+                if (outImage != null)
+                {
+                    Debug.WriteLine($"Saving to PDF {filename}");
+                    SaveToPdf.Save(filename, outImage, margins: 20f, imageScale: 0.87f); // 0.87 seems to match real pixels to a 100% zoom in Adobe Reader.
+                }
+                outImage?.Dispose();
+            }
+            else
+            {
+                ImageFormat imgFormat = ImageFormatFromExtension(filename);
+                Debug.WriteLine($"Guessed file format from file name ({filename}): {imgFormat} ");
+                SaveImage(fileDialog.FileName, imgFormat);
+            }
         }
     }
 
@@ -198,7 +211,7 @@ public partial class ScreenshotEditor : Form
 
     private static ImageFormat ImageFormatFromExtension(string filename)
     {
-        string extension = Path.GetExtension(filename);
+        string extension = Path.GetExtension(filename).ToLowerInvariant();
         return extension switch
         {
             ".png" => ImageFormat.Png,
