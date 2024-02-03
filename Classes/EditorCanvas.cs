@@ -34,7 +34,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
             return new Rectangle(0, 0, CanvasSize.Width, CanvasSize.Height);
         }
     }
-    
+
     public GraphicSymbol? CurrentSelectedSymbol
     {
         get

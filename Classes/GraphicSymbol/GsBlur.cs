@@ -1,7 +1,4 @@
-﻿using ScreenShotTool.Properties;
-using System.Diagnostics;
-
-namespace ScreenShotTool;
+﻿namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
 public class GsBlur : GsDynamicImage
 {
@@ -22,7 +19,7 @@ public class GsBlur : GsDynamicImage
         {
             lineColor = Color.Red;
         }
-        GsBlur newSymbol = new (startPoint, endPoint, lineColor, Color.White)
+        GsBlur newSymbol = new(startPoint, endPoint, lineColor, Color.White)
         {
             isTempSymbol = temp,
             MosaicSize = mosaicSize,
@@ -50,7 +47,6 @@ public class GsBlur : GsDynamicImage
                 // draw this outline during creation with temp symbol, line will be transparent after permanent symbol is created
                 graphic.DrawRectangle(LinePen, Left, Top, Width, Height);
             }
-
         }
     }
 

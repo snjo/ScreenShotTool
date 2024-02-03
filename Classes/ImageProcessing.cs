@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Drawing.Imaging;
-using System.Linq;
 using System.Runtime.Versioning;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ScreenShotTool;
 [SupportedOSPlatform("windows")]
@@ -42,7 +37,7 @@ public static class ImageProcessing
         sw.Start();
         //blurImage.DisposeAndNull();
 
-        Bitmap blurImage = new (sourceBitmap.Width, sourceBitmap.Height);
+        Bitmap blurImage = new(sourceBitmap.Width, sourceBitmap.Height);
         Graphics graphics = Graphics.FromImage(blurImage);
         Color pixelColor = Color.Black;
         SolidBrush blurBrush = new(pixelColor);

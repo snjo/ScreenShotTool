@@ -24,7 +24,7 @@ public class GsImage : GraphicSymbol
 
     public static GsImage Create(Point startPoint, Bitmap bitmap)
     {
-        GsImage gsImage = new (startPoint, Point.Empty, false)
+        GsImage gsImage = new(startPoint, Point.Empty, false)
         {
             image = bitmap,
             Width = bitmap.Width,
@@ -39,7 +39,7 @@ public class GsImage : GraphicSymbol
     public static GsImage Create(Point startPoint, SharedBitmap copiedImage, bool checkClipboard)
     {
         bool useClipboard = true;
-        GsImage gsImage = new (startPoint, Point.Empty, false);
+        GsImage gsImage = new(startPoint, Point.Empty, false);
 
         Image? clipboardImage = null;
         if (checkClipboard)
@@ -159,7 +159,7 @@ public class GsImage : GraphicSymbol
     {
         if (Rotation != oldRotation || Width != oldWidth || Height != oldHeight)
         {
-            Bitmap tempRotated = new (RotatedBounds.Width, RotatedBounds.Height);
+            Bitmap tempRotated = new(RotatedBounds.Width, RotatedBounds.Height);
             using (Graphics rotateG = Graphics.FromImage(tempRotated))
             {
                 rotateG.ResetTransform();
@@ -199,7 +199,7 @@ public class GsImage : GraphicSymbol
 
     private void UpdateCorners()
     {
-        Point pivot = new (Left + Width / 2, Top + Height / 2);
+        Point pivot = new(Left + Width / 2, Top + Height / 2);
         corner1 = GetCorner(pivot.X, pivot.Y, Left, Top, Rotation);
         corner2 = GetCorner(pivot.X, pivot.Y, Right, Top, Rotation);
         corner3 = GetCorner(pivot.X, pivot.Y, Right, Bottom, Rotation);
@@ -295,7 +295,7 @@ public class GsImage : GraphicSymbol
     private static Bitmap CreateAlphaShadow(Bitmap source)
     {
         //don't use this on non-32bppARGB, bmppixelsnoop doesn't support it.
-        Bitmap shadow = new (source.Width, source.Height);
+        Bitmap shadow = new(source.Width, source.Height);
         using (Graphics g = Graphics.FromImage(shadow))
         {
             using var snoop = new BmpPixelSnoop(source);
