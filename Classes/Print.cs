@@ -73,9 +73,7 @@ public class Print
 
     public List<PaperSize> GetPaperSizes()
     {
-        List<PaperSize> paperSizes = new();
-        paperSizes = printDocument.PrinterSettings.PaperSizes.Cast<PaperSize>().ToList();
-        return paperSizes;
+        return printDocument.PrinterSettings.PaperSizes.Cast<PaperSize>().ToList();
     }
 
     public List<string> GetPaperSizeNames()

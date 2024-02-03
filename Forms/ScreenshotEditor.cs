@@ -257,7 +257,7 @@ public partial class ScreenshotEditor : Form
                 tempImage = Image.FromStream(stream);
             }
 
-            loadedImage = ImageToBitmap32bppArgb(tempImage, true);
+            loadedImage = ImageProcessing.ImageToBitmap32bppArgb(tempImage, true);
         }
         catch (Exception ex)
         {
@@ -532,7 +532,7 @@ public partial class ScreenshotEditor : Form
         if (result != null)
         {
             //copiedBitmap.DisposeImage();
-            copiedBitmap.SetImage(CopyImage(result)); // disposes and refills
+            copiedBitmap.SetImage(ImageProcessing.CopyImage(result)); // disposes and refills
             Debug.WriteLine($"Set copiedImage to result {copiedBitmap.Width}");
             Clipboard.SetImage(result);
             result.Dispose();
@@ -968,11 +968,12 @@ public partial class ScreenshotEditor : Form
 
     private void NumericBlurMosaicSize_ValueChanged(object sender, EventArgs e)
     {
-        if (editorCanvas.InitialBlurComplete)
+        editorCanvas.MosaicSize = numericBlurMosaicSize.ValueInt();
+        if (GetSelectedSymbolFirst() is GsBlur gsB)
         {
-            editorCanvas.mosaicSize = numericBlurMosaicSize.ValueInt();
-            editorCanvas.UpdateOverlay();
+            gsB.MosaicSize = numericBlurMosaicSize.ValueInt();
         }
+        editorCanvas.UpdateOverlay();
     }
 
     private void TextBoxSymbolText_TextChanged(object sender, EventArgs e)
@@ -1152,7 +1153,7 @@ public partial class ScreenshotEditor : Form
     {
         gsC.showOutline = false;
         Rectangle cropRect = gsC.Bounds;
-        Bitmap outImage = CropImage(image, cropRect);
+        Bitmap outImage = ImageProcessing.CropImage(image, cropRect);
         foreach (GraphicSymbol gs in editorCanvas.Symbols)
         {
             gs.MoveTo(gs.Left - cropRect.Left, gs.Top - cropRect.Top);
@@ -1177,10 +1178,10 @@ public partial class ScreenshotEditor : Form
         if (assembled != null)
         {
             Rectangle cropRect = gsC.Bounds;
-            Bitmap outImage = EditorCanvas.CropImage(assembled, cropRect);
+            Bitmap outImage = ImageProcessing.CropImage(assembled, cropRect);
             assembled.Dispose();
             copiedBitmap.DisposeImage();
-            copiedBitmap.SetImage(CopyImage(outImage));
+            copiedBitmap.SetImage(ImageProcessing.CopyImage(outImage));
             Clipboard.SetImage(outImage);
             outImage.Dispose();
             gsC.showOutline = true;
