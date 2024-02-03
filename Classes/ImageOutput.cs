@@ -12,6 +12,10 @@ namespace ScreenShotTool;
 
 public static class ImageOutput
 {
+    public static string SupportedImageFormatExtensions = ".png .jpg .jpeg .bmp .gif .webp .tiff .tif";
+    public static string FilterLoadImage = "Images|*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp|PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|All files|*.*";
+    public static string FilterSaveImage = "PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|PDF|*.pdf|All files|*.*";
+
     public static (bool result, int filtexIndex) SaveWithDialog(Bitmap outImage, string filter, string filenameSuggestion = "", int filterIndex = 1)
     {
         FileDialog fileDialog = new SaveFileDialog();
@@ -71,9 +75,18 @@ public static class ImageOutput
         {
             ".png" => ImageFormat.Png,
             ".jpg" => ImageFormat.Jpeg,
+            ".jpeg" => ImageFormat.Jpeg,
             ".bmp" => ImageFormat.Bmp,
             ".gif" => ImageFormat.Gif,
+            ".webp" => ImageFormat.Webp,
+            ".tif" => ImageFormat.Tiff,
+            ".tiff" => ImageFormat.Tiff,
             _ => ImageFormat.Png,
         };
+    }
+
+    public static bool IsSupportedImageFormat(string extension)
+    {
+        return (SupportedImageFormatExtensions.Contains(extension));
     }
 }

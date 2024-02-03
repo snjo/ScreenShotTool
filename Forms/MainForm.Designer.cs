@@ -41,6 +41,7 @@
             copyToClipboardToolStripMenuItem = new ToolStripMenuItem();
             copyFileToolStripMenuItem = new ToolStripMenuItem();
             editImageToolStripMenuItem = new ToolStripMenuItem();
+            convertFileFormatToolStripMenuItem = new ToolStripMenuItem();
             notifyIcon1 = new NotifyIcon(components);
             contextMenuSysTray = new ContextMenuStrip(components);
             openProgramToolStripMenuItem = new ToolStripMenuItem();
@@ -73,7 +74,6 @@
             websiteToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             labelInfo = new Label();
-            convertToPDFOrOtherFormatToolStripMenuItem = new ToolStripMenuItem();
             contextMenuListView.SuspendLayout();
             contextMenuSysTray.SuspendLayout();
             menuStrip1.SuspendLayout();
@@ -103,9 +103,10 @@
             // 
             // contextMenuListView
             // 
-            contextMenuListView.Items.AddRange(new ToolStripItem[] { itemOpenImage, itemOpenFolder, itemDeleteFile, itemRemove, copyToClipboardToolStripMenuItem, copyFileToolStripMenuItem, editImageToolStripMenuItem, convertToPDFOrOtherFormatToolStripMenuItem });
+            contextMenuListView.Items.AddRange(new ToolStripItem[] { itemOpenImage, itemOpenFolder, itemDeleteFile, itemRemove, copyToClipboardToolStripMenuItem, copyFileToolStripMenuItem, editImageToolStripMenuItem, convertFileFormatToolStripMenuItem });
             contextMenuListView.Name = "contextMenuListView";
             contextMenuListView.Size = new Size(239, 202);
+            contextMenuListView.Opening += contextMenuListView_Opening;
             // 
             // itemOpenImage
             // 
@@ -155,6 +156,13 @@
             editImageToolStripMenuItem.Size = new Size(238, 22);
             editImageToolStripMenuItem.Text = "&Edit Image";
             editImageToolStripMenuItem.Click += EditImageFromFile_Click;
+            // 
+            // convertToPDFOrOtherFormatToolStripMenuItem
+            // 
+            convertFileFormatToolStripMenuItem.Name = "convertToPDFOrOtherFormatToolStripMenuItem";
+            convertFileFormatToolStripMenuItem.Size = new Size(238, 22);
+            convertFileFormatToolStripMenuItem.Text = "Convert to PDF or other format";
+            convertFileFormatToolStripMenuItem.Click += ConvertFileFormat_Click;
             // 
             // notifyIcon1
             // 
@@ -391,13 +399,6 @@
             labelInfo.TabIndex = 37;
             labelInfo.Text = "To take a screenshot use hotkeys";
             // 
-            // convertToPDFOrOtherFormatToolStripMenuItem
-            // 
-            convertToPDFOrOtherFormatToolStripMenuItem.Name = "convertToPDFOrOtherFormatToolStripMenuItem";
-            convertToPDFOrOtherFormatToolStripMenuItem.Size = new Size(238, 22);
-            convertToPDFOrOtherFormatToolStripMenuItem.Text = "Convert to PDF or other format";
-            convertToPDFOrOtherFormatToolStripMenuItem.Click += ConvertFileFormat_Click;
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -469,6 +470,6 @@
         private ToolStripMenuItem openEditorToolStripMenuItem;
         private ToolStripMenuItem editorToolStripMenuItem;
         private ToolStripMenuItem helpToolStripMenuItem;
-        private ToolStripMenuItem convertToPDFOrOtherFormatToolStripMenuItem;
+        private ToolStripMenuItem convertFileFormatToolStripMenuItem;
     }
 }

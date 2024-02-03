@@ -3,11 +3,13 @@
 ## TODO:
 - text multi line
 - Undo?
-- PDF support for acp?
 
 ## 1.8
 
 #### Editor
+- PDF support. Save captures cirectly to PDF
+- Print from the editor
+- Convert captured images to other image formats or PDF from the capture list or editor.
 - New Stickers button, easily insert emojis, cursors etc from a preset folder. (this folder can be changed in Options)
 - Drag and drop images into editor
 - Image symbols can be rotated
@@ -16,6 +18,7 @@
 - Multi select symbols in list or with Control-click (alllows deletin and moving multiple symbols)
 - Move symbols with arrow keys, Shift to move x10
 - Move symbols to Back/Front with Home/End
+- Support for screens with zoom other than 100%. Some UI changes done to allow for this.
 
 ## 1.7
 

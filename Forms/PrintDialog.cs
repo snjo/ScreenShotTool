@@ -19,6 +19,7 @@ public partial class PrintDialog : Form
     public PrintDialog(Print print, Bitmap? image, float marginLeft = 5f, float marginRight = 5f, float marginTop = 5f, float marginBottom = 5f)
     {
         InitializeComponent();
+        Font = new Font(this.Font.FontFamily, 9);
         printer = print;
         PrinterName = print.GetDefaultPrinterName();
         comboBoxPrinters.Items.AddRange(print.InstalledPrinters.ToArray());

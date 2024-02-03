@@ -1483,7 +1483,7 @@ public partial class MainForm : Form
         foreach (ListViewItem item in listViewThumbnails.SelectedItems)
         {
             filesRemaining--;
-            
+
             if (item.Tag is string filename)
             {
                 if (Path.GetExtension(filename).ToLowerInvariant() == ".pdf")
@@ -1498,7 +1498,7 @@ public partial class MainForm : Form
                     bool resume;
                     Bitmap outImage = (Bitmap)Image.FromFile(filename);
                     string nameSuggestion = Path.GetFileNameWithoutExtension(filename);
-                    (resume, filterIndex) = ImageOutput.SaveWithDialog(outImage, ScreenshotEditor.filterSaveImage, nameSuggestion, filterIndex);
+                    (resume, filterIndex) = ImageOutput.SaveWithDialog(outImage, ImageOutput.FilterSaveImage, nameSuggestion, filterIndex);
                     if (resume == false && filesRemaining > 0)
                     {
                         if (MessageBox.Show("Cancel or error detected. Do you want to continue converting files", "Resume converting?", MessageBoxButtons.YesNo) == DialogResult.No)
@@ -1520,4 +1520,32 @@ public partial class MainForm : Form
         }
     }
 
+    private void contextMenuListView_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+        if (!contextMenuListView.Visible) return;
+        bool convertableImages = false;
+
+        if (listViewThumbnails.SelectedItems.Count > 0 )
+        {
+            for (int i = 0; i < listViewThumbnails.SelectedItems.Count; i++)
+            {
+                if (listViewThumbnails.SelectedItems[i].Tag is string filename)
+                {
+                    bool isImage = false;
+                    string extension = Path.GetExtension(filename);
+                    if (ImageOutput.IsSupportedImageFormat(extension))
+                    {
+                        isImage = true;
+                        convertableImages = true;
+                    }
+                    if (i == 0)
+                    {
+                            copyToClipboardToolStripMenuItem.Enabled = isImage;
+                            editImageToolStripMenuItem.Enabled = isImage;
+                    }
+                }
+            }
+        }
+        convertFileFormatToolStripMenuItem.Enabled = convertableImages;
+    }
 }

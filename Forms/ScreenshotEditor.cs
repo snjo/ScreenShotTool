@@ -21,8 +21,8 @@ public partial class ScreenshotEditor : Form
     public readonly static int startingFontSize = 10;
     readonly List<Button> toolButtons = [];
     public SharedBitmap copiedBitmap = new SharedBitmap();
-    public static string filterLoadImage = "Images|*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp|PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|All files|*.*";
-    public static string filterSaveImage = "PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|PDF|*.pdf|All files|*.*";
+    //public static string filterLoadImage = "Images|*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp|PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|All files|*.*";
+    //public static string filterSaveImage = "PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|PDF|*.pdf|All files|*.*";
 
     public ScreenshotEditor()
     {
@@ -165,7 +165,7 @@ public partial class ScreenshotEditor : Form
         Bitmap? outImage = editorCanvas.AssembleImageForSaveOrCopy();
         if (outImage != null)
         {
-            ImageOutput.SaveWithDialog(outImage, filterSaveImage);
+            ImageOutput.SaveWithDialog(outImage, ImageOutput.FilterSaveImage);
         }
     }
 
@@ -226,14 +226,12 @@ public partial class ScreenshotEditor : Form
 
         FileDialog fileDialog = new OpenFileDialog
         {
-            Filter = filterLoadImage
+            Filter = ImageOutput.FilterLoadImage
         };
         if (Folder.Length > 0 && Directory.Exists(Folder))
         {
             Debug.WriteLine($"Setting InitialDirectory {Folder}");
             fileDialog.InitialDirectory = Folder;
-            //fileDialog.RestoreDirectory = true;
-            //fileDialog.AutoUpgradeEnabled = true;
         }
         else
         {
