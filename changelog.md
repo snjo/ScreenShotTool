@@ -5,6 +5,7 @@
 - Undo?
 - drag and drop from main form
 
+
 ## 1.8
 
 #### Editor
@@ -20,6 +21,7 @@
 - Move symbols with arrow keys, Shift to move x10
 - Move symbols to Back/Front with Home/End
 - Support for screens with zoom other than 100%. Some UI changes done to allow for this.
+- Open Editor directly with -editor command line argument, or using a file's Open With or drag and drop on exe. (Does not start the rest of the program)
 
 ## 1.7
 
