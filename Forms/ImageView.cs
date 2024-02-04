@@ -92,6 +92,7 @@ namespace ScreenShotTool
             this.ScreenBounds = screenBounds;
             frameRate = Settings.Default.MaxFramerate;
             InitializeComponent();
+            AutoScaleMode = AutoScaleMode.None;
             Font = new Font(this.Font.FontFamily, 10);
 
             viewerMode = mode;

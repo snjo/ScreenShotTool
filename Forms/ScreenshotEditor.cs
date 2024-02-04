@@ -63,7 +63,7 @@ public partial class ScreenshotEditor : Form
             AutoScaleMode = AutoScaleMode.None;
         }
         Font = new Font(Font.FontFamily, 9);
-        
+
         FillFontFamilyBox();
         numericPropertiesFontSize.Maximum = maxFontSize;
         numericPropertiesFontSize.Minimum = minimumFontSize;
@@ -1517,8 +1517,8 @@ public partial class ScreenshotEditor : Form
             if (this.Height < 550) this.Height = 550;
             //Debug.WriteLine("Min width: " + this.MinimumSize.Width);
         }
-        
-        
+
+        timerFixDPI.Start();
     }
 
     private void SetFontInControls(Control control, int newFontSize)
@@ -1527,7 +1527,16 @@ public partial class ScreenshotEditor : Form
         control.Font = new Font(this.Font.FontFamily, newFontSize);
         foreach (Control subcontrol in control.Controls)
         {
-            SetFontInControls(subcontrol , newFontSize);
+            SetFontInControls(subcontrol, newFontSize);
+        }
+    }
+
+    private void timerFixDPI_Tick(object sender, EventArgs e)
+    {
+        timerFixDPI.Stop();
+        if (pictureBoxOverlay.Image != null)
+        {
+            pictureBoxOverlay.Size = pictureBoxOverlay.Image.Size;   
         }
     }
 }

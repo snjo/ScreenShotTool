@@ -536,7 +536,7 @@
             label41.Name = "label41";
             label41.Size = new Size(435, 40);
             label41.TabIndex = 86;
-            label41.Text = "Window and text will not increase on higher monitor zoom levels. Less accessible, but more predictable";
+            label41.Text = "Window and text will not increase on higher monitor zoom levels. Less accessible, but more predictable in some configurations";
             // 
             // checkBoxPreventDpiRescale
             // 

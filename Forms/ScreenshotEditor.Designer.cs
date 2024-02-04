@@ -130,6 +130,7 @@
             timerAfterLoad = new System.Windows.Forms.Timer(components);
             TimerUpdateOverlay = new System.Windows.Forms.Timer(components);
             toolTip1 = new ToolTip(components);
+            timerFixDPI = new System.Windows.Forms.Timer(components);
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
@@ -1269,6 +1270,10 @@
             toolTip1.InitialDelay = 200;
             toolTip1.ReshowDelay = 40;
             // 
+            // timerFixDPI
+            // 
+            timerFixDPI.Tick += timerFixDPI_Tick;
+            // 
             // ScreenshotEditor
             // 
             AllowDrop = true;
@@ -1435,5 +1440,6 @@
         private Splitter splitter1;
         private Splitter splitter2;
         private ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.Timer timerFixDPI;
     }
 }
