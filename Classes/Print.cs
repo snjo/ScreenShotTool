@@ -116,12 +116,12 @@ public class Print
     {
         if (printDocument != null && printDocument.PrinterSettings.IsDefaultPrinter)
         {
-            Debug.WriteLine("Printer is default");
+            //Debug.WriteLine("Printer is default");
             return true;
         }
         else
         {
-            Debug.WriteLine("Printer is not default");
+            //Debug.WriteLine("Printer is not default");
             return true;
         }
     }
@@ -172,7 +172,7 @@ public class Print
                 imgDrawSize.Width = imgDrawSize.Height * imageRatio;
             }
         }
-        Debug.WriteLine($"imgDrawSize {imgDrawSize}");
+        //Debug.WriteLine($"imgDrawSize {imgDrawSize}");
         return new Rectangle((int)left, (int)top, (int)imgDrawSize.Width, (int)imgDrawSize.Height);
     }
 

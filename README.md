@@ -157,6 +157,23 @@ Select the type of graphic symbol to add from the vertical list on the left. The
 
 You can move, edit and scale symbols after you have placed them by clicking and dragging the symbol, or using the Properties panel on the right.
 
+<!---CW:2000:4000:-->
+| **Keys**           | **Function**                               |
+|--------------------|--------------------------------------------|
+| Ctrl+C             | Copy the current image or selected region  |
+| Ctrl+V             | Paste an image or text into the editor     |
+| Arrow keys         | Move the selected symbol(s) around         |
+| Shift + Arrow keys | Move the selected symbol(s) faster         |
+| Home               | Move the selected symbol to the front      |
+| End                | Move the selected symbol to the back       |
+| Enter              | Complete an active crop selection          |
+| Esc / right click  | Cancel drawing a symbol                    |
+| Delete             | Delete selected symbol(s)                  |
+| Ctrl+O             | Open a file                                |
+| Ctrl+S             | Save the current image (Save As)           |
+| Ctrl+P             | Print the current image                    |
+
+
 # Application options
 
 #### Start Hidden

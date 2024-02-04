@@ -70,7 +70,7 @@ public partial class PrintDialog : Form
         if (paperSize != null)
         {
             printer.PaperSize = paperSize;
-            Debug.WriteLine($"Paper size = {printer.PaperSize.PaperName}");
+            //Debug.WriteLine($"Paper size = {printer.PaperSize.PaperName}");
         }
         else
         {

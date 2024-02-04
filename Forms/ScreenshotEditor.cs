@@ -1,6 +1,7 @@
 ﻿using ScreenShotTool.Classes;
 using ScreenShotTool.Properties;
 using System.Diagnostics;
+using System.Drawing.Printing;
 using System.Runtime.Versioning;
 using System.Windows.Forms;
 
@@ -437,7 +438,7 @@ public partial class ScreenshotEditor : Form
                 PasteTextIntoImage();
             }
         }
-        if ((e.KeyCode == Keys.C && e.Modifiers == Keys.Control))
+        if (e.KeyCode == Keys.C && e.Modifiers == Keys.Control)
         {
             if (GetSelectedSymbolFirst() is GsCrop gsC)
             {
@@ -449,13 +450,17 @@ public partial class ScreenshotEditor : Form
                 CopyToClipboard();
             }
         }
-        if ((e.KeyCode == Keys.S && e.Modifiers == Keys.Control))
+        if (e.KeyCode == Keys.S && e.Modifiers == Keys.Control)
         {
             SaveFileAction();
         }
-        if ((e.KeyCode == Keys.O && e.Modifiers == Keys.Control))
+        if (e.KeyCode == Keys.O && e.Modifiers == Keys.Control)
         {
             OpenFileAction();
+        }
+        if (e.KeyCode == Keys.P && e.Modifiers == Keys.Control)
+        {
+            PrintImage();
         }
         if (e.KeyCode == Keys.Escape)
         {
@@ -1495,7 +1500,12 @@ public partial class ScreenshotEditor : Form
 
     }
 
-    private void ToolStripMenuItem1_Click(object sender, EventArgs e)
+    private void ToolStripMenuItemPrint_Click(object sender, EventArgs e)
+    {
+        PrintImage();
+    }
+
+    private void PrintImage()
     {
         Bitmap? outImage = editorCanvas.AssembleImageForSaveOrCopy();
         if (outImage != null)

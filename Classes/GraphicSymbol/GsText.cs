@@ -43,6 +43,7 @@ public class GsText : GraphicSymbol
 
     private Font CreateFont()
     {
+        ShadowDistance = Math.Clamp((int)fontEmSize / 10, 1, 10);
         return new Font(fontFamily, fontEmSize, fontStyle);
     }
 

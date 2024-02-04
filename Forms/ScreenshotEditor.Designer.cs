@@ -204,7 +204,7 @@
             toolStripMenuItem1.Name = "toolStripMenuItem1";
             toolStripMenuItem1.Size = new Size(184, 22);
             toolStripMenuItem1.Text = "Print...";
-            toolStripMenuItem1.Click += ToolStripMenuItem1_Click;
+            toolStripMenuItem1.Click += ToolStripMenuItemPrint_Click;
             // 
             // itemLoadFromClipboard
             // 
