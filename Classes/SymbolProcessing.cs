@@ -28,22 +28,4 @@ public class SymbolProcessing
             return new Point((int)(symbolLocation.X + xFlip * dominantSide * aspectRatio), (int)(symbolLocation.Y + yFlip * dominantSide));
         }
     }
-
-    //private void InsertImagesInSymbol(GraphicSymbol symbol, Bitmap SourceImage)
-    //{
-    //    if (symbol is GsBlur gsblur)
-    //    {
-    //        if (SourceImage != null)
-    //        {
-    //            //gsblur.SourceImage = blurImage; // TODO XXXXXXX
-    //        }
-    //    }
-    //    else if (symbol is GsDynamicImage gsdi)
-    //    {
-    //        if (SourceImage != null)
-    //        {
-    //            gsdi.SourceImage = (Bitmap)SourceImage;
-    //        }
-    //    }
-    //}
 }

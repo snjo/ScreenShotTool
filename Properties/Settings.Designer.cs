@@ -922,5 +922,17 @@ namespace ScreenShotTool.Properties {
                 this["StickerFolder"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool PreventDpiRescale {
+            get {
+                return ((bool)(this["PreventDpiRescale"]));
+            }
+            set {
+                this["PreventDpiRescale"] = value;
+            }
+        }
     }
 }

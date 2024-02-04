@@ -84,6 +84,8 @@ namespace ScreenShotTool
 
             numericUpDownFramerate.SetValueClamped(settings.MaxFramerate);
 
+            checkBoxPreventDpiRescale.Checked = settings.PreventDpiRescale;
+
             //Tab: Editor
 
             checkBoxSelectAfterPlacingSymbol.Checked = settings.SelectAfterPlacingSymbol;
@@ -182,6 +184,8 @@ namespace ScreenShotTool
             settings.AllowTrayTooltipWarning = checkBoxTrayTooltipWarning.Checked;
 
             settings.MaxFramerate = numericUpDownFramerate.ValueInt();
+
+            settings.PreventDpiRescale = checkBoxPreventDpiRescale.Checked;
 
             // Tab: Editor
 

@@ -165,7 +165,7 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, editToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(898, 24);
+            menuStrip1.Size = new Size(935, 24);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -273,7 +273,7 @@
             panelButtons.Dock = DockStyle.Left;
             panelButtons.Location = new Point(0, 0);
             panelButtons.Name = "panelButtons";
-            panelButtons.Size = new Size(46, 558);
+            panelButtons.Size = new Size(46, 625);
             panelButtons.TabIndex = 1;
             // 
             // buttonStickers
@@ -508,7 +508,7 @@
             panelImage.Controls.Add(pictureBoxOverlay);
             panelImage.Location = new Point(49, 34);
             panelImage.Name = "panelImage";
-            panelImage.Size = new Size(649, 521);
+            panelImage.Size = new Size(686, 588);
             panelImage.TabIndex = 3;
             // 
             // pictureBoxOverlay
@@ -954,15 +954,15 @@
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(0, 24);
             panel1.Name = "panel1";
-            panel1.Size = new Size(898, 560);
+            panel1.Size = new Size(935, 627);
             panel1.TabIndex = 29;
             // 
             // splitter2
             // 
             splitter2.Dock = DockStyle.Right;
-            splitter2.Location = new Point(700, 32);
+            splitter2.Location = new Point(737, 32);
             splitter2.Name = "splitter2";
-            splitter2.Size = new Size(3, 526);
+            splitter2.Size = new Size(3, 593);
             splitter2.TabIndex = 41;
             splitter2.TabStop = false;
             // 
@@ -970,7 +970,7 @@
             // 
             splitter1.Location = new Point(46, 32);
             splitter1.Name = "splitter1";
-            splitter1.Size = new Size(3, 526);
+            splitter1.Size = new Size(3, 593);
             splitter1.TabIndex = 40;
             splitter1.TabStop = false;
             // 
@@ -987,7 +987,7 @@
             panel3.Dock = DockStyle.Top;
             panel3.Location = new Point(46, 0);
             panel3.Name = "panel3";
-            panel3.Size = new Size(657, 32);
+            panel3.Size = new Size(694, 32);
             panel3.TabIndex = 39;
             // 
             // label19
@@ -1029,9 +1029,9 @@
             panel2.Controls.Add(panelPropertiesCrop);
             panel2.Controls.Add(panelPropertiesBlur);
             panel2.Dock = DockStyle.Right;
-            panel2.Location = new Point(703, 0);
+            panel2.Location = new Point(740, 0);
             panel2.Name = "panel2";
-            panel2.Size = new Size(193, 558);
+            panel2.Size = new Size(193, 625);
             panel2.TabIndex = 38;
             // 
             // panelPropertiesImage
@@ -1274,7 +1274,7 @@
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(898, 584);
+            ClientSize = new Size(935, 651);
             Controls.Add(panel1);
             Controls.Add(menuStrip1);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -1285,6 +1285,7 @@
             Text = "Screenshot Tool Editor";
             TopMost = true;
             Deactivate += ScreenshotEditor_Deactivate;
+            DpiChanged += ScreenshotEditor_DpiChanged;
             DragDrop += ScreenshotEditor_DragDrop;
             DragEnter += ScreenshotEditor_DragEnter;
             KeyDown += ScreenshotEditor_KeyDown;

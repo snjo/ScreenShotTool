@@ -15,6 +15,7 @@
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   	<Deterministic>false</Deterministic>
   	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  	<ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   
   <ItemGroup>

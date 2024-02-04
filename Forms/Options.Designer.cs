@@ -65,6 +65,9 @@
             checkBoxTrayTooltipWarning = new CheckBox();
             tabControl1 = new TabControl();
             tabPageApplication = new TabPage();
+            label41 = new Label();
+            checkBoxPreventDpiRescale = new CheckBox();
+            label40 = new Label();
             checkBoxAutorun = new CheckBox();
             checkBoxMinimizeOnClose = new CheckBox();
             label24 = new Label();
@@ -496,6 +499,9 @@
             // tabPageApplication
             // 
             tabPageApplication.AutoScroll = true;
+            tabPageApplication.Controls.Add(label41);
+            tabPageApplication.Controls.Add(checkBoxPreventDpiRescale);
+            tabPageApplication.Controls.Add(label40);
             tabPageApplication.Controls.Add(checkBoxAutorun);
             tabPageApplication.Controls.Add(checkBoxMinimizeOnClose);
             tabPageApplication.Controls.Add(label24);
@@ -522,6 +528,35 @@
             tabPageApplication.TabIndex = 1;
             tabPageApplication.Text = "Application";
             tabPageApplication.UseVisualStyleBackColor = true;
+            // 
+            // label41
+            // 
+            label41.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
+            label41.Location = new Point(18, 445);
+            label41.Name = "label41";
+            label41.Size = new Size(435, 40);
+            label41.TabIndex = 86;
+            label41.Text = "Window and text will not increase on higher monitor zoom levels. Less accessible, but more predictable";
+            // 
+            // checkBoxPreventDpiRescale
+            // 
+            checkBoxPreventDpiRescale.AutoSize = true;
+            checkBoxPreventDpiRescale.Location = new Point(18, 423);
+            checkBoxPreventDpiRescale.Name = "checkBoxPreventDpiRescale";
+            checkBoxPreventDpiRescale.Size = new Size(294, 19);
+            checkBoxPreventDpiRescale.TabIndex = 85;
+            checkBoxPreventDpiRescale.Text = "Prevent rescaling when DPI (screen zoom) changes";
+            checkBoxPreventDpiRescale.UseVisualStyleBackColor = true;
+            // 
+            // label40
+            // 
+            label40.AutoSize = true;
+            label40.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label40.Location = new Point(6, 400);
+            label40.Name = "label40";
+            label40.Size = new Size(113, 15);
+            label40.TabIndex = 84;
+            label40.Text = "UI and Accessibility";
             // 
             // checkBoxAutorun
             // 
@@ -1514,5 +1549,8 @@
         private Label label38;
         private Button buttonSelectStickerFolder;
         private Panel panel1;
+        private CheckBox checkBoxPreventDpiRescale;
+        private Label label40;
+        private Label label41;
     }
 }

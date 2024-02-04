@@ -42,8 +42,7 @@
             float a2 = color2.A / 255f;
             float transparency = a1 * a2;
             int A = (int)(transparency * 255);
-            //Debug.WriteLine($"{A}: {a1} * {a2} == {transparency}");
-            return int.Clamp(A, 0, 255); /// xxx test todo
+            return int.Clamp(A, 0, 255);
         }
 
         public static int MultiplyColorChannel(int channel1, int channel2)

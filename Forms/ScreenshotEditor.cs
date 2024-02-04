@@ -2,6 +2,7 @@
 using ScreenShotTool.Properties;
 using System.Diagnostics;
 using System.Runtime.Versioning;
+using System.Windows.Forms;
 
 namespace ScreenShotTool.Forms;
 
@@ -57,7 +58,12 @@ public partial class ScreenshotEditor : Form
 
     private void SetupEditor()
     {
+        if (Settings.Default.PreventDpiRescale)
+        {
+            AutoScaleMode = AutoScaleMode.None;
+        }
         Font = new Font(Font.FontFamily, 9);
+        
         FillFontFamilyBox();
         numericPropertiesFontSize.Maximum = maxFontSize;
         numericPropertiesFontSize.Minimum = minimumFontSize;
@@ -1481,17 +1487,47 @@ public partial class ScreenshotEditor : Form
         if (outImage != null)
         {
             Print print = new();
-            //print.PrintImage(outImage);
             PrintDialog printDialog = new(print, outImage);
             DialogResult result = printDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                //print.SelectPrinter(printDialog.PrinterName);
-
-                //print.
                 print.PrintImage(outImage);
             }
             print.Dispose();
+        }
+    }
+
+    private void ScreenshotEditor_DpiChanged(object sender, DpiChangedEventArgs e)
+    {
+        Debug.WriteLine($"DPI changed, device dpi: {DeviceDpi} old: {e.DeviceDpiOld} new: {e.DeviceDpiNew}");
+        //e.Cancel = true; // will stop window from rescaling, but fonts and controls etc still change size, so stuff is messed up
+
+        //Use this to prevent all rescale of fonts and controls
+        if (Settings.Default.PreventDpiRescale)
+        {
+            int newFontSize = 9;
+            Font = new Font(this.Font.FontFamily, newFontSize);
+
+            foreach (Control control in Controls)
+            {
+                SetFontInControls(control, newFontSize);
+            }
+
+            if (this.Width < 750) this.Width = 750;
+            if (this.Height < 550) this.Height = 550;
+            //Debug.WriteLine("Min width: " + this.MinimumSize.Width);
+        }
+        
+        
+    }
+
+    private void SetFontInControls(Control control, int newFontSize)
+    {
+        //Debug.WriteLine($"Set font in Control {control.Name} from old {control.Font.Size} / {control.Font.SizeInPoints}p to {newFontSize}");
+        control.Font = new Font(this.Font.FontFamily, newFontSize);
+        foreach (Control subcontrol in control.Controls)
+        {
+            SetFontInControls(subcontrol , newFontSize);
         }
     }
 }

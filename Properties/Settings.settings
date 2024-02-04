@@ -227,5 +227,8 @@
     <Setting Name="StickerFolder" Type="System.String" Scope="User">
       <Value Profile="(Default)">.\img\stickers</Value>
     </Setting>
+    <Setting Name="PreventDpiRescale" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

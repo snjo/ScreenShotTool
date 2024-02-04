@@ -3,6 +3,7 @@
 ## TODO:
 - text multi line
 - Undo?
+- drag and drop from main form
 
 ## 1.8
 
