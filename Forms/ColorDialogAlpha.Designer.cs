@@ -273,8 +273,10 @@
             Controls.Add(trackBarRed);
             Controls.Add(buttonCancel);
             Controls.Add(buttonOK);
+            KeyPreview = true;
             Name = "ColorDialogAlpha";
             Text = "ColorDialogAlpha";
+            KeyDown += ColorDialogAlpha_KeyDown;
             ((System.ComponentModel.ISupportInitialize)trackBarRed).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericRed).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericBlue).EndInit();

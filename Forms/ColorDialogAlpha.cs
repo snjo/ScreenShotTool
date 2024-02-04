@@ -131,9 +131,9 @@ public partial class ColorDialogAlpha : Form
 
     private void ClickSwatch(object? sender, EventArgs e)
     {
+        Debug.WriteLine("Single clicked swatch, use color");
         if (sender is Button button)
         {
-            //Debug.WriteLine(button.BackColor);
             UpateColor(button.BackColor);
         }
     }
@@ -222,6 +222,14 @@ public partial class ColorDialogAlpha : Form
             {
                 Debug.WriteLine("Picked color is empty");
             }
+        }
+    }
+
+    private void ColorDialogAlpha_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.KeyCode == Keys.Escape)
+        {
+            DialogResult = DialogResult.Cancel;
         }
     }
 }

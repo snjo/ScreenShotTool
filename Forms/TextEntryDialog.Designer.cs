@@ -70,8 +70,10 @@
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(textBox1);
+            KeyPreview = true;
             Name = "TextEntryDialog";
             Text = "TextEntryDialog";
+            KeyDown += TextEntryDialog_KeyDown;
             ResumeLayout(false);
             PerformLayout();
         }

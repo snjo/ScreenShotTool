@@ -164,6 +164,8 @@ You can move, edit and scale symbols after you have placed them by clicking and 
 | Ctrl+V             | Paste an image or text into the editor     |
 | Arrow keys         | Move the selected symbol(s) around         |
 | Shift + Arrow keys | Move the selected symbol(s) faster         |
+| Shift + drag       | Scale proportional or create square symbol |
+| Ctrl + click       | Multi select or deselect symbol            |
 | Home               | Move the selected symbol to the front      |
 | End                | Move the selected symbol to the back       |
 | Enter              | Complete an active crop selection          |

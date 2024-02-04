@@ -31,4 +31,12 @@ public partial class TextEntryDialog : Form
         TextResult = textBox1.Text;
         DialogResult = DialogResult.OK;
     }
+
+    private void TextEntryDialog_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.KeyCode == Keys.Escape)
+        {
+            DialogResult = DialogResult.Cancel;
+        }
+    }
 }
