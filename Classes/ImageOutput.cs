@@ -7,7 +7,7 @@ namespace ScreenShotTool;
 
 public static class ImageOutput
 {
-    public const string SupportedImageFormatExtensions = ".png .jpg .jpeg .bmp .gif .webp .tiff .tif";
+    public const string SupportedImageFormatExtensions = ".png.jpg.jpeg.bmp.gif.webp.tiff.tif";
     public const string FilterLoadImage = "Images|*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.tif;*.tiff;*.webp|PNG|*.png|JPG|*.jpg;*.jpeg|GIF|*.gif|BMP|*.bmp|Tiff|*.tif;*.tiff|Webp|*.webp|All files|*.*";
     public const string FilterSaveImage = "PNG|*.png|JPG|*.jpg|GIF|*.gif|BMP|*.bmp|PDF|*.pdf|Tiff|*.tif|Webp|*.webp|All files|*.*";
 

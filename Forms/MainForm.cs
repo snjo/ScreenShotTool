@@ -1,4 +1,5 @@
 using Hotkeys;
+using ScreenShotTool.Classes;
 using ScreenShotTool.Forms;
 using ScreenShotTool.Properties;
 using System.Diagnostics;
@@ -272,7 +273,7 @@ public partial class MainForm : Form
 
         if (showThumbnails && savedToFile)
         {
-            AddThumbnail(DestinationFileName + DestinationFileExtension);
+            AddThumbnail(DestinationFileName + DestinationFileExtension, bitmap);
             UpdateInfoLabelVisibility();
         }
 
@@ -448,10 +449,11 @@ public partial class MainForm : Form
         return text;
     }
 
-    private void AddThumbnail(string DestinationFileName)
+    private void AddThumbnail(string filepath, Bitmap? bitmap)
     {
-        Debug.WriteLine("Add thumbnail: " + DestinationFileName);
         if (bitmap == null) return;
+        string displayName = Path.GetFileName(filepath);
+        Debug.WriteLine($"Add thumbnail: dest {displayName} last {filepath}");
         try
         {
             Debug.WriteLine("AddThumbnail, bitmap: " + bitmap.Size);
@@ -463,7 +465,7 @@ public partial class MainForm : Form
         }
 
         Image thumbImg;
-        if (Path.GetExtension(DestinationFileName) == ".pdf")
+        if (Path.GetExtension(displayName) == ".pdf")
         {
             thumbImg = ResizeImage(bitmap, settings.ThumbnailWidth, settings.ThumbnailHeight, Settings.Default.CropThumbnails, Resources.pdf);
         }
@@ -477,10 +479,48 @@ public partial class MainForm : Form
 
         imageList.Images.Add(thumbImg);
         thumbImg.Dispose();
-        ListViewItem thumb = listViewThumbnails.Items.Add(DestinationFileName);
-        thumb.Text = DestinationFileName;
-        thumb.Tag = lastSavedFile;
+        ListViewItem thumb = listViewThumbnails.Items.Add(displayName);
+        thumb.Text = displayName;
+        thumb.Tag = filepath;
         thumb.ImageIndex = imageList.Images.Count - 1;
+    }
+
+    private void AddThumbnailFromFile(string filepath)
+    {
+        string extension = Path.GetExtension(filepath).ToLower();
+        Bitmap? fileBitmap = null;
+        bool doDispose = false;
+        if (extension.Length > 0 && ImageOutput.SupportedImageFormatExtensions.Contains(extension))
+        {
+            try
+            {
+                using (FileStream stream = new(filepath, FileMode.Open))
+                {
+                    fileBitmap = (Bitmap)Image.FromStream(stream);
+                    doDispose = true;
+                }
+            }
+            catch
+            {
+                Debug.WriteLine($"Failed to load image {filepath}");
+            }
+            if (fileBitmap == null)
+            {
+                fileBitmap = Resources.thumbunknown;
+                doDispose = false;
+            }
+        }
+        else if (extension == ".pdf")
+        {
+            fileBitmap = Resources.thumbpdf;
+        }
+        else
+        {
+            fileBitmap = Resources.thumbunknown;
+        }
+        
+        AddThumbnail(filepath, fileBitmap);
+        if (doDispose) fileBitmap.Dispose();
     }
 
     /// <summary>
@@ -1547,5 +1587,22 @@ public partial class MainForm : Form
             }
         }
         convertFileFormatToolStripMenuItem.Enabled = convertableImages;
+    }
+
+    private void listViewThumbnails_DragEnter(object sender, DragEventArgs e)
+    {
+        DragDropMethods.FileDropDragEnter(this, e);
+    }
+
+    private void listViewThumbnails_DragDrop(object sender, DragEventArgs e)
+    {
+        if (e.Data == null) return;
+        List<string> fileNames = DragDropMethods.GetDroppedFileNames(e);
+        
+        for (int i = 0; i < fileNames.Count; i++)
+        {
+            AddThumbnailFromFile(fileNames[i]);
+        }
+        UpdateInfoLabelVisibility();
     }
 }

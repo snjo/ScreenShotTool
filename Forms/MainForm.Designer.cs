@@ -90,6 +90,7 @@
             // 
             // listViewThumbnails
             // 
+            listViewThumbnails.AllowDrop = true;
             listViewThumbnails.ContextMenuStrip = contextMenuListView;
             listViewThumbnails.Location = new Point(12, 27);
             listViewThumbnails.Name = "listViewThumbnails";
@@ -97,6 +98,8 @@
             listViewThumbnails.TabIndex = 0;
             listViewThumbnails.UseCompatibleStateImageBehavior = false;
             listViewThumbnails.SizeChanged += ListViewThumbnails_SizeChanged;
+            listViewThumbnails.DragDrop += listViewThumbnails_DragDrop;
+            listViewThumbnails.DragEnter += listViewThumbnails_DragEnter;
             listViewThumbnails.DoubleClick += ListView1_DoubleClick;
             listViewThumbnails.KeyDown += ListView1_KeyDown;
             listViewThumbnails.MouseDown += ListViewThumbnails_MouseDown;
@@ -105,7 +108,7 @@
             // 
             contextMenuListView.Items.AddRange(new ToolStripItem[] { itemOpenImage, itemOpenFolder, itemDeleteFile, itemRemove, copyToClipboardToolStripMenuItem, copyFileToolStripMenuItem, editImageToolStripMenuItem, convertFileFormatToolStripMenuItem });
             contextMenuListView.Name = "contextMenuListView";
-            contextMenuListView.Size = new Size(239, 202);
+            contextMenuListView.Size = new Size(239, 180);
             contextMenuListView.Opening += ContextMenuListView_Opening;
             // 
             // itemOpenImage
@@ -157,9 +160,9 @@
             editImageToolStripMenuItem.Text = "&Edit Image";
             editImageToolStripMenuItem.Click += EditImageFromFile_Click;
             // 
-            // convertToPDFOrOtherFormatToolStripMenuItem
+            // convertFileFormatToolStripMenuItem
             // 
-            convertFileFormatToolStripMenuItem.Name = "convertToPDFOrOtherFormatToolStripMenuItem";
+            convertFileFormatToolStripMenuItem.Name = "convertFileFormatToolStripMenuItem";
             convertFileFormatToolStripMenuItem.Size = new Size(238, 22);
             convertFileFormatToolStripMenuItem.Text = "Convert to PDF or other format";
             convertFileFormatToolStripMenuItem.Click += ConvertFileFormat_Click;
