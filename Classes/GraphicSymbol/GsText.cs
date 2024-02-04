@@ -31,6 +31,16 @@ public class GsText : GraphicSymbol
         FillColor = foregroundColor;
     }
 
+    public static GsText Create(Point startPoint, Color foregroundColor, string text, int fontSize)
+    {
+        GsText newSymbol = new GsText(startPoint, startPoint.Addition(new Point(10, 10)), foregroundColor, Color.Transparent, false)
+        {
+            Text = text,
+            fontEmSize = fontSize
+        };
+        return newSymbol;
+    }
+
     private Font CreateFont()
     {
         return new Font(fontFamily, fontEmSize, fontStyle);

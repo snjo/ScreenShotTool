@@ -428,7 +428,14 @@ public partial class ScreenshotEditor : Form
 
         if (e.KeyCode == Keys.V && e.Modifiers == Keys.Control)
         {
-            PasteIntoImage();
+            if (Clipboard.ContainsImage())
+            {
+                PasteIntoImage();
+            }
+            else if (Clipboard.ContainsText())
+            {
+                PasteTextIntoImage();
+            }
         }
         if ((e.KeyCode == Keys.C && e.Modifiers == Keys.Control))
         {
@@ -546,9 +553,26 @@ public partial class ScreenshotEditor : Form
 
     private void PasteIntoImage()
     {
-        //SetUserAction(UserActions.CreateImage);
-        //editorCanvas.dragStarted = true;
-        //editorCanvas.dragStart = new Point(0, 0);
+        GsImage gsImage = GsImage.Create(GetPastePosition(), copiedBitmap, true);
+        if (gsImage.ValidSymbol)
+        {
+            AddNewSymbolToList(gsImage);
+        }
+        else
+        {
+            gsImage.Dispose();
+        }
+
+        editorCanvas.UpdateOverlay();
+    }
+
+    private void PasteTextIntoImage()
+    {
+        AddNewSymbolToList(GsText.Create(GetPastePosition(), buttonNewColorLine.BackColor, Clipboard.GetText(), 10));
+    }
+
+    private Point GetPastePosition()
+    {
         Point location = MousePositionLocal;
         bool badLocation = false;
         if (location.X < 0 || location.X > editorCanvas.CanvasRect.Width - 10)
@@ -564,17 +588,7 @@ public partial class ScreenshotEditor : Form
             location = new Point(10, 10);
         }
 
-        GsImage gsImage = GsImage.Create(location, copiedBitmap, true);
-        if (gsImage.ValidSymbol)
-        {
-            AddNewSymbolToList(gsImage);
-        }
-        else
-        {
-            gsImage.Dispose();
-        }
-
-        editorCanvas.UpdateOverlay();
+        return location;
     }
 
     #endregion
@@ -1536,7 +1550,36 @@ public partial class ScreenshotEditor : Form
         timerFixDPI.Stop();
         if (pictureBoxOverlay.Image != null)
         {
-            pictureBoxOverlay.Size = pictureBoxOverlay.Image.Size;   
+            pictureBoxOverlay.Size = pictureBoxOverlay.Image.Size;
+        }
+    }
+
+    private void buttonPropertiesEditText_Click(object sender, EventArgs e)
+    {
+        EditSelectedText();
+    }
+
+    private void EditSelectedText()
+    {
+        if (GetSelectedSymbolFirst() is GsText gsT)
+        {
+            TextEntryDialog textEntry = new TextEntryDialog(gsT.Text);
+            DialogResult result = textEntry.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                Debug.WriteLine("update text: " + textEntry.TextResult);
+                //gsT.Text = textEntry.Text;
+                textBoxSymbolText.Text = textEntry.TextResult;
+            }
+            textEntry.Dispose();
+        }
+    }
+
+    private void pictureBoxOverlay_DoubleClick(object sender, EventArgs e)
+    {
+        if (GetSelectedSymbolFirst() is GsText)
+        {
+            EditSelectedText();
         }
     }
 }
