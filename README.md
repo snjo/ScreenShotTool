@@ -157,7 +157,7 @@ Select the type of graphic symbol to add from the vertical list on the left. The
 
 You can move, edit and scale symbols after you have placed them by clicking and dragging the symbol, or using the Properties panel on the right.
 
-<!---CW:2000:4000:-->
+<!---CW:3000:6000:-->
 | **Keys**           | **Function**                               |
 |--------------------|--------------------------------------------|
 | Ctrl+C             | Copy the current image or selected region  |

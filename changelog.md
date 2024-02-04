@@ -6,21 +6,21 @@
 ## 1.8
 
 #### Editor
-- PDF support. Save captures cirectly to PDF
+- PDF support. Save captures directly to PDF
 - Print from the editor
 - Convert captured images to other image formats or PDF from the capture list or editor.
-- New Stickers button, easily insert emojis, cursors etc from a preset folder. (this folder can be changed in Options)
+- New Stickers button, easily insert emojis, cursors etc. from a preset folder. (this folder can be changed in Options)
 - Drag and drop images into editor
 - Image symbols can be rotated
 - Changed shadow rendering, supports images with alpha
 - Proportional scaling of symbols with Shift
-- Multi select symbols in list or with Control-click (alllows deletin and moving multiple symbols)
+- Multi select symbols in list or with Control-click (allows deleting and moving multiple symbols)
 - Move symbols with arrow keys, Shift to move x10
 - Move symbols to Back/Front with Home/End
 - Support for screens with zoom other than 100%. Some UI changes done to allow for this.
-- Open Editor directly with -editor command line argument, or using a file's Open With or drag and drop on exe. (Does not start the rest of the program)
 - Multiline text, and double click to edit text symbols
 - Paste text directly into editor
+- Open Editor directly with -editor command line argument, or using a file's Open With or drag and drop on exe. (Does not start the rest of the program)
 
 
 ## 1.7
