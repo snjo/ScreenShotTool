@@ -273,7 +273,7 @@ public partial class MainForm : Form
 
         if (showThumbnails && savedToFile)
         {
-            AddThumbnail(DestinationFileName + DestinationFileExtension, bitmap);
+            AddThumbnail(Path.Combine(DestinationFolder, DestinationFileName + DestinationFileExtension), bitmap);
             UpdateInfoLabelVisibility();
         }
 
@@ -1349,11 +1349,15 @@ public partial class MainForm : Form
         // open folder of first selected file
         if (listViewThumbnails.SelectedItems.Count > 0)
         {
-            string? file = listViewThumbnails.SelectedItems[0].Tag?.ToString();
-            if (file == null) return;
-            string? folder = Path.GetDirectoryName(file);
-            if (folder == null) return;
-            BrowseFolderInExplorer(folder);
+            if (listViewThumbnails.SelectedItems[0].Tag is string filename)
+            {
+                //string? file = listViewThumbnails.SelectedItems[0].Tag?.ToString();
+                //if (file == null) return;
+                string? folder = Path.GetDirectoryName(filename);
+                Debug.WriteLine($"open folder from filename {filename}: {folder}");
+                if (folder == null) return;
+                BrowseFolderInExplorer(folder);
+            }
         }
     }
 

@@ -1,7 +1,6 @@
 ﻿## Changelog
 
 ## TODO:
-- text multi line
 - Undo?
 
 ## 1.8
@@ -20,6 +19,9 @@
 - Move symbols to Back/Front with Home/End
 - Support for screens with zoom other than 100%. Some UI changes done to allow for this.
 - Open Editor directly with -editor command line argument, or using a file's Open With or drag and drop on exe. (Does not start the rest of the program)
+- Multiline text, and double click to edit text symbols
+- Paste text directly into editor
+
 
 ## 1.7
 
