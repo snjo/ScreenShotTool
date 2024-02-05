@@ -261,9 +261,9 @@
             Controls.Add(label2);
             Controls.Add(comboBoxPrinters);
             Controls.Add(label1);
-            FormBorderStyle = FormBorderStyle.SizableToolWindow;
+            FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Name = "PrintDialog";
-            Text = "PrintDialog";
+            Text = "Print image";
             ((System.ComponentModel.ISupportInitialize)numericMarginLeft).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericMarginTop).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericImageScale).EndInit();

@@ -277,7 +277,7 @@
             KeyPreview = true;
             Name = "ColorDialogAlpha";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "ColorDialogAlpha";
+            Text = "Select color";
             KeyDown += ColorDialogAlpha_KeyDown;
             ((System.ComponentModel.ISupportInitialize)trackBarRed).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericRed).EndInit();
