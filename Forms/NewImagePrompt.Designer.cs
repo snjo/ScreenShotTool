@@ -132,6 +132,7 @@
             Controls.Add(numericHeight);
             Controls.Add(label1);
             Controls.Add(numericWidth);
+            FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Name = "NewImagePrompt";
             Text = "Create new image";
             ((System.ComponentModel.ISupportInitialize)numericWidth).EndInit();

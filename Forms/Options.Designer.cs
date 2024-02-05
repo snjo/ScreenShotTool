@@ -1399,6 +1399,7 @@
             ClientSize = new Size(495, 639);
             Controls.Add(panel1);
             Controls.Add(tabControl1);
+            FormBorderStyle = FormBorderStyle.SizableToolWindow;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Options";
             Text = "Options";
