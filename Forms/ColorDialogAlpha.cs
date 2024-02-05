@@ -10,12 +10,24 @@ public partial class ColorDialogAlpha : Form
     Size SwatchSize = new(20, 20);
     readonly int swatchPadding = 3;
     public Color Color = Color.White;
-    readonly List<Color> colors;
+    List<Color> colors = [];
 
     public ColorDialogAlpha(Color startColor)
     {
-
         InitializeComponent();
+        Initialize(startColor);
+
+        //Debug.WriteLine($"Swatch size: {SwatchSize}, in panelSwatches size: {panelSwatches.Size}");
+    }
+
+    public ColorDialogAlpha(Color startColor, Point location)
+    {
+        Initialize(startColor);
+        Location = location;
+    }
+
+    private void Initialize(Color startColor)
+    {
         Font = new Font(this.Font.FontFamily, 9);
         this.Color = startColor;
         colors = GetAllColors(false);
@@ -23,7 +35,6 @@ public partial class ColorDialogAlpha : Form
         SwatchSize.Height = (panelSwatches.Height / SwatchesVertical);
         UpateColor(this.Color);
         CreateColorSwatches();
-        //Debug.WriteLine($"Swatch size: {SwatchSize}, in panelSwatches size: {panelSwatches.Size}");
     }
 
     private void CreateColorSwatches()

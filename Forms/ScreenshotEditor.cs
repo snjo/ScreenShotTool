@@ -971,7 +971,8 @@ public partial class ScreenshotEditor : Form
                 if (item.Tag is not GraphicSymbol gs) return;
 
                 ColorDialogAlpha colorDialogAlpha = new(button.BackColor);
-                DialogResult result = colorDialogAlpha.ShowDialog();
+                colorDialogAlpha.StartPosition = FormStartPosition.CenterScreen;
+                DialogResult result = colorDialogAlpha.ShowDialog(this);
                 if (result == DialogResult.OK)
                 {
                     ColorTools.SetButtonColors(button, colorDialogAlpha.Color, "X");
@@ -1574,7 +1575,7 @@ public partial class ScreenshotEditor : Form
         if (GetSelectedSymbolFirst() is GsText gsT)
         {
             TextEntryDialog textEntry = new TextEntryDialog(gsT.Text);
-            DialogResult result = textEntry.ShowDialog();
+            DialogResult result = textEntry.ShowDialog(this);
             if (result == DialogResult.OK)
             {
                 Debug.WriteLine("update text: " + textEntry.TextResult);

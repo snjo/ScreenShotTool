@@ -273,8 +273,10 @@
             Controls.Add(trackBarRed);
             Controls.Add(buttonCancel);
             Controls.Add(buttonOK);
+            FormBorderStyle = FormBorderStyle.SizableToolWindow;
             KeyPreview = true;
             Name = "ColorDialogAlpha";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "ColorDialogAlpha";
             KeyDown += ColorDialogAlpha_KeyDown;
             ((System.ComponentModel.ISupportInitialize)trackBarRed).EndInit();
