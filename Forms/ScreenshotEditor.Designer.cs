@@ -167,7 +167,7 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, editToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(1007, 24);
+            menuStrip1.Size = new Size(994, 24);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -275,7 +275,7 @@
             panelButtons.Dock = DockStyle.Left;
             panelButtons.Location = new Point(0, 0);
             panelButtons.Name = "panelButtons";
-            panelButtons.Size = new Size(46, 757);
+            panelButtons.Size = new Size(46, 786);
             panelButtons.TabIndex = 1;
             // 
             // buttonStickers
@@ -288,7 +288,7 @@
             buttonStickers.Margin = new Padding(1);
             buttonStickers.Name = "buttonStickers";
             buttonStickers.Size = new Size(36, 36);
-            buttonStickers.TabIndex = 15;
+            buttonStickers.TabIndex = 14;
             toolTip1.SetToolTip(buttonStickers, "Stickers and cursors");
             buttonStickers.UseVisualStyleBackColor = true;
             buttonStickers.Click += ButtonStickers_Click;
@@ -303,7 +303,7 @@
             buttonFilledCurve.Margin = new Padding(1);
             buttonFilledCurve.Name = "buttonFilledCurve";
             buttonFilledCurve.Size = new Size(36, 36);
-            buttonFilledCurve.TabIndex = 14;
+            buttonFilledCurve.TabIndex = 8;
             toolTip1.SetToolTip(buttonFilledCurve, "Filled curve");
             buttonFilledCurve.UseVisualStyleBackColor = true;
             buttonFilledCurve.Click += ButtonFillCurve_Click;
@@ -319,7 +319,7 @@
             buttonDraw.Margin = new Padding(1);
             buttonDraw.Name = "buttonDraw";
             buttonDraw.Size = new Size(36, 36);
-            buttonDraw.TabIndex = 13;
+            buttonDraw.TabIndex = 7;
             toolTip1.SetToolTip(buttonDraw, "Freenhand lines. To stop, Right Click or press Cancel");
             buttonDraw.UseVisualStyleBackColor = true;
             buttonDraw.Click += ButtonDraw_Click;
@@ -334,7 +334,7 @@
             buttonNumbered.Margin = new Padding(1);
             buttonNumbered.Name = "buttonNumbered";
             buttonNumbered.Size = new Size(36, 36);
-            buttonNumbered.TabIndex = 12;
+            buttonNumbered.TabIndex = 11;
             toolTip1.SetToolTip(buttonNumbered, "Number markers (Automatically increments number)");
             buttonNumbered.UseVisualStyleBackColor = true;
             buttonNumbered.Click += ButtonNumbered_Click;
@@ -349,7 +349,7 @@
             buttonCrop.Margin = new Padding(1);
             buttonCrop.Name = "buttonCrop";
             buttonCrop.Size = new Size(36, 36);
-            buttonCrop.TabIndex = 11;
+            buttonCrop.TabIndex = 13;
             toolTip1.SetToolTip(buttonCrop, "Crop or Copy region");
             buttonCrop.UseVisualStyleBackColor = true;
             buttonCrop.Click += ButtonCrop_Click;
@@ -394,7 +394,7 @@
             buttonSelect.Margin = new Padding(1);
             buttonSelect.Name = "buttonSelect";
             buttonSelect.Size = new Size(36, 36);
-            buttonSelect.TabIndex = 8;
+            buttonSelect.TabIndex = 1;
             toolTip1.SetToolTip(buttonSelect, "Select (right click or Escape when drawing to switch to select)");
             buttonSelect.UseVisualStyleBackColor = true;
             buttonSelect.Click += ButtonSelect_Click;
@@ -409,7 +409,7 @@
             buttonBorder.Margin = new Padding(1);
             buttonBorder.Name = "buttonBorder";
             buttonBorder.Size = new Size(36, 36);
-            buttonBorder.TabIndex = 6;
+            buttonBorder.TabIndex = 12;
             toolTip1.SetToolTip(buttonBorder, "Frame (adds a line around the image)");
             buttonBorder.UseVisualStyleBackColor = true;
             buttonBorder.Click += ButtonBorder_Click;
@@ -424,7 +424,7 @@
             buttonText.Margin = new Padding(1);
             buttonText.Name = "buttonText";
             buttonText.Size = new Size(36, 36);
-            buttonText.TabIndex = 5;
+            buttonText.TabIndex = 6;
             toolTip1.SetToolTip(buttonText, "Text");
             buttonText.UseVisualStyleBackColor = true;
             buttonText.Click += ButtonNewText_Click;
@@ -439,7 +439,7 @@
             buttonArrow.Margin = new Padding(1);
             buttonArrow.Name = "buttonArrow";
             buttonArrow.Size = new Size(36, 36);
-            buttonArrow.TabIndex = 4;
+            buttonArrow.TabIndex = 5;
             toolTip1.SetToolTip(buttonArrow, "Arrow");
             buttonArrow.UseVisualStyleBackColor = true;
             buttonArrow.Click += ButtonArrow_Click;
@@ -454,7 +454,7 @@
             buttonLine.Margin = new Padding(1);
             buttonLine.Name = "buttonLine";
             buttonLine.Size = new Size(36, 36);
-            buttonLine.TabIndex = 2;
+            buttonLine.TabIndex = 4;
             toolTip1.SetToolTip(buttonLine, "Line");
             buttonLine.UseVisualStyleBackColor = true;
             buttonLine.Click += ButtonLine_Click;
@@ -469,7 +469,7 @@
             buttonCircle.Margin = new Padding(1);
             buttonCircle.Name = "buttonCircle";
             buttonCircle.Size = new Size(36, 36);
-            buttonCircle.TabIndex = 1;
+            buttonCircle.TabIndex = 3;
             toolTip1.SetToolTip(buttonCircle, "Circle / Ellipse");
             buttonCircle.UseVisualStyleBackColor = true;
             buttonCircle.Click += ButtonCircle_Click;
@@ -484,7 +484,7 @@
             buttonRectangle.Margin = new Padding(1);
             buttonRectangle.Name = "buttonRectangle";
             buttonRectangle.Size = new Size(36, 36);
-            buttonRectangle.TabIndex = 0;
+            buttonRectangle.TabIndex = 2;
             toolTip1.SetToolTip(buttonRectangle, "Rectangle");
             buttonRectangle.UseVisualStyleBackColor = true;
             buttonRectangle.Click += ButtonRectangle_Click;
@@ -496,7 +496,7 @@
             numericNewLineWeight.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
             numericNewLineWeight.Name = "numericNewLineWeight";
             numericNewLineWeight.Size = new Size(48, 23);
-            numericNewLineWeight.TabIndex = 3;
+            numericNewLineWeight.TabIndex = 22;
             toolTip1.SetToolTip(numericNewLineWeight, "Set line width for the next created symbol");
             numericNewLineWeight.Value = new decimal(new int[] { 2, 0, 0, 0 });
             numericNewLineWeight.ValueChanged += NumericNewLineWeight_ValueChanged;
@@ -510,7 +510,7 @@
             panelImage.Controls.Add(pictureBoxOverlay);
             panelImage.Location = new Point(49, 34);
             panelImage.Name = "panelImage";
-            panelImage.Size = new Size(758, 720);
+            panelImage.Size = new Size(745, 749);
             panelImage.TabIndex = 3;
             // 
             // pictureBoxOverlay
@@ -532,7 +532,7 @@
             listViewSymbols.Location = new Point(3, 2);
             listViewSymbols.Name = "listViewSymbols";
             listViewSymbols.Size = new Size(170, 83);
-            listViewSymbols.TabIndex = 0;
+            listViewSymbols.TabIndex = 30;
             listViewSymbols.UseCompatibleStateImageBehavior = false;
             listViewSymbols.View = View.List;
             listViewSymbols.SelectedIndexChanged += ListViewSymbols_SelectedIndexChanged;
@@ -560,7 +560,7 @@
             panelPropertiesPosition.Location = new Point(3, 91);
             panelPropertiesPosition.Name = "panelPropertiesPosition";
             panelPropertiesPosition.Size = new Size(170, 80);
-            panelPropertiesPosition.TabIndex = 4;
+            panelPropertiesPosition.TabIndex = 100;
             // 
             // numericPropertiesHeight
             // 
@@ -569,7 +569,7 @@
             numericPropertiesHeight.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numericPropertiesHeight.Name = "numericPropertiesHeight";
             numericPropertiesHeight.Size = new Size(55, 23);
-            numericPropertiesHeight.TabIndex = 12;
+            numericPropertiesHeight.TabIndex = 34;
             numericPropertiesHeight.Tag = "Height";
             toolTip1.SetToolTip(numericPropertiesHeight, "Height");
             numericPropertiesHeight.Value = new decimal(new int[] { 1, 0, 0, 0 });
@@ -583,7 +583,7 @@
             numericPropertiesY.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
             numericPropertiesY.Name = "numericPropertiesY";
             numericPropertiesY.Size = new Size(55, 23);
-            numericPropertiesY.TabIndex = 11;
+            numericPropertiesY.TabIndex = 32;
             numericPropertiesY.Tag = "Y";
             toolTip1.SetToolTip(numericPropertiesY, "Y position (upper left)");
             numericPropertiesY.ValueChanged += Numeric_ValueChanged;
@@ -596,7 +596,7 @@
             numericPropertiesWidth.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numericPropertiesWidth.Name = "numericPropertiesWidth";
             numericPropertiesWidth.Size = new Size(55, 23);
-            numericPropertiesWidth.TabIndex = 10;
+            numericPropertiesWidth.TabIndex = 33;
             numericPropertiesWidth.Tag = "Width";
             toolTip1.SetToolTip(numericPropertiesWidth, "Width");
             numericPropertiesWidth.Value = new decimal(new int[] { 1, 0, 0, 0 });
@@ -610,7 +610,7 @@
             numericPropertiesX.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
             numericPropertiesX.Name = "numericPropertiesX";
             numericPropertiesX.Size = new Size(55, 23);
-            numericPropertiesX.TabIndex = 9;
+            numericPropertiesX.TabIndex = 31;
             numericPropertiesX.Tag = "X";
             toolTip1.SetToolTip(numericPropertiesX, "X position (upper left)");
             numericPropertiesX.ValueChanged += Numeric_ValueChanged;
@@ -669,7 +669,7 @@
             buttonPropertiesColorLine.Location = new Point(110, 2);
             buttonPropertiesColorLine.Name = "buttonPropertiesColorLine";
             buttonPropertiesColorLine.Size = new Size(55, 23);
-            buttonPropertiesColorLine.TabIndex = 13;
+            buttonPropertiesColorLine.TabIndex = 36;
             buttonPropertiesColorLine.Tag = "LineColor";
             toolTip1.SetToolTip(buttonPropertiesColorLine, "Set line color on the currently selected symbol");
             buttonPropertiesColorLine.UseVisualStyleBackColor = false;
@@ -690,7 +690,7 @@
             textBoxSymbolText.Multiline = true;
             textBoxSymbolText.Name = "textBoxSymbolText";
             textBoxSymbolText.Size = new Size(123, 41);
-            textBoxSymbolText.TabIndex = 26;
+            textBoxSymbolText.TabIndex = 38;
             textBoxSymbolText.TextChanged += TextBoxSymbolText_TextChanged;
             // 
             // numericPropertiesLineWeight
@@ -699,7 +699,7 @@
             numericPropertiesLineWeight.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
             numericPropertiesLineWeight.Name = "numericPropertiesLineWeight";
             numericPropertiesLineWeight.Size = new Size(55, 23);
-            numericPropertiesLineWeight.TabIndex = 15;
+            numericPropertiesLineWeight.TabIndex = 37;
             numericPropertiesLineWeight.Tag = "LineWeight";
             toolTip1.SetToolTip(numericPropertiesLineWeight, "Line width / weight");
             numericPropertiesLineWeight.Value = new decimal(new int[] { 1, 0, 0, 0 });
@@ -713,7 +713,7 @@
             buttonPropertiesColorFill.Location = new Point(110, 1);
             buttonPropertiesColorFill.Name = "buttonPropertiesColorFill";
             buttonPropertiesColorFill.Size = new Size(55, 23);
-            buttonPropertiesColorFill.TabIndex = 14;
+            buttonPropertiesColorFill.TabIndex = 35;
             buttonPropertiesColorFill.Tag = "FillColor";
             toolTip1.SetToolTip(buttonPropertiesColorFill, "Set fill color on the currently selected symbol");
             buttonPropertiesColorFill.UseVisualStyleBackColor = false;
@@ -742,7 +742,7 @@
             buttonDeleteSymbol.Location = new Point(4, 28);
             buttonDeleteSymbol.Name = "buttonDeleteSymbol";
             buttonDeleteSymbol.Size = new Size(94, 23);
-            buttonDeleteSymbol.TabIndex = 0;
+            buttonDeleteSymbol.TabIndex = 72;
             buttonDeleteSymbol.Text = "Delete Symbol";
             toolTip1.SetToolTip(buttonDeleteSymbol, "Delete the selected symbol (Hotkey: Delete)");
             buttonDeleteSymbol.UseVisualStyleBackColor = true;
@@ -757,7 +757,7 @@
             buttonNewColorFill.Location = new Point(320, 3);
             buttonNewColorFill.Name = "buttonNewColorFill";
             buttonNewColorFill.Size = new Size(60, 23);
-            buttonNewColorFill.TabIndex = 18;
+            buttonNewColorFill.TabIndex = 21;
             buttonNewColorFill.Tag = "FillColor";
             toolTip1.SetToolTip(buttonNewColorFill, "Set fill color for the next created symbol");
             buttonNewColorFill.UseVisualStyleBackColor = false;
@@ -772,7 +772,7 @@
             buttonNewColorLine.Location = new Point(194, 3);
             buttonNewColorLine.Name = "buttonNewColorLine";
             buttonNewColorLine.Size = new Size(60, 23);
-            buttonNewColorLine.TabIndex = 17;
+            buttonNewColorLine.TabIndex = 20;
             buttonNewColorLine.Tag = "LineColor";
             toolTip1.SetToolTip(buttonNewColorLine, "Set line color or text color for the next created symbol");
             buttonNewColorLine.UseVisualStyleBackColor = false;
@@ -810,10 +810,10 @@
             panelPropertiesFill.BorderStyle = BorderStyle.FixedSingle;
             panelPropertiesFill.Controls.Add(label7);
             panelPropertiesFill.Controls.Add(buttonPropertiesColorFill);
-            panelPropertiesFill.Location = new Point(3, 405);
+            panelPropertiesFill.Location = new Point(3, 172);
             panelPropertiesFill.Name = "panelPropertiesFill";
             panelPropertiesFill.Size = new Size(170, 29);
-            panelPropertiesFill.TabIndex = 27;
+            panelPropertiesFill.TabIndex = 101;
             // 
             // panelPropertiesText
             // 
@@ -828,17 +828,17 @@
             panelPropertiesText.Controls.Add(numericPropertiesFontSize);
             panelPropertiesText.Controls.Add(comboBoxFontFamily);
             panelPropertiesText.Controls.Add(textBoxSymbolText);
-            panelPropertiesText.Location = new Point(3, 234);
+            panelPropertiesText.Location = new Point(3, 263);
             panelPropertiesText.Name = "panelPropertiesText";
             panelPropertiesText.Size = new Size(170, 165);
-            panelPropertiesText.TabIndex = 28;
+            panelPropertiesText.TabIndex = 102;
             // 
             // buttonPropertiesEditText
             // 
             buttonPropertiesEditText.Location = new Point(133, 22);
             buttonPropertiesEditText.Name = "buttonPropertiesEditText";
             buttonPropertiesEditText.Size = new Size(32, 23);
-            buttonPropertiesEditText.TabIndex = 35;
+            buttonPropertiesEditText.TabIndex = 39;
             buttonPropertiesEditText.Text = "...";
             buttonPropertiesEditText.UseVisualStyleBackColor = true;
             buttonPropertiesEditText.Click += buttonPropertiesEditText_Click;
@@ -849,7 +849,7 @@
             checkBoxUnderline.Location = new Point(75, 140);
             checkBoxUnderline.Name = "checkBoxUnderline";
             checkBoxUnderline.Size = new Size(77, 19);
-            checkBoxUnderline.TabIndex = 34;
+            checkBoxUnderline.TabIndex = 45;
             checkBoxUnderline.Text = "Underline";
             checkBoxUnderline.UseVisualStyleBackColor = true;
             checkBoxUnderline.Click += FontStyle_CheckedChanged;
@@ -860,7 +860,7 @@
             checkBoxStrikeout.Location = new Point(5, 140);
             checkBoxStrikeout.Name = "checkBoxStrikeout";
             checkBoxStrikeout.Size = new Size(73, 19);
-            checkBoxStrikeout.TabIndex = 33;
+            checkBoxStrikeout.TabIndex = 44;
             checkBoxStrikeout.Text = "Strikeout";
             checkBoxStrikeout.UseVisualStyleBackColor = true;
             checkBoxStrikeout.Click += FontStyle_CheckedChanged;
@@ -871,7 +871,7 @@
             checkBoxFontItalic.Location = new Point(75, 121);
             checkBoxFontItalic.Name = "checkBoxFontItalic";
             checkBoxFontItalic.Size = new Size(51, 19);
-            checkBoxFontItalic.TabIndex = 32;
+            checkBoxFontItalic.TabIndex = 43;
             checkBoxFontItalic.Text = "Italic";
             checkBoxFontItalic.UseVisualStyleBackColor = true;
             checkBoxFontItalic.Click += FontStyle_CheckedChanged;
@@ -882,7 +882,7 @@
             checkBoxFontBold.Location = new Point(5, 121);
             checkBoxFontBold.Name = "checkBoxFontBold";
             checkBoxFontBold.Size = new Size(50, 19);
-            checkBoxFontBold.TabIndex = 31;
+            checkBoxFontBold.TabIndex = 42;
             checkBoxFontBold.Text = "Bold";
             checkBoxFontBold.UseVisualStyleBackColor = true;
             checkBoxFontBold.Click += FontStyle_CheckedChanged;
@@ -912,7 +912,7 @@
             numericPropertiesFontSize.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
             numericPropertiesFontSize.Name = "numericPropertiesFontSize";
             numericPropertiesFontSize.Size = new Size(55, 23);
-            numericPropertiesFontSize.TabIndex = 28;
+            numericPropertiesFontSize.TabIndex = 40;
             numericPropertiesFontSize.Value = new decimal(new int[] { 10, 0, 0, 0 });
             numericPropertiesFontSize.ValueChanged += NumericPropertiesFontSize_ValueChanged;
             // 
@@ -922,7 +922,7 @@
             comboBoxFontFamily.Location = new Point(2, 96);
             comboBoxFontFamily.Name = "comboBoxFontFamily";
             comboBoxFontFamily.Size = new Size(162, 23);
-            comboBoxFontFamily.TabIndex = 27;
+            comboBoxFontFamily.TabIndex = 41;
             comboBoxFontFamily.TextChanged += ComboBoxFontFamily_ValueMemberChanged;
             // 
             // panelPropertiesHighlight
@@ -930,10 +930,10 @@
             panelPropertiesHighlight.BorderStyle = BorderStyle.FixedSingle;
             panelPropertiesHighlight.Controls.Add(label18);
             panelPropertiesHighlight.Controls.Add(comboBoxBlendMode);
-            panelPropertiesHighlight.Location = new Point(3, 495);
+            panelPropertiesHighlight.Location = new Point(3, 464);
             panelPropertiesHighlight.Name = "panelPropertiesHighlight";
             panelPropertiesHighlight.Size = new Size(170, 49);
-            panelPropertiesHighlight.TabIndex = 31;
+            panelPropertiesHighlight.TabIndex = 104;
             panelPropertiesHighlight.Visible = false;
             // 
             // label18
@@ -952,7 +952,7 @@
             comboBoxBlendMode.Location = new Point(3, 22);
             comboBoxBlendMode.Name = "comboBoxBlendMode";
             comboBoxBlendMode.Size = new Size(162, 23);
-            comboBoxBlendMode.TabIndex = 0;
+            comboBoxBlendMode.TabIndex = 48;
             comboBoxBlendMode.Text = "Multiply";
             toolTip1.SetToolTip(comboBoxBlendMode, "Changes how the higlighter color affects the undelying image. Multiply or Darken is usually the best choice");
             comboBoxBlendMode.SelectedIndexChanged += ComboBoxBlendMode_SelectedIndexChanged;
@@ -969,15 +969,15 @@
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(0, 24);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1007, 759);
+            panel1.Size = new Size(994, 788);
             panel1.TabIndex = 29;
             // 
             // splitter2
             // 
             splitter2.Dock = DockStyle.Right;
-            splitter2.Location = new Point(809, 32);
+            splitter2.Location = new Point(796, 32);
             splitter2.Name = "splitter2";
-            splitter2.Size = new Size(3, 725);
+            splitter2.Size = new Size(3, 754);
             splitter2.TabIndex = 41;
             splitter2.TabStop = false;
             // 
@@ -985,7 +985,7 @@
             // 
             splitter1.Location = new Point(46, 32);
             splitter1.Name = "splitter1";
-            splitter1.Size = new Size(3, 725);
+            splitter1.Size = new Size(3, 754);
             splitter1.TabIndex = 40;
             splitter1.TabStop = false;
             // 
@@ -1002,7 +1002,7 @@
             panel3.Dock = DockStyle.Top;
             panel3.Location = new Point(46, 0);
             panel3.Name = "panel3";
-            panel3.Size = new Size(766, 32);
+            panel3.Size = new Size(753, 32);
             panel3.TabIndex = 39;
             // 
             // label19
@@ -1023,7 +1023,7 @@
             checkBoxNewShadow.Location = new Point(516, 7);
             checkBoxNewShadow.Name = "checkBoxNewShadow";
             checkBoxNewShadow.Size = new Size(68, 19);
-            checkBoxNewShadow.TabIndex = 24;
+            checkBoxNewShadow.TabIndex = 23;
             checkBoxNewShadow.Text = "Shadow";
             toolTip1.SetToolTip(checkBoxNewShadow, "Enable shadows for the next created symbol");
             checkBoxNewShadow.UseVisualStyleBackColor = true;
@@ -1044,9 +1044,9 @@
             panel2.Controls.Add(panelPropertiesCrop);
             panel2.Controls.Add(panelPropertiesBlur);
             panel2.Dock = DockStyle.Right;
-            panel2.Location = new Point(812, 0);
+            panel2.Location = new Point(799, 0);
             panel2.Name = "panel2";
-            panel2.Size = new Size(193, 757);
+            panel2.Size = new Size(193, 786);
             panel2.TabIndex = 38;
             // 
             // panelPropertiesImage
@@ -1055,17 +1055,17 @@
             panelPropertiesImage.Controls.Add(buttonResetImageSize);
             panelPropertiesImage.Controls.Add(labelRotation);
             panelPropertiesImage.Controls.Add(numericPropertiesRotation);
-            panelPropertiesImage.Location = new Point(3, 656);
+            panelPropertiesImage.Location = new Point(3, 569);
             panelPropertiesImage.Name = "panelPropertiesImage";
             panelPropertiesImage.Size = new Size(170, 56);
-            panelPropertiesImage.TabIndex = 37;
+            panelPropertiesImage.TabIndex = 106;
             // 
             // buttonResetImageSize
             // 
             buttonResetImageSize.Location = new Point(4, 3);
             buttonResetImageSize.Name = "buttonResetImageSize";
             buttonResetImageSize.Size = new Size(94, 23);
-            buttonResetImageSize.TabIndex = 2;
+            buttonResetImageSize.TabIndex = 51;
             buttonResetImageSize.Text = "Reset size";
             buttonResetImageSize.UseVisualStyleBackColor = true;
             buttonResetImageSize.Click += ButtonResetImageSize_Click;
@@ -1087,7 +1087,7 @@
             numericPropertiesRotation.Minimum = new decimal(new int[] { 720, 0, 0, int.MinValue });
             numericPropertiesRotation.Name = "numericPropertiesRotation";
             numericPropertiesRotation.Size = new Size(55, 23);
-            numericPropertiesRotation.TabIndex = 0;
+            numericPropertiesRotation.TabIndex = 52;
             numericPropertiesRotation.ValueChanged += NumericPropertiesRotation_ValueChanged;
             numericPropertiesRotation.KeyPress += NumericPropertiesRotation_KeyPress;
             // 
@@ -1097,10 +1097,10 @@
             panelPropertiesPolygon.Controls.Add(labelCurveTension);
             panelPropertiesPolygon.Controls.Add(numericPropertiesCurveTension);
             panelPropertiesPolygon.Controls.Add(checkBoxPropertiesCloseCurve);
-            panelPropertiesPolygon.Location = new Point(3, 603);
+            panelPropertiesPolygon.Location = new Point(3, 516);
             panelPropertiesPolygon.Name = "panelPropertiesPolygon";
             panelPropertiesPolygon.Size = new Size(170, 51);
-            panelPropertiesPolygon.TabIndex = 36;
+            panelPropertiesPolygon.TabIndex = 105;
             // 
             // labelCurveTension
             // 
@@ -1119,7 +1119,7 @@
             numericPropertiesCurveTension.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
             numericPropertiesCurveTension.Name = "numericPropertiesCurveTension";
             numericPropertiesCurveTension.Size = new Size(55, 23);
-            numericPropertiesCurveTension.TabIndex = 1;
+            numericPropertiesCurveTension.TabIndex = 50;
             toolTip1.SetToolTip(numericPropertiesCurveTension, "0-1. Higher values are smoother, but can make bulges when closing curves");
             numericPropertiesCurveTension.Value = new decimal(new int[] { 5, 0, 0, 65536 });
             numericPropertiesCurveTension.ValueChanged += NumericPropertiesCurveTension_ValueChanged;
@@ -1130,7 +1130,7 @@
             checkBoxPropertiesCloseCurve.Location = new Point(7, 4);
             checkBoxPropertiesCloseCurve.Name = "checkBoxPropertiesCloseCurve";
             checkBoxPropertiesCloseCurve.Size = new Size(89, 19);
-            checkBoxPropertiesCloseCurve.TabIndex = 0;
+            checkBoxPropertiesCloseCurve.TabIndex = 49;
             checkBoxPropertiesCloseCurve.Text = "Close Curve";
             toolTip1.SetToolTip(checkBoxPropertiesCloseCurve, "Draws a line between the first and last point of the curve");
             checkBoxPropertiesCloseCurve.UseVisualStyleBackColor = true;
@@ -1143,7 +1143,7 @@
             panelPropertiesLine.Controls.Add(label6);
             panelPropertiesLine.Controls.Add(buttonPropertiesColorLine);
             panelPropertiesLine.Controls.Add(label8);
-            panelPropertiesLine.Location = new Point(3, 175);
+            panelPropertiesLine.Location = new Point(3, 204);
             panelPropertiesLine.Name = "panelPropertiesLine";
             panelPropertiesLine.Size = new Size(170, 57);
             panelPropertiesLine.TabIndex = 2;
@@ -1154,17 +1154,17 @@
             panelPropertiesDelete.Controls.Add(buttonToBack);
             panelPropertiesDelete.Controls.Add(buttonToFront);
             panelPropertiesDelete.Controls.Add(buttonDeleteSymbol);
-            panelPropertiesDelete.Location = new Point(3, 546);
+            panelPropertiesDelete.Location = new Point(3, 719);
             panelPropertiesDelete.Name = "panelPropertiesDelete";
             panelPropertiesDelete.Size = new Size(170, 55);
-            panelPropertiesDelete.TabIndex = 33;
+            panelPropertiesDelete.TabIndex = 109;
             // 
             // buttonToBack
             // 
             buttonToBack.Location = new Point(70, 3);
             buttonToBack.Name = "buttonToBack";
             buttonToBack.Size = new Size(69, 23);
-            buttonToBack.TabIndex = 2;
+            buttonToBack.TabIndex = 71;
             buttonToBack.Text = "To Back";
             toolTip1.SetToolTip(buttonToBack, "Moves the selected symbol so it appears behind any other symbol");
             buttonToBack.UseVisualStyleBackColor = true;
@@ -1175,7 +1175,7 @@
             buttonToFront.Location = new Point(4, 3);
             buttonToFront.Name = "buttonToFront";
             buttonToFront.Size = new Size(65, 23);
-            buttonToFront.TabIndex = 1;
+            buttonToFront.TabIndex = 70;
             buttonToFront.Text = "To Front";
             toolTip1.SetToolTip(buttonToFront, "Moves the selected symbol so it appears in front of any other symbol");
             buttonToFront.UseVisualStyleBackColor = true;
@@ -1185,10 +1185,10 @@
             // 
             panelPropertiesShadow.BorderStyle = BorderStyle.FixedSingle;
             panelPropertiesShadow.Controls.Add(checkBoxPropertiesShadow);
-            panelPropertiesShadow.Location = new Point(3, 434);
+            panelPropertiesShadow.Location = new Point(3, 691);
             panelPropertiesShadow.Name = "panelPropertiesShadow";
             panelPropertiesShadow.Size = new Size(170, 26);
-            panelPropertiesShadow.TabIndex = 32;
+            panelPropertiesShadow.TabIndex = 108;
             // 
             // checkBoxPropertiesShadow
             // 
@@ -1196,7 +1196,7 @@
             checkBoxPropertiesShadow.Location = new Point(6, 3);
             checkBoxPropertiesShadow.Name = "checkBoxPropertiesShadow";
             checkBoxPropertiesShadow.Size = new Size(68, 19);
-            checkBoxPropertiesShadow.TabIndex = 30;
+            checkBoxPropertiesShadow.TabIndex = 55;
             checkBoxPropertiesShadow.Text = "Shadow";
             toolTip1.SetToolTip(checkBoxPropertiesShadow, "Draws a dark semi-transparent shadow untderneath the symbol");
             checkBoxPropertiesShadow.UseVisualStyleBackColor = true;
@@ -1208,17 +1208,17 @@
             panelPropertiesCrop.BorderStyle = BorderStyle.FixedSingle;
             panelPropertiesCrop.Controls.Add(buttonPropertyCopyCrop);
             panelPropertiesCrop.Controls.Add(buttonPropertyCrop);
-            panelPropertiesCrop.Location = new Point(3, 718);
+            panelPropertiesCrop.Location = new Point(3, 631);
             panelPropertiesCrop.Name = "panelPropertiesCrop";
             panelPropertiesCrop.Size = new Size(170, 54);
-            panelPropertiesCrop.TabIndex = 34;
+            panelPropertiesCrop.TabIndex = 107;
             // 
             // buttonPropertyCopyCrop
             // 
             buttonPropertyCopyCrop.Location = new Point(3, 2);
             buttonPropertyCopyCrop.Name = "buttonPropertyCopyCrop";
             buttonPropertyCopyCrop.Size = new Size(95, 23);
-            buttonPropertyCopyCrop.TabIndex = 2;
+            buttonPropertyCopyCrop.TabIndex = 53;
             buttonPropertyCopyCrop.Text = "Copy selection";
             toolTip1.SetToolTip(buttonPropertyCopyCrop, "Copy the selected region to the clipboard (Hotkey: Ctrl+C)");
             buttonPropertyCopyCrop.UseVisualStyleBackColor = true;
@@ -1229,7 +1229,7 @@
             buttonPropertyCrop.Location = new Point(4, 27);
             buttonPropertyCrop.Name = "buttonPropertyCrop";
             buttonPropertyCrop.Size = new Size(94, 23);
-            buttonPropertyCrop.TabIndex = 1;
+            buttonPropertyCrop.TabIndex = 54;
             buttonPropertyCrop.Text = "Crop image";
             toolTip1.SetToolTip(buttonPropertyCrop, "Crop the image to the selected region. all symbols remain (Hotkey: Enter)");
             buttonPropertyCrop.UseVisualStyleBackColor = true;
@@ -1240,10 +1240,10 @@
             panelPropertiesBlur.BorderStyle = BorderStyle.FixedSingle;
             panelPropertiesBlur.Controls.Add(label17);
             panelPropertiesBlur.Controls.Add(numericBlurMosaicSize);
-            panelPropertiesBlur.Location = new Point(3, 463);
+            panelPropertiesBlur.Location = new Point(3, 432);
             panelPropertiesBlur.Name = "panelPropertiesBlur";
             panelPropertiesBlur.Size = new Size(170, 30);
-            panelPropertiesBlur.TabIndex = 35;
+            panelPropertiesBlur.TabIndex = 103;
             // 
             // label17
             // 
@@ -1262,7 +1262,7 @@
             numericBlurMosaicSize.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
             numericBlurMosaicSize.Name = "numericBlurMosaicSize";
             numericBlurMosaicSize.Size = new Size(55, 23);
-            numericBlurMosaicSize.TabIndex = 25;
+            numericBlurMosaicSize.TabIndex = 47;
             toolTip1.SetToolTip(numericBlurMosaicSize, "The size of the mosaic tiles in pixels. Larger tiles obscures the underlying contents more");
             numericBlurMosaicSize.Value = new decimal(new int[] { 10, 0, 0, 0 });
             numericBlurMosaicSize.ValueChanged += NumericBlurMosaicSize_ValueChanged;
@@ -1293,7 +1293,7 @@
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1007, 783);
+            ClientSize = new Size(994, 812);
             Controls.Add(panel1);
             Controls.Add(menuStrip1);
             Icon = (Icon)resources.GetObject("$this.Icon");

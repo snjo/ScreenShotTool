@@ -467,11 +467,11 @@ public partial class MainForm : Form
         Image thumbImg;
         if (Path.GetExtension(displayName) == ".pdf")
         {
-            thumbImg = ResizeImage(bitmap, settings.ThumbnailWidth, settings.ThumbnailHeight, Settings.Default.CropThumbnails, Resources.pdf);
+            thumbImg = ResizeThumbnail(bitmap, settings.ThumbnailWidth, settings.ThumbnailHeight, Settings.Default.CropThumbnails, Resources.pdf);
         }
         else
         {
-            thumbImg = ResizeImage(bitmap, settings.ThumbnailWidth, settings.ThumbnailHeight, Settings.Default.CropThumbnails);
+            thumbImg = ResizeThumbnail(bitmap, settings.ThumbnailWidth, settings.ThumbnailHeight, Settings.Default.CropThumbnails);
         }
 
         //int width = imageList.ImageSize.Width;
@@ -531,11 +531,11 @@ public partial class MainForm : Form
     /// <param name="height">The height to resize to.</param>
     /// <param name="crop">Crop the image</param>
     /// <returns>The resized image.</returns>
-    public static Bitmap ResizeImage(Image image, int width, int height, bool crop = false, Bitmap? fileTypeIcon = null)
+    public static Bitmap ResizeThumbnail(Image image, int width, int height, bool crop = false, Bitmap? fileTypeIcon = null)
     {
         //https://stackoverflow.com/questions/1922040/how-to-resize-an-image-c-sharp
         //Debug.WriteLine("Resizing image from: " + image.Width + "x" + image.Height + " to " + width + "x" + height);
-        var destRect = new Rectangle(0, 0, width, height);
+        Rectangle destRect;
         var destImage = new Bitmap(width, height);
 
         Image cropped;
@@ -550,7 +550,7 @@ public partial class MainForm : Form
             cropped = image;
         }
 
-        destImage.SetResolution(cropped.HorizontalResolution, cropped.VerticalResolution);
+        //destImage.SetResolution(cropped.HorizontalResolution, cropped.VerticalResolution);
 
         using (var graphics = Graphics.FromImage(destImage))
         {
@@ -560,9 +560,27 @@ public partial class MainForm : Form
             //graphics.SmoothingMode = SmoothingMode.HighQuality;
             //graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-            using var wrapMode = new ImageAttributes();
-            wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-            graphics.DrawImage(cropped, destRect, 0, 0, cropped.Width, cropped.Height, GraphicsUnit.Pixel, wrapMode);
+            float ratioFrame = (float)width / (float)height;
+            float ratioImageW = (float)cropped.Width / (float)cropped.Height;
+            float ratioImageH = (float)cropped.Height / (float)cropped.Width;
+            Debug.WriteLine($"-----Thumb------");
+            if (ratioImageW < ratioFrame)
+            {
+                float marginHorz = width - (height * ratioImageW);
+                Debug.WriteLine($"W {width} - W {width} * riW {ratioImageW} ({width * ratioImageW}) = mH {marginHorz}");
+                Debug.WriteLine($"Thumb too tall rI<rT, riW {ratioImageW}, margin Hz {marginHorz}");
+                destRect = new Rectangle((int)(marginHorz / 2f), 0, (int)(width - marginHorz), height);
+                
+            }
+            else
+            {
+                float marginVert = height - (width * ratioImageH);
+                Debug.WriteLine($"Thumb too wide ri>rT,  riH {ratioImageH}, margin Vt {marginVert}");
+                destRect = new Rectangle(0, (int)(marginVert / 2f), width, (int)(height - marginVert));
+            }
+            graphics.DrawImage(cropped, new Rectangle(Math.Max(destRect.X, 0), Math.Max(destRect.Y, 0), Math.Min(destRect.Width, width), Math.Min(destRect.Height, height)));
+            Debug.WriteLine($"destRect {destRect}");
+
             if (fileTypeIcon != null)
             {
                 graphics.DrawImageUnscaled(fileTypeIcon, 0, 0);
