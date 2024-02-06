@@ -194,11 +194,13 @@ public class CaptureModule : ImageViewModule
 
         if (CompleteCaptureOnMouseRelease)
         {
+            Debug.WriteLine("Mouse up. Stop viewer based on release options");
             bool disposeAll = true;
             parentForm.isClosing = true;
 
             if (SendToClipboard)
             {
+                Debug.WriteLine("Mouse up. Send to Clipboard");
                 if (ImageResult != null)
                 {
                     Clipboard.SetImage(ImageResult);
@@ -207,6 +209,7 @@ public class CaptureModule : ImageViewModule
 
             if (SendToEditor)
             {
+                Debug.WriteLine("Mouse up. Send to Editor");
                 if (ImageResult != null)
                 {
                     Bitmap clonedForEditor = ImageResult.Clone(new Rectangle(0, 0, ImageResult.Width, ImageResult.Height), System.Drawing.Imaging.PixelFormat.Format32bppArgb); //(regionRect, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
@@ -217,6 +220,7 @@ public class CaptureModule : ImageViewModule
 
             if (SaveToFile)
             {
+                Debug.WriteLine("Mouse up. Send to File");
                 DisposeSourceImage();
                 parentForm.DialogResult = DialogResult.Yes;
             }

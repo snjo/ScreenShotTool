@@ -753,7 +753,7 @@ public partial class ScreenshotEditor : Form
                     textBoxSymbolText.Text = gsText.Text;
                     if (gsText.ListViewItem != null)
                     {
-                        gsText.ListViewItem.Text = "Text: " + gsText.Text;
+                        gsText.ListViewItem.Text = "Text: " + gsText.Text[..10];
                     }
                     numericPropertiesFontSize.Value = (int)Math.Clamp(gsText.fontEmSize, minimumFontSize, maxFontSize);
                     checkBoxFontBold.Checked = (gsText.fontStyle & FontStyle.Bold) != 0;

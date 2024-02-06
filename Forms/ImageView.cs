@@ -12,10 +12,10 @@ namespace ScreenShotTool
     [SupportedOSPlatform("windows")]
     public partial class ImageView : Form
     {
-        public bool CompleteCaptureOnMouseRelease = false;
-        public bool SaveToFile = false;
-        public bool SendToClipboard = false;
-        public bool SendToEditor = false;
+        public bool CompleteCaptureOnMouseRelease = Settings.Default.RegionCompletesOnMouseRelease;
+        public bool SaveToFile = Settings.Default.RegionToFile;
+        public bool SendToClipboard = Settings.Default.RegionToClipboard;
+        public bool SendToEditor = Settings.Default.RegionToEditor;
         public int X = 0;
         public int Y = 0;
         //public readonly Screen screen;
