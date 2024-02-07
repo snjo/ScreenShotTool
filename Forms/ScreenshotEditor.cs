@@ -1594,4 +1594,22 @@ public partial class ScreenshotEditor : Form
             EditSelectedText();
         }
     }
+
+    HelpForm? helpWindow;
+    private void helpToolStripMenuItem1_Click(object sender, EventArgs e)
+    {
+        if (helpWindow == null)
+        {
+            helpWindow = new HelpForm();
+        }
+        if (helpWindow.IsDisposed)
+        {
+            helpWindow = new HelpForm();
+        }
+        helpWindow.Show();
+        helpWindow.WindowState = FormWindowState.Normal;
+
+        helpWindow.ScrollToText("Screenshot Editor");
+        
+    }
 }

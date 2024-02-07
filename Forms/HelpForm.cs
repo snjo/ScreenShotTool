@@ -1,4 +1,6 @@
-﻿namespace ScreenShotTool
+﻿using System.Diagnostics;
+
+namespace ScreenShotTool
 {
 #pragma warning disable CA1416 // Validate platform compatibility
     public partial class HelpForm : Form
@@ -12,6 +14,37 @@
             InitializeComponent();
             Font = new Font(this.Font.FontFamily, 9);
             OpenFile(FileName);
+        }
+
+        void ScrollToLine(int line) // int wantedLine_zero_based = wanted line number; 1st line = 0
+        {
+            // https://copyprogramming.com/howto/how-can-i-scroll-to-a-specified-line-number-of-a-richtextbox-control-using-c
+            int index = richTextBox1.GetFirstCharIndexFromLine(line);
+            Debug.WriteLine($"Scrolling help to index {index} (total length is {richTextBox1.TextLength}");
+            if (index > -1)
+            {
+                richTextBox1.Select(index, 0);
+                richTextBox1.ScrollToCaret();
+            }
+        }
+
+        public void ScrollToText(string text)
+        {
+            int lineNumber = -1;
+            for (int i = 0; i < richTextBox1.Lines.Count(); i++)
+            {
+                if (richTextBox1.Lines[i] == text)
+                {
+                    lineNumber = i;
+                    break;
+                }
+            }
+            //int line = richTextBox1.Text.IndexOf(text);
+            if (lineNumber > -1)
+            {
+                Debug.WriteLine($"Scrolling help to line {lineNumber}: {text}");
+                ScrollToLine(lineNumber);
+            }
         }
 
         private void Save_Click(object sender, EventArgs e)

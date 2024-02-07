@@ -132,6 +132,11 @@
             TimerUpdateOverlay = new System.Windows.Forms.Timer(components);
             toolTip1 = new ToolTip(components);
             timerFixDPI = new System.Windows.Forms.Timer(components);
+            helpToolStripMenuItem = new ToolStripMenuItem();
+            helpToolStripMenuItem1 = new ToolStripMenuItem();
+            documentationonGithubToolStripMenuItem = new ToolStripMenuItem();
+            websiteToolStripMenuItem = new ToolStripMenuItem();
+            aboutToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
@@ -164,7 +169,7 @@
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, editToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, editToolStripMenuItem, helpToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(994, 24);
@@ -176,7 +181,7 @@
             fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { itemNewImage, itemSave, itemLoadFromFile, toolStripMenuItem1, itemLoadFromClipboard, itemExit });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 20);
-            fileToolStripMenuItem.Text = "File";
+            fileToolStripMenuItem.Text = "&File";
             // 
             // itemNewImage
             // 
@@ -225,7 +230,7 @@
             editToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { copyToolStripMenuItem, pasteIntoThisImageToolStripMenuItem, itemPasteScaled, deleteOverlayElementsToolStripMenuItem });
             editToolStripMenuItem.Name = "editToolStripMenuItem";
             editToolStripMenuItem.Size = new Size(39, 20);
-            editToolStripMenuItem.Text = "Edit";
+            editToolStripMenuItem.Text = "&Edit";
             // 
             // copyToolStripMenuItem
             // 
@@ -1288,6 +1293,38 @@
             // 
             timerFixDPI.Tick += timerFixDPI_Tick;
             // 
+            // helpToolStripMenuItem
+            // 
+            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { helpToolStripMenuItem1, documentationonGithubToolStripMenuItem, websiteToolStripMenuItem, aboutToolStripMenuItem });
+            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            helpToolStripMenuItem.Size = new Size(44, 20);
+            helpToolStripMenuItem.Text = "&Help";
+            // 
+            // helpToolStripMenuItem1
+            // 
+            helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
+            helpToolStripMenuItem1.Size = new Size(221, 22);
+            helpToolStripMenuItem1.Text = "&Help";
+            helpToolStripMenuItem1.Click += helpToolStripMenuItem1_Click;
+            // 
+            // documentationonGithubToolStripMenuItem
+            // 
+            documentationonGithubToolStripMenuItem.Name = "documentationonGithubToolStripMenuItem";
+            documentationonGithubToolStripMenuItem.Size = new Size(221, 22);
+            documentationonGithubToolStripMenuItem.Text = "&Documentation (on Github)";
+            // 
+            // websiteToolStripMenuItem
+            // 
+            websiteToolStripMenuItem.Name = "websiteToolStripMenuItem";
+            websiteToolStripMenuItem.Size = new Size(221, 22);
+            websiteToolStripMenuItem.Text = "&Website";
+            // 
+            // aboutToolStripMenuItem
+            // 
+            aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            aboutToolStripMenuItem.Size = new Size(221, 22);
+            aboutToolStripMenuItem.Text = "&About";
+            // 
             // ScreenshotEditor
             // 
             AllowDrop = true;
@@ -1456,5 +1493,10 @@
         private ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.Timer timerFixDPI;
         private Button buttonPropertiesEditText;
+        private ToolStripMenuItem helpToolStripMenuItem;
+        private ToolStripMenuItem helpToolStripMenuItem1;
+        private ToolStripMenuItem documentationonGithubToolStripMenuItem;
+        private ToolStripMenuItem websiteToolStripMenuItem;
+        private ToolStripMenuItem aboutToolStripMenuItem;
     }
 }

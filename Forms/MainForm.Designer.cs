@@ -333,27 +333,27 @@
             topMenuEdit.DropDownItems.AddRange(new ToolStripItem[] { editSelectedFileToolStripMenuItem, editFromClipboardToolStripMenuItem, openEditorToolStripMenuItem });
             topMenuEdit.Name = "topMenuEdit";
             topMenuEdit.Size = new Size(39, 20);
-            topMenuEdit.Text = "Edit";
+            topMenuEdit.Text = "&Edit";
             // 
             // editSelectedFileToolStripMenuItem
             // 
             editSelectedFileToolStripMenuItem.Name = "editSelectedFileToolStripMenuItem";
-            editSelectedFileToolStripMenuItem.Size = new Size(176, 22);
-            editSelectedFileToolStripMenuItem.Text = "Edit selected file";
+            editSelectedFileToolStripMenuItem.Size = new Size(180, 22);
+            editSelectedFileToolStripMenuItem.Text = "Edit selected &file";
             editSelectedFileToolStripMenuItem.Click += EditImageFromFile_Click;
             // 
             // editFromClipboardToolStripMenuItem
             // 
             editFromClipboardToolStripMenuItem.Name = "editFromClipboardToolStripMenuItem";
-            editFromClipboardToolStripMenuItem.Size = new Size(176, 22);
-            editFromClipboardToolStripMenuItem.Text = "Edit from clipboard";
+            editFromClipboardToolStripMenuItem.Size = new Size(180, 22);
+            editFromClipboardToolStripMenuItem.Text = "Edit from &clipboard";
             editFromClipboardToolStripMenuItem.Click += EditImageFromClipboard_Click;
             // 
             // openEditorToolStripMenuItem
             // 
             openEditorToolStripMenuItem.Name = "openEditorToolStripMenuItem";
-            openEditorToolStripMenuItem.Size = new Size(176, 22);
-            openEditorToolStripMenuItem.Text = "Open editor";
+            openEditorToolStripMenuItem.Size = new Size(180, 22);
+            openEditorToolStripMenuItem.Text = "Open &editor";
             openEditorToolStripMenuItem.Click += EditImageNoFile_Click;
             // 
             // TopMenuHelp

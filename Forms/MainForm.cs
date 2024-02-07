@@ -984,7 +984,7 @@ public partial class MainForm : Form
         return folder;
     }
 
-    public void OpenHelp()
+    public void OpenHelp(string gotoPhrase = "")
     {
         if (helpWindow == null)
         {
@@ -996,6 +996,10 @@ public partial class MainForm : Form
         }
         helpWindow.Show();
         helpWindow.WindowState = FormWindowState.Normal;
+        if (gotoPhrase != "")
+        {
+            helpWindow.ScrollToText(gotoPhrase);
+        }
     }
 
     private void OpenOptions()

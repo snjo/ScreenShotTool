@@ -290,7 +290,7 @@ namespace ScreenShotTool
 
         private void ButtonHelp_Click(object sender, EventArgs e)
         {
-            mainForm.OpenHelp();
+            mainForm.OpenHelp("Application options");
         }
 
         private void ButtonBrowseFolder_Click(object sender, EventArgs e)
