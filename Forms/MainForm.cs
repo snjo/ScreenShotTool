@@ -449,7 +449,7 @@ public partial class MainForm : Form
         return text;
     }
 
-    private void AddThumbnail(string filepath, Bitmap? bitmap)
+    private void AddThumbnail(string filepath, Bitmap? bitmap, bool allowFiletypeIcon = true)
     {
         if (bitmap == null) return;
         string displayName = Path.GetFileName(filepath);
@@ -465,7 +465,7 @@ public partial class MainForm : Form
         }
 
         Image thumbImg;
-        if (Path.GetExtension(displayName) == ".pdf")
+        if (Path.GetExtension(displayName) == ".pdf" && allowFiletypeIcon)
         {
             thumbImg = ResizeThumbnail(bitmap, settings.ThumbnailWidth, settings.ThumbnailHeight, Settings.Default.CropThumbnails, Resources.pdf);
         }
@@ -473,9 +473,6 @@ public partial class MainForm : Form
         {
             thumbImg = ResizeThumbnail(bitmap, settings.ThumbnailWidth, settings.ThumbnailHeight, Settings.Default.CropThumbnails);
         }
-
-        //int width = imageList.ImageSize.Width;
-
 
         imageList.Images.Add(thumbImg);
         thumbImg.Dispose();
@@ -519,7 +516,7 @@ public partial class MainForm : Form
             fileBitmap = Resources.thumbunknown;
         }
         
-        AddThumbnail(filepath, fileBitmap);
+        AddThumbnail(filepath, fileBitmap, false);
         if (doDispose) fileBitmap.Dispose();
     }
 
@@ -530,65 +527,52 @@ public partial class MainForm : Form
     /// <param name="width">The width to resize to.</param>
     /// <param name="height">The height to resize to.</param>
     /// <param name="crop">Crop the image</param>
+    /// <param name="fileTypeIcon">Optional overlay image placed in the corner of the image</param>
     /// <returns>The resized image.</returns>
     public static Bitmap ResizeThumbnail(Image image, int width, int height, bool crop = false, Bitmap? fileTypeIcon = null)
     {
-        //https://stackoverflow.com/questions/1922040/how-to-resize-an-image-c-sharp
-        //Debug.WriteLine("Resizing image from: " + image.Width + "x" + image.Height + " to " + width + "x" + height);
-        Rectangle destRect;
-        var destImage = new Bitmap(width, height);
+        Rectangle thumbRect;
+        Bitmap thumbImage = new (width, height);
 
         Image cropped;
         if (crop)
         {
-            //cropped = cropImageSquare(image);
             cropped = CropImageToAspectRatio(image, Settings.Default.ThumbnailWidth, Settings.Default.ThumbnailHeight);
-            Debug.WriteLine("Crop to square: " + image.Width + "x" + image.Height + " to" + cropped.Width + "x" + cropped.Height);
         }
         else
         {
             cropped = image;
         }
 
-        //destImage.SetResolution(cropped.HorizontalResolution, cropped.VerticalResolution);
-
-        using (var graphics = Graphics.FromImage(destImage))
+        using (var graphics = Graphics.FromImage(thumbImage))
         {
-            //graphics.CompositingMode = CompositingMode.SourceCopy;
-            //graphics.CompositingQuality = CompositingQuality.HighQuality;
-            //graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-            //graphics.SmoothingMode = SmoothingMode.HighQuality;
-            //graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            if (cropped.Width < width && cropped.Height < height)
+            {
+                //crisp drawing of small images
+                graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+            }
 
             float ratioFrame = (float)width / (float)height;
             float ratioImageW = (float)cropped.Width / (float)cropped.Height;
             float ratioImageH = (float)cropped.Height / (float)cropped.Width;
-            Debug.WriteLine($"-----Thumb------");
             if (ratioImageW < ratioFrame)
             {
                 float marginHorz = width - (height * ratioImageW);
-                Debug.WriteLine($"W {width} - W {width} * riW {ratioImageW} ({width * ratioImageW}) = mH {marginHorz}");
-                Debug.WriteLine($"Thumb too tall rI<rT, riW {ratioImageW}, margin Hz {marginHorz}");
-                destRect = new Rectangle((int)(marginHorz / 2f), 0, (int)(width - marginHorz), height);
-                
+                thumbRect = new Rectangle((int)(marginHorz / 2f), 0, (int)(width - marginHorz), height);
             }
             else
             {
                 float marginVert = height - (width * ratioImageH);
-                Debug.WriteLine($"Thumb too wide ri>rT,  riH {ratioImageH}, margin Vt {marginVert}");
-                destRect = new Rectangle(0, (int)(marginVert / 2f), width, (int)(height - marginVert));
+                thumbRect = new Rectangle(0, (int)(marginVert / 2f), width, (int)(height - marginVert));
             }
-            graphics.DrawImage(cropped, new Rectangle(Math.Max(destRect.X, 0), Math.Max(destRect.Y, 0), Math.Min(destRect.Width, width), Math.Min(destRect.Height, height)));
-            Debug.WriteLine($"destRect {destRect}");
+            graphics.DrawImage(cropped, new Rectangle(Math.Max(thumbRect.X, 0), Math.Max(thumbRect.Y, 0), Math.Min(thumbRect.Width, width), Math.Min(thumbRect.Height, height)));
 
             if (fileTypeIcon != null)
             {
                 graphics.DrawImageUnscaled(fileTypeIcon, 0, 0);
             }
         }
-
-        Debug.WriteLine("Resize image returns:" + destImage.Width + "x" + destImage.Height);
-        return destImage;
+        return thumbImage;
     }
 
     private static Image CropImageToAspectRatio(Image img, int aspectRatioWidth, int aspectRatioHeight)
@@ -1577,6 +1561,7 @@ public partial class MainForm : Form
             {
                 if (listViewThumbnails.SelectedItems[i].Tag is string filename)
                 {
+                    Debug.WriteLine($"item tag is {filename}");
                     bool isImage = false;
                     string extension = Path.GetExtension(filename);
                     if (ImageOutput.IsSupportedImageFormat(extension))
@@ -1589,6 +1574,10 @@ public partial class MainForm : Form
                         copyToClipboardToolStripMenuItem.Enabled = isImage;
                         editImageToolStripMenuItem.Enabled = isImage;
                     }
+                }
+                else
+                {
+                    Debug.WriteLine($"item tag is not string");
                 }
             }
         }

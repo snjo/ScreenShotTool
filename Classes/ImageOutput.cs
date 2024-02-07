@@ -81,6 +81,6 @@ public static class ImageOutput
 
     public static bool IsSupportedImageFormat(string extension)
     {
-        return (SupportedImageFormatExtensions.Contains(extension));
+        return (SupportedImageFormatExtensions.Contains(extension.ToLowerInvariant()));
     }
 }
