@@ -1407,12 +1407,12 @@ public partial class MainForm : Form
 
     private void HelponGithubToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        OpenLink("https://github.com/snjo/ScreenShotTool/blob/master/README.md");
+        OpenDocumentation();
     }
 
     private void WebsiteToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        OpenLink("https://github.com/snjo/ScreenShotTool/");
+        OpenWebsite();
     }
 
     private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1425,17 +1425,27 @@ public partial class MainForm : Form
         Process.Start(new ProcessStartInfo() { FileName = url, UseShellExecute = true });
     }
 
-    About aboutWindow = new About();
-    public void OpenAbout()
+    public static void OpenWebsite()
     {
-        if (aboutWindow == null)
-        {
-            aboutWindow = new About();
-        }
-        if (aboutWindow.IsDisposed)
-        {
-            aboutWindow = new About();
-        }
+        OpenLink("https://github.com/snjo/ScreenShotTool/");
+    }
+   
+    public static void OpenDocumentation()
+    {
+        OpenLink("https://github.com/snjo/ScreenShotTool/blob/master/README.md");
+    }
+
+    public static void OpenAbout()
+    {
+        About aboutWindow = new About();
+        //if (aboutWindow == null)
+        //{
+        //    aboutWindow = new About();
+        //}
+        //if (aboutWindow.IsDisposed)
+        //{
+        //    aboutWindow = new About();
+        //}
         aboutWindow.Show();
         aboutWindow.WindowState = FormWindowState.Normal;
     }

@@ -43,6 +43,11 @@
             pasteIntoThisImageToolStripMenuItem = new ToolStripMenuItem();
             itemPasteScaled = new ToolStripMenuItem();
             deleteOverlayElementsToolStripMenuItem = new ToolStripMenuItem();
+            helpToolStripMenuItem = new ToolStripMenuItem();
+            helpToolStripMenuItem1 = new ToolStripMenuItem();
+            documentationonGithubToolStripMenuItem = new ToolStripMenuItem();
+            websiteToolStripMenuItem = new ToolStripMenuItem();
+            aboutToolStripMenuItem = new ToolStripMenuItem();
             panelButtons = new Panel();
             buttonStickers = new Button();
             buttonFilledCurve = new Button();
@@ -132,11 +137,6 @@
             TimerUpdateOverlay = new System.Windows.Forms.Timer(components);
             toolTip1 = new ToolTip(components);
             timerFixDPI = new System.Windows.Forms.Timer(components);
-            helpToolStripMenuItem = new ToolStripMenuItem();
-            helpToolStripMenuItem1 = new ToolStripMenuItem();
-            documentationonGithubToolStripMenuItem = new ToolStripMenuItem();
-            websiteToolStripMenuItem = new ToolStripMenuItem();
-            aboutToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
@@ -259,6 +259,41 @@
             deleteOverlayElementsToolStripMenuItem.Size = new Size(190, 22);
             deleteOverlayElementsToolStripMenuItem.Text = "&Delete added symbols";
             deleteOverlayElementsToolStripMenuItem.Click += DeleteOverlayElementsToolStripMenuItem_Click;
+            // 
+            // helpToolStripMenuItem
+            // 
+            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { helpToolStripMenuItem1, documentationonGithubToolStripMenuItem, websiteToolStripMenuItem, aboutToolStripMenuItem });
+            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            helpToolStripMenuItem.Size = new Size(44, 20);
+            helpToolStripMenuItem.Text = "&Help";
+            // 
+            // helpToolStripMenuItem1
+            // 
+            helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
+            helpToolStripMenuItem1.Size = new Size(221, 22);
+            helpToolStripMenuItem1.Text = "&Help";
+            helpToolStripMenuItem1.Click += Help_Click;
+            // 
+            // documentationonGithubToolStripMenuItem
+            // 
+            documentationonGithubToolStripMenuItem.Name = "documentationonGithubToolStripMenuItem";
+            documentationonGithubToolStripMenuItem.Size = new Size(221, 22);
+            documentationonGithubToolStripMenuItem.Text = "&Documentation (on Github)";
+            documentationonGithubToolStripMenuItem.Click += Documentation_Click;
+            // 
+            // websiteToolStripMenuItem
+            // 
+            websiteToolStripMenuItem.Name = "websiteToolStripMenuItem";
+            websiteToolStripMenuItem.Size = new Size(221, 22);
+            websiteToolStripMenuItem.Text = "&Website";
+            websiteToolStripMenuItem.Click += Website_Click;
+            // 
+            // aboutToolStripMenuItem
+            // 
+            aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            aboutToolStripMenuItem.Size = new Size(221, 22);
+            aboutToolStripMenuItem.Text = "&About";
+            aboutToolStripMenuItem.Click += About_Click;
             // 
             // panelButtons
             // 
@@ -1292,38 +1327,6 @@
             // timerFixDPI
             // 
             timerFixDPI.Tick += timerFixDPI_Tick;
-            // 
-            // helpToolStripMenuItem
-            // 
-            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { helpToolStripMenuItem1, documentationonGithubToolStripMenuItem, websiteToolStripMenuItem, aboutToolStripMenuItem });
-            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            helpToolStripMenuItem.Size = new Size(44, 20);
-            helpToolStripMenuItem.Text = "&Help";
-            // 
-            // helpToolStripMenuItem1
-            // 
-            helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
-            helpToolStripMenuItem1.Size = new Size(221, 22);
-            helpToolStripMenuItem1.Text = "&Help";
-            helpToolStripMenuItem1.Click += helpToolStripMenuItem1_Click;
-            // 
-            // documentationonGithubToolStripMenuItem
-            // 
-            documentationonGithubToolStripMenuItem.Name = "documentationonGithubToolStripMenuItem";
-            documentationonGithubToolStripMenuItem.Size = new Size(221, 22);
-            documentationonGithubToolStripMenuItem.Text = "&Documentation (on Github)";
-            // 
-            // websiteToolStripMenuItem
-            // 
-            websiteToolStripMenuItem.Name = "websiteToolStripMenuItem";
-            websiteToolStripMenuItem.Size = new Size(221, 22);
-            websiteToolStripMenuItem.Text = "&Website";
-            // 
-            // aboutToolStripMenuItem
-            // 
-            aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(221, 22);
-            aboutToolStripMenuItem.Text = "&About";
             // 
             // ScreenshotEditor
             // 

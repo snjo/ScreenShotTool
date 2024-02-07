@@ -1596,7 +1596,7 @@ public partial class ScreenshotEditor : Form
     }
 
     HelpForm? helpWindow;
-    private void helpToolStripMenuItem1_Click(object sender, EventArgs e)
+    private void Help_Click(object sender, EventArgs e)
     {
         if (helpWindow == null)
         {
@@ -1610,6 +1610,21 @@ public partial class ScreenshotEditor : Form
         helpWindow.WindowState = FormWindowState.Normal;
 
         helpWindow.ScrollToText("Screenshot Editor");
-        
+
+    }
+
+    private void Documentation_Click(object sender, EventArgs e)
+    {
+        MainForm.OpenDocumentation();
+    }
+
+    private void Website_Click(object sender, EventArgs e)
+    {
+        MainForm.OpenWebsite();
+    }
+
+    private void About_Click(object sender, EventArgs e)
+    {
+        MainForm.OpenAbout();
     }
 }
