@@ -12,12 +12,12 @@ public partial class TextEntryDialog : Form
         textBox1.Text = text;
     }
 
-    private void textBox1_TextChanged(object sender, EventArgs e)
+    private void TextBox1_TextChanged(object sender, EventArgs e)
     {
         TextResult = textBox1.Text;
     }
 
-    private void buttonOK_Click(object sender, EventArgs e)
+    private void ButtonOK_Click(object sender, EventArgs e)
     {
         TextResult = textBox1.Text;
         DialogResult = DialogResult.OK;

@@ -1240,7 +1240,6 @@
             checkBoxPropertiesShadow.Text = "Shadow";
             toolTip1.SetToolTip(checkBoxPropertiesShadow, "Draws a dark semi-transparent shadow untderneath the symbol");
             checkBoxPropertiesShadow.UseVisualStyleBackColor = true;
-            checkBoxPropertiesShadow.CheckedChanged += CheckBoxPropertiesShadow_CheckedChanged;
             checkBoxPropertiesShadow.Click += CheckBoxPropertiesShadow_Click;
             // 
             // panelPropertiesCrop

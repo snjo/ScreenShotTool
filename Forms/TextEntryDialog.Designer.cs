@@ -45,7 +45,7 @@
             textBox1.Size = new Size(572, 248);
             textBox1.TabIndex = 0;
             textBox1.WordWrap = false;
-            textBox1.TextChanged += textBox1_TextChanged;
+            textBox1.TextChanged += TextBox1_TextChanged;
             // 
             // button1
             // 
@@ -67,7 +67,7 @@
             button2.TabIndex = 2;
             button2.Text = "OK";
             button2.UseVisualStyleBackColor = true;
-            button2.Click += buttonOK_Click;
+            button2.Click += ButtonOK_Click;
             // 
             // panel1
             // 

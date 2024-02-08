@@ -44,9 +44,36 @@ public partial class MainForm : Form
     ImageList imageList = new ImageList();
     #endregion
 
+    #region DLLimports
+
     [LibraryImport("user32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     public static partial bool SetForegroundWindow(IntPtr hWnd);
+
+    // https://stackoverflow.com/questions/5878963/getting-active-window-coordinates-and-height-width-in-c-sharp
+
+    [DllImport("user32.dll")]
+#pragma warning disable SYSLIB1054 // Use 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time
+    static extern IntPtr GetForegroundWindow();
+
+
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+    static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+
+    private static IntPtr GetActiveWindow()
+    {
+        Debug.WriteLine("ForeGround Window:" + GetForegroundWindow());
+        return GetForegroundWindow();
+    }
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+
+#pragma warning restore SYSLIB1054 // Use 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time
+
+
+    #endregion
 
     #region form open and close
     public MainForm()
@@ -265,16 +292,7 @@ public partial class MainForm : Form
 
     #endregion
 
-    #region capture
-    private void WriteMessage(string text)
-    {
-        textBoxLog.Text = text + Environment.NewLine + textBoxLog.Text;
-    }
-
-    private void ButtonScreenshot_Click(object sender, EventArgs e)
-    {
-        CaptureAction(CaptureMode.Window);
-    }
+    #region Capture
 
     public enum CaptureMode
     {
@@ -329,58 +347,156 @@ public partial class MainForm : Form
         bitmap?.Dispose();
     }
 
-    private void UpdateInfoLabelVisibility(bool forceHide = false)
+    public bool CaptureWindow(string folder, string filename, ImageFormat format)
     {
-        if (listViewThumbnails.Items.Count > 0 || forceHide)
+        bool saved = false;
+        GetWindowRect(GetActiveWindow(), out RECT windowRect);
+        if (settings.TrimChecked)
         {
-            labelInfo.Visible = false;
+            windowRect.Left += settings.TrimLeft;
+            windowRect.Right -= settings.TrimRight;
+            windowRect.Top += settings.TrimTop;
+            windowRect.Bottom -= settings.TrimBottom;
         }
-        else
+        if (windowRect.Width > 0 && windowRect.Height > 0)
         {
-            labelInfo.Visible = true;
-        }
-    }
-
-    private void UpdateLabelInfoPosition()
-    {
-        int widthAvailable = listViewThumbnails.Width - labelInfo.Width;
-        int HeightAvailable = listViewThumbnails.Height - labelInfo.Height;
-        labelInfo.Location = new Point(Math.Max(listViewThumbnails.Left + 5, widthAvailable / 2), Math.Max(listViewThumbnails.Top + 5, HeightAvailable / 2));
-        if (labelInfo.Height + 5 > listViewThumbnails.Height)
-        {
-            UpdateInfoLabelVisibility(forceHide: true);
-        }
-        else
-        {
-            UpdateInfoLabelVisibility();
-        }
-    }
-
-    public void SetInfoText()
-    {
-        labelInfo.Text = "To take a screenshot press:\n\n";
-        //List<string> hotkeyLines = new List<string>();
-        foreach (KeyValuePair<string, Hotkey> entry in HotkeyList)
-        {
-            //hotkeyLines.Add(entry.Key + ": " + entry.Value.ToString());
-            string keyName = CamelCaseToSpaces(entry.Key).PadRight(25);
-            labelInfo.Text += $"{keyName} :  {entry.Value} \n";
-        }
-        labelInfo.Text += "\nChange hotkeys in Options.";
-    }
-
-    public static string CamelCaseToSpaces(string text)
-    {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < text.Length; i++)
-        {
-            if (char.IsUpper(text[i]) && i > 0)
+            bitmap?.Dispose();
+            bitmap = CaptureBitmap(windowRect.Left, windowRect.Top, windowRect.Width, windowRect.Height);
+            if (settings.WindowToFile)
             {
-                sb.Append(' ');
+                saved = SaveBitmap(folder, filename, format, bitmap);
             }
-            sb.Append(text[i]);
+            if (settings.WindowToClipboard)
+            {
+                Clipboard.SetImage(bitmap);
+            }
+            return saved;
         }
-        return sb.ToString();
+        else
+        {
+            Debug.WriteLine("Capture size is less than zero. Capture aborted.");
+            ShowBalloonToolTip("Capture error", "Capture size is less than zero. Capture aborted.", ToolTipIcon.Warning, BalloonTipType.ScreenshotError);
+            return false;
+        }
+    }
+
+    public bool CaptureRegion(string folder, string filename, ImageFormat format, bool useAllScreens)
+    {
+        bool saved = false;
+        ImageView imgView;
+
+        if (useAllScreens)
+        {
+            imgView = ImageView.CreateUsingAllScreens(ImageView.ViewerMode.cropCapture);
+        }
+        else
+        {
+            imgView = ImageView.CreateUsingCurrentScreen(ImageView.ViewerMode.cropCapture);
+        }
+
+        imgView.SetImage();
+        DialogResult result = imgView.ShowDialog();
+        if (result == DialogResult.Yes) // Yes means save to file
+        {
+            Bitmap? bmpResult = imgView.GetBitmap();
+            if (bmpResult != null)
+            {
+                //save to file or copy to clipboard is handled inside the viewer
+                saved = SaveBitmap(folder, filename, format, bmpResult);
+
+                bitmap?.Dispose();
+                bitmap = bmpResult;
+            }
+            else
+            {
+                Debug.WriteLine("ImageView result image was null");
+                saved = false;
+            }
+        }
+        return saved;
+    }
+
+    public bool CaptureSingleScreen(string folder, string filename, ImageFormat format)
+    {
+        bool saved = false;
+        Screen screen = Screen.FromPoint(Cursor.Position);
+        bitmap?.Dispose();
+        bitmap = GetScreenImage(screen);
+
+        if (settings.ScreenToFile)
+        {
+            saved = SaveBitmap(folder, filename, format, bitmap);
+        }
+        if (settings.ScreenToClipboard)
+        {
+            Clipboard.SetImage(bitmap);
+        }
+        return saved;
+    }
+
+    public bool CaptureAllScreens(string folder, string filename, ImageFormat format)
+    {
+        bool saved = false;
+        bitmap?.Dispose();
+        bitmap = GetAllScreensImage();
+
+        if (settings.ScreenToFile)
+        {
+            saved = SaveBitmap(folder, filename, format, bitmap);
+        }
+        if (settings.ScreenToClipboard)
+        {
+            Clipboard.SetImage(bitmap);
+        }
+        return saved;
+    }
+
+
+    private Bitmap GetAllScreensImage()
+    {
+        Rectangle screenBound = SystemInformation.VirtualScreen;
+        if (screenBound.Width > 0 && screenBound.Height > 0)
+        {
+            return CaptureBitmap(screenBound.Left, screenBound.Top, screenBound.Width, screenBound.Height);
+        }
+        else
+        {
+            Debug.WriteLine("Screen bounds size is less than zero. Capture aborted.");
+            ShowBalloonToolTip("Capture error", "Screen bounds  size is less than zero. Capture aborted.", ToolTipIcon.Warning, BalloonTipType.ScreenshotError);
+        }
+        return new Bitmap(0, 0);
+    }
+
+    private Bitmap GetScreenImage(Screen screen)
+    {
+        Rectangle screenBound = screen.Bounds;//SystemInformation.VirtualScreen;
+        if (screenBound.Width > 0 && screenBound.Height > 0)
+        {
+            return CaptureBitmap(screenBound.Left, screenBound.Top, screenBound.Width, screenBound.Height);
+        }
+        else
+        {
+            Debug.WriteLine("Screen bounds size is less than zero. Capture aborted.");
+            ShowBalloonToolTip("Capture error", "Screen bounds  size is less than zero. Capture aborted.", ToolTipIcon.Warning, BalloonTipType.ScreenshotError);
+        }
+
+        return new Bitmap(0, 0);
+    }
+    #endregion
+
+    #region Make Filename
+
+    //https://stackoverflow.com/questions/309485/c-sharp-sanitize-file-name
+    private static string MakeValidFileName(string name)
+    {
+        string invalidChars = System.Text.RegularExpressions.Regex.Escape(new string(System.IO.Path.GetInvalidFileNameChars()));
+        string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
+
+        return System.Text.RegularExpressions.Regex.Replace(name, invalidRegStr, "_");
+    }
+    private static string ShortenString(string input, int maxLength)
+    {
+        return input[..Math.Min(maxLength, input.Length)].Trim();
     }
 
     public void SetCounter(int num, bool saveSetting = true)
@@ -476,6 +592,9 @@ public partial class MainForm : Form
 
         return text;
     }
+    #endregion
+
+    #region Thumbnail
 
     private void AddThumbnail(string filepath, Bitmap? bitmap, bool allowFiletypeIcon = true)
     {
@@ -640,7 +759,9 @@ public partial class MainForm : Form
         Bitmap bmpImage = new Bitmap(img);
         return bmpImage.Clone(cropArea, bmpImage.PixelFormat);
     }
+    #endregion
 
+    #region Save Image
     private void SetImageFormat()
     {
         string DestinationFileExtension = settings.FileExtension;
@@ -653,147 +774,6 @@ public partial class MainForm : Form
             ".tiff" => ImageFormat.Tiff,
             _ => ImageFormat.Jpeg,
         };
-    }
-
-    private static string ShortenString(string input, int maxLength)
-    {
-        return input[..Math.Min(maxLength, input.Length)].Trim();
-    }
-
-    public bool CaptureWindow(string folder, string filename, ImageFormat format)
-    {
-        bool saved = false;
-        GetWindowRect(GetActiveWindow(), out RECT windowRect);
-        if (settings.TrimChecked)
-        {
-            windowRect.Left += settings.TrimLeft;
-            windowRect.Right -= settings.TrimRight;
-            windowRect.Top += settings.TrimTop;
-            windowRect.Bottom -= settings.TrimBottom;
-        }
-        if (windowRect.Width > 0 && windowRect.Height > 0)
-        {
-            bitmap?.Dispose();
-            bitmap = CaptureBitmap(windowRect.Left, windowRect.Top, windowRect.Width, windowRect.Height);
-            if (settings.WindowToFile)
-            {
-                saved = SaveBitmap(folder, filename, format, bitmap);
-            }
-            if (settings.WindowToClipboard)
-            {
-                Clipboard.SetImage(bitmap);
-            }
-            return saved;
-        }
-        else
-        {
-            Debug.WriteLine("Capture size is less than zero. Capture aborted.");
-            ShowBalloonToolTip("Capture error", "Capture size is less than zero. Capture aborted.", ToolTipIcon.Warning, BalloonTipType.ScreenshotError);
-            return false;
-        }
-    }
-
-    public bool CaptureRegion(string folder, string filename, ImageFormat format, bool useAllScreens)
-    {
-        bool saved = false;
-        ImageView imgView;
-
-        if (useAllScreens)
-        {
-            imgView = ImageView.CreateUsingAllScreens(ImageView.ViewerMode.cropCapture);
-        }
-        else
-        {
-            imgView = ImageView.CreateUsingCurrentScreen(ImageView.ViewerMode.cropCapture);
-        }
-
-        imgView.SetImage();
-        DialogResult result = imgView.ShowDialog();
-        if (result == DialogResult.Yes) // Yes means save to file
-        {
-            Bitmap? bmpResult = imgView.GetBitmap();
-            if (bmpResult != null)
-            {
-                //save to file or copy to clipboard is handled inside the viewer
-                saved = SaveBitmap(folder, filename, format, bmpResult);
-
-                bitmap?.Dispose();
-                bitmap = bmpResult;
-            }
-            else
-            {
-                Debug.WriteLine("ImageView result image was null");
-                saved = false;
-            }
-        }
-        return saved;
-    }
-
-    public bool CaptureSingleScreen(string folder, string filename, ImageFormat format)
-    {
-        bool saved = false;
-        Screen screen = Screen.FromPoint(Cursor.Position);
-        bitmap?.Dispose();
-        bitmap = GetScreenImage(screen);
-
-        if (settings.ScreenToFile)
-        {
-            saved = SaveBitmap(folder, filename, format, bitmap);
-        }
-        if (settings.ScreenToClipboard)
-        {
-            Clipboard.SetImage(bitmap);
-        }
-        return saved;
-    }
-
-    public bool CaptureAllScreens(string folder, string filename, ImageFormat format)
-    {
-        bool saved = false;
-        bitmap?.Dispose();
-        bitmap = GetAllScreensImage();
-
-        if (settings.ScreenToFile)
-        {
-            saved = SaveBitmap(folder, filename, format, bitmap);
-        }
-        if (settings.ScreenToClipboard)
-        {
-            Clipboard.SetImage(bitmap);
-        }
-        return saved;
-    }
-
-
-    private Bitmap GetAllScreensImage()
-    {
-        Rectangle screenBound = SystemInformation.VirtualScreen;
-        if (screenBound.Width > 0 && screenBound.Height > 0)
-        {
-            return CaptureBitmap(screenBound.Left, screenBound.Top, screenBound.Width, screenBound.Height);
-        }
-        else
-        {
-            Debug.WriteLine("Screen bounds size is less than zero. Capture aborted.");
-            ShowBalloonToolTip("Capture error", "Screen bounds  size is less than zero. Capture aborted.", ToolTipIcon.Warning, BalloonTipType.ScreenshotError);
-        }
-        return new Bitmap(0, 0);
-    }
-
-    private Bitmap GetScreenImage(Screen screen)
-    {
-        Rectangle screenBound = screen.Bounds;//SystemInformation.VirtualScreen;
-        if (screenBound.Width > 0 && screenBound.Height > 0)
-        {
-            return CaptureBitmap(screenBound.Left, screenBound.Top, screenBound.Width, screenBound.Height);
-        }
-        else
-        {
-            Debug.WriteLine("Screen bounds size is less than zero. Capture aborted.");
-            ShowBalloonToolTip("Capture error", "Screen bounds  size is less than zero. Capture aborted.", ToolTipIcon.Warning, BalloonTipType.ScreenshotError);
-        }
-
-        return new Bitmap(0, 0);
     }
 
     private bool SaveBitmap(string folder, string filename, ImageFormat format, Bitmap capture)
@@ -895,41 +875,10 @@ public partial class MainForm : Form
         captureGraphics.Dispose();
         return captureBitmap;
     }
-
-    //https://stackoverflow.com/questions/309485/c-sharp-sanitize-file-name
-    private static string MakeValidFileName(string name)
-    {
-        string invalidChars = System.Text.RegularExpressions.Regex.Escape(new string(System.IO.Path.GetInvalidFileNameChars()));
-        string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
-
-        return System.Text.RegularExpressions.Regex.Replace(name, invalidRegStr, "_");
-    }
-
     #endregion
 
     #region active window location
-    // https://stackoverflow.com/questions/5878963/getting-active-window-coordinates-and-height-width-in-c-sharp
-
-    [DllImport("user32.dll")]
-#pragma warning disable SYSLIB1054 // Use 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time
-    static extern IntPtr GetForegroundWindow();
-
-
-    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-    static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
-
-    private static IntPtr GetActiveWindow()
-    {
-        Debug.WriteLine("ForeGround Window:" + GetForegroundWindow());
-        return GetForegroundWindow();
-    }
-
-    [DllImport("user32.dll")]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
-
-#pragma warning restore SYSLIB1054 // Use 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time
-
+    
     [StructLayout(LayoutKind.Sequential)]
     public struct RECT
     {
@@ -1233,7 +1182,12 @@ public partial class MainForm : Form
 
     #endregion
 
-    #region Log view
+    #region Log view and info
+    private void WriteMessage(string text)
+    {
+        textBoxLog.Text = text + Environment.NewLine + textBoxLog.Text;
+    }
+
     private void LabelShowLog_Click(object sender, EventArgs e)
     {
         showLog = !showLog;
@@ -1264,6 +1218,60 @@ public partial class MainForm : Form
             textBoxLog.Visible = false;
             listViewThumbnails.Size = new Size(internalWidth - (logMargin * 2), internalHeight - labelShowLog.Height - 40);
         }
+    }
+
+    private void UpdateInfoLabelVisibility(bool forceHide = false)
+    {
+        if (listViewThumbnails.Items.Count > 0 || forceHide)
+        {
+            labelInfo.Visible = false;
+        }
+        else
+        {
+            labelInfo.Visible = true;
+        }
+    }
+
+    private void UpdateLabelInfoPosition()
+    {
+        int widthAvailable = listViewThumbnails.Width - labelInfo.Width;
+        int HeightAvailable = listViewThumbnails.Height - labelInfo.Height;
+        labelInfo.Location = new Point(Math.Max(listViewThumbnails.Left + 5, widthAvailable / 2), Math.Max(listViewThumbnails.Top + 5, HeightAvailable / 2));
+        if (labelInfo.Height + 5 > listViewThumbnails.Height)
+        {
+            UpdateInfoLabelVisibility(forceHide: true);
+        }
+        else
+        {
+            UpdateInfoLabelVisibility();
+        }
+    }
+
+    public void SetInfoText()
+    {
+        labelInfo.Text = "To take a screenshot press:\n\n";
+        //List<string> hotkeyLines = new List<string>();
+        foreach (KeyValuePair<string, Hotkey> entry in HotkeyList)
+        {
+            //hotkeyLines.Add(entry.Key + ": " + entry.Value.ToString());
+            string keyName = CamelCaseToSpaces(entry.Key).PadRight(25);
+            labelInfo.Text += $"{keyName} :  {entry.Value} \n";
+        }
+        labelInfo.Text += "\nChange hotkeys in Options.";
+    }
+
+    public static string CamelCaseToSpaces(string text)
+    {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < text.Length; i++)
+        {
+            if (char.IsUpper(text[i]) && i > 0)
+            {
+                sb.Append(' ');
+            }
+            sb.Append(text[i]);
+        }
+        return sb.ToString();
     }
     #endregion
 

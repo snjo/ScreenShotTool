@@ -303,6 +303,57 @@ public partial class ScreenshotEditor : Form
         imagePrompt.Dispose();
     }
 
+    private void ToolStripMenuItemPrint_Click(object sender, EventArgs e)
+    {
+        PrintImage();
+    }
+
+    private void PrintImage()
+    {
+        Bitmap? outImage = editorCanvas.AssembleImageForSaveOrCopy();
+        if (outImage != null)
+        {
+            Print print = new();
+            PrintDialog printDialog = new(print, outImage);
+            DialogResult result = printDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                print.PrintImage(outImage);
+            }
+            print.Dispose();
+        }
+    }
+
+    HelpForm? helpWindow;
+    private void Help_Click(object sender, EventArgs e)
+    {
+        helpWindow ??= new HelpForm();
+        if (helpWindow.IsDisposed)
+        {
+            helpWindow = new HelpForm();
+        }
+        helpWindow.Show();
+        helpWindow.WindowState = FormWindowState.Normal;
+
+        helpWindow.ScrollToText("Screenshot Editor");
+
+    }
+
+    private void Documentation_Click(object sender, EventArgs e)
+    {
+        MainForm.OpenDocumentation();
+    }
+
+    private void Website_Click(object sender, EventArgs e)
+    {
+        MainForm.OpenWebsite();
+    }
+
+    private void About_Click(object sender, EventArgs e)
+    {
+        MainForm.OpenAbout();
+    }
+
     #endregion
 
     #region User Actions --------------------------------------------------------------------------------
@@ -1249,6 +1300,49 @@ public partial class ScreenshotEditor : Form
         }
     }
 
+    private void ButtonResetImageSize_Click(object sender, EventArgs e)
+    {
+        if (editorCanvas.CurrentSelectedSymbol != null)
+        {
+            if (editorCanvas.CurrentSelectedSymbol is GsImage gsI)
+            {
+                if (gsI.image != null)
+                {
+                    gsI.Width = gsI.image.Width;
+                    gsI.Height = gsI.image.Height;
+                    editorCanvas.UpdateOverlay();
+                }
+            }
+        }
+    }
+    private void ButtonPropertiesEditText_Click(object sender, EventArgs e)
+    {
+        EditSelectedText();
+    }
+
+    private void EditSelectedText()
+    {
+        if (GetSelectedSymbolFirst() is GsText gsT)
+        {
+            TextEntryDialog textEntry = new(gsT.Text);
+            DialogResult result = textEntry.ShowDialog(this);
+            if (result == DialogResult.OK)
+            {
+                textBoxSymbolText.Text = textEntry.TextResult;
+            }
+            textEntry.Dispose();
+        }
+    }
+
+    private void PictureBoxOverlay_DoubleClick(object sender, EventArgs e)
+    {
+        // edit text in popup if the selected symbol is GsText
+        if (GetSelectedSymbolFirst() is GsText)
+        {
+            EditSelectedText();
+        }
+    }
+
     #endregion
 
     #region Top toolbar, new Symbol settings ------------------------------------------------------------
@@ -1481,48 +1575,7 @@ public partial class ScreenshotEditor : Form
     }
     #endregion
 
-    private void ButtonResetImageSize_Click(object sender, EventArgs e)
-    {
-        if (editorCanvas.CurrentSelectedSymbol != null)
-        {
-            if (editorCanvas.CurrentSelectedSymbol is GsImage gsI)
-            {
-                if (gsI.image != null)
-                {
-                    gsI.Width = gsI.image.Width;
-                    gsI.Height = gsI.image.Height;
-                    editorCanvas.UpdateOverlay();
-                }
-            }
-        }
-    }
-
-    private void CheckBoxPropertiesShadow_CheckedChanged(object sender, EventArgs e)
-    {
-
-    }
-
-    private void ToolStripMenuItemPrint_Click(object sender, EventArgs e)
-    {
-        PrintImage();
-    }
-
-    private void PrintImage()
-    {
-        Bitmap? outImage = editorCanvas.AssembleImageForSaveOrCopy();
-        if (outImage != null)
-        {
-            Print print = new();
-            PrintDialog printDialog = new(print, outImage);
-            DialogResult result = printDialog.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                print.PrintImage(outImage);
-            }
-            print.Dispose();
-        }
-    }
-
+    #region adjust Form on DPI change
     private void ScreenshotEditor_DpiChanged(object sender, DpiChangedEventArgs e)
     {
         Debug.WriteLine($"DPI changed, device dpi: {DeviceDpi} old: {e.DeviceDpiOld} new: {e.DeviceDpiNew}");
@@ -1541,7 +1594,6 @@ public partial class ScreenshotEditor : Form
 
             if (this.Width < 750) this.Width = 750;
             if (this.Height < 550) this.Height = 550;
-            //Debug.WriteLine("Min width: " + this.MinimumSize.Width);
         }
 
         timerFixDPI.Start();
@@ -1549,7 +1601,6 @@ public partial class ScreenshotEditor : Form
 
     private void SetFontInControls(Control control, int newFontSize)
     {
-        //Debug.WriteLine($"Set font in Control {control.Name} from old {control.Font.Size} / {control.Font.SizeInPoints}p to {newFontSize}");
         control.Font = new Font(this.Font.FontFamily, newFontSize);
         foreach (Control subcontrol in control.Controls)
         {
@@ -1566,60 +1617,7 @@ public partial class ScreenshotEditor : Form
         }
     }
 
-    private void ButtonPropertiesEditText_Click(object sender, EventArgs e)
-    {
-        EditSelectedText();
-    }
+    #endregion
 
-    private void EditSelectedText()
-    {
-        if (GetSelectedSymbolFirst() is GsText gsT)
-        {
-            TextEntryDialog textEntry = new(gsT.Text);
-            DialogResult result = textEntry.ShowDialog(this);
-            if (result == DialogResult.OK)
-            {
-                textBoxSymbolText.Text = textEntry.TextResult;
-            }
-            textEntry.Dispose();
-        }
-    }
 
-    private void PictureBoxOverlay_DoubleClick(object sender, EventArgs e)
-    {
-        if (GetSelectedSymbolFirst() is GsText)
-        {
-            EditSelectedText();
-        }
-    }
-
-    HelpForm? helpWindow;
-    private void Help_Click(object sender, EventArgs e)
-    {
-        helpWindow ??= new HelpForm();
-        if (helpWindow.IsDisposed)
-        {
-            helpWindow = new HelpForm();
-        }
-        helpWindow.Show();
-        helpWindow.WindowState = FormWindowState.Normal;
-
-        helpWindow.ScrollToText("Screenshot Editor");
-
-    }
-
-    private void Documentation_Click(object sender, EventArgs e)
-    {
-        MainForm.OpenDocumentation();
-    }
-
-    private void Website_Click(object sender, EventArgs e)
-    {
-        MainForm.OpenWebsite();
-    }
-
-    private void About_Click(object sender, EventArgs e)
-    {
-        MainForm.OpenAbout();
-    }
 }
