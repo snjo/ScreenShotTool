@@ -1,4 +1,5 @@
 using Hotkeys;
+using Microsoft.VisualBasic.ApplicationServices;
 using Microsoft.Win32;
 using ScreenShotTool.Classes;
 using ScreenShotTool.Forms;
@@ -21,6 +22,7 @@ namespace ScreenShotTool;
 [SupportedOSPlatform("windows")]
 public partial class MainForm : Form
 {
+    public static readonly string ApplicationName = "Screenshot Tool";
     readonly Settings settings = Settings.Default;
     HelpForm? helpWindow;
     ImageFormat DestinationFormat = ImageFormat.Jpeg;
@@ -106,13 +108,13 @@ public partial class MainForm : Form
                 }
             }
             Settings.Default.UpgradeSettings = false;
+            Autorun.Autorun.UpdatePathIfEnabled(ApplicationName);
         }
         else
         {
             Debug.WriteLine("Not upgrading settings");
         }
-
-        // test
+        // test of registry loading
         //using (SettingsRegistry sr = new())
         //{
         //    sr.LoadSettingsFromRegistry();

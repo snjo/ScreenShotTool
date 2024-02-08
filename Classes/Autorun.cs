@@ -43,4 +43,12 @@ public static class Autorun
             }
         }
     }
+
+    public static void UpdatePathIfEnabled(string ApplicationName)
+    {
+        if (IsEnabled(ApplicationName))
+        {
+            Enable(ApplicationName);
+        }
+    }
 }

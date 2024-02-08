@@ -32,16 +32,20 @@ public class SettingsRegistry : IDisposable
         
         string? foldername = RegKey.GetValue("Foldername")?.ToString();
         string? filename = RegKey.GetValue("Filename")?.ToString();
+        string? fileextension = RegKey.GetValue("Fileextension")?.ToString();
         if (string.IsNullOrEmpty(foldername) == false)
         {
-            Debug.WriteLine("Loading folder name from registry: " + foldername);
             Settings.Default.Foldername = foldername;
         }
         if (string.IsNullOrEmpty(filename) == false)
         {
-            Debug.WriteLine("Loading file name from registry: " + filename);
             Settings.Default.Filename = filename;
         }
+        if (string.IsNullOrEmpty(fileextension) == false)
+        {
+            Settings.Default.FileExtension = fileextension;
+        }
+
 
         foreach (string hotkey in MainForm.HotkeyNames)
         {
@@ -73,6 +77,7 @@ public class SettingsRegistry : IDisposable
         Debug.WriteLine("Writing to registry, foldername: " + Settings.Default.Foldername);
         RegKey.SetValue("Foldername", Settings.Default.Foldername);
         RegKey.SetValue("Filename", Settings.Default.Filename);
+        RegKey.SetValue("Fileextension", Settings.Default.FileExtension);
 
         foreach (string hotkey in MainForm.HotkeyNames)
         {

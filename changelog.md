@@ -3,6 +3,12 @@
 ## TODO:
 - Undo?
 
+## 1.9
+- Save certain settings to registry as a fallback if they fail after upgrading the program (folder, file and hotkey settings)
+- Added help and about to Editor
+- Help jumps to the right section for the Window it's opened from
+- Bug fixes and UI tweaks
+
 ## 1.8
 
 #### Editor

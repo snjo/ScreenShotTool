@@ -12,7 +12,7 @@ namespace ScreenShotTool
     {
         readonly MainForm mainForm;
         readonly Settings settings = Settings.Default;
-        readonly string ApplicationName = "Screenshot Tool";
+        //public static readonly string ApplicationName = "Screenshot Tool";
 
         public Options(MainForm parent)
         {
@@ -73,7 +73,7 @@ namespace ScreenShotTool
             //Tab: Application
             checkBoxStartHidden.Checked = settings.StartHidden;
             checkBoxMinimizeOnClose.Checked = settings.MinimizeOnClose;
-            checkBoxAutorun.Checked = Autorun.Autorun.IsEnabled(ApplicationName);
+            checkBoxAutorun.Checked = Autorun.Autorun.IsEnabled(MainForm.ApplicationName);
 
             checkBoxTrayTooltipInfoCapture.Checked = settings.AllowTrayTooltipInfoCapture;
             checkBoxTrayTooltipInfoFolder.Checked = settings.AllowTrayTooltipInfoFolder;
@@ -170,11 +170,11 @@ namespace ScreenShotTool
             settings.MinimizeOnClose = checkBoxMinimizeOnClose.Checked;
             if (checkBoxAutorun.Checked)
             {
-                Autorun.Autorun.Enable(ApplicationName);
+                Autorun.Autorun.Enable(MainForm.ApplicationName);
             }
             else
             {
-                Autorun.Autorun.Disable(ApplicationName);
+                Autorun.Autorun.Disable(MainForm.ApplicationName);
             }
 
             settings.CropThumbnails = checkBoxCropThumbnails.Checked;
