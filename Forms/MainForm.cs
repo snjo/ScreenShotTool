@@ -963,9 +963,11 @@ public partial class MainForm : Form
     // https://stackoverflow.com/questions/5878963/getting-active-window-coordinates-and-height-width-in-c-sharp
 
     [DllImport("user32.dll")]
+#pragma warning disable SYSLIB1054 // Use 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time
     static extern IntPtr GetForegroundWindow();
 
-    [DllImport("user32.dll")]
+
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
     static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
 
     private static IntPtr GetActiveWindow()
@@ -977,7 +979,7 @@ public partial class MainForm : Form
     [DllImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
     static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
-
+#pragma warning restore SYSLIB1054 // Use 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time
     [StructLayout(LayoutKind.Sequential)]
     public struct RECT
     {
