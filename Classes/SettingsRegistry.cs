@@ -13,14 +13,14 @@ namespace ScreenShotTool.Classes;
 
 
 
-public class SettingsRegistry : IDisposable
+public class SettingsRegistry //: IDisposable
 {
-    string RegKeyName = @"SOFTWARE\ScreenshotTool";
-    public SettingsRegistry()
-    {
-    }
+    readonly static string RegKeyName = @"SOFTWARE\ScreenshotTool";
+    //public SettingsRegistry()
+    //{
+    //}
 
-    public void LoadSettingsFromRegistry()
+    public static void LoadSettingsFromRegistry()
     {
         RegistryKey? RegKey = Registry.CurrentUser.OpenSubKey(RegKeyName);
         Debug.WriteLine("Loading fallback values from registry");
@@ -64,7 +64,7 @@ public class SettingsRegistry : IDisposable
         RegKey.Dispose();
     }
 
-    public void SaveSettingsToRegistry()
+    public static void SaveSettingsToRegistry()
     {
         RegistryKey RegKey = Registry.CurrentUser.CreateSubKey(RegKeyName);
         //RegKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\ScreenshotTool");
@@ -96,19 +96,19 @@ public class SettingsRegistry : IDisposable
         RegKey.Dispose();
     }
 
-    private string HotkeyToRegistryString(string hotkeyKey, bool Ctrl, bool Alt, bool Shift, bool Win)
+    private static string HotkeyToRegistryString(string hotkeyKey, bool Ctrl, bool Alt, bool Shift, bool Win)
     { 
-        StringBuilder keyValue = new StringBuilder();
+        StringBuilder keyValue = new ();
         keyValue.Append(Ctrl ? "1" : "0");
         keyValue.Append(Alt ? "1" : "0");
         keyValue.Append(Shift ? "1" : "0");
         keyValue.Append(Win ? "1" : "0");
-        keyValue.Append(" ");
+        keyValue.Append(' ');
         keyValue.Append(hotkeyKey);
         return keyValue.ToString();
     }
 
-    private (string hotkeyKey, bool Ctrl, bool Alt, bool Shift, bool Win) HotkeyFromRegistryString(string RegistryString)
+    private static (string hotkeyKey, bool Ctrl, bool Alt, bool Shift, bool Win) HotkeyFromRegistryString(string RegistryString)
     {
         if (RegistryString.Length < 6) return ("", false, false, false, false);
 
@@ -116,12 +116,12 @@ public class SettingsRegistry : IDisposable
         bool Alt = RegistryString[1] == '1';
         bool Shift = RegistryString[2] == '1';
         bool Win = RegistryString[3] == '1';
-        string key = RegistryString.Substring(5);
+        string key = RegistryString[5..];
         return (key, Ctrl, Alt, Shift, Win);
     }
 
-    public void Dispose()
-    {
-        //RegKey?.Dispose();
-    }
+    //public void Dispose()
+    //{
+    //    //RegKey?.Dispose();
+    //}
 }

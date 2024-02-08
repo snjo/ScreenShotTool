@@ -22,11 +22,11 @@ namespace ScreenShotTool;
 [SupportedOSPlatform("windows")]
 public partial class MainForm : Form
 {
+    #region Declare variables
     public static readonly string ApplicationName = "Screenshot Tool";
     readonly Settings settings = Settings.Default;
     HelpForm? helpWindow;
     ImageFormat DestinationFormat = ImageFormat.Jpeg;
-    //int counter = 0;
     string lastFolder = ".";
     string lastSavedFile = "";
     Options? options;
@@ -45,21 +45,11 @@ public partial class MainForm : Form
     public bool showThumbnails = true;
     Bitmap? bitmap;
     ImageList imageList = new ImageList();
+    #endregion
 
     [LibraryImport("user32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     public static partial bool SetForegroundWindow(IntPtr hWnd);
-
-    public Dictionary<string, Hotkey> HotkeyList = [];
-
-    public static List<string> HotkeyNames =
-    [
-        "CaptureRegion",
-        "CaptureWindow",
-        "CaptureCurrentScreen",
-        "CaptureAllScreens",
-        "BrowseFolder",
-    ];
 
     #region form open and close
     public MainForm()
@@ -91,21 +81,87 @@ public partial class MainForm : Form
         Close();
     }
 
+
+
+    private void MainForm_Load(object sender, EventArgs e)
+    {
+        if (settings.ThumbnailWidth > 256) settings.ThumbnailWidth = 256;
+        if (settings.ThumbnailHeight > 256) settings.ThumbnailHeight = 256;
+        imageList.ImageSize = new Size(settings.ThumbnailWidth, settings.ThumbnailHeight);
+        imageList.ColorDepth = ColorDepth.Depth32Bit;
+        listViewThumbnails.LargeImageList = imageList;
+        SetCounter(settings.Counter);
+    }
+
+    private void HideApplication()
+    {
+        //Don't use this.ShowInTaskbar = true/false, it breaks hotkeys
+        Debug.WriteLine("Hiding application");
+        this.WindowState = FormWindowState.Minimized;
+        Hide();
+    }
+
+    private void ShowApplication()
+    {
+        Debug.WriteLine("Showing Application");
+        Show();
+        WindowState = FormWindowState.Normal; // setting Normal here makes it actually show up in front of other windows
+    }
+
+    private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+    {
+        Debug.WriteLine($"FormClosing: {e.CloseReason} {sender}");
+        if (settings.MinimizeOnClose && ExitForSure == false)
+        {
+            this.WindowState = FormWindowState.Minimized;
+            e.Cancel = true;
+        }
+        else
+        {
+            HotkeyTools.ReleaseHotkeys(HotkeyList);
+        }
+    }
+
+    private void MainForm_SizeChanged(object sender, EventArgs e)
+    {
+        if (WindowState == FormWindowState.Minimized)
+        {
+            if (Settings.Default.StartHidden)
+            {
+                HideApplication();
+            }
+        }
+        UpdateLogVisible();
+    }
+    #endregion
+
+    #region Hotkeys
+    public Dictionary<string, Hotkey> HotkeyList = [];
+
+    public static readonly List<string> HotkeyNames =
+    [
+        "CaptureRegion",
+        "CaptureWindow",
+        "CaptureCurrentScreen",
+        "CaptureAllScreens",
+        "BrowseFolder",
+    ];
+    #endregion
+
+    #region Settings
+
     private static void UpgradeSettings()
     {
-
-        
-
         if (Settings.Default.UpgradeSettings)
         {
             Debug.WriteLine("Upgrading settings");
             Settings.Default.Upgrade();
             if (Settings.Default.UpgradeSettings == true)
             {
-                using (SettingsRegistry sr = new())
-                {
-                    sr.LoadSettingsFromRegistry();
-                }
+                //using (SettingsRegistry sr = new())
+                //{
+                    SettingsRegistry.LoadSettingsFromRegistry();
+                //}
             }
             Settings.Default.UpgradeSettings = false;
             Autorun.Autorun.UpdatePathIfEnabled(ApplicationName);
@@ -145,47 +201,28 @@ public partial class MainForm : Form
         }
     }
 
-    private void MainForm_Load(object sender, EventArgs e)
+    public void UpdateTrimStatus()
     {
-        if (settings.ThumbnailWidth > 256) settings.ThumbnailWidth = 256;
-        if (settings.ThumbnailHeight > 256) settings.ThumbnailHeight = 256;
-        imageList.ImageSize = new Size(settings.ThumbnailWidth, settings.ThumbnailHeight);
-        imageList.ColorDepth = ColorDepth.Depth32Bit;
-        listViewThumbnails.LargeImageList = imageList;
-        SetCounter(settings.Counter);
-    }
-
-    private void HideApplication()
-    {
-        //Don't use this.ShowInTaskbar = true/false, it breaks hotkeys
-        Debug.WriteLine("Hiding application");
-        this.WindowState = FormWindowState.Minimized;
-        Hide();
-    }
-
-    private void ShowApplication()
-    {
-        //WindowState = FormWindowState.Normal; // setting Normal before messing with size
-        Debug.WriteLine("Showing Application");
-        //if (this.Size.Height < 50)
-        //{
-        //    Size = DefaultSize;
-        //}
-        Show();
-        WindowState = FormWindowState.Normal; // setting Normal a second time makes it actually show up in front of other windows
-    }
-
-    private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-    {
-        Debug.WriteLine($"FormClosing: {e.CloseReason} {sender}");
-        if (settings.MinimizeOnClose && ExitForSure == false)
+        string disableCrop = "Disable &Cropping";
+        string enableCrop = "Enable &Cropping";
+        if (settings.TrimChecked)
         {
-            this.WindowState = FormWindowState.Minimized;
-            e.Cancel = true;
+            enableCroppingToolStripMenuItem.Text = disableCrop;
+            toggleCropToolStripMenuItem.Text = disableCrop;
+
+
         }
         else
         {
-            HotkeyTools.ReleaseHotkeys(HotkeyList);
+            enableCroppingToolStripMenuItem.Text = enableCrop;
+            toggleCropToolStripMenuItem.Text = enableCrop;
+        }
+        if (options != null)
+        {
+            if (!options.IsDisposed)
+            {
+                options.UpdateTrimCheck();
+            }
         }
     }
     #endregion
@@ -207,12 +244,6 @@ public partial class MainForm : Form
 
     private void HandleHotkey(int id)
     {
-        //if (!HotkeyList.ContainsKey("CaptureWindow") || !HotkeyList.ContainsKey("BrowseFolder"))
-        //{
-        //    writeMessage("hotkey invalid: " + id);
-        //    return;
-        //}
-
         if (id == HotkeyList["CaptureWindow"].ghk.id)
         {
             CaptureAction(CaptureMode.Window);
@@ -330,7 +361,7 @@ public partial class MainForm : Form
 
     public void SetInfoText()
     {
-        labelInfo.Text = "To take a screenshot press:\n";
+        labelInfo.Text = "To take a screenshot press:\n\n";
         //List<string> hotkeyLines = new List<string>();
         foreach (KeyValuePair<string, Hotkey> entry in HotkeyList)
         {
@@ -512,11 +543,9 @@ public partial class MainForm : Form
         {
             try
             {
-                using (FileStream stream = new(filepath, FileMode.Open))
-                {
-                    fileBitmap = (Bitmap)Image.FromStream(stream);
-                    doDispose = true;
-                }
+                using FileStream stream = new(filepath, FileMode.Open);
+                fileBitmap = (Bitmap)Image.FromStream(stream);
+                doDispose = true;
             }
             catch
             {
@@ -680,7 +709,7 @@ public partial class MainForm : Form
 
     private static string ShortenString(string input, int maxLength)
     {
-        return input.Substring(0, Math.Min(maxLength, input.Length)).Trim();
+        return input[..Math.Min(maxLength, input.Length)].Trim();
     }
 
     public bool CaptureWindow(string folder, string filename, ImageFormat format)
@@ -986,6 +1015,7 @@ public partial class MainForm : Form
     }
     #endregion
 
+    #region Open item
     public string BrowseFolderInExplorer(string folder)
     {
         if (folder.Length < 1)
@@ -1005,37 +1035,6 @@ public partial class MainForm : Form
         return folder;
     }
 
-    public void OpenHelp(string gotoPhrase = "")
-    {
-        if (helpWindow == null)
-        {
-            helpWindow = new HelpForm();
-        }
-        if (helpWindow.IsDisposed)
-        {
-            helpWindow = new HelpForm();
-        }
-        helpWindow.Show();
-        helpWindow.WindowState = FormWindowState.Normal;
-        if (gotoPhrase != "")
-        {
-            helpWindow.ScrollToText(gotoPhrase);
-        }
-    }
-
-    private void OpenOptions()
-    {
-        if (options == null || options.IsDisposed)
-            options = new Options(this);
-        options.Show();
-        options.WindowState = FormWindowState.Normal;
-        SetForegroundWindow(options.Handle);
-    }
-
-    private void ListView1_DoubleClick(object sender, EventArgs e)
-    {
-        OpenSelectedImageExternal();
-    }
 
     private void OpenSelectedImageExternal()
     {
@@ -1068,6 +1067,34 @@ public partial class MainForm : Form
             WriteMessage("Can't open file, it no longer exists: " + file);
         }
     }
+
+    #endregion
+
+    #region Open Forms
+    private void OpenOptions()
+    {
+        if (options == null || options.IsDisposed)
+            options = new Options(this);
+        options.Show();
+        options.WindowState = FormWindowState.Normal;
+        SetForegroundWindow(options.Handle);
+    }
+
+    public void OpenHelp(string gotoPhrase = "")
+    {
+        helpWindow ??= new HelpForm();
+        if (helpWindow.IsDisposed)
+        {
+            helpWindow = new HelpForm();
+        }
+        helpWindow.Show();
+        helpWindow.WindowState = FormWindowState.Normal;
+        if (gotoPhrase != "")
+        {
+            helpWindow.ScrollToText(gotoPhrase);
+        }
+    }
+    #endregion
 
     #region click events --------------------------------------------------------
     private void ButtonOpenLastFolder_Click(object sender, EventArgs e)
@@ -1190,46 +1217,6 @@ public partial class MainForm : Form
 
     #endregion
 
-
-
-    public void UpdateTrimStatus()
-    {
-        string disableCrop = "Disable &Cropping";
-        string enableCrop = "Enable &Cropping";
-        if (settings.TrimChecked)
-        {
-            enableCroppingToolStripMenuItem.Text = disableCrop;
-            toggleCropToolStripMenuItem.Text = disableCrop;
-
-
-        }
-        else
-        {
-            enableCroppingToolStripMenuItem.Text = enableCrop;
-            toggleCropToolStripMenuItem.Text = enableCrop;
-        }
-        if (options != null)
-        {
-            if (!options.IsDisposed)
-            {
-                options.UpdateTrimCheck();
-            }
-        }
-    }
-
-    private void MainForm_SizeChanged(object sender, EventArgs e)
-    {
-        if (WindowState == FormWindowState.Minimized)
-        {
-            if (Settings.Default.StartHidden)
-            {
-                HideApplication();
-            }
-        }
-        UpdateLogVisible();
-        //UpdateLabelInfoPosition();
-    }
-
     #region Balloon Tip ----------------------------------------------------------------
 
     private BalloonTipType lastBallonTip = BalloonTipType.NotSet;
@@ -1294,6 +1281,7 @@ public partial class MainForm : Form
 
     #endregion
 
+    #region Log view
     private void LabelShowLog_Click(object sender, EventArgs e)
     {
         showLog = !showLog;
@@ -1325,7 +1313,9 @@ public partial class MainForm : Form
             listViewThumbnails.Size = new Size(internalWidth - (logMargin * 2), internalHeight - labelShowLog.Height - 40);
         }
     }
+    #endregion
 
+    #region Menu items and clicks
     private void ItemOpenImage_Click(object sender, EventArgs e)
     {
         // open first selected image in external viewer
@@ -1398,19 +1388,6 @@ public partial class MainForm : Form
         }
     }
 
-    private void ListViewThumbnails_MouseDown(object sender, MouseEventArgs e)
-    {
-
-        if (e.Button == MouseButtons.Right)
-        {
-            var focusedItem = listViewThumbnails.FocusedItem;
-            if (focusedItem != null && focusedItem.Bounds.Contains(e.Location))
-            {
-                contextMenuListView.Show(Cursor.Position);
-            }
-        }
-    }
-
     private void ResetCounterToolStripMenuItem_Click(object sender, EventArgs e)
     {
         SetCounter(1);
@@ -1459,14 +1436,6 @@ public partial class MainForm : Form
     public static void OpenAbout()
     {
         About aboutWindow = new About();
-        //if (aboutWindow == null)
-        //{
-        //    aboutWindow = new About();
-        //}
-        //if (aboutWindow.IsDisposed)
-        //{
-        //    aboutWindow = new About();
-        //}
         aboutWindow.Show();
         aboutWindow.WindowState = FormWindowState.Normal;
     }
@@ -1534,10 +1503,6 @@ public partial class MainForm : Form
         OpenHelp();
     }
 
-    private void ListViewThumbnails_SizeChanged(object sender, EventArgs e)
-    {
-        UpdateLabelInfoPosition();
-    }
 
     private void ConvertFileFormat_Click(object sender, EventArgs e)
     {
@@ -1584,6 +1549,32 @@ public partial class MainForm : Form
             MessageBox.Show("Some files were skipped, converting PDFs to other formats is currently not supported.");
         }
     }
+    #endregion
+
+    #region ListView
+
+    private void ListViewThumbnails_SizeChanged(object sender, EventArgs e)
+    {
+        UpdateLabelInfoPosition();
+    }
+
+    private void ListView1_DoubleClick(object sender, EventArgs e)
+    {
+        OpenSelectedImageExternal();
+    }
+
+    private void ListViewThumbnails_MouseDown(object sender, MouseEventArgs e)
+    {
+
+        if (e.Button == MouseButtons.Right)
+        {
+            var focusedItem = listViewThumbnails.FocusedItem;
+            if (focusedItem != null && focusedItem.Bounds.Contains(e.Location))
+            {
+                contextMenuListView.Show(Cursor.Position);
+            }
+        }
+    }
 
     private void ContextMenuListView_Opening(object sender, System.ComponentModel.CancelEventArgs e)
     {
@@ -1619,12 +1610,12 @@ public partial class MainForm : Form
         convertFileFormatToolStripMenuItem.Enabled = convertableImages;
     }
 
-    private void listViewThumbnails_DragEnter(object sender, DragEventArgs e)
+    private void ListViewThumbnails_DragEnter(object sender, DragEventArgs e)
     {
         DragDropMethods.FileDropDragEnter(this, e);
     }
 
-    private void listViewThumbnails_DragDrop(object sender, DragEventArgs e)
+    private void ListViewThumbnails_DragDrop(object sender, DragEventArgs e)
     {
         if (e.Data == null) return;
         List<string> fileNames = DragDropMethods.GetDroppedFileNames(e);
@@ -1635,4 +1626,6 @@ public partial class MainForm : Form
         }
         UpdateInfoLabelVisibility();
     }
+    #endregion
+
 }

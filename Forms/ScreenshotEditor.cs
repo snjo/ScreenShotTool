@@ -753,7 +753,7 @@ public partial class ScreenshotEditor : Form
                     textBoxSymbolText.Text = gsText.Text;
                     if (gsText.ListViewItem != null)
                     {
-                        string displayText = gsText.Text.Substring(0, Math.Min(gsText.Text.Length, 20));
+                        string displayText = gsText.Text[..Math.Min(gsText.Text.Length, 20)];
                         gsText.ListViewItem.Text = "Text: " + displayText;
                     }
                     numericPropertiesFontSize.Value = (int)Math.Clamp(gsText.fontEmSize, minimumFontSize, maxFontSize);
@@ -971,8 +971,10 @@ public partial class ScreenshotEditor : Form
                 ListViewItem item = listViewSymbols.SelectedItems[0];
                 if (item.Tag is not GraphicSymbol gs) return;
 
-                ColorDialogAlpha colorDialogAlpha = new(button.BackColor);
-                colorDialogAlpha.StartPosition = FormStartPosition.CenterScreen;
+                ColorDialogAlpha colorDialogAlpha = new(button.BackColor)
+                {
+                    StartPosition = FormStartPosition.CenterScreen
+                };
                 DialogResult result = colorDialogAlpha.ShowDialog(this);
                 if (result == DialogResult.OK)
                 {
@@ -1557,7 +1559,7 @@ public partial class ScreenshotEditor : Form
         }
     }
 
-    private void timerFixDPI_Tick(object sender, EventArgs e)
+    private void TimerFixDPI_Tick(object sender, EventArgs e)
     {
         timerFixDPI.Stop();
         if (pictureBoxOverlay.Image != null)
@@ -1566,7 +1568,7 @@ public partial class ScreenshotEditor : Form
         }
     }
 
-    private void buttonPropertiesEditText_Click(object sender, EventArgs e)
+    private void ButtonPropertiesEditText_Click(object sender, EventArgs e)
     {
         EditSelectedText();
     }
@@ -1575,7 +1577,7 @@ public partial class ScreenshotEditor : Form
     {
         if (GetSelectedSymbolFirst() is GsText gsT)
         {
-            TextEntryDialog textEntry = new TextEntryDialog(gsT.Text);
+            TextEntryDialog textEntry = new (gsT.Text);
             DialogResult result = textEntry.ShowDialog(this);
             if (result == DialogResult.OK)
             {
@@ -1585,7 +1587,7 @@ public partial class ScreenshotEditor : Form
         }
     }
 
-    private void pictureBoxOverlay_DoubleClick(object sender, EventArgs e)
+    private void PictureBoxOverlay_DoubleClick(object sender, EventArgs e)
     {
         if (GetSelectedSymbolFirst() is GsText)
         {
@@ -1596,10 +1598,7 @@ public partial class ScreenshotEditor : Form
     HelpForm? helpWindow;
     private void Help_Click(object sender, EventArgs e)
     {
-        if (helpWindow == null)
-        {
-            helpWindow = new HelpForm();
-        }
+        helpWindow ??= new HelpForm();
         if (helpWindow.IsDisposed)
         {
             helpWindow = new HelpForm();

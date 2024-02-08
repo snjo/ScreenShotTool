@@ -9,39 +9,27 @@ public static class Autorun
 
     public static bool IsEnabled(string ApplicationName)
     {
-        using (RegistryKey? key = Registry.CurrentUser.OpenSubKey(autoStartKey, false))
+        using RegistryKey? key = Registry.CurrentUser.OpenSubKey(autoStartKey, false);
+        if (key != null)
         {
-            if (key != null)
-            {
-                return key.GetValue(ApplicationName, null) != null;
-            }
-            else
-            {
-                return false;
-            }
+            return key.GetValue(ApplicationName, null) != null;
+        }
+        else
+        {
+            return false;
         }
     }
 
     public static void Enable(string ApplicationName)
     {
-        using (RegistryKey? key = Registry.CurrentUser.OpenSubKey(autoStartKey, true))
-        {
-            if (key != null)
-            {
-                key.SetValue(ApplicationName, "\"" + Application.ExecutablePath + "\"");
-            }
-        }
+        using RegistryKey? key = Registry.CurrentUser.OpenSubKey(autoStartKey, true);
+        key?.SetValue(ApplicationName, "\"" + Application.ExecutablePath + "\"");
     }
 
     public static void Disable(string ApplicationName)
     {
-        using (RegistryKey? key = Registry.CurrentUser.OpenSubKey(autoStartKey, true))
-        {
-            if (key != null)
-            {
-                key.DeleteValue(ApplicationName, false);
-            }
-        }
+        using RegistryKey? key = Registry.CurrentUser.OpenSubKey(autoStartKey, true);
+        key?.DeleteValue(ApplicationName, false);
     }
 
     public static void UpdatePathIfEnabled(string ApplicationName)

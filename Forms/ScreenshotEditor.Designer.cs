@@ -561,7 +561,7 @@
             pictureBoxOverlay.Size = new Size(500, 500);
             pictureBoxOverlay.TabIndex = 1;
             pictureBoxOverlay.TabStop = false;
-            pictureBoxOverlay.DoubleClick += pictureBoxOverlay_DoubleClick;
+            pictureBoxOverlay.DoubleClick += PictureBoxOverlay_DoubleClick;
             pictureBoxOverlay.MouseDown += PictureBoxOverlay_MouseDown;
             pictureBoxOverlay.MouseMove += PictureBoxOverlay_MouseMove;
             pictureBoxOverlay.MouseUp += PictureBoxOverlay_MouseUp;
@@ -881,7 +881,7 @@
             buttonPropertiesEditText.TabIndex = 39;
             buttonPropertiesEditText.Text = "...";
             buttonPropertiesEditText.UseVisualStyleBackColor = true;
-            buttonPropertiesEditText.Click += buttonPropertiesEditText_Click;
+            buttonPropertiesEditText.Click += ButtonPropertiesEditText_Click;
             // 
             // checkBoxUnderline
             // 
@@ -1326,7 +1326,7 @@
             // 
             // timerFixDPI
             // 
-            timerFixDPI.Tick += timerFixDPI_Tick;
+            timerFixDPI.Tick += TimerFixDPI_Tick;
             // 
             // ScreenshotEditor
             // 

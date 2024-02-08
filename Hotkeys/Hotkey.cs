@@ -46,7 +46,7 @@ namespace Hotkeys
             }
             else
             {
-                result = "no hotkey";
+                result = "";//"no hotkey set";
             }
             return result;
         }

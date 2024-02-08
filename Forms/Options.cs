@@ -233,10 +233,10 @@ namespace ScreenShotTool
             mainForm.UpdateTrimStatus();
             mainForm.SetInfoText();
             //mainForm.SaveSettings();
-            using (SettingsRegistry sr = new())
-            {
-                sr.SaveSettingsToRegistry();
-            }
+            //using (SettingsRegistry sr = new())
+            //{
+            SettingsRegistry.SaveSettingsToRegistry();
+            //}
             
         }
 
@@ -248,7 +248,7 @@ namespace ScreenShotTool
             {
                 if (cell.Value != null)
                     settingKey = (string)cell.Value;
-                if (settingKey == null) settingKey = string.Empty;
+                settingKey ??= string.Empty;
             }
 
             if (settingKey.Length > 0)

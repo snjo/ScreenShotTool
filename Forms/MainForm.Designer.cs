@@ -98,8 +98,8 @@
             listViewThumbnails.TabIndex = 0;
             listViewThumbnails.UseCompatibleStateImageBehavior = false;
             listViewThumbnails.SizeChanged += ListViewThumbnails_SizeChanged;
-            listViewThumbnails.DragDrop += listViewThumbnails_DragDrop;
-            listViewThumbnails.DragEnter += listViewThumbnails_DragEnter;
+            listViewThumbnails.DragDrop += ListViewThumbnails_DragDrop;
+            listViewThumbnails.DragEnter += ListViewThumbnails_DragEnter;
             listViewThumbnails.DoubleClick += ListView1_DoubleClick;
             listViewThumbnails.KeyDown += ListView1_KeyDown;
             listViewThumbnails.MouseDown += ListViewThumbnails_MouseDown;
@@ -338,21 +338,21 @@
             // editSelectedFileToolStripMenuItem
             // 
             editSelectedFileToolStripMenuItem.Name = "editSelectedFileToolStripMenuItem";
-            editSelectedFileToolStripMenuItem.Size = new Size(180, 22);
+            editSelectedFileToolStripMenuItem.Size = new Size(176, 22);
             editSelectedFileToolStripMenuItem.Text = "Edit selected &file";
             editSelectedFileToolStripMenuItem.Click += EditImageFromFile_Click;
             // 
             // editFromClipboardToolStripMenuItem
             // 
             editFromClipboardToolStripMenuItem.Name = "editFromClipboardToolStripMenuItem";
-            editFromClipboardToolStripMenuItem.Size = new Size(180, 22);
+            editFromClipboardToolStripMenuItem.Size = new Size(176, 22);
             editFromClipboardToolStripMenuItem.Text = "Edit from &clipboard";
             editFromClipboardToolStripMenuItem.Click += EditImageFromClipboard_Click;
             // 
             // openEditorToolStripMenuItem
             // 
             openEditorToolStripMenuItem.Name = "openEditorToolStripMenuItem";
-            openEditorToolStripMenuItem.Size = new Size(180, 22);
+            openEditorToolStripMenuItem.Size = new Size(176, 22);
             openEditorToolStripMenuItem.Text = "Open &editor";
             openEditorToolStripMenuItem.Click += EditImageNoFile_Click;
             // 
@@ -393,6 +393,7 @@
             // 
             // labelInfo
             // 
+            labelInfo.AllowDrop = true;
             labelInfo.BackColor = Color.White;
             labelInfo.Font = new Font("Courier New", 9F);
             labelInfo.ForeColor = Color.Gray;
@@ -401,6 +402,8 @@
             labelInfo.Size = new Size(401, 138);
             labelInfo.TabIndex = 37;
             labelInfo.Text = "To take a screenshot use hotkeys";
+            labelInfo.DragDrop += ListViewThumbnails_DragDrop;
+            labelInfo.DragEnter += ListViewThumbnails_DragEnter;
             // 
             // MainForm
             // 
