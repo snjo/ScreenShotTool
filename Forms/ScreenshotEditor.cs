@@ -1,9 +1,7 @@
 ﻿using ScreenShotTool.Classes;
 using ScreenShotTool.Properties;
 using System.Diagnostics;
-using System.Drawing.Printing;
 using System.Runtime.Versioning;
-using System.Windows.Forms;
 
 namespace ScreenShotTool.Forms;
 
@@ -1577,7 +1575,7 @@ public partial class ScreenshotEditor : Form
     {
         if (GetSelectedSymbolFirst() is GsText gsT)
         {
-            TextEntryDialog textEntry = new (gsT.Text);
+            TextEntryDialog textEntry = new(gsT.Text);
             DialogResult result = textEntry.ShowDialog(this);
             if (result == DialogResult.OK)
             {

@@ -1,6 +1,4 @@
 using Hotkeys;
-using Microsoft.VisualBasic.ApplicationServices;
-using Microsoft.Win32;
 using ScreenShotTool.Classes;
 using ScreenShotTool.Forms;
 using ScreenShotTool.Properties;
@@ -11,7 +9,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
-using System.Threading.Tasks.Dataflow;
 
 [assembly: AssemblyVersion("1.8.*")]
 
@@ -160,7 +157,7 @@ public partial class MainForm : Form
             {
                 //using (SettingsRegistry sr = new())
                 //{
-                    SettingsRegistry.LoadSettingsFromRegistry();
+                SettingsRegistry.LoadSettingsFromRegistry();
                 //}
             }
             Settings.Default.UpgradeSettings = false;
@@ -411,12 +408,6 @@ public partial class MainForm : Form
         SetCounter(Counter + 1);
     }
 
-    //private void numericUpDownCounter_ValueChanged(object sender, EventArgs e)
-    //{
-    //    settings.Counter = (int)numericUpDownCounter.Value;
-    //    settings.Save();
-    //}
-
     public string ComposeFileName(string text, string overrideTitle = "")
     {
         string splitTitleString = settings.SplitTitleString;
@@ -465,21 +456,6 @@ public partial class MainForm : Form
         text = text.Replace("$w", windowTitle);
         text = text.Replace("$c", counter);
         // incrementing the counter happens in CaptureAction if the file is actually saved
-
-        // full set of replacement string used by Greenshot
-        /*
-            ${YYYY} year, 4 digits
-            ${MM} month, 2 digits
-            ${DD} day, 2 digits
-            ${hh} hour, 2 digits
-            ${mm} minute, 2 digits
-            ${ss} second, 2 digits
-            ${NUM} incrementing number, 6 digits
-            ${title} Window title
-            ${user} Windows user
-            ${domain} Windows domain
-            ${hostname} PC name
-         */
 
         if (text.Contains("${")) // do Greenshot style text replacements
         {
@@ -565,7 +541,7 @@ public partial class MainForm : Form
         {
             fileBitmap = Resources.thumbunknown;
         }
-        
+
         AddThumbnail(filepath, fileBitmap, false);
         if (doDispose) fileBitmap.Dispose();
     }
@@ -582,7 +558,7 @@ public partial class MainForm : Form
     public static Bitmap ResizeThumbnail(Image image, int width, int height, bool crop = false, Bitmap? fileTypeIcon = null)
     {
         Rectangle thumbRect;
-        Bitmap thumbImage = new (width, height);
+        Bitmap thumbImage = new(width, height);
 
         Image cropped;
         if (crop)
@@ -664,34 +640,6 @@ public partial class MainForm : Form
         Bitmap bmpImage = new Bitmap(img);
         return bmpImage.Clone(cropArea, bmpImage.PixelFormat);
     }
-
-    /*
-    private static Image CropImageSquare(Image img)
-    {
-        int width = img.Width;
-        int height = img.Height;
-        Rectangle cropArea;
-        if (width == height)
-        {
-            return img;
-        }
-        else if (width > height)
-        {
-            int overflow = img.Width - img.Height;
-            int overflowLeft = overflow / 2;
-            //int overflowRight = overflow - overflowLeft;
-            cropArea = new Rectangle(overflowLeft, 0, width - overflow, height);
-        }
-        else
-        {
-            int overflow = img.Height - img.Width;
-            int overflowTop = overflow / 2;
-            //int overflowBottom = overflow - overflowTop;
-            cropArea = new Rectangle(0, overflowTop, width, height - overflow);
-        }
-        Bitmap bmpImage = new Bitmap(img);
-        return bmpImage.Clone(cropArea, bmpImage.PixelFormat);
-    }*/
 
     private void SetImageFormat()
     {
@@ -979,7 +927,9 @@ public partial class MainForm : Form
     [DllImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
     static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+
 #pragma warning restore SYSLIB1054 // Use 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time
+
     [StructLayout(LayoutKind.Sequential)]
     public struct RECT
     {
@@ -1429,7 +1379,7 @@ public partial class MainForm : Form
     {
         OpenLink("https://github.com/snjo/ScreenShotTool/");
     }
-   
+
     public static void OpenDocumentation()
     {
         OpenLink("https://github.com/snjo/ScreenShotTool/blob/master/README.md");
@@ -1621,7 +1571,7 @@ public partial class MainForm : Form
     {
         if (e.Data == null) return;
         List<string> fileNames = DragDropMethods.GetDroppedFileNames(e);
-        
+
         for (int i = 0; i < fileNames.Count; i++)
         {
             AddThumbnailFromFile(fileNames[i]);

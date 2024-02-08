@@ -237,7 +237,7 @@ namespace ScreenShotTool
             //{
             SettingsRegistry.SaveSettingsToRegistry();
             //}
-            
+
         }
 
         private static Hotkey GetHotkeyFromGrid(Hotkey hotkey, DataGridViewCellCollection settingRow)

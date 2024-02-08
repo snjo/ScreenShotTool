@@ -33,7 +33,7 @@ namespace ScreenShotTool
             {
                 Application.Run(new MainForm());
             }
-            
+
         }
     }
 }

@@ -1,24 +1,17 @@
 ﻿using Microsoft.Win32;
 using ScreenShotTool.Properties;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.Versioning;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ScreenShotTool.Classes;
 [SupportedOSPlatform("windows")]
 
 
 
-public class SettingsRegistry //: IDisposable
+public class SettingsRegistry
 {
     readonly static string RegKeyName = @"SOFTWARE\ScreenshotTool";
-    //public SettingsRegistry()
-    //{
-    //}
 
     public static void LoadSettingsFromRegistry()
     {
@@ -29,7 +22,7 @@ public class SettingsRegistry //: IDisposable
             Debug.WriteLine("RegKey is null");
             return;
         }
-        
+
         string? foldername = RegKey.GetValue("Foldername")?.ToString();
         string? filename = RegKey.GetValue("Filename")?.ToString();
         string? fileextension = RegKey.GetValue("Fileextension")?.ToString();
@@ -67,7 +60,6 @@ public class SettingsRegistry //: IDisposable
     public static void SaveSettingsToRegistry()
     {
         RegistryKey RegKey = Registry.CurrentUser.CreateSubKey(RegKeyName);
-        //RegKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\ScreenshotTool");
         Debug.WriteLine("Saving fallback values to registry");
         if (RegKey == null)
         {
@@ -97,8 +89,8 @@ public class SettingsRegistry //: IDisposable
     }
 
     private static string HotkeyToRegistryString(string hotkeyKey, bool Ctrl, bool Alt, bool Shift, bool Win)
-    { 
-        StringBuilder keyValue = new ();
+    {
+        StringBuilder keyValue = new();
         keyValue.Append(Ctrl ? "1" : "0");
         keyValue.Append(Alt ? "1" : "0");
         keyValue.Append(Shift ? "1" : "0");
@@ -119,9 +111,4 @@ public class SettingsRegistry //: IDisposable
         string key = RegistryString[5..];
         return (key, Ctrl, Alt, Shift, Win);
     }
-
-    //public void Dispose()
-    //{
-    //    //RegKey?.Dispose();
-    //}
 }
