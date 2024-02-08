@@ -12,7 +12,7 @@ namespace ScreenShotTool.Classes;
 public class SettingsRegistry
 {
     readonly static string RegKeyName = @"SOFTWARE\ScreenshotTool";
-    readonly static string[] settingStrings = { "Foldername", "Filename", "FileExtension", "StickerFolder" };
+    readonly static string[] settingStrings = { "Foldername", "Filename", "FileExtension", "StickerFolder", "StartHidden", "MinimizeOnClose", "Counter" };
 
     public static void LoadSettingsFromRegistry()
     {
@@ -26,7 +26,7 @@ public class SettingsRegistry
 
         foreach (string settingString in settingStrings)
         {
-            ApplySettingFromRegistry(RegKey, settingString);
+            LoadSettingFromRegistry(RegKey, settingString);
         }
 
         foreach (string hotkey in MainForm.HotkeyNames)
@@ -46,19 +46,27 @@ public class SettingsRegistry
         RegKey.Dispose();
     }
 
-    private static void ApplySettingFromRegistry(RegistryKey key, string name)
+    private static void LoadSettingFromRegistry(RegistryKey key, string name)
     {
-        string? value = key.GetValue(name)?.ToString();
-        if (string.IsNullOrEmpty(value) == false)
+        object? value = key.GetValue(name);
+        if (value != null)
         {
-            try
+            if (value is string || value is bool || value is int)
             {
-                Debug.WriteLine($"Applying setting '{name}' from registry: {value}");
-                Settings.Default[name] = value;
-            }
-            catch
-            {
-                Debug.WriteLine($"ApplySettingFromRegistry: Setting '{name}' does not exist");
+                try
+                {
+                    Debug.WriteLine($"Applying setting '{name}' from registry: {value}");
+
+                    if (value.ToString() == "True" || value.ToString() == "False")
+                    {
+                        value = bool.Parse(value.ToString());
+                    }
+                    Settings.Default[name] = value;
+                }
+                catch
+                {
+                    Debug.WriteLine($"ApplySettingFromRegistry: Setting '{name}' does not exist");
+                }
             }
         }
         else
@@ -69,20 +77,28 @@ public class SettingsRegistry
 
     private static void SaveSettingToRegistry(RegistryKey key, string name)
     {
-        string? value;
+        object? value;
         try
         {
-            value = Settings.Default[name].ToString();
+                value = Settings.Default[name];
         }
         catch
         {
             Debug.WriteLine($"SaveSettingToRegistry: Setting '{name}' does not exist");
             return;
         }
-        if (string.IsNullOrEmpty(value) == false)
+
+        if (value != null)
         {
-            Debug.WriteLine($"Saving setting '{name}' to registry: {value}");
-            key.SetValue(name, value);
+            if (value is string || value is bool || value is int)
+            {
+                Debug.WriteLine($"Saving setting '{name}' to registry: {value}");
+                key.SetValue(name, value);
+            }
+            else
+            {
+                Debug.WriteLine($"Can't save '{name}' to registry, type is not allowed");
+            }
         }
     }
 
