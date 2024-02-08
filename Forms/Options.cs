@@ -1,4 +1,5 @@
 ﻿using Hotkeys;
+using ScreenShotTool.Classes;
 using ScreenShotTool.Forms;
 using ScreenShotTool.Properties;
 using System.Diagnostics;
@@ -232,6 +233,11 @@ namespace ScreenShotTool
             mainForm.UpdateTrimStatus();
             mainForm.SetInfoText();
             //mainForm.SaveSettings();
+            using (SettingsRegistry sr = new())
+            {
+                sr.SaveSettingsToRegistry();
+            }
+            
         }
 
         private static Hotkey GetHotkeyFromGrid(Hotkey hotkey, DataGridViewCellCollection settingRow)
@@ -314,7 +320,7 @@ namespace ScreenShotTool
 
         private void ReloadHotkeys()
         {
-            HotkeyTools.UpdateHotkeys(mainForm.HotkeyList, mainForm.HotkeyNames, mainForm);
+            HotkeyTools.UpdateHotkeys(mainForm.HotkeyList, MainForm.HotkeyNames, mainForm);
             Debug.WriteLine("Released and re-registered hotkeys");
         }
 

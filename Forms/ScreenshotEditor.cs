@@ -1579,8 +1579,6 @@ public partial class ScreenshotEditor : Form
             DialogResult result = textEntry.ShowDialog(this);
             if (result == DialogResult.OK)
             {
-                Debug.WriteLine("update text: " + textEntry.TextResult);
-                //gsT.Text = textEntry.Text;
                 textBoxSymbolText.Text = textEntry.TextResult;
             }
             textEntry.Dispose();

@@ -1,4 +1,5 @@
 using Hotkeys;
+using Microsoft.Win32;
 using ScreenShotTool.Classes;
 using ScreenShotTool.Forms;
 using ScreenShotTool.Properties;
@@ -9,6 +10,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
+using System.Threading.Tasks.Dataflow;
 
 [assembly: AssemblyVersion("1.8.*")]
 
@@ -48,7 +50,7 @@ public partial class MainForm : Form
 
     public Dictionary<string, Hotkey> HotkeyList = [];
 
-    public List<string> HotkeyNames =
+    public static List<string> HotkeyNames =
     [
         "CaptureRegion",
         "CaptureWindow",
@@ -89,16 +91,33 @@ public partial class MainForm : Form
 
     private static void UpgradeSettings()
     {
+
+        
+
         if (Settings.Default.UpgradeSettings)
         {
             Debug.WriteLine("Upgrading settings");
             Settings.Default.Upgrade();
+            if (Settings.Default.UpgradeSettings == true)
+            {
+                using (SettingsRegistry sr = new())
+                {
+                    sr.LoadSettingsFromRegistry();
+                }
+            }
             Settings.Default.UpgradeSettings = false;
         }
         else
         {
             Debug.WriteLine("Not upgrading settings");
         }
+
+        // test
+        //using (SettingsRegistry sr = new())
+        //{
+        //    sr.LoadSettingsFromRegistry();
+        //}
+        // end test
     }
 
     public void LoadHotkeysFromSettings()
