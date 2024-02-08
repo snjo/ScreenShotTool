@@ -195,10 +195,7 @@ public partial class MainForm : Form
             Debug.WriteLine("Not upgrading settings");
         }
         // test of registry loading
-        //using (SettingsRegistry sr = new())
-        //{
-        //    sr.LoadSettingsFromRegistry();
-        //}
+        SettingsRegistry.LoadSettingsFromRegistry();
         // end test
     }
 

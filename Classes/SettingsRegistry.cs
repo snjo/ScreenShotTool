@@ -12,6 +12,7 @@ namespace ScreenShotTool.Classes;
 public class SettingsRegistry
 {
     readonly static string RegKeyName = @"SOFTWARE\ScreenshotTool";
+    readonly static string[] settingStrings = { "Foldername", "Filename", "FileExtension", "StickerFolder" };
 
     public static void LoadSettingsFromRegistry()
     {
@@ -23,22 +24,10 @@ public class SettingsRegistry
             return;
         }
 
-        string? foldername = RegKey.GetValue("Foldername")?.ToString();
-        string? filename = RegKey.GetValue("Filename")?.ToString();
-        string? fileextension = RegKey.GetValue("Fileextension")?.ToString();
-        if (string.IsNullOrEmpty(foldername) == false)
+        foreach (string settingString in settingStrings)
         {
-            Settings.Default.Foldername = foldername;
+            ApplySettingFromRegistry(RegKey, settingString);
         }
-        if (string.IsNullOrEmpty(filename) == false)
-        {
-            Settings.Default.Filename = filename;
-        }
-        if (string.IsNullOrEmpty(fileextension) == false)
-        {
-            Settings.Default.FileExtension = fileextension;
-        }
-
 
         foreach (string hotkey in MainForm.HotkeyNames)
         {
@@ -57,6 +46,46 @@ public class SettingsRegistry
         RegKey.Dispose();
     }
 
+    private static void ApplySettingFromRegistry(RegistryKey key, string name)
+    {
+        string? value = key.GetValue(name)?.ToString();
+        if (string.IsNullOrEmpty(value) == false)
+        {
+            try
+            {
+                Debug.WriteLine($"Applying setting '{name}' from registry: {value}");
+                Settings.Default[name] = value;
+            }
+            catch
+            {
+                Debug.WriteLine($"ApplySettingFromRegistry: Setting '{name}' does not exist");
+            }
+        }
+        else
+        {
+            Debug.WriteLine($"The setting '{name}' does not exist in the registry");
+        }
+    }
+
+    private static void SaveSettingToRegistry(RegistryKey key, string name)
+    {
+        string? value;
+        try
+        {
+            value = Settings.Default[name].ToString();
+        }
+        catch
+        {
+            Debug.WriteLine($"SaveSettingToRegistry: Setting '{name}' does not exist");
+            return;
+        }
+        if (string.IsNullOrEmpty(value) == false)
+        {
+            Debug.WriteLine($"Saving setting '{name}' to registry: {value}");
+            key.SetValue(name, value);
+        }
+    }
+
     public static void SaveSettingsToRegistry()
     {
         RegistryKey RegKey = Registry.CurrentUser.CreateSubKey(RegKeyName);
@@ -67,9 +96,10 @@ public class SettingsRegistry
             return;
         }
         Debug.WriteLine("Writing to registry, foldername: " + Settings.Default.Foldername);
-        RegKey.SetValue("Foldername", Settings.Default.Foldername);
-        RegKey.SetValue("Filename", Settings.Default.Filename);
-        RegKey.SetValue("Fileextension", Settings.Default.FileExtension);
+        foreach (string settingString in settingStrings)
+        {
+            SaveSettingToRegistry(RegKey, settingString);
+        }
 
         foreach (string hotkey in MainForm.HotkeyNames)
         {
