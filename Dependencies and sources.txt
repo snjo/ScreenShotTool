@@ -10,6 +10,10 @@ https://www.nuget.org/packages/PDFsharp-gdi
 Used in SaveToPdf.cs
 Used for converting image files to PDFs, without using print to PDF. If removed, print to a PDF printer would still be possible.
 
+FrameworkExtract.System.Deployment
+https://www.nuget.org/packages/FrameworkExtract.System.Deployment
+Used in About.cs
+Used to show correct version number in ClickOnce deployed versions
 
 CLASSES FROM OTHER AUTHORS
 

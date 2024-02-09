@@ -9,7 +9,13 @@ namespace ScreenShotTool
         {
             InitializeComponent();
             Font = new Font(this.Font.FontFamily, 9);
-            labelVersion.Text = "Version " + ProductVersion;
+            string version = ProductVersion;
+
+            if (version == "1.0.0.0" )
+            {
+                version = "ClickOnce (Check .exe details)";
+            }
+            labelVersion.Text = "Version: " + version;
         }
 
         private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

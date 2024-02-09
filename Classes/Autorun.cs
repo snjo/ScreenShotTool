@@ -32,11 +32,17 @@ public static class Autorun
         key?.DeleteValue(ApplicationName, false);
     }
 
-    public static void UpdatePathIfEnabled(string ApplicationName)
+    public static bool UpdatePathIfEnabled(string ApplicationName)
     {
-        if (IsEnabled(ApplicationName))
+        bool enabled = IsEnabled(ApplicationName);
+        if (enabled)
         {
             Enable(ApplicationName);
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }

@@ -14,14 +14,14 @@ public class SettingsRegistry
     readonly static string RegKeyName = @"SOFTWARE\ScreenshotTool";
     readonly static string[] settingStrings = { "Foldername", "Filename", "FileExtension", "StickerFolder", "StartHidden", "MinimizeOnClose", "Counter" };
 
-    public static void LoadSettingsFromRegistry()
+    public static bool LoadSettingsFromRegistry()
     {
         RegistryKey? RegKey = Registry.CurrentUser.OpenSubKey(RegKeyName);
         Debug.WriteLine("Loading fallback values from registry");
         if (RegKey == null)
         {
             Debug.WriteLine("RegKey is null");
-            return;
+            return false;
         }
 
         foreach (string settingString in settingStrings)
@@ -44,6 +44,7 @@ public class SettingsRegistry
         }
 
         RegKey.Dispose();
+        return true;
     }
 
     private static void LoadSettingFromRegistry(RegistryKey key, string name)

@@ -174,28 +174,37 @@ public partial class MainForm : Form
 
     #region Settings
 
-    private static void UpgradeSettings()
+    private void UpgradeSettings()
     {
         if (Settings.Default.UpgradeSettings)
         {
-            Debug.WriteLine("Upgrading settings");
+            Debug.WriteLine("Upgrading settings from previous version");
+            WriteMessage("Upgrading settings");
             Settings.Default.Upgrade();
             if (Settings.Default.UpgradeSettings == true)
             {
-                //using (SettingsRegistry sr = new())
-                //{
-                SettingsRegistry.LoadSettingsFromRegistry();
-                //}
+                if (SettingsRegistry.LoadSettingsFromRegistry())
+                {
+                    WriteMessage("Loading fallback settings from registry");
+                }
+                else
+                {
+                    WriteMessage("No fallback settings in registry, using default settings");
+                }
             }
             Settings.Default.UpgradeSettings = false;
-            Autorun.Autorun.UpdatePathIfEnabled(ApplicationName);
+            if (Autorun.Autorun.UpdatePathIfEnabled(ApplicationName))
+            {
+                WriteMessage("Autorun is enabled, updating path in registry");
+            }
         }
         else
         {
             Debug.WriteLine("Not upgrading settings");
+            WriteMessage("Loading settings from user config");
         }
         // test of registry loading
-        SettingsRegistry.LoadSettingsFromRegistry();
+        //SettingsRegistry.LoadSettingsFromRegistry();
         // end test
     }
 
