@@ -1061,6 +1061,7 @@ public partial class MainForm : Form
                 else
                 {
                     WriteMessage("File no longer exists, removing from list: " + deleteFile);
+                    item.Remove();
                 }
                 //item.Remove();
 
@@ -1428,7 +1429,10 @@ public partial class MainForm : Form
                 }
             }
             Clipboard.Clear();
-            Clipboard.SetData(DataFormats.FileDrop, fileList.ToArray());
+            if (fileList.Count > 0)
+            {
+                Clipboard.SetData(DataFormats.FileDrop, fileList.ToArray());
+            }
         }
     }
 
