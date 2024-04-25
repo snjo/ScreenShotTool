@@ -67,6 +67,9 @@ public partial class ScreenshotEditor : Form
         numericPropertiesFontSize.Maximum = maxFontSize;
         numericPropertiesFontSize.Minimum = minimumFontSize;
         numericPropertiesFontSize.Value = startingFontSize;
+
+        listViewSymbols.Height = 200;
+        CreatePropertyPanels();
         DisableAllPanels();
         numericBlurMosaicSize.Value = Settings.Default.BlurMosaicSize;
         timerAfterLoad.Start(); // turns off TopMost shortly after Load. Without TopMost the Window opens behind other forms (why? who can say)
@@ -85,8 +88,6 @@ public partial class ScreenshotEditor : Form
         toolButtons.Add(buttonDraw);
         toolButtons.Add(buttonFilledCurve);
 
-        listViewSymbols.Height = 200;
-
         ColorTools.SetButtonColors(buttonNewColorFill, Settings.Default.NewSymbolFillColor, "X");
         ColorTools.SetButtonColors(buttonNewColorLine, Settings.Default.NewSymbolLineColor, "X");
         numericNewLineWeight.Value = Settings.Default.NewSymbolLineWeight;
@@ -97,10 +98,10 @@ public partial class ScreenshotEditor : Form
 
     public void UpdateNumericLimits()
     {
-        numericPropertiesX.Minimum = -editorCanvas.OutOfBoundsMaxPixels;
-        numericPropertiesX.Maximum = editorCanvas.CanvasSize.Width + editorCanvas.OutOfBoundsMaxPixels;
-        numericPropertiesY.Minimum = -editorCanvas.OutOfBoundsMaxPixels;
-        numericPropertiesY.Maximum = editorCanvas.CanvasSize.Height + editorCanvas.OutOfBoundsMaxPixels;
+        symbolPosition.numericPropertiesX.Minimum = -editorCanvas.OutOfBoundsMaxPixels;
+        symbolPosition.numericPropertiesX.Maximum = editorCanvas.CanvasSize.Width + editorCanvas.OutOfBoundsMaxPixels;
+        symbolPosition.numericPropertiesY.Minimum = -editorCanvas.OutOfBoundsMaxPixels;
+        symbolPosition.numericPropertiesY.Maximum = editorCanvas.CanvasSize.Height + editorCanvas.OutOfBoundsMaxPixels;
     }
     #endregion
 
@@ -649,6 +650,36 @@ public partial class ScreenshotEditor : Form
 
     #region Symbol Properties panel ---------------------------------------------------------------------
 
+    List<Control> SymbolControls = [];
+
+    Controls.SymbolPosition symbolPosition = new Controls.SymbolPosition();
+    Controls.SymbolNumbered symbolNumbered = new Controls.SymbolNumbered();
+
+    private void CreatePropertyPanels()
+    {
+
+        AddPropertiesPanel(symbolPosition);
+        symbolPosition.numericPropertiesX.ValueChanged += Numeric_ValueChanged;
+        symbolPosition.numericPropertiesY.ValueChanged += Numeric_ValueChanged;
+        symbolPosition.numericPropertiesWidth.ValueChanged += Numeric_ValueChanged;
+        symbolPosition.numericPropertiesHeight.ValueChanged += Numeric_ValueChanged;
+
+        AddPropertiesPanel(symbolNumbered);
+        symbolNumbered.NumberText.TextChanged += NumericMarkerChanged;
+        symbolNumbered.checkBoxAuto.CheckedChanged += NumericMarkerChanged;
+    }
+
+    private void AddPropertiesPanel(Control control)
+    {
+        PropertiesPanel.Controls.Add(control);
+        SymbolControls.Add(control);
+        control.Left = 3;
+        if (SymbolControls.Last() != null)
+        {
+            control.Top = SymbolControls.Last().Bottom + 5 + (listViewSymbols.Bottom);
+        }
+    }
+
     public void AddNewSymbolToList(GraphicSymbol symbol, int index = -1, string name = "")
     {
         if (symbol != null)
@@ -728,7 +759,21 @@ public partial class ScreenshotEditor : Form
         top += panel.Height + 3;
     }
 
+    private static void EnablePanel(Control panel, int left, ref int top)
+    {
+        panel.Enabled = true;
+        panel.Visible = true;
+        panel.Location = new Point(left, top);
+        top += panel.Height + 3;
+    }
+
     private static void DisablePanel(Panel panel)
+    {
+        panel.Enabled = false;
+        panel.Visible = false;
+    }
+
+    private static void DisablePanel(Control panel)
     {
         panel.Enabled = false;
         panel.Visible = false;
@@ -736,9 +781,9 @@ public partial class ScreenshotEditor : Form
 
     private void DisableAllPanels()
     {
-        panelPropertiesPosition.Location = new Point(listViewSymbols.Left, listViewSymbols.Bottom + 5);
-        panelPropertiesPosition.Visible = true;
-        panelPropertiesPosition.Enabled = false;
+        symbolPosition.Location = new Point(listViewSymbols.Left, listViewSymbols.Bottom + 5);
+        symbolPosition.Visible = true;
+        symbolPosition.Enabled = false;
         DisablePanel(panelPropertiesFill);
         DisablePanel(panelPropertiesLine);
         DisablePanel(panelPropertiesText);
@@ -749,6 +794,7 @@ public partial class ScreenshotEditor : Form
         DisablePanel(panelPropertiesBlur);
         DisablePanel(panelPropertiesPolygon);
         DisablePanel(panelPropertiesImage);
+        DisablePanel(symbolNumbered);
     }
 
     private static void SetNumericClamp(NumericUpDown numericUpDown, decimal value)
@@ -768,19 +814,19 @@ public partial class ScreenshotEditor : Form
             if (item.Tag is GraphicSymbol graphicSymbol)
             {
                 DisableAllPanels();
-                EnablePanel(panelPropertiesPosition, panelLeft, ref lastPanelBottom);
+                EnablePanel(symbolPosition, panelLeft, ref lastPanelBottom);
 
                 numericPropertiesLineWeight.Enabled = true;
-                numericPropertiesWidth.Enabled = true;
-                numericPropertiesHeight.Enabled = true;
+                symbolPosition.numericPropertiesWidth.Enabled = true;
+                symbolPosition.numericPropertiesHeight.Enabled = true;
                 buttonPropertiesColorLine.Enabled = true;
                 //numericPropertiesLineAlpha.Enabled = true;
 
-                labelSymbolType.Text = "Symbol: " + graphicSymbol.Name;
-                SetNumericClamp(numericPropertiesX, graphicSymbol.Left);
-                SetNumericClamp(numericPropertiesY, graphicSymbol.Top);
-                SetNumericClamp(numericPropertiesWidth, graphicSymbol.Width);
-                SetNumericClamp(numericPropertiesHeight, graphicSymbol.Height);
+                symbolPosition.labelSymbolType.Text = "Symbol: " + graphicSymbol.Name;
+                SetNumericClamp(symbolPosition.numericPropertiesX, graphicSymbol.Left);
+                SetNumericClamp(symbolPosition.numericPropertiesY, graphicSymbol.Top);
+                SetNumericClamp(symbolPosition.numericPropertiesWidth, graphicSymbol.Width);
+                SetNumericClamp(symbolPosition.numericPropertiesHeight, graphicSymbol.Height);
                 ColorTools.SetButtonColors(buttonPropertiesColorLine, graphicSymbol.LineColor, "X");
                 ColorTools.SetButtonColors(buttonPropertiesColorFill, graphicSymbol.FillColor, "X");
                 //buttonPropertiesColorLine.BackColor = graphicSymbol.LineColor;
@@ -795,8 +841,8 @@ public partial class ScreenshotEditor : Form
                     EnablePanel(panelPropertiesText, panelLeft, ref lastPanelBottom);
                     EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
 
-                    numericPropertiesWidth.Enabled = false;
-                    numericPropertiesHeight.Enabled = false;
+                    symbolPosition.numericPropertiesWidth.Enabled = false;
+                    symbolPosition.numericPropertiesHeight.Enabled = false;
                     numericPropertiesLineWeight.Enabled = false;
 
                     textBoxSymbolText.Text = gsText.Text;
@@ -830,11 +876,15 @@ public partial class ScreenshotEditor : Form
                     EnablePanel(panelPropertiesFill, panelLeft, ref lastPanelBottom);
                     EnablePanel(panelPropertiesLine, panelLeft, ref lastPanelBottom);
                     EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
-                    numericPropertiesHeight.Enabled = false;
+                    EnablePanel(symbolNumbered, panelLeft, ref lastPanelBottom);
+                    symbolPosition.numericPropertiesHeight.Enabled = false;
                     if (gsNumbered.ListViewItem != null)
                     {
-                        gsNumbered.ListViewItem.Text = "Number: " + gsNumbered.Number;
+                        gsNumbered.ListViewItem.Text = "Number: " + gsNumbered.Text; // Number;
                     }
+                    symbolNumbered.checkBoxAuto.Checked = gsNumbered.AutoNumber;
+                    symbolNumbered.NumberText.Enabled = !gsNumbered.AutoNumber;
+                    symbolNumbered.NumberText.Text = gsNumbered.Text;
                 }
                 else if (graphicSymbol is GsImage gsI)
                 {
@@ -952,11 +1002,11 @@ public partial class ScreenshotEditor : Form
 
     public void ClearPropertyPanelValues()
     {
-        labelSymbolType.Text = "Symbol: ";
-        numericPropertiesX.Value = 0;
-        numericPropertiesY.Value = 0;
-        numericPropertiesWidth.Value = 1;
-        numericPropertiesHeight.Value = 1;
+        symbolPosition.labelSymbolType.Text = "Symbol: ";
+        symbolPosition.numericPropertiesX.Value = 0;
+        symbolPosition.numericPropertiesY.Value = 0;
+        symbolPosition.numericPropertiesWidth.Value = 1;
+        symbolPosition.numericPropertiesHeight.Value = 1;
         ColorTools.SetButtonColors(buttonPropertiesColorLine, Color.Gray, "X");
         ColorTools.SetButtonColors(buttonPropertiesColorFill, Color.Gray, "X");
         //buttonPropertiesColorLine.BackColor = Color.Gray;
@@ -968,28 +1018,47 @@ public partial class ScreenshotEditor : Form
         buttonDeleteSymbol.Tag = null;
     }
 
-    private void Numeric_ValueChanged(object sender, EventArgs e)
+    private void NumericMarkerChanged(object? sender, EventArgs e)
+    {
+        if (listViewSymbols.SelectedItems.Count > 0)
+        {
+            ListViewItem item = listViewSymbols.SelectedItems[0];
+            if (item.Tag is GsNumbered gsNumbered)
+            {
+                gsNumbered.AutoNumber = symbolNumbered.checkBoxAuto.Checked;
+                symbolNumbered.NumberText.Enabled = !gsNumbered.AutoNumber;
+                if (!gsNumbered.AutoNumber)
+                {
+                    gsNumbered.Text = symbolNumbered.NumberText.Text;
+                    Debug.WriteLine("gsNumbered: " + gsNumbered.Text);
+                }
+            }
+            editorCanvas.UpdateOverlay();
+        }
+    }
+
+    private void Numeric_ValueChanged(object? sender, EventArgs e)
     {
         if (listViewSymbols.SelectedItems.Count > 0)
         {
             ListViewItem item = listViewSymbols.SelectedItems[0];
             if (item.Tag is not GraphicSymbol gs) return;
 
-            if (sender == numericPropertiesX)
+            if (sender == symbolPosition.numericPropertiesX)
             {
-                gs.Left = (int)numericPropertiesX.Value;
+                gs.Left = (int)symbolPosition.numericPropertiesX.Value;
             }
-            if (sender == numericPropertiesY)
+            if (sender == symbolPosition.numericPropertiesY)
             {
-                gs.Top = (int)numericPropertiesY.Value;
+                gs.Top = (int)symbolPosition.numericPropertiesY.Value;
             }
-            if (sender == numericPropertiesWidth)
+            if (sender == symbolPosition.numericPropertiesWidth)
             {
-                gs.Width = (int)numericPropertiesWidth.Value;
+                gs.Width = (int)symbolPosition.numericPropertiesWidth.Value;
             }
-            if (sender == numericPropertiesHeight)
+            if (sender == symbolPosition.numericPropertiesHeight)
             {
-                gs.Height = (int)numericPropertiesHeight.Value;
+                gs.Height = (int)symbolPosition.numericPropertiesHeight.Value;
             }
             if (sender == numericPropertiesLineWeight)
             {

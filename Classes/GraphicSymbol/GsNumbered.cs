@@ -5,7 +5,9 @@ namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
 public class GsNumbered : GraphicSymbol
 {
-    public int Number = 0;
+    public bool AutoNumber = true;
+    //public int Number = 0;
+    public string Text = "";
     private readonly FontFamily fontFamily = FontFamily.GenericSansSerif;
     private float fontEmSize = 12f;
     private readonly FontStyle fontStyle = FontStyle.Bold;
@@ -38,7 +40,7 @@ public class GsNumbered : GraphicSymbol
         font = CreateFont();
         circleBrush.Color = FillColor;
         fontBrush.Color = LineColor;
-        string text = Number.ToString();
+        string text = Text; //Number.ToString();
         graphic.FillEllipse(circleBrush, new Rectangle(Left, Top, Diameter, Diameter));
         SizeF sizeInPixels = graphic.MeasureString(text, font);
         int WidthToSpare = Diameter - (int)sizeInPixels.Width;

@@ -308,8 +308,12 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
             }
             if (symbol is GsNumbered gsNumbered)
             {
-                gsNumbered.Number = NumberedSymbolCounter;
-                NumberedSymbolCounter++;
+                if (gsNumbered.AutoNumber)
+                {
+                    //gsNumbered.Number = NumberedSymbolCounter;
+                    gsNumbered.Text = NumberedSymbolCounter.ToString();
+                    NumberedSymbolCounter++;
+                }
             }
             symbol.ContainerBounds = new Rectangle(0, 0, SourceImage.Width, SourceImage.Height); // used by Border symbol
             symbol.DrawSymbol(graphic);
@@ -318,7 +322,8 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         {
             if (temporarySymbol is GsNumbered gsNumbered)
             {
-                gsNumbered.Number = NumberedSymbolCounter;
+                //gsNumbered.Number = NumberedSymbolCounter;
+                gsNumbered.Text = NumberedSymbolCounter.ToString();
             }
             if (temporarySymbol is GsDynamicImage gsDynamicImage)
             {

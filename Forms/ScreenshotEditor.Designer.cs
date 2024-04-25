@@ -69,16 +69,6 @@
             listViewSymbols = new ListView();
             columnHeaderType = new ColumnHeader();
             columnHeaderColor = new ColumnHeader();
-            panelPropertiesPosition = new Panel();
-            numericPropertiesHeight = new NumericUpDown();
-            numericPropertiesY = new NumericUpDown();
-            numericPropertiesWidth = new NumericUpDown();
-            numericPropertiesX = new NumericUpDown();
-            label5 = new Label();
-            label4 = new Label();
-            label3 = new Label();
-            label2 = new Label();
-            labelSymbolType = new Label();
             buttonPropertiesColorLine = new Button();
             label6 = new Label();
             textBoxSymbolText = new TextBox();
@@ -112,7 +102,7 @@
             panel3 = new Panel();
             label19 = new Label();
             checkBoxNewShadow = new CheckBox();
-            panel2 = new Panel();
+            PropertiesPanel = new Panel();
             panelPropertiesImage = new Panel();
             buttonResetImageSize = new Button();
             labelRotation = new Label();
@@ -142,11 +132,6 @@
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
             panelImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxOverlay).BeginInit();
-            panelPropertiesPosition.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesHeight).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesY).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesWidth).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesX).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesLineWeight).BeginInit();
             panelPropertiesFill.SuspendLayout();
             panelPropertiesText.SuspendLayout();
@@ -154,7 +139,7 @@
             panelPropertiesHighlight.SuspendLayout();
             panel1.SuspendLayout();
             panel3.SuspendLayout();
-            panel2.SuspendLayout();
+            PropertiesPanel.SuspendLayout();
             panelPropertiesImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesRotation).BeginInit();
             panelPropertiesPolygon.SuspendLayout();
@@ -585,122 +570,6 @@
             // 
             columnHeaderColor.Text = "Color";
             // 
-            // panelPropertiesPosition
-            // 
-            panelPropertiesPosition.BorderStyle = BorderStyle.FixedSingle;
-            panelPropertiesPosition.Controls.Add(numericPropertiesHeight);
-            panelPropertiesPosition.Controls.Add(numericPropertiesY);
-            panelPropertiesPosition.Controls.Add(numericPropertiesWidth);
-            panelPropertiesPosition.Controls.Add(numericPropertiesX);
-            panelPropertiesPosition.Controls.Add(label5);
-            panelPropertiesPosition.Controls.Add(label4);
-            panelPropertiesPosition.Controls.Add(label3);
-            panelPropertiesPosition.Controls.Add(label2);
-            panelPropertiesPosition.Controls.Add(labelSymbolType);
-            panelPropertiesPosition.Location = new Point(3, 91);
-            panelPropertiesPosition.Name = "panelPropertiesPosition";
-            panelPropertiesPosition.Size = new Size(170, 80);
-            panelPropertiesPosition.TabIndex = 100;
-            // 
-            // numericPropertiesHeight
-            // 
-            numericPropertiesHeight.Location = new Point(110, 53);
-            numericPropertiesHeight.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
-            numericPropertiesHeight.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            numericPropertiesHeight.Name = "numericPropertiesHeight";
-            numericPropertiesHeight.Size = new Size(55, 23);
-            numericPropertiesHeight.TabIndex = 34;
-            numericPropertiesHeight.Tag = "Height";
-            toolTip1.SetToolTip(numericPropertiesHeight, "Height");
-            numericPropertiesHeight.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            numericPropertiesHeight.ValueChanged += Numeric_ValueChanged;
-            numericPropertiesHeight.KeyPress += NumericPropertiesHeight_KeyPress;
-            // 
-            // numericPropertiesY
-            // 
-            numericPropertiesY.Location = new Point(110, 24);
-            numericPropertiesY.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
-            numericPropertiesY.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
-            numericPropertiesY.Name = "numericPropertiesY";
-            numericPropertiesY.Size = new Size(55, 23);
-            numericPropertiesY.TabIndex = 32;
-            numericPropertiesY.Tag = "Y";
-            toolTip1.SetToolTip(numericPropertiesY, "Y position (upper left)");
-            numericPropertiesY.ValueChanged += Numeric_ValueChanged;
-            numericPropertiesY.KeyPress += NumericPropertiesY_KeyPress;
-            // 
-            // numericPropertiesWidth
-            // 
-            numericPropertiesWidth.Location = new Point(21, 53);
-            numericPropertiesWidth.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
-            numericPropertiesWidth.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            numericPropertiesWidth.Name = "numericPropertiesWidth";
-            numericPropertiesWidth.Size = new Size(55, 23);
-            numericPropertiesWidth.TabIndex = 33;
-            numericPropertiesWidth.Tag = "Width";
-            toolTip1.SetToolTip(numericPropertiesWidth, "Width");
-            numericPropertiesWidth.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            numericPropertiesWidth.ValueChanged += Numeric_ValueChanged;
-            numericPropertiesWidth.KeyPress += NumericPropertiesWidth_KeyPress;
-            // 
-            // numericPropertiesX
-            // 
-            numericPropertiesX.Location = new Point(21, 24);
-            numericPropertiesX.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
-            numericPropertiesX.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
-            numericPropertiesX.Name = "numericPropertiesX";
-            numericPropertiesX.Size = new Size(55, 23);
-            numericPropertiesX.TabIndex = 31;
-            numericPropertiesX.Tag = "X";
-            toolTip1.SetToolTip(numericPropertiesX, "X position (upper left)");
-            numericPropertiesX.ValueChanged += Numeric_ValueChanged;
-            numericPropertiesX.KeyPress += NumericPropertiesX_KeyPress;
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new Point(82, 55);
-            label5.Name = "label5";
-            label5.Size = new Size(16, 15);
-            label5.TabIndex = 5;
-            label5.Text = "H";
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(3, 55);
-            label4.Name = "label4";
-            label4.Size = new Size(18, 15);
-            label4.TabIndex = 4;
-            label4.Text = "W";
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(82, 26);
-            label3.Name = "label3";
-            label3.Size = new Size(14, 15);
-            label3.TabIndex = 3;
-            label3.Text = "Y";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(3, 26);
-            label2.Name = "label2";
-            label2.Size = new Size(14, 15);
-            label2.TabIndex = 2;
-            label2.Text = "X";
-            // 
-            // labelSymbolType
-            // 
-            labelSymbolType.AutoSize = true;
-            labelSymbolType.Location = new Point(3, 4);
-            labelSymbolType.Name = "labelSymbolType";
-            labelSymbolType.Size = new Size(53, 15);
-            labelSymbolType.TabIndex = 1;
-            labelSymbolType.Text = "Symbol: ";
-            // 
             // buttonPropertiesColorLine
             // 
             buttonPropertiesColorLine.BackColor = Color.FromArgb(0, 192, 0);
@@ -1003,7 +872,7 @@
             panel1.Controls.Add(splitter2);
             panel1.Controls.Add(splitter1);
             panel1.Controls.Add(panel3);
-            panel1.Controls.Add(panel2);
+            panel1.Controls.Add(PropertiesPanel);
             panel1.Controls.Add(panelButtons);
             panel1.Controls.Add(panelImage);
             panel1.Dock = DockStyle.Fill;
@@ -1068,26 +937,25 @@
             toolTip1.SetToolTip(checkBoxNewShadow, "Enable shadows for the next created symbol");
             checkBoxNewShadow.UseVisualStyleBackColor = true;
             // 
-            // panel2
+            // PropertiesPanel
             // 
-            panel2.AutoScroll = true;
-            panel2.Controls.Add(listViewSymbols);
-            panel2.Controls.Add(panelPropertiesImage);
-            panel2.Controls.Add(panelPropertiesPosition);
-            panel2.Controls.Add(panelPropertiesFill);
-            panel2.Controls.Add(panelPropertiesPolygon);
-            panel2.Controls.Add(panelPropertiesLine);
-            panel2.Controls.Add(panelPropertiesText);
-            panel2.Controls.Add(panelPropertiesDelete);
-            panel2.Controls.Add(panelPropertiesShadow);
-            panel2.Controls.Add(panelPropertiesHighlight);
-            panel2.Controls.Add(panelPropertiesCrop);
-            panel2.Controls.Add(panelPropertiesBlur);
-            panel2.Dock = DockStyle.Right;
-            panel2.Location = new Point(799, 0);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(193, 786);
-            panel2.TabIndex = 38;
+            PropertiesPanel.AutoScroll = true;
+            PropertiesPanel.Controls.Add(listViewSymbols);
+            PropertiesPanel.Controls.Add(panelPropertiesImage);
+            PropertiesPanel.Controls.Add(panelPropertiesFill);
+            PropertiesPanel.Controls.Add(panelPropertiesPolygon);
+            PropertiesPanel.Controls.Add(panelPropertiesLine);
+            PropertiesPanel.Controls.Add(panelPropertiesText);
+            PropertiesPanel.Controls.Add(panelPropertiesDelete);
+            PropertiesPanel.Controls.Add(panelPropertiesShadow);
+            PropertiesPanel.Controls.Add(panelPropertiesHighlight);
+            PropertiesPanel.Controls.Add(panelPropertiesCrop);
+            PropertiesPanel.Controls.Add(panelPropertiesBlur);
+            PropertiesPanel.Dock = DockStyle.Right;
+            PropertiesPanel.Location = new Point(799, 0);
+            PropertiesPanel.Name = "PropertiesPanel";
+            PropertiesPanel.Size = new Size(193, 786);
+            PropertiesPanel.TabIndex = 38;
             // 
             // panelPropertiesImage
             // 
@@ -1353,12 +1221,6 @@
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).EndInit();
             panelImage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBoxOverlay).EndInit();
-            panelPropertiesPosition.ResumeLayout(false);
-            panelPropertiesPosition.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesHeight).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesY).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesWidth).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesX).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesLineWeight).EndInit();
             panelPropertiesFill.ResumeLayout(false);
             panelPropertiesFill.PerformLayout();
@@ -1370,7 +1232,7 @@
             panel1.ResumeLayout(false);
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
-            panel2.ResumeLayout(false);
+            PropertiesPanel.ResumeLayout(false);
             panelPropertiesImage.ResumeLayout(false);
             panelPropertiesImage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesRotation).EndInit();
@@ -1413,20 +1275,10 @@
         private ListView listViewSymbols;
         private ColumnHeader columnHeaderType;
         private ColumnHeader columnHeaderColor;
-        private Panel panelPropertiesPosition;
-        private Label labelSymbolType;
         private Button buttonDeleteSymbol;
         private Label label8;
         private Label label7;
         private Label label6;
-        private Label label5;
-        private Label label4;
-        private Label label3;
-        private Label label2;
-        private NumericUpDown numericPropertiesX;
-        private NumericUpDown numericPropertiesHeight;
-        private NumericUpDown numericPropertiesY;
-        private NumericUpDown numericPropertiesWidth;
         private NumericUpDown numericPropertiesLineWeight;
         private Button buttonPropertiesColorFill;
         private Button buttonPropertiesColorLine;
@@ -1488,7 +1340,7 @@
         private Label labelRotation;
         private NumericUpDown numericPropertiesRotation;
         private Button buttonResetImageSize;
-        private Panel panel2;
+        private Panel PropertiesPanel;
         private Panel panel3;
         private Splitter splitter1;
         private Splitter splitter2;
