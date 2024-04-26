@@ -69,7 +69,7 @@ public partial class ScreenshotEditor : Form
         numericPropertiesFontSize.Value = startingFontSize;
 
         listViewSymbols.Height = 200;
-        CreatePropertyPanels();
+        CreatePropertyPanels(SymbolPropertiesPanel);
         DisableAllPanels();
         numericBlurMosaicSize.Value = Settings.Default.BlurMosaicSize;
         timerAfterLoad.Start(); // turns off TopMost shortly after Load. Without TopMost the Window opens behind other forms (why? who can say)
@@ -649,35 +649,43 @@ public partial class ScreenshotEditor : Form
     #endregion
 
     #region Symbol Properties panel ---------------------------------------------------------------------
-
-    List<Control> SymbolControls = [];
+    PropertyPanels propertyPanels = new();
 
     Controls.SymbolPosition symbolPosition = new Controls.SymbolPosition();
     Controls.SymbolNumbered symbolNumbered = new Controls.SymbolNumbered();
+    Controls.SymbolOrganize symbolOrganize = new Controls.SymbolOrganize();
+    Controls.SymbolFillColor symbolFillColor = new Controls.SymbolFillColor();
+    Controls.SymbolLineColor symbolLineColor = new Controls.SymbolLineColor();
 
-    private void CreatePropertyPanels()
+    private void CreatePropertyPanels(Control parentPanel)
     {
-
-        AddPropertiesPanel(symbolPosition);
+        Point location = new Point(3, listViewSymbols.Bottom);
+        propertyPanels.Add(symbolPosition, parentPanel);//, location);
         symbolPosition.numericPropertiesX.ValueChanged += Numeric_ValueChanged;
         symbolPosition.numericPropertiesY.ValueChanged += Numeric_ValueChanged;
         symbolPosition.numericPropertiesWidth.ValueChanged += Numeric_ValueChanged;
         symbolPosition.numericPropertiesHeight.ValueChanged += Numeric_ValueChanged;
 
-        AddPropertiesPanel(symbolNumbered);
+        propertyPanels.Add(symbolNumbered, parentPanel);//, location);
         symbolNumbered.NumberText.TextChanged += NumericMarkerChanged;
         symbolNumbered.checkBoxAuto.CheckedChanged += NumericMarkerChanged;
+
+        propertyPanels.Add(symbolOrganize, parentPanel);//, location);
+        symbolOrganize.buttonToFront.Click += ButtonToFront_Click;
+        symbolOrganize.buttonToBack.Click += ButtonToBack_Click;
+        symbolOrganize.buttonDeleteSymbol.Click += ButtonDeleteSymbol_Click;
+
+        propertyPanels.Add(symbolFillColor, parentPanel);
+        symbolFillColor.buttonFillColor.Click += ColorChangeClick;
+
+        propertyPanels.Add(symbolLineColor, parentPanel);
+        symbolLineColor.buttonLineColor.Click += ColorChangeClick;
+        symbolLineColor.numericLineWeight.ValueChanged += Numeric_ValueChanged;
     }
 
-    private void AddPropertiesPanel(Control control)
+    private void ButtonPropertiesColorLine_Click(object? sender, EventArgs e)
     {
-        PropertiesPanel.Controls.Add(control);
-        SymbolControls.Add(control);
-        control.Left = 3;
-        if (SymbolControls.Last() != null)
-        {
-            control.Top = SymbolControls.Last().Bottom + 5 + (listViewSymbols.Bottom);
-        }
+        throw new NotImplementedException();
     }
 
     public void AddNewSymbolToList(GraphicSymbol symbol, int index = -1, string name = "")
@@ -784,17 +792,28 @@ public partial class ScreenshotEditor : Form
         symbolPosition.Location = new Point(listViewSymbols.Left, listViewSymbols.Bottom + 5);
         symbolPosition.Visible = true;
         symbolPosition.Enabled = false;
-        DisablePanel(panelPropertiesFill);
-        DisablePanel(panelPropertiesLine);
+        //DisablePanel(panelPropertiesFill);
+        //DisablePanel(panelPropertiesLine);
         DisablePanel(panelPropertiesText);
         DisablePanel(panelPropertiesHighlight);
         DisablePanel(panelPropertiesShadow);
-        DisablePanel(panelPropertiesDelete);
+        //DisablePanel(panelPropertiesDelete);
         DisablePanel(panelPropertiesCrop);
         DisablePanel(panelPropertiesBlur);
         DisablePanel(panelPropertiesPolygon);
         DisablePanel(panelPropertiesImage);
-        DisablePanel(symbolNumbered);
+        //DisablePanel(symbolNumbered);
+        foreach (Control c in propertyPanels.SymbolControls)
+        {
+            if (c is not Controls.SymbolPosition sp)
+            {
+                DisablePanel(c);
+            }
+            else
+            {
+                Debug.WriteLine("skipping position panel");
+            }
+        }
     }
 
     private static void SetNumericClamp(NumericUpDown numericUpDown, decimal value)
@@ -816,10 +835,10 @@ public partial class ScreenshotEditor : Form
                 DisableAllPanels();
                 EnablePanel(symbolPosition, panelLeft, ref lastPanelBottom);
 
-                numericPropertiesLineWeight.Enabled = true;
+                symbolLineColor.numericLineWeight.Enabled = true;
                 symbolPosition.numericPropertiesWidth.Enabled = true;
                 symbolPosition.numericPropertiesHeight.Enabled = true;
-                buttonPropertiesColorLine.Enabled = true;
+                symbolLineColor.buttonLineColor.Enabled = true;
                 //numericPropertiesLineAlpha.Enabled = true;
 
                 symbolPosition.labelSymbolType.Text = "Symbol: " + graphicSymbol.Name;
@@ -827,23 +846,23 @@ public partial class ScreenshotEditor : Form
                 SetNumericClamp(symbolPosition.numericPropertiesY, graphicSymbol.Top);
                 SetNumericClamp(symbolPosition.numericPropertiesWidth, graphicSymbol.Width);
                 SetNumericClamp(symbolPosition.numericPropertiesHeight, graphicSymbol.Height);
-                ColorTools.SetButtonColors(buttonPropertiesColorLine, graphicSymbol.LineColor, "X");
-                ColorTools.SetButtonColors(buttonPropertiesColorFill, graphicSymbol.FillColor, "X");
+                ColorTools.SetButtonColors(symbolLineColor.buttonLineColor, graphicSymbol.LineColor, "X");
+                ColorTools.SetButtonColors(symbolFillColor.buttonFillColor, graphicSymbol.FillColor, "X");
                 //buttonPropertiesColorLine.BackColor = graphicSymbol.LineColor;
                 //buttonPropertiesColorFill.BackColor = graphicSymbol.FillColor;
-                numericPropertiesLineWeight.Value = graphicSymbol.LineWeight;
+                symbolLineColor.numericLineWeight.Value = graphicSymbol.LineWeight;
                 checkBoxPropertiesShadow.Checked = graphicSymbol.ShadowEnabled;
-                buttonDeleteSymbol.Tag = graphicSymbol;
+                symbolOrganize.buttonDeleteSymbol.Tag = graphicSymbol;
 
                 if (graphicSymbol is GsText gsText)
                 {
-                    EnablePanel(panelPropertiesLine, panelLeft, ref lastPanelBottom);
+                    EnablePanel(symbolLineColor, panelLeft, ref lastPanelBottom);
                     EnablePanel(panelPropertiesText, panelLeft, ref lastPanelBottom);
                     EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
 
                     symbolPosition.numericPropertiesWidth.Enabled = false;
                     symbolPosition.numericPropertiesHeight.Enabled = false;
-                    numericPropertiesLineWeight.Enabled = false;
+                    symbolLineColor.numericLineWeight.Enabled = false;
 
                     textBoxSymbolText.Text = gsText.Text;
                     if (gsText.ListViewItem != null)
@@ -859,7 +878,7 @@ public partial class ScreenshotEditor : Form
                 }
                 else if (graphicSymbol is GsHighlight gsHL)
                 {
-                    EnablePanel(panelPropertiesFill, panelLeft, ref lastPanelBottom);
+                    EnablePanel(symbolFillColor, panelLeft, ref lastPanelBottom);
                     EnablePanel(panelPropertiesHighlight, panelLeft, ref lastPanelBottom);
                     comboBoxBlendMode.Text = gsHL.blendMode.ToString();
                 }
@@ -873,8 +892,8 @@ public partial class ScreenshotEditor : Form
                 }
                 else if (graphicSymbol is GsNumbered gsNumbered)
                 {
-                    EnablePanel(panelPropertiesFill, panelLeft, ref lastPanelBottom);
-                    EnablePanel(panelPropertiesLine, panelLeft, ref lastPanelBottom);
+                    EnablePanel(symbolFillColor, panelLeft, ref lastPanelBottom);
+                    EnablePanel(symbolLineColor, panelLeft, ref lastPanelBottom);
                     EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
                     EnablePanel(symbolNumbered, panelLeft, ref lastPanelBottom);
                     symbolPosition.numericPropertiesHeight.Enabled = false;
@@ -894,8 +913,8 @@ public partial class ScreenshotEditor : Form
                 }
                 else if (graphicSymbol is GsPolygon gsP)
                 {
-                    EnablePanel(panelPropertiesFill, panelLeft, ref lastPanelBottom);
-                    EnablePanel(panelPropertiesLine, panelLeft, ref lastPanelBottom);
+                    EnablePanel(symbolFillColor, panelLeft, ref lastPanelBottom);
+                    EnablePanel(symbolLineColor, panelLeft, ref lastPanelBottom);
                     EnablePanel(panelPropertiesPolygon, panelLeft, ref lastPanelBottom);
                     EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
                     checkBoxPropertiesCloseCurve.Checked = gsP.closedCurve;
@@ -903,18 +922,18 @@ public partial class ScreenshotEditor : Form
                 }
                 else if (graphicSymbol is GsBoundingBox) // must be after all other symbols that inherit from GsBoundingBox
                 {
-                    EnablePanel(panelPropertiesFill, panelLeft, ref lastPanelBottom);
-                    EnablePanel(panelPropertiesLine, panelLeft, ref lastPanelBottom);
+                    EnablePanel(symbolFillColor, panelLeft, ref lastPanelBottom);
+                    EnablePanel(symbolLineColor, panelLeft, ref lastPanelBottom);
                     EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
                 }
                 else if (graphicSymbol is GsLine)
                 {
-                    EnablePanel(panelPropertiesLine, panelLeft, ref lastPanelBottom);
+                    EnablePanel(symbolLineColor, panelLeft, ref lastPanelBottom);
                     EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
                 }
 
 
-                EnablePanel(panelPropertiesDelete, panelLeft, ref lastPanelBottom);
+                EnablePanel(symbolOrganize, panelLeft, ref lastPanelBottom);
 
                 if (graphicSymbol is GsText == false)
                 {
@@ -932,7 +951,7 @@ public partial class ScreenshotEditor : Form
         }
     }
 
-    private void ButtonDeleteSymbol_Click(object sender, EventArgs e)
+    private void ButtonDeleteSymbol_Click(object? sender, EventArgs e)
     {
         DeleteSelectedSymbols();
     }
@@ -991,14 +1010,14 @@ public partial class ScreenshotEditor : Form
         editorCanvas.UpdateOverlay();
     }
 
-    private ListViewItem? GetSelecteListItem()
-    {
-        if (listViewSymbols.SelectedItems.Count > 0)
-        {
-            return listViewSymbols.SelectedItems[0];
-        }
-        else return null;
-    }
+    //private ListViewItem? GetSelecteListItem()
+    //{
+    //    if (listViewSymbols.SelectedItems.Count > 0)
+    //    {
+    //        return listViewSymbols.SelectedItems[0];
+    //    }
+    //    else return null;
+    //}
 
     public void ClearPropertyPanelValues()
     {
@@ -1007,15 +1026,15 @@ public partial class ScreenshotEditor : Form
         symbolPosition.numericPropertiesY.Value = 0;
         symbolPosition.numericPropertiesWidth.Value = 1;
         symbolPosition.numericPropertiesHeight.Value = 1;
-        ColorTools.SetButtonColors(buttonPropertiesColorLine, Color.Gray, "X");
-        ColorTools.SetButtonColors(buttonPropertiesColorFill, Color.Gray, "X");
+        ColorTools.SetButtonColors(symbolLineColor.buttonLineColor, Color.Gray, "X");
+        ColorTools.SetButtonColors(symbolFillColor.buttonFillColor, Color.Gray, "X");
         //buttonPropertiesColorLine.BackColor = Color.Gray;
         //buttonPropertiesColorFill.BackColor = Color.Gray;
         //numericPropertiesLineAlpha.Value = 255;
         //numericPropertiesFillAlpha.Value = 255;
-        numericPropertiesLineWeight.Value = 1;
+        symbolLineColor.numericLineWeight.Value = 1;
         numericPropertiesFontSize.Value = 10;
-        buttonDeleteSymbol.Tag = null;
+        symbolOrganize.buttonDeleteSymbol.Tag = null;
     }
 
     private void NumericMarkerChanged(object? sender, EventArgs e)
@@ -1060,9 +1079,9 @@ public partial class ScreenshotEditor : Form
             {
                 gs.Height = (int)symbolPosition.numericPropertiesHeight.Value;
             }
-            if (sender == numericPropertiesLineWeight)
+            if (sender == symbolLineColor.numericLineWeight)
             {
-                gs.LineWeight = (int)numericPropertiesLineWeight.Value;
+                gs.LineWeight = (int)symbolLineColor.numericLineWeight.Value;
             }
             //if (sender == numericPropertiesLineAlpha)
             //{
@@ -1080,7 +1099,7 @@ public partial class ScreenshotEditor : Form
         editorCanvas.UpdateOverlay();
     }
 
-    private void ColorChangeClick(object sender, EventArgs e)
+    private void ColorChangeClick(object? sender, EventArgs e)
     {
         if (sender is Button button)
         {
@@ -1097,11 +1116,11 @@ public partial class ScreenshotEditor : Form
                 if (result == DialogResult.OK)
                 {
                     ColorTools.SetButtonColors(button, colorDialogAlpha.Color, "X");
-                    if (sender == buttonPropertiesColorLine)
+                    if (sender == symbolLineColor.buttonLineColor)
                     {
                         gs.LineColor = colorDialogAlpha.Color;
                     }
-                    if (sender == buttonPropertiesColorFill)
+                    if (sender == symbolFillColor.buttonFillColor)
                     {
                         gs.FillColor = colorDialogAlpha.Color;
                     }
@@ -1354,14 +1373,14 @@ public partial class ScreenshotEditor : Form
         }
     }
 
-    private void ButtonToFront_Click(object sender, EventArgs e)
+    private void ButtonToFront_Click(object? sender, EventArgs e)
     {
         if (listViewSymbols.SelectedItems.Count > 0)
         {
             MoveSymbolToFront(listViewSymbols.SelectedItems[0]);
         }
     }
-    private void ButtonToBack_Click(object sender, EventArgs e)
+    private void ButtonToBack_Click(object? sender, EventArgs e)
     {
         if (listViewSymbols.SelectedItems.Count > 0)
         {
@@ -1558,7 +1577,7 @@ public partial class ScreenshotEditor : Form
 
     #region NumericUpDowns Supress ding
 
-    private static void SupressEnterDing(KeyPressEventArgs e)
+    private static void SupressEnterDing(object? sender, KeyPressEventArgs e)
     {
         if (e.KeyChar == (char)Keys.Enter)
         {
@@ -1568,35 +1587,35 @@ public partial class ScreenshotEditor : Form
         }
     }
 
-    private void NumericPropertiesRotation_KeyPress(object sender, KeyPressEventArgs e)
-    {
-        SupressEnterDing(e);
-    }
+    //private void NumericPropertiesRotation_KeyPress(object sender, KeyPressEventArgs e)
+    //{
+    //    SupressEnterDing(e);
+    //}
 
-    private void NumericNewLineWeight_KeyPress(object sender, KeyPressEventArgs e)
-    {
-        SupressEnterDing(e);
-    }
+    //private void NumericNewLineWeight_KeyPress(object sender, KeyPressEventArgs e)
+    //{
+    //    SupressEnterDing(e);
+    //}
 
-    private void NumericPropertiesX_KeyPress(object sender, KeyPressEventArgs e)
-    {
-        SupressEnterDing(e);
-    }
+    //private void NumericPropertiesX_KeyPress(object sender, KeyPressEventArgs e)
+    //{
+    //    SupressEnterDing(e);
+    //}
 
-    private void NumericPropertiesY_KeyPress(object sender, KeyPressEventArgs e)
-    {
-        SupressEnterDing(e);
-    }
+    //private void NumericPropertiesY_KeyPress(object sender, KeyPressEventArgs e)
+    //{
+    //    SupressEnterDing(e);
+    //}
 
-    private void NumericPropertiesWidth_KeyPress(object sender, KeyPressEventArgs e)
-    {
-        SupressEnterDing(e);
-    }
+    //private void NumericPropertiesWidth_KeyPress(object sender, KeyPressEventArgs e)
+    //{
+    //    SupressEnterDing(e);
+    //}
 
-    private void NumericPropertiesHeight_KeyPress(object sender, KeyPressEventArgs e)
-    {
-        SupressEnterDing(e);
-    }
+    //private void NumericPropertiesHeight_KeyPress(object sender, KeyPressEventArgs e)
+    //{
+    //    SupressEnterDing(e);
+    //}
     #endregion
 
     #region Drag and Drop -------------------------------------------------------------------------------

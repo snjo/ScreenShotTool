@@ -60,7 +60,7 @@ public class SettingsRegistry
 
                     if (value.ToString() == "True" || value.ToString() == "False")
                     {
-                        value = bool.Parse(value.ToString());
+                        value = bool.Parse(value.ToString()+"");
                     }
                     Settings.Default[name] = value;
                 }
