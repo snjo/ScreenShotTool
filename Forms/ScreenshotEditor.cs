@@ -648,7 +648,7 @@ public partial class ScreenshotEditor : Form
 
     #endregion
 
-    #region Symbol Properties panel ---------------------------------------------------------------------
+    #region Create Symbol Properties panels -------------------------------------------------------------
     PropertyPanels propertyPanels = new();
 
     Controls.SymbolPosition symbolPosition = new Controls.SymbolPosition();
@@ -722,11 +722,41 @@ public partial class ScreenshotEditor : Form
         symbolFont.checkBoxUnderline.Click += FontStyle_CheckedChanged;
         symbolFont.checkBoxStrikeout.Click += FontStyle_CheckedChanged;
     }
+    #endregion
 
-    private void ButtonPropertiesColorLine_Click(object? sender, EventArgs e)
+    #region Enable/Disable Properties panels ------------------------------------------------------------
+
+    private static void EnablePanel(Control panel, int left, ref int top)
     {
-        throw new NotImplementedException();
+        panel.Enabled = true;
+        panel.Visible = true;
+        panel.Location = new Point(left, top);
+        top += panel.Height + 3;
     }
+
+    private static void DisablePanel(Control panel)
+    {
+        panel.Enabled = false;
+        panel.Visible = false;
+    }
+
+    private void DisableAllPanels()
+    {
+        symbolPosition.Location = new Point(listViewSymbols.Left, listViewSymbols.Bottom + 5);
+        symbolPosition.Visible = true;
+        symbolPosition.Enabled = false;        
+        foreach (Control c in propertyPanels.SymbolControls)
+        {
+            if (c is not Controls.SymbolPosition sp) // don't disable the position panel, remains on screen
+            {
+                DisablePanel(c);
+            }
+        }
+    }
+
+    #endregion
+
+    #region Symbol Properties functionality -------------------------------------------------------------
 
     public void AddNewSymbolToList(GraphicSymbol symbol, int index = -1, string name = "")
     {
@@ -797,49 +827,6 @@ public partial class ScreenshotEditor : Form
             }
         }
         UpdatePropertiesPanel();
-    }
-
-    //private static void EnablePanel(Panel panel, int left, ref int top)
-    //{
-    //    panel.Enabled = true;
-    //    panel.Visible = true;
-    //    panel.Location = new Point(left, top);
-    //    top += panel.Height + 3;
-    //}
-
-    private static void EnablePanel(Control panel, int left, ref int top)
-    {
-        panel.Enabled = true;
-        panel.Visible = true;
-        panel.Location = new Point(left, top);
-        top += panel.Height + 3;
-        //Debug.WriteLine($"Enable panel {panel.Name} at location {panel.Location} with size {panel.Size}");
-    }
-
-    //private static void DisablePanel(Panel panel)
-    //{
-    //    panel.Enabled = false;
-    //    panel.Visible = false;
-    //}
-
-    private static void DisablePanel(Control panel)
-    {
-        panel.Enabled = false;
-        panel.Visible = false;
-    }
-
-    private void DisableAllPanels()
-    {
-        symbolPosition.Location = new Point(listViewSymbols.Left, listViewSymbols.Bottom + 5);
-        symbolPosition.Visible = true;
-        symbolPosition.Enabled = false;        
-        foreach (Control c in propertyPanels.SymbolControls)
-        {
-            if (c is not Controls.SymbolPosition sp) // don't disable the position panel, remains on screen
-            {
-                DisablePanel(c);
-            }
-        }
     }
 
     private static void SetNumericClamp(NumericUpDown numericUpDown, decimal value)
