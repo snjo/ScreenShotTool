@@ -69,25 +69,11 @@
             listViewSymbols = new ListView();
             columnHeaderType = new ColumnHeader();
             columnHeaderColor = new ColumnHeader();
-            textBoxSymbolText = new TextBox();
             buttonNewColorFill = new Button();
             buttonNewColorLine = new Button();
             label1 = new Label();
             label9 = new Label();
             label10 = new Label();
-            panelPropertiesText = new Panel();
-            buttonPropertiesEditText = new Button();
-            checkBoxUnderline = new CheckBox();
-            checkBoxStrikeout = new CheckBox();
-            checkBoxFontItalic = new CheckBox();
-            checkBoxFontBold = new CheckBox();
-            label16 = new Label();
-            label15 = new Label();
-            numericPropertiesFontSize = new NumericUpDown();
-            comboBoxFontFamily = new ComboBox();
-            panelPropertiesHighlight = new Panel();
-            label18 = new Label();
-            comboBoxBlendMode = new ComboBox();
             panel1 = new Panel();
             splitter2 = new Splitter();
             splitter1 = new Splitter();
@@ -95,22 +81,6 @@
             label19 = new Label();
             checkBoxNewShadow = new CheckBox();
             SymbolPropertiesPanel = new Panel();
-            panelPropertiesImage = new Panel();
-            buttonResetImageSize = new Button();
-            labelRotation = new Label();
-            numericPropertiesRotation = new NumericUpDown();
-            panelPropertiesPolygon = new Panel();
-            labelCurveTension = new Label();
-            numericPropertiesCurveTension = new NumericUpDown();
-            checkBoxPropertiesCloseCurve = new CheckBox();
-            panelPropertiesShadow = new Panel();
-            checkBoxPropertiesShadow = new CheckBox();
-            panelPropertiesCrop = new Panel();
-            buttonPropertyCopyCrop = new Button();
-            buttonPropertyCrop = new Button();
-            panelPropertiesBlur = new Panel();
-            label17 = new Label();
-            numericBlurMosaicSize = new NumericUpDown();
             timerAfterLoad = new System.Windows.Forms.Timer(components);
             TimerUpdateOverlay = new System.Windows.Forms.Timer(components);
             toolTip1 = new ToolTip(components);
@@ -120,20 +90,9 @@
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).BeginInit();
             panelImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxOverlay).BeginInit();
-            panelPropertiesText.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesFontSize).BeginInit();
-            panelPropertiesHighlight.SuspendLayout();
             panel1.SuspendLayout();
             panel3.SuspendLayout();
             SymbolPropertiesPanel.SuspendLayout();
-            panelPropertiesImage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesRotation).BeginInit();
-            panelPropertiesPolygon.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesCurveTension).BeginInit();
-            panelPropertiesShadow.SuspendLayout();
-            panelPropertiesCrop.SuspendLayout();
-            panelPropertiesBlur.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericBlurMosaicSize).BeginInit();
             SuspendLayout();
             // 
             // menuStrip1
@@ -553,15 +512,6 @@
             // 
             columnHeaderColor.Text = "Color";
             // 
-            // textBoxSymbolText
-            // 
-            textBoxSymbolText.Location = new Point(4, 23);
-            textBoxSymbolText.Multiline = true;
-            textBoxSymbolText.Name = "textBoxSymbolText";
-            textBoxSymbolText.Size = new Size(123, 41);
-            textBoxSymbolText.TabIndex = 38;
-            textBoxSymbolText.TextChanged += TextBoxSymbolText_TextChanged;
-            // 
             // buttonNewColorFill
             // 
             buttonNewColorFill.AccessibleName = "New symbol fill color";
@@ -618,148 +568,6 @@
             label10.Size = new Size(64, 15);
             label10.TabIndex = 19;
             label10.Text = "Line Width";
-            // 
-            // panelPropertiesText
-            // 
-            panelPropertiesText.BorderStyle = BorderStyle.FixedSingle;
-            panelPropertiesText.Controls.Add(buttonPropertiesEditText);
-            panelPropertiesText.Controls.Add(checkBoxUnderline);
-            panelPropertiesText.Controls.Add(checkBoxStrikeout);
-            panelPropertiesText.Controls.Add(checkBoxFontItalic);
-            panelPropertiesText.Controls.Add(checkBoxFontBold);
-            panelPropertiesText.Controls.Add(label16);
-            panelPropertiesText.Controls.Add(label15);
-            panelPropertiesText.Controls.Add(numericPropertiesFontSize);
-            panelPropertiesText.Controls.Add(comboBoxFontFamily);
-            panelPropertiesText.Controls.Add(textBoxSymbolText);
-            panelPropertiesText.Location = new Point(3, 124);
-            panelPropertiesText.Name = "panelPropertiesText";
-            panelPropertiesText.Size = new Size(170, 165);
-            panelPropertiesText.TabIndex = 102;
-            // 
-            // buttonPropertiesEditText
-            // 
-            buttonPropertiesEditText.Location = new Point(133, 22);
-            buttonPropertiesEditText.Name = "buttonPropertiesEditText";
-            buttonPropertiesEditText.Size = new Size(32, 23);
-            buttonPropertiesEditText.TabIndex = 39;
-            buttonPropertiesEditText.Text = "...";
-            buttonPropertiesEditText.UseVisualStyleBackColor = true;
-            buttonPropertiesEditText.Click += ButtonPropertiesEditText_Click;
-            // 
-            // checkBoxUnderline
-            // 
-            checkBoxUnderline.AutoSize = true;
-            checkBoxUnderline.Location = new Point(75, 140);
-            checkBoxUnderline.Name = "checkBoxUnderline";
-            checkBoxUnderline.Size = new Size(77, 19);
-            checkBoxUnderline.TabIndex = 45;
-            checkBoxUnderline.Text = "Underline";
-            checkBoxUnderline.UseVisualStyleBackColor = true;
-            checkBoxUnderline.Click += FontStyle_CheckedChanged;
-            // 
-            // checkBoxStrikeout
-            // 
-            checkBoxStrikeout.AutoSize = true;
-            checkBoxStrikeout.Location = new Point(5, 140);
-            checkBoxStrikeout.Name = "checkBoxStrikeout";
-            checkBoxStrikeout.Size = new Size(73, 19);
-            checkBoxStrikeout.TabIndex = 44;
-            checkBoxStrikeout.Text = "Strikeout";
-            checkBoxStrikeout.UseVisualStyleBackColor = true;
-            checkBoxStrikeout.Click += FontStyle_CheckedChanged;
-            // 
-            // checkBoxFontItalic
-            // 
-            checkBoxFontItalic.AutoSize = true;
-            checkBoxFontItalic.Location = new Point(75, 121);
-            checkBoxFontItalic.Name = "checkBoxFontItalic";
-            checkBoxFontItalic.Size = new Size(51, 19);
-            checkBoxFontItalic.TabIndex = 43;
-            checkBoxFontItalic.Text = "Italic";
-            checkBoxFontItalic.UseVisualStyleBackColor = true;
-            checkBoxFontItalic.Click += FontStyle_CheckedChanged;
-            // 
-            // checkBoxFontBold
-            // 
-            checkBoxFontBold.AutoSize = true;
-            checkBoxFontBold.Location = new Point(5, 121);
-            checkBoxFontBold.Name = "checkBoxFontBold";
-            checkBoxFontBold.Size = new Size(50, 19);
-            checkBoxFontBold.TabIndex = 42;
-            checkBoxFontBold.Text = "Bold";
-            checkBoxFontBold.UseVisualStyleBackColor = true;
-            checkBoxFontBold.Click += FontStyle_CheckedChanged;
-            // 
-            // label16
-            // 
-            label16.AutoSize = true;
-            label16.Location = new Point(4, 5);
-            label16.Name = "label16";
-            label16.Size = new Size(77, 15);
-            label16.TabIndex = 30;
-            label16.Text = "Text contents";
-            // 
-            // label15
-            // 
-            label15.AutoSize = true;
-            label15.Location = new Point(3, 72);
-            label15.Name = "label15";
-            label15.Size = new Size(54, 15);
-            label15.TabIndex = 29;
-            label15.Text = "Font Size";
-            // 
-            // numericPropertiesFontSize
-            // 
-            numericPropertiesFontSize.Location = new Point(109, 70);
-            numericPropertiesFontSize.Maximum = new decimal(new int[] { 200, 0, 0, 0 });
-            numericPropertiesFontSize.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
-            numericPropertiesFontSize.Name = "numericPropertiesFontSize";
-            numericPropertiesFontSize.Size = new Size(55, 23);
-            numericPropertiesFontSize.TabIndex = 40;
-            numericPropertiesFontSize.Value = new decimal(new int[] { 10, 0, 0, 0 });
-            numericPropertiesFontSize.ValueChanged += NumericPropertiesFontSize_ValueChanged;
-            // 
-            // comboBoxFontFamily
-            // 
-            comboBoxFontFamily.FormattingEnabled = true;
-            comboBoxFontFamily.Location = new Point(2, 96);
-            comboBoxFontFamily.Name = "comboBoxFontFamily";
-            comboBoxFontFamily.Size = new Size(162, 23);
-            comboBoxFontFamily.TabIndex = 41;
-            comboBoxFontFamily.TextChanged += ComboBoxFontFamily_ValueMemberChanged;
-            // 
-            // panelPropertiesHighlight
-            // 
-            panelPropertiesHighlight.BorderStyle = BorderStyle.FixedSingle;
-            panelPropertiesHighlight.Controls.Add(label18);
-            panelPropertiesHighlight.Controls.Add(comboBoxBlendMode);
-            panelPropertiesHighlight.Location = new Point(3, 325);
-            panelPropertiesHighlight.Name = "panelPropertiesHighlight";
-            panelPropertiesHighlight.Size = new Size(170, 49);
-            panelPropertiesHighlight.TabIndex = 104;
-            panelPropertiesHighlight.Visible = false;
-            // 
-            // label18
-            // 
-            label18.AutoSize = true;
-            label18.Location = new Point(3, 4);
-            label18.Name = "label18";
-            label18.Size = new Size(117, 15);
-            label18.TabIndex = 30;
-            label18.Text = "Higlight blend mode";
-            // 
-            // comboBoxBlendMode
-            // 
-            comboBoxBlendMode.FormattingEnabled = true;
-            comboBoxBlendMode.Items.AddRange(new object[] { "Multiply", "Lighten", "Darken", "Desaturate", "Normal", "Divide", "Invert" });
-            comboBoxBlendMode.Location = new Point(3, 22);
-            comboBoxBlendMode.Name = "comboBoxBlendMode";
-            comboBoxBlendMode.Size = new Size(162, 23);
-            comboBoxBlendMode.TabIndex = 48;
-            comboBoxBlendMode.Text = "Multiply";
-            toolTip1.SetToolTip(comboBoxBlendMode, "Changes how the higlighter color affects the undelying image. Multiply or Darken is usually the best choice");
-            comboBoxBlendMode.SelectedIndexChanged += ComboBoxBlendMode_SelectedIndexChanged;
             // 
             // panel1
             // 
@@ -836,189 +644,11 @@
             // 
             SymbolPropertiesPanel.AutoScroll = true;
             SymbolPropertiesPanel.Controls.Add(listViewSymbols);
-            SymbolPropertiesPanel.Controls.Add(panelPropertiesImage);
-            SymbolPropertiesPanel.Controls.Add(panelPropertiesPolygon);
-            SymbolPropertiesPanel.Controls.Add(panelPropertiesText);
-            SymbolPropertiesPanel.Controls.Add(panelPropertiesShadow);
-            SymbolPropertiesPanel.Controls.Add(panelPropertiesHighlight);
-            SymbolPropertiesPanel.Controls.Add(panelPropertiesCrop);
-            SymbolPropertiesPanel.Controls.Add(panelPropertiesBlur);
             SymbolPropertiesPanel.Dock = DockStyle.Right;
             SymbolPropertiesPanel.Location = new Point(799, 0);
             SymbolPropertiesPanel.Name = "SymbolPropertiesPanel";
             SymbolPropertiesPanel.Size = new Size(193, 786);
             SymbolPropertiesPanel.TabIndex = 38;
-            // 
-            // panelPropertiesImage
-            // 
-            panelPropertiesImage.BorderStyle = BorderStyle.FixedSingle;
-            panelPropertiesImage.Controls.Add(buttonResetImageSize);
-            panelPropertiesImage.Controls.Add(labelRotation);
-            panelPropertiesImage.Controls.Add(numericPropertiesRotation);
-            panelPropertiesImage.Location = new Point(3, 430);
-            panelPropertiesImage.Name = "panelPropertiesImage";
-            panelPropertiesImage.Size = new Size(170, 56);
-            panelPropertiesImage.TabIndex = 106;
-            // 
-            // buttonResetImageSize
-            // 
-            buttonResetImageSize.Location = new Point(4, 3);
-            buttonResetImageSize.Name = "buttonResetImageSize";
-            buttonResetImageSize.Size = new Size(94, 23);
-            buttonResetImageSize.TabIndex = 51;
-            buttonResetImageSize.Text = "Reset size";
-            buttonResetImageSize.UseVisualStyleBackColor = true;
-            buttonResetImageSize.Click += ButtonResetImageSize_Click;
-            // 
-            // labelRotation
-            // 
-            labelRotation.AutoSize = true;
-            labelRotation.Location = new Point(4, 31);
-            labelRotation.Name = "labelRotation";
-            labelRotation.Size = new Size(52, 15);
-            labelRotation.TabIndex = 1;
-            labelRotation.Text = "Rotation";
-            // 
-            // numericPropertiesRotation
-            // 
-            numericPropertiesRotation.DecimalPlaces = 1;
-            numericPropertiesRotation.Location = new Point(110, 28);
-            numericPropertiesRotation.Maximum = new decimal(new int[] { 720, 0, 0, 0 });
-            numericPropertiesRotation.Minimum = new decimal(new int[] { 720, 0, 0, int.MinValue });
-            numericPropertiesRotation.Name = "numericPropertiesRotation";
-            numericPropertiesRotation.Size = new Size(55, 23);
-            numericPropertiesRotation.TabIndex = 52;
-            numericPropertiesRotation.ValueChanged += NumericPropertiesRotation_ValueChanged;
-            // 
-            // panelPropertiesPolygon
-            // 
-            panelPropertiesPolygon.BorderStyle = BorderStyle.FixedSingle;
-            panelPropertiesPolygon.Controls.Add(labelCurveTension);
-            panelPropertiesPolygon.Controls.Add(numericPropertiesCurveTension);
-            panelPropertiesPolygon.Controls.Add(checkBoxPropertiesCloseCurve);
-            panelPropertiesPolygon.Location = new Point(3, 377);
-            panelPropertiesPolygon.Name = "panelPropertiesPolygon";
-            panelPropertiesPolygon.Size = new Size(170, 51);
-            panelPropertiesPolygon.TabIndex = 105;
-            // 
-            // labelCurveTension
-            // 
-            labelCurveTension.AutoSize = true;
-            labelCurveTension.Location = new Point(4, 26);
-            labelCurveTension.Name = "labelCurveTension";
-            labelCurveTension.Size = new Size(80, 15);
-            labelCurveTension.TabIndex = 2;
-            labelCurveTension.Text = "Curve tension";
-            // 
-            // numericPropertiesCurveTension
-            // 
-            numericPropertiesCurveTension.DecimalPlaces = 1;
-            numericPropertiesCurveTension.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numericPropertiesCurveTension.Location = new Point(110, 24);
-            numericPropertiesCurveTension.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
-            numericPropertiesCurveTension.Name = "numericPropertiesCurveTension";
-            numericPropertiesCurveTension.Size = new Size(55, 23);
-            numericPropertiesCurveTension.TabIndex = 50;
-            toolTip1.SetToolTip(numericPropertiesCurveTension, "0-1. Higher values are smoother, but can make bulges when closing curves");
-            numericPropertiesCurveTension.Value = new decimal(new int[] { 5, 0, 0, 65536 });
-            numericPropertiesCurveTension.ValueChanged += NumericPropertiesCurveTension_ValueChanged;
-            // 
-            // checkBoxPropertiesCloseCurve
-            // 
-            checkBoxPropertiesCloseCurve.AutoSize = true;
-            checkBoxPropertiesCloseCurve.Location = new Point(7, 4);
-            checkBoxPropertiesCloseCurve.Name = "checkBoxPropertiesCloseCurve";
-            checkBoxPropertiesCloseCurve.Size = new Size(89, 19);
-            checkBoxPropertiesCloseCurve.TabIndex = 49;
-            checkBoxPropertiesCloseCurve.Text = "Close Curve";
-            toolTip1.SetToolTip(checkBoxPropertiesCloseCurve, "Draws a line between the first and last point of the curve");
-            checkBoxPropertiesCloseCurve.UseVisualStyleBackColor = true;
-            checkBoxPropertiesCloseCurve.Click += CheckBoxPropertiesCloseCurve_Click;
-            // 
-            // panelPropertiesShadow
-            // 
-            panelPropertiesShadow.BorderStyle = BorderStyle.FixedSingle;
-            panelPropertiesShadow.Controls.Add(checkBoxPropertiesShadow);
-            panelPropertiesShadow.Location = new Point(3, 552);
-            panelPropertiesShadow.Name = "panelPropertiesShadow";
-            panelPropertiesShadow.Size = new Size(170, 26);
-            panelPropertiesShadow.TabIndex = 108;
-            // 
-            // checkBoxPropertiesShadow
-            // 
-            checkBoxPropertiesShadow.AutoSize = true;
-            checkBoxPropertiesShadow.Location = new Point(6, 3);
-            checkBoxPropertiesShadow.Name = "checkBoxPropertiesShadow";
-            checkBoxPropertiesShadow.Size = new Size(68, 19);
-            checkBoxPropertiesShadow.TabIndex = 55;
-            checkBoxPropertiesShadow.Text = "Shadow";
-            toolTip1.SetToolTip(checkBoxPropertiesShadow, "Draws a dark semi-transparent shadow untderneath the symbol");
-            checkBoxPropertiesShadow.UseVisualStyleBackColor = true;
-            checkBoxPropertiesShadow.Click += CheckBoxPropertiesShadow_Click;
-            // 
-            // panelPropertiesCrop
-            // 
-            panelPropertiesCrop.BorderStyle = BorderStyle.FixedSingle;
-            panelPropertiesCrop.Controls.Add(buttonPropertyCopyCrop);
-            panelPropertiesCrop.Controls.Add(buttonPropertyCrop);
-            panelPropertiesCrop.Location = new Point(3, 492);
-            panelPropertiesCrop.Name = "panelPropertiesCrop";
-            panelPropertiesCrop.Size = new Size(170, 54);
-            panelPropertiesCrop.TabIndex = 107;
-            // 
-            // buttonPropertyCopyCrop
-            // 
-            buttonPropertyCopyCrop.Location = new Point(3, 2);
-            buttonPropertyCopyCrop.Name = "buttonPropertyCopyCrop";
-            buttonPropertyCopyCrop.Size = new Size(95, 23);
-            buttonPropertyCopyCrop.TabIndex = 53;
-            buttonPropertyCopyCrop.Text = "Copy selection";
-            toolTip1.SetToolTip(buttonPropertyCopyCrop, "Copy the selected region to the clipboard (Hotkey: Ctrl+C)");
-            buttonPropertyCopyCrop.UseVisualStyleBackColor = true;
-            buttonPropertyCopyCrop.Click += ButtonPropertyCopyCrop_Click;
-            // 
-            // buttonPropertyCrop
-            // 
-            buttonPropertyCrop.Location = new Point(4, 27);
-            buttonPropertyCrop.Name = "buttonPropertyCrop";
-            buttonPropertyCrop.Size = new Size(94, 23);
-            buttonPropertyCrop.TabIndex = 54;
-            buttonPropertyCrop.Text = "Crop image";
-            toolTip1.SetToolTip(buttonPropertyCrop, "Crop the image to the selected region. all symbols remain (Hotkey: Enter)");
-            buttonPropertyCrop.UseVisualStyleBackColor = true;
-            buttonPropertyCrop.Click += ButtonPropertyCrop_Click;
-            // 
-            // panelPropertiesBlur
-            // 
-            panelPropertiesBlur.BorderStyle = BorderStyle.FixedSingle;
-            panelPropertiesBlur.Controls.Add(label17);
-            panelPropertiesBlur.Controls.Add(numericBlurMosaicSize);
-            panelPropertiesBlur.Location = new Point(3, 293);
-            panelPropertiesBlur.Name = "panelPropertiesBlur";
-            panelPropertiesBlur.Size = new Size(170, 30);
-            panelPropertiesBlur.TabIndex = 103;
-            // 
-            // label17
-            // 
-            label17.AutoSize = true;
-            label17.Location = new Point(4, 5);
-            label17.Name = "label17";
-            label17.Size = new Size(68, 15);
-            label17.TabIndex = 26;
-            label17.Text = "Mosaic Size";
-            // 
-            // numericBlurMosaicSize
-            // 
-            numericBlurMosaicSize.AccessibleName = "Mosaic pixel size (applies to all blur symbols)";
-            numericBlurMosaicSize.Location = new Point(110, 2);
-            numericBlurMosaicSize.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
-            numericBlurMosaicSize.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
-            numericBlurMosaicSize.Name = "numericBlurMosaicSize";
-            numericBlurMosaicSize.Size = new Size(55, 23);
-            numericBlurMosaicSize.TabIndex = 47;
-            toolTip1.SetToolTip(numericBlurMosaicSize, "The size of the mosaic tiles in pixels. Larger tiles obscures the underlying contents more");
-            numericBlurMosaicSize.Value = new decimal(new int[] { 10, 0, 0, 0 });
-            numericBlurMosaicSize.ValueChanged += NumericBlurMosaicSize_ValueChanged;
             // 
             // timerAfterLoad
             // 
@@ -1067,27 +697,10 @@
             ((System.ComponentModel.ISupportInitialize)numericNewLineWeight).EndInit();
             panelImage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBoxOverlay).EndInit();
-            panelPropertiesText.ResumeLayout(false);
-            panelPropertiesText.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesFontSize).EndInit();
-            panelPropertiesHighlight.ResumeLayout(false);
-            panelPropertiesHighlight.PerformLayout();
             panel1.ResumeLayout(false);
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
             SymbolPropertiesPanel.ResumeLayout(false);
-            panelPropertiesImage.ResumeLayout(false);
-            panelPropertiesImage.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesRotation).EndInit();
-            panelPropertiesPolygon.ResumeLayout(false);
-            panelPropertiesPolygon.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesCurveTension).EndInit();
-            panelPropertiesShadow.ResumeLayout(false);
-            panelPropertiesShadow.PerformLayout();
-            panelPropertiesCrop.ResumeLayout(false);
-            panelPropertiesBlur.ResumeLayout(false);
-            panelPropertiesBlur.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numericBlurMosaicSize).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1123,58 +736,28 @@
         private Label label9;
         private Label label10;
         private ToolStripMenuItem itemNewImage;
-        private TextBox textBoxSymbolText;
         private Button buttonText;
-        private Panel panelPropertiesText;
-        private NumericUpDown numericPropertiesFontSize;
-        private ComboBox comboBoxFontFamily;
-        private CheckBox checkBoxFontItalic;
-        private CheckBox checkBoxFontBold;
-        private Label label16;
-        private Label label15;
-        private CheckBox checkBoxUnderline;
-        private CheckBox checkBoxStrikeout;
         private Panel panel1;
         private Button buttonBorder;
         private CheckBox checkBoxNewShadow;
-        private CheckBox checkBoxPropertiesShadow;
         private Button buttonBlur;
-        private Label label17;
-        private NumericUpDown numericBlurMosaicSize;
         private System.Windows.Forms.Timer timerAfterLoad;
         private Button buttonSelect;
         private Button buttonHighlight;
-        private Panel panelPropertiesHighlight;
-        private ComboBox comboBoxBlendMode;
-        private Label label18;
-        private Panel panelPropertiesShadow;
         private System.Windows.Forms.Timer TimerUpdateOverlay;
         private Button buttonCrop;
-        private Panel panelPropertiesCrop;
-        private Button buttonPropertyCopyCrop;
-        private Button buttonPropertyCrop;
-        private Panel panelPropertiesBlur;
         private Label label19;
         private Button buttonNumbered;
         private Button buttonDraw;
-        private Panel panelPropertiesPolygon;
-        private CheckBox checkBoxPropertiesCloseCurve;
         private Button buttonFilledCurve;
-        private Label labelCurveTension;
-        private NumericUpDown numericPropertiesCurveTension;
         private ToolTip toolTip1;
         private Button buttonStickers;
-        private Panel panelPropertiesImage;
-        private Label labelRotation;
-        private NumericUpDown numericPropertiesRotation;
-        private Button buttonResetImageSize;
         private Panel SymbolPropertiesPanel;
         private Panel panel3;
         private Splitter splitter1;
         private Splitter splitter2;
         private ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.Timer timerFixDPI;
-        private Button buttonPropertiesEditText;
         private ToolStripMenuItem helpToolStripMenuItem;
         private ToolStripMenuItem helpToolStripMenuItem1;
         private ToolStripMenuItem documentationonGithubToolStripMenuItem;

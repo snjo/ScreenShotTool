@@ -64,14 +64,14 @@ public partial class ScreenshotEditor : Form
         Font = new Font(Font.FontFamily, 9);
 
         FillFontFamilyBox();
-        numericPropertiesFontSize.Maximum = maxFontSize;
-        numericPropertiesFontSize.Minimum = minimumFontSize;
-        numericPropertiesFontSize.Value = startingFontSize;
+        symbolFont.numericPropertiesFontSize.Maximum = maxFontSize;
+        symbolFont.numericPropertiesFontSize.Minimum = minimumFontSize;
+        symbolFont.numericPropertiesFontSize.Value = startingFontSize;
 
         listViewSymbols.Height = 200;
         CreatePropertyPanels(SymbolPropertiesPanel);
         DisableAllPanels();
-        numericBlurMosaicSize.Value = Settings.Default.BlurMosaicSize;
+        symbolMosaic.numericBlurMosaicSize.Value = Settings.Default.BlurMosaicSize;
         timerAfterLoad.Start(); // turns off TopMost shortly after Load. Without TopMost the Window opens behind other forms (why? who can say)
 
         toolButtons.Add(buttonSelect);
@@ -98,10 +98,10 @@ public partial class ScreenshotEditor : Form
 
     public void UpdateNumericLimits()
     {
-        symbolPosition.numericPropertiesX.Minimum = -editorCanvas.OutOfBoundsMaxPixels;
-        symbolPosition.numericPropertiesX.Maximum = editorCanvas.CanvasSize.Width + editorCanvas.OutOfBoundsMaxPixels;
-        symbolPosition.numericPropertiesY.Minimum = -editorCanvas.OutOfBoundsMaxPixels;
-        symbolPosition.numericPropertiesY.Maximum = editorCanvas.CanvasSize.Height + editorCanvas.OutOfBoundsMaxPixels;
+        symbolPosition.numericX.Minimum = -editorCanvas.OutOfBoundsMaxPixels;
+        symbolPosition.numericX.Maximum = editorCanvas.CanvasSize.Width + editorCanvas.OutOfBoundsMaxPixels;
+        symbolPosition.numericY.Minimum = -editorCanvas.OutOfBoundsMaxPixels;
+        symbolPosition.numericY.Maximum = editorCanvas.CanvasSize.Height + editorCanvas.OutOfBoundsMaxPixels;
     }
     #endregion
 
@@ -656,21 +656,30 @@ public partial class ScreenshotEditor : Form
     Controls.SymbolOrganize symbolOrganize = new Controls.SymbolOrganize();
     Controls.SymbolFillColor symbolFillColor = new Controls.SymbolFillColor();
     Controls.SymbolLineColor symbolLineColor = new Controls.SymbolLineColor();
+    Controls.SymbolShadows symbolShadows = new Controls.SymbolShadows();
+    Controls.SymbolCrop symbolCrop = new Controls.SymbolCrop();
+    Controls.symbolImage symbolImage = new Controls.symbolImage();
+    Controls.SymbolCurve symbolCurve = new Controls.SymbolCurve();
+    Controls.SymbolBlendMode symbolBlendMode = new Controls.SymbolBlendMode();
+    Controls.SymbolMosaic symbolMosaic = new Controls.SymbolMosaic();
+    Controls.SymbolFont symbolFont = new Controls.SymbolFont();
+
+    //ButtonPropertyCopyCrop_Click
 
     private void CreatePropertyPanels(Control parentPanel)
     {
         Point location = new Point(3, listViewSymbols.Bottom);
-        propertyPanels.Add(symbolPosition, parentPanel);//, location);
-        symbolPosition.numericPropertiesX.ValueChanged += Numeric_ValueChanged;
-        symbolPosition.numericPropertiesY.ValueChanged += Numeric_ValueChanged;
-        symbolPosition.numericPropertiesWidth.ValueChanged += Numeric_ValueChanged;
-        symbolPosition.numericPropertiesHeight.ValueChanged += Numeric_ValueChanged;
+        propertyPanels.Add(symbolPosition, parentPanel);
+        symbolPosition.numericX.ValueChanged += Numeric_ValueChanged;
+        symbolPosition.numericY.ValueChanged += Numeric_ValueChanged;
+        symbolPosition.numericWidth.ValueChanged += Numeric_ValueChanged;
+        symbolPosition.numericHeight.ValueChanged += Numeric_ValueChanged;
 
-        propertyPanels.Add(symbolNumbered, parentPanel);//, location);
+        propertyPanels.Add(symbolNumbered, parentPanel);
         symbolNumbered.NumberText.TextChanged += NumericMarkerChanged;
-        symbolNumbered.checkBoxAuto.CheckedChanged += NumericMarkerChanged;
+        symbolNumbered.checkBoxAuto.Click += NumericMarkerChanged;
 
-        propertyPanels.Add(symbolOrganize, parentPanel);//, location);
+        propertyPanels.Add(symbolOrganize, parentPanel);
         symbolOrganize.buttonToFront.Click += ButtonToFront_Click;
         symbolOrganize.buttonToBack.Click += ButtonToBack_Click;
         symbolOrganize.buttonDeleteSymbol.Click += ButtonDeleteSymbol_Click;
@@ -681,6 +690,37 @@ public partial class ScreenshotEditor : Form
         propertyPanels.Add(symbolLineColor, parentPanel);
         symbolLineColor.buttonLineColor.Click += ColorChangeClick;
         symbolLineColor.numericLineWeight.ValueChanged += Numeric_ValueChanged;
+
+        propertyPanels.Add(symbolShadows, parentPanel);
+        symbolShadows.checkBoxShadow.Click += CheckBoxPropertiesShadow_Click;
+
+        propertyPanels.Add(symbolCrop, parentPanel);
+        symbolCrop.buttonCopy.Click += ButtonPropertyCopy_Click;
+        symbolCrop.buttonCrop.Click += ButtonPropertyCrop_Click;
+
+        propertyPanels.Add(symbolImage, parentPanel);
+        symbolImage.buttonResetImageSize.Click += ButtonResetImageSize_Click;
+        symbolImage.numericRotation.ValueChanged += NumericPropertiesRotation_ValueChanged;
+
+        propertyPanels.Add(symbolCurve, parentPanel);
+        symbolCurve.checkBoxCloseCurve.Click += CheckBoxPropertiesCloseCurve_Click;
+        symbolCurve.numericCurveTension.ValueChanged += NumericPropertiesCurveTension_ValueChanged;
+
+        propertyPanels.Add(symbolBlendMode, parentPanel);
+        symbolBlendMode.comboBoxBlendMode.SelectedIndexChanged += ComboBoxBlendMode_SelectedIndexChanged;
+
+        propertyPanels.Add(symbolMosaic, parentPanel);
+        symbolMosaic.numericBlurMosaicSize.ValueChanged += NumericBlurMosaicSize_ValueChanged;
+
+        propertyPanels.Add(symbolFont, parentPanel);
+        symbolFont.textBoxSymbolText.TextChanged += TextBoxSymbolText_TextChanged;
+        symbolFont.buttonPropertiesEditText.Click += ButtonPropertiesEditText_Click;
+        symbolFont.numericPropertiesFontSize.ValueChanged += NumericPropertiesFontSize_ValueChanged;
+        symbolFont.comboBoxFontFamily.TextChanged += ComboBoxFontFamily_ValueMemberChanged;
+        symbolFont.checkBoxFontBold.Click += FontStyle_CheckedChanged;
+        symbolFont.checkBoxFontItalic.Click += FontStyle_CheckedChanged;
+        symbolFont.checkBoxUnderline.Click += FontStyle_CheckedChanged;
+        symbolFont.checkBoxStrikeout.Click += FontStyle_CheckedChanged;
     }
 
     private void ButtonPropertiesColorLine_Click(object? sender, EventArgs e)
@@ -759,13 +799,13 @@ public partial class ScreenshotEditor : Form
         UpdatePropertiesPanel();
     }
 
-    private static void EnablePanel(Panel panel, int left, ref int top)
-    {
-        panel.Enabled = true;
-        panel.Visible = true;
-        panel.Location = new Point(left, top);
-        top += panel.Height + 3;
-    }
+    //private static void EnablePanel(Panel panel, int left, ref int top)
+    //{
+    //    panel.Enabled = true;
+    //    panel.Visible = true;
+    //    panel.Location = new Point(left, top);
+    //    top += panel.Height + 3;
+    //}
 
     private static void EnablePanel(Control panel, int left, ref int top)
     {
@@ -773,13 +813,14 @@ public partial class ScreenshotEditor : Form
         panel.Visible = true;
         panel.Location = new Point(left, top);
         top += panel.Height + 3;
+        //Debug.WriteLine($"Enable panel {panel.Name} at location {panel.Location} with size {panel.Size}");
     }
 
-    private static void DisablePanel(Panel panel)
-    {
-        panel.Enabled = false;
-        panel.Visible = false;
-    }
+    //private static void DisablePanel(Panel panel)
+    //{
+    //    panel.Enabled = false;
+    //    panel.Visible = false;
+    //}
 
     private static void DisablePanel(Control panel)
     {
@@ -791,27 +832,12 @@ public partial class ScreenshotEditor : Form
     {
         symbolPosition.Location = new Point(listViewSymbols.Left, listViewSymbols.Bottom + 5);
         symbolPosition.Visible = true;
-        symbolPosition.Enabled = false;
-        //DisablePanel(panelPropertiesFill);
-        //DisablePanel(panelPropertiesLine);
-        DisablePanel(panelPropertiesText);
-        DisablePanel(panelPropertiesHighlight);
-        DisablePanel(panelPropertiesShadow);
-        //DisablePanel(panelPropertiesDelete);
-        DisablePanel(panelPropertiesCrop);
-        DisablePanel(panelPropertiesBlur);
-        DisablePanel(panelPropertiesPolygon);
-        DisablePanel(panelPropertiesImage);
-        //DisablePanel(symbolNumbered);
+        symbolPosition.Enabled = false;        
         foreach (Control c in propertyPanels.SymbolControls)
         {
-            if (c is not Controls.SymbolPosition sp)
+            if (c is not Controls.SymbolPosition sp) // don't disable the position panel, remains on screen
             {
                 DisablePanel(c);
-            }
-            else
-            {
-                Debug.WriteLine("skipping position panel");
             }
         }
     }
@@ -836,67 +862,66 @@ public partial class ScreenshotEditor : Form
                 EnablePanel(symbolPosition, panelLeft, ref lastPanelBottom);
 
                 symbolLineColor.numericLineWeight.Enabled = true;
-                symbolPosition.numericPropertiesWidth.Enabled = true;
-                symbolPosition.numericPropertiesHeight.Enabled = true;
+                symbolPosition.numericWidth.Enabled = true;
+                symbolPosition.numericHeight.Enabled = true;
                 symbolLineColor.buttonLineColor.Enabled = true;
-                //numericPropertiesLineAlpha.Enabled = true;
 
                 symbolPosition.labelSymbolType.Text = "Symbol: " + graphicSymbol.Name;
-                SetNumericClamp(symbolPosition.numericPropertiesX, graphicSymbol.Left);
-                SetNumericClamp(symbolPosition.numericPropertiesY, graphicSymbol.Top);
-                SetNumericClamp(symbolPosition.numericPropertiesWidth, graphicSymbol.Width);
-                SetNumericClamp(symbolPosition.numericPropertiesHeight, graphicSymbol.Height);
+                SetNumericClamp(symbolPosition.numericX, graphicSymbol.Left);
+                SetNumericClamp(symbolPosition.numericY, graphicSymbol.Top);
+                SetNumericClamp(symbolPosition.numericWidth, graphicSymbol.Width);
+                SetNumericClamp(symbolPosition.numericHeight, graphicSymbol.Height);
                 ColorTools.SetButtonColors(symbolLineColor.buttonLineColor, graphicSymbol.LineColor, "X");
                 ColorTools.SetButtonColors(symbolFillColor.buttonFillColor, graphicSymbol.FillColor, "X");
-                //buttonPropertiesColorLine.BackColor = graphicSymbol.LineColor;
-                //buttonPropertiesColorFill.BackColor = graphicSymbol.FillColor;
                 symbolLineColor.numericLineWeight.Value = graphicSymbol.LineWeight;
-                checkBoxPropertiesShadow.Checked = graphicSymbol.ShadowEnabled;
+                symbolShadows.checkBoxShadow.Checked = graphicSymbol.ShadowEnabled;
                 symbolOrganize.buttonDeleteSymbol.Tag = graphicSymbol;
 
                 if (graphicSymbol is GsText gsText)
                 {
                     EnablePanel(symbolLineColor, panelLeft, ref lastPanelBottom);
-                    EnablePanel(panelPropertiesText, panelLeft, ref lastPanelBottom);
-                    EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
+                    EnablePanel(symbolFont, panelLeft, ref lastPanelBottom);
+                    EnablePanel(symbolShadows, panelLeft, ref lastPanelBottom);
 
-                    symbolPosition.numericPropertiesWidth.Enabled = false;
-                    symbolPosition.numericPropertiesHeight.Enabled = false;
+                    symbolPosition.numericWidth.Enabled = false;
+                    symbolPosition.numericHeight.Enabled = false;
                     symbolLineColor.numericLineWeight.Enabled = false;
 
-                    textBoxSymbolText.Text = gsText.Text;
+                    symbolFont.textBoxSymbolText.Text = gsText.Text;
                     if (gsText.ListViewItem != null)
                     {
                         string displayText = gsText.Text[..Math.Min(gsText.Text.Length, 20)];
                         gsText.ListViewItem.Text = "Text: " + displayText;
                     }
-                    numericPropertiesFontSize.Value = (int)Math.Clamp(gsText.fontEmSize, minimumFontSize, maxFontSize);
-                    checkBoxFontBold.Checked = (gsText.fontStyle & FontStyle.Bold) != 0;
-                    checkBoxFontItalic.Checked = (gsText.fontStyle & FontStyle.Italic) != 0;
-                    checkBoxStrikeout.Checked = (gsText.fontStyle & FontStyle.Strikeout) != 0;
-                    checkBoxUnderline.Checked = (gsText.fontStyle & FontStyle.Underline) != 0;
+                    symbolFont.comboBoxFontFamily.Text = gsText.fontFamily.Name;
+                    symbolFont.numericPropertiesFontSize.Value = (int)Math.Clamp(gsText.fontEmSize, minimumFontSize, maxFontSize);
+                    symbolFont.checkBoxFontBold.Checked = (gsText.fontStyle & FontStyle.Bold) != 0;
+                    symbolFont.checkBoxFontItalic.Checked = (gsText.fontStyle & FontStyle.Italic) != 0;
+                    symbolFont.checkBoxStrikeout.Checked = (gsText.fontStyle & FontStyle.Strikeout) != 0;
+                    symbolFont.checkBoxUnderline.Checked = (gsText.fontStyle & FontStyle.Underline) != 0;
                 }
                 else if (graphicSymbol is GsHighlight gsHL)
                 {
                     EnablePanel(symbolFillColor, panelLeft, ref lastPanelBottom);
-                    EnablePanel(panelPropertiesHighlight, panelLeft, ref lastPanelBottom);
-                    comboBoxBlendMode.Text = gsHL.blendMode.ToString();
+                    EnablePanel(symbolBlendMode, panelLeft, ref lastPanelBottom);
+                    symbolBlendMode.comboBoxBlendMode.Text = gsHL.blendMode.ToString();
                 }
-                else if (graphicSymbol is GsBlur)
+                else if (graphicSymbol is GsBlur gsb)
                 {
-                    EnablePanel(panelPropertiesBlur, panelLeft, ref lastPanelBottom);
+                    EnablePanel(symbolMosaic, panelLeft, ref lastPanelBottom);
+                    symbolMosaic.numericBlurMosaicSize.SetValueClamped(gsb.MosaicSize);
                 }
                 else if (graphicSymbol is GsCrop)
                 {
-                    EnablePanel(panelPropertiesCrop, panelLeft, ref lastPanelBottom);
+                    EnablePanel(symbolCrop, panelLeft, ref lastPanelBottom);
                 }
                 else if (graphicSymbol is GsNumbered gsNumbered)
                 {
                     EnablePanel(symbolFillColor, panelLeft, ref lastPanelBottom);
                     EnablePanel(symbolLineColor, panelLeft, ref lastPanelBottom);
-                    EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
+                    EnablePanel(symbolShadows, panelLeft, ref lastPanelBottom);
                     EnablePanel(symbolNumbered, panelLeft, ref lastPanelBottom);
-                    symbolPosition.numericPropertiesHeight.Enabled = false;
+                    symbolPosition.numericHeight.Enabled = false;
                     if (gsNumbered.ListViewItem != null)
                     {
                         gsNumbered.ListViewItem.Text = "Number: " + gsNumbered.Text; // Number;
@@ -907,29 +932,29 @@ public partial class ScreenshotEditor : Form
                 }
                 else if (graphicSymbol is GsImage gsI)
                 {
-                    EnablePanel(panelPropertiesImage, panelLeft, ref lastPanelBottom);
-                    EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
-                    SetNumericClamp(numericPropertiesRotation, (decimal)gsI.Rotation % 360);
+                    EnablePanel(symbolImage, panelLeft, ref lastPanelBottom);
+                    EnablePanel(symbolShadows, panelLeft, ref lastPanelBottom);
+                    SetNumericClamp(symbolImage.numericRotation, (decimal)gsI.Rotation % 360);
                 }
                 else if (graphicSymbol is GsPolygon gsP)
                 {
                     EnablePanel(symbolFillColor, panelLeft, ref lastPanelBottom);
                     EnablePanel(symbolLineColor, panelLeft, ref lastPanelBottom);
-                    EnablePanel(panelPropertiesPolygon, panelLeft, ref lastPanelBottom);
-                    EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
-                    checkBoxPropertiesCloseCurve.Checked = gsP.closedCurve;
-                    numericPropertiesCurveTension.Value = (decimal)gsP.curveTension;
+                    EnablePanel(symbolCurve, panelLeft, ref lastPanelBottom);
+                    EnablePanel(symbolShadows, panelLeft, ref lastPanelBottom);
+                    symbolCurve.checkBoxCloseCurve.Checked = gsP.closedCurve;
+                    symbolCurve.numericCurveTension.Value = (decimal)gsP.curveTension;
                 }
                 else if (graphicSymbol is GsBoundingBox) // must be after all other symbols that inherit from GsBoundingBox
                 {
                     EnablePanel(symbolFillColor, panelLeft, ref lastPanelBottom);
                     EnablePanel(symbolLineColor, panelLeft, ref lastPanelBottom);
-                    EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
+                    EnablePanel(symbolShadows, panelLeft, ref lastPanelBottom);
                 }
                 else if (graphicSymbol is GsLine)
                 {
                     EnablePanel(symbolLineColor, panelLeft, ref lastPanelBottom);
-                    EnablePanel(panelPropertiesShadow, panelLeft, ref lastPanelBottom);
+                    EnablePanel(symbolShadows, panelLeft, ref lastPanelBottom);
                 }
 
 
@@ -937,11 +962,8 @@ public partial class ScreenshotEditor : Form
 
                 if (graphicSymbol is GsText == false)
                 {
-                    textBoxSymbolText.Text = "";
+                    symbolFont.textBoxSymbolText.Text = "";
                 }
-
-                //numericPropertiesLineAlpha.Value = graphicSymbol.lineAlpha;
-                //numericPropertiesFillAlpha.Value = graphicSymbol.fillAlpha;
             }
         }
         else
@@ -1022,18 +1044,14 @@ public partial class ScreenshotEditor : Form
     public void ClearPropertyPanelValues()
     {
         symbolPosition.labelSymbolType.Text = "Symbol: ";
-        symbolPosition.numericPropertiesX.Value = 0;
-        symbolPosition.numericPropertiesY.Value = 0;
-        symbolPosition.numericPropertiesWidth.Value = 1;
-        symbolPosition.numericPropertiesHeight.Value = 1;
+        symbolPosition.numericX.Value = 0;
+        symbolPosition.numericY.Value = 0;
+        symbolPosition.numericWidth.Value = 1;
+        symbolPosition.numericHeight.Value = 1;
         ColorTools.SetButtonColors(symbolLineColor.buttonLineColor, Color.Gray, "X");
         ColorTools.SetButtonColors(symbolFillColor.buttonFillColor, Color.Gray, "X");
-        //buttonPropertiesColorLine.BackColor = Color.Gray;
-        //buttonPropertiesColorFill.BackColor = Color.Gray;
-        //numericPropertiesLineAlpha.Value = 255;
-        //numericPropertiesFillAlpha.Value = 255;
         symbolLineColor.numericLineWeight.Value = 1;
-        numericPropertiesFontSize.Value = 10;
+        symbolFont.numericPropertiesFontSize.Value = 10;
         symbolOrganize.buttonDeleteSymbol.Tag = null;
     }
 
@@ -1063,38 +1081,26 @@ public partial class ScreenshotEditor : Form
             ListViewItem item = listViewSymbols.SelectedItems[0];
             if (item.Tag is not GraphicSymbol gs) return;
 
-            if (sender == symbolPosition.numericPropertiesX)
+            if (sender == symbolPosition.numericX)
             {
-                gs.Left = (int)symbolPosition.numericPropertiesX.Value;
+                gs.Left = (int)symbolPosition.numericX.Value;
             }
-            if (sender == symbolPosition.numericPropertiesY)
+            if (sender == symbolPosition.numericY)
             {
-                gs.Top = (int)symbolPosition.numericPropertiesY.Value;
+                gs.Top = (int)symbolPosition.numericY.Value;
             }
-            if (sender == symbolPosition.numericPropertiesWidth)
+            if (sender == symbolPosition.numericWidth)
             {
-                gs.Width = (int)symbolPosition.numericPropertiesWidth.Value;
+                gs.Width = (int)symbolPosition.numericWidth.Value;
             }
-            if (sender == symbolPosition.numericPropertiesHeight)
+            if (sender == symbolPosition.numericHeight)
             {
-                gs.Height = (int)symbolPosition.numericPropertiesHeight.Value;
+                gs.Height = (int)symbolPosition.numericHeight.Value;
             }
             if (sender == symbolLineColor.numericLineWeight)
             {
                 gs.LineWeight = (int)symbolLineColor.numericLineWeight.Value;
             }
-            //if (sender == numericPropertiesLineAlpha)
-            //{
-            //    //gs.lineAlpha = (int)numericPropertiesLineAlpha.Value;
-            //    gs.UpdateColors();
-            //    buttonPropertiesColorLine.BackColor = gs.LineColor;
-            //}
-            //if (sender == numericPropertiesFillAlpha)
-            //{
-            //    gs.fillAlpha = (int)numericPropertiesFillAlpha.Value;
-            //    gs.UpdateColors();
-            //    buttonPropertiesColorFill.BackColor = gs.BackgroundColor;
-            //}
         }
         editorCanvas.UpdateOverlay();
     }
@@ -1131,22 +1137,22 @@ public partial class ScreenshotEditor : Form
         }
     }
 
-    private void NumericBlurMosaicSize_ValueChanged(object sender, EventArgs e)
+    private void NumericBlurMosaicSize_ValueChanged(object? sender, EventArgs e)
     {
-        editorCanvas.MosaicSize = numericBlurMosaicSize.ValueInt();
+        editorCanvas.MosaicSize = symbolMosaic.numericBlurMosaicSize.ValueInt();
         if (GetSelectedSymbolFirst() is GsBlur gsB)
         {
-            gsB.MosaicSize = numericBlurMosaicSize.ValueInt();
+            gsB.MosaicSize = symbolMosaic.numericBlurMosaicSize.ValueInt();
         }
         editorCanvas.UpdateOverlay();
     }
 
-    private void TextBoxSymbolText_TextChanged(object sender, EventArgs e)
+    private void TextBoxSymbolText_TextChanged(object? sender, EventArgs e)
     {
         GsText? textSymbol = GetSelectedTextSymbol();
         if (textSymbol != null)
         {
-            textSymbol.Text = textBoxSymbolText.Text;
+            textSymbol.Text = symbolFont.textBoxSymbolText.Text;
             if (textSymbol.ListViewItem != null)
             {
                 textSymbol.ListViewItem.Text = "Text: " + textSymbol.Text;
@@ -1155,23 +1161,23 @@ public partial class ScreenshotEditor : Form
         editorCanvas.UpdateOverlay();
     }
 
-    private void NumericPropertiesFontSize_ValueChanged(object sender, EventArgs e)
+    private void NumericPropertiesFontSize_ValueChanged(object? sender, EventArgs e)
     {
         GsText? textSymbol = GetSelectedTextSymbol();
         if (textSymbol != null)
         {
-            textSymbol.fontEmSize = (float)numericPropertiesFontSize.Value;
+            textSymbol.fontEmSize = (float)symbolFont.numericPropertiesFontSize.Value;
             textSymbol.UpdateFont();
         }
         editorCanvas.UpdateOverlay();
     }
 
-    private void ComboBoxFontFamily_ValueMemberChanged(object sender, EventArgs e)
+    private void ComboBoxFontFamily_ValueMemberChanged(object? sender, EventArgs e)
     {
         GsText? textSymbol = GetSelectedTextSymbol();
         if (textSymbol != null)
         {
-            string selectedFont = comboBoxFontFamily.Text;
+            string selectedFont = symbolFont.comboBoxFontFamily.Text;
             if (fontDictionary.TryGetValue(selectedFont, out FontFamily? value))
             {
                 textSymbol.fontFamily = value;
@@ -1192,20 +1198,20 @@ public partial class ScreenshotEditor : Form
             fontNames.Add(font.Name);
             fontDictionary.Add(font.Name, font);
         }
-        comboBoxFontFamily.DataSource = fontNames;
+        symbolFont.comboBoxFontFamily.DataSource = fontNames;
     }
 
-    private void FontStyle_CheckedChanged(object sender, EventArgs e)
+    private void FontStyle_CheckedChanged(object? sender, EventArgs e)
     {
         UpdateFontStyle();
     }
 
     private void UpdateFontStyle()
     {
-        bool bold = checkBoxFontBold.Checked;
-        bool italic = checkBoxFontItalic.Checked;
-        bool strikeout = checkBoxStrikeout.Checked;
-        bool underline = checkBoxUnderline.Checked;
+        bool bold = symbolFont.checkBoxFontBold.Checked;
+        bool italic = symbolFont.checkBoxFontItalic.Checked;
+        bool strikeout = symbolFont.checkBoxStrikeout.Checked;
+        bool underline = symbolFont.checkBoxUnderline.Checked;
         GsText? textSymbol = GetSelectedTextSymbol();
         if (textSymbol != null)
         {
@@ -1231,24 +1237,24 @@ public partial class ScreenshotEditor : Form
         editorCanvas.UpdateOverlay();
     }
 
-    private void CheckBoxPropertiesShadow_Click(object sender, EventArgs e)
+    private void CheckBoxPropertiesShadow_Click(object? sender, EventArgs e)
     {
         GraphicSymbol? symbol = GetSelectedSymbolFirst();
         if (symbol != null)
         {
-            symbol.ShadowEnabled = checkBoxPropertiesShadow.Checked;
+            symbol.ShadowEnabled = symbolShadows.checkBoxShadow.Checked;
         }
         editorCanvas.UpdateOverlay();
     }
 
-    private void CheckBoxPropertiesCloseCurve_Click(object sender, EventArgs e)
+    private void CheckBoxPropertiesCloseCurve_Click(object? sender, EventArgs e)
     {
         GraphicSymbol? symbol = GetSelectedSymbolFirst();
         if (symbol != null)
         {
             if (symbol is GsPolygon gsP)
             {
-                gsP.closedCurve = checkBoxPropertiesCloseCurve.Checked;
+                gsP.closedCurve = symbolCurve.checkBoxCloseCurve.Checked;
             }
         }
         editorCanvas.UpdateOverlay();
@@ -1293,11 +1299,11 @@ public partial class ScreenshotEditor : Form
         return null;
     }
 
-    private void ComboBoxBlendMode_SelectedIndexChanged(object sender, EventArgs e)
+    private void ComboBoxBlendMode_SelectedIndexChanged(object? sender, EventArgs e)
     {
         if (editorCanvas.CurrentSelectedSymbol is GsHighlight gshl)
         {
-            if (Enum.TryParse(comboBoxBlendMode.Text, out ColorBlend.BlendModes newBlend))
+            if (Enum.TryParse(symbolBlendMode.comboBoxBlendMode.Text, out ColorBlend.BlendModes newBlend))
             {
                 gshl.blendMode = newBlend;
             }
@@ -1305,7 +1311,7 @@ public partial class ScreenshotEditor : Form
         }
     }
 
-    private void ButtonPropertyCrop_Click(object sender, EventArgs e)
+    private void ButtonPropertyCrop_Click(object? sender, EventArgs e)
     {
         if (editorCanvas.SourceImage == null) return;
         if (GetSelectedSymbolFirst() is GsCrop gsC)
@@ -1328,7 +1334,7 @@ public partial class ScreenshotEditor : Form
         DeleteSelectedSymbol(gsC);
     }
 
-    private void ButtonPropertyCopyCrop_Click(object sender, EventArgs e)
+    private void ButtonPropertyCopy_Click(object? sender, EventArgs e)
     {
         if (GetSelectedSymbolFirst() is GsCrop gsC)
         {
@@ -1353,21 +1359,21 @@ public partial class ScreenshotEditor : Form
         }
     }
 
-    private void NumericPropertiesCurveTension_ValueChanged(object sender, EventArgs e)
+    private void NumericPropertiesCurveTension_ValueChanged(object? sender, EventArgs e)
     {
         if (GetSelectedSymbolFirst() is GsPolygon gsP)
         {
-            gsP.curveTension = (float)numericPropertiesCurveTension.Value;
+            gsP.curveTension = (float)symbolCurve.numericCurveTension.Value;
             editorCanvas.UpdateOverlay();
         }
     }
 
-    private void NumericPropertiesRotation_ValueChanged(object sender, EventArgs e)
+    private void NumericPropertiesRotation_ValueChanged(object? sender, EventArgs e)
     {
-        SetNumericClamp(numericPropertiesRotation, numericPropertiesRotation.Value % 360);
+        SetNumericClamp(symbolImage.numericRotation, symbolImage.numericRotation.Value % 360);
         if (GetSelectedSymbolFirst() is GraphicSymbol gs)
         {
-            gs.Rotation = (float)numericPropertiesRotation.Value;
+            gs.Rotation = (float)symbolImage.numericRotation.Value;
 
             editorCanvas.UpdateOverlay();
         }
@@ -1388,7 +1394,7 @@ public partial class ScreenshotEditor : Form
         }
     }
 
-    private void ButtonResetImageSize_Click(object sender, EventArgs e)
+    private void ButtonResetImageSize_Click(object? sender, EventArgs e)
     {
         if (editorCanvas.CurrentSelectedSymbol != null)
         {
@@ -1403,7 +1409,7 @@ public partial class ScreenshotEditor : Form
             }
         }
     }
-    private void ButtonPropertiesEditText_Click(object sender, EventArgs e)
+    private void ButtonPropertiesEditText_Click(object? sender, EventArgs e)
     {
         EditSelectedText();
     }
@@ -1416,13 +1422,13 @@ public partial class ScreenshotEditor : Form
             DialogResult result = textEntry.ShowDialog(this);
             if (result == DialogResult.OK)
             {
-                textBoxSymbolText.Text = textEntry.TextResult;
+                symbolFont.textBoxSymbolText.Text = textEntry.TextResult;
             }
             textEntry.Dispose();
         }
     }
 
-    private void PictureBoxOverlay_DoubleClick(object sender, EventArgs e)
+    private void PictureBoxOverlay_DoubleClick(object? sender, EventArgs e)
     {
         // edit text in popup if the selected symbol is GsText
         if (GetSelectedSymbolFirst() is GsText)
@@ -1620,7 +1626,7 @@ public partial class ScreenshotEditor : Form
 
     #region Drag and Drop -------------------------------------------------------------------------------
 
-    private List<string> GetDroppedFileNames(DragEventArgs e)
+    private static List<string> GetDroppedFileNames(DragEventArgs e)
     {
         if (e.Data == null) return [];
         if (e.Data.GetData(DataFormats.FileDrop, true) is not string[] fileNames) return [];

@@ -29,29 +29,29 @@
         private void InitializeComponent()
         {
             panel1 = new Panel();
-            numericPropertiesHeight = new NumericUpDown();
-            numericPropertiesY = new NumericUpDown();
-            numericPropertiesWidth = new NumericUpDown();
-            numericPropertiesX = new NumericUpDown();
+            numericHeight = new NumericUpDown();
+            numericY = new NumericUpDown();
+            numericWidth = new NumericUpDown();
+            numericX = new NumericUpDown();
             label5 = new Label();
             label4 = new Label();
             label3 = new Label();
             label2 = new Label();
             labelSymbolType = new Label();
             panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesHeight).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesY).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesWidth).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesX).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericHeight).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericY).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericWidth).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericX).BeginInit();
             SuspendLayout();
             // 
             // panel1
             // 
             panel1.BorderStyle = BorderStyle.FixedSingle;
-            panel1.Controls.Add(numericPropertiesHeight);
-            panel1.Controls.Add(numericPropertiesY);
-            panel1.Controls.Add(numericPropertiesWidth);
-            panel1.Controls.Add(numericPropertiesX);
+            panel1.Controls.Add(numericHeight);
+            panel1.Controls.Add(numericY);
+            panel1.Controls.Add(numericWidth);
+            panel1.Controls.Add(numericX);
             panel1.Controls.Add(label5);
             panel1.Controls.Add(label4);
             panel1.Controls.Add(label3);
@@ -65,45 +65,45 @@
             // 
             // numericPropertiesHeight
             // 
-            numericPropertiesHeight.Location = new Point(110, 52);
-            numericPropertiesHeight.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
-            numericPropertiesHeight.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            numericPropertiesHeight.Name = "numericPropertiesHeight";
-            numericPropertiesHeight.Size = new Size(55, 23);
-            numericPropertiesHeight.TabIndex = 52;
-            numericPropertiesHeight.Tag = "Height";
-            numericPropertiesHeight.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            numericHeight.Location = new Point(110, 52);
+            numericHeight.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            numericHeight.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numericHeight.Name = "numericPropertiesHeight";
+            numericHeight.Size = new Size(55, 23);
+            numericHeight.TabIndex = 52;
+            numericHeight.Tag = "Height";
+            numericHeight.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // numericPropertiesY
             // 
-            numericPropertiesY.Location = new Point(110, 23);
-            numericPropertiesY.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
-            numericPropertiesY.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
-            numericPropertiesY.Name = "numericPropertiesY";
-            numericPropertiesY.Size = new Size(55, 23);
-            numericPropertiesY.TabIndex = 50;
-            numericPropertiesY.Tag = "Y";
+            numericY.Location = new Point(110, 23);
+            numericY.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            numericY.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
+            numericY.Name = "numericPropertiesY";
+            numericY.Size = new Size(55, 23);
+            numericY.TabIndex = 50;
+            numericY.Tag = "Y";
             // 
             // numericPropertiesWidth
             // 
-            numericPropertiesWidth.Location = new Point(21, 52);
-            numericPropertiesWidth.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
-            numericPropertiesWidth.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            numericPropertiesWidth.Name = "numericPropertiesWidth";
-            numericPropertiesWidth.Size = new Size(55, 23);
-            numericPropertiesWidth.TabIndex = 51;
-            numericPropertiesWidth.Tag = "Width";
-            numericPropertiesWidth.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            numericWidth.Location = new Point(21, 52);
+            numericWidth.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            numericWidth.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numericWidth.Name = "numericPropertiesWidth";
+            numericWidth.Size = new Size(55, 23);
+            numericWidth.TabIndex = 51;
+            numericWidth.Tag = "Width";
+            numericWidth.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // numericPropertiesX
             // 
-            numericPropertiesX.Location = new Point(21, 23);
-            numericPropertiesX.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
-            numericPropertiesX.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
-            numericPropertiesX.Name = "numericPropertiesX";
-            numericPropertiesX.Size = new Size(55, 23);
-            numericPropertiesX.TabIndex = 49;
-            numericPropertiesX.Tag = "X";
+            numericX.Location = new Point(21, 23);
+            numericX.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+            numericX.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
+            numericX.Name = "numericPropertiesX";
+            numericX.Size = new Size(55, 23);
+            numericX.TabIndex = 49;
+            numericX.Tag = "X";
             // 
             // label5
             // 
@@ -159,10 +159,10 @@
             Size = new Size(170, 80);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesHeight).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesY).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesWidth).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericPropertiesX).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericHeight).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericY).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericWidth).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericX).EndInit();
             ResumeLayout(false);
         }
 
@@ -173,10 +173,10 @@
         private Label label4;
         private Label label3;
         private Label label2;
-        internal NumericUpDown numericPropertiesHeight;
-        internal NumericUpDown numericPropertiesY;
-        internal NumericUpDown numericPropertiesWidth;
-        internal NumericUpDown numericPropertiesX;
+        internal NumericUpDown numericHeight;
+        internal NumericUpDown numericY;
+        internal NumericUpDown numericWidth;
+        internal NumericUpDown numericX;
         internal Label labelSymbolType;
     }
 }
