@@ -161,7 +161,7 @@ public partial class ScreenshotEditor : Form
 
     private void SaveFileAction()
     {
-        Bitmap? outImage = editorCanvas.AssembleImageForSaveOrCopy();
+        Bitmap? outImage = editorCanvas.GetImageInProgress(); //editorCanvas.AssembleImageForSaveOrCopy();
         if (outImage != null)
         {
             ImageOutput.SaveWithDialog(outImage, ImageOutput.FilterSaveImage);
@@ -311,7 +311,7 @@ public partial class ScreenshotEditor : Form
 
     private void PrintImage()
     {
-        Bitmap? outImage = editorCanvas.AssembleImageForSaveOrCopy();
+        Bitmap? outImage = editorCanvas.GetImageInProgress(); //editorCanvas.AssembleImageForSaveOrCopy();
         if (outImage != null)
         {
             Print print = new();
@@ -595,7 +595,7 @@ public partial class ScreenshotEditor : Form
 
     public void CopyToClipboard()
     {
-        Bitmap? result = editorCanvas.AssembleImageForSaveOrCopy();
+        Bitmap? result = editorCanvas.GetImageInProgress();//editorCanvas.AssembleImageForSaveOrCopy();
         if (result != null)
         {
             //copiedBitmap.DisposeImage();
@@ -1332,7 +1332,7 @@ public partial class ScreenshotEditor : Form
     private void CopySelectionToClipboard(GsCrop gsC)
     {
         gsC.showOutline = false;
-        Bitmap? assembled = editorCanvas.AssembleImageForSaveOrCopy();
+        Bitmap? assembled = editorCanvas.GetImageInProgress(); //editorCanvas.AssembleImageForSaveOrCopy();
         if (assembled != null)
         {
             Rectangle cropRect = gsC.Bounds;

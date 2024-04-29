@@ -183,19 +183,25 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         }
     }
 
-    public Bitmap? AssembleImageForSaveOrCopy()
+    // no longer in use, GetImageInProgress is better
+    //public Bitmap? AssembleImageForSaveOrCopy() 
+    //{
+    //    UpdateOverlay(highlightSelected: false);
+    //    if (SourceImage == null) return null;
+    //    Bitmap outImage = new(SourceImage);
+    //    Graphics saveGraphic = Graphics.FromImage(outImage);
+    //    saveGraphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+    //    saveGraphic.TextRenderingHint = TextRenderingHint.AntiAlias;
+    //    imageInProgress = new(SourceImage); // clears the image so higlights etc aren't drawn twice, applying double blend mode
+    //    DrawElements(saveGraphic, ShowNonOutputWidgets: false);
+    //    saveGraphic.Dispose();
+    //    return outImage;
+    //}
+
+    public Bitmap? GetImageInProgress()
     {
-        UpdateOverlay(highlightSelected: false);
-        if (SourceImage == null) return null;
-        Bitmap outImage = new(SourceImage);
-        Graphics saveGraphic = Graphics.FromImage(outImage);
-        saveGraphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-        saveGraphic.TextRenderingHint = TextRenderingHint.AntiAlias;
-        imageInProgress = new(SourceImage);
-        DrawElements(saveGraphic, ShowNonOutputWidgets: false);
-        //Clipboard.SetImage(outImage);
-        saveGraphic.Dispose();
-        return outImage;
+        if (imageInProgress == null) return null;
+        return new Bitmap(imageInProgress);
     }
 
     #endregion
