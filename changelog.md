@@ -3,6 +3,11 @@
 ## TODO:
 - Undo?
 
+## 2.0
+- Numbered markers can have custom text instead of auto numbering
+- Fixed bug when copying and saving images with highlighter blend modes applying twice
+- Rebuilt Symbol property panels
+
 ## 1.9
 - Save certain settings to registry as a fallback if they fail after upgrading the program (folder, file and hotkey settings)
 - Added help and about to Editor
