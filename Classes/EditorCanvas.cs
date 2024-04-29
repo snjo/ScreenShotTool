@@ -200,6 +200,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
 
     public Bitmap? GetImageInProgress()
     {
+        UpdateOverlay(highlightSelected: false);
         if (imageInProgress == null) return null;
         return new Bitmap(imageInProgress);
     }
