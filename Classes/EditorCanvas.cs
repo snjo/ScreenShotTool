@@ -191,6 +191,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         Graphics saveGraphic = Graphics.FromImage(outImage);
         saveGraphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
         saveGraphic.TextRenderingHint = TextRenderingHint.AntiAlias;
+        imageInProgress = new(SourceImage);
         DrawElements(saveGraphic, ShowNonOutputWidgets: false);
         //Clipboard.SetImage(outImage);
         saveGraphic.Dispose();
