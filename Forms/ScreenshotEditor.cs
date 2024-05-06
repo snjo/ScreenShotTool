@@ -1530,6 +1530,15 @@ public partial class ScreenshotEditor : Form
     private void ButtonStickers_Click(object sender, EventArgs e)
     {
         string stickerFolder = Path.GetFullPath(Settings.Default.StickerFolder);
+        string? appFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+        string alternateFolder = Path.Join(appFolder, "stickers");
+        Debug.WriteLine($"App folder: {appFolder}");
+        Debug.WriteLine($"Alternate folder: {alternateFolder}");
+        Debug.WriteLine($"Open sticker folder: {stickerFolder}");
+        if (Directory.Exists(stickerFolder) == false && Directory.Exists(alternateFolder))
+        {
+            stickerFolder = alternateFolder;
+        }
         InsertImageFromFileDialog(new Point(editorCanvas.CanvasSize.Width / 2, editorCanvas.CanvasSize.Height / 2), stickerFolder);
     }
 
