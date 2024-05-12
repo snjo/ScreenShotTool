@@ -29,8 +29,17 @@ public partial class TagView : Form
     private void buttonAddTag_Click(object sender, EventArgs e)
     {
         mainForm.CaptureTags.Add(new InfoTag(false, ""));
+        List<int> columnWidths = new List<int>();
+        foreach (DataGridViewColumn column in dataGridView1.Columns)
+        {
+            columnWidths.Add(column.Width);
+        }
         dataGridView1.DataSource = null;
         dataGridView1.DataSource = bindingList;
+        for (int i = 0; i < dataGridView1.Columns.Count; i++)
+        {
+            dataGridView1.Columns[i].Width = columnWidths[i];
+        }
     }
 
     private void buttonSaveTags_Click(object sender, EventArgs e)
