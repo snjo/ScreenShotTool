@@ -50,6 +50,16 @@ public static class ImageOutput
         Debug.WriteLine($"Saving image {filename} with format {imgFormat}");
         //Bitmap? outImage = editorCanvas.AssembleImageForSaveOrCopy();
 
+        //if (Settings.Default.SaveTagsExif)
+        //{
+        //    PropertyItem tagItem = outImage.PropertyItems[0];
+        //    tagItem.Id = 0x9286; // UserComment
+        //    tagItem.Type = 2; // string
+        //    tagItem.Value = System.Text.Encoding.UTF8.GetBytes("testTag");
+        //    tagItem.Len = tagItem.Value.Length;
+        //    outImage.SetPropertyItem(tagItem);
+        //}
+
         if (outImage != null && imgFormat == ImageFormat.Jpeg)
         {
             MainForm.SaveJpeg(filename, (Bitmap)outImage, Settings.Default.JpegQuality);

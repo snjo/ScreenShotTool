@@ -230,5 +230,11 @@
     <Setting Name="PreventDpiRescale" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="TagDataFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">%localappdata%\ScreenshotTool\TagData</Value>
+    </Setting>
+    <Setting Name="SaveTagsExif" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

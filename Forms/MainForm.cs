@@ -81,6 +81,7 @@ public partial class MainForm : Form
         InitializeComponent();
         Font = new Font(this.Font.FontFamily, 9);
         UpgradeSettings();
+        LoadTagData();
         LoadHotkeysFromSettings();
 
         UpdateTrimStatus();
@@ -135,6 +136,7 @@ public partial class MainForm : Form
     private void Form1_FormClosing(object sender, FormClosingEventArgs e)
     {
         Debug.WriteLine($"FormClosing: {e.CloseReason} {sender}");
+        SaveTagData();
         if (settings.MinimizeOnClose && ExitForSure == false)
         {
             this.WindowState = FormWindowState.Minimized;
@@ -577,6 +579,10 @@ public partial class MainForm : Form
         text = text.Replace("$ms", millisecond);
         text = text.Replace("$w", windowTitle);
         text = text.Replace("$c", counter);
+
+        //text = text.Replace("$TAG1", GetTag(1)?.Name);
+        text = text.Replace("$TAG", GetTagsText());
+        
         // incrementing the counter happens in CaptureAction if the file is actually saved
 
         if (text.Contains("${")) // do Greenshot style text replacements
@@ -884,7 +890,7 @@ public partial class MainForm : Form
     #endregion
 
     #region active window location
-    
+
     [StructLayout(LayoutKind.Sequential)]
     public struct RECT
     {
@@ -1598,4 +1604,154 @@ public partial class MainForm : Form
     }
     #endregion
 
+    #region Tags --------------------------------------
+
+    TagView? tagView;
+    public List<InfoTag> CaptureTags = [];
+    //= new List<InfoTag>()
+    //{
+    //    new InfoTag("Alpha", "Test 1", "none"),
+    //    new InfoTag("Beta", "Test 2", "none"),
+    //};
+
+    private void LoadTagData()
+    {
+        CaptureTags.Clear();
+        string tagDataFolder = Environment.ExpandEnvironmentVariables(settings.TagDataFolder);
+        if (Directory.Exists(tagDataFolder) == false)
+        {
+            try
+            {
+                Debug.WriteLine($"Couldn't create find Tag Data Folder, creating the folder: {tagDataFolder}");
+                Directory.CreateDirectory(tagDataFolder);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine($"Couldn't create Tag Data Folder {tagDataFolder}\n: {e.Message}");
+            }
+        }
+        // Folder should exist now
+        if (Directory.Exists(tagDataFolder))
+        {
+            string tagFile = Path.Join(tagDataFolder, "tags.txt");
+            if (File.Exists(tagFile) == false)
+            {
+                Debug.WriteLine($"Can't find tag file: {tagFile}");
+            }
+            else
+            {
+                string[] tagLines = File.ReadAllLines(tagFile);
+                foreach (string line in tagLines)
+                {
+                    if (line.Length < 3)
+                    {
+                        Debug.WriteLine($"Invalid data on line, too short, aborting");
+                        break;
+                    }
+                    else
+                    {
+                        bool enabled = false;
+                        string[] sections = line.Split(";");
+                        if (sections.Length > 2)
+                        {
+                            if (sections[0] == "True")
+                                enabled = true;
+                            InfoTag tag = new InfoTag(enabled, sections[1], sections[2]);
+                            CaptureTags.Add(tag);
+                            Debug.WriteLine($"Added tag: {enabled}, {sections[1]} ({sections[2]}");
+                        }
+                        else
+                        {
+                            Debug.WriteLine("Too few sections on line");
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            Debug.WriteLine("Couldn't load tag data folder");
+        }
+        if (CaptureTags.Count == 0)
+        {
+            CaptureTags.Add(new InfoTag(false, "blank"));
+        }
+    }
+
+    public void SaveTagData()
+    {
+        string tagDataFolder = Environment.ExpandEnvironmentVariables(settings.TagDataFolder);
+        if (Directory.Exists(tagDataFolder) == false)
+        {
+            try
+            {
+                Debug.WriteLine($"Couldn't create find Tag Data Folder, creating the folder: {tagDataFolder}");
+                Directory.CreateDirectory(tagDataFolder);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine($"Couldn't create Tag Data Folder {tagDataFolder}\n: {e.Message}");
+            }
+        }
+        // Folder should exist now
+        if (Directory.Exists(tagDataFolder))
+        {
+            string tagFile = Path.Join(tagDataFolder, "tags.txt");
+            StringBuilder sb = new StringBuilder();
+            foreach (InfoTag tag in CaptureTags)
+            {
+                sb.Append(tag.Enabled);
+                sb.Append($";{tag.Name}");
+                sb.AppendLine($";{tag.Description}");
+            }
+            try
+            {
+                Debug.WriteLine($"Saving to tag file: {tagFile}");
+                File.WriteAllText(tagFile, sb.ToString());
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine($"Error saving to tag file {tagFile}:\n{e.Message}");
+            }
+        }
+    }
+
+    public InfoTag? GetTag(int index)
+    {
+        if (index < CaptureTags.Count)
+        {
+            return CaptureTags[index];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public string GetTagsText()
+    {
+        StringBuilder sb = new StringBuilder();
+        foreach (InfoTag tag in CaptureTags)
+        {
+            if (tag.Enabled)
+            {
+                if (sb.Length > 0)
+                    sb.Append(", ");
+                sb.Append(tag.Name);
+            }
+        }
+        return sb.ToString();
+    }
+
+    private void EditTagsToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        if (tagView == null || tagView.IsDisposed)
+        {
+            tagView = new TagView(this);
+        }
+        
+        tagView.Show();
+        //CaptureTags.Add(new InfoTag("Hello", "x", "img"));
+    }
+    #endregion
 }

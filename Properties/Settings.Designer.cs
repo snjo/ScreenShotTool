@@ -934,5 +934,29 @@ namespace ScreenShotTool.Properties {
                 this["PreventDpiRescale"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("%localappdata%\\ScreenshotTool\\TagData")]
+        public string TagDataFolder {
+            get {
+                return ((string)(this["TagDataFolder"]));
+            }
+            set {
+                this["TagDataFolder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SaveTagsExif {
+            get {
+                return ((bool)(this["SaveTagsExif"]));
+            }
+            set {
+                this["SaveTagsExif"] = value;
+            }
+        }
     }
 }
