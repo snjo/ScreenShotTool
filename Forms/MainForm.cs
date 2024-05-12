@@ -582,7 +582,7 @@ public partial class MainForm : Form
 
         //text = text.Replace("$TAG1", GetTag(1)?.Name);
         text = text.Replace("$TAG", GetTagsText());
-        
+
         // incrementing the counter happens in CaptureAction if the file is actually saved
 
         if (text.Contains("${")) // do Greenshot style text replacements
@@ -1608,11 +1608,6 @@ public partial class MainForm : Form
 
     TagView? tagView;
     public List<InfoTag> CaptureTags = [];
-    //= new List<InfoTag>()
-    //{
-    //    new InfoTag("Alpha", "Test 1", "none"),
-    //    new InfoTag("Beta", "Test 2", "none"),
-    //};
 
     private void LoadTagData()
     {
@@ -1674,7 +1669,7 @@ public partial class MainForm : Form
         }
         if (CaptureTags.Count == 0)
         {
-            CaptureTags.Add(new InfoTag(false, "blank"));
+            CaptureTags.Add(new InfoTag(false, ""));
         }
     }
 
@@ -1749,9 +1744,8 @@ public partial class MainForm : Form
         {
             tagView = new TagView(this);
         }
-        
+
         tagView.Show();
-        //CaptureTags.Add(new InfoTag("Hello", "x", "img"));
     }
     #endregion
 }
