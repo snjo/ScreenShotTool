@@ -166,15 +166,15 @@ Note that $TAG variable is all upper case, to distinguish it from the $t Time va
 	☑ Food
 	☐ Cars
 	☑ Recipe
-
+	 
 	Your folder and file names in settings is:
 	D:\Captures\$w\$TAG
 	$d $t $TAG
-
+	 
 	The resulting output file name:
 	D:\Captures\WebBrowser\Food, Recipe\2024-05-13 13:44 Food, Recipe.png
-
-	If the no tags are enabled, a subfolder will not be created even though the \$TAG is present
+	 
+	If no tags are enabled, a subfolder will not be created even though the \$TAG is present
 
 The available tags are saved in %localappdata%\ScreenShotTool\TagData\tags.txt
 
