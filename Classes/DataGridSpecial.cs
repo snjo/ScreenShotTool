@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.Versioning;
+using System.Windows.Forms;
 
 namespace ScreenShotTool.Classes;
 [SupportedOSPlatform("windows")]
@@ -38,6 +39,12 @@ public partial class DataGridSpecial : DataGridView
         container.Add(this);
         InitializeComponent();
         base.CellMouseUp += CheckboxEndEdit;
+        base.CellClick += CellClickCheck;
         Debug.WriteLine($"DataGridViewSpecial created");
+    }
+
+    private void CellClickCheck(object? sender, DataGridViewCellEventArgs e)
+    {
+        Debug.WriteLine($"Clicked {e.RowIndex} {e.ColumnIndex}");
     }
 }

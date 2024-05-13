@@ -1,4 +1,4 @@
-# ScreenShot Tool
+﻿# ScreenShot Tool
 
 A simple screenshot program, inspired by Greenshot, but each capture method can have individual settings for saving to file, clipboard or editor.
 
@@ -95,6 +95,7 @@ The default file name is "$w $d $t $c", which will output something like "MyWind
     $t      Time
     $ms     Milliseconds
     $c      Counter number (auto increments)
+    $TAG    Add tag names, multiple active tags is separated with comma. See "Tags" below
 
 You can also use longer form variables, these are identical to Greenshot's variable format.
 
@@ -144,6 +145,38 @@ This can be used to remove the window title bar and edges. In the Windows 11 def
 #### Counter number
 
 When using the $c or ${NUM} variable, it inserts the number in this field. The number is saved between sessions.
+
+### Tags and the $TAG variable
+
+Tags are used for adding info to the file or folder name that can be changed on the fly.
+
+To create and enable tags, use the Edit Tags window (Main window > Edit > Edit Tags).
+
+Tags have three parts:
+- The checkbox enables the tag
+- The Name field is what is output in the $TAG
+- The Description field is just for adding an explanatary note to yourself, and is not used in $TAG output
+
+When $TAG is present in the file or folder name setting, any enabled tags will be added in the name. If there are multiple active tag, they are separated with comma.
+
+Note that $TAG variable is all upper case, to distinguish it from the $t Time variable
+
+	Example:
+	You have the current tags in the Tag View:
+	☑ Food
+	☐ Cars
+	☑ Recipe
+
+	Your folder and file names in settings is:
+	D:\Captures\$w\$TAG
+	$d $t $TAG
+
+	The resulting output file name:
+	D:\Captures\WebBrowser\Food, Recipe\2024-05-13 13:44 Food, Recipe.png
+
+	If the no tags are enabled, a subfolder will not be created even though the \$TAG is present
+
+The available tags are saved in %localappdata%\ScreenShotTool\TagData\tags.txt
 
 --------------------------------------------------------------------------------------
 

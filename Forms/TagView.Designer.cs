@@ -34,6 +34,9 @@ namespace ScreenShotTool.Forms
             dataGridView1 = new DataGridSpecial(components);
             buttonAddTag = new Button();
             buttonSaveTags = new Button();
+            buttonMoveUp = new Button();
+            buttonMoveDown = new Button();
+            buttonDelete = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -42,7 +45,9 @@ namespace ScreenShotTool.Forms
             dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Location = new Point(6, 35);
+            dataGridView1.MultiSelect = false;
             dataGridView1.Name = "dataGridView1";
+            dataGridView1.RowHeadersVisible = false;
             dataGridView1.Size = new Size(459, 407);
             dataGridView1.TabIndex = 0;
             // 
@@ -67,11 +72,44 @@ namespace ScreenShotTool.Forms
             buttonSaveTags.UseVisualStyleBackColor = true;
             buttonSaveTags.Click += buttonSaveTags_Click;
             // 
+            // buttonMoveUp
+            // 
+            buttonMoveUp.Location = new Point(102, 6);
+            buttonMoveUp.Name = "buttonMoveUp";
+            buttonMoveUp.Size = new Size(63, 23);
+            buttonMoveUp.TabIndex = 3;
+            buttonMoveUp.Text = "Up";
+            buttonMoveUp.UseVisualStyleBackColor = true;
+            buttonMoveUp.Click += ButtonMoveUp_Click;
+            // 
+            // buttonMoveDown
+            // 
+            buttonMoveDown.Location = new Point(166, 6);
+            buttonMoveDown.Name = "buttonMoveDown";
+            buttonMoveDown.Size = new Size(59, 23);
+            buttonMoveDown.TabIndex = 4;
+            buttonMoveDown.Text = "Down";
+            buttonMoveDown.UseVisualStyleBackColor = true;
+            buttonMoveDown.Click += ButtonMoveDown_Click;
+            // 
+            // buttonDelete
+            // 
+            buttonDelete.Location = new Point(247, 6);
+            buttonDelete.Name = "buttonDelete";
+            buttonDelete.Size = new Size(75, 23);
+            buttonDelete.TabIndex = 5;
+            buttonDelete.Text = "Delete";
+            buttonDelete.UseVisualStyleBackColor = true;
+            buttonDelete.Click += buttonDelete_Click;
+            // 
             // TagView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(471, 443);
+            Controls.Add(buttonDelete);
+            Controls.Add(buttonMoveDown);
+            Controls.Add(buttonMoveUp);
             Controls.Add(buttonSaveTags);
             Controls.Add(buttonAddTag);
             Controls.Add(dataGridView1);
@@ -86,5 +124,8 @@ namespace ScreenShotTool.Forms
         private Button buttonAddTag;
         private DataGridSpecial dataGridView1;
         private Button buttonSaveTags;
+        private Button buttonMoveUp;
+        private Button buttonMoveDown;
+        private Button buttonDelete;
     }
 }
