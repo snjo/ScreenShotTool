@@ -37,6 +37,7 @@ namespace ScreenShotTool.Forms
             buttonMoveUp = new Button();
             buttonMoveDown = new Button();
             buttonDelete = new Button();
+            buttonOnTop = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -55,58 +56,68 @@ namespace ScreenShotTool.Forms
             // 
             buttonAddTag.Location = new Point(6, 6);
             buttonAddTag.Name = "buttonAddTag";
-            buttonAddTag.Size = new Size(75, 23);
+            buttonAddTag.Size = new Size(35, 23);
             buttonAddTag.TabIndex = 1;
-            buttonAddTag.Text = "Add tag";
+            buttonAddTag.Text = "➕";
             buttonAddTag.UseVisualStyleBackColor = true;
             buttonAddTag.Click += buttonAddTag_Click;
             // 
             // buttonSaveTags
             // 
-            buttonSaveTags.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            buttonSaveTags.Location = new Point(390, 6);
+            buttonSaveTags.Location = new Point(205, 6);
             buttonSaveTags.Name = "buttonSaveTags";
-            buttonSaveTags.Size = new Size(75, 23);
+            buttonSaveTags.Size = new Size(35, 23);
             buttonSaveTags.TabIndex = 2;
-            buttonSaveTags.Text = "Save";
+            buttonSaveTags.Text = "💾";
             buttonSaveTags.UseVisualStyleBackColor = true;
             buttonSaveTags.Click += buttonSaveTags_Click;
             // 
             // buttonMoveUp
             // 
-            buttonMoveUp.Location = new Point(102, 6);
+            buttonMoveUp.Location = new Point(47, 6);
             buttonMoveUp.Name = "buttonMoveUp";
-            buttonMoveUp.Size = new Size(63, 23);
+            buttonMoveUp.Size = new Size(35, 23);
             buttonMoveUp.TabIndex = 3;
-            buttonMoveUp.Text = "Up";
+            buttonMoveUp.Text = "🠉";
             buttonMoveUp.UseVisualStyleBackColor = true;
             buttonMoveUp.Click += ButtonMoveUp_Click;
             // 
             // buttonMoveDown
             // 
-            buttonMoveDown.Location = new Point(166, 6);
+            buttonMoveDown.Location = new Point(88, 6);
             buttonMoveDown.Name = "buttonMoveDown";
-            buttonMoveDown.Size = new Size(59, 23);
+            buttonMoveDown.Size = new Size(35, 23);
             buttonMoveDown.TabIndex = 4;
-            buttonMoveDown.Text = "Down";
+            buttonMoveDown.Text = "🠋";
             buttonMoveDown.UseVisualStyleBackColor = true;
             buttonMoveDown.Click += ButtonMoveDown_Click;
             // 
             // buttonDelete
             // 
-            buttonDelete.Location = new Point(247, 6);
+            buttonDelete.Location = new Point(129, 6);
             buttonDelete.Name = "buttonDelete";
-            buttonDelete.Size = new Size(75, 23);
+            buttonDelete.Size = new Size(35, 23);
             buttonDelete.TabIndex = 5;
-            buttonDelete.Text = "Delete";
+            buttonDelete.Text = "🗑";
             buttonDelete.UseVisualStyleBackColor = true;
             buttonDelete.Click += buttonDelete_Click;
+            // 
+            // buttonOnTop
+            // 
+            buttonOnTop.Location = new Point(246, 6);
+            buttonOnTop.Name = "buttonOnTop";
+            buttonOnTop.Size = new Size(35, 23);
+            buttonOnTop.TabIndex = 6;
+            buttonOnTop.Text = "📌";
+            buttonOnTop.UseVisualStyleBackColor = true;
+            buttonOnTop.Click += buttonOnTop_Click;
             // 
             // TagView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(471, 443);
+            Controls.Add(buttonOnTop);
             Controls.Add(buttonDelete);
             Controls.Add(buttonMoveDown);
             Controls.Add(buttonMoveUp);
@@ -127,5 +138,6 @@ namespace ScreenShotTool.Forms
         private Button buttonMoveUp;
         private Button buttonMoveDown;
         private Button buttonDelete;
+        private Button buttonOnTop;
     }
 }

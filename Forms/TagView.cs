@@ -92,4 +92,9 @@ public partial class TagView : Form
         mainForm.CaptureTags.RemoveAt(currentIndex);
         RefreshGrid();
     }
+
+    private void buttonOnTop_Click(object sender, EventArgs e)
+    {
+        TopMost = !TopMost;
+    }
 }
