@@ -29,19 +29,8 @@ public class Tagging
     {
         CaptureTags.Clear();
         string tagDataFolder = Environment.ExpandEnvironmentVariables(Settings.Default.TagDataFolder);
-        if (Directory.Exists(tagDataFolder) == false)
-        {
-            try
-            {
-                Debug.WriteLine($"Couldn't create find Tag Data Folder, creating the folder: {tagDataFolder}");
-                Directory.CreateDirectory(tagDataFolder);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine($"Couldn't create Tag Data Folder {tagDataFolder}\n: {e.Message}");
-            }
-        }
-        // Folder should exist now
+
+        // Load tags if folder exists
         if (Directory.Exists(tagDataFolder))
         {
             string tagFile = Path.Join(tagDataFolder, "tags.txt");
