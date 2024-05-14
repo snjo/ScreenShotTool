@@ -68,13 +68,14 @@
             editSelectedFileToolStripMenuItem = new ToolStripMenuItem();
             editFromClipboardToolStripMenuItem = new ToolStripMenuItem();
             openEditorToolStripMenuItem = new ToolStripMenuItem();
+            editTagsToolStripMenuItem = new ToolStripMenuItem();
             TopMenuHelp = new ToolStripMenuItem();
             helpofflineCopyToolStripMenuItem = new ToolStripMenuItem();
             helponGithubToolStripMenuItem = new ToolStripMenuItem();
             websiteToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             labelInfo = new Label();
-            editTagsToolStripMenuItem = new ToolStripMenuItem();
+            editTagsToolStripMenuItem1 = new ToolStripMenuItem();
             contextMenuListView.SuspendLayout();
             contextMenuSysTray.SuspendLayout();
             menuStrip1.SuspendLayout();
@@ -182,10 +183,10 @@
             // 
             // contextMenuSysTray
             // 
-            contextMenuSysTray.Items.AddRange(new ToolStripItem[] { openProgramToolStripMenuItem, optionsToolStripMenuItem, editorToolStripMenuItem, helpToolStripMenuItem, enableCroppingToolStripMenuItem, openLastUsedFolderToolStripMenuItem, pToolStripMenuItem, exitApplicationToolStripMenuItem });
+            contextMenuSysTray.Items.AddRange(new ToolStripItem[] { helpToolStripMenuItem, openProgramToolStripMenuItem, optionsToolStripMenuItem, editTagsToolStripMenuItem1, editorToolStripMenuItem, enableCroppingToolStripMenuItem, openLastUsedFolderToolStripMenuItem, pToolStripMenuItem, exitApplicationToolStripMenuItem });
             contextMenuSysTray.Name = "contextMenuSysTray";
             contextMenuSysTray.ShowImageMargin = false;
-            contextMenuSysTray.Size = new Size(164, 180);
+            contextMenuSysTray.Size = new Size(164, 224);
             // 
             // openProgramToolStripMenuItem
             // 
@@ -357,6 +358,13 @@
             openEditorToolStripMenuItem.Text = "Open &editor";
             openEditorToolStripMenuItem.Click += EditImageNoFile_Click;
             // 
+            // editTagsToolStripMenuItem
+            // 
+            editTagsToolStripMenuItem.Name = "editTagsToolStripMenuItem";
+            editTagsToolStripMenuItem.Size = new Size(180, 22);
+            editTagsToolStripMenuItem.Text = "Edit Tags";
+            editTagsToolStripMenuItem.Click += ShowTagView_Click;
+            // 
             // TopMenuHelp
             // 
             TopMenuHelp.DropDownItems.AddRange(new ToolStripItem[] { helpofflineCopyToolStripMenuItem, helponGithubToolStripMenuItem, websiteToolStripMenuItem, aboutToolStripMenuItem });
@@ -406,12 +414,12 @@
             labelInfo.DragDrop += ListViewThumbnails_DragDrop;
             labelInfo.DragEnter += ListViewThumbnails_DragEnter;
             // 
-            // editTagsToolStripMenuItem
+            // editTagsToolStripMenuItem1
             // 
-            editTagsToolStripMenuItem.Name = "editTagsToolStripMenuItem";
-            editTagsToolStripMenuItem.Size = new Size(180, 22);
-            editTagsToolStripMenuItem.Text = "Edit Tags";
-            editTagsToolStripMenuItem.Click += EditTagsToolStripMenuItem_Click;
+            editTagsToolStripMenuItem1.Name = "editTagsToolStripMenuItem1";
+            editTagsToolStripMenuItem1.Size = new Size(163, 22);
+            editTagsToolStripMenuItem1.Text = "Edit Tags";
+            editTagsToolStripMenuItem1.Click += ShowTagView_Click;
             // 
             // MainForm
             // 
@@ -486,5 +494,6 @@
         private ToolStripMenuItem helpToolStripMenuItem;
         private ToolStripMenuItem convertFileFormatToolStripMenuItem;
         private ToolStripMenuItem editTagsToolStripMenuItem;
+        private ToolStripMenuItem editTagsToolStripMenuItem1;
     }
 }
