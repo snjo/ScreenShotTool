@@ -4,6 +4,7 @@
 - Undo?
 
 ## 2.0
+- Customize file/folder output name on the fly with the Tag editor window. Use with the $TAG variable in output settings.
 - Numbered markers can have custom text instead of auto numbering
 - Fixed bug when copying and saving images with highlighter blend modes applying twice
 - Rebuilt Symbol property panels
