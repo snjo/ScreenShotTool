@@ -1,5 +1,7 @@
 ﻿using ScreenShotTool.Classes;
+using ScreenShotTool.Properties;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.Versioning;
 
 namespace ScreenShotTool.Forms;
@@ -25,6 +27,10 @@ public partial class TagView : Form
             dataGridView1.Columns[2].Width = 220;
         }
         dataGridView1.AutoGenerateColumns = false;
+        Debug.WriteLine($"Multiselect setting: {Settings.Default.TagMultiSelect}");
+        checkBoxMultiSelect.Checked = Settings.Default.TagMultiSelect;
+        dataGridView1.AllowCheckboxMultiSelect = Settings.Default.TagMultiSelect;
+        Debug.WriteLine($"Grid multiselect: {dataGridView1.AllowCheckboxMultiSelect}");
     }
 
     private void buttonAddTag_Click(object sender, EventArgs e)
@@ -80,6 +86,7 @@ public partial class TagView : Form
         InfoTag item = list[oldIndex];
         list.RemoveAt(oldIndex);
         list.Insert(newIndex, item);
+        dataGridView1.CurrentCell = dataGridView1.Rows[newIndex].Cells[0];
     }
 
     private void buttonDelete_Click(object sender, EventArgs e)
@@ -96,5 +103,12 @@ public partial class TagView : Form
     private void buttonOnTop_Click(object sender, EventArgs e)
     {
         TopMost = !TopMost;
+    }
+
+    private void AllowMultiSelect_Click(object sender, EventArgs e)
+    {
+        Settings.Default.TagMultiSelect = checkBoxMultiSelect.Checked;
+        Settings.Default.Save();
+        dataGridView1.AllowCheckboxMultiSelect = checkBoxMultiSelect.Checked;
     }
 }

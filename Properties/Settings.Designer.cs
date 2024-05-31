@@ -950,12 +950,12 @@ namespace ScreenShotTool.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool SaveTagsExif {
+        public bool TagMultiSelect {
             get {
-                return ((bool)(this["SaveTagsExif"]));
+                return ((bool)(this["TagMultiSelect"]));
             }
             set {
-                this["SaveTagsExif"] = value;
+                this["TagMultiSelect"] = value;
             }
         }
     }

@@ -38,6 +38,7 @@ namespace ScreenShotTool.Forms
             buttonMoveDown = new Button();
             buttonDelete = new Button();
             buttonOnTop = new Button();
+            checkBoxMultiSelect = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -112,11 +113,23 @@ namespace ScreenShotTool.Forms
             buttonOnTop.UseVisualStyleBackColor = true;
             buttonOnTop.Click += buttonOnTop_Click;
             // 
+            // checkBox1
+            // 
+            checkBoxMultiSelect.AutoSize = true;
+            checkBoxMultiSelect.Location = new Point(301, 9);
+            checkBoxMultiSelect.Name = "checkBox1";
+            checkBoxMultiSelect.Size = new Size(131, 19);
+            checkBoxMultiSelect.TabIndex = 7;
+            checkBoxMultiSelect.Text = "Multi select allowed";
+            checkBoxMultiSelect.UseVisualStyleBackColor = true;
+            checkBoxMultiSelect.Click += AllowMultiSelect_Click;
+            // 
             // TagView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(471, 443);
+            Controls.Add(checkBoxMultiSelect);
             Controls.Add(buttonOnTop);
             Controls.Add(buttonDelete);
             Controls.Add(buttonMoveDown);
@@ -128,6 +141,7 @@ namespace ScreenShotTool.Forms
             Text = "TagView";
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -139,5 +153,6 @@ namespace ScreenShotTool.Forms
         private Button buttonMoveDown;
         private Button buttonDelete;
         private Button buttonOnTop;
+        private CheckBox checkBoxMultiSelect;
     }
 }
