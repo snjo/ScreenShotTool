@@ -17,6 +17,7 @@
             Desaturate = 6,
             Invert = 7,
             Average = 8,
+            Contrast = 9,
         }
 
         public static Color BlendColors(Color color1, Color color2, BlendModes blendmode)
@@ -32,6 +33,7 @@
                 BlendModes.Desaturate => Desaturate(color1, color2), // grayscale
                 BlendModes.Invert => Invert(color1), // outputs the inverted color, light channels becomes dark, dark becomes light
                 BlendModes.Average => Average(color1, color2), // same as Normal with 50% opacity
+                BlendModes.Contrast => Contrast(color1, color2),
                 _ => color1
             };
         }
@@ -71,6 +73,23 @@
             float avg = (c1 + c2) / 2;
             int result = (int)(avg * 255);
             return int.Clamp(result, 0, 255);
+        }
+
+        public static int ContrastColorChannel(int channel1, int channel2)
+        {
+            // https://www.dfstudios.co.uk/articles/programming/image-programming-algorithms/image-processing-algorithms-part-5-contrast-adjustment/
+            // channel2 is used for contrast amount, gray 128 is unchanged, less becomes grayer, greater is more contrast. Color hues are valid for per-channel contrast.
+            // Shifting the channel2/contrast value up so 0 becomes -255, and 255 becomes remains 255, to allow for more or less contrast
+            channel2 = (channel2 * 2) - 255;
+            float contrast = channel2;
+            float factor = (259f * (contrast + 255f)) / (255f * (259f - contrast));
+            return (int)Math.Clamp(factor * (channel1 - 128) + 128, 0, 255);
+        }
+
+        private static Color Contrast(Color color1, Color color2)
+        {
+            int Alpha = CombineTransparencies(color1, color2);
+            return Color.FromArgb(Alpha, ContrastColorChannel(color1.R, color2.R), ContrastColorChannel(color1.G, color2.G), ContrastColorChannel(color1.B, color2.B));
         }
 
         public static Color Average(Color color1, Color color2)

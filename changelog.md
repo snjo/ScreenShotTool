@@ -3,6 +3,9 @@
 ## TODO:
 - Undo?
 
+## 2.1
+- Added Contrast to the highlighter blend modes
+
 ## 2.0
 - Customize file/folder output name on the fly with the Tag editor window. Use with the $TAG variable in output settings.
 - Numbered markers can have custom text instead of auto numbering
