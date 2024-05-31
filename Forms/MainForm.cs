@@ -545,10 +545,10 @@ public partial class MainForm : Form
         string day = DateTime.Now.Day.ToString();
         string fullDateISO = $"{year}-{month}-{day}";
 
-        string hour = DateTime.Now.Hour.ToString();
-        string minute = DateTime.Now.Minute.ToString();
-        string second = DateTime.Now.Second.ToString();
-        string millisecond = DateTime.Now.Millisecond.ToString();
+        string hour = DateTime.Now.Hour.ToString().PadLeft(2, '0');
+        string minute = DateTime.Now.Minute.ToString().PadLeft(2, '0');
+        string second = DateTime.Now.Second.ToString().PadLeft(2, '0');
+        string millisecond = DateTime.Now.Millisecond.ToString().PadLeft(3, '0'); ;
         string time = $"{hour}-{minute}-{second}";
 
         string counter = Counter.ToString().PadLeft(3, '0');
