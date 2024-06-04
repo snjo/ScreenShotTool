@@ -5,6 +5,7 @@
 
 ## 2.1
 - Added Contrast to the highlighter blend modes
+- Fixed missing 0-padding on timestamps in file names
 
 ## 2.0
 - Customize file/folder output name on the fly with the Tag editor window. Use with the $TAG variable in output settings.
