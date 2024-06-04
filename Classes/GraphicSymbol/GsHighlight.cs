@@ -8,6 +8,9 @@ public class GsHighlight : GsDynamicImage
     private Color previousColor = Color.White;
     private ColorBlend.BlendModes previousBlendMode = ColorBlend.BlendModes.Multiply;
     DateTime lastLocalUpdate = DateTime.MinValue;
+    public float BlendStrengthRed = 1f;
+    public float BlendStrengthBlue = 1f;
+    public float BlendStrengthGreen = 1f;
     public GsHighlight(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadow, int lineWidth) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadow, lineWidth)
     {
         Name = "Highlight";
@@ -68,10 +71,18 @@ public class GsHighlight : GsDynamicImage
                 int sampleY = bmpTop + y;
                 if (sampleX < 0 || sampleY < 0 || sampleX >= snoop.Width || sampleY >= snoop.Height) continue;
                 Color sourcePixel = snoop.GetPixel(sampleX, sampleY);
-                target.SetPixel(x, y, ColorBlend.BlendColors(sourcePixel, FillColor, blendMode));
-
+                Color blended = ColorBlend.BlendColors(sourcePixel, FillColor, blendMode);
+                target.SetPixel(x, y, ApplyChannel(sourcePixel, blended));
             }
         }
+    }
+
+    private Color ApplyChannel(Color original, Color blended)
+    {
+        int R = (int)float.Lerp((float)original.R, blended.R, BlendStrengthRed);
+        int G = (int)float.Lerp((float)original.G, blended.G, BlendStrengthGreen);
+        int B = (int)float.Lerp((float)original.B, blended.B, BlendStrengthBlue);
+        return (Color.FromArgb(original.A, R, G, B));
     }
 
     public override void DisposeImages()

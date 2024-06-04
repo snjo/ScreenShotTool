@@ -708,6 +708,9 @@ public partial class ScreenshotEditor : Form
 
         propertyPanels.Add(symbolBlendMode, parentPanel);
         symbolBlendMode.comboBoxBlendMode.SelectedIndexChanged += ComboBoxBlendMode_SelectedIndexChanged;
+        symbolBlendMode.numericRed.ValueChanged += NumericBlend_ValueChanged;
+        symbolBlendMode.numericGreen.ValueChanged += NumericBlend_ValueChanged;
+        symbolBlendMode.numericBlue.ValueChanged += NumericBlend_ValueChanged;
 
         propertyPanels.Add(symbolMosaic, parentPanel);
         symbolMosaic.numericBlurMosaicSize.ValueChanged += NumericBlurMosaicSize_ValueChanged;
@@ -892,6 +895,10 @@ public partial class ScreenshotEditor : Form
                     EnablePanel(symbolFillColor, panelLeft, ref lastPanelBottom);
                     EnablePanel(symbolBlendMode, panelLeft, ref lastPanelBottom);
                     symbolBlendMode.comboBoxBlendMode.Text = gsHL.blendMode.ToString();
+                    //symbolBlendMode.numericRed.Value = gsHL.BlendStrengthRed;
+                    SetNumericClamp(symbolBlendMode.numericRed, (decimal)gsHL.BlendStrengthRed);
+                    SetNumericClamp(symbolBlendMode.numericGreen, (decimal)gsHL.BlendStrengthGreen);
+                    SetNumericClamp(symbolBlendMode.numericBlue, (decimal)gsHL.BlendStrengthBlue);
                 }
                 else if (graphicSymbol is GsBlur gsb)
                 {
@@ -1088,6 +1095,20 @@ public partial class ScreenshotEditor : Form
             {
                 gs.LineWeight = (int)symbolLineColor.numericLineWeight.Value;
             }
+        }
+        editorCanvas.UpdateOverlay();
+    }
+
+    private void NumericBlend_ValueChanged(object? sender, EventArgs e)
+    {
+        if (GetSelectedSymbolFirst() is GsHighlight gsH)
+        {
+            if (sender == symbolBlendMode.numericRed)
+                gsH.BlendStrengthRed = (float)symbolBlendMode.numericRed.Value;
+            if (sender == symbolBlendMode.numericGreen)
+                gsH.BlendStrengthGreen = (float)symbolBlendMode.numericGreen.Value;
+            if (sender == symbolBlendMode.numericBlue)
+                gsH.BlendStrengthBlue = (float)symbolBlendMode.numericBlue.Value;
         }
         editorCanvas.UpdateOverlay();
     }

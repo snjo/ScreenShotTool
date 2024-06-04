@@ -31,18 +31,31 @@
             panelPropertiesHighlight = new Panel();
             label18 = new Label();
             comboBoxBlendMode = new ComboBox();
+            numericRed = new NumericUpDown();
+            labelChannel = new Label();
+            label1 = new Label();
+            numericGreen = new NumericUpDown();
+            numericBlue = new NumericUpDown();
             panelPropertiesHighlight.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericRed).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericGreen).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericBlue).BeginInit();
             SuspendLayout();
             // 
             // panelPropertiesHighlight
             // 
             panelPropertiesHighlight.BorderStyle = BorderStyle.FixedSingle;
+            panelPropertiesHighlight.Controls.Add(numericBlue);
+            panelPropertiesHighlight.Controls.Add(numericGreen);
+            panelPropertiesHighlight.Controls.Add(label1);
+            panelPropertiesHighlight.Controls.Add(labelChannel);
+            panelPropertiesHighlight.Controls.Add(numericRed);
             panelPropertiesHighlight.Controls.Add(label18);
             panelPropertiesHighlight.Controls.Add(comboBoxBlendMode);
             panelPropertiesHighlight.Dock = DockStyle.Fill;
             panelPropertiesHighlight.Location = new Point(0, 0);
             panelPropertiesHighlight.Name = "panelPropertiesHighlight";
-            panelPropertiesHighlight.Size = new Size(170, 50);
+            panelPropertiesHighlight.Size = new Size(170, 102);
             panelPropertiesHighlight.TabIndex = 105;
             // 
             // label18
@@ -64,15 +77,69 @@
             comboBoxBlendMode.TabIndex = 48;
             comboBoxBlendMode.Text = "Multiply";
             // 
+            // numericRed
+            // 
+            numericRed.DecimalPlaces = 2;
+            numericRed.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
+            numericRed.Location = new Point(33, 72);
+            numericRed.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
+            numericRed.Name = "numericRed";
+            numericRed.Size = new Size(42, 23);
+            numericRed.TabIndex = 49;
+            numericRed.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
+            // labelChannel
+            // 
+            labelChannel.AutoSize = true;
+            labelChannel.Location = new Point(3, 51);
+            labelChannel.Name = "labelChannel";
+            labelChannel.Size = new Size(159, 15);
+            labelChannel.TabIndex = 50;
+            labelChannel.Text = "Affect color channel amount";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(3, 74);
+            label1.Name = "label1";
+            label1.Size = new Size(29, 15);
+            label1.TabIndex = 54;
+            label1.Text = "RGB";
+            // 
+            // numericGreen
+            // 
+            numericGreen.DecimalPlaces = 2;
+            numericGreen.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
+            numericGreen.Location = new Point(78, 72);
+            numericGreen.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
+            numericGreen.Name = "numericGreen";
+            numericGreen.Size = new Size(42, 23);
+            numericGreen.TabIndex = 55;
+            numericGreen.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
+            // numericBlue
+            // 
+            numericBlue.DecimalPlaces = 2;
+            numericBlue.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
+            numericBlue.Location = new Point(124, 72);
+            numericBlue.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
+            numericBlue.Name = "numericBlue";
+            numericBlue.Size = new Size(42, 23);
+            numericBlue.TabIndex = 56;
+            numericBlue.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
             // SymbolBlendMode
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(panelPropertiesHighlight);
             Name = "SymbolBlendMode";
-            Size = new Size(170, 50);
+            Size = new Size(170, 102);
             panelPropertiesHighlight.ResumeLayout(false);
             panelPropertiesHighlight.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericRed).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericGreen).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericBlue).EndInit();
             ResumeLayout(false);
         }
 
@@ -81,5 +148,11 @@
         private Panel panelPropertiesHighlight;
         private Label label18;
         internal ComboBox comboBoxBlendMode;
+        private Label labelChannel;
+        private Label label1;
+        internal NumericUpDown numericRed;
+        internal NumericUpDown numericBlue;
+        internal NumericUpDown numericGreen;
+        private NumericUpDown numericUpDown3;
     }
 }

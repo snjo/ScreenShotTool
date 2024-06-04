@@ -5,6 +5,7 @@
 
 ## 2.1
 - Added Contrast to the highlighter blend modes
+- Tag view option to disable multi select of active tags
 - Fixed missing 0-padding on timestamps in file names
 
 ## 2.0

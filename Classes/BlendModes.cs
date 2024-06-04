@@ -20,7 +20,7 @@
             Contrast = 9,
         }
 
-        public static Color BlendColors(Color color1, Color color2, BlendModes blendmode)
+        public static Color BlendColors(Color color1, Color color2, BlendModes blendmode) //, float AffectChannelRed = 1f, float AffectChannelGreen = 1f, float AffectChannelBlue = 1f)
         {
             return blendmode switch
             {
