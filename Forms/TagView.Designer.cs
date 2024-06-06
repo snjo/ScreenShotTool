@@ -39,6 +39,7 @@ namespace ScreenShotTool.Forms
             buttonDelete = new Button();
             buttonOnTop = new Button();
             checkBoxMultiSelect = new CheckBox();
+            toolTip1 = new ToolTip(components);
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -52,6 +53,7 @@ namespace ScreenShotTool.Forms
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.Size = new Size(459, 407);
             dataGridView1.TabIndex = 0;
+            dataGridView1.KeyUp += GridHotkeyCheck;
             // 
             // buttonAddTag
             // 
@@ -60,6 +62,7 @@ namespace ScreenShotTool.Forms
             buttonAddTag.Size = new Size(35, 23);
             buttonAddTag.TabIndex = 1;
             buttonAddTag.Text = "➕";
+            toolTip1.SetToolTip(buttonAddTag, "Add tag (Ctrl+Plus)");
             buttonAddTag.UseVisualStyleBackColor = true;
             buttonAddTag.Click += buttonAddTag_Click;
             // 
@@ -70,6 +73,7 @@ namespace ScreenShotTool.Forms
             buttonSaveTags.Size = new Size(35, 23);
             buttonSaveTags.TabIndex = 2;
             buttonSaveTags.Text = "💾";
+            toolTip1.SetToolTip(buttonSaveTags, "Save tag list (Ctrl+S). Also saved automatically on program exit.");
             buttonSaveTags.UseVisualStyleBackColor = true;
             buttonSaveTags.Click += buttonSaveTags_Click;
             // 
@@ -80,6 +84,7 @@ namespace ScreenShotTool.Forms
             buttonMoveUp.Size = new Size(35, 23);
             buttonMoveUp.TabIndex = 3;
             buttonMoveUp.Text = "🠉";
+            toolTip1.SetToolTip(buttonMoveUp, "Move tag up (Ctrl+Comma)");
             buttonMoveUp.UseVisualStyleBackColor = true;
             buttonMoveUp.Click += ButtonMoveUp_Click;
             // 
@@ -90,6 +95,7 @@ namespace ScreenShotTool.Forms
             buttonMoveDown.Size = new Size(35, 23);
             buttonMoveDown.TabIndex = 4;
             buttonMoveDown.Text = "🠋";
+            toolTip1.SetToolTip(buttonMoveDown, "Move tag down (Ctrl+Period)");
             buttonMoveDown.UseVisualStyleBackColor = true;
             buttonMoveDown.Click += ButtonMoveDown_Click;
             // 
@@ -100,6 +106,7 @@ namespace ScreenShotTool.Forms
             buttonDelete.Size = new Size(35, 23);
             buttonDelete.TabIndex = 5;
             buttonDelete.Text = "🗑";
+            toolTip1.SetToolTip(buttonDelete, "Delete tag (Ctrl+Del)");
             buttonDelete.UseVisualStyleBackColor = true;
             buttonDelete.Click += buttonDelete_Click;
             // 
@@ -110,14 +117,15 @@ namespace ScreenShotTool.Forms
             buttonOnTop.Size = new Size(35, 23);
             buttonOnTop.TabIndex = 6;
             buttonOnTop.Text = "📌";
+            toolTip1.SetToolTip(buttonOnTop, "Pin window in front of other programs");
             buttonOnTop.UseVisualStyleBackColor = true;
             buttonOnTop.Click += buttonOnTop_Click;
             // 
-            // checkBox1
+            // checkBoxMultiSelect
             // 
             checkBoxMultiSelect.AutoSize = true;
             checkBoxMultiSelect.Location = new Point(301, 9);
-            checkBoxMultiSelect.Name = "checkBox1";
+            checkBoxMultiSelect.Name = "checkBoxMultiSelect";
             checkBoxMultiSelect.Size = new Size(131, 19);
             checkBoxMultiSelect.TabIndex = 7;
             checkBoxMultiSelect.Text = "Multi select allowed";
@@ -154,5 +162,6 @@ namespace ScreenShotTool.Forms
         private Button buttonDelete;
         private Button buttonOnTop;
         private CheckBox checkBoxMultiSelect;
+        private ToolTip toolTip1;
     }
 }

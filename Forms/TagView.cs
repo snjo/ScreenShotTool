@@ -35,8 +35,19 @@ public partial class TagView : Form
 
     private void buttonAddTag_Click(object sender, EventArgs e)
     {
-        tagging.CaptureTags.Add(new InfoTag(false, ""));
+        //tagging.CaptureTags.Add(new InfoTag(false, ""));
+        int selectedTag = dataGridView1.SelectedCells[0].RowIndex + 1;
+        if (selectedTag >= 0 && selectedTag < dataGridView1.Rows.Count)
+        {
+            tagging.CaptureTags.Insert(selectedTag, new InfoTag(false, ""));
+        }
+        else
+        {
+            tagging.CaptureTags.Add(new InfoTag(false, ""));
+        }
         RefreshGrid();
+        dataGridView1.CurrentCell = dataGridView1.Rows[selectedTag].Cells[1];
+        dataGridView1.Select();
     }
 
     private void RefreshGrid()
@@ -110,5 +121,50 @@ public partial class TagView : Form
         Settings.Default.TagMultiSelect = checkBoxMultiSelect.Checked;
         Settings.Default.Save();
         dataGridView1.AllowCheckboxMultiSelect = checkBoxMultiSelect.Checked;
+    }
+
+    private void GridHotkeyCheck(object sender, KeyEventArgs e)
+    {
+        if (e.Modifiers == Keys.Control)
+        { 
+            if (e.KeyCode == Keys.Oemplus || e.KeyCode == Keys.Add)
+            {
+                Debug.WriteLine("Add tag hotkey");
+                buttonAddTag_Click(sender, e);
+            }
+            else if (e.KeyCode == Keys.Delete)
+            {
+                buttonDelete_Click(sender, e);
+            }
+            else if (e.KeyCode == Keys.Oemcomma)
+            {
+                ButtonMoveUp_Click(sender, e);
+            }
+            else if (e.KeyCode == Keys.OemPeriod)
+            {
+                ButtonMoveDown_Click(sender, e);
+            }
+            else if (e.KeyCode == Keys.S)
+            {
+                buttonSaveTags_Click(sender, e);
+            }
+            else if (e.KeyCode == Keys.D)
+            {
+                DeselectTags();
+            }
+            else if (e.KeyCode == Keys.Q)
+            {
+                Close();
+            }
+        }
+    }
+
+    private void DeselectTags()
+    {
+        foreach (InfoTag tag in tagging.CaptureTags)
+        {
+            tag.Enabled = false;
+            RefreshGrid();
+        }
     }
 }
