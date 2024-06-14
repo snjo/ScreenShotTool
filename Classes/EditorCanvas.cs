@@ -449,7 +449,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
                 ScreenshotEditor.UserActions.CreateCircle => new GsCircle(upperLeft, size, lineColor, fillColor, shadow, lineWeightForceVisible),
                 ScreenshotEditor.UserActions.CreateLine => new GsLine(dragStart, dragEnd, lineColorForceVisible, fillColor, shadow, lineWeightForceVisible),
                 ScreenshotEditor.UserActions.CreateArrow => new GsArrow(dragStart, dragEnd, lineColorForceVisible, fillColor, shadow, lineWeightForceVisible),
-                ScreenshotEditor.UserActions.CreateText => new GsText(dragStart, size, lineColor, fillColor, shadow),
+                ScreenshotEditor.UserActions.CreateText => new GsText(dragStart, size, lineColorForceVisible, fillColor, shadow),
                 ScreenshotEditor.UserActions.CreateBlur => GsBlur.Create(upperLeft, size, temp, MosaicSize, BlurRadius),
                 ScreenshotEditor.UserActions.CreateHighlight => new GsHighlight(upperLeft, size, lineColor, Color.Yellow, false, 0),
                 ScreenshotEditor.UserActions.CreateCrop => new GsCrop(upperLeft, size, Color.Black, Color.White), // set line/fill color to a solid, so it isn't skipped in rendering
