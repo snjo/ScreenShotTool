@@ -3,6 +3,9 @@
 ## TODO:
 - Undo?
 
+## 2.2
+- Added option to send deleted files to recycle bin
+
 ## 2.1
 - Added Contrast to the highlighter blend modes
 - Tag view option to disable multi select of active tags
