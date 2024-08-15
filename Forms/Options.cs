@@ -87,6 +87,8 @@ namespace ScreenShotTool
 
             checkBoxPreventDpiRescale.Checked = settings.PreventDpiRescale;
 
+            checkBoxDeleteRecycle.Checked = settings.DeleteToRecycleBin;
+
             //Tab: Editor
 
             checkBoxSelectAfterPlacingSymbol.Checked = settings.SelectAfterPlacingSymbol;
@@ -187,6 +189,8 @@ namespace ScreenShotTool
             settings.MaxFramerate = numericUpDownFramerate.ValueInt();
 
             settings.PreventDpiRescale = checkBoxPreventDpiRescale.Checked;
+
+            settings.DeleteToRecycleBin = checkBoxDeleteRecycle.Checked;
 
             // Tab: Editor
 

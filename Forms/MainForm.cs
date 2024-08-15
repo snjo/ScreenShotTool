@@ -1,4 +1,5 @@
 using Hotkeys;
+using Microsoft.VisualBasic.FileIO;
 using ScreenShotTool.Classes;
 using ScreenShotTool.Forms;
 using ScreenShotTool.Properties;
@@ -1056,7 +1057,14 @@ public partial class MainForm : Form
                 {
                     try
                     {
-                        File.Delete(deleteFile);
+                        if (settings.DeleteToRecycleBin)
+                        {
+                            FileSystem.DeleteFile(deleteFile, UIOption.AllDialogs, RecycleOption.SendToRecycleBin, UICancelOption.DoNothing);
+                        }
+                        else
+                        {
+                            File.Delete(deleteFile);
+                        }
                         item.Remove();
                         WriteMessage("Deleted file " + deleteFile);
                     }

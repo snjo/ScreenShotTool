@@ -147,6 +147,8 @@
             buttonResetOptions = new Button();
             colorDialog1 = new ColorDialog();
             panel1 = new Panel();
+            label42 = new Label();
+            checkBoxDeleteRecycle = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
@@ -499,6 +501,8 @@
             // tabPageApplication
             // 
             tabPageApplication.AutoScroll = true;
+            tabPageApplication.Controls.Add(checkBoxDeleteRecycle);
+            tabPageApplication.Controls.Add(label42);
             tabPageApplication.Controls.Add(label41);
             tabPageApplication.Controls.Add(checkBoxPreventDpiRescale);
             tabPageApplication.Controls.Add(label40);
@@ -1392,6 +1396,26 @@
             panel1.Size = new Size(495, 31);
             panel1.TabIndex = 95;
             // 
+            // label42
+            // 
+            label42.AutoSize = true;
+            label42.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label42.Location = new Point(6, 485);
+            label42.Name = "label42";
+            label42.Size = new Size(68, 15);
+            label42.TabIndex = 87;
+            label42.Text = "File system";
+            // 
+            // checkBoxDeleteRecycle
+            // 
+            checkBoxDeleteRecycle.AutoSize = true;
+            checkBoxDeleteRecycle.Location = new Point(18, 513);
+            checkBoxDeleteRecycle.Name = "checkBoxDeleteRecycle";
+            checkBoxDeleteRecycle.Size = new Size(195, 19);
+            checkBoxDeleteRecycle.TabIndex = 88;
+            checkBoxDeleteRecycle.Text = "Send deleted files to Recycle Bin";
+            checkBoxDeleteRecycle.UseVisualStyleBackColor = true;
+            // 
             // Options
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1553,5 +1577,7 @@
         private CheckBox checkBoxPreventDpiRescale;
         private Label label40;
         private Label label41;
+        private CheckBox checkBoxDeleteRecycle;
+        private Label label42;
     }
 }
