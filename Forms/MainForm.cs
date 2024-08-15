@@ -64,7 +64,7 @@ public partial class MainForm : Form
 
     private static IntPtr GetActiveWindow()
     {
-        Debug.WriteLine("ForeGround Window:" + GetForegroundWindow());
+        //Debug.WriteLine("ForeGround Window:" + GetForegroundWindow());
         return GetForegroundWindow();
     }
 
@@ -615,16 +615,16 @@ public partial class MainForm : Form
     {
         if (bitmap == null) return;
         string displayName = Path.GetFileName(filepath);
-        Debug.WriteLine($"Add thumbnail: dest {displayName} last {filepath}");
-        try
-        {
-            Debug.WriteLine("AddThumbnail, bitmap: " + bitmap.Size);
-        }
-        catch
-        {
-            Debug.WriteLine("AddThumbnail, bitmap error");
-            return;
-        }
+        //Debug.WriteLine($"Add thumbnail: dest {displayName} last {filepath}");
+        //try
+        //{
+        //    Debug.WriteLine("AddThumbnail, bitmap: " + bitmap.Size);
+        //}
+        //catch
+        //{
+        //    Debug.WriteLine("AddThumbnail, bitmap error");
+        //    return;
+        //}
 
         Image thumbImg;
         if (Path.GetExtension(displayName) == ".pdf" && allowFiletypeIcon)
@@ -1045,6 +1045,7 @@ public partial class MainForm : Form
 
     private void DeleteSelectedFiles()
     {
+        bool recycle = settings.DeleteToRecycleBin && ModifierKeys != Keys.Shift;
         if (listViewThumbnails.SelectedItems.Count > 0)
         {
             Debug.WriteLine("deleting " + listViewThumbnails.SelectedItems[0].Text);
@@ -1057,16 +1058,17 @@ public partial class MainForm : Form
                 {
                     try
                     {
-                        if (settings.DeleteToRecycleBin)
+                        if (recycle)
                         {
                             FileSystem.DeleteFile(deleteFile, UIOption.AllDialogs, RecycleOption.SendToRecycleBin, UICancelOption.DoNothing);
+                            //Debug.WriteLine($"Sending file to recycle bin: {deleteFile}");
                         }
                         else
                         {
                             File.Delete(deleteFile);
+                            //Debug.WriteLine("Hard-deleted file " + deleteFile);
                         }
                         item.Remove();
-                        WriteMessage("Deleted file " + deleteFile);
                     }
                     catch (Exception ex)
                     {
@@ -1167,13 +1169,13 @@ public partial class MainForm : Form
 
         if (showToolTip)
         {
-            Debug.WriteLine("Showing Balloon tip: " + tipType.ToString());
+            //Debug.WriteLine("Showing Balloon tip: " + tipType.ToString());
             lastBallonTip = tipType;
             notifyIcon1.ShowBalloonTip(timeout, title, text, icon);
         }
         else
         {
-            Debug.WriteLine("Supressing Balloon tip: " + tipType.ToString());
+            //Debug.WriteLine("Supressing Balloon tip: " + tipType.ToString());
         }
     }
 
