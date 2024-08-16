@@ -65,6 +65,8 @@
             checkBoxTrayTooltipWarning = new CheckBox();
             tabControl1 = new TabControl();
             tabPageApplication = new TabPage();
+            checkBoxDeleteRecycle = new CheckBox();
+            label42 = new Label();
             label41 = new Label();
             checkBoxPreventDpiRescale = new CheckBox();
             label40 = new Label();
@@ -147,8 +149,7 @@
             buttonResetOptions = new Button();
             colorDialog1 = new ColorDialog();
             panel1 = new Panel();
-            label42 = new Label();
-            checkBoxDeleteRecycle = new CheckBox();
+            label43 = new Label();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
@@ -501,6 +502,7 @@
             // tabPageApplication
             // 
             tabPageApplication.AutoScroll = true;
+            tabPageApplication.Controls.Add(label43);
             tabPageApplication.Controls.Add(checkBoxDeleteRecycle);
             tabPageApplication.Controls.Add(label42);
             tabPageApplication.Controls.Add(label41);
@@ -532,6 +534,26 @@
             tabPageApplication.TabIndex = 1;
             tabPageApplication.Text = "Application";
             tabPageApplication.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxDeleteRecycle
+            // 
+            checkBoxDeleteRecycle.AutoSize = true;
+            checkBoxDeleteRecycle.Location = new Point(18, 513);
+            checkBoxDeleteRecycle.Name = "checkBoxDeleteRecycle";
+            checkBoxDeleteRecycle.Size = new Size(195, 19);
+            checkBoxDeleteRecycle.TabIndex = 88;
+            checkBoxDeleteRecycle.Text = "Send deleted files to Recycle Bin";
+            checkBoxDeleteRecycle.UseVisualStyleBackColor = true;
+            // 
+            // label42
+            // 
+            label42.AutoSize = true;
+            label42.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label42.Location = new Point(6, 485);
+            label42.Name = "label42";
+            label42.Size = new Size(68, 15);
+            label42.TabIndex = 87;
+            label42.Text = "File system";
             // 
             // label41
             // 
@@ -1396,25 +1418,14 @@
             panel1.Size = new Size(495, 31);
             panel1.TabIndex = 95;
             // 
-            // label42
+            // label43
             // 
-            label42.AutoSize = true;
-            label42.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label42.Location = new Point(6, 485);
-            label42.Name = "label42";
-            label42.Size = new Size(68, 15);
-            label42.TabIndex = 87;
-            label42.Text = "File system";
-            // 
-            // checkBoxDeleteRecycle
-            // 
-            checkBoxDeleteRecycle.AutoSize = true;
-            checkBoxDeleteRecycle.Location = new Point(18, 513);
-            checkBoxDeleteRecycle.Name = "checkBoxDeleteRecycle";
-            checkBoxDeleteRecycle.Size = new Size(195, 19);
-            checkBoxDeleteRecycle.TabIndex = 88;
-            checkBoxDeleteRecycle.Text = "Send deleted files to Recycle Bin";
-            checkBoxDeleteRecycle.UseVisualStyleBackColor = true;
+            label43.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
+            label43.Location = new Point(18, 535);
+            label43.Name = "label43";
+            label43.Size = new Size(435, 40);
+            label43.TabIndex = 89;
+            label43.Text = "Deleting to recycle bin is slower than hard deletion. When this is on you can still delete instead of recycle with Shift+Del   ";
             // 
             // Options
             // 
@@ -1579,5 +1590,6 @@
         private Label label41;
         private CheckBox checkBoxDeleteRecycle;
         private Label label42;
+        private Label label43;
     }
 }
