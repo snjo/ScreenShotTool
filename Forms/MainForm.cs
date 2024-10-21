@@ -1519,10 +1519,8 @@ public partial class MainForm : Form
                 try
                 {
                     bool resume;
-                    //using (Bitmap outImage = (Bitmap)Image.FromFile(filename))
-                    using (FileStream stream = new FileStream(filename, FileMode.Open, FileAccess.Read))
+                    using (Bitmap outImage = (Bitmap)Image.FromFile(filename))
                     {
-                        Bitmap outImage = (Bitmap)Image.FromStream(stream);
                         string nameSuggestion = Path.GetFileNameWithoutExtension(filename);
                         (resume, filterIndex) = ImageOutput.SaveWithDialog(outImage, ImageOutput.FilterSaveImage, nameSuggestion, filterIndex);
                         if (resume == false && filesRemaining > 0)
