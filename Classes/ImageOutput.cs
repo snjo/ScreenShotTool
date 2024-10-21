@@ -31,7 +31,7 @@ public static class ImageOutput
             {
                 Debug.WriteLine($"Saving to PDF {filename}");
                 SaveToPdf.Save(filename, outImage, margins: 20f, imageScale: 0.87f); // 0.87 seems to match real pixels to a 100% zoom in Adobe Reader.
-                outImage?.Dispose();
+                //outImage?.Dispose();
                 return (File.Exists(filename), filterIndex);
             }
             else

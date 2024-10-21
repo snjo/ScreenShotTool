@@ -1519,16 +1519,21 @@ public partial class MainForm : Form
                 try
                 {
                     bool resume;
-                    Bitmap outImage = (Bitmap)Image.FromFile(filename);
-                    string nameSuggestion = Path.GetFileNameWithoutExtension(filename);
-                    (resume, filterIndex) = ImageOutput.SaveWithDialog(outImage, ImageOutput.FilterSaveImage, nameSuggestion, filterIndex);
-                    if (resume == false && filesRemaining > 0)
+                    //using (Bitmap outImage = (Bitmap)Image.FromFile(filename))
+                    using (FileStream stream = new FileStream(filename, FileMode.Open, FileAccess.Read))
                     {
-                        if (MessageBox.Show("Cancel or error detected. Do you want to continue converting files", "Resume converting?", MessageBoxButtons.YesNo) == DialogResult.No)
+                        Bitmap outImage = (Bitmap)Image.FromStream(stream);
+                        string nameSuggestion = Path.GetFileNameWithoutExtension(filename);
+                        (resume, filterIndex) = ImageOutput.SaveWithDialog(outImage, ImageOutput.FilterSaveImage, nameSuggestion, filterIndex);
+                        if (resume == false && filesRemaining > 0)
                         {
-                            break;
+                            if (MessageBox.Show("Cancel or error detected. Do you want to continue converting files", "Resume converting?", MessageBoxButtons.YesNo) == DialogResult.No)
+                            {
+                                break;
+                            }
                         }
                     }
+                    
                 }
                 catch (Exception ex)
                 {
