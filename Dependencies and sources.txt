@@ -12,7 +12,7 @@ Used for converting image files to PDFs, without using print to PDF. If removed,
 
 FrameworkExtract.System.Deployment
 https://www.nuget.org/packages/FrameworkExtract.System.Deployment
-Used in About.cs
+Previously used in About.cs
 Used to show correct version number in ClickOnce deployed versions
 
 CLASSES FROM OTHER AUTHORS
