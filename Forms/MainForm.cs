@@ -1094,7 +1094,7 @@ public partial class MainForm : Form
 
         foreach (Image img in imageList.Images)
         {
-            img?.Dispose();
+            img?.Dispose(); // TODO: maybe not needed, causes lag? Check RAM used with or without
         }
         imageList.Images.Clear();
         listViewThumbnails.Clear();
@@ -1324,7 +1324,7 @@ public partial class MainForm : Form
         // remove all selected items from list, without deleting the file
         foreach (ListViewItem item in listViewThumbnails.SelectedItems)
         {
-            item.Remove();
+            item.Remove(); // TODO check that images are disposed when removing item, to save RAM
         }
         UpdateInfoLabelVisibility();
     }
