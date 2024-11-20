@@ -1092,10 +1092,10 @@ public partial class MainForm : Form
     private void ButtonClearList_Click(object sender, EventArgs e)
     {
 
-        foreach (Image img in imageList.Images)
-        {
-            img?.Dispose(); // TODO: maybe not needed, causes lag? Check RAM used with or without
-        }
+        //foreach (Image img in imageList.Images)
+        //{
+        //    img?.Dispose(); // TODO: maybe not needed, causes lag? Check RAM used with or without
+        //}
         imageList.Images.Clear();
         listViewThumbnails.Clear();
         UpdateInfoLabelVisibility();
