@@ -3,8 +3,14 @@
 ## TODO:
 - Undo?
 
+## 2.3 (In progress)
+- Removed hang when clearing large lists of thumbnails (removed un-needed image dispose)
+
 ## 2.2
 - Added option to send deleted files to recycle bin
+- Blend modes can affect different color channels differently (per-channel blend mode)
+- New tags are added below the currently selected tag
+- Fixed locked files after aborted image convert
 
 ## 2.1
 - Added Contrast to the highlighter blend modes
