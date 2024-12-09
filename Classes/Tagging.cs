@@ -43,7 +43,7 @@ public class Tagging
                 string[] tagLines = File.ReadAllLines(tagFile);
                 foreach (string line in tagLines)
                 {
-                    if (line.Length < 3)
+                    if (line.Length < 2)
                     {
                         Debug.WriteLine($"Invalid data on line, too short, aborting");
                         break;
@@ -51,19 +51,40 @@ public class Tagging
                     else
                     {
                         bool enabled = false;
+                        string name = "unnamed";
+                        string description = "";
+                        string category = "";
                         string[] sections = line.Split(";");
-                        if (sections.Length > 2)
-                        {
-                            if (sections[0] == "True")
-                                enabled = true;
-                            InfoTag tag = new InfoTag(enabled, sections[1], sections[2]);
-                            CaptureTags.Add(tag);
-                            Debug.WriteLine($"Added tag: {enabled}, {sections[1]} ({sections[2]}");
-                        }
-                        else
+
+                        if (sections.Length < 2)
                         {
                             Debug.WriteLine("Too few sections on line");
                         }
+                        else
+                        {
+                            if (sections.Length >= 1)
+                            {
+                                if (sections[0] == "True")
+                                    enabled = true;
+                            }
+                            if (sections.Length >= 2)
+                            {
+                                name = sections[1];
+                            }
+                            if (sections.Length >= 3)
+                            {
+                                description = sections[2];
+                            }
+                            if (sections.Length >= 4)
+                            {
+                                category = sections[3];
+                            }
+                            InfoTag tag = new InfoTag(enabled, name, description, category);
+                            CaptureTags.Add(tag);
+                            Debug.WriteLine($"Added tag: {enabled}, '{name}' in category '{category}', description: '{description}'");
+                        }
+                        
+                        
                     }
                 }
             }
@@ -102,7 +123,9 @@ public class Tagging
             {
                 sb.Append(tag.Enabled);
                 sb.Append($";{tag.Name}");
-                sb.AppendLine($";{tag.Description}");
+                sb.Append($";{tag.Description}");
+                sb.AppendLine($";{tag.Category}");
+                
             }
             try
             {

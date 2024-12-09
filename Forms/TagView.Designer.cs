@@ -40,6 +40,7 @@ namespace ScreenShotTool.Forms
             buttonOnTop = new Button();
             checkBoxMultiSelect = new CheckBox();
             toolTip1 = new ToolTip(components);
+            CheckListCategory = new CheckedListBox();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -51,7 +52,7 @@ namespace ScreenShotTool.Forms
             dataGridView1.MultiSelect = false;
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersVisible = false;
-            dataGridView1.Size = new Size(459, 407);
+            dataGridView1.Size = new Size(501, 425);
             dataGridView1.TabIndex = 0;
             dataGridView1.KeyUp += GridHotkeyCheck;
             // 
@@ -132,11 +133,20 @@ namespace ScreenShotTool.Forms
             checkBoxMultiSelect.UseVisualStyleBackColor = true;
             checkBoxMultiSelect.Click += AllowMultiSelect_Click;
             // 
+            // CheckListCategory
+            // 
+            CheckListCategory.FormattingEnabled = true;
+            CheckListCategory.Location = new Point(513, 35);
+            CheckListCategory.Name = "CheckListCategory";
+            CheckListCategory.Size = new Size(118, 418);
+            CheckListCategory.TabIndex = 8;
+            // 
             // TagView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(471, 443);
+            ClientSize = new Size(643, 461);
+            Controls.Add(CheckListCategory);
             Controls.Add(checkBoxMultiSelect);
             Controls.Add(buttonOnTop);
             Controls.Add(buttonDelete);
@@ -163,5 +173,6 @@ namespace ScreenShotTool.Forms
         private Button buttonOnTop;
         private CheckBox checkBoxMultiSelect;
         private ToolTip toolTip1;
+        private CheckedListBox CheckListCategory;
     }
 }

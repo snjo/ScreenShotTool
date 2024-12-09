@@ -1,18 +1,12 @@
 ﻿namespace ScreenShotTool.Classes;
 
-public class InfoTag
+public class InfoTag(bool Enabled, string Name, string Description = "", string Category = "")
 {
-    public InfoTag(bool enabled, string name, string description = "")//, string image = "")
-    {
-        Enabled = enabled;
-        Name = name;
-        Description = description;
-        //Image = image;
-    }
 
-    public bool Enabled { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
+    public bool Enabled { get; set; } = Enabled;
+    public string Name { get; set; } = Name;
+    public string Description { get; set; } = Description;
+    public string Category { get; set; } = Category;
     //public string Image { get; set; }
 
     public override string ToString()
