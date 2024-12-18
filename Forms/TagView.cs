@@ -25,9 +25,9 @@ public partial class TagView : Form
         dataGridView1.DataSource = bindingList;
 
         UpdateCategories();
-        CheckListCategory.DataSource = categoryList;
-        CheckListCategory.DisplayMember = "DisplayName";
-        CheckListCategory.ValueMember = "IsChecked";
+        //CheckListCategory.DataSource = categoryList;
+        //CheckListCategory.DisplayMember = "DisplayName";
+        //CheckListCategory.ValueMember = "Enabled";
 
         if (dataGridView1.Columns.Count > 1)
         {
@@ -104,8 +104,8 @@ public partial class TagView : Form
     {
         foreach (InfoTagCategory cat in categoryList)
         {
-            Debug.WriteLine($"Check category {cat.DisplayName} against {name}");
-            if (cat.DisplayName == name)
+            Debug.WriteLine($"Check category {cat.Name} against {name}");
+            if (cat.Name == name)
             {
                 Debug.WriteLine("   HIT on category search");
                 return true;

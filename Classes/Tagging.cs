@@ -17,6 +17,7 @@ public class Tagging
     MainForm mainForm;
     TagView? tagView;
     public List<InfoTag> CaptureTags = [];
+    public List<InfoTagCategory> CaptureTagCategories = [];
 
     public Tagging(MainForm parent)
     {
@@ -28,6 +29,7 @@ public class Tagging
     public void LoadTagData()
     {
         CaptureTags.Clear();
+        CaptureTagCategories.Clear();
         string tagDataFolder = Environment.ExpandEnvironmentVariables(Settings.Default.TagDataFolder);
 
         // Load tags if folder exists
