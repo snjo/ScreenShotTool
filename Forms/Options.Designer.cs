@@ -65,6 +65,7 @@
             checkBoxTrayTooltipWarning = new CheckBox();
             tabControl1 = new TabControl();
             tabPageApplication = new TabPage();
+            label43 = new Label();
             checkBoxDeleteRecycle = new CheckBox();
             label42 = new Label();
             label41 = new Label();
@@ -149,7 +150,7 @@
             buttonResetOptions = new Button();
             colorDialog1 = new ColorDialog();
             panel1 = new Panel();
-            label43 = new Label();
+            checkBoxAddThumbAtStartOfList = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
@@ -496,12 +497,13 @@
             tabControl1.Location = new Point(0, 0);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(495, 606);
+            tabControl1.Size = new Size(495, 642);
             tabControl1.TabIndex = 1;
             // 
             // tabPageApplication
             // 
             tabPageApplication.AutoScroll = true;
+            tabPageApplication.Controls.Add(checkBoxAddThumbAtStartOfList);
             tabPageApplication.Controls.Add(label43);
             tabPageApplication.Controls.Add(checkBoxDeleteRecycle);
             tabPageApplication.Controls.Add(label42);
@@ -530,15 +532,24 @@
             tabPageApplication.Location = new Point(4, 24);
             tabPageApplication.Name = "tabPageApplication";
             tabPageApplication.Padding = new Padding(3);
-            tabPageApplication.Size = new Size(487, 578);
+            tabPageApplication.Size = new Size(487, 614);
             tabPageApplication.TabIndex = 1;
             tabPageApplication.Text = "Application";
             tabPageApplication.UseVisualStyleBackColor = true;
             // 
+            // label43
+            // 
+            label43.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
+            label43.Location = new Point(18, 555);
+            label43.Name = "label43";
+            label43.Size = new Size(435, 40);
+            label43.TabIndex = 89;
+            label43.Text = "Deleting to recycle bin is slower than hard deletion. When this is on you can still delete instead of recycle with Shift+Del   ";
+            // 
             // checkBoxDeleteRecycle
             // 
             checkBoxDeleteRecycle.AutoSize = true;
-            checkBoxDeleteRecycle.Location = new Point(18, 513);
+            checkBoxDeleteRecycle.Location = new Point(18, 533);
             checkBoxDeleteRecycle.Name = "checkBoxDeleteRecycle";
             checkBoxDeleteRecycle.Size = new Size(195, 19);
             checkBoxDeleteRecycle.TabIndex = 88;
@@ -549,7 +560,7 @@
             // 
             label42.AutoSize = true;
             label42.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label42.Location = new Point(6, 485);
+            label42.Location = new Point(6, 505);
             label42.Name = "label42";
             label42.Size = new Size(68, 15);
             label42.TabIndex = 87;
@@ -558,7 +569,7 @@
             // label41
             // 
             label41.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
-            label41.Location = new Point(18, 445);
+            label41.Location = new Point(18, 465);
             label41.Name = "label41";
             label41.Size = new Size(435, 40);
             label41.TabIndex = 86;
@@ -567,7 +578,7 @@
             // checkBoxPreventDpiRescale
             // 
             checkBoxPreventDpiRescale.AutoSize = true;
-            checkBoxPreventDpiRescale.Location = new Point(18, 423);
+            checkBoxPreventDpiRescale.Location = new Point(18, 443);
             checkBoxPreventDpiRescale.Name = "checkBoxPreventDpiRescale";
             checkBoxPreventDpiRescale.Size = new Size(294, 19);
             checkBoxPreventDpiRescale.TabIndex = 85;
@@ -578,7 +589,7 @@
             // 
             label40.AutoSize = true;
             label40.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label40.Location = new Point(6, 400);
+            label40.Location = new Point(6, 420);
             label40.Name = "label40";
             label40.Size = new Size(113, 15);
             label40.TabIndex = 84;
@@ -608,7 +619,7 @@
             // 
             label24.AutoSize = true;
             label24.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label24.Location = new Point(6, 308);
+            label24.Location = new Point(6, 328);
             label24.Name = "label24";
             label24.Size = new Size(80, 15);
             label24.TabIndex = 73;
@@ -617,7 +628,7 @@
             // label13
             // 
             label13.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
-            label13.Location = new Point(17, 356);
+            label13.Location = new Point(17, 376);
             label13.Name = "label13";
             label13.Size = new Size(435, 40);
             label13.TabIndex = 72;
@@ -626,7 +637,7 @@
             // label17
             // 
             label17.AutoSize = true;
-            label17.Location = new Point(182, 332);
+            label17.Location = new Point(182, 352);
             label17.Name = "label17";
             label17.Size = new Size(23, 15);
             label17.TabIndex = 71;
@@ -635,7 +646,7 @@
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new Point(17, 332);
+            label12.Location = new Point(17, 352);
             label12.Name = "label12";
             label12.Size = new Size(84, 15);
             label12.TabIndex = 70;
@@ -644,7 +655,7 @@
             // numericUpDownFramerate
             // 
             numericUpDownFramerate.Increment = new decimal(new int[] { 5, 0, 0, 0 });
-            numericUpDownFramerate.Location = new Point(123, 330);
+            numericUpDownFramerate.Location = new Point(123, 350);
             numericUpDownFramerate.Maximum = new decimal(new int[] { 120, 0, 0, 0 });
             numericUpDownFramerate.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
             numericUpDownFramerate.Name = "numericUpDownFramerate";
@@ -1413,25 +1424,26 @@
             panel1.Controls.Add(buttonCancel);
             panel1.Controls.Add(buttonHelp);
             panel1.Dock = DockStyle.Bottom;
-            panel1.Location = new Point(0, 608);
+            panel1.Location = new Point(0, 644);
             panel1.Name = "panel1";
             panel1.Size = new Size(495, 31);
             panel1.TabIndex = 95;
             // 
-            // label43
+            // checkBoxAddThumbsAtStartOfList
             // 
-            label43.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
-            label43.Location = new Point(18, 535);
-            label43.Name = "label43";
-            label43.Size = new Size(435, 40);
-            label43.TabIndex = 89;
-            label43.Text = "Deleting to recycle bin is slower than hard deletion. When this is on you can still delete instead of recycle with Shift+Del   ";
+            checkBoxAddThumbAtStartOfList.AutoSize = true;
+            checkBoxAddThumbAtStartOfList.Location = new Point(16, 300);
+            checkBoxAddThumbAtStartOfList.Name = "checkBoxAddThumbsAtStartOfList";
+            checkBoxAddThumbAtStartOfList.Size = new Size(182, 19);
+            checkBoxAddThumbAtStartOfList.TabIndex = 90;
+            checkBoxAddThumbAtStartOfList.Text = "Add thumbnails at start of list";
+            checkBoxAddThumbAtStartOfList.UseVisualStyleBackColor = true;
             // 
             // Options
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(495, 639);
+            ClientSize = new Size(495, 675);
             Controls.Add(panel1);
             Controls.Add(tabControl1);
             FormBorderStyle = FormBorderStyle.SizableToolWindow;
@@ -1591,5 +1603,6 @@
         private CheckBox checkBoxDeleteRecycle;
         private Label label42;
         private Label label43;
+        private CheckBox checkBoxAddThumbAtStartOfList;
     }
 }

@@ -970,5 +970,17 @@ namespace ScreenShotTool.Properties {
                 this["DeleteToRecycleBin"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AddThumbAtStartOfList {
+            get {
+                return ((bool)(this["AddThumbAtStartOfList"]));
+            }
+            set {
+                this["AddThumbAtStartOfList"] = value;
+            }
+        }
     }
 }

@@ -3,6 +3,8 @@ using Microsoft.VisualBasic.FileIO;
 using ScreenShotTool.Classes;
 using ScreenShotTool.Forms;
 using ScreenShotTool.Properties;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -101,6 +103,7 @@ public partial class MainForm : Form
         UpdateLogVisible();
 
         SetInfoText();
+        listViewThumbnails.ListViewItemSorter = new CompareByIndex(this.listViewThumbnails);
     }
 
     private void ExitProgram()
@@ -638,7 +641,16 @@ public partial class MainForm : Form
 
         imageList.Images.Add(thumbImg);
         thumbImg.Dispose();
-        ListViewItem thumb = listViewThumbnails.Items.Add(displayName);
+        ListViewItem thumb;
+        if (settings.AddThumbAtStartOfList)
+        {
+            thumb = listViewThumbnails.Items.Insert(0, displayName);
+        }
+        else
+        {
+            thumb = listViewThumbnails.Items.Add(displayName);
+        }
+
         thumb.Text = displayName;
         thumb.Tag = filepath;
         thumb.ImageIndex = imageList.Images.Count - 1;
