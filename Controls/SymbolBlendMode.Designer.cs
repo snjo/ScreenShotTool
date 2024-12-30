@@ -153,6 +153,5 @@
         internal NumericUpDown numericRed;
         internal NumericUpDown numericBlue;
         internal NumericUpDown numericGreen;
-        private NumericUpDown numericUpDown3;
     }
 }

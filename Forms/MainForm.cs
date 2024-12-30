@@ -44,8 +44,8 @@ public partial class MainForm : Form
 
     public bool showThumbnails = true;
     Bitmap? bitmap;
-    ImageList imageList = new ImageList();
-    Tagging tagging;
+    readonly ImageList imageList = new ImageList();
+    readonly Tagging tagging;
     #endregion
 
     #region DLLimports
@@ -929,7 +929,7 @@ public partial class MainForm : Form
         }
     }
 
-    private string GetActiveWindowTitle()
+    private static string GetActiveWindowTitle()
     {
         const int nChars = 256;
         StringBuilder Buff = new StringBuilder(nChars);
