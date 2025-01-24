@@ -29,17 +29,17 @@
         private void InitializeComponent()
         {
             panelPropertiesHighlight = new Panel();
+            numericBlue = new NumericUpDown();
+            numericGreen = new NumericUpDown();
+            label1 = new Label();
+            labelChannel = new Label();
+            numericRed = new NumericUpDown();
             label18 = new Label();
             comboBoxBlendMode = new ComboBox();
-            numericRed = new NumericUpDown();
-            labelChannel = new Label();
-            label1 = new Label();
-            numericGreen = new NumericUpDown();
-            numericBlue = new NumericUpDown();
             panelPropertiesHighlight.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericRed).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericGreen).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericBlue).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericGreen).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericRed).BeginInit();
             SuspendLayout();
             // 
             // panelPropertiesHighlight
@@ -58,53 +58,16 @@
             panelPropertiesHighlight.Size = new Size(170, 102);
             panelPropertiesHighlight.TabIndex = 105;
             // 
-            // label18
+            // numericBlue
             // 
-            label18.AutoSize = true;
-            label18.Location = new Point(3, 4);
-            label18.Name = "label18";
-            label18.Size = new Size(117, 15);
-            label18.TabIndex = 30;
-            label18.Text = "Higlight blend mode";
-            // 
-            // comboBoxBlendMode
-            // 
-            comboBoxBlendMode.FormattingEnabled = true;
-            comboBoxBlendMode.Items.AddRange(new object[] { "Multiply", "Lighten", "Darken", "Desaturate", "Normal", "Divide", "Invert", "Contrast" });
-            comboBoxBlendMode.Location = new Point(3, 22);
-            comboBoxBlendMode.Name = "comboBoxBlendMode";
-            comboBoxBlendMode.Size = new Size(162, 23);
-            comboBoxBlendMode.TabIndex = 48;
-            comboBoxBlendMode.Text = "Multiply";
-            // 
-            // numericRed
-            // 
-            numericRed.DecimalPlaces = 2;
-            numericRed.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
-            numericRed.Location = new Point(33, 72);
-            numericRed.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
-            numericRed.Name = "numericRed";
-            numericRed.Size = new Size(42, 23);
-            numericRed.TabIndex = 49;
-            numericRed.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            // 
-            // labelChannel
-            // 
-            labelChannel.AutoSize = true;
-            labelChannel.Location = new Point(3, 51);
-            labelChannel.Name = "labelChannel";
-            labelChannel.Size = new Size(159, 15);
-            labelChannel.TabIndex = 50;
-            labelChannel.Text = "Affect color channel amount";
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(3, 74);
-            label1.Name = "label1";
-            label1.Size = new Size(29, 15);
-            label1.TabIndex = 54;
-            label1.Text = "RGB";
+            numericBlue.DecimalPlaces = 2;
+            numericBlue.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
+            numericBlue.Location = new Point(124, 72);
+            numericBlue.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
+            numericBlue.Name = "numericBlue";
+            numericBlue.Size = new Size(42, 23);
+            numericBlue.TabIndex = 56;
+            numericBlue.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // numericGreen
             // 
@@ -117,16 +80,53 @@
             numericGreen.TabIndex = 55;
             numericGreen.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
-            // numericBlue
+            // label1
             // 
-            numericBlue.DecimalPlaces = 2;
-            numericBlue.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
-            numericBlue.Location = new Point(124, 72);
-            numericBlue.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
-            numericBlue.Name = "numericBlue";
-            numericBlue.Size = new Size(42, 23);
-            numericBlue.TabIndex = 56;
-            numericBlue.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            label1.AutoSize = true;
+            label1.Location = new Point(3, 74);
+            label1.Name = "label1";
+            label1.Size = new Size(29, 15);
+            label1.TabIndex = 54;
+            label1.Text = "RGB";
+            // 
+            // labelChannel
+            // 
+            labelChannel.AutoSize = true;
+            labelChannel.Location = new Point(3, 51);
+            labelChannel.Name = "labelChannel";
+            labelChannel.Size = new Size(159, 15);
+            labelChannel.TabIndex = 50;
+            labelChannel.Text = "Affect color channel amount";
+            // 
+            // numericRed
+            // 
+            numericRed.DecimalPlaces = 2;
+            numericRed.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
+            numericRed.Location = new Point(33, 72);
+            numericRed.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
+            numericRed.Name = "numericRed";
+            numericRed.Size = new Size(42, 23);
+            numericRed.TabIndex = 49;
+            numericRed.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
+            // label18
+            // 
+            label18.AutoSize = true;
+            label18.Location = new Point(3, 4);
+            label18.Name = "label18";
+            label18.Size = new Size(117, 15);
+            label18.TabIndex = 30;
+            label18.Text = "Higlight blend mode";
+            // 
+            // comboBoxBlendMode
+            // 
+            comboBoxBlendMode.FormattingEnabled = true;
+            comboBoxBlendMode.Items.AddRange(new object[] { "Multiply", "Lighten", "Darken", "Desaturate", "Normal", "Divide", "Invert", "Contrast", "InvertBrightness" });
+            comboBoxBlendMode.Location = new Point(3, 22);
+            comboBoxBlendMode.Name = "comboBoxBlendMode";
+            comboBoxBlendMode.Size = new Size(162, 23);
+            comboBoxBlendMode.TabIndex = 48;
+            comboBoxBlendMode.Text = "Multiply";
             // 
             // SymbolBlendMode
             // 
@@ -137,9 +137,9 @@
             Size = new Size(170, 102);
             panelPropertiesHighlight.ResumeLayout(false);
             panelPropertiesHighlight.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numericRed).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericGreen).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericBlue).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericGreen).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericRed).EndInit();
             ResumeLayout(false);
         }
 
