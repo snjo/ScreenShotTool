@@ -963,6 +963,27 @@ public partial class MainForm : Form
         return folder;
     }
 
+    public string BrowseFileInExplorer(string file)
+    {
+        if (file.Length < 1)
+        {
+            file = ".";
+        }
+        if (File.Exists(file))
+        {
+            Debug.WriteLine("Opening file: " + file);
+            //Process.Start(new ProcessStartInfo() { FileName = folder, UseShellExecute = true });
+            //string filePath = Path.GetFullPath(filePath);
+            Process.Start("explorer.exe", string.Format("/select,\"{0}\"", file));
+        }
+        else
+        {
+            WriteMessage("Can't open file " + file);
+        }
+
+        return file;
+    }
+
 
     private void OpenSelectedImageExternal()
     {
@@ -1360,6 +1381,24 @@ public partial class MainForm : Form
                 Debug.WriteLine($"open folder from filename {filename}: {folder}");
                 if (folder == null) return;
                 BrowseFolderInExplorer(folder);
+            }
+        }
+    }
+
+    private void ItemOpenFileInExplorer_Click(object sender, EventArgs e)
+    {
+        // open folder of first selected file
+        if (listViewThumbnails.SelectedItems.Count > 0)
+        {
+            if (listViewThumbnails.SelectedItems[0].Tag is string filename)
+            {
+                //string? file = listViewThumbnails.SelectedItems[0].Tag?.ToString();
+                //if (file == null) return;
+                //string? folder = Path.GetDirectoryName(filename);
+                Debug.WriteLine($"open file {filename}");
+                BrowseFileInExplorer(filename);
+                //if (folder == null) return;
+                //BrowseFolderInExplorer(folder);
             }
         }
     }
