@@ -35,7 +35,7 @@ namespace ScreenShotTool
                 BlendModes.Darken => Darken(color1, color2), // only colors that are lighter than color2 are darkened
                 BlendModes.Desaturate => Desaturate(color1, color2), // grayscale
                 BlendModes.Invert => Invert(color1), // outputs the inverted color, light channels becomes dark, dark becomes light
-                BlendModes.InvertBrightness => InvertBrighness(color1),
+                BlendModes.InvertBrightness => InvertBrighness(color1, color2),
                 BlendModes.Average => Average(color1, color2), // same as Normal with 50% opacity
                 BlendModes.Contrast => Contrast(color1, color2),
                 _ => color1
@@ -139,16 +139,27 @@ namespace ScreenShotTool
             return Color.FromArgb(color1.A, 255 - color1.R, 255 - color1.G, 255 - color1.B);
         }
 
-        public static Color InvertBrighness(Color color1)
+        public static Color InvertBrighness(Color color1, Color color2)
         {
+            //color1 is the underlying image
+            //color2 is used to adjust the brightness of the extremes (dark to light as whites or pure color)
+            //color2 RED channel is used to transition between using BRIGHTNESS and PERCEPTUAL BRIGHTNESS
+            //color2 BLUE channel is used to transition between using SOURCE SATURATION and IMPROVED SATURATION, allowing for bright colors to move toward whites
+            //color2 GREEN channel is not used
             double hue;
             double saturation;
             double brightness;
             ColorTools.ColorToHSV(color1, out hue, out saturation, out brightness);
             double perceptualBrightness = ColorTools.ColorBrightness(color1);
-            double brightnessInvert = 1 - perceptualBrightness;
+            double brightnessInvert1 = 1 - brightness;
+            double brightnessInvert2 = 1 - perceptualBrightness;
 
-            Color outColor = ColorTools.ColorFromHSV(hue, saturation, brightnessInvert);
+            double finalBrightness = Double.Lerp(brightnessInvert1, brightnessInvert2, color2.R / 255d); // fade between Color.Brightness and perceptual brightness
+            double finalSaturation = Double.Lerp(saturation, brightness, color2.B / 255d); // using brightness for saturation allows dark>bright colors to fade into whites
+
+            Color outColor = ColorTools.ColorFromHSV(hue, finalSaturation, finalBrightness);
+
+            //Color outColor = ColorTools.ColorFromHSV(hue, color2.GetBrightness(), 1);
             return outColor;
         }
     }
