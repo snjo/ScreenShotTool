@@ -128,6 +128,19 @@ namespace ScreenShotTool
 
         public static Color Desaturate(Color color1, Color color2)
         {
+            // uses an average color, not perceptual, so pure greens are just as dark as blues and reds
+            // TODO: make a perceptual desaturate instead
+
+            int Alpha = CombineTransparencies(color1, color2);
+            //int avgColor = Math.Clamp((int)((color1.R + color1.G + color1.B) / 3f), 0, 255);
+            int desaturated = (int)(ColorTools.ColorBrightness(color1) * 255f);
+            return Color.FromArgb(Alpha, desaturated, desaturated, desaturated);
+        }
+
+        public static Color AverageRGB(Color color1, Color color2)
+        {
+            // uses an average color, not perceptual, so pure greens are just as dark as blues and reds
+
             int Alpha = CombineTransparencies(color1, color2);
             int avgColor = Math.Clamp((int)((color1.R + color1.G + color1.B) / 3f), 0, 255);
             return Color.FromArgb(Alpha, avgColor, avgColor, avgColor);
@@ -144,8 +157,9 @@ namespace ScreenShotTool
             //color1 is the underlying image
             //color2 is used to adjust the brightness of the extremes (dark to light as whites or pure color)
             //color2 RED channel is used to transition between using BRIGHTNESS and PERCEPTUAL BRIGHTNESS
-            //color2 BLUE channel is used to transition between using SOURCE SATURATION and IMPROVED SATURATION, allowing for bright colors to move toward whites
-            //color2 GREEN channel is not used
+            //color2 BLUE channel is not used
+            //color2 GREEN channel is not used channel is used to transition between using SOURCE SATURATION and IMPROVED SATURATION, allowing for bright colors to move toward whites
+            // using RED and GREEN because that matches the default Yellow highlighter values and gives the prettiest result.
             double hue;
             double saturation;
             double brightness;
@@ -155,7 +169,7 @@ namespace ScreenShotTool
             double brightnessInvert2 = 1 - perceptualBrightness;
 
             double finalBrightness = Double.Lerp(brightnessInvert1, brightnessInvert2, color2.R / 255d); // fade between Color.Brightness and perceptual brightness
-            double finalSaturation = Double.Lerp(saturation, brightness, color2.B / 255d); // using brightness for saturation allows dark>bright colors to fade into whites
+            double finalSaturation = Double.Lerp(saturation, brightness, color2.G / 255d); // using brightness for saturation allows dark>bright colors to fade into whites
 
             Color outColor = ColorTools.ColorFromHSV(hue, finalSaturation, finalBrightness);
 
