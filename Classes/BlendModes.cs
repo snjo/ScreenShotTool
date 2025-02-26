@@ -128,8 +128,7 @@ namespace ScreenShotTool
 
         public static Color Desaturate(Color color1, Color color2)
         {
-            // uses an average color, not perceptual, so pure greens are just as dark as blues and reds
-            // TODO: make a perceptual desaturate instead
+            // uses perceptual brightness to desaturate, blues are much darker than greens.
 
             int Alpha = CombineTransparencies(color1, color2);
             //int avgColor = Math.Clamp((int)((color1.R + color1.G + color1.B) / 3f), 0, 255);
@@ -137,7 +136,7 @@ namespace ScreenShotTool
             return Color.FromArgb(Alpha, desaturated, desaturated, desaturated);
         }
 
-        public static Color AverageRGB(Color color1, Color color2)
+        public static Color DesaturateAverageRGB(Color color1, Color color2)
         {
             // uses an average color, not perceptual, so pure greens are just as dark as blues and reds
 
