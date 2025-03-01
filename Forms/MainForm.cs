@@ -645,10 +645,19 @@ public partial class MainForm : Form
         if (settings.AddThumbAtStartOfList)
         {
             thumb = listViewThumbnails.Items.Insert(0, displayName);
+            if (listViewThumbnails.Items.Count > 0)
+            {
+                listViewThumbnails.Items[0].EnsureVisible();
+            }
         }
         else
         {
             thumb = listViewThumbnails.Items.Add(displayName);
+            int thumbcount = listViewThumbnails.Items.Count;
+            if (thumbcount > 0)
+            {
+                listViewThumbnails.Items[thumbcount-1].EnsureVisible();
+            }
         }
 
         thumb.Text = displayName;
