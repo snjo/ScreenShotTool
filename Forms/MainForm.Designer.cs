@@ -77,6 +77,7 @@
             websiteToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             labelInfo = new Label();
+            toolStripMenuItem1 = new ToolStripMenuItem();
             contextMenuListView.SuspendLayout();
             contextMenuSysTray.SuspendLayout();
             menuStrip1.SuspendLayout();
@@ -382,7 +383,7 @@
             // 
             // TopMenuHelp
             // 
-            TopMenuHelp.DropDownItems.AddRange(new ToolStripItem[] { helpofflineCopyToolStripMenuItem, helponGithubToolStripMenuItem, websiteToolStripMenuItem, aboutToolStripMenuItem });
+            TopMenuHelp.DropDownItems.AddRange(new ToolStripItem[] { helpofflineCopyToolStripMenuItem, helponGithubToolStripMenuItem, toolStripMenuItem1, websiteToolStripMenuItem, aboutToolStripMenuItem });
             TopMenuHelp.Name = "TopMenuHelp";
             TopMenuHelp.Size = new Size(44, 20);
             TopMenuHelp.Text = "&Help";
@@ -428,6 +429,13 @@
             labelInfo.Text = "To take a screenshot use hotkeys";
             labelInfo.DragDrop += ListViewThumbnails_DragDrop;
             labelInfo.DragEnter += ListViewThumbnails_DragEnter;
+            // 
+            // toolStripMenuItem1
+            // 
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new Size(220, 22);
+            toolStripMenuItem1.Text = "&Version changelog";
+            toolStripMenuItem1.Click += ChangelogToolStripMenuItem_Click;
             // 
             // MainForm
             // 
@@ -504,5 +512,6 @@
         private ToolStripMenuItem editTagsToolStripMenuItem;
         private ToolStripMenuItem editTagsToolStripMenuItem1;
         private ToolStripMenuItem itemOpenFileInExplorer;
+        private ToolStripMenuItem toolStripMenuItem1;
     }
 }

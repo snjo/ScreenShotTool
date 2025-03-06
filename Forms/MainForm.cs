@@ -656,7 +656,7 @@ public partial class MainForm : Form
             int thumbcount = listViewThumbnails.Items.Count;
             if (thumbcount > 0)
             {
-                listViewThumbnails.Items[thumbcount-1].EnsureVisible();
+                listViewThumbnails.Items[thumbcount - 1].EnsureVisible();
             }
         }
 
@@ -1458,6 +1458,11 @@ public partial class MainForm : Form
         OpenDocumentation();
     }
 
+    private void ChangelogToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        OpenWebsiteChangelog();
+    }
+
     private void WebsiteToolStripMenuItem_Click(object sender, EventArgs e)
     {
         OpenWebsite();
@@ -1476,6 +1481,11 @@ public partial class MainForm : Form
     public static void OpenWebsite()
     {
         OpenLink("https://github.com/snjo/ScreenShotTool/");
+    }
+
+    public static void OpenWebsiteChangelog()
+    {
+        OpenLink("https://github.com/snjo/ScreenShotTool/blob/master/changelog.md");
     }
 
     public static void OpenDocumentation()
@@ -1591,7 +1601,7 @@ public partial class MainForm : Form
                             }
                         }
                     }
-                    
+
                 }
                 catch (Exception ex)
                 {
@@ -1683,4 +1693,6 @@ public partial class MainForm : Form
         UpdateInfoLabelVisibility();
     }
     #endregion
+
+
 }

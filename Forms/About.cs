@@ -1,4 +1,5 @@
-﻿using System.Runtime.Versioning;
+﻿using System.Diagnostics;
+using System.Runtime.Versioning;
 
 namespace ScreenShotTool
 {
@@ -9,13 +10,17 @@ namespace ScreenShotTool
         {
             InitializeComponent();
             Font = new Font(this.Font.FontFamily, 9);
-            string version = ProductVersion;
+            string applicationVersion = Application.ProductVersion;
+            //string controlVersion = ProductVersion;
+            
+            Debug.WriteLine($"Application version: {applicationVersion}");
+            //Debug.WriteLine($"control version: {controlVersion}");
 
-            if (version == "1.0.0.0")
+            if (applicationVersion == "1.0.0.0")
             {
-                version = "ClickOnce (Check .exe details)";
+                applicationVersion = "ClickOnce (Check .exe details)";
             }
-            labelVersion.Text = "Version: " + version;
+            labelVersion.Text = "Version: " + applicationVersion;
         }
 
         private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
