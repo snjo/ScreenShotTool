@@ -618,16 +618,6 @@ public partial class MainForm : Form
     {
         if (bitmap == null) return;
         string displayName = Path.GetFileName(filepath);
-        //Debug.WriteLine($"Add thumbnail: dest {displayName} last {filepath}");
-        //try
-        //{
-        //    Debug.WriteLine("AddThumbnail, bitmap: " + bitmap.Size);
-        //}
-        //catch
-        //{
-        //    Debug.WriteLine("AddThumbnail, bitmap error");
-        //    return;
-        //}
 
         Image thumbImg;
         if (Path.GetExtension(displayName) == ".pdf" && allowFiletypeIcon)
