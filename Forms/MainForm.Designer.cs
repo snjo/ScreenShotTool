@@ -74,10 +74,12 @@
             TopMenuHelp = new ToolStripMenuItem();
             helpofflineCopyToolStripMenuItem = new ToolStripMenuItem();
             helponGithubToolStripMenuItem = new ToolStripMenuItem();
+            toolStripMenuItem1 = new ToolStripMenuItem();
             websiteToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             labelInfo = new Label();
-            toolStripMenuItem1 = new ToolStripMenuItem();
+            copyClipboardToFileToolStripMenuItem = new ToolStripMenuItem();
+            saveClipboardToFileToolStripMenuItem = new ToolStripMenuItem();
             contextMenuListView.SuspendLayout();
             contextMenuSysTray.SuspendLayout();
             menuStrip1.SuspendLayout();
@@ -348,7 +350,7 @@
             // 
             // topMenuEdit
             // 
-            topMenuEdit.DropDownItems.AddRange(new ToolStripItem[] { editSelectedFileToolStripMenuItem, editFromClipboardToolStripMenuItem, openEditorToolStripMenuItem, editTagsToolStripMenuItem });
+            topMenuEdit.DropDownItems.AddRange(new ToolStripItem[] { editSelectedFileToolStripMenuItem, editFromClipboardToolStripMenuItem, openEditorToolStripMenuItem, editTagsToolStripMenuItem, copyClipboardToFileToolStripMenuItem, saveClipboardToFileToolStripMenuItem });
             topMenuEdit.Name = "topMenuEdit";
             topMenuEdit.Size = new Size(39, 20);
             topMenuEdit.Text = "&Edit";
@@ -356,28 +358,28 @@
             // editSelectedFileToolStripMenuItem
             // 
             editSelectedFileToolStripMenuItem.Name = "editSelectedFileToolStripMenuItem";
-            editSelectedFileToolStripMenuItem.Size = new Size(176, 22);
+            editSelectedFileToolStripMenuItem.Size = new Size(188, 22);
             editSelectedFileToolStripMenuItem.Text = "Edit selected &file";
             editSelectedFileToolStripMenuItem.Click += EditImageFromFile_Click;
             // 
             // editFromClipboardToolStripMenuItem
             // 
             editFromClipboardToolStripMenuItem.Name = "editFromClipboardToolStripMenuItem";
-            editFromClipboardToolStripMenuItem.Size = new Size(176, 22);
+            editFromClipboardToolStripMenuItem.Size = new Size(188, 22);
             editFromClipboardToolStripMenuItem.Text = "Edit from &clipboard";
             editFromClipboardToolStripMenuItem.Click += EditImageFromClipboard_Click;
             // 
             // openEditorToolStripMenuItem
             // 
             openEditorToolStripMenuItem.Name = "openEditorToolStripMenuItem";
-            openEditorToolStripMenuItem.Size = new Size(176, 22);
+            openEditorToolStripMenuItem.Size = new Size(188, 22);
             openEditorToolStripMenuItem.Text = "Open &editor";
             openEditorToolStripMenuItem.Click += EditImageNoFile_Click;
             // 
             // editTagsToolStripMenuItem
             // 
             editTagsToolStripMenuItem.Name = "editTagsToolStripMenuItem";
-            editTagsToolStripMenuItem.Size = new Size(176, 22);
+            editTagsToolStripMenuItem.Size = new Size(188, 22);
             editTagsToolStripMenuItem.Text = "Edit Tags";
             editTagsToolStripMenuItem.Click += ShowTagView_Click;
             // 
@@ -401,6 +403,13 @@
             helponGithubToolStripMenuItem.Size = new Size(220, 22);
             helponGithubToolStripMenuItem.Text = "&Documentation (on github)";
             helponGithubToolStripMenuItem.Click += HelponGithubToolStripMenuItem_Click;
+            // 
+            // toolStripMenuItem1
+            // 
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new Size(220, 22);
+            toolStripMenuItem1.Text = "&Version changelog";
+            toolStripMenuItem1.Click += ChangelogToolStripMenuItem_Click;
             // 
             // websiteToolStripMenuItem
             // 
@@ -430,12 +439,19 @@
             labelInfo.DragDrop += ListViewThumbnails_DragDrop;
             labelInfo.DragEnter += ListViewThumbnails_DragEnter;
             // 
-            // toolStripMenuItem1
+            // copyClipboardToFileToolStripMenuItem
             // 
-            toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(220, 22);
-            toolStripMenuItem1.Text = "&Version changelog";
-            toolStripMenuItem1.Click += ChangelogToolStripMenuItem_Click;
+            copyClipboardToFileToolStripMenuItem.Name = "copyClipboardToFileToolStripMenuItem";
+            copyClipboardToFileToolStripMenuItem.Size = new Size(188, 22);
+            copyClipboardToFileToolStripMenuItem.Text = "Copy clipboard to file";
+            copyClipboardToFileToolStripMenuItem.Click += copyClipboardToFileToolStripMenuItem_Click;
+            // 
+            // saveClipboardToFileToolStripMenuItem
+            // 
+            saveClipboardToFileToolStripMenuItem.Name = "saveClipboardToFileToolStripMenuItem";
+            saveClipboardToFileToolStripMenuItem.Size = new Size(188, 22);
+            saveClipboardToFileToolStripMenuItem.Text = "Save clipboard to file";
+            saveClipboardToFileToolStripMenuItem.Click += saveClipboardToFileToolStripMenuItem_Click;
             // 
             // MainForm
             // 
@@ -513,5 +529,7 @@
         private ToolStripMenuItem editTagsToolStripMenuItem1;
         private ToolStripMenuItem itemOpenFileInExplorer;
         private ToolStripMenuItem toolStripMenuItem1;
+        private ToolStripMenuItem copyClipboardToFileToolStripMenuItem;
+        private ToolStripMenuItem saveClipboardToFileToolStripMenuItem;
     }
 }

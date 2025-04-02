@@ -77,7 +77,7 @@ public static class ImageOutput
         }
     }
 
-    private static ImageFormat ImageFormatFromExtension(string filename)
+    public static ImageFormat ImageFormatFromExtension(string filename)
     {
         string extension = Path.GetExtension(filename).ToLowerInvariant();
         return extension switch

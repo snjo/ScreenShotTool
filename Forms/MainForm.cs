@@ -1,10 +1,12 @@
 using Hotkeys;
 using Microsoft.VisualBasic.FileIO;
+using PdfSharp.Pdf.Filters;
 using ScreenShotTool.Classes;
 using ScreenShotTool.Forms;
 using ScreenShotTool.Properties;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -12,6 +14,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
+using static System.Windows.Forms.DataFormats;
 
 [assembly: AssemblyVersion("2.3.*")]
 
@@ -34,6 +37,7 @@ public partial class MainForm : Form
     private int Counter = 0;
     private readonly int CounterMax = 9999;
     private bool ExitForSure = false;
+    private string FileDropTempFolder = "filedrop";
 
     public string helpText =
         "Default filename values:\r" +
@@ -152,6 +156,7 @@ public partial class MainForm : Form
         {
             HotkeyTools.ReleaseHotkeys(HotkeyList);
         }
+        DeletFileDropFiles();
     }
 
     private void MainForm_SizeChanged(object sender, EventArgs e)
@@ -1685,4 +1690,106 @@ public partial class MainForm : Form
     #endregion
 
 
+    private void copyClipboardToFileToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        ClipboardToImageCopyFile();
+    }
+
+    private void saveClipboardToFileToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        ClipboardToImageSelectSaveFile();
+    }
+
+    private void DeletFileDropFiles()
+    {
+        if (Directory.Exists(FileDropTempFolder))
+        {
+            foreach (string file in Directory.GetFiles(FileDropTempFolder))
+            {
+                try
+                {
+                    File.Delete(file);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error deleting file {file}, exception {ex.Message}");
+                }
+            }
+        }
+    }
+
+    private void ClipboardToImageCopyFile()
+    {
+        if (Clipboard.ContainsImage() == false)
+        {
+            MessageBox.Show("Clipboard does not contain a valid image");
+            return;
+        }
+        string filePath = FileDropTempFolder + @"\clipboardImage." + DestinationFormat.ToString().ToLowerInvariant();
+        filePath = Path.GetFullPath(filePath);
+        filePath = filePath.Replace(".jpeg", ".jpg");
+        CreateFileFromClipboardImage(filePath);
+        if (File.Exists(filePath))
+        {
+            Debug.WriteLine($"File created, copying file reference to {filePath}");
+            StringCollection fileDropList = new StringCollection();
+            fileDropList.Add(filePath);
+            Debug.WriteLine($"Added to drop list, entries {fileDropList.Count} {fileDropList[0]}");
+;           Clipboard.SetFileDropList(fileDropList);
+        }
+        else
+        {
+            Debug.WriteLine($"File not created {filePath}");
+        }
+    }
+
+    private void ClipboardToImageSelectSaveFile()
+    {
+        if (Clipboard.ContainsImage() == false)
+        {
+            MessageBox.Show("Clipboard does not contain a valid image");
+            return;
+        }
+        string filePath = string.Empty;
+        SaveFileDialog dialog = new ();
+        dialog.Filter = ImageOutput.FilterSaveImage;
+        DialogResult result = dialog.ShowDialog();
+        filePath = dialog.FileName;
+        if (result == DialogResult.OK)
+        {
+            Debug.WriteLine($"Saving clipboard image to file {filePath}");
+            CreateFileFromClipboardImage(filePath);
+        }
+    }
+
+    private void CreateFileFromClipboardImage(string filePath)
+    {
+        string DestinationFileExtension = settings.FileExtension;
+        //string DestinationFolder = ComposeFileName(settings.Foldername, "Clipboard");
+        string? DestinationFolder = Path.GetDirectoryName(filePath);
+        string? DestinationFileName = Path.GetFileName(filePath);
+        ImageFormat format = DestinationFormat;
+
+        if (DestinationFileName.Contains("."))
+        {
+            format = ImageOutput.ImageFormatFromExtension(filePath);
+            string possibleExtension = Path.GetExtension(filePath);
+            if (possibleExtension.Length > 2)
+            {
+                DestinationFileExtension = Path.GetExtension(filePath);
+            }
+            Debug.WriteLine($"Using format from filename {format.ToString()} from file name {filePath}");
+        }
+            //ComposeFileName(settings.Filename, "Region");
+        Image? bmp = Clipboard.GetImage();
+        if (bmp != null && DestinationFolder != null && DestinationFileName != null)
+        {
+            bool saved = SaveBitmap(DestinationFolder, Path.GetFileNameWithoutExtension(DestinationFileName) + DestinationFileExtension, format, (Bitmap)bmp);
+            Debug.WriteLine($"Save success: {saved} to file {DestinationFolder} {DestinationFileExtension} {DestinationFileName} {DestinationFormat}");
+        }
+        else
+        {
+            MessageBox.Show("Clipboard image could not be processed, image is null");
+        }
+    }
 }
