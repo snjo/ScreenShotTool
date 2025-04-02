@@ -3,11 +3,13 @@
 ## TODO:
 - Undo?
 
-## 2.3 (In progress)
-- Removed hang when clearing large lists of thumbnails (removed un-needed image dispose)
+## 2.4 (In progress)
 - Thumbnails are added to the start of the list by default (reverse chronological). Adjustable in options
 - Thumbnail list scrolls to the most recent capture
 - Tags have a category, in preparation for future features
+
+## 2.3
+- Removed hang when clearing large lists of thumbnails (removed un-needed image dispose)
 
 ## 2.2
 - Added option to send deleted files to recycle bin

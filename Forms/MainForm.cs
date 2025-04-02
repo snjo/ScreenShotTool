@@ -16,7 +16,7 @@ using System.Runtime.Versioning;
 using System.Text;
 using static System.Windows.Forms.DataFormats;
 
-[assembly: AssemblyVersion("2.3.*")]
+[assembly: AssemblyVersion("2.4.*")]
 
 #pragma warning disable IDE0090 // Use 'new(...)'
 
@@ -557,7 +557,7 @@ public partial class MainForm : Form
         string hour = DateTime.Now.Hour.ToString().PadLeft(2, '0');
         string minute = DateTime.Now.Minute.ToString().PadLeft(2, '0');
         string second = DateTime.Now.Second.ToString().PadLeft(2, '0');
-        string millisecond = DateTime.Now.Millisecond.ToString().PadLeft(3, '0'); ;
+        string millisecond = DateTime.Now.Millisecond.ToString().PadLeft(3, '0');
         string time = $"{hour}-{minute}-{second}";
 
         string counter = Counter.ToString().PadLeft(3, '0');
