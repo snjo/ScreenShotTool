@@ -550,8 +550,8 @@ public partial class MainForm : Form
         int splitTitleIndex = settings.SplitTitleIndex;
         string alternateTitle = settings.AlternateTitle;
         string year = DateTime.Now.Year.ToString();
-        string month = DateTime.Now.Month.ToString();
-        string day = DateTime.Now.Day.ToString();
+        string month = DateTime.Now.Month.ToString().PadLeft(2, '0');
+        string day = DateTime.Now.Day.ToString().PadLeft(2, '0');
         string fullDateISO = $"{year}-{month}-{day}";
 
         string hour = DateTime.Now.Hour.ToString().PadLeft(2, '0');
@@ -1725,9 +1725,12 @@ public partial class MainForm : Form
             MessageBox.Show("Clipboard does not contain a valid image");
             return;
         }
-        string filePath = FileDropTempFolder + @"\clipboardImage." + DestinationFormat.ToString().ToLowerInvariant();
+        string filePath = FileDropTempFolder + @"\clipboardImage $d $t" + "." + DestinationFormat.ToString().ToLowerInvariant();
         filePath = Path.GetFullPath(filePath);
         filePath = filePath.Replace(".jpeg", ".jpg");
+
+        filePath = ComposeFileName(filePath);
+
         CreateFileFromClipboardImage(filePath);
         if (File.Exists(filePath))
         {
