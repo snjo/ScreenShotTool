@@ -4,9 +4,11 @@
 - Undo?
 
 ## 2.4 (In progress)
+- Save an image from the clipboard directly to a file, or add it to file drop for pasting to file explorer.
 - Thumbnails are added to the start of the list by default (reverse chronological). Adjustable in options
 - Thumbnail list scrolls to the most recent capture
 - Tags have a category, in preparation for future features
+- Fix missing leading zeroes on month and day in file names
 
 ## 2.3
 - Removed hang when clearing large lists of thumbnails (removed un-needed image dispose)
