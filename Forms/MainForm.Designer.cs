@@ -51,6 +51,8 @@
             editTagsToolStripMenuItem1 = new ToolStripMenuItem();
             editorToolStripMenuItem = new ToolStripMenuItem();
             enableCroppingToolStripMenuItem = new ToolStripMenuItem();
+            toolStripMenuItem3 = new ToolStripMenuItem();
+            copyClipboardImageToFileDropToolStripMenuItem = new ToolStripMenuItem();
             openLastUsedFolderToolStripMenuItem = new ToolStripMenuItem();
             pToolStripMenuItem = new ToolStripMenuItem();
             exitApplicationToolStripMenuItem = new ToolStripMenuItem();
@@ -80,7 +82,6 @@
             websiteToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             labelInfo = new Label();
-            copyClipboardImageToFileDropToolStripMenuItem = new ToolStripMenuItem();
             contextMenuListView.SuspendLayout();
             contextMenuSysTray.SuspendLayout();
             menuStrip1.SuspendLayout();
@@ -195,7 +196,7 @@
             // 
             // contextMenuSysTray
             // 
-            contextMenuSysTray.Items.AddRange(new ToolStripItem[] { helpToolStripMenuItem, openProgramToolStripMenuItem, optionsToolStripMenuItem, editTagsToolStripMenuItem1, editorToolStripMenuItem, enableCroppingToolStripMenuItem, copyClipboardImageToFileDropToolStripMenuItem, openLastUsedFolderToolStripMenuItem, pToolStripMenuItem, exitApplicationToolStripMenuItem });
+            contextMenuSysTray.Items.AddRange(new ToolStripItem[] { helpToolStripMenuItem, openProgramToolStripMenuItem, optionsToolStripMenuItem, editTagsToolStripMenuItem1, editorToolStripMenuItem, enableCroppingToolStripMenuItem, toolStripMenuItem3, copyClipboardImageToFileDropToolStripMenuItem, openLastUsedFolderToolStripMenuItem, pToolStripMenuItem, exitApplicationToolStripMenuItem });
             contextMenuSysTray.Name = "contextMenuSysTray";
             contextMenuSysTray.ShowImageMargin = false;
             contextMenuSysTray.Size = new Size(228, 246);
@@ -242,6 +243,20 @@
             enableCroppingToolStripMenuItem.Size = new Size(227, 22);
             enableCroppingToolStripMenuItem.Text = "Enable &Cropping";
             enableCroppingToolStripMenuItem.Click += EnableCroppingToolStripMenuItem_Click;
+            // 
+            // toolStripMenuItem3
+            // 
+            toolStripMenuItem3.Name = "toolStripMenuItem3";
+            toolStripMenuItem3.Size = new Size(227, 22);
+            toolStripMenuItem3.Text = "Save clipboard image to file";
+            toolStripMenuItem3.Click += saveClipboardToFileToolStripMenuItem_Click;
+            // 
+            // copyClipboardImageToFileDropToolStripMenuItem
+            // 
+            copyClipboardImageToFileDropToolStripMenuItem.Name = "copyClipboardImageToFileDropToolStripMenuItem";
+            copyClipboardImageToFileDropToolStripMenuItem.Size = new Size(227, 22);
+            copyClipboardImageToFileDropToolStripMenuItem.Text = "Copy clipboard image to file drop";
+            copyClipboardImageToFileDropToolStripMenuItem.Click += copyClipboardToFileToolStripMenuItem_Click;
             // 
             // openLastUsedFolderToolStripMenuItem
             // 
@@ -359,43 +374,43 @@
             // editSelectedFileToolStripMenuItem
             // 
             editSelectedFileToolStripMenuItem.Name = "editSelectedFileToolStripMenuItem";
-            editSelectedFileToolStripMenuItem.Size = new Size(188, 22);
+            editSelectedFileToolStripMenuItem.Size = new Size(252, 22);
             editSelectedFileToolStripMenuItem.Text = "Edit selected &file";
             editSelectedFileToolStripMenuItem.Click += EditImageFromFile_Click;
             // 
             // editFromClipboardToolStripMenuItem
             // 
             editFromClipboardToolStripMenuItem.Name = "editFromClipboardToolStripMenuItem";
-            editFromClipboardToolStripMenuItem.Size = new Size(188, 22);
+            editFromClipboardToolStripMenuItem.Size = new Size(252, 22);
             editFromClipboardToolStripMenuItem.Text = "Edit from &clipboard";
             editFromClipboardToolStripMenuItem.Click += EditImageFromClipboard_Click;
             // 
             // openEditorToolStripMenuItem
             // 
             openEditorToolStripMenuItem.Name = "openEditorToolStripMenuItem";
-            openEditorToolStripMenuItem.Size = new Size(188, 22);
+            openEditorToolStripMenuItem.Size = new Size(252, 22);
             openEditorToolStripMenuItem.Text = "Open &editor";
             openEditorToolStripMenuItem.Click += EditImageNoFile_Click;
             // 
             // editTagsToolStripMenuItem
             // 
             editTagsToolStripMenuItem.Name = "editTagsToolStripMenuItem";
-            editTagsToolStripMenuItem.Size = new Size(188, 22);
+            editTagsToolStripMenuItem.Size = new Size(252, 22);
             editTagsToolStripMenuItem.Text = "Edit Tags";
             editTagsToolStripMenuItem.Click += ShowTagView_Click;
             // 
             // copyClipboardToFileToolStripMenuItem
             // 
             copyClipboardToFileToolStripMenuItem.Name = "copyClipboardToFileToolStripMenuItem";
-            copyClipboardToFileToolStripMenuItem.Size = new Size(188, 22);
-            copyClipboardToFileToolStripMenuItem.Text = "Copy clipboard to file";
+            copyClipboardToFileToolStripMenuItem.Size = new Size(252, 22);
+            copyClipboardToFileToolStripMenuItem.Text = "Copy clipboard image to file drop";
             copyClipboardToFileToolStripMenuItem.Click += copyClipboardToFileToolStripMenuItem_Click;
             // 
             // saveClipboardToFileToolStripMenuItem
             // 
             saveClipboardToFileToolStripMenuItem.Name = "saveClipboardToFileToolStripMenuItem";
-            saveClipboardToFileToolStripMenuItem.Size = new Size(188, 22);
-            saveClipboardToFileToolStripMenuItem.Text = "Save clipboard to file";
+            saveClipboardToFileToolStripMenuItem.Size = new Size(252, 22);
+            saveClipboardToFileToolStripMenuItem.Text = "Save clipboard image to file";
             saveClipboardToFileToolStripMenuItem.Click += saveClipboardToFileToolStripMenuItem_Click;
             // 
             // TopMenuHelp
@@ -453,13 +468,6 @@
             labelInfo.Text = "To take a screenshot use hotkeys";
             labelInfo.DragDrop += ListViewThumbnails_DragDrop;
             labelInfo.DragEnter += ListViewThumbnails_DragEnter;
-            // 
-            // copyClipboardImageToFileDropToolStripMenuItem
-            // 
-            copyClipboardImageToFileDropToolStripMenuItem.Name = "copyClipboardImageToFileDropToolStripMenuItem";
-            copyClipboardImageToFileDropToolStripMenuItem.Size = new Size(227, 22);
-            copyClipboardImageToFileDropToolStripMenuItem.Text = "Copy clipboard image to file drop";
-            copyClipboardImageToFileDropToolStripMenuItem.Click += copyClipboardToFileToolStripMenuItem_Click;
             // 
             // MainForm
             // 
@@ -540,5 +548,6 @@
         private ToolStripMenuItem copyClipboardToFileToolStripMenuItem;
         private ToolStripMenuItem saveClipboardToFileToolStripMenuItem;
         private ToolStripMenuItem copyClipboardImageToFileDropToolStripMenuItem;
+        private ToolStripMenuItem toolStripMenuItem3;
     }
 }
