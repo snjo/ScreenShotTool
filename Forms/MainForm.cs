@@ -33,7 +33,7 @@ public partial class MainForm : Form
     private int Counter = 0;
     private readonly int CounterMax = 9999;
     private bool ExitForSure = false;
-    private string FileDropTempFolder = "filedrop";
+    private readonly string FileDropTempFolder = "filedrop";
 
     public string helpText =
         "Default filename values:\r" +
@@ -980,8 +980,7 @@ public partial class MainForm : Form
         if (File.Exists(filePath))
         {
             Debug.WriteLine($"File created, copying file reference to {filePath}");
-            StringCollection fileDropList = new StringCollection();
-            fileDropList.Add(filePath);
+            StringCollection fileDropList = [filePath];
             Debug.WriteLine($"Added to drop list, entries {fileDropList.Count} {fileDropList[0]}");
             try
             {
@@ -1007,11 +1006,12 @@ public partial class MainForm : Form
             MessageBox.Show("Clipboard does not contain a valid image");
             return;
         }
-        string filePath = string.Empty;
-        SaveFileDialog dialog = new();
-        dialog.Filter = ImageOutput.FilterSaveImage;
+        SaveFileDialog dialog = new()
+        {
+            Filter = ImageOutput.FilterSaveImage
+        };
         DialogResult result = dialog.ShowDialog();
-        filePath = dialog.FileName;
+        string filePath = dialog.FileName;
         if (result == DialogResult.OK)
         {
             Debug.WriteLine($"Saving clipboard image to file {filePath}");
@@ -1027,7 +1027,7 @@ public partial class MainForm : Form
         string? DestinationFileName = Path.GetFileName(filePath);
         ImageFormat format = DestinationFormat;
 
-        if (DestinationFileName.Contains("."))
+        if (DestinationFileName.Contains('.'))
         {
             format = ImageOutput.ImageFormatFromExtension(filePath);
             string possibleExtension = Path.GetExtension(filePath);
@@ -1035,7 +1035,7 @@ public partial class MainForm : Form
             {
                 DestinationFileExtension = Path.GetExtension(filePath);
             }
-            Debug.WriteLine($"Using format from filename {format.ToString()} from file name {filePath}");
+            Debug.WriteLine($"Using format from filename {format} from file name {filePath}");
         }
         //ComposeFileName(settings.Filename, "Region");
         Image? bmp = Clipboard.GetImage();
@@ -1050,7 +1050,7 @@ public partial class MainForm : Form
         }
     }
 
-    private void FixClipboardImage()
+    private static void FixClipboardImage()
     {
         // loads and sets the clipboard image to convert from an unpasteable image type to a more compatible one
         if (Clipboard.ContainsImage())
@@ -1756,16 +1756,14 @@ public partial class MainForm : Form
                 try
                 {
                     bool resume;
-                    using (Bitmap outImage = (Bitmap)Image.FromFile(filename))
+                    using Bitmap outImage = (Bitmap)Image.FromFile(filename);
+                    string nameSuggestion = Path.GetFileNameWithoutExtension(filename);
+                    (resume, filterIndex) = ImageOutput.SaveWithDialog(outImage, ImageOutput.FilterSaveImage, nameSuggestion, filterIndex);
+                    if (resume == false && filesRemaining > 0)
                     {
-                        string nameSuggestion = Path.GetFileNameWithoutExtension(filename);
-                        (resume, filterIndex) = ImageOutput.SaveWithDialog(outImage, ImageOutput.FilterSaveImage, nameSuggestion, filterIndex);
-                        if (resume == false && filesRemaining > 0)
+                        if (MessageBox.Show("Cancel or error detected. Do you want to continue converting files", "Resume converting?", MessageBoxButtons.YesNo) == DialogResult.No)
                         {
-                            if (MessageBox.Show("Cancel or error detected. Do you want to continue converting files", "Resume converting?", MessageBoxButtons.YesNo) == DialogResult.No)
-                            {
-                                break;
-                            }
+                            break;
                         }
                     }
 
@@ -1783,17 +1781,17 @@ public partial class MainForm : Form
         }
     }
 
-    private void copyClipboardToFileToolStripMenuItem_Click(object sender, EventArgs e)
+    private void CopyClipboardToFileToolStripMenuItem_Click(object sender, EventArgs e)
     {
         ClipboardImageToFileDrop();
     }
 
-    private void saveClipboardToFileToolStripMenuItem_Click(object sender, EventArgs e)
+    private void SaveClipboardToFileToolStripMenuItem_Click(object sender, EventArgs e)
     {
         ClipboardImageToSaveFile();
     }
 
-    private void fixClipboardImageMenuItem_Click(object sender, EventArgs e)
+    private void FixClipboardImageMenuItem_Click(object sender, EventArgs e)
     {
         FixClipboardImage();
     }

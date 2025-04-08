@@ -260,14 +260,14 @@
             toolStripMenuItem3.Name = "toolStripMenuItem3";
             toolStripMenuItem3.Size = new Size(255, 22);
             toolStripMenuItem3.Text = "Save clipboard image to file";
-            toolStripMenuItem3.Click += saveClipboardToFileToolStripMenuItem_Click;
+            toolStripMenuItem3.Click += SaveClipboardToFileToolStripMenuItem_Click;
             // 
             // copyClipboardImageToFileDropToolStripMenuItem
             // 
             copyClipboardImageToFileDropToolStripMenuItem.Name = "copyClipboardImageToFileDropToolStripMenuItem";
             copyClipboardImageToFileDropToolStripMenuItem.Size = new Size(255, 22);
             copyClipboardImageToFileDropToolStripMenuItem.Text = "Copy clipboard image to file drop";
-            copyClipboardImageToFileDropToolStripMenuItem.Click += copyClipboardToFileToolStripMenuItem_Click;
+            copyClipboardImageToFileDropToolStripMenuItem.Click += CopyClipboardToFileToolStripMenuItem_Click;
             // 
             // toolStripMenuItem5
             // 
@@ -430,21 +430,21 @@
             copyClipboardToFileToolStripMenuItem.Name = "copyClipboardToFileToolStripMenuItem";
             copyClipboardToFileToolStripMenuItem.Size = new Size(280, 22);
             copyClipboardToFileToolStripMenuItem.Text = "Copy clipboard image to file drop";
-            copyClipboardToFileToolStripMenuItem.Click += copyClipboardToFileToolStripMenuItem_Click;
+            copyClipboardToFileToolStripMenuItem.Click += CopyClipboardToFileToolStripMenuItem_Click;
             // 
             // saveClipboardToFileToolStripMenuItem
             // 
             saveClipboardToFileToolStripMenuItem.Name = "saveClipboardToFileToolStripMenuItem";
             saveClipboardToFileToolStripMenuItem.Size = new Size(280, 22);
             saveClipboardToFileToolStripMenuItem.Text = "Save clipboard image to file";
-            saveClipboardToFileToolStripMenuItem.Click += saveClipboardToFileToolStripMenuItem_Click;
+            saveClipboardToFileToolStripMenuItem.Click += SaveClipboardToFileToolStripMenuItem_Click;
             // 
             // fixClipboardImageMenuItem
             // 
             fixClipboardImageMenuItem.Name = "fixClipboardImageMenuItem";
             fixClipboardImageMenuItem.Size = new Size(280, 22);
             fixClipboardImageMenuItem.Text = "Fix clipboard image (more compatible)";
-            fixClipboardImageMenuItem.Click += fixClipboardImageMenuItem_Click;
+            fixClipboardImageMenuItem.Click += FixClipboardImageMenuItem_Click;
             // 
             // TopMenuHelp
             // 
@@ -507,7 +507,7 @@
             toolStripMenuItem8.Name = "toolStripMenuItem8";
             toolStripMenuItem8.Size = new Size(255, 22);
             toolStripMenuItem8.Text = "Fix clipboard image (more compatible)";
-            toolStripMenuItem8.Click += fixClipboardImageMenuItem_Click;
+            toolStripMenuItem8.Click += FixClipboardImageMenuItem_Click;
             // 
             // MainForm
             // 

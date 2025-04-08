@@ -12,7 +12,7 @@ namespace ScreenShotTool.Classes;
 public class SettingsRegistry
 {
     readonly static string RegKeyName = @"SOFTWARE\ScreenshotTool";
-    readonly static string[] settingStrings = { "Foldername", "Filename", "FileExtension", "StickerFolder", "StartHidden", "MinimizeOnClose", "Counter" };
+    readonly static string[] settingStrings = ["Foldername", "Filename", "FileExtension", "StickerFolder", "StartHidden", "MinimizeOnClose", "Counter"];
 
     public static bool LoadSettingsFromRegistry()
     {
@@ -58,9 +58,14 @@ public class SettingsRegistry
                 {
                     Debug.WriteLine($"Applying setting '{name}' from registry: {value}");
 
-                    if (value.ToString() == "True" || value.ToString() == "False")
+                    string? valueAsString = value.ToString();
+
+                    if (valueAsString != null)
                     {
-                        value = bool.Parse(value.ToString());
+                        if (valueAsString == "True" || valueAsString == "False")
+                        {
+                            value = bool.Parse(valueAsString);
+                        }
                     }
                     Settings.Default[name] = value;
                 }

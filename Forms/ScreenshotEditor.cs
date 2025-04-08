@@ -649,26 +649,26 @@ public partial class ScreenshotEditor : Form
     #endregion
 
     #region Create Symbol Properties panels -------------------------------------------------------------
-    PropertyPanels propertyPanels = new();
+    private readonly PropertyPanels propertyPanels = new();
 
-    Controls.SymbolPosition symbolPosition = new Controls.SymbolPosition();
-    Controls.SymbolNumbered symbolNumbered = new Controls.SymbolNumbered();
-    Controls.SymbolOrganize symbolOrganize = new Controls.SymbolOrganize();
-    Controls.SymbolFillColor symbolFillColor = new Controls.SymbolFillColor();
-    Controls.SymbolLineColor symbolLineColor = new Controls.SymbolLineColor();
-    Controls.SymbolShadows symbolShadows = new Controls.SymbolShadows();
-    Controls.SymbolCrop symbolCrop = new Controls.SymbolCrop();
-    Controls.symbolImage symbolImage = new Controls.symbolImage();
-    Controls.SymbolCurve symbolCurve = new Controls.SymbolCurve();
-    Controls.SymbolBlendMode symbolBlendMode = new Controls.SymbolBlendMode();
-    Controls.SymbolMosaic symbolMosaic = new Controls.SymbolMosaic();
-    Controls.SymbolFont symbolFont = new Controls.SymbolFont();
+    private readonly Controls.SymbolPosition symbolPosition = new();
+    private readonly Controls.SymbolNumbered symbolNumbered = new();
+    private readonly Controls.SymbolOrganize symbolOrganize = new();
+    private readonly Controls.SymbolFillColor symbolFillColor = new();
+    private readonly Controls.SymbolLineColor symbolLineColor = new();
+    private readonly Controls.SymbolShadows symbolShadows = new();
+    private readonly Controls.SymbolCrop symbolCrop = new();
+    private readonly Controls.symbolImage symbolImage = new();
+    private readonly Controls.SymbolCurve symbolCurve = new();
+    private readonly Controls.SymbolBlendMode symbolBlendMode = new();
+    private readonly Controls.SymbolMosaic symbolMosaic = new();
+    private readonly Controls.SymbolFont symbolFont = new();
 
     //ButtonPropertyCopyCrop_Click
 
     private void CreatePropertyPanels(Control parentPanel)
     {
-        Point location = new Point(3, listViewSymbols.Bottom);
+        Point location = new(3, listViewSymbols.Bottom);
         propertyPanels.Add(symbolPosition, parentPanel);
         symbolPosition.numericX.ValueChanged += Numeric_ValueChanged;
         symbolPosition.numericY.ValueChanged += Numeric_ValueChanged;
@@ -1277,7 +1277,7 @@ public partial class ScreenshotEditor : Form
 
             if (items != null && items.Count > 0)
             {
-                List<ListViewItem> listViewItems = items.Cast<ListViewItem>().ToList();
+                List<ListViewItem> listViewItems = [.. items.Cast<ListViewItem>()];
 
                 foreach (var item in listViewItems)
                 {
@@ -1551,9 +1551,11 @@ public partial class ScreenshotEditor : Form
     private void ButtonStickers_Click(object sender, EventArgs e)
     {
         string stickerFolder = Path.GetFullPath(Settings.Default.StickerFolder);
-        string? appFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-        string alternateFolder = Path.Join(appFolder, "stickers");
-        Debug.WriteLine($"App folder: {appFolder}");
+        string appFolderBaseDir = System.AppContext.BaseDirectory;
+        //string? appFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+        string alternateFolder = Path.Join(appFolderBaseDir, "stickers");
+
+        Debug.WriteLine($"App folder Base Dir {appFolderBaseDir}");
         Debug.WriteLine($"Alternate folder: {alternateFolder}");
         Debug.WriteLine($"Open sticker folder: {stickerFolder}");
         if (Directory.Exists(stickerFolder) == false && Directory.Exists(alternateFolder))
