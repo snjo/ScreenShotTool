@@ -979,9 +979,8 @@ public partial class MainForm : Form
         CreateFileFromClipboardImage(filePath);
         if (File.Exists(filePath))
         {
-            Debug.WriteLine($"File created, copying file reference to {filePath}");
+            Debug.WriteLine($"File created, adding to drop list, file: {filePath}");
             StringCollection fileDropList = [filePath];
-            Debug.WriteLine($"Added to drop list, entries {fileDropList.Count} {fileDropList[0]}");
             try
             {
                 Clipboard.SetFileDropList(fileDropList);
@@ -989,13 +988,13 @@ public partial class MainForm : Form
             catch (Exception ex)
             {
                 Debug.WriteLine($"Exception setting clipboard drop list\n{ex.Message}");
+                WriteMessage("Error when adding file drop to clipboard");
             }
-
-
         }
         else
         {
-            Debug.WriteLine($"File not created {filePath}");
+            Debug.WriteLine($"Error, file not created: {filePath}");
+            WriteMessage($"Error, file not created: {filePath}");
         }
     }
 
@@ -1050,7 +1049,7 @@ public partial class MainForm : Form
         }
     }
 
-    private static void FixClipboardImage()
+    private void FixClipboardImage()
     {
         // loads and sets the clipboard image to convert from an unpasteable image type to a more compatible one
         if (Clipboard.ContainsImage())
@@ -1063,6 +1062,7 @@ public partial class MainForm : Form
             catch (Exception ex)
             {
                 Debug.WriteLine($"Exception when getting image from clipboard\n{ex.Message}");
+                WriteMessage("Error: Could not get image from clipboard, possibly in use by other application.");
             }
             if (img != null)
             {
@@ -1074,6 +1074,7 @@ public partial class MainForm : Form
                 catch (Exception ex)
                 {
                     Debug.WriteLine($"Exception when setting image to clipboard\n{ex.Message}");
+                    WriteMessage("Error: Could not add image to clipboard, possibly in use by other application.");
                 }
             }
         }
@@ -1128,7 +1129,6 @@ public partial class MainForm : Form
         }
         if (Directory.Exists(folder))
         {
-            Debug.WriteLine("Opening folder: " + folder);
             Process.Start(new ProcessStartInfo() { FileName = folder, UseShellExecute = true });
         }
         else

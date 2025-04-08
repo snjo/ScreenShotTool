@@ -227,6 +227,30 @@ You can move, edit and scale symbols after you have placed them by clicking and 
 | Contrast           | White = full contrast, Gray = normal, Black = no contrast, Selected color hue will have an effect as well  |
 
 
+# Images in the clipboard
+
+If you copy an image into the clipboard (typically from another application) you can use menu options or the system tray icon for quick export options
+
+### Save clipboard image to file
+
+If there's an image in the clipboard, opens a save dialog to save that image to a new file.
+
+### Copy clipboard image to file drop
+
+When selecting this, the image in the clipboard is converted into a file that you can paste into a folder.
+
+In the background, the clipboard image is saved to a new file in a temporary folder (program path\filedrop\), then the adds it to the file drop list in the clipboard.
+
+When exiting the program, any droppable files are deleted from this temporary folder.
+
+The first time you do this, a notification will inform you that a folder has been created to store the temp files.
+
+### Fix clipboard image
+
+If you copy an image from an application and can't paste it into an older application, use this function to convert the clipboard image into a more compatible format, then paste it normally.
+
+An example of this problem: Copying an image from MS Teams chat and into an outdated program like Lotus Notes.
+
 # Application options
 
 #### Start Hidden
