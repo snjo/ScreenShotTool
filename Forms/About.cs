@@ -12,7 +12,7 @@ namespace ScreenShotTool
             Font = new Font(this.Font.FontFamily, 9);
             string applicationVersion = Application.ProductVersion;
             //string controlVersion = ProductVersion;
-            
+
             Debug.WriteLine($"Application version: {applicationVersion}");
             //Debug.WriteLine($"control version: {controlVersion}");
 

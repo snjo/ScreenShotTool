@@ -4,7 +4,8 @@
 - Undo?
 
 ## 2.4 (In progress)
-- Save an image from the clipboard directly to a file, or add it to file drop for pasting to file explorer.
+- Menu items: Save an image from the clipboard directly to a file, or add it to file drop for pasting to file explorer.
+- Menu item: Fix clipboard images, convert them to a more compatible format (e.g. when copying from MS Teams and pasting to old programs)
 - Thumbnails are added to the start of the list by default (reverse chronological). Adjustable in options
 - Thumbnail list scrolls to the most recent capture
 - Tags have a category, in preparation for future features

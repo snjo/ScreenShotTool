@@ -3,7 +3,6 @@ using ScreenShotTool.Properties;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.Versioning;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace ScreenShotTool.Forms;
 [SupportedOSPlatform("windows")]
@@ -15,7 +14,7 @@ public partial class TagView : Form
     BindingSource bindingSource;
     BindingList<InfoTag> bindingList;
     List<InfoTagCategory> categoryList = new();
-    
+
     public TagView(Tagging parent)
     {
         InitializeComponent();
@@ -176,7 +175,7 @@ public partial class TagView : Form
     private void GridHotkeyCheck(object sender, KeyEventArgs e)
     {
         if (e.Modifiers == Keys.Control)
-        { 
+        {
             if (e.KeyCode == Keys.Oemplus || e.KeyCode == Keys.Add)
             {
                 Debug.WriteLine("Add tag hotkey");

@@ -1,11 +1,8 @@
 using Hotkeys;
 using Microsoft.VisualBasic.FileIO;
-using PdfSharp.Pdf.Filters;
 using ScreenShotTool.Classes;
 using ScreenShotTool.Forms;
 using ScreenShotTool.Properties;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
@@ -14,7 +11,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
-using static System.Windows.Forms.DataFormats;
 
 [assembly: AssemblyVersion("2.4.*")]
 
@@ -172,19 +168,6 @@ public partial class MainForm : Form
     }
     #endregion
 
-    #region Hotkeys
-    public Dictionary<string, Hotkey> HotkeyList = [];
-
-    public static readonly List<string> HotkeyNames =
-    [
-        "CaptureRegion",
-        "CaptureWindow",
-        "CaptureCurrentScreen",
-        "CaptureAllScreens",
-        "BrowseFolder",
-    ];
-    #endregion
-
     #region Settings
 
     private void UpgradeSettings()
@@ -271,6 +254,26 @@ public partial class MainForm : Form
     #endregion
 
     #region Hotkeys
+
+    // Add hotkey:
+    // Add entry to MainForm.cs method HotkeyNames
+    // Add entry to MainForm.cs method HandleHotkey
+    // Add hotkey values to Settings.settings file
+    // Settings values per new key: hk???Key hk???Ctrl hk???Alt hk???Shift hk???Win
+
+    public Dictionary<string, Hotkey> HotkeyList = [];
+
+    public static readonly List<string> HotkeyNames =
+    [
+        "CaptureRegion",
+        "CaptureWindow",
+        "CaptureCurrentScreen",
+        "CaptureAllScreens",
+        "BrowseFolder",
+        "SaveClipboardToFile",
+        "CopyClipboardToFileDrop"
+    ];
+
     protected override void WndProc(ref Message m)
     {
         base.WndProc(ref m);
@@ -306,6 +309,14 @@ public partial class MainForm : Form
         else if (id == HotkeyList["BrowseFolder"].ghk.id)
         {
             BrowseFolderInExplorer(lastFolder);
+        }
+        else if (id == HotkeyList["SaveClipboardToFile"].ghk.id)
+        {
+            ClipboardImageToSaveFile();
+        }
+        else if (id == HotkeyList["CopyClipboardToFileDrop"].ghk.id)
+        {
+            ClipboardImageToFileDrop();
         }
     }
 
@@ -908,7 +919,7 @@ public partial class MainForm : Form
     }
     #endregion
 
-    #region save clipboard image to file
+    #region save clipboard image to file, drop or fix format
 
     private void DeletFileDropFiles()
     {
@@ -923,7 +934,7 @@ public partial class MainForm : Form
             Debug.WriteLine($"Error getting drop folder path {FileDropTempFolder}\n{ex.Message}");
             return;
         }
-        
+
         if (Directory.Exists(filedropFolder))
         {
             foreach (string file in Directory.GetFiles(filedropFolder))
@@ -952,7 +963,7 @@ public partial class MainForm : Form
         }
     }
 
-    private void ClipboardToImageCopyFile()
+    private void ClipboardImageToFileDrop()
     {
         if (Clipboard.ContainsImage() == false)
         {
@@ -972,7 +983,16 @@ public partial class MainForm : Form
             StringCollection fileDropList = new StringCollection();
             fileDropList.Add(filePath);
             Debug.WriteLine($"Added to drop list, entries {fileDropList.Count} {fileDropList[0]}");
-            ; Clipboard.SetFileDropList(fileDropList);
+            try
+            {
+                Clipboard.SetFileDropList(fileDropList);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception setting clipboard drop list\n{ex.Message}");
+            }
+
+
         }
         else
         {
@@ -980,7 +1000,7 @@ public partial class MainForm : Form
         }
     }
 
-    private void ClipboardToImageSelectSaveFile()
+    private void ClipboardImageToSaveFile()
     {
         if (Clipboard.ContainsImage() == false)
         {
@@ -1027,6 +1047,35 @@ public partial class MainForm : Form
         else
         {
             MessageBox.Show("Clipboard image could not be processed, image is null");
+        }
+    }
+
+    private void FixClipboardImage()
+    {
+        // loads and sets the clipboard image to convert from an unpasteable image type to a more compatible one
+        if (Clipboard.ContainsImage())
+        {
+            Image? img = null;
+            try
+            {
+                img = Clipboard.GetImage();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception when getting image from clipboard\n{ex.Message}");
+            }
+            if (img != null)
+            {
+                try
+                {
+                    Clipboard.SetImage(img);
+                    Debug.WriteLine($"Fixed clipboard image");
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Exception when setting image to clipboard\n{ex.Message}");
+                }
+            }
         }
     }
     #endregion
@@ -1736,12 +1785,17 @@ public partial class MainForm : Form
 
     private void copyClipboardToFileToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        ClipboardToImageCopyFile();
+        ClipboardImageToFileDrop();
     }
 
     private void saveClipboardToFileToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        ClipboardToImageSelectSaveFile();
+        ClipboardImageToSaveFile();
+    }
+
+    private void fixClipboardImageMenuItem_Click(object sender, EventArgs e)
+    {
+        FixClipboardImage();
     }
     #endregion
 

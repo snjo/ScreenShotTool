@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.Versioning;
-using System.Windows.Forms;
 
 namespace ScreenShotTool.Classes;
 [SupportedOSPlatform("windows")]
@@ -9,7 +8,7 @@ namespace ScreenShotTool.Classes;
 public partial class DataGridSpecial : DataGridView
 {
     public bool AllowCheckboxMultiSelect = true;
-    
+
     //public DataGridSpecial()
     //{
     //    InitializeComponent();
@@ -32,12 +31,12 @@ public partial class DataGridSpecial : DataGridView
             Debug.WriteLine($"Multiselect: {AllowCheckboxMultiSelect}");
             if (AllowCheckboxMultiSelect == false)
             {
-                
+
                 if (Rows[e.RowIndex].Cells[e.ColumnIndex] is DataGridViewCheckBoxCell cbCell)
                 {
                     Debug.WriteLine($"Checkbox cell: {cbCell.Value}");
-                        //Deselect all other checkboxes
-                        CheckOnly(e.ColumnIndex, e.RowIndex, (bool)cbCell.Value);
+                    //Deselect all other checkboxes
+                    CheckOnly(e.ColumnIndex, e.RowIndex, (bool)cbCell.Value);
                 }
             }
         }

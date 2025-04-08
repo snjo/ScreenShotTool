@@ -747,7 +747,7 @@ public partial class ScreenshotEditor : Form
     {
         symbolPosition.Location = new Point(listViewSymbols.Left, listViewSymbols.Bottom + 5);
         symbolPosition.Visible = true;
-        symbolPosition.Enabled = false;        
+        symbolPosition.Enabled = false;
         foreach (Control c in propertyPanels.SymbolControls)
         {
             if (c is not Controls.SymbolPosition sp) // don't disable the position panel, remains on screen

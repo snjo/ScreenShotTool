@@ -220,7 +220,8 @@ public partial class ColorDialogAlpha : Form
             //SaveToFile = settings.RegionToFile,
             //SendToEditor = settings.RegionToEditor,
             //SendToClipboard = settings.RegionToClipboard,
-        };
+        }
+        ;
         imgView.SetImage();
         DialogResult result = imgView.ShowDialog();
         if (result == DialogResult.OK || result == DialogResult.Yes)

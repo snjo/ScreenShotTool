@@ -12,7 +12,7 @@ namespace ScreenShotTool.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.10.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.13.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -980,6 +980,126 @@ namespace ScreenShotTool.Properties {
             }
             set {
                 this["AddThumbAtStartOfList"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string hkSaveClipboardToFileKey {
+            get {
+                return ((string)(this["hkSaveClipboardToFileKey"]));
+            }
+            set {
+                this["hkSaveClipboardToFileKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool hkSaveClipboardToFileCtrl {
+            get {
+                return ((bool)(this["hkSaveClipboardToFileCtrl"]));
+            }
+            set {
+                this["hkSaveClipboardToFileCtrl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool hkSaveClipboardToFileAlt {
+            get {
+                return ((bool)(this["hkSaveClipboardToFileAlt"]));
+            }
+            set {
+                this["hkSaveClipboardToFileAlt"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool hkSaveClipboardToFileShift {
+            get {
+                return ((bool)(this["hkSaveClipboardToFileShift"]));
+            }
+            set {
+                this["hkSaveClipboardToFileShift"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool hkSaveClipboardToFileWin {
+            get {
+                return ((bool)(this["hkSaveClipboardToFileWin"]));
+            }
+            set {
+                this["hkSaveClipboardToFileWin"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string hkCopyClipboardToFileDropKey {
+            get {
+                return ((string)(this["hkCopyClipboardToFileDropKey"]));
+            }
+            set {
+                this["hkCopyClipboardToFileDropKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool hkCopyClipboardToFileDropCtrl {
+            get {
+                return ((bool)(this["hkCopyClipboardToFileDropCtrl"]));
+            }
+            set {
+                this["hkCopyClipboardToFileDropCtrl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool hkCopyClipboardToFileDropAlt {
+            get {
+                return ((bool)(this["hkCopyClipboardToFileDropAlt"]));
+            }
+            set {
+                this["hkCopyClipboardToFileDropAlt"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool hkCopyClipboardToFileDropShift {
+            get {
+                return ((bool)(this["hkCopyClipboardToFileDropShift"]));
+            }
+            set {
+                this["hkCopyClipboardToFileDropShift"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool hkCopyClipboardToFileDropWin {
+            get {
+                return ((bool)(this["hkCopyClipboardToFileDropWin"]));
+            }
+            set {
+                this["hkCopyClipboardToFileDropWin"] = value;
             }
         }
     }

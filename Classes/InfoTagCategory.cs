@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Runtime.Versioning;
-using System.Text;
-using System.Threading.Tasks;
-using System.Diagnostics;
 
 namespace ScreenShotTool.Classes
 {
     [SupportedOSPlatform("windows")]
 
-    public class InfoTagCategory (bool IsChecked, string DisplayName, string Description)
+    public class InfoTagCategory(bool IsChecked, string DisplayName, string Description)
     {
         public bool Enabled { get; set; } = IsChecked;
         public string Name { get; set; } = DisplayName;

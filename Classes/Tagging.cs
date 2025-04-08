@@ -1,12 +1,8 @@
 ﻿using ScreenShotTool.Forms;
 using ScreenShotTool.Properties;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.Versioning;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ScreenShotTool.Classes;
 
@@ -85,8 +81,8 @@ public class Tagging
                             CaptureTags.Add(tag);
                             Debug.WriteLine($"Added tag: {enabled}, '{name}' in category '{category}', description: '{description}'");
                         }
-                        
-                        
+
+
                     }
                 }
             }
@@ -127,7 +123,7 @@ public class Tagging
                 sb.Append($";{tag.Name}");
                 sb.Append($";{tag.Description}");
                 sb.AppendLine($";{tag.Category}");
-                
+
             }
             try
             {

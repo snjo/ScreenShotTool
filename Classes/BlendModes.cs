@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace ScreenShotTool
+﻿namespace ScreenShotTool
 {
     public class ColorBlend
     {
