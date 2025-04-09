@@ -172,7 +172,7 @@
             copyFileToolStripMenuItem.Name = "copyFileToolStripMenuItem";
             copyFileToolStripMenuItem.Size = new Size(238, 22);
             copyFileToolStripMenuItem.Text = "Cop&y Files";
-            copyFileToolStripMenuItem.Click += CopyFileToolStripMenuItem_Click;
+            copyFileToolStripMenuItem.Click += CopyFileMenuItem_Click;
             // 
             // editImageToolStripMenuItem
             // 

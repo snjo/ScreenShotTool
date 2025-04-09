@@ -398,7 +398,14 @@ public partial class MainForm : Form
             }
             if (settings.WindowToClipboard)
             {
-                Clipboard.SetImage(bitmap);
+                try
+                {
+                    Clipboard.SetImage(bitmap);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error updating clipboard. Please Try again.\n\n{ex.Message}");
+                }
             }
             return saved;
         }
@@ -459,7 +466,14 @@ public partial class MainForm : Form
         }
         if (settings.ScreenToClipboard)
         {
-            Clipboard.SetImage(bitmap);
+            try
+            {
+                Clipboard.SetImage(bitmap);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating clipboard. Please Try again.\n\n{ex.Message}");
+            }
         }
         return saved;
     }
@@ -476,7 +490,14 @@ public partial class MainForm : Form
         }
         if (settings.ScreenToClipboard)
         {
-            Clipboard.SetImage(bitmap);
+            try
+            {
+                Clipboard.SetImage(bitmap);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating clipboard. Please Try again.\n\n{ex.Message}");
+            }
         }
         return saved;
     }
@@ -1667,7 +1688,7 @@ public partial class MainForm : Form
         aboutWindow.WindowState = FormWindowState.Normal;
     }
 
-    private void CopyFileToolStripMenuItem_Click(object sender, EventArgs e)
+    private void CopyFileMenuItem_Click(object sender, EventArgs e)
     {
         if (listViewThumbnails.SelectedItems.Count > 0)
         {
@@ -1691,7 +1712,14 @@ public partial class MainForm : Form
             Clipboard.Clear();
             if (fileList.Count > 0)
             {
-                Clipboard.SetData(DataFormats.FileDrop, fileList.ToArray());
+                try
+                {
+                    Clipboard.SetData(DataFormats.FileDrop, fileList.ToArray());
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error updating clipboard. Please Try again.\n\n{ex.Message}");
+                }
             }
         }
     }

@@ -601,7 +601,15 @@ public partial class ScreenshotEditor : Form
             //copiedBitmap.DisposeImage();
             copiedBitmap.SetImage(ImageProcessing.CopyImage(result)); // disposes and refills
             Debug.WriteLine($"Set copiedImage to result {copiedBitmap.Width}");
-            Clipboard.SetImage(result);
+
+            try
+            {
+                Clipboard.SetImage(result);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating clipboard. Please try again.\n\n{ex.Message}");
+            }
             result.Dispose();
         }
     }
@@ -1361,7 +1369,16 @@ public partial class ScreenshotEditor : Form
             assembled.Dispose();
             copiedBitmap.DisposeImage();
             copiedBitmap.SetImage(ImageProcessing.CopyImage(outImage));
-            Clipboard.SetImage(outImage);
+
+            try
+            {
+                Clipboard.SetImage(outImage);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating clipboard. Please try again.\n\n{ex.Message}");
+            }
+
             outImage.Dispose();
             gsC.showOutline = true;
         }
