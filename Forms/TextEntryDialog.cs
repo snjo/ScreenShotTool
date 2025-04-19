@@ -6,10 +6,14 @@ namespace ScreenShotTool.Forms;
 public partial class TextEntryDialog : Form
 {
     public string TextResult = string.Empty;
-    public TextEntryDialog(string text)
+    public bool ConfirmOnEnter = false;
+
+    public TextEntryDialog(string text, bool confirmOnEnter = false, bool multiLine = true)
     {
         InitializeComponent();
         textBox1.Text = text;
+        ConfirmOnEnter = confirmOnEnter;
+        textBox1.Multiline = multiLine;
     }
 
     private void TextBox1_TextChanged(object sender, EventArgs e)
@@ -19,8 +23,7 @@ public partial class TextEntryDialog : Form
 
     private void ButtonOK_Click(object sender, EventArgs e)
     {
-        TextResult = textBox1.Text;
-        DialogResult = DialogResult.OK;
+        ConfirmDialog();
     }
 
     private void TextEntryDialog_KeyDown(object sender, KeyEventArgs e)
@@ -29,5 +32,15 @@ public partial class TextEntryDialog : Form
         {
             DialogResult = DialogResult.Cancel;
         }
+        if (e.KeyCode == Keys.Enter && ConfirmOnEnter)
+        {
+            ConfirmDialog();
+        }
+    }
+
+    private void ConfirmDialog()
+    {
+        TextResult = textBox1.Text;
+        DialogResult = DialogResult.OK;
     }
 }

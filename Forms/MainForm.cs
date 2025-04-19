@@ -1319,6 +1319,67 @@ public partial class MainForm : Form
         UpdateInfoLabelVisibility();
     }
 
+    private void RenameSelectedFile()
+    {
+        if (listViewThumbnails.SelectedItems.Count < 1) return;
+
+        ListViewItem item = listViewThumbnails.SelectedItems[0];
+        string? oldFileName = item.Tag?.ToString();
+        if (oldFileName == null || File.Exists(oldFileName) == false)
+        {
+            MessageBox.Show("File not found, cancelling rename.");
+            return;
+        }
+
+        TextEntryDialog textEntryDialog = new TextEntryDialog(oldFileName, true, false);
+        DialogResult result = textEntryDialog.ShowDialog();
+        if (result == DialogResult.OK)
+        {
+            string newFileName = textEntryDialog.TextResult;
+
+            string? newDirectoryName = Path.GetDirectoryName(newFileName);
+            if (Directory.Exists(newDirectoryName) == false)
+            {
+                DialogResult createDirectoryResult = MessageBox.Show($"Folder does not exist:\n{Path.GetDirectoryName(newFileName)}\nDo you want to create the folder?", "Create folder?", MessageBoxButtons.OKCancel);
+                if (createDirectoryResult == DialogResult.OK)
+                {
+                    try
+                    {
+                        if (newDirectoryName == null)
+                        {
+                            MessageBox.Show($"Could not determine directory name:\n{newDirectoryName}");
+                            return;
+                        }
+                        Directory.CreateDirectory(newDirectoryName);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Could not create directoy:\n{ex.ToString()}");
+                        return;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+
+            try
+            {
+                File.Move(oldFileName, newFileName);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error moving file\nfrom: {oldFileName}\nto: {newFileName}\n\n{ex.Message}");
+                return;
+            }
+
+            item.Tag = textEntryDialog.TextResult;
+            item.Text = Path.GetFileNameWithoutExtension(newFileName);
+        }
+    }
+
     private void ButtonClearList_Click(object sender, EventArgs e)
     {
 
@@ -1563,6 +1624,12 @@ public partial class MainForm : Form
     {
         // delete selected files
         DeleteSelectedFiles();
+    }
+
+    private void ItemRenameFile_Click(Object sender, EventArgs e)
+    {
+        // open prompt to rename file and possibly move it to a subfolder
+        RenameSelectedFile();
     }
 
     private void ItemOpenFolder_Click(object sender, EventArgs e)
@@ -1900,6 +1967,6 @@ public partial class MainForm : Form
         }
         UpdateInfoLabelVisibility();
     }
-    #endregion
 
+#endregion
 }

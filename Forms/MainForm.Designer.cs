@@ -38,6 +38,7 @@
             itemOpenFileInExplorer = new ToolStripMenuItem();
             itemOpenFolder = new ToolStripMenuItem();
             itemDeleteFile = new ToolStripMenuItem();
+            itemRename = new ToolStripMenuItem();
             itemRemove = new ToolStripMenuItem();
             copyToClipboardToolStripMenuItem = new ToolStripMenuItem();
             copyFileToolStripMenuItem = new ToolStripMenuItem();
@@ -54,6 +55,7 @@
             toolStripMenuItem4 = new ToolStripSeparator();
             toolStripMenuItem3 = new ToolStripMenuItem();
             copyClipboardImageToFileDropToolStripMenuItem = new ToolStripMenuItem();
+            toolStripMenuItem8 = new ToolStripMenuItem();
             toolStripMenuItem5 = new ToolStripSeparator();
             openLastUsedFolderToolStripMenuItem = new ToolStripMenuItem();
             pToolStripMenuItem = new ToolStripMenuItem();
@@ -87,7 +89,6 @@
             websiteToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             labelInfo = new Label();
-            toolStripMenuItem8 = new ToolStripMenuItem();
             contextMenuListView.SuspendLayout();
             contextMenuSysTray.SuspendLayout();
             menuStrip1.SuspendLayout();
@@ -120,9 +121,9 @@
             // 
             // contextMenuListView
             // 
-            contextMenuListView.Items.AddRange(new ToolStripItem[] { itemOpenImage, itemOpenFileInExplorer, itemOpenFolder, itemDeleteFile, itemRemove, copyToClipboardToolStripMenuItem, copyFileToolStripMenuItem, editImageToolStripMenuItem, convertFileFormatToolStripMenuItem });
+            contextMenuListView.Items.AddRange(new ToolStripItem[] { itemOpenImage, itemOpenFileInExplorer, itemOpenFolder, itemDeleteFile, itemRename, itemRemove, copyToClipboardToolStripMenuItem, copyFileToolStripMenuItem, editImageToolStripMenuItem, convertFileFormatToolStripMenuItem });
             contextMenuListView.Name = "contextMenuListView";
-            contextMenuListView.Size = new Size(239, 202);
+            contextMenuListView.Size = new Size(239, 246);
             contextMenuListView.Opening += ContextMenuListView_Opening;
             // 
             // itemOpenImage
@@ -152,6 +153,13 @@
             itemDeleteFile.Size = new Size(238, 22);
             itemDeleteFile.Text = "&Delete File";
             itemDeleteFile.Click += ItemDeleteFile_Click;
+            // 
+            // itemRename
+            // 
+            itemRename.Name = "itemRename";
+            itemRename.Size = new Size(238, 22);
+            itemRename.Text = "Rename / Move File";
+            itemRename.Click += ItemRenameFile_Click;
             // 
             // itemRemove
             // 
@@ -205,7 +213,7 @@
             contextMenuSysTray.Items.AddRange(new ToolStripItem[] { helpToolStripMenuItem, openProgramToolStripMenuItem, optionsToolStripMenuItem, editorToolStripMenuItem, editTagsToolStripMenuItem1, enableCroppingToolStripMenuItem, toolStripMenuItem4, toolStripMenuItem3, copyClipboardImageToFileDropToolStripMenuItem, toolStripMenuItem8, toolStripMenuItem5, openLastUsedFolderToolStripMenuItem, pToolStripMenuItem, toolStripMenuItem6, exitApplicationToolStripMenuItem });
             contextMenuSysTray.Name = "contextMenuSysTray";
             contextMenuSysTray.ShowImageMargin = false;
-            contextMenuSysTray.Size = new Size(256, 308);
+            contextMenuSysTray.Size = new Size(256, 286);
             // 
             // helpToolStripMenuItem
             // 
@@ -268,6 +276,13 @@
             copyClipboardImageToFileDropToolStripMenuItem.Size = new Size(255, 22);
             copyClipboardImageToFileDropToolStripMenuItem.Text = "Copy clipboard image to file drop";
             copyClipboardImageToFileDropToolStripMenuItem.Click += CopyClipboardToFileToolStripMenuItem_Click;
+            // 
+            // toolStripMenuItem8
+            // 
+            toolStripMenuItem8.Name = "toolStripMenuItem8";
+            toolStripMenuItem8.Size = new Size(255, 22);
+            toolStripMenuItem8.Text = "Fix clipboard image (more compatible)";
+            toolStripMenuItem8.Click += FixClipboardImageMenuItem_Click;
             // 
             // toolStripMenuItem5
             // 
@@ -502,13 +517,6 @@
             labelInfo.DragDrop += ListViewThumbnails_DragDrop;
             labelInfo.DragEnter += ListViewThumbnails_DragEnter;
             // 
-            // toolStripMenuItem8
-            // 
-            toolStripMenuItem8.Name = "toolStripMenuItem8";
-            toolStripMenuItem8.Size = new Size(255, 22);
-            toolStripMenuItem8.Text = "Fix clipboard image (more compatible)";
-            toolStripMenuItem8.Click += FixClipboardImageMenuItem_Click;
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -595,5 +603,6 @@
         private ToolStripSeparator toolStripMenuItem7;
         private ToolStripMenuItem fixClipboardImageMenuItem;
         private ToolStripMenuItem toolStripMenuItem8;
+        private ToolStripMenuItem itemRename;
     }
 }
