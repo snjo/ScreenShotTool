@@ -479,11 +479,11 @@ public partial class ScreenshotEditor : Form
 
         if (e.KeyCode == Keys.V && e.Modifiers == Keys.Control)
         {
-            if (Clipboard.ContainsImage())
+            if (ClipboardHelpers.ContainsImage())
             {
                 PasteIntoImage();
             }
-            else if (Clipboard.ContainsText())
+            else if (ClipboardHelpers.ContainsText())
             {
                 PasteTextIntoImage();
             }
@@ -604,7 +604,7 @@ public partial class ScreenshotEditor : Form
 
             try
             {
-                Clipboard.SetImage(result);
+                ClipboardHelpers.SetImage(result);
             }
             catch (Exception ex)
             {
@@ -631,7 +631,11 @@ public partial class ScreenshotEditor : Form
 
     private void PasteTextIntoImage()
     {
-        AddNewSymbolToList(GsText.Create(GetPastePosition(), buttonNewColorLine.BackColor, Clipboard.GetText(), 10));
+        string newText = ClipboardHelpers.GetText();
+        if (newText.Length > 0)
+        {
+            AddNewSymbolToList(GsText.Create(GetPastePosition(), buttonNewColorLine.BackColor, newText, 10));
+        }
     }
 
     private Point GetPastePosition()
@@ -1372,7 +1376,7 @@ public partial class ScreenshotEditor : Form
 
             try
             {
-                Clipboard.SetImage(outImage);
+                ClipboardHelpers.SetImage(outImage);
             }
             catch (Exception ex)
             {

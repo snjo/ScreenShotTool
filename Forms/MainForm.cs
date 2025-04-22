@@ -398,14 +398,7 @@ public partial class MainForm : Form
             }
             if (settings.WindowToClipboard)
             {
-                try
-                {
-                    Clipboard.SetImage(bitmap);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error updating clipboard. Please Try again.\n\n{ex.Message}");
-                }
+                ClipboardHelpers.SetImage(bitmap);
             }
             return saved;
         }
@@ -466,14 +459,7 @@ public partial class MainForm : Form
         }
         if (settings.ScreenToClipboard)
         {
-            try
-            {
-                Clipboard.SetImage(bitmap);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error updating clipboard. Please Try again.\n\n{ex.Message}");
-            }
+            ClipboardHelpers.SetImage(bitmap);
         }
         return saved;
     }
@@ -490,14 +476,7 @@ public partial class MainForm : Form
         }
         if (settings.ScreenToClipboard)
         {
-            try
-            {
-                Clipboard.SetImage(bitmap);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error updating clipboard. Please Try again.\n\n{ex.Message}");
-            }
+            ClipboardHelpers.SetImage(bitmap);
         }
         return saved;
     }
@@ -986,7 +965,7 @@ public partial class MainForm : Form
 
     private void ClipboardImageToFileDrop()
     {
-        if (Clipboard.ContainsImage() == false)
+        if (ClipboardHelpers.ContainsImage() == false)
         {
             MessageBox.Show("Clipboard does not contain a valid image");
             return;
@@ -1002,13 +981,8 @@ public partial class MainForm : Form
         {
             Debug.WriteLine($"File created, adding to drop list, file: {filePath}");
             StringCollection fileDropList = [filePath];
-            try
+            if (ClipboardHelpers.SetFileList(fileDropList) == false)
             {
-                Clipboard.SetFileDropList(fileDropList);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Exception setting clipboard drop list\n{ex.Message}");
                 WriteMessage("Error when adding file drop to clipboard");
             }
         }
@@ -1021,7 +995,7 @@ public partial class MainForm : Form
 
     private void ClipboardImageToSaveFile()
     {
-        if (Clipboard.ContainsImage() == false)
+        if (ClipboardHelpers.ContainsImage() == false)
         {
             MessageBox.Show("Clipboard does not contain a valid image");
             return;
@@ -1058,7 +1032,7 @@ public partial class MainForm : Form
             Debug.WriteLine($"Using format from filename {format} from file name {filePath}");
         }
         //ComposeFileName(settings.Filename, "Region");
-        Image? bmp = Clipboard.GetImage();
+        Image? bmp = ClipboardHelpers.GetImage();
         if (bmp != null && DestinationFolder != null && DestinationFileName != null)
         {
             bool saved = SaveBitmap(DestinationFolder, Path.GetFileNameWithoutExtension(DestinationFileName) + DestinationFileExtension, format, (Bitmap)bmp);
@@ -1073,12 +1047,12 @@ public partial class MainForm : Form
     private void FixClipboardImage()
     {
         // loads and sets the clipboard image to convert from an unpasteable image type to a more compatible one
-        if (Clipboard.ContainsImage())
+        if (ClipboardHelpers.ContainsImage())
         {
             Image? img = null;
             try
             {
-                img = Clipboard.GetImage();
+                img = ClipboardHelpers.GetImage();
             }
             catch (Exception ex)
             {
@@ -1089,7 +1063,7 @@ public partial class MainForm : Form
             {
                 try
                 {
-                    Clipboard.SetImage(img);
+                    ClipboardHelpers.SetImage(img);
                     Debug.WriteLine($"Fixed clipboard image");
                 }
                 catch (Exception ex)
@@ -1678,7 +1652,7 @@ public partial class MainForm : Form
                 try
                 {
                     Image toClipboard = Image.FromFile(file);
-                    Clipboard.SetImage(toClipboard);
+                    ClipboardHelpers.SetImage(toClipboard);
                     toClipboard.Dispose();
                 }
                 catch
@@ -1776,17 +1750,10 @@ public partial class MainForm : Form
                     WriteMessage("File no longer exists, can't copy: " + file);
                 }
             }
-            Clipboard.Clear();
+            ClipboardHelpers.Clear();
             if (fileList.Count > 0)
             {
-                try
-                {
-                    Clipboard.SetData(DataFormats.FileDrop, fileList.ToArray());
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error updating clipboard. Please Try again.\n\n{ex.Message}");
-                }
+                ClipboardHelpers.SetFileList(fileList);
             }
         }
     }
