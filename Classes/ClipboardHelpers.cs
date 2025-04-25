@@ -121,8 +121,8 @@ namespace ScreenShotTool
 
         private static void ClipboardErrorMessage(Exception ex, bool errorpopup)
         {
-            Debug.WriteLine($"Error updating clipboard. Please Try again. Exeption: {ex.Message}");
-            if (errorpopup) MessageBox.Show($"Error updating clipboard. Please Try again.\n\n{ex.Message}");
+            Debug.WriteLine($"Error updating clipboard. Please Try again.Exception: {ex.Message}");
+            if (errorpopup) MessageBox.Show($"Error updating clipboard. Please Try again.\nThe clipboard may be in use by another application.\n\n{ex.Message}");
         }
     }
 }

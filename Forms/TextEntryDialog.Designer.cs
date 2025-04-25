@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             textBox1 = new TextBox();
-            button1 = new Button();
-            button2 = new Button();
+            buttonCancel = new Button();
+            buttonOK = new Button();
             panel1 = new Panel();
             panel1.SuspendLayout();
             SuspendLayout();
@@ -49,30 +49,30 @@
             // 
             // button1
             // 
-            button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button1.DialogResult = DialogResult.Cancel;
-            button1.Location = new Point(433, 5);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 23);
-            button1.TabIndex = 1;
-            button1.Text = "Cancel";
-            button1.UseVisualStyleBackColor = true;
+            buttonCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonCancel.DialogResult = DialogResult.Cancel;
+            buttonCancel.Location = new Point(433, 5);
+            buttonCancel.Name = "button1";
+            buttonCancel.Size = new Size(75, 23);
+            buttonCancel.TabIndex = 1;
+            buttonCancel.Text = "Cancel";
+            buttonCancel.UseVisualStyleBackColor = true;
             // 
             // button2
             // 
-            button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button2.Location = new Point(512, 5);
-            button2.Name = "button2";
-            button2.Size = new Size(75, 23);
-            button2.TabIndex = 2;
-            button2.Text = "OK";
-            button2.UseVisualStyleBackColor = true;
-            button2.Click += ButtonOK_Click;
+            buttonOK.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonOK.Location = new Point(512, 5);
+            buttonOK.Name = "button2";
+            buttonOK.Size = new Size(75, 23);
+            buttonOK.TabIndex = 2;
+            buttonOK.Text = "OK";
+            buttonOK.UseVisualStyleBackColor = true;
+            buttonOK.Click += ButtonOK_Click;
             // 
             // panel1
             // 
-            panel1.Controls.Add(button1);
-            panel1.Controls.Add(button2);
+            panel1.Controls.Add(buttonCancel);
+            panel1.Controls.Add(buttonOK);
             panel1.Dock = DockStyle.Bottom;
             panel1.Location = new Point(0, 266);
             panel1.Name = "panel1";
@@ -100,8 +100,8 @@
         #endregion
 
         private TextBox textBox1;
-        private Button button1;
-        private Button button2;
+        private Button buttonCancel;
+        private Button buttonOK;
         private Panel panel1;
     }
 }

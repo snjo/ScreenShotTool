@@ -1341,7 +1341,12 @@ public partial class MainForm : Form
 
             try
             {
-                File.Move(oldFileName, newFileName);
+                if (File.Exists(newFileName))
+                {
+                    DialogResult overwriteResult = MessageBox.Show($"File already exists.\nDo you want to overwrite the file {Path.GetFileName(newFileName)}","Replace File?",MessageBoxButtons.YesNo);
+                    if (overwriteResult == DialogResult.No) return;
+                }
+                File.Move(oldFileName, newFileName, overwrite: true);
             }
             catch (Exception ex)
             {
@@ -1350,7 +1355,7 @@ public partial class MainForm : Form
             }
 
             item.Tag = textEntryDialog.TextResult;
-            item.Text = Path.GetFileNameWithoutExtension(newFileName);
+            item.Text = Path.GetFileName(newFileName);
         }
     }
 
