@@ -129,7 +129,6 @@
             // uses perceptual brightness to desaturate, blues are much darker than greens.
 
             int Alpha = CombineTransparencies(color1, color2);
-            //int avgColor = Math.Clamp((int)((color1.R + color1.G + color1.B) / 3f), 0, 255);
             int desaturated = (int)(ColorTools.ColorBrightness(color1) * 255f);
             return Color.FromArgb(Alpha, desaturated, desaturated, desaturated);
         }
@@ -137,6 +136,7 @@
         public static Color DesaturateAverageRGB(Color color1, Color color2)
         {
             // uses an average color, not perceptual, so pure greens are just as dark as blues and reds
+            // not in use since there's seldom a desire for this effect.
 
             int Alpha = CombineTransparencies(color1, color2);
             int avgColor = Math.Clamp((int)((color1.R + color1.G + color1.B) / 3f), 0, 255);
@@ -145,17 +145,19 @@
 
         public static Color Invert(Color color1)
         {
+            //Inverts the brightness, also inverts the hues, a classic.
             //int Alpha = CombineTransparencies(color1, color2);
             return Color.FromArgb(color1.A, 255 - color1.R, 255 - color1.G, 255 - color1.B);
         }
 
         public static Color InvertBrighness(Color color1, Color color2)
         {
+            // Inverts the image brighness, while maintaining the hue.
             //color1 is the underlying image
             //color2 is used to adjust the brightness of the extremes (dark to light as whites or pure color)
             //color2 RED channel is used to transition between using BRIGHTNESS and PERCEPTUAL BRIGHTNESS
+            //color2 GREEN channel is used to transition between using SOURCE SATURATION and IMPROVED SATURATION, allowing for bright colors to move toward whites
             //color2 BLUE channel is not used
-            //color2 GREEN channel is not used channel is used to transition between using SOURCE SATURATION and IMPROVED SATURATION, allowing for bright colors to move toward whites
             // using RED and GREEN because that matches the default Yellow highlighter values and gives the prettiest result.
             double hue;
             double saturation;
@@ -170,7 +172,6 @@
 
             Color outColor = ColorTools.ColorFromHSV(hue, finalSaturation, finalBrightness);
 
-            //Color outColor = ColorTools.ColorFromHSV(hue, color2.GetBrightness(), 1);
             return outColor;
         }
     }
