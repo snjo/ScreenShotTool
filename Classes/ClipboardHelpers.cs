@@ -28,7 +28,7 @@ namespace ScreenShotTool
         {
             try
             {
-                Clipboard.SetData(DataFormats.FileDrop, fileList);
+                Clipboard.SetFileDropList(fileList);
                 return true;
             }
             catch (Exception ex)
