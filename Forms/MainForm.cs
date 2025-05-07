@@ -524,6 +524,52 @@ public partial class MainForm : Form
 
         return System.Text.RegularExpressions.Regex.Replace(name, invalidRegStr, "_");
     }
+
+    private static string MakeValidDirectoryName(string name)
+    {
+        name = name.Trim();
+        List<char> invalidPathChars = Path.GetInvalidPathChars().ToList();
+        bool fixesNeeded = false;
+
+        invalidPathChars.AddRange(new List<char> { ':', '<', '>', '*', '?', '/', '"' }); // from the ones in the invalid file chars list
+
+        bool hasDriveLetter = false;
+
+        if (name.Length > 1) // allow for : one place, after the drive letter, if so split the first two chars from the rest for processing
+        {
+            if (name[1] == ':')
+                hasDriveLetter = true;
+        }
+
+        string postDriveLetter = name.Substring(2);
+
+        string processName = hasDriveLetter ? postDriveLetter : name;
+
+        foreach (char invalidPathChar in invalidPathChars)
+        {
+            if (processName.Contains(invalidPathChar))
+            {
+                processName = processName.Replace(invalidPathChar, '_');
+                Debug.WriteLine($"Replaced {invalidPathChar} with _");
+                fixesNeeded = true;
+            }
+        }
+
+        StringBuilder sb = new();
+
+        if (hasDriveLetter)
+        {
+            sb.Append(name.Substring(0,2));
+        }
+        sb.Append(processName);
+
+        if (fixesNeeded)
+        {
+            Debug.WriteLine($"Save path fixed from: '{name}' to: '{sb}'");
+        }
+        return sb.ToString();
+    }
+
     private static string ShortenString(string input, int maxLength)
     {
         return input[..Math.Min(maxLength, input.Length)].Trim();
@@ -820,6 +866,9 @@ public partial class MainForm : Form
 
     private bool SaveBitmap(string folder, string filename, ImageFormat format, Bitmap capture)
     {
+        //folder = MakeValidDirectoryName(folder);
+        folder = MakeValidDirectoryName(folder);
+        filename = MakeValidFileName(filename);
         if (folder.Length < 1)
         {
             folder = ".";
