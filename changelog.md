@@ -4,10 +4,15 @@
 - Undo?
 
 ## 2.4 (In progress)
-- Menu items: Save an image from the clipboard directly to a file, or add it to file drop for pasting to file explorer.
+- Menu items: Save an image from the clipboard directly to a file, or add it to file drop for pasting to file explorer
 - Menu item: Fix clipboard images, convert them to a more compatible format (e.g. when copying from MS Teams and pasting to old programs)
+- Hotkeys available for the above clipboard to file / clipboard to file drop
+- File context menu: Added "Rename / Move file"
+- New highlighter blend mode: Invert Brightness, maintains hue
+- Blend mode Desaturate now uses perceptual brightness, not flat RGB values
 - Thumbnails are added to the start of the list by default (reverse chronological). Adjustable in options
 - Thumbnail list scrolls to the most recent capture
+- Changelog available from Help menu (github link)
 - Tags have a category, in preparation for future features
 - Fix missing leading zeroes on month and day in file names
 - Fix file drop list not working reliably (from capture list and clipboard to drop list)
