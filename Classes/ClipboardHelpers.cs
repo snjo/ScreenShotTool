@@ -10,20 +10,6 @@ namespace ScreenShotTool
     public static class ClipboardHelpers
     {
 
-        public static bool SetFileList(List<string> fileList, bool errorpopup = true)
-        {
-            try
-            {
-                Clipboard.SetData(DataFormats.FileDrop, fileList.ToArray());
-                return true;
-            }
-            catch (Exception ex)
-            {
-                ClipboardErrorMessage(ex, errorpopup);
-                return false;
-            }
-        }
-
         public static bool SetFileList(StringCollection fileList, bool errorpopup = true)
         {
             try

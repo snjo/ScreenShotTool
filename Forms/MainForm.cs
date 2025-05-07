@@ -1740,7 +1740,7 @@ public partial class MainForm : Form
         {
             Debug.WriteLine("Copying files to clipboard");
 
-            List<string> fileList = [];
+            StringCollection fileList = [];
 
             foreach (ListViewItem item in listViewThumbnails.SelectedItems)
             {
