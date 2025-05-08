@@ -33,7 +33,13 @@ public partial class MainForm : Form
     private int Counter = 0;
     private readonly int CounterMax = 9999;
     private bool ExitForSure = false;
-    private readonly string FileDropTempFolder = "filedrop";
+    private string FileDropTempFolder
+    {
+        get
+        {
+            return Environment.ExpandEnvironmentVariables("%temp%\\ScreenshotTool\\filedrop");
+        }
+    }
 
     public string helpText =
         "Default filename values:\r" +
