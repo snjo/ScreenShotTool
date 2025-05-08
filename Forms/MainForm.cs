@@ -516,9 +516,9 @@ public partial class MainForm : Form
 
     #region Make Filename
 
-    //https://stackoverflow.com/questions/309485/c-sharp-sanitize-file-name
     private static string MakeValidFileName(string name)
     {
+        // from https://stackoverflow.com/questions/309485/c-sharp-sanitize-file-name
         string invalidChars = System.Text.RegularExpressions.Regex.Escape(new string(System.IO.Path.GetInvalidFileNameChars()));
         string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
 
@@ -531,7 +531,8 @@ public partial class MainForm : Form
         List<char> invalidPathChars = Path.GetInvalidPathChars().ToList();
         bool fixesNeeded = false;
 
-        invalidPathChars.AddRange(new List<char> { ':', '<', '>', '*', '?', '/', '"' }); // from the ones in the invalid file chars list
+        // add / : * ? " < > |
+        invalidPathChars.AddRange(new List<char> { '/', ':', '*', '?', '"', '<', '>' }); // from the ones in the invalid file chars list, except backslash
 
         bool hasDriveLetter = false;
 
@@ -551,6 +552,16 @@ public partial class MainForm : Form
 
         foreach (char invalidPathChar in invalidPathChars)
         {
+            // print invalid chars list to debug
+            //if (Char.IsWhiteSpace(invalidPathChar))
+            //{
+            //    Debug.WriteLine($"Invalid whitespace path char: {(int)invalidPathChar:X4}");
+            //}
+            //else
+            //{
+            //    Debug.WriteLine($"Invalid path char: {(int)invalidPathChar:X4} {invalidPathChar:c}");
+            //}
+            
             if (processName.Contains(invalidPathChar))
             {
                 processName = processName.Replace(invalidPathChar, '_');
