@@ -537,7 +537,11 @@ public partial class MainForm : Form
 
         if (name.Length > 1) // allow for : one place, after the drive letter, if so split the first two chars from the rest for processing
         {
-            if (name[1] == ':')
+            char driveLetter = name[0];
+            bool driveLetterIsValid = false;
+            if ((driveLetter >= 'A' && driveLetter <= 'Z') || (driveLetter >= 'a' && driveLetter <= 'z'))
+                driveLetterIsValid = true;
+            if (name[1] == ':' && driveLetterIsValid)
                 hasDriveLetter = true;
         }
 
