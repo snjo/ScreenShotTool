@@ -1072,7 +1072,8 @@ public partial class MainForm : Form
         }
         SaveFileDialog dialog = new()
         {
-            Filter = ImageOutput.FilterSaveImage
+            Filter = ImageOutput.FilterSaveImage,
+            FileName = ComposeFileName("ClipboardImage $d $t")
         };
         DialogResult result = dialog.ShowDialog();
         string filePath = dialog.FileName;
