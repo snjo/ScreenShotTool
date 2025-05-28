@@ -918,6 +918,7 @@ public partial class MainForm : Form
         {
             try
             {
+                //Stopwatch sw = Stopwatch.StartNew();
                 if (Path.GetExtension(filename).Equals(".pdf", StringComparison.OrdinalIgnoreCase))
                 {
                     Debug.WriteLine("SaveBitmap: Saving to PDF instead of image");
@@ -929,9 +930,11 @@ public partial class MainForm : Form
                 }
                 else
                 {
-                    Debug.WriteLine("Saving image with format " + format.ToString() + " to " + folder + "\\" + filename);
+                    //Debug.WriteLine("Saving image with format " + format.ToString() + " to " + folder + "\\" + filename);
                     capture.Save(folder + "\\" + filename, format);
                 }
+                //sw.Stop();
+                //Debug.WriteLine($"Stopwatch, saved image in {sw.ElapsedMilliseconds}");
                 WriteMessage("Saved " + folder + "\\" + filename);
 
                 ShowBalloonToolTip("Capture saved", folder + Environment.NewLine + filename, ToolTipIcon.Info, BalloonTipType.ScreenshotSaved);
@@ -967,7 +970,7 @@ public partial class MainForm : Form
     //https://stackoverflow.com/questions/1484759/quality-of-a-saved-jpg-in-c-sharp
     public static void SaveJpeg(string path, Bitmap image, long quality = 95L)
     {
-        Debug.WriteLine("Saving JPEG with quality " + quality);
+        //Debug.WriteLine("Saving JPEG with quality " + quality);
         using EncoderParameters encoderParameters = new EncoderParameters(1);
         using EncoderParameter encoderParameter = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, quality);
         ImageCodecInfo codecInfo = ImageCodecInfo.GetImageDecoders().First(codec => codec.FormatID == ImageFormat.Jpeg.Guid);

@@ -79,7 +79,7 @@ public class Tagging
                             }
                             InfoTag tag = new InfoTag(enabled, name, description, category);
                             CaptureTags.Add(tag);
-                            Debug.WriteLine($"Added tag: {enabled}, '{name}' in category '{category}', description: '{description}'");
+                            //Debug.WriteLine($"Added tag: {enabled}, '{name}' in category '{category}', description: '{description}'");
                         }
 
 
