@@ -16,6 +16,8 @@
 - Tags have a category, in preparation for future features
 - Fix missing leading zeroes on month and day in file names
 - Fix file drop list not working reliably (from capture list and clipboard to drop list)
+- File drop uses the %temp% folder
+- Fix errors with invalid drive letters and characters in file names
 
 ## 2.3
 - Removed hang when clearing large lists of thumbnails (removed un-needed image dispose)
