@@ -119,4 +119,47 @@ public static class ImageProcessing
         }
         return bmp;
     }
+
+    public static void FixTransparentPixels(int width, int height, Bitmap captureBitmap)
+    {
+        // Fix transparent pixels by replacing color with an average of surrounding pixels
+        using BmpPixelSnoop snoop = new(captureBitmap);
+        for (int px = 0; px < width; px++)
+        {
+            for (int py = 0; py < height; py++)
+            {
+                Color color = snoop.GetPixel(px, py);
+                if (color.A < 255)
+                {
+                    int R = 0;
+                    int G = 0;
+                    int B = 0;
+                    int samples = 0;
+                    for (int i = px - 1; i < px + 2; i++)
+                    {
+                        for (int j = py - 1; j < py + 2; j++)
+                        {
+                            if (i < 0 || j < 0 || i >= captureBitmap.Width || j >= captureBitmap.Height)
+                            {
+                                continue;
+                            }
+                            Color c = snoop.GetPixel(i, j);
+                            R += c.R;
+                            G += c.G;
+                            B += c.B;
+                            samples++;
+                        }
+                    }
+                    if (samples > 0)
+                    {
+                        R = Math.Clamp((int)(R / samples), 0, 255);
+                        G = Math.Clamp((int)(G / samples), 0, 255);
+                        B = Math.Clamp((int)(B / samples), 0, 255);
+                    }
+                    snoop.SetPixel(px, py, Color.FromArgb(R, G, B));
+                }
+
+            }
+        }
+    }
 }

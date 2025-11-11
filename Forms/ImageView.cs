@@ -142,8 +142,13 @@ namespace ScreenShotTool
             //Copying Image from The Screen
             captureGraphics.CopyFromScreen(captureRectangle.Left, captureRectangle.Top, 0, 0, captureRectangle.Size);
             captureGraphics.Dispose();
+
+            ImageProcessing.FixTransparentPixels(width, height, captureBitmap);
+
             return captureBitmap;
         }
+
+        
 
         public Bitmap? GetBitmap()
         {

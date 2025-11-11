@@ -987,6 +987,9 @@ public partial class MainForm : Form
 
         //Copying Image from The Screen
         captureGraphics.CopyFromScreen(captureRectangle.Left, captureRectangle.Top, 0, 0, captureRectangle.Size);
+
+        ImageProcessing.FixTransparentPixels(width, height, captureBitmap);
+
         captureGraphics.Dispose();
         return captureBitmap;
     }
