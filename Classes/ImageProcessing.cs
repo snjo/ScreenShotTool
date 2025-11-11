@@ -129,7 +129,7 @@ public static class ImageProcessing
             for (int py = 0; py < height; py++)
             {
                 Color color = snoop.GetPixel(px, py);
-                if (color.A < 255)
+                if (color.A == 0)
                 {
                     int R = 0;
                     int G = 0;
@@ -144,17 +144,21 @@ public static class ImageProcessing
                                 continue;
                             }
                             Color c = snoop.GetPixel(i, j);
-                            R += c.R;
-                            G += c.G;
-                            B += c.B;
-                            samples++;
+                            if (c.A > 0)
+                            {
+                                R += c.R;
+                                G += c.G;
+                                B += c.B;
+                                samples++;
+                            }
                         }
                     }
                     if (samples > 0)
                     {
                         R = Math.Clamp((int)(R / samples), 0, 255);
-                        G = Math.Clamp((int)(G / samples), 0, 255);
+                        G = Math.Clamp((int)(G / samples) + 100, 0, 255);
                         B = Math.Clamp((int)(B / samples), 0, 255);
+                        //Debug.WriteLine($"Fix transparent pixel at {px} {py} using {samples} surrounding samples, result R{R} G{G} B{B}");
                     }
                     snoop.SetPixel(px, py, Color.FromArgb(R, G, B));
                 }
