@@ -344,6 +344,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Update="ScreenShotTool on Github.url">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="test.md">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
