@@ -1,5 +1,8 @@
 ﻿## Changelog
 
+## 2.5 (In progress)
+
+
 ## 2.4
 - Menu items: Save an image from the clipboard directly to a file, or add it to file drop for pasting to file explorer
 - Menu item: Fix clipboard images, convert them to a more compatible format (e.g. when copying from MS Teams and pasting to old programs)
