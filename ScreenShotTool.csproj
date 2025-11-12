@@ -55,6 +55,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="changelog.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="img\editor.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
