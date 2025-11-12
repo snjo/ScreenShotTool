@@ -88,7 +88,7 @@ Save to file, open in Editor or copy to clipboard based on options (Options > Mo
 ### File name variables
 
 When saving to file, the name of the active application, time or incrementing numbers can be included in the file or folder name.  
-The default file name is "$w $d $t $c", which will output something like "MyWindow 2023-12-31 16:02 003"
+The default file name is `$w $d $t $c`, which will output something like "MyWindow 2023-12-31 16:02 003"
 
     $w      Active Window title ("Region" or "Screen" is used in those modes)
     $d      Date in ISO format (2023-12-31)
@@ -115,7 +115,7 @@ You can also use longer form variables, these are identical to Greenshot's varia
 
 ### Title tweaks
 
-The title of the active window when using $w can be adjusted to make file names nicer.
+The title of the active window when using `$w` can be adjusted to make file names nicer.
 
 #### Window title max length
 
@@ -144,7 +144,7 @@ This can be used to remove the window title bar and edges. In the Windows 11 def
 
 #### Counter number
 
-When using the $c or ${NUM} variable, it inserts the number in this field. The number is saved between sessions.
+When using the `$c` or `${NUM}` variable, it inserts the number in this field. The number is saved between sessions.
 
 ### Tags and the $TAG variable
 
@@ -154,12 +154,12 @@ To create and enable tags, use the Edit Tags window (Main window > Edit > Edit T
 
 Tags have three parts:
 - The checkbox enables the tag
-- The Name field is what is output in the $TAG
-- The Description field is just for adding an explanatary note to yourself, and is not used in $TAG output
+- The Name field is what is output in the `$TAG`
+- The Description field is just for adding an explanatary note to yourself, and is not used in `$TAG` output
 
-When $TAG is present in the file or folder name setting, any enabled tags will be added in the name. If there are multiple active tag, they are separated with comma.
+When `$TAG` is present in the file or folder name setting, any enabled tags will be added in the name. If there are multiple active tag, they are separated with comma.
 
-Note that $TAG variable is all upper case, to distinguish it from the $t Time variable
+Note that `$TAG` variable is all upper case, to distinguish it from the `$t` Time variable
 
 	Example:
 	You have the current tags in the Tag View:
