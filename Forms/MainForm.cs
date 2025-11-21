@@ -48,7 +48,10 @@ public partial class MainForm : Form
         "\n$d/t/ms: Date, Time, Milliseconds\r" +
         "\n$c: Counter number (auto increments)";
 
-    public bool showThumbnails = true;
+    public bool showThumbnails
+    {
+        get {  return settings.MaxThumbnailsInList > 0; }
+    }// = true;
     Bitmap? bitmap;
     readonly ImageList imageList = new ImageList();
     readonly Tagging tagging;
