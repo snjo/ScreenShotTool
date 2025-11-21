@@ -89,6 +89,7 @@
             websiteToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             labelInfo = new Label();
+            timerCleanThumbnailList = new System.Windows.Forms.Timer(components);
             contextMenuListView.SuspendLayout();
             contextMenuSysTray.SuspendLayout();
             menuStrip1.SuspendLayout();
@@ -123,7 +124,7 @@
             // 
             contextMenuListView.Items.AddRange(new ToolStripItem[] { itemOpenImage, itemOpenFileInExplorer, itemOpenFolder, itemDeleteFile, itemRename, itemRemove, copyToClipboardToolStripMenuItem, copyFileToolStripMenuItem, editImageToolStripMenuItem, convertFileFormatToolStripMenuItem });
             contextMenuListView.Name = "contextMenuListView";
-            contextMenuListView.Size = new Size(239, 246);
+            contextMenuListView.Size = new Size(239, 224);
             contextMenuListView.Opening += ContextMenuListView_Opening;
             // 
             // itemOpenImage
@@ -517,6 +518,12 @@
             labelInfo.DragDrop += ListViewThumbnails_DragDrop;
             labelInfo.DragEnter += ListViewThumbnails_DragEnter;
             // 
+            // timerCleanThumbnailList
+            // 
+            timerCleanThumbnailList.Enabled = true;
+            timerCleanThumbnailList.Interval = 5000;
+            timerCleanThumbnailList.Tick += TimerCleanThumbnailList_Tick;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -604,5 +611,6 @@
         private ToolStripMenuItem fixClipboardImageMenuItem;
         private ToolStripMenuItem toolStripMenuItem8;
         private ToolStripMenuItem itemRename;
+        private System.Windows.Forms.Timer timerCleanThumbnailList;
     }
 }

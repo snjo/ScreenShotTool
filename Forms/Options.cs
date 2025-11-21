@@ -83,6 +83,7 @@ namespace ScreenShotTool
             numericThumbWidth.SetValueClamped(settings.ThumbnailWidth);
             numericThumbHeight.SetValueClamped(settings.ThumbnailHeight);
             checkBoxAddThumbAtStartOfList.Checked = settings.AddThumbAtStartOfList;
+            numericMaxThumbnails.SetValueClamped(settings.MaxThumbnailsInList);
 
             numericUpDownFramerate.SetValueClamped(settings.MaxFramerate);
 
@@ -184,6 +185,7 @@ namespace ScreenShotTool
             settings.ThumbnailWidth = numericThumbWidth.ValueInt();
             settings.ThumbnailHeight = numericThumbHeight.ValueInt();
             settings.AddThumbAtStartOfList = checkBoxAddThumbAtStartOfList.Checked;
+            settings.MaxThumbnailsInList = numericMaxThumbnails.ValueInt();
             settings.AllowTrayTooltipInfoCapture = checkBoxTrayTooltipInfoCapture.Checked;
             settings.AllowTrayTooltipInfoFolder = checkBoxTrayTooltipInfoFolder.Checked;
             settings.AllowTrayTooltipWarning = checkBoxTrayTooltipWarning.Checked;

@@ -65,6 +65,7 @@
             checkBoxTrayTooltipWarning = new CheckBox();
             tabControl1 = new TabControl();
             tabPageApplication = new TabPage();
+            checkBoxAddThumbAtStartOfList = new CheckBox();
             label43 = new Label();
             checkBoxDeleteRecycle = new CheckBox();
             label42 = new Label();
@@ -150,7 +151,8 @@
             buttonResetOptions = new Button();
             colorDialog1 = new ColorDialog();
             panel1 = new Panel();
-            checkBoxAddThumbAtStartOfList = new CheckBox();
+            label44 = new Label();
+            numericMaxThumbnails = new NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
@@ -174,6 +176,7 @@
             ((System.ComponentModel.ISupportInitialize)numericBlurSampleArea).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericBlurMosaicSize).BeginInit();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericMaxThumbnails).BeginInit();
             SuspendLayout();
             // 
             // checkBoxTrim
@@ -503,6 +506,8 @@
             // tabPageApplication
             // 
             tabPageApplication.AutoScroll = true;
+            tabPageApplication.Controls.Add(label44);
+            tabPageApplication.Controls.Add(numericMaxThumbnails);
             tabPageApplication.Controls.Add(checkBoxAddThumbAtStartOfList);
             tabPageApplication.Controls.Add(label43);
             tabPageApplication.Controls.Add(checkBoxDeleteRecycle);
@@ -537,19 +542,29 @@
             tabPageApplication.Text = "Application";
             tabPageApplication.UseVisualStyleBackColor = true;
             // 
+            // checkBoxAddThumbAtStartOfList
+            // 
+            checkBoxAddThumbAtStartOfList.AutoSize = true;
+            checkBoxAddThumbAtStartOfList.Location = new Point(16, 297);
+            checkBoxAddThumbAtStartOfList.Name = "checkBoxAddThumbAtStartOfList";
+            checkBoxAddThumbAtStartOfList.Size = new Size(182, 19);
+            checkBoxAddThumbAtStartOfList.TabIndex = 90;
+            checkBoxAddThumbAtStartOfList.Text = "Add thumbnails at start of list";
+            checkBoxAddThumbAtStartOfList.UseVisualStyleBackColor = true;
+            // 
             // label43
             // 
             label43.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
-            label43.Location = new Point(18, 555);
+            label43.Location = new Point(18, 571);
             label43.Name = "label43";
-            label43.Size = new Size(435, 40);
+            label43.Size = new Size(435, 41);
             label43.TabIndex = 89;
             label43.Text = "Deleting to recycle bin is slower than hard deletion. When this is on you can still delete instead of recycle with Shift+Del   ";
             // 
             // checkBoxDeleteRecycle
             // 
             checkBoxDeleteRecycle.AutoSize = true;
-            checkBoxDeleteRecycle.Location = new Point(18, 533);
+            checkBoxDeleteRecycle.Location = new Point(18, 549);
             checkBoxDeleteRecycle.Name = "checkBoxDeleteRecycle";
             checkBoxDeleteRecycle.Size = new Size(195, 19);
             checkBoxDeleteRecycle.TabIndex = 88;
@@ -560,7 +575,7 @@
             // 
             label42.AutoSize = true;
             label42.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label42.Location = new Point(6, 505);
+            label42.Location = new Point(6, 521);
             label42.Name = "label42";
             label42.Size = new Size(68, 15);
             label42.TabIndex = 87;
@@ -569,16 +584,16 @@
             // label41
             // 
             label41.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
-            label41.Location = new Point(18, 465);
+            label41.Location = new Point(18, 481);
             label41.Name = "label41";
-            label41.Size = new Size(435, 40);
+            label41.Size = new Size(435, 41);
             label41.TabIndex = 86;
             label41.Text = "Window and text will not increase on higher monitor zoom levels. Less accessible, but more predictable in some configurations";
             // 
             // checkBoxPreventDpiRescale
             // 
             checkBoxPreventDpiRescale.AutoSize = true;
-            checkBoxPreventDpiRescale.Location = new Point(18, 443);
+            checkBoxPreventDpiRescale.Location = new Point(18, 459);
             checkBoxPreventDpiRescale.Name = "checkBoxPreventDpiRescale";
             checkBoxPreventDpiRescale.Size = new Size(294, 19);
             checkBoxPreventDpiRescale.TabIndex = 85;
@@ -589,7 +604,7 @@
             // 
             label40.AutoSize = true;
             label40.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label40.Location = new Point(6, 420);
+            label40.Location = new Point(6, 436);
             label40.Name = "label40";
             label40.Size = new Size(113, 15);
             label40.TabIndex = 84;
@@ -619,7 +634,7 @@
             // 
             label24.AutoSize = true;
             label24.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label24.Location = new Point(6, 328);
+            label24.Location = new Point(6, 344);
             label24.Name = "label24";
             label24.Size = new Size(80, 15);
             label24.TabIndex = 73;
@@ -628,16 +643,16 @@
             // label13
             // 
             label13.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
-            label13.Location = new Point(17, 376);
+            label13.Location = new Point(17, 392);
             label13.Name = "label13";
-            label13.Size = new Size(435, 40);
+            label13.Size = new Size(435, 41);
             label13.TabIndex = 72;
             label13.Text = "Used in Region capture and Editor. If the framerate is higher than your sytem can handle, there will be additional lag to catch up.";
             // 
             // label17
             // 
             label17.AutoSize = true;
-            label17.Location = new Point(182, 352);
+            label17.Location = new Point(182, 368);
             label17.Name = "label17";
             label17.Size = new Size(23, 15);
             label17.TabIndex = 71;
@@ -646,7 +661,7 @@
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new Point(17, 352);
+            label12.Location = new Point(17, 368);
             label12.Name = "label12";
             label12.Size = new Size(84, 15);
             label12.TabIndex = 70;
@@ -655,7 +670,7 @@
             // numericUpDownFramerate
             // 
             numericUpDownFramerate.Increment = new decimal(new int[] { 5, 0, 0, 0 });
-            numericUpDownFramerate.Location = new Point(123, 350);
+            numericUpDownFramerate.Location = new Point(123, 366);
             numericUpDownFramerate.Maximum = new decimal(new int[] { 120, 0, 0, 0 });
             numericUpDownFramerate.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
             numericUpDownFramerate.Name = "numericUpDownFramerate";
@@ -727,7 +742,7 @@
             tabPageModes.Controls.Add(labelWindow);
             tabPageModes.Location = new Point(4, 24);
             tabPageModes.Name = "tabPageModes";
-            tabPageModes.Size = new Size(487, 578);
+            tabPageModes.Size = new Size(487, 614);
             tabPageModes.TabIndex = 3;
             tabPageModes.Text = "Modes";
             tabPageModes.UseVisualStyleBackColor = true;
@@ -960,7 +975,7 @@
             tabPageOutput.Location = new Point(4, 24);
             tabPageOutput.Name = "tabPageOutput";
             tabPageOutput.Padding = new Padding(3);
-            tabPageOutput.Size = new Size(487, 578);
+            tabPageOutput.Size = new Size(487, 614);
             tabPageOutput.TabIndex = 0;
             tabPageOutput.Text = "Capture Output";
             tabPageOutput.UseVisualStyleBackColor = true;
@@ -1059,7 +1074,7 @@
             tabPageHotkeys.Location = new Point(4, 24);
             tabPageHotkeys.Name = "tabPageHotkeys";
             tabPageHotkeys.Padding = new Padding(3);
-            tabPageHotkeys.Size = new Size(487, 578);
+            tabPageHotkeys.Size = new Size(487, 614);
             tabPageHotkeys.TabIndex = 2;
             tabPageHotkeys.Text = "Hotkeys";
             tabPageHotkeys.UseVisualStyleBackColor = true;
@@ -1073,7 +1088,7 @@
             HotkeyGrid.Location = new Point(3, 3);
             HotkeyGrid.Name = "HotkeyGrid";
             HotkeyGrid.RowHeadersVisible = false;
-            HotkeyGrid.Size = new Size(481, 572);
+            HotkeyGrid.Size = new Size(481, 608);
             HotkeyGrid.TabIndex = 20;
             // 
             // ColumnFunction
@@ -1145,7 +1160,7 @@
             tabPageEditor.Location = new Point(4, 24);
             tabPageEditor.Name = "tabPageEditor";
             tabPageEditor.Padding = new Padding(3);
-            tabPageEditor.Size = new Size(487, 578);
+            tabPageEditor.Size = new Size(487, 614);
             tabPageEditor.TabIndex = 4;
             tabPageEditor.Text = "Editor";
             tabPageEditor.UseVisualStyleBackColor = true;
@@ -1429,15 +1444,23 @@
             panel1.Size = new Size(495, 31);
             panel1.TabIndex = 95;
             // 
-            // checkBoxAddThumbsAtStartOfList
+            // label44
             // 
-            checkBoxAddThumbAtStartOfList.AutoSize = true;
-            checkBoxAddThumbAtStartOfList.Location = new Point(16, 300);
-            checkBoxAddThumbAtStartOfList.Name = "checkBoxAddThumbsAtStartOfList";
-            checkBoxAddThumbAtStartOfList.Size = new Size(182, 19);
-            checkBoxAddThumbAtStartOfList.TabIndex = 90;
-            checkBoxAddThumbAtStartOfList.Text = "Add thumbnails at start of list";
-            checkBoxAddThumbAtStartOfList.UseVisualStyleBackColor = true;
+            label44.AutoSize = true;
+            label44.Location = new Point(18, 322);
+            label44.Name = "label44";
+            label44.Size = new Size(93, 15);
+            label44.TabIndex = 92;
+            label44.Text = "Max items in list";
+            // 
+            // numericMaxThumbnails
+            // 
+            numericMaxThumbnails.Location = new Point(124, 320);
+            numericMaxThumbnails.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+            numericMaxThumbnails.Name = "numericMaxThumbnails";
+            numericMaxThumbnails.Size = new Size(54, 23);
+            numericMaxThumbnails.TabIndex = 91;
+            numericMaxThumbnails.Value = new decimal(new int[] { 100, 0, 0, 0 });
             // 
             // Options
             // 
@@ -1477,6 +1500,7 @@
             ((System.ComponentModel.ISupportInitialize)numericBlurSampleArea).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericBlurMosaicSize).EndInit();
             panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)numericMaxThumbnails).EndInit();
             ResumeLayout(false);
         }
 
@@ -1604,5 +1628,7 @@
         private Label label42;
         private Label label43;
         private CheckBox checkBoxAddThumbAtStartOfList;
+        private Label label44;
+        private NumericUpDown numericMaxThumbnails;
     }
 }

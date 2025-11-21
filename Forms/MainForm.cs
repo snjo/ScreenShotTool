@@ -52,6 +52,7 @@ public partial class MainForm : Form
     Bitmap? bitmap;
     readonly ImageList imageList = new ImageList();
     readonly Tagging tagging;
+    DateTime lastCaptureTime = DateTime.MinValue;
     #endregion
 
     #region DLLimports
@@ -340,6 +341,7 @@ public partial class MainForm : Form
 
     public void CaptureAction(CaptureMode mode)
     {
+        lastCaptureTime = DateTime.Now;
         string DestinationFolder = ComposeFileName(settings.Foldername);
         string DestinationFileName = ComposeFileName(settings.Filename);
         string DestinationFileExtension = settings.FileExtension;
@@ -567,7 +569,7 @@ public partial class MainForm : Form
             //{
             //    Debug.WriteLine($"Invalid path char: {(int)invalidPathChar:X4} {invalidPathChar:c}");
             //}
-            
+
             if (processName.Contains(invalidPathChar))
             {
                 processName = processName.Replace(invalidPathChar, '_');
@@ -580,7 +582,7 @@ public partial class MainForm : Form
 
         if (hasDriveLetter)
         {
-            sb.Append(name.Substring(0,2));
+            sb.Append(name.Substring(0, 2));
         }
         sb.Append(processName);
 
@@ -1420,7 +1422,7 @@ public partial class MainForm : Form
             {
                 if (File.Exists(newFileName))
                 {
-                    DialogResult overwriteResult = MessageBox.Show($"File already exists.\nDo you want to overwrite the file {Path.GetFileName(newFileName)}","Replace File?",MessageBoxButtons.YesNo);
+                    DialogResult overwriteResult = MessageBox.Show($"File already exists.\nDo you want to overwrite the file {Path.GetFileName(newFileName)}", "Replace File?", MessageBoxButtons.YesNo);
                     if (overwriteResult == DialogResult.No) return;
                 }
                 File.Move(oldFileName, newFileName, overwrite: true);
@@ -2017,5 +2019,35 @@ public partial class MainForm : Form
         UpdateInfoLabelVisibility();
     }
 
-#endregion
+    #endregion
+
+    private void TimerCleanThumbnailList_Tick(object sender, EventArgs e)
+    {
+        TimeSpan timeSinceLastCapture = DateTime.Now - lastCaptureTime;
+        TimeSpan minimumRestTime = TimeSpan.FromSeconds(60);
+        if (timeSinceLastCapture > minimumRestTime)
+        {
+            int itemCount = listViewThumbnails.Items.Count;
+            int maxItems = settings.MaxThumbnailsInList;
+            //int maxItems = 3; //test
+            int tooMany = itemCount - maxItems;
+            if (itemCount > maxItems)
+            {
+                for (int i = 0; i < tooMany; i++)
+                {
+                    if (listViewThumbnails.Items.Count < 1) return;
+                    int index = 0;
+                    if (settings.AddThumbAtStartOfList)
+                    {
+                        index = listViewThumbnails.Items.Count - 1;
+                    }
+                    
+                    ListViewItem item = listViewThumbnails.Items[index];
+                    imageList.Images[item.ImageIndex].Dispose();
+                    listViewThumbnails.Items.Remove(item);
+                }
+            }
+            UpdateInfoLabelVisibility();
+        }
+    }
 }
