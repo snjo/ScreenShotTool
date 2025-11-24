@@ -1,6 +1,8 @@
 ﻿## Changelog
 
 ## 2.5 (In progress)
+- Trim the number of thumbnails in the list periodically, based on max thumbs setting
+- Disable thumbnail list if max thumbs is 0
 
 
 ## 2.4
