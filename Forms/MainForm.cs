@@ -50,7 +50,7 @@ public partial class MainForm : Form
 
     public bool showThumbnails
     {
-        get {  return settings.MaxThumbnailsInList > 0; }
+        get { return settings.MaxThumbnailsInList > 0; }
     }// = true;
     Bitmap? bitmap;
     readonly ImageList imageList = new ImageList();
@@ -987,17 +987,21 @@ public partial class MainForm : Form
     {
         Bitmap captureBitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb);
         Graphics captureGraphics = Graphics.FromImage(captureBitmap);
-
+        
         Rectangle captureRectangle = new Rectangle(x, y, width, height);
 
         //Copying Image from The Screen
         captureGraphics.CopyFromScreen(captureRectangle.Left, captureRectangle.Top, 0, 0, captureRectangle.Size);
+        // alternate but slower capture method: https://www.c-sharpcorner.com/article/screen-capture-and-save-as-an-image/
 
-        ImageProcessing.FixTransparentPixels(width, height, captureBitmap);
-
+        if (Settings.Default.fixTransparentPixels)
+        {
+            ImageProcessing.FixTransparentPixels(width, height, captureBitmap);
+        }
         captureGraphics.Dispose();
         return captureBitmap;
     }
+
     #endregion
 
     #region save clipboard image to file, drop or fix format
@@ -1334,7 +1338,6 @@ public partial class MainForm : Form
         bool recycle = settings.DeleteToRecycleBin && ModifierKeys != Keys.Shift;
         if (listViewThumbnails.SelectedItems.Count > 0)
         {
-            Debug.WriteLine("deleting " + listViewThumbnails.SelectedItems[0].Text);
             foreach (ListViewItem item in listViewThumbnails.SelectedItems)
             {
                 string deleteFile = "";
@@ -2044,7 +2047,7 @@ public partial class MainForm : Form
                     {
                         index = listViewThumbnails.Items.Count - 1;
                     }
-                    
+
                     ListViewItem item = listViewThumbnails.Items[index];
                     imageList.Images[item.ImageIndex].Dispose();
                     listViewThumbnails.Items.Remove(item);

@@ -65,6 +65,8 @@
             checkBoxTrayTooltipWarning = new CheckBox();
             tabControl1 = new TabControl();
             tabPageApplication = new TabPage();
+            label44 = new Label();
+            numericMaxThumbnails = new NumericUpDown();
             checkBoxAddThumbAtStartOfList = new CheckBox();
             label43 = new Label();
             checkBoxDeleteRecycle = new CheckBox();
@@ -151,8 +153,7 @@
             buttonResetOptions = new Button();
             colorDialog1 = new ColorDialog();
             panel1 = new Panel();
-            label44 = new Label();
-            numericMaxThumbnails = new NumericUpDown();
+            checkBoxFixTransparentPixels = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)trimTop).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimBottom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimRight).BeginInit();
@@ -164,6 +165,7 @@
             ((System.ComponentModel.ISupportInitialize)numericThumbHeight).BeginInit();
             tabControl1.SuspendLayout();
             tabPageApplication.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericMaxThumbnails).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownFramerate).BeginInit();
             tabPageModes.SuspendLayout();
             tabPageOutput.SuspendLayout();
@@ -176,7 +178,6 @@
             ((System.ComponentModel.ISupportInitialize)numericBlurSampleArea).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericBlurMosaicSize).BeginInit();
             panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericMaxThumbnails).BeginInit();
             SuspendLayout();
             // 
             // checkBoxTrim
@@ -500,12 +501,13 @@
             tabControl1.Location = new Point(0, 0);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(495, 642);
+            tabControl1.Size = new Size(495, 669);
             tabControl1.TabIndex = 1;
             // 
             // tabPageApplication
             // 
             tabPageApplication.AutoScroll = true;
+            tabPageApplication.Controls.Add(checkBoxFixTransparentPixels);
             tabPageApplication.Controls.Add(label44);
             tabPageApplication.Controls.Add(numericMaxThumbnails);
             tabPageApplication.Controls.Add(checkBoxAddThumbAtStartOfList);
@@ -537,10 +539,28 @@
             tabPageApplication.Location = new Point(4, 24);
             tabPageApplication.Name = "tabPageApplication";
             tabPageApplication.Padding = new Padding(3);
-            tabPageApplication.Size = new Size(487, 614);
+            tabPageApplication.Size = new Size(487, 641);
             tabPageApplication.TabIndex = 1;
             tabPageApplication.Text = "Application";
             tabPageApplication.UseVisualStyleBackColor = true;
+            // 
+            // label44
+            // 
+            label44.AutoSize = true;
+            label44.Location = new Point(18, 322);
+            label44.Name = "label44";
+            label44.Size = new Size(93, 15);
+            label44.TabIndex = 92;
+            label44.Text = "Max items in list";
+            // 
+            // numericMaxThumbnails
+            // 
+            numericMaxThumbnails.Location = new Point(124, 320);
+            numericMaxThumbnails.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+            numericMaxThumbnails.Name = "numericMaxThumbnails";
+            numericMaxThumbnails.Size = new Size(54, 23);
+            numericMaxThumbnails.TabIndex = 91;
+            numericMaxThumbnails.Value = new decimal(new int[] { 100, 0, 0, 0 });
             // 
             // checkBoxAddThumbAtStartOfList
             // 
@@ -555,7 +575,7 @@
             // label43
             // 
             label43.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
-            label43.Location = new Point(18, 571);
+            label43.Location = new Point(18, 593);
             label43.Name = "label43";
             label43.Size = new Size(435, 41);
             label43.TabIndex = 89;
@@ -564,7 +584,7 @@
             // checkBoxDeleteRecycle
             // 
             checkBoxDeleteRecycle.AutoSize = true;
-            checkBoxDeleteRecycle.Location = new Point(18, 549);
+            checkBoxDeleteRecycle.Location = new Point(18, 571);
             checkBoxDeleteRecycle.Name = "checkBoxDeleteRecycle";
             checkBoxDeleteRecycle.Size = new Size(195, 19);
             checkBoxDeleteRecycle.TabIndex = 88;
@@ -575,7 +595,7 @@
             // 
             label42.AutoSize = true;
             label42.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label42.Location = new Point(6, 521);
+            label42.Location = new Point(6, 543);
             label42.Name = "label42";
             label42.Size = new Size(68, 15);
             label42.TabIndex = 87;
@@ -584,7 +604,7 @@
             // label41
             // 
             label41.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
-            label41.Location = new Point(18, 481);
+            label41.Location = new Point(18, 503);
             label41.Name = "label41";
             label41.Size = new Size(435, 41);
             label41.TabIndex = 86;
@@ -593,7 +613,7 @@
             // checkBoxPreventDpiRescale
             // 
             checkBoxPreventDpiRescale.AutoSize = true;
-            checkBoxPreventDpiRescale.Location = new Point(18, 459);
+            checkBoxPreventDpiRescale.Location = new Point(18, 481);
             checkBoxPreventDpiRescale.Name = "checkBoxPreventDpiRescale";
             checkBoxPreventDpiRescale.Size = new Size(294, 19);
             checkBoxPreventDpiRescale.TabIndex = 85;
@@ -604,7 +624,7 @@
             // 
             label40.AutoSize = true;
             label40.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label40.Location = new Point(6, 436);
+            label40.Location = new Point(6, 458);
             label40.Name = "label40";
             label40.Size = new Size(113, 15);
             label40.TabIndex = 84;
@@ -742,7 +762,7 @@
             tabPageModes.Controls.Add(labelWindow);
             tabPageModes.Location = new Point(4, 24);
             tabPageModes.Name = "tabPageModes";
-            tabPageModes.Size = new Size(487, 614);
+            tabPageModes.Size = new Size(487, 641);
             tabPageModes.TabIndex = 3;
             tabPageModes.Text = "Modes";
             tabPageModes.UseVisualStyleBackColor = true;
@@ -1439,34 +1459,26 @@
             panel1.Controls.Add(buttonCancel);
             panel1.Controls.Add(buttonHelp);
             panel1.Dock = DockStyle.Bottom;
-            panel1.Location = new Point(0, 644);
+            panel1.Location = new Point(0, 675);
             panel1.Name = "panel1";
             panel1.Size = new Size(495, 31);
             panel1.TabIndex = 95;
             // 
-            // label44
+            // checkBoxFixTransparentPixels
             // 
-            label44.AutoSize = true;
-            label44.Location = new Point(18, 322);
-            label44.Name = "label44";
-            label44.Size = new Size(93, 15);
-            label44.TabIndex = 92;
-            label44.Text = "Max items in list";
-            // 
-            // numericMaxThumbnails
-            // 
-            numericMaxThumbnails.Location = new Point(124, 320);
-            numericMaxThumbnails.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
-            numericMaxThumbnails.Name = "numericMaxThumbnails";
-            numericMaxThumbnails.Size = new Size(54, 23);
-            numericMaxThumbnails.TabIndex = 91;
-            numericMaxThumbnails.Value = new decimal(new int[] { 100, 0, 0, 0 });
+            checkBoxFixTransparentPixels.AutoSize = true;
+            checkBoxFixTransparentPixels.Location = new Point(16, 430);
+            checkBoxFixTransparentPixels.Name = "checkBoxFixTransparentPixels";
+            checkBoxFixTransparentPixels.Size = new Size(316, 19);
+            checkBoxFixTransparentPixels.TabIndex = 93;
+            checkBoxFixTransparentPixels.Text = "Fix transparent pixel errors (slight performance impact)";
+            checkBoxFixTransparentPixels.UseVisualStyleBackColor = true;
             // 
             // Options
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(495, 675);
+            ClientSize = new Size(495, 706);
             Controls.Add(panel1);
             Controls.Add(tabControl1);
             FormBorderStyle = FormBorderStyle.SizableToolWindow;
@@ -1485,6 +1497,7 @@
             tabControl1.ResumeLayout(false);
             tabPageApplication.ResumeLayout(false);
             tabPageApplication.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericMaxThumbnails).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownFramerate).EndInit();
             tabPageModes.ResumeLayout(false);
             tabPageModes.PerformLayout();
@@ -1500,7 +1513,6 @@
             ((System.ComponentModel.ISupportInitialize)numericBlurSampleArea).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericBlurMosaicSize).EndInit();
             panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)numericMaxThumbnails).EndInit();
             ResumeLayout(false);
         }
 
@@ -1630,5 +1642,6 @@
         private CheckBox checkBoxAddThumbAtStartOfList;
         private Label label44;
         private NumericUpDown numericMaxThumbnails;
+        private CheckBox checkBoxFixTransparentPixels;
     }
 }

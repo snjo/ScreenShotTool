@@ -1,6 +1,5 @@
 ﻿using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Drawing;
 using System.Runtime.Versioning;
 
 namespace ScreenShotTool
@@ -51,7 +50,7 @@ namespace ScreenShotTool
                 return null;
             }
         }
-        
+
         public static bool ContainsImage()
         {
             try

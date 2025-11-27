@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Runtime.Versioning;
+﻿using System.Runtime.Versioning;
 
 namespace ScreenShotTool.Forms;
 [SupportedOSPlatform("windows")]
@@ -20,7 +19,7 @@ public partial class TextEntryDialog : Form
         {
             this.Height = 60 + textBox1.Bottom + panel1.Height; // adjust size of form if multiline
         }
-        
+
     }
 
     private void TextBox1_TextChanged(object sender, EventArgs e)

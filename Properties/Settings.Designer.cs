@@ -1114,5 +1114,17 @@ namespace ScreenShotTool.Properties {
                 this["MaxThumbnailsInList"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool fixTransparentPixels {
+            get {
+                return ((bool)(this["fixTransparentPixels"]));
+            }
+            set {
+                this["fixTransparentPixels"] = value;
+            }
+        }
     }
 }

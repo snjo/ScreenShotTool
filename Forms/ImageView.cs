@@ -42,30 +42,17 @@ namespace ScreenShotTool
         {
             Screen screen = Screen.FromPoint(Cursor.Position);
             Rectangle screenBounds = screen.Bounds;
-            //if (screenBounds.Height == 960)
-            //{
-            //    screenBounds.Height = 1440;
-            //    screenBounds.Width = 2560;
-            //}
-            Bitmap bmp = GetScreenImage(screenBounds);
-            ImageView result = new ImageView(mode, screenBounds, bmp)
-            {
-                ScreenBounds = screenBounds,
-                StartPosition = FormStartPosition.Manual,
-                Location = new Point(screenBounds.X, screenBounds.Y),
-                Size = screenBounds.Size,
-            };
-            Debug.WriteLine($"Screen bounds: {screenBounds}, dpi:{result.DeviceDpi}, {screen}");
-            Debug.WriteLine($"Virtual {SystemInformation.VirtualScreen.Size}");
-            Debug.WriteLine($"Monitor count: {SystemInformation.MonitorCount}, primary {SystemInformation.PrimaryMonitorSize}");
-
-            //Debug.WriteLine($"DPI? { DPIUtil.GetDpi(result, Cursor.Position)}, scale {DPIUtil.ScaleFactor(result, Cursor.Position)}");
-            return result;
+            return Create(mode, screenBounds);
         }
 
         public static ImageView CreateUsingAllScreens(ViewerMode mode)
         {
             Rectangle screenBounds = SystemInformation.VirtualScreen;
+            return Create(mode, screenBounds);
+        }
+
+        public static ImageView Create(ViewerMode mode, Rectangle screenBounds)
+        {
             Bitmap bmp = GetScreenImage(screenBounds);
             ImageView result = new ImageView(mode, screenBounds, bmp)
             {
@@ -75,16 +62,6 @@ namespace ScreenShotTool
                 Size = screenBounds.Size,
             };
             return result;
-        }
-
-        private Bitmap GetAllScreensImage()
-        {
-            Rectangle screenBound = SystemInformation.VirtualScreen;
-            if (screenBound.Width > 0 && screenBound.Height > 0)
-            {
-                return CaptureBitmap(screenBound.Left, screenBound.Top, screenBound.Width, screenBound.Height);
-            }
-            return new Bitmap(0, 0);
         }
 
         public ImageView(ViewerMode mode, Rectangle screenBounds, Bitmap? image)
@@ -148,7 +125,7 @@ namespace ScreenShotTool
             return captureBitmap;
         }
 
-        
+
 
         public Bitmap? GetBitmap()
         {

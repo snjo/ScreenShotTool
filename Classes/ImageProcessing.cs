@@ -122,6 +122,8 @@ public static class ImageProcessing
 
     public static void FixTransparentPixels(int width, int height, Bitmap captureBitmap)
     {
+        //Stopwatch sw = Stopwatch.StartNew();
+
         // Fix transparent pixels by replacing color with an average of surrounding pixels
         using BmpPixelSnoop snoop = new(captureBitmap);
         for (int px = 0; px < width; px++)
@@ -165,5 +167,7 @@ public static class ImageProcessing
 
             }
         }
+        //Debug.WriteLine($"Fixed transparent pixels, time elapsed {sw.Elapsed.TotalMilliseconds} ms");
+        //sw.Stop();
     }
 }
