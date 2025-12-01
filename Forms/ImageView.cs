@@ -99,7 +99,7 @@ namespace ScreenShotTool
             //Rectangle screenBound = screen.Bounds;//SystemInformation.VirtualScreen;
             if (screenBounds.Width > 0 && screenBounds.Height > 0)
             {
-                return CaptureBitmap(screenBounds.Left, screenBounds.Top, screenBounds.Width, screenBounds.Height);
+                return ImageProcessing.CaptureBitmap(screenBounds.Left, screenBounds.Top, screenBounds.Width, screenBounds.Height, forceTransparencyFix: true);
             }
             else
             {
@@ -109,21 +109,21 @@ namespace ScreenShotTool
             return new Bitmap(0, 0);
         }
 
-        public static Bitmap CaptureBitmap(int x, int y, int width, int height)
-        {
-            Bitmap captureBitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb);
-            Graphics captureGraphics = Graphics.FromImage(captureBitmap);
+        //public static Bitmap CaptureBitmap(int x, int y, int width, int height)
+        //{
+        //    Bitmap captureBitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+        //    Graphics captureGraphics = Graphics.FromImage(captureBitmap);
 
-            Rectangle captureRectangle = new Rectangle(x, y, width, height);
+        //    Rectangle captureRectangle = new Rectangle(x, y, width, height);
 
-            //Copying Image from The Screen
-            captureGraphics.CopyFromScreen(captureRectangle.Left, captureRectangle.Top, 0, 0, captureRectangle.Size);
-            captureGraphics.Dispose();
+        //    //Copying Image from The Screen
+        //    captureGraphics.CopyFromScreen(captureRectangle.Left, captureRectangle.Top, 0, 0, captureRectangle.Size);
+        //    captureGraphics.Dispose();
 
-            ImageProcessing.FixTransparentPixels(width, height, captureBitmap);
+        //    ImageProcessing.FixTransparentPixels(width, height, captureBitmap);
 
-            return captureBitmap;
-        }
+        //    return captureBitmap;
+        //}
 
 
 

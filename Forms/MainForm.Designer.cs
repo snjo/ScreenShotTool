@@ -90,6 +90,7 @@
             aboutToolStripMenuItem = new ToolStripMenuItem();
             labelInfo = new Label();
             timerCleanThumbnailList = new System.Windows.Forms.Timer(components);
+            fixTransparentPixelsToolStripMenuItem = new ToolStripMenuItem();
             contextMenuListView.SuspendLayout();
             contextMenuSysTray.SuspendLayout();
             menuStrip1.SuspendLayout();
@@ -122,9 +123,9 @@
             // 
             // contextMenuListView
             // 
-            contextMenuListView.Items.AddRange(new ToolStripItem[] { itemOpenImage, itemOpenFileInExplorer, itemOpenFolder, itemDeleteFile, itemRename, itemRemove, copyToClipboardToolStripMenuItem, copyFileToolStripMenuItem, editImageToolStripMenuItem, convertFileFormatToolStripMenuItem });
+            contextMenuListView.Items.AddRange(new ToolStripItem[] { itemOpenImage, itemOpenFileInExplorer, itemOpenFolder, itemDeleteFile, itemRename, itemRemove, copyToClipboardToolStripMenuItem, copyFileToolStripMenuItem, editImageToolStripMenuItem, convertFileFormatToolStripMenuItem, fixTransparentPixelsToolStripMenuItem });
             contextMenuListView.Name = "contextMenuListView";
-            contextMenuListView.Size = new Size(239, 224);
+            contextMenuListView.Size = new Size(239, 268);
             contextMenuListView.Opening += ContextMenuListView_Opening;
             // 
             // itemOpenImage
@@ -214,19 +215,19 @@
             contextMenuSysTray.Items.AddRange(new ToolStripItem[] { helpToolStripMenuItem, openProgramToolStripMenuItem, optionsToolStripMenuItem, editorToolStripMenuItem, editTagsToolStripMenuItem1, enableCroppingToolStripMenuItem, toolStripMenuItem4, toolStripMenuItem3, copyClipboardImageToFileDropToolStripMenuItem, toolStripMenuItem8, toolStripMenuItem5, openLastUsedFolderToolStripMenuItem, pToolStripMenuItem, toolStripMenuItem6, exitApplicationToolStripMenuItem });
             contextMenuSysTray.Name = "contextMenuSysTray";
             contextMenuSysTray.ShowImageMargin = false;
-            contextMenuSysTray.Size = new Size(256, 286);
+            contextMenuSysTray.Size = new Size(255, 286);
             // 
             // helpToolStripMenuItem
             // 
             helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            helpToolStripMenuItem.Size = new Size(255, 22);
+            helpToolStripMenuItem.Size = new Size(254, 22);
             helpToolStripMenuItem.Text = "Help";
             helpToolStripMenuItem.Click += HelpToolStripMenuItem_Click;
             // 
             // openProgramToolStripMenuItem
             // 
             openProgramToolStripMenuItem.Name = "openProgramToolStripMenuItem";
-            openProgramToolStripMenuItem.Size = new Size(255, 22);
+            openProgramToolStripMenuItem.Size = new Size(254, 22);
             openProgramToolStripMenuItem.Text = "Open &Program";
             openProgramToolStripMenuItem.Click += OpenProgramToolStripMenuItem_Click;
             // 
@@ -234,85 +235,85 @@
             // 
             optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             optionsToolStripMenuItem.ShortcutKeyDisplayString = "";
-            optionsToolStripMenuItem.Size = new Size(255, 22);
+            optionsToolStripMenuItem.Size = new Size(254, 22);
             optionsToolStripMenuItem.Text = "&Options";
             optionsToolStripMenuItem.Click += ButtonOptions_Click;
             // 
             // editorToolStripMenuItem
             // 
             editorToolStripMenuItem.Name = "editorToolStripMenuItem";
-            editorToolStripMenuItem.Size = new Size(255, 22);
+            editorToolStripMenuItem.Size = new Size(254, 22);
             editorToolStripMenuItem.Text = "Editor";
             editorToolStripMenuItem.Click += EditorToolStripMenuItem_Click;
             // 
             // editTagsToolStripMenuItem1
             // 
             editTagsToolStripMenuItem1.Name = "editTagsToolStripMenuItem1";
-            editTagsToolStripMenuItem1.Size = new Size(255, 22);
+            editTagsToolStripMenuItem1.Size = new Size(254, 22);
             editTagsToolStripMenuItem1.Text = "Edit Tags";
             editTagsToolStripMenuItem1.Click += ShowTagView_Click;
             // 
             // enableCroppingToolStripMenuItem
             // 
             enableCroppingToolStripMenuItem.Name = "enableCroppingToolStripMenuItem";
-            enableCroppingToolStripMenuItem.Size = new Size(255, 22);
+            enableCroppingToolStripMenuItem.Size = new Size(254, 22);
             enableCroppingToolStripMenuItem.Text = "Enable &Cropping";
             enableCroppingToolStripMenuItem.Click += EnableCroppingToolStripMenuItem_Click;
             // 
             // toolStripMenuItem4
             // 
             toolStripMenuItem4.Name = "toolStripMenuItem4";
-            toolStripMenuItem4.Size = new Size(252, 6);
+            toolStripMenuItem4.Size = new Size(251, 6);
             // 
             // toolStripMenuItem3
             // 
             toolStripMenuItem3.Name = "toolStripMenuItem3";
-            toolStripMenuItem3.Size = new Size(255, 22);
+            toolStripMenuItem3.Size = new Size(254, 22);
             toolStripMenuItem3.Text = "Save clipboard image to file";
             toolStripMenuItem3.Click += SaveClipboardToFileToolStripMenuItem_Click;
             // 
             // copyClipboardImageToFileDropToolStripMenuItem
             // 
             copyClipboardImageToFileDropToolStripMenuItem.Name = "copyClipboardImageToFileDropToolStripMenuItem";
-            copyClipboardImageToFileDropToolStripMenuItem.Size = new Size(255, 22);
+            copyClipboardImageToFileDropToolStripMenuItem.Size = new Size(254, 22);
             copyClipboardImageToFileDropToolStripMenuItem.Text = "Copy clipboard image to file drop";
             copyClipboardImageToFileDropToolStripMenuItem.Click += CopyClipboardToFileToolStripMenuItem_Click;
             // 
             // toolStripMenuItem8
             // 
             toolStripMenuItem8.Name = "toolStripMenuItem8";
-            toolStripMenuItem8.Size = new Size(255, 22);
+            toolStripMenuItem8.Size = new Size(254, 22);
             toolStripMenuItem8.Text = "Fix clipboard image (more compatible)";
             toolStripMenuItem8.Click += FixClipboardImageMenuItem_Click;
             // 
             // toolStripMenuItem5
             // 
             toolStripMenuItem5.Name = "toolStripMenuItem5";
-            toolStripMenuItem5.Size = new Size(252, 6);
+            toolStripMenuItem5.Size = new Size(251, 6);
             // 
             // openLastUsedFolderToolStripMenuItem
             // 
             openLastUsedFolderToolStripMenuItem.Name = "openLastUsedFolderToolStripMenuItem";
-            openLastUsedFolderToolStripMenuItem.Size = new Size(255, 22);
+            openLastUsedFolderToolStripMenuItem.Size = new Size(254, 22);
             openLastUsedFolderToolStripMenuItem.Text = "Open last used &Folder";
             openLastUsedFolderToolStripMenuItem.Click += ButtonOpenLastFolder_Click;
             // 
             // pToolStripMenuItem
             // 
             pToolStripMenuItem.Name = "pToolStripMenuItem";
-            pToolStripMenuItem.Size = new Size(255, 22);
+            pToolStripMenuItem.Size = new Size(254, 22);
             pToolStripMenuItem.Text = "Open last &Screenshot";
             pToolStripMenuItem.Click += OpenFileToolStripMenuItem_Click;
             // 
             // toolStripMenuItem6
             // 
             toolStripMenuItem6.Name = "toolStripMenuItem6";
-            toolStripMenuItem6.Size = new Size(252, 6);
+            toolStripMenuItem6.Size = new Size(251, 6);
             // 
             // exitApplicationToolStripMenuItem
             // 
             exitApplicationToolStripMenuItem.Name = "exitApplicationToolStripMenuItem";
-            exitApplicationToolStripMenuItem.Size = new Size(255, 22);
+            exitApplicationToolStripMenuItem.Size = new Size(254, 22);
             exitApplicationToolStripMenuItem.Text = "E&xit application";
             exitApplicationToolStripMenuItem.Click += ExitApplicationToolStripMenuItem_Click;
             // 
@@ -411,54 +412,54 @@
             // editSelectedFileToolStripMenuItem
             // 
             editSelectedFileToolStripMenuItem.Name = "editSelectedFileToolStripMenuItem";
-            editSelectedFileToolStripMenuItem.Size = new Size(280, 22);
+            editSelectedFileToolStripMenuItem.Size = new Size(279, 22);
             editSelectedFileToolStripMenuItem.Text = "Edit selected &file";
             editSelectedFileToolStripMenuItem.Click += EditImageFromFile_Click;
             // 
             // editFromClipboardToolStripMenuItem
             // 
             editFromClipboardToolStripMenuItem.Name = "editFromClipboardToolStripMenuItem";
-            editFromClipboardToolStripMenuItem.Size = new Size(280, 22);
+            editFromClipboardToolStripMenuItem.Size = new Size(279, 22);
             editFromClipboardToolStripMenuItem.Text = "Edit from &clipboard";
             editFromClipboardToolStripMenuItem.Click += EditImageFromClipboard_Click;
             // 
             // openEditorToolStripMenuItem
             // 
             openEditorToolStripMenuItem.Name = "openEditorToolStripMenuItem";
-            openEditorToolStripMenuItem.Size = new Size(280, 22);
+            openEditorToolStripMenuItem.Size = new Size(279, 22);
             openEditorToolStripMenuItem.Text = "Open &editor";
             openEditorToolStripMenuItem.Click += EditImageNoFile_Click;
             // 
             // editTagsToolStripMenuItem
             // 
             editTagsToolStripMenuItem.Name = "editTagsToolStripMenuItem";
-            editTagsToolStripMenuItem.Size = new Size(280, 22);
+            editTagsToolStripMenuItem.Size = new Size(279, 22);
             editTagsToolStripMenuItem.Text = "Edit Tags";
             editTagsToolStripMenuItem.Click += ShowTagView_Click;
             // 
             // toolStripMenuItem7
             // 
             toolStripMenuItem7.Name = "toolStripMenuItem7";
-            toolStripMenuItem7.Size = new Size(277, 6);
+            toolStripMenuItem7.Size = new Size(276, 6);
             // 
             // copyClipboardToFileToolStripMenuItem
             // 
             copyClipboardToFileToolStripMenuItem.Name = "copyClipboardToFileToolStripMenuItem";
-            copyClipboardToFileToolStripMenuItem.Size = new Size(280, 22);
+            copyClipboardToFileToolStripMenuItem.Size = new Size(279, 22);
             copyClipboardToFileToolStripMenuItem.Text = "Copy clipboard image to file drop";
             copyClipboardToFileToolStripMenuItem.Click += CopyClipboardToFileToolStripMenuItem_Click;
             // 
             // saveClipboardToFileToolStripMenuItem
             // 
             saveClipboardToFileToolStripMenuItem.Name = "saveClipboardToFileToolStripMenuItem";
-            saveClipboardToFileToolStripMenuItem.Size = new Size(280, 22);
+            saveClipboardToFileToolStripMenuItem.Size = new Size(279, 22);
             saveClipboardToFileToolStripMenuItem.Text = "Save clipboard image to file";
             saveClipboardToFileToolStripMenuItem.Click += SaveClipboardToFileToolStripMenuItem_Click;
             // 
             // fixClipboardImageMenuItem
             // 
             fixClipboardImageMenuItem.Name = "fixClipboardImageMenuItem";
-            fixClipboardImageMenuItem.Size = new Size(280, 22);
+            fixClipboardImageMenuItem.Size = new Size(279, 22);
             fixClipboardImageMenuItem.Text = "Fix clipboard image (more compatible)";
             fixClipboardImageMenuItem.Click += FixClipboardImageMenuItem_Click;
             // 
@@ -523,6 +524,13 @@
             timerCleanThumbnailList.Enabled = true;
             timerCleanThumbnailList.Interval = 5000;
             timerCleanThumbnailList.Tick += TimerCleanThumbnailList_Tick;
+            // 
+            // fixTransparentPixelsToolStripMenuItem
+            // 
+            fixTransparentPixelsToolStripMenuItem.Name = "fixTransparentPixelsToolStripMenuItem";
+            fixTransparentPixelsToolStripMenuItem.Size = new Size(238, 22);
+            fixTransparentPixelsToolStripMenuItem.Text = "Fix transparent pixels";
+            fixTransparentPixelsToolStripMenuItem.Click += FixTransparentPixels_Click;
             // 
             // MainForm
             // 
@@ -612,5 +620,6 @@
         private ToolStripMenuItem toolStripMenuItem8;
         private ToolStripMenuItem itemRename;
         private System.Windows.Forms.Timer timerCleanThumbnailList;
+        private ToolStripMenuItem fixTransparentPixelsToolStripMenuItem;
     }
 }

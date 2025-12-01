@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using ScreenShotTool.Properties;
+using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
 
@@ -120,19 +121,21 @@ public static class ImageProcessing
         return bmp;
     }
 
-    public static void FixTransparentPixels(int width, int height, Bitmap captureBitmap)
+    public static int FixTransparentPixels(Bitmap bmp)
     {
         //Stopwatch sw = Stopwatch.StartNew();
 
         // Fix transparent pixels by replacing color with an average of surrounding pixels
-        using BmpPixelSnoop snoop = new(captureBitmap);
-        for (int px = 0; px < width; px++)
+        using BmpPixelSnoop snoop = new(bmp);
+        int fixesApplied = 0;
+        for (int px = 0; px < bmp.Width; px++)
         {
-            for (int py = 0; py < height; py++)
+            for (int py = 0; py < bmp.Height; py++)
             {
                 Color color = snoop.GetPixel(px, py);
                 if (color.A == 0)
                 {
+                    fixesApplied++;
                     int R = 0;
                     int G = 0;
                     int B = 0;
@@ -141,7 +144,7 @@ public static class ImageProcessing
                     {
                         for (int j = py - 1; j < py + 2; j++)
                         {
-                            if (i < 0 || j < 0 || i >= captureBitmap.Width || j >= captureBitmap.Height)
+                            if (i < 0 || j < 0 || i >= bmp.Width || j >= bmp.Height)
                             {
                                 continue;
                             }
@@ -158,7 +161,7 @@ public static class ImageProcessing
                     if (samples > 0)
                     {
                         R = Math.Clamp((int)(R / samples), 0, 255);
-                        G = Math.Clamp((int)(G / samples) + 100, 0, 255);
+                        G = Math.Clamp((int)(G / samples), 0, 255);
                         B = Math.Clamp((int)(B / samples), 0, 255);
                         //Debug.WriteLine($"Fix transparent pixel at {px} {py} using {samples} surrounding samples, result R{R} G{G} B{B}");
                     }
@@ -167,7 +170,27 @@ public static class ImageProcessing
 
             }
         }
+        return fixesApplied;
         //Debug.WriteLine($"Fixed transparent pixels, time elapsed {sw.Elapsed.TotalMilliseconds} ms");
         //sw.Stop();
+    }
+
+    public static Bitmap CaptureBitmap(int x, int y, int width, int height, bool forceTransparencyFix = false)
+    {
+        Bitmap captureBitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+        Graphics captureGraphics = Graphics.FromImage(captureBitmap);
+
+        Rectangle captureRectangle = new Rectangle(x, y, width, height);
+
+        //Copying Image from The Screen
+        captureGraphics.CopyFromScreen(captureRectangle.Left, captureRectangle.Top, 0, 0, captureRectangle.Size);
+        // alternate but slower capture method: https://www.c-sharpcorner.com/article/screen-capture-and-save-as-an-image/
+
+        if (Settings.Default.fixTransparentPixels || forceTransparencyFix)
+        {
+            ImageProcessing.FixTransparentPixels(captureBitmap);
+        }
+        captureGraphics.Dispose();
+        return captureBitmap;
     }
 }

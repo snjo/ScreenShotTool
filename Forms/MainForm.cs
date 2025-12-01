@@ -402,7 +402,7 @@ public partial class MainForm : Form
         if (windowRect.Width > 0 && windowRect.Height > 0)
         {
             bitmap?.Dispose();
-            bitmap = CaptureBitmap(windowRect.Left, windowRect.Top, windowRect.Width, windowRect.Height);
+            bitmap = ImageProcessing.CaptureBitmap(windowRect.Left, windowRect.Top, windowRect.Width, windowRect.Height);
             if (settings.WindowToFile)
             {
                 saved = SaveBitmap(folder, filename, format, bitmap);
@@ -498,7 +498,7 @@ public partial class MainForm : Form
         Rectangle screenBound = SystemInformation.VirtualScreen;
         if (screenBound.Width > 0 && screenBound.Height > 0)
         {
-            return CaptureBitmap(screenBound.Left, screenBound.Top, screenBound.Width, screenBound.Height);
+            return ImageProcessing.CaptureBitmap(screenBound.Left, screenBound.Top, screenBound.Width, screenBound.Height);
         }
         else
         {
@@ -513,7 +513,7 @@ public partial class MainForm : Form
         Rectangle screenBound = screen.Bounds;//SystemInformation.VirtualScreen;
         if (screenBound.Width > 0 && screenBound.Height > 0)
         {
-            return CaptureBitmap(screenBound.Left, screenBound.Top, screenBound.Width, screenBound.Height);
+            return ImageProcessing.CaptureBitmap(screenBound.Left, screenBound.Top, screenBound.Width, screenBound.Height);
         }
         else
         {
@@ -981,25 +981,6 @@ public partial class MainForm : Form
         ImageCodecInfo codecInfo = ImageCodecInfo.GetImageDecoders().First(codec => codec.FormatID == ImageFormat.Jpeg.Guid);
         encoderParameters.Param[0] = encoderParameter;
         image.Save(path, codecInfo, encoderParameters);
-    }
-
-    public static Bitmap CaptureBitmap(int x, int y, int width, int height)
-    {
-        Bitmap captureBitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb);
-        Graphics captureGraphics = Graphics.FromImage(captureBitmap);
-        
-        Rectangle captureRectangle = new Rectangle(x, y, width, height);
-
-        //Copying Image from The Screen
-        captureGraphics.CopyFromScreen(captureRectangle.Left, captureRectangle.Top, 0, 0, captureRectangle.Size);
-        // alternate but slower capture method: https://www.c-sharpcorner.com/article/screen-capture-and-save-as-an-image/
-
-        if (Settings.Default.fixTransparentPixels)
-        {
-            ImageProcessing.FixTransparentPixels(width, height, captureBitmap);
-        }
-        captureGraphics.Dispose();
-        return captureBitmap;
     }
 
     #endregion
@@ -2054,6 +2035,40 @@ public partial class MainForm : Form
                 }
             }
             UpdateInfoLabelVisibility();
+        }
+    }
+
+    private void FixTransparentPixels_Click(object sender, EventArgs e)
+    {
+        if (listViewThumbnails.SelectedItems.Count == 0) return;
+        foreach (ListViewItem item in listViewThumbnails.SelectedItems)
+        {
+            if (item.Tag is string filename)
+            {
+                if (Path.GetExtension(filename).Equals(".png", StringComparison.OrdinalIgnoreCase) == false)
+                {
+                    Debug.WriteLine($"Skipping non-png file {filename}");
+                    continue;
+                }
+                if (File.Exists(filename) == false) return;
+                try
+                {
+                    Bitmap org = (Bitmap)Image.FromFile(filename);
+                    Bitmap bmp = ImageProcessing.CopyImage(org);
+                    org.Dispose();
+                    
+                    //string nameSuggestion = Path.GetFileNameWithoutExtension(filename) + "_fix.png";
+                    int fixes = ImageProcessing.FixTransparentPixels(bmp);
+                    bmp.Save(filename,ImageFormat.Png);
+                    bmp.Dispose();
+                    Debug.WriteLine($"Fixed transparency on {fixes} pixels. Save to file {filename}");
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Couldn't save file {filename}, {ex.Message}");
+                    MessageBox.Show($"Couldn't save file {filename}, {ex.Message}");
+                }
+            }
         }
     }
 }
