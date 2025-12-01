@@ -3,7 +3,7 @@
 ## 2.5 (In progress)
 - Trim the number of thumbnails in the list periodically, based on max thumbs setting
 - Disable thumbnail list if max thumbs is 0
-- Option to enable/disable transparent pixel fix and context menu entry for fixing files
+- Fixed transparent pixel issue (now using Format32bppRgb during capture)
 
 
 ## 2.4
