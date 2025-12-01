@@ -86,7 +86,6 @@ namespace ScreenShotTool
             numericMaxThumbnails.SetValueClamped(settings.MaxThumbnailsInList);
 
             numericUpDownFramerate.SetValueClamped(settings.MaxFramerate);
-            checkBoxFixTransparentPixels.Checked = settings.fixTransparentPixels;
 
             checkBoxPreventDpiRescale.Checked = settings.PreventDpiRescale;
 
@@ -192,7 +191,6 @@ namespace ScreenShotTool
             settings.AllowTrayTooltipWarning = checkBoxTrayTooltipWarning.Checked;
 
             settings.MaxFramerate = numericUpDownFramerate.ValueInt();
-            settings.fixTransparentPixels = checkBoxFixTransparentPixels.Checked;
 
             settings.PreventDpiRescale = checkBoxPreventDpiRescale.Checked;
 

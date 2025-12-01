@@ -2038,37 +2038,37 @@ public partial class MainForm : Form
         }
     }
 
-    private void FixTransparentPixels_Click(object sender, EventArgs e)
-    {
-        if (listViewThumbnails.SelectedItems.Count == 0) return;
-        foreach (ListViewItem item in listViewThumbnails.SelectedItems)
-        {
-            if (item.Tag is string filename)
-            {
-                if (Path.GetExtension(filename).Equals(".png", StringComparison.OrdinalIgnoreCase) == false)
-                {
-                    Debug.WriteLine($"Skipping non-png file {filename}");
-                    continue;
-                }
-                if (File.Exists(filename) == false) return;
-                try
-                {
-                    Bitmap org = (Bitmap)Image.FromFile(filename);
-                    Bitmap bmp = ImageProcessing.CopyImage(org);
-                    org.Dispose();
+    //private void FixTransparentPixels_Click(object sender, EventArgs e)
+    //{
+    //    if (listViewThumbnails.SelectedItems.Count == 0) return;
+    //    foreach (ListViewItem item in listViewThumbnails.SelectedItems)
+    //    {
+    //        if (item.Tag is string filename)
+    //        {
+    //            if (Path.GetExtension(filename).Equals(".png", StringComparison.OrdinalIgnoreCase) == false)
+    //            {
+    //                Debug.WriteLine($"Skipping non-png file {filename}");
+    //                continue;
+    //            }
+    //            if (File.Exists(filename) == false) return;
+    //            try
+    //            {
+    //                Bitmap org = (Bitmap)Image.FromFile(filename);
+    //                Bitmap bmp = ImageProcessing.CopyImage(org);
+    //                org.Dispose();
                     
-                    //string nameSuggestion = Path.GetFileNameWithoutExtension(filename) + "_fix.png";
-                    int fixes = ImageProcessing.FixTransparentPixels(bmp);
-                    bmp.Save(filename,ImageFormat.Png);
-                    bmp.Dispose();
-                    Debug.WriteLine($"Fixed transparency on {fixes} pixels. Save to file {filename}");
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"Couldn't save file {filename}, {ex.Message}");
-                    MessageBox.Show($"Couldn't save file {filename}, {ex.Message}");
-                }
-            }
-        }
-    }
+    //                //string nameSuggestion = Path.GetFileNameWithoutExtension(filename) + "_fix.png";
+    //                int fixes = ImageProcessing.FixTransparentPixels(bmp);
+    //                bmp.Save(filename,ImageFormat.Png);
+    //                bmp.Dispose();
+    //                Debug.WriteLine($"Fixed transparency on {fixes} pixels. Save to file {filename}");
+    //            }
+    //            catch (Exception ex)
+    //            {
+    //                Debug.WriteLine($"Couldn't save file {filename}, {ex.Message}");
+    //                MessageBox.Show($"Couldn't save file {filename}, {ex.Message}");
+    //            }
+    //        }
+    //    }
+    //}
 }

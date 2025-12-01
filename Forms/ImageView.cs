@@ -99,7 +99,7 @@ namespace ScreenShotTool
             //Rectangle screenBound = screen.Bounds;//SystemInformation.VirtualScreen;
             if (screenBounds.Width > 0 && screenBounds.Height > 0)
             {
-                return ImageProcessing.CaptureBitmap(screenBounds.Left, screenBounds.Top, screenBounds.Width, screenBounds.Height, forceTransparencyFix: true);
+                return ImageProcessing.CaptureBitmap(screenBounds.Left, screenBounds.Top, screenBounds.Width, screenBounds.Height);//, forceTransparencyFix: true);
             }
             else
             {

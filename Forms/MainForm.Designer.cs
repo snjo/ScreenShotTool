@@ -90,7 +90,6 @@
             aboutToolStripMenuItem = new ToolStripMenuItem();
             labelInfo = new Label();
             timerCleanThumbnailList = new System.Windows.Forms.Timer(components);
-            fixTransparentPixelsToolStripMenuItem = new ToolStripMenuItem();
             contextMenuListView.SuspendLayout();
             contextMenuSysTray.SuspendLayout();
             menuStrip1.SuspendLayout();
@@ -123,9 +122,9 @@
             // 
             // contextMenuListView
             // 
-            contextMenuListView.Items.AddRange(new ToolStripItem[] { itemOpenImage, itemOpenFileInExplorer, itemOpenFolder, itemDeleteFile, itemRename, itemRemove, copyToClipboardToolStripMenuItem, copyFileToolStripMenuItem, editImageToolStripMenuItem, convertFileFormatToolStripMenuItem, fixTransparentPixelsToolStripMenuItem });
+            contextMenuListView.Items.AddRange(new ToolStripItem[] { itemOpenImage, itemOpenFileInExplorer, itemOpenFolder, itemDeleteFile, itemRename, itemRemove, copyToClipboardToolStripMenuItem, copyFileToolStripMenuItem, editImageToolStripMenuItem, convertFileFormatToolStripMenuItem });
             contextMenuListView.Name = "contextMenuListView";
-            contextMenuListView.Size = new Size(239, 268);
+            contextMenuListView.Size = new Size(239, 246);
             contextMenuListView.Opening += ContextMenuListView_Opening;
             // 
             // itemOpenImage
@@ -525,13 +524,6 @@
             timerCleanThumbnailList.Interval = 5000;
             timerCleanThumbnailList.Tick += TimerCleanThumbnailList_Tick;
             // 
-            // fixTransparentPixelsToolStripMenuItem
-            // 
-            fixTransparentPixelsToolStripMenuItem.Name = "fixTransparentPixelsToolStripMenuItem";
-            fixTransparentPixelsToolStripMenuItem.Size = new Size(238, 22);
-            fixTransparentPixelsToolStripMenuItem.Text = "Fix transparent pixels";
-            fixTransparentPixelsToolStripMenuItem.Click += FixTransparentPixels_Click;
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -620,6 +612,5 @@
         private ToolStripMenuItem toolStripMenuItem8;
         private ToolStripMenuItem itemRename;
         private System.Windows.Forms.Timer timerCleanThumbnailList;
-        private ToolStripMenuItem fixTransparentPixelsToolStripMenuItem;
     }
 }
