@@ -1,4 +1,6 @@
-﻿namespace ScreenShotTool
+﻿using System.Diagnostics;
+
+namespace ScreenShotTool
 {
     public class ColorBlend
     {
@@ -19,6 +21,7 @@
             Average = 8,
             Contrast = 9,
             InvertBrightness = 10,
+            TintBrightColors = 11,
         }
 
         public static Color BlendColors(Color color1, Color color2, BlendModes blendmode) //, float AffectChannelRed = 1f, float AffectChannelGreen = 1f, float AffectChannelBlue = 1f)
@@ -34,6 +37,7 @@
                 BlendModes.Desaturate => Desaturate(color1, color2), // grayscale
                 BlendModes.Invert => Invert(color1), // outputs the inverted color, light channels becomes dark, dark becomes light
                 BlendModes.InvertBrightness => InvertBrighness(color1, color2),
+                BlendModes.TintBrightColors => TintBrightColors(color1, color2),
                 BlendModes.Average => Average(color1, color2), // same as Normal with 50% opacity
                 BlendModes.Contrast => Contrast(color1, color2),
                 _ => color1
@@ -173,6 +177,23 @@
             Color outColor = ColorTools.ColorFromHSV(hue, finalSaturation, finalBrightness);
 
             return outColor;
+        }
+
+        public static Color TintBrightColors(Color color1, Color color2)
+        {
+            int darkest = Math.Min(color1.R, color1.G);
+            darkest = 64; // don't tint the darkest pixels
+
+            int R2 = Math.Max(darkest, color2.R);
+            int G2 = Math.Max(darkest, color2.G);
+            int B2 = Math.Max(darkest, color2.B);
+
+            int R = Math.Min(color1.R, R2);
+            int G = Math.Min(color1.G, G2);
+            int B = Math.Min(color1.B, B2);
+
+            int Alpha = CombineTransparencies(color1, color2);
+            return Color.FromArgb(Alpha, R, G, B);
         }
     }
 }
