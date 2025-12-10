@@ -1,7 +1,6 @@
 ﻿using ScreenShotTool.Forms;
 using ScreenShotTool.Properties;
 using System.Diagnostics;
-using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 

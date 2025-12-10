@@ -1,5 +1,4 @@
-﻿using ScreenShotTool.Properties;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
 
@@ -123,10 +122,10 @@ public static class ImageProcessing
 
     public static Bitmap CaptureBitmap(int x, int y, int width, int height)
     {
-        Bitmap captureBitmap = new Bitmap(width, height, PixelFormat.Format32bppRgb); //Format32bppRgb Format32bppArgb
+        Bitmap captureBitmap = new (width, height, PixelFormat.Format32bppRgb); //Format32bppRgb Format32bppArgb
         Graphics captureGraphics = Graphics.FromImage(captureBitmap);
 
-        Rectangle captureRectangle = new Rectangle(x, y, width, height);
+        Rectangle captureRectangle = new (x, y, width, height);
 
         //Copying Image from The Screen
         captureGraphics.CopyFromScreen(captureRectangle.Left, captureRectangle.Top, 0, 0, captureRectangle.Size);

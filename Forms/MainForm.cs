@@ -48,10 +48,10 @@ public partial class MainForm : Form
         "\n$d/t/ms: Date, Time, Milliseconds\r" +
         "\n$c: Counter number (auto increments)";
 
-    public bool showThumbnails
+    public bool ShowThumbnails
     {
         get { return settings.MaxThumbnailsInList > 0; }
-    }// = true;
+    }
     Bitmap? bitmap;
     readonly ImageList imageList = new ImageList();
     readonly Tagging tagging;
@@ -379,7 +379,7 @@ public partial class MainForm : Form
             IncrementCounter();
         }
 
-        if (showThumbnails && savedToFile)
+        if (ShowThumbnails && savedToFile)
         {
             AddThumbnail(Path.Combine(DestinationFolder, DestinationFileName + DestinationFileExtension), bitmap);
             UpdateInfoLabelVisibility();
@@ -1394,7 +1394,7 @@ public partial class MainForm : Form
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"Could not create directoy:\n{ex.ToString()}");
+                        MessageBox.Show($"Could not create directoy:\n{ex}");
                         return;
                     }
                 }
@@ -2056,7 +2056,7 @@ public partial class MainForm : Form
     //                Bitmap org = (Bitmap)Image.FromFile(filename);
     //                Bitmap bmp = ImageProcessing.CopyImage(org);
     //                org.Dispose();
-                    
+
     //                //string nameSuggestion = Path.GetFileNameWithoutExtension(filename) + "_fix.png";
     //                int fixes = ImageProcessing.FixTransparentPixels(bmp);
     //                bmp.Save(filename,ImageFormat.Png);
