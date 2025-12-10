@@ -1,10 +1,9 @@
 ﻿## Changelog
 
-## 2.5 (In progress)
+## 2.5
 - Trim the number of thumbnails in the list periodically, based on max thumbs setting
 - Disable thumbnail list if max thumbs is 0
-- Fixed transparent pixel issue (now using Format32bppRgb during capture)
-
+- Fixed error where some dark pixels were saved as transparent (now using Format32bppRgb during capture)
 
 ## 2.4
 - Menu items: Save an image from the clipboard directly to a file, or add it to file drop for pasting to file explorer
