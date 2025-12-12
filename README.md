@@ -31,7 +31,7 @@ Hotkeys can be changed in **Options**
 
 ## Region capture
 
-During region capture, the current screen the mouse cursor is on will display a region selection interface.  
+During region capture, the region selection interface will appear on the monitor that the mouse cursor is on.  
 Click and drag the mouse to create a selection. This can be refined with the keys shown below.
 
 To confirm the region, press Enter to save to file, C to copy the selection to the clipboard or E to open the selection in the Editor. Press Escape to exit.
@@ -49,8 +49,8 @@ When adjusting the position of the region, arrows are shown in all directions.
     Esc             Exit region capture, discard selection
     S               Size adjustment mode (Default)
     P               Position adjustment mode
-    Ctrl+Arrow Key  Size adjustemt side selection
     Arrow Key       Size / Position adjustement
+	Ctrl+Arrow Key  Size adjustment side selection
     Shift           Hold Shift to adjust region by 10 pixels instead of 1
 
 #### Region framerate
