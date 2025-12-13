@@ -1,5 +1,4 @@
-﻿using ScreenShotTool.Properties;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
 
@@ -121,77 +120,17 @@ public static class ImageProcessing
         return bmp;
     }
 
-    //public static int FixTransparentPixels(Bitmap bmp)
-    //{
-    //    // not needed, found fix: https://stackoverflow.com/questions/28150408/c-sharp-screenshot-bug
-    //    // use Format32bppRgb when capturing desktop
-    //    //Stopwatch sw = Stopwatch.StartNew();
-
-    //    // Fix transparent pixels by replacing color with an average of surrounding pixels
-    //    using BmpPixelSnoop snoop = new(bmp);
-    //    int fixesApplied = 0;
-    //    for (int px = 0; px < bmp.Width; px++)
-    //    {
-    //        for (int py = 0; py < bmp.Height; py++)
-    //        {
-    //            Color color = snoop.GetPixel(px, py);
-    //            if (color.A == 0)
-    //            {
-    //                fixesApplied++;
-    //                int R = 0;
-    //                int G = 0;
-    //                int B = 0;
-    //                int samples = 0;
-    //                for (int i = px - 1; i < px + 2; i++)
-    //                {
-    //                    for (int j = py - 1; j < py + 2; j++)
-    //                    {
-    //                        if (i < 0 || j < 0 || i >= bmp.Width || j >= bmp.Height)
-    //                        {
-    //                            continue;
-    //                        }
-    //                        Color c = snoop.GetPixel(i, j);
-    //                        if (c.A > 0)
-    //                        {
-    //                            R += c.R;
-    //                            G += c.G;
-    //                            B += c.B;
-    //                            samples++;
-    //                        }
-    //                    }
-    //                }
-    //                if (samples > 0)
-    //                {
-    //                    R = Math.Clamp((int)(R / samples), 0, 255);
-    //                    G = Math.Clamp((int)(G / samples), 0, 255);
-    //                    B = Math.Clamp((int)(B / samples), 0, 255);
-    //                    //Debug.WriteLine($"Fix transparent pixel at {px} {py} using {samples} surrounding samples, result R{R} G{G} B{B}");
-    //                }
-    //                snoop.SetPixel(px, py, Color.FromArgb(R, G, B));
-    //            }
-
-    //        }
-    //    }
-    //    return fixesApplied;
-    //    //Debug.WriteLine($"Fixed transparent pixels, time elapsed {sw.Elapsed.TotalMilliseconds} ms");
-    //    //sw.Stop();
-    //}
-
-    public static Bitmap CaptureBitmap(int x, int y, int width, int height)//, bool forceTransparencyFix = false)
+    public static Bitmap CaptureBitmap(int x, int y, int width, int height)
     {
-        Bitmap captureBitmap = new Bitmap(width, height, PixelFormat.Format32bppRgb); //Format32bppRgb Format32bppArgb
+        Bitmap captureBitmap = new (width, height, PixelFormat.Format32bppRgb); //Format32bppRgb Format32bppArgb
         Graphics captureGraphics = Graphics.FromImage(captureBitmap);
 
-        Rectangle captureRectangle = new Rectangle(x, y, width, height);
+        Rectangle captureRectangle = new (x, y, width, height);
 
         //Copying Image from The Screen
         captureGraphics.CopyFromScreen(captureRectangle.Left, captureRectangle.Top, 0, 0, captureRectangle.Size);
         // alternate but slower capture method: https://www.c-sharpcorner.com/article/screen-capture-and-save-as-an-image/
 
-        //if (Settings.Default.fixTransparentPixels || forceTransparencyFix)
-        //{
-        //    ImageProcessing.FixTransparentPixels(captureBitmap);
-        //}
         captureGraphics.Dispose();
         return captureBitmap;
     }
