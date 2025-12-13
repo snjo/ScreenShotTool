@@ -53,7 +53,7 @@ namespace ScreenShotTool.Forms
             dataGridView1.MultiSelect = false;
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersVisible = false;
-            dataGridView1.Size = new Size(495, 399);
+            dataGridView1.Size = new Size(603, 399);
             dataGridView1.TabIndex = 0;
             dataGridView1.KeyUp += GridHotkeyCheck;
             // 
@@ -155,7 +155,7 @@ namespace ScreenShotTool.Forms
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(502, 461);
+            ClientSize = new Size(610, 461);
             Controls.Add(label1);
             Controls.Add(textBoxFilter);
             Controls.Add(checkBoxMultiSelect);

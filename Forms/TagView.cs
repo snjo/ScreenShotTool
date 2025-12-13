@@ -35,6 +35,7 @@ public partial class TagView : Form
             dataGridView1.Columns[0].Width = 60;
             dataGridView1.Columns[1].Width = 150;
             dataGridView1.Columns[2].Width = 220;
+            dataGridView1.Columns[3].Width = 150;
         }
         dataGridView1.AutoGenerateColumns = false;
         Debug.WriteLine($"Multiselect setting: {Settings.Default.TagMultiSelect}");
@@ -47,31 +48,27 @@ public partial class TagView : Form
 
     private void buttonAddTag_Click(object sender, EventArgs e)
     {
-        //tagging.CaptureTags.Add(new InfoTag(false, ""));
         int selectedTagIndex = 0;
         if (dataGridView1.SelectedCells.Count > 0)
         {
             InfoTag selectedItem = (InfoTag)dataGridView1.SelectedCells[0].OwningRow.DataBoundItem;
             selectedTagIndex = tagging.CaptureTags.IndexOf(selectedItem);
         }
-        
-        //int selectedTag = dataGridView1.SelectedCells[0].RowIndex + 1;
+        InfoTag newTag = new InfoTag(false, "", "", textBoxFilter.Text);
+        tagging.CaptureTags.Insert(selectedTagIndex, newTag); // adding filter text to avoid indexing error when new tag is hidden
 
-        tagging.CaptureTags.Insert(selectedTagIndex, new InfoTag(false, "", "", textBoxFilter.Text)); // adding filter text to avoid indexing error when new tag is hidden
-
-        //if (selectedTagIndex >= 0 && selectedTagIndex < dataGridView1.Rows.Count)
-        //{
-        //    Debug.WriteLine($"Insert tag at index {selectedTagIndex}");
-        //    tagging.CaptureTags.Insert(selectedTagIndex, new InfoTag(false, "","",textBoxFilter.Text)); // adding filter text to avoid indexing error when new tag is hidden
-        //}
-        //else
-        //{
-        //    Debug.WriteLine($"Insert blank tag at end");
-        //    tagging.CaptureTags.Add(new InfoTag(false, ""));
-        //}
         RefreshGrid();
-        //dataGridView1.CurrentCell = dataGridView1.Rows[selectedTagIndex].Cells[1];
-        //dataGridView1.Select();
+        int selectIndex = 0;
+        foreach (DataGridViewRow row in dataGridView1.Rows)
+        {
+            if (row.DataBoundItem == newTag)
+            {
+                selectIndex = row.Index;
+                break;
+            }
+        }
+        dataGridView1.CurrentCell = dataGridView1.Rows[selectIndex].Cells[1];
+        dataGridView1.Select();
     }
 
     private void RefreshGrid()
