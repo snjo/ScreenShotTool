@@ -1,8 +1,10 @@
-﻿using ScreenShotTool.Classes;
+﻿using PdfSharp.Pdf.Filters;
+using ScreenShotTool.Classes;
 using ScreenShotTool.Properties;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.Versioning;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace ScreenShotTool.Forms;
 [SupportedOSPlatform("windows")]
@@ -19,7 +21,7 @@ public partial class TagView : Form
     {
         InitializeComponent();
         this.tagging = parent;
-        bindingList = new BindingList<InfoTag>(parent.CaptureTags);
+        bindingList = parent.FilteredTags(textBoxFilter.Text);//new BindingList<InfoTag>(parent.CaptureTags);
         bindingSource = new BindingSource(bindingList, null);
         dataGridView1.DataSource = bindingList;
 
@@ -46,18 +48,30 @@ public partial class TagView : Form
     private void buttonAddTag_Click(object sender, EventArgs e)
     {
         //tagging.CaptureTags.Add(new InfoTag(false, ""));
-        int selectedTag = dataGridView1.SelectedCells[0].RowIndex + 1;
-        if (selectedTag >= 0 && selectedTag < dataGridView1.Rows.Count)
+        int selectedTagIndex = 0;
+        if (dataGridView1.SelectedCells.Count > 0)
         {
-            tagging.CaptureTags.Insert(selectedTag, new InfoTag(false, ""));
+            InfoTag selectedItem = (InfoTag)dataGridView1.SelectedCells[0].OwningRow.DataBoundItem;
+            selectedTagIndex = tagging.CaptureTags.IndexOf(selectedItem);
         }
-        else
-        {
-            tagging.CaptureTags.Add(new InfoTag(false, ""));
-        }
+        
+        //int selectedTag = dataGridView1.SelectedCells[0].RowIndex + 1;
+
+        tagging.CaptureTags.Insert(selectedTagIndex, new InfoTag(false, "", "", textBoxFilter.Text)); // adding filter text to avoid indexing error when new tag is hidden
+
+        //if (selectedTagIndex >= 0 && selectedTagIndex < dataGridView1.Rows.Count)
+        //{
+        //    Debug.WriteLine($"Insert tag at index {selectedTagIndex}");
+        //    tagging.CaptureTags.Insert(selectedTagIndex, new InfoTag(false, "","",textBoxFilter.Text)); // adding filter text to avoid indexing error when new tag is hidden
+        //}
+        //else
+        //{
+        //    Debug.WriteLine($"Insert blank tag at end");
+        //    tagging.CaptureTags.Add(new InfoTag(false, ""));
+        //}
         RefreshGrid();
-        dataGridView1.CurrentCell = dataGridView1.Rows[selectedTag].Cells[1];
-        dataGridView1.Select();
+        //dataGridView1.CurrentCell = dataGridView1.Rows[selectedTagIndex].Cells[1];
+        //dataGridView1.Select();
     }
 
     private void RefreshGrid()
@@ -68,6 +82,7 @@ public partial class TagView : Form
             columnWidths.Add(column.Width);
         }
         dataGridView1.DataSource = null;
+        bindingList = tagging.FilteredTags(textBoxFilter.Text);
         dataGridView1.DataSource = bindingList;
         //CheckListCategory.DisplayMember = "Name";
         //CheckListCategory.ValueMember = "IsChecked";
@@ -103,14 +118,14 @@ public partial class TagView : Form
     {
         foreach (InfoTagCategory cat in categoryList)
         {
-            Debug.WriteLine($"Check category {cat.Name} against {name}");
+            //Debug.WriteLine($"Check category {cat.Name} against {name}");
             if (cat.Name == name)
             {
-                Debug.WriteLine("   HIT on category search");
+                //Debug.WriteLine("   HIT on category search");
                 return true;
             }
         }
-        Debug.WriteLine("   MISS on category search");
+        //Debug.WriteLine("   MISS on category search");
         return false;
     }
 
@@ -151,12 +166,10 @@ public partial class TagView : Form
 
     private void buttonDelete_Click(object sender, EventArgs e)
     {
-        if (tagging.CaptureTags.Count != dataGridView1.Rows.Count) return;
-        if (dataGridView1.Rows.Count < 1) return;
-        int currentIndex = dataGridView1.SelectedCells[0].RowIndex;
-        if (currentIndex < 0) return;
-        if (currentIndex >= tagging.CaptureTags.Count) return;
-        tagging.CaptureTags.RemoveAt(currentIndex);
+        if (dataGridView1.SelectedCells.Count < 1) return;
+        InfoTag item = (InfoTag)dataGridView1.SelectedCells[0].OwningRow.DataBoundItem;
+        Debug.WriteLine($"Deleting tag: {item.Name} / {item.Description} / {item.Category}");
+        tagging.CaptureTags.Remove(item);
         RefreshGrid();
     }
 
@@ -215,5 +228,10 @@ public partial class TagView : Form
             tag.Enabled = false;
             RefreshGrid();
         }
+    }
+
+    private void TextBoxFilter_TextChanged(object sender, EventArgs e)
+    {
+        RefreshGrid();
     }
 }

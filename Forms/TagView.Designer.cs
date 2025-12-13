@@ -40,6 +40,8 @@ namespace ScreenShotTool.Forms
             buttonOnTop = new Button();
             checkBoxMultiSelect = new CheckBox();
             toolTip1 = new ToolTip(components);
+            textBoxFilter = new TextBox();
+            label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -47,11 +49,11 @@ namespace ScreenShotTool.Forms
             // 
             dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(6, 35);
+            dataGridView1.Location = new Point(6, 61);
             dataGridView1.MultiSelect = false;
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersVisible = false;
-            dataGridView1.Size = new Size(495, 425);
+            dataGridView1.Size = new Size(495, 399);
             dataGridView1.TabIndex = 0;
             dataGridView1.KeyUp += GridHotkeyCheck;
             // 
@@ -132,11 +134,30 @@ namespace ScreenShotTool.Forms
             checkBoxMultiSelect.UseVisualStyleBackColor = true;
             checkBoxMultiSelect.Click += AllowMultiSelect_Click;
             // 
+            // textBoxFilter
+            // 
+            textBoxFilter.Location = new Point(102, 32);
+            textBoxFilter.Name = "textBoxFilter";
+            textBoxFilter.Size = new Size(195, 23);
+            textBoxFilter.TabIndex = 8;
+            textBoxFilter.TextChanged += TextBoxFilter_TextChanged;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(12, 35);
+            label1.Name = "label1";
+            label1.Size = new Size(84, 15);
+            label1.TabIndex = 9;
+            label1.Text = "Category Filter";
+            // 
             // TagView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(502, 461);
+            Controls.Add(label1);
+            Controls.Add(textBoxFilter);
             Controls.Add(checkBoxMultiSelect);
             Controls.Add(buttonOnTop);
             Controls.Add(buttonDelete);
@@ -163,5 +184,7 @@ namespace ScreenShotTool.Forms
         private Button buttonOnTop;
         private CheckBox checkBoxMultiSelect;
         private ToolTip toolTip1;
+        private TextBox textBoxFilter;
+        private Label label1;
     }
 }

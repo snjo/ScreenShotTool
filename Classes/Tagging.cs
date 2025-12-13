@@ -1,5 +1,6 @@
 ﻿using ScreenShotTool.Forms;
 using ScreenShotTool.Properties;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.Versioning;
 using System.Text;
@@ -20,7 +21,15 @@ public class Tagging
         this.mainForm = parent;
     }
 
+    public BindingList<InfoTag> FilteredTags(string filter)
+    {
+        return ToBindingList((CaptureTags.Where(x => x.Category.Contains(filter,StringComparison.InvariantCultureIgnoreCase))));
+    }
 
+    public static BindingList<T> ToBindingList<T>(IEnumerable<T> range)
+    {
+        return new BindingList<T>(range.ToList());
+    }
 
     public void LoadTagData()
     {
