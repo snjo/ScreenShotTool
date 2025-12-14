@@ -38,12 +38,8 @@ public partial class TagView : Form
             dataGridView1.Columns[3].Width = 150;
         }
         dataGridView1.AutoGenerateColumns = false;
-        Debug.WriteLine($"Multiselect setting: {Settings.Default.TagMultiSelect}");
         checkBoxMultiSelect.Checked = Settings.Default.TagMultiSelect;
         dataGridView1.AllowCheckboxMultiSelect = Settings.Default.TagMultiSelect;
-        Debug.WriteLine($"Grid multiselect: {dataGridView1.AllowCheckboxMultiSelect}");
-
-
     }
 
     private void buttonAddTag_Click(object sender, EventArgs e)
@@ -58,10 +54,16 @@ public partial class TagView : Form
         tagging.CaptureTags.Insert(selectedTagIndex, newTag); // adding filter text to avoid indexing error when new tag is hidden
 
         RefreshGrid();
+        SelectCellContainingInfoTag(newTag);
+    }
+
+    private void SelectCellContainingInfoTag(InfoTag tag)
+    {
+        if (dataGridView1.Rows.Count < 1) return;
         int selectIndex = 0;
         foreach (DataGridViewRow row in dataGridView1.Rows)
         {
-            if (row.DataBoundItem == newTag)
+            if (row.DataBoundItem == tag)
             {
                 selectIndex = row.Index;
                 break;
@@ -81,8 +83,6 @@ public partial class TagView : Form
         dataGridView1.DataSource = null;
         bindingList = tagging.FilteredTags(textBoxFilter.Text);
         dataGridView1.DataSource = bindingList;
-        //CheckListCategory.DisplayMember = "Name";
-        //CheckListCategory.ValueMember = "IsChecked";
         for (int i = 0; i < dataGridView1.Columns.Count; i++)
         {
             dataGridView1.Columns[i].Width = columnWidths[i];
@@ -91,38 +91,24 @@ public partial class TagView : Form
 
     private void UpdateCategories()
     {
-        Debug.WriteLine($"Updating categories");
         foreach (InfoTag tag in bindingList)
         {
-            Debug.WriteLine($"   Checking tag {tag.Category}");
-            if (CategoryExists(tag.Category))
+            if (CategoryExists(tag.Category) == false)
             {
-                Debug.WriteLine($"      Found duplicate category {tag.Category}");
-            }
-            else
-            {
-                Debug.WriteLine($"      Found new category {tag.Category}");
                 categoryList.Add(new InfoTagCategory(tag.Enabled, tag.Category, tag.Description));
             }
         }
-        //CheckListCategory.DataSource = null;
-        //CheckListCategory.DataSource = categoryList;
-        ////CheckListCategory.Update();
-        //CheckListCategory.Refresh();
     }
 
     private bool CategoryExists(string name)
     {
         foreach (InfoTagCategory cat in categoryList)
         {
-            //Debug.WriteLine($"Check category {cat.Name} against {name}");
             if (cat.Name == name)
             {
-                //Debug.WriteLine("   HIT on category search");
                 return true;
             }
         }
-        //Debug.WriteLine("   MISS on category search");
         return false;
     }
 
@@ -133,24 +119,34 @@ public partial class TagView : Form
 
     private void ButtonMoveUp_Click(object sender, EventArgs e)
     {
-        if (tagging.CaptureTags.Count != dataGridView1.Rows.Count) return;
+        //if (tagging.CaptureTags.Count != dataGridView1.Rows.Count) return;
         if (dataGridView1.Rows.Count < 2) return;
-        int currentIndex = dataGridView1.SelectedCells[0].RowIndex;
-        if (currentIndex < 1) return;
-        if (currentIndex >= tagging.CaptureTags.Count) return;
-        MoveItemInList(tagging.CaptureTags, currentIndex, currentIndex - 1);
+
+        InfoTag selectedItem = (InfoTag)dataGridView1.SelectedCells[0].OwningRow.DataBoundItem;
+        int selectedTagIndex = tagging.CaptureTags.IndexOf(selectedItem);
+
+        //int currentIndex = dataGridView1.SelectedCells[0].RowIndex;
+        if (selectedTagIndex < 1) return;
+        if (selectedTagIndex >= tagging.CaptureTags.Count) return;
+        MoveItemInList(tagging.CaptureTags, selectedTagIndex, selectedTagIndex - 1);
         RefreshGrid();
+        SelectCellContainingInfoTag(selectedItem);
     }
 
     private void ButtonMoveDown_Click(object sender, EventArgs e)
     {
-        if (tagging.CaptureTags.Count != dataGridView1.Rows.Count) return;
+        //if (tagging.CaptureTags.Count != dataGridView1.Rows.Count) return;
         if (dataGridView1.Rows.Count < 2) return;
-        int currentIndex = dataGridView1.SelectedCells[0].RowIndex;
-        if (currentIndex < 0) return;
-        if (currentIndex >= tagging.CaptureTags.Count - 1) return;
-        MoveItemInList(tagging.CaptureTags, currentIndex, currentIndex + 1);
+
+        InfoTag selectedItem = (InfoTag)dataGridView1.SelectedCells[0].OwningRow.DataBoundItem;
+        int selectedTagIndex = tagging.CaptureTags.IndexOf(selectedItem);
+
+        //int currentIndex = dataGridView1.SelectedCells[0].RowIndex;
+        if (selectedTagIndex < 0) return;
+        if (selectedTagIndex >= tagging.CaptureTags.Count - 1) return;
+        MoveItemInList(tagging.CaptureTags, selectedTagIndex, selectedTagIndex + 1);
         RefreshGrid();
+        SelectCellContainingInfoTag(selectedItem);
     }
 
     private void MoveItemInList(List<InfoTag> list, int oldIndex, int newIndex)
@@ -158,7 +154,6 @@ public partial class TagView : Form
         InfoTag item = list[oldIndex];
         list.RemoveAt(oldIndex);
         list.Insert(newIndex, item);
-        dataGridView1.CurrentCell = dataGridView1.Rows[newIndex].Cells[0];
     }
 
     private void buttonDelete_Click(object sender, EventArgs e)
