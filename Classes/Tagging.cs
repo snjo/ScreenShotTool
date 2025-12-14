@@ -23,7 +23,7 @@ public class Tagging
 
     public BindingList<InfoTag> FilteredTags(string filter)
     {
-        return ToBindingList((CaptureTags.Where(x => x.Category.Contains(filter,StringComparison.InvariantCultureIgnoreCase))));
+        return ToBindingList((CaptureTags.Where(x => x.Enabled || x.Category.Contains(filter,StringComparison.InvariantCultureIgnoreCase))));
     }
 
     public static BindingList<T> ToBindingList<T>(IEnumerable<T> range)
