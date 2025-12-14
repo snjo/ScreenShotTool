@@ -66,7 +66,7 @@ namespace ScreenShotTool.Forms
             buttonAddTag.Text = "➕";
             toolTip1.SetToolTip(buttonAddTag, "Add tag (Ctrl+Plus)");
             buttonAddTag.UseVisualStyleBackColor = true;
-            buttonAddTag.Click += buttonAddTag_Click;
+            buttonAddTag.Click += ButtonAddTag_Click;
             // 
             // buttonSaveTags
             // 
@@ -77,7 +77,7 @@ namespace ScreenShotTool.Forms
             buttonSaveTags.Text = "💾";
             toolTip1.SetToolTip(buttonSaveTags, "Save tag list (Ctrl+S). Also saved automatically on program exit.");
             buttonSaveTags.UseVisualStyleBackColor = true;
-            buttonSaveTags.Click += buttonSaveTags_Click;
+            buttonSaveTags.Click += ButtonSaveTags_Click;
             // 
             // buttonMoveUp
             // 
@@ -110,7 +110,7 @@ namespace ScreenShotTool.Forms
             buttonDelete.Text = "🗑";
             toolTip1.SetToolTip(buttonDelete, "Delete tag (Ctrl+Del)");
             buttonDelete.UseVisualStyleBackColor = true;
-            buttonDelete.Click += buttonDelete_Click;
+            buttonDelete.Click += ButtonDelete_Click;
             // 
             // buttonOnTop
             // 
@@ -121,7 +121,7 @@ namespace ScreenShotTool.Forms
             buttonOnTop.Text = "📌";
             toolTip1.SetToolTip(buttonOnTop, "Pin window in front of other programs");
             buttonOnTop.UseVisualStyleBackColor = true;
-            buttonOnTop.Click += buttonOnTop_Click;
+            buttonOnTop.Click += ButtonOnTop_Click;
             // 
             // checkBoxMultiSelect
             // 

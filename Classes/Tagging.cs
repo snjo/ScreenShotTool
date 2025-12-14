@@ -11,19 +11,17 @@ namespace ScreenShotTool.Classes;
 
 public class Tagging
 {
-    MainForm mainForm;
     TagView? tagView;
     public List<InfoTag> CaptureTags = [];
     public List<InfoTagCategory> CaptureTagCategories = [];
 
-    public Tagging(MainForm parent)
+    public Tagging()
     {
-        this.mainForm = parent;
     }
 
     public BindingList<InfoTag> FilteredTags(string filter)
     {
-        return ToBindingList((CaptureTags.Where(x => x.Enabled || x.Category.Contains(filter,StringComparison.InvariantCultureIgnoreCase))));
+        return ToBindingList((CaptureTags.Where(x => x.Enabled || x.Category.Contains(filter, StringComparison.InvariantCultureIgnoreCase))));
     }
 
     public static BindingList<T> ToBindingList<T>(IEnumerable<T> range)
@@ -86,7 +84,7 @@ public class Tagging
                             {
                                 category = sections[3];
                             }
-                            InfoTag tag = new InfoTag(enabled, name, description, category);
+                            InfoTag tag = new(enabled, name, description, category);
                             CaptureTags.Add(tag);
                             //Debug.WriteLine($"Added tag: {enabled}, '{name}' in category '{category}', description: '{description}'");
                         }
@@ -125,7 +123,7 @@ public class Tagging
         if (Directory.Exists(tagDataFolder))
         {
             string tagFile = Path.Join(tagDataFolder, "tags.txt");
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             foreach (InfoTag tag in CaptureTags)
             {
                 sb.Append(tag.Enabled);
@@ -146,21 +144,9 @@ public class Tagging
         }
     }
 
-    public InfoTag? GetTag(int index)
-    {
-        if (index < CaptureTags.Count)
-        {
-            return CaptureTags[index];
-        }
-        else
-        {
-            return null;
-        }
-    }
-
     public string GetTagsText()
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new();
         foreach (InfoTag tag in CaptureTags)
         {
             if (tag.Enabled)

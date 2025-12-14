@@ -33,7 +33,7 @@ public partial class MainForm : Form
     private int Counter = 0;
     private readonly int CounterMax = 9999;
     private bool ExitForSure = false;
-    private string FileDropTempFolder
+    private static string FileDropTempFolder
     {
         get
         {
@@ -93,7 +93,7 @@ public partial class MainForm : Form
     public MainForm()
     {
         InitializeComponent();
-        tagging = new Tagging(this);
+        tagging = new Tagging();
         Font = new Font(this.Font.FontFamily, 9);
         UpgradeSettings();
         tagging.LoadTagData();
@@ -563,16 +563,6 @@ public partial class MainForm : Form
 
         foreach (char invalidPathChar in invalidPathChars)
         {
-            // print invalid chars list to debug
-            //if (Char.IsWhiteSpace(invalidPathChar))
-            //{
-            //    Debug.WriteLine($"Invalid whitespace path char: {(int)invalidPathChar:X4}");
-            //}
-            //else
-            //{
-            //    Debug.WriteLine($"Invalid path char: {(int)invalidPathChar:X4} {invalidPathChar:c}");
-            //}
-
             if (processName.Contains(invalidPathChar))
             {
                 processName = processName.Replace(invalidPathChar, '_');
@@ -972,7 +962,7 @@ public partial class MainForm : Form
         return true;
     }
 
-    //https://stackoverflow.com/questions/1484759/quality-of-a-saved-jpg-in-c-sharp
+    // https://stackoverflow.com/questions/1484759/quality-of-a-saved-jpg-in-c-sharp
     public static void SaveJpeg(string path, Bitmap image, long quality = 95L)
     {
         //Debug.WriteLine("Saving JPEG with quality " + quality);
@@ -987,7 +977,7 @@ public partial class MainForm : Form
 
     #region save clipboard image to file, drop or fix format
 
-    private void DeletFileDropFiles()
+    private static void DeletFileDropFiles()
     {
         Debug.WriteLine($"Deleting temp drop files");
         string filedropFolder;
@@ -1210,9 +1200,7 @@ public partial class MainForm : Form
         if (File.Exists(file))
         {
             Debug.WriteLine("Opening file: " + file);
-            //Process.Start(new ProcessStartInfo() { FileName = folder, UseShellExecute = true });
-            //string filePath = Path.GetFullPath(filePath);
-            Process.Start("explorer.exe", string.Format("/select,\"{0}\"", file));
+            Process.Start("explorer.exe", $"/select,\"{file}\""); //string.Format("/select,\"{0}\"", file));
         }
         else
         {

@@ -1,34 +1,26 @@
-﻿using PdfSharp.Pdf.Filters;
-using ScreenShotTool.Classes;
+﻿using ScreenShotTool.Classes;
 using ScreenShotTool.Properties;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.Versioning;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace ScreenShotTool.Forms;
 [SupportedOSPlatform("windows")]
 
 public partial class TagView : Form
 {
-    Tagging tagging;
-    //BindingList<InfoTag> tags;
-    BindingSource bindingSource;
+    readonly Tagging tagging;
     BindingList<InfoTag> bindingList;
-    List<InfoTagCategory> categoryList = new();
+    readonly List<InfoTagCategory> categoryList = [];
 
     public TagView(Tagging parent)
     {
         InitializeComponent();
         this.tagging = parent;
-        bindingList = parent.FilteredTags(textBoxFilter.Text);//new BindingList<InfoTag>(parent.CaptureTags);
-        bindingSource = new BindingSource(bindingList, null);
+        bindingList = parent.FilteredTags(textBoxFilter.Text);
         dataGridView1.DataSource = bindingList;
 
         UpdateCategories();
-        //CheckListCategory.DataSource = categoryList;
-        //CheckListCategory.DisplayMember = "DisplayName";
-        //CheckListCategory.ValueMember = "Enabled";
 
         if (dataGridView1.Columns.Count > 1)
         {
@@ -42,7 +34,7 @@ public partial class TagView : Form
         dataGridView1.AllowCheckboxMultiSelect = Settings.Default.TagMultiSelect;
     }
 
-    private void buttonAddTag_Click(object sender, EventArgs e)
+    private void ButtonAddTag_Click(object sender, EventArgs e)
     {
         int selectedTagIndex = 0;
         if (dataGridView1.SelectedCells.Count > 0)
@@ -50,8 +42,8 @@ public partial class TagView : Form
             InfoTag selectedItem = (InfoTag)dataGridView1.SelectedCells[0].OwningRow.DataBoundItem;
             selectedTagIndex = tagging.CaptureTags.IndexOf(selectedItem);
         }
-        InfoTag newTag = new InfoTag(false, "", "", textBoxFilter.Text);
-        tagging.CaptureTags.Insert(selectedTagIndex, newTag); // adding filter text to avoid indexing error when new tag is hidden
+        InfoTag newTag = new(false, "", "", textBoxFilter.Text); // adding filter text to avoid indexing error when newly created tag is not visible, and to prefill wanted category
+        tagging.CaptureTags.Insert(selectedTagIndex, newTag);
 
         RefreshGrid();
         SelectCellContainingInfoTag(newTag);
@@ -75,7 +67,7 @@ public partial class TagView : Form
 
     private void RefreshGrid()
     {
-        List<int> columnWidths = new List<int>();
+        List<int> columnWidths = [];
         foreach (DataGridViewColumn column in dataGridView1.Columns)
         {
             columnWidths.Add(column.Width);
@@ -112,20 +104,17 @@ public partial class TagView : Form
         return false;
     }
 
-    private void buttonSaveTags_Click(object sender, EventArgs e)
+    private void ButtonSaveTags_Click(object sender, EventArgs e)
     {
         tagging.SaveTagData();
     }
 
     private void ButtonMoveUp_Click(object sender, EventArgs e)
     {
-        //if (tagging.CaptureTags.Count != dataGridView1.Rows.Count) return;
         if (dataGridView1.Rows.Count < 2) return;
 
         InfoTag selectedItem = (InfoTag)dataGridView1.SelectedCells[0].OwningRow.DataBoundItem;
         int selectedTagIndex = tagging.CaptureTags.IndexOf(selectedItem);
-
-        //int currentIndex = dataGridView1.SelectedCells[0].RowIndex;
         if (selectedTagIndex < 1) return;
         if (selectedTagIndex >= tagging.CaptureTags.Count) return;
         MoveItemInList(tagging.CaptureTags, selectedTagIndex, selectedTagIndex - 1);
@@ -135,13 +124,11 @@ public partial class TagView : Form
 
     private void ButtonMoveDown_Click(object sender, EventArgs e)
     {
-        //if (tagging.CaptureTags.Count != dataGridView1.Rows.Count) return;
         if (dataGridView1.Rows.Count < 2) return;
 
         InfoTag selectedItem = (InfoTag)dataGridView1.SelectedCells[0].OwningRow.DataBoundItem;
         int selectedTagIndex = tagging.CaptureTags.IndexOf(selectedItem);
 
-        //int currentIndex = dataGridView1.SelectedCells[0].RowIndex;
         if (selectedTagIndex < 0) return;
         if (selectedTagIndex >= tagging.CaptureTags.Count - 1) return;
         MoveItemInList(tagging.CaptureTags, selectedTagIndex, selectedTagIndex + 1);
@@ -149,14 +136,14 @@ public partial class TagView : Form
         SelectCellContainingInfoTag(selectedItem);
     }
 
-    private void MoveItemInList(List<InfoTag> list, int oldIndex, int newIndex)
+    private static void MoveItemInList(List<InfoTag> list, int oldIndex, int newIndex)
     {
         InfoTag item = list[oldIndex];
         list.RemoveAt(oldIndex);
         list.Insert(newIndex, item);
     }
 
-    private void buttonDelete_Click(object sender, EventArgs e)
+    private void ButtonDelete_Click(object sender, EventArgs e)
     {
         if (dataGridView1.SelectedCells.Count < 1) return;
         InfoTag item = (InfoTag)dataGridView1.SelectedCells[0].OwningRow.DataBoundItem;
@@ -165,7 +152,7 @@ public partial class TagView : Form
         RefreshGrid();
     }
 
-    private void buttonOnTop_Click(object sender, EventArgs e)
+    private void ButtonOnTop_Click(object sender, EventArgs e)
     {
         TopMost = !TopMost;
     }
@@ -184,11 +171,11 @@ public partial class TagView : Form
             if (e.KeyCode == Keys.Oemplus || e.KeyCode == Keys.Add)
             {
                 Debug.WriteLine("Add tag hotkey");
-                buttonAddTag_Click(sender, e);
+                ButtonAddTag_Click(sender, e);
             }
             else if (e.KeyCode == Keys.Delete)
             {
-                buttonDelete_Click(sender, e);
+                ButtonDelete_Click(sender, e);
             }
             else if (e.KeyCode == Keys.Oemcomma)
             {
@@ -200,7 +187,7 @@ public partial class TagView : Form
             }
             else if (e.KeyCode == Keys.S)
             {
-                buttonSaveTags_Click(sender, e);
+                ButtonSaveTags_Click(sender, e);
             }
             else if (e.KeyCode == Keys.D)
             {

@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace ScreenShotTool
+﻿namespace ScreenShotTool
 {
     public class ColorBlend
     {
@@ -181,8 +179,7 @@ namespace ScreenShotTool
 
         public static Color TintBrightColors(Color color1, Color color2)
         {
-            int darkest = Math.Min(color1.R, color1.G);
-            darkest = 64; // don't tint the darkest pixels
+            int darkest = 64; // Don't tint the darkest pixels that are below this "Magic number". Could be configurable in the symbol too panel instead.
 
             int R2 = Math.Max(darkest, color2.R);
             int G2 = Math.Max(darkest, color2.G);
