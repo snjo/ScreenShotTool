@@ -39,8 +39,9 @@ public partial class TagView : Form
         int selectedTagIndex = 0;
         if (dataGridView1.SelectedCells.Count > 0)
         {
-            InfoTag selectedItem = (InfoTag)dataGridView1.SelectedCells[0].OwningRow.DataBoundItem;
-            selectedTagIndex = tagging.CaptureTags.IndexOf(selectedItem);
+            InfoTag? selectedItem = GetSelectedCellsInfoTag(); //(InfoTag)dataGridView1.SelectedCells[0].OwningRow.DataBoundItem;
+            if (selectedItem == null) return;
+            selectedTagIndex = GetSelectedTagIndex(selectedItem); //tagging.CaptureTags.IndexOf(selectedItem);
         }
         InfoTag newTag = new(false, "", "", textBoxFilter.Text); // adding filter text to avoid indexing error when newly created tag is not visible, and to prefill wanted category
         tagging.CaptureTags.Insert(selectedTagIndex, newTag);
@@ -111,10 +112,11 @@ public partial class TagView : Form
 
     private void ButtonMoveUp_Click(object sender, EventArgs e)
     {
-        if (dataGridView1.Rows.Count < 2) return;
+        if (dataGridView1.Rows.Count < 2) return; // can't move when list is 1 long
+        InfoTag? selectedItem = GetSelectedCellsInfoTag();
+        if (selectedItem == null) return;
+        int selectedTagIndex = GetSelectedTagIndex(selectedItem);
 
-        InfoTag selectedItem = (InfoTag)dataGridView1.SelectedCells[0].OwningRow.DataBoundItem;
-        int selectedTagIndex = tagging.CaptureTags.IndexOf(selectedItem);
         if (selectedTagIndex < 1) return;
         if (selectedTagIndex >= tagging.CaptureTags.Count) return;
         MoveItemInList(tagging.CaptureTags, selectedTagIndex, selectedTagIndex - 1);
@@ -124,16 +126,27 @@ public partial class TagView : Form
 
     private void ButtonMoveDown_Click(object sender, EventArgs e)
     {
-        if (dataGridView1.Rows.Count < 2) return;
-
-        InfoTag selectedItem = (InfoTag)dataGridView1.SelectedCells[0].OwningRow.DataBoundItem;
-        int selectedTagIndex = tagging.CaptureTags.IndexOf(selectedItem);
+        if (dataGridView1.Rows.Count < 2) return; // can't move when list is 1 long
+        InfoTag? selectedItem = GetSelectedCellsInfoTag();
+        if (selectedItem == null) return;
+        int selectedTagIndex = GetSelectedTagIndex(selectedItem);
 
         if (selectedTagIndex < 0) return;
         if (selectedTagIndex >= tagging.CaptureTags.Count - 1) return;
         MoveItemInList(tagging.CaptureTags, selectedTagIndex, selectedTagIndex + 1);
         RefreshGrid();
         SelectCellContainingInfoTag(selectedItem);
+    }
+
+    private InfoTag? GetSelectedCellsInfoTag()
+    {
+        if (dataGridView1.SelectedCells.Count < 1) return null;
+        return (InfoTag)dataGridView1.SelectedCells[0].OwningRow.DataBoundItem;
+    }
+
+    private int GetSelectedTagIndex(InfoTag selectedItem)
+    {
+        return tagging.CaptureTags.IndexOf(selectedItem);
     }
 
     private static void MoveItemInList(List<InfoTag> list, int oldIndex, int newIndex)
@@ -145,12 +158,14 @@ public partial class TagView : Form
 
     private void ButtonDelete_Click(object sender, EventArgs e)
     {
-        if (dataGridView1.SelectedCells.Count < 1) return;
-        InfoTag item = (InfoTag)dataGridView1.SelectedCells[0].OwningRow.DataBoundItem;
+        InfoTag? item = GetSelectedCellsInfoTag();
+        if (item == null) return;
         Debug.WriteLine($"Deleting tag: {item.Name} / {item.Description} / {item.Category}");
         tagging.CaptureTags.Remove(item);
         RefreshGrid();
     }
+
+
 
     private void ButtonOnTop_Click(object sender, EventArgs e)
     {
