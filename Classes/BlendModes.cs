@@ -1,4 +1,7 @@
-﻿namespace ScreenShotTool
+﻿using System.Reflection.Metadata.Ecma335;
+using static ScreenShotTool.ColorBlend;
+
+namespace ScreenShotTool
 {
     public class ColorBlend
     {
@@ -19,10 +22,20 @@
             Average = 8,
             Contrast = 9,
             InvertBrightness = 10,
-            TintBrightColors = 11,
+            Tint = 11,
+            TintBrightColors = 12,
         }
 
-        public static Color BlendColors(Color color1, Color color2, BlendModes blendmode) //, float AffectChannelRed = 1f, float AffectChannelGreen = 1f, float AffectChannelBlue = 1f)
+        public static bool HasAdjustmentValue(BlendModes blendmode)
+        {
+            return blendmode switch
+            {
+                BlendModes.TintBrightColors => true,
+                _ => false
+            };
+        }
+
+        public static Color BlendColors(Color color1, Color color2, BlendModes blendmode, int adjustment = 0) //, float AffectChannelRed = 1f, float AffectChannelGreen = 1f, float AffectChannelBlue = 1f)
         {
             return blendmode switch
             {
@@ -35,7 +48,8 @@
                 BlendModes.Desaturate => Desaturate(color1, color2), // grayscale
                 BlendModes.Invert => Invert(color1), // outputs the inverted color, light channels becomes dark, dark becomes light
                 BlendModes.InvertBrightness => InvertBrighness(color1, color2),
-                BlendModes.TintBrightColors => TintBrightColors(color1, color2),
+                BlendModes.Tint => Tint(color1, color2, adjustment),
+                BlendModes.TintBrightColors => TintBrightColors(color1, color2, adjustment),
                 BlendModes.Average => Average(color1, color2), // same as Normal with 50% opacity
                 BlendModes.Contrast => Contrast(color1, color2),
                 _ => color1
@@ -177,13 +191,16 @@
             return outColor;
         }
 
-        public static Color TintBrightColors(Color color1, Color color2)
+        public static Color TintBrightColors(Color color1, Color color2, int adjustment)
         {
-            int darkest = 64; // Don't tint the darkest pixels that are below this "Magic number". Could be configurable in the symbol too panel instead.
-
-            int R2 = Math.Max(darkest, color2.R);
-            int G2 = Math.Max(darkest, color2.G);
-            int B2 = Math.Max(darkest, color2.B);
+            // A variant of Darken, but capping the darkest values of color2 with a Max(adjustment, color2 RGB)
+            // useful for colorizing brigh text on a dark bakground, but not applying tint to the background.
+            // (or tinting bright backgrounds but not the colored/dark text in front)
+            // the higher the adjustment value, the less it will affect brighter colors, but also giving a more washed out color.
+            
+            int R2 = Math.Max(adjustment, color2.R);
+            int G2 = Math.Max(adjustment, color2.G);
+            int B2 = Math.Max(adjustment, color2.B);
 
             int R = Math.Min(color1.R, R2);
             int G = Math.Min(color1.G, G2);
@@ -191,6 +208,26 @@
 
             int Alpha = CombineTransparencies(color1, color2);
             return Color.FromArgb(Alpha, R, G, B);
+        }
+
+        public static Color Tint(Color color1, Color color2, int adjustment)
+        {
+            // Replaces the hue of color 1 with color2's hue, keeps the darkest value of color1 and color2
+
+            ColorTools.ColorToHSV(color1, out double hue1, out double sat1, out double val1);
+            ColorTools.ColorToHSV(color2, out double hue2, out double sat2, out double val2);
+
+            //if (val1*255 < adjustment)
+            //{
+            //    return color1;
+            //}
+
+            double H = hue2;
+            double S = sat2;
+            double V = Math.Min(val1, val2);
+            Color c = ColorTools.ColorFromHSV(H, S, V);
+            int Alpha = CombineTransparencies(color1, color2);
+            return Color.FromArgb(Alpha, c.R, c.G, c.B);
         }
     }
 }

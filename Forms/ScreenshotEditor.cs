@@ -723,6 +723,7 @@ public partial class ScreenshotEditor : Form
         symbolBlendMode.numericRed.ValueChanged += NumericBlend_ValueChanged;
         symbolBlendMode.numericGreen.ValueChanged += NumericBlend_ValueChanged;
         symbolBlendMode.numericBlue.ValueChanged += NumericBlend_ValueChanged;
+        symbolBlendMode.numericAdjustmentValue.ValueChanged += NumericBlend_ValueChanged;
 
         propertyPanels.Add(symbolMosaic, parentPanel);
         symbolMosaic.numericBlurMosaicSize.ValueChanged += NumericBlurMosaicSize_ValueChanged;
@@ -907,10 +908,12 @@ public partial class ScreenshotEditor : Form
                     EnablePanel(symbolFillColor, panelLeft, ref lastPanelBottom);
                     EnablePanel(symbolBlendMode, panelLeft, ref lastPanelBottom);
                     symbolBlendMode.comboBoxBlendMode.Text = gsHL.blendMode.ToString();
-                    //symbolBlendMode.numericRed.Value = gsHL.BlendStrengthRed;
+
                     SetNumericClamp(symbolBlendMode.numericRed, (decimal)gsHL.BlendStrengthRed);
                     SetNumericClamp(symbolBlendMode.numericGreen, (decimal)gsHL.BlendStrengthGreen);
                     SetNumericClamp(symbolBlendMode.numericBlue, (decimal)gsHL.BlendStrengthBlue);
+                    SetNumericClamp(symbolBlendMode.numericAdjustmentValue, (decimal)gsHL.BlendAdjustment);
+                    UpdateBlendModeAdjustmentEnabled(gsHL);
                 }
                 else if (graphicSymbol is GsBlur gsb)
                 {
@@ -977,6 +980,12 @@ public partial class ScreenshotEditor : Form
             DisableAllPanels();
             ClearPropertyPanelValues();
         }
+    }
+
+    private void UpdateBlendModeAdjustmentEnabled(GsHighlight gsHL)
+    {
+        symbolBlendMode.numericAdjustmentValue.Enabled = ColorBlend.HasAdjustmentValue(gsHL.blendMode);
+        symbolBlendMode.labelAdjustment.Enabled = ColorBlend.HasAdjustmentValue(gsHL.blendMode);
     }
 
     private void ButtonDeleteSymbol_Click(object? sender, EventArgs e)
@@ -1121,6 +1130,8 @@ public partial class ScreenshotEditor : Form
                 gsH.BlendStrengthGreen = (float)symbolBlendMode.numericGreen.Value;
             if (sender == symbolBlendMode.numericBlue)
                 gsH.BlendStrengthBlue = (float)symbolBlendMode.numericBlue.Value;
+            if (sender == symbolBlendMode.numericAdjustmentValue)
+                gsH.BlendAdjustment = (int)symbolBlendMode.numericAdjustmentValue.Value;
         }
         editorCanvas.UpdateOverlay();
     }
@@ -1321,13 +1332,14 @@ public partial class ScreenshotEditor : Form
 
     private void ComboBoxBlendMode_SelectedIndexChanged(object? sender, EventArgs e)
     {
-        if (editorCanvas.CurrentSelectedSymbol is GsHighlight gshl)
+        if (editorCanvas.CurrentSelectedSymbol is GsHighlight gsHL)
         {
             if (Enum.TryParse(symbolBlendMode.comboBoxBlendMode.Text, out ColorBlend.BlendModes newBlend))
             {
-                gshl.blendMode = newBlend;
+                gsHL.blendMode = newBlend;
             }
             editorCanvas.UpdateOverlay();
+            UpdateBlendModeAdjustmentEnabled(gsHL);
         }
     }
 

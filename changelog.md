@@ -2,7 +2,7 @@
 
 ## 2.6 (In progress)
 - Added category filter to tag list. New tags automatically get assigned the current filter as category name.
-- Added higlight blend mode "Tint Bright Colors"
+- Added higlight blend modes "Tint" and "Tint Bright Colors"
 
 ## 2.5
 - Trim the number of thumbnails in the list periodically, based on max thumbs setting

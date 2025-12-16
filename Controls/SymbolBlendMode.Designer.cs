@@ -36,15 +36,20 @@
             numericRed = new NumericUpDown();
             label18 = new Label();
             comboBoxBlendMode = new ComboBox();
+            numericAdjustmentValue = new NumericUpDown();
+            labelAdjustment = new Label();
             panelPropertiesHighlight.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericBlue).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericGreen).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericRed).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericAdjustmentValue).BeginInit();
             SuspendLayout();
             // 
             // panelPropertiesHighlight
             // 
             panelPropertiesHighlight.BorderStyle = BorderStyle.FixedSingle;
+            panelPropertiesHighlight.Controls.Add(labelAdjustment);
+            panelPropertiesHighlight.Controls.Add(numericAdjustmentValue);
             panelPropertiesHighlight.Controls.Add(numericBlue);
             panelPropertiesHighlight.Controls.Add(numericGreen);
             panelPropertiesHighlight.Controls.Add(label1);
@@ -55,7 +60,7 @@
             panelPropertiesHighlight.Dock = DockStyle.Fill;
             panelPropertiesHighlight.Location = new Point(0, 0);
             panelPropertiesHighlight.Name = "panelPropertiesHighlight";
-            panelPropertiesHighlight.Size = new Size(170, 102);
+            panelPropertiesHighlight.Size = new Size(170, 130);
             panelPropertiesHighlight.TabIndex = 105;
             // 
             // numericBlue
@@ -121,12 +126,29 @@
             // comboBoxBlendMode
             // 
             comboBoxBlendMode.FormattingEnabled = true;
-            comboBoxBlendMode.Items.AddRange(new object[] { "Multiply", "Lighten", "Darken", "Desaturate", "Normal", "Divide", "Invert", "Contrast", "InvertBrightness", "TintBrightColors" });
+            comboBoxBlendMode.Items.AddRange(new object[] { "Multiply", "Lighten", "Darken", "Desaturate", "Normal", "Divide", "Invert", "Contrast", "InvertBrightness", "Tint", "TintBrightColors" });
             comboBoxBlendMode.Location = new Point(3, 22);
             comboBoxBlendMode.Name = "comboBoxBlendMode";
             comboBoxBlendMode.Size = new Size(162, 23);
             comboBoxBlendMode.TabIndex = 48;
             comboBoxBlendMode.Text = "Multiply";
+            // 
+            // numericAdjustmentValue
+            // 
+            numericAdjustmentValue.Location = new Point(99, 102);
+            numericAdjustmentValue.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numericAdjustmentValue.Name = "numericAdjustmentValue";
+            numericAdjustmentValue.Size = new Size(63, 23);
+            numericAdjustmentValue.TabIndex = 57;
+            // 
+            // labelAdjustment
+            // 
+            labelAdjustment.AutoSize = true;
+            labelAdjustment.Location = new Point(3, 104);
+            labelAdjustment.Name = "labelAdjustment";
+            labelAdjustment.Size = new Size(69, 15);
+            labelAdjustment.TabIndex = 58;
+            labelAdjustment.Text = "Adjustment";
             // 
             // SymbolBlendMode
             // 
@@ -134,12 +156,13 @@
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(panelPropertiesHighlight);
             Name = "SymbolBlendMode";
-            Size = new Size(170, 102);
+            Size = new Size(170, 130);
             panelPropertiesHighlight.ResumeLayout(false);
             panelPropertiesHighlight.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numericBlue).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericGreen).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericRed).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericAdjustmentValue).EndInit();
             ResumeLayout(false);
         }
 
@@ -153,5 +176,7 @@
         internal NumericUpDown numericRed;
         internal NumericUpDown numericBlue;
         internal NumericUpDown numericGreen;
+        internal Label labelAdjustment;
+        internal NumericUpDown numericAdjustmentValue;
     }
 }

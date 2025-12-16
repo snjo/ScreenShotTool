@@ -11,6 +11,7 @@ public class GsHighlight : GsDynamicImage
     public float BlendStrengthRed = 1f;
     public float BlendStrengthBlue = 1f;
     public float BlendStrengthGreen = 1f;
+    public int BlendAdjustment = 64;
     public GsHighlight(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadow, int lineWidth) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadow, lineWidth)
     {
         Name = "Highlight";
@@ -71,7 +72,7 @@ public class GsHighlight : GsDynamicImage
                 int sampleY = bmpTop + y;
                 if (sampleX < 0 || sampleY < 0 || sampleX >= snoop.Width || sampleY >= snoop.Height) continue;
                 Color sourcePixel = snoop.GetPixel(sampleX, sampleY);
-                Color blended = ColorBlend.BlendColors(sourcePixel, FillColor, blendMode);
+                Color blended = ColorBlend.BlendColors(sourcePixel, FillColor, blendMode, BlendAdjustment);
                 target.SetPixel(x, y, ApplyChannel(sourcePixel, blended));
             }
         }
