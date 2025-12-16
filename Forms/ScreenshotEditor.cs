@@ -912,8 +912,7 @@ public partial class ScreenshotEditor : Form
                     SetNumericClamp(symbolBlendMode.numericRed, (decimal)gsHL.BlendStrengthRed);
                     SetNumericClamp(symbolBlendMode.numericGreen, (decimal)gsHL.BlendStrengthGreen);
                     SetNumericClamp(symbolBlendMode.numericBlue, (decimal)gsHL.BlendStrengthBlue);
-                    SetNumericClamp(symbolBlendMode.numericAdjustmentValue, (decimal)gsHL.BlendAdjustment);
-                    UpdateBlendModeAdjustmentEnabled(gsHL);
+                    UpdateBlendModeAdjustment(gsHL);
                 }
                 else if (graphicSymbol is GsBlur gsb)
                 {
@@ -982,10 +981,18 @@ public partial class ScreenshotEditor : Form
         }
     }
 
-    private void UpdateBlendModeAdjustmentEnabled(GsHighlight gsHL)
+    private void UpdateBlendModeAdjustment(GsHighlight gsHL)
     {
         symbolBlendMode.numericAdjustmentValue.Enabled = ColorBlend.HasAdjustmentValue(gsHL.blendMode);
         symbolBlendMode.labelAdjustment.Enabled = ColorBlend.HasAdjustmentValue(gsHL.blendMode);
+        decimal adjustmentValue = 0;
+        switch (gsHL.blendMode)
+        {
+            case ColorBlend.BlendModes.TintBrightColors:
+                adjustmentValue = gsHL.TintBrightColorsAdjustment;
+                break;
+        }
+        SetNumericClamp(symbolBlendMode.numericAdjustmentValue, adjustmentValue);
     }
 
     private void ButtonDeleteSymbol_Click(object? sender, EventArgs e)
@@ -1122,16 +1129,23 @@ public partial class ScreenshotEditor : Form
 
     private void NumericBlend_ValueChanged(object? sender, EventArgs e)
     {
-        if (GetSelectedSymbolFirst() is GsHighlight gsH)
+        if (GetSelectedSymbolFirst() is GsHighlight gsHL)
         {
             if (sender == symbolBlendMode.numericRed)
-                gsH.BlendStrengthRed = (float)symbolBlendMode.numericRed.Value;
+                gsHL.BlendStrengthRed = (float)symbolBlendMode.numericRed.Value;
             if (sender == symbolBlendMode.numericGreen)
-                gsH.BlendStrengthGreen = (float)symbolBlendMode.numericGreen.Value;
+                gsHL.BlendStrengthGreen = (float)symbolBlendMode.numericGreen.Value;
             if (sender == symbolBlendMode.numericBlue)
-                gsH.BlendStrengthBlue = (float)symbolBlendMode.numericBlue.Value;
+                gsHL.BlendStrengthBlue = (float)symbolBlendMode.numericBlue.Value;
             if (sender == symbolBlendMode.numericAdjustmentValue)
-                gsH.BlendAdjustment = (int)symbolBlendMode.numericAdjustmentValue.Value;
+            {
+                switch (gsHL.blendMode)
+                {
+                    case ColorBlend.BlendModes.TintBrightColors:
+                        gsHL.TintBrightColorsAdjustment = (int)symbolBlendMode.numericAdjustmentValue.Value;
+                        break;
+                }
+            }
         }
         editorCanvas.UpdateOverlay();
     }
@@ -1339,7 +1353,7 @@ public partial class ScreenshotEditor : Form
                 gsHL.blendMode = newBlend;
             }
             editorCanvas.UpdateOverlay();
-            UpdateBlendModeAdjustmentEnabled(gsHL);
+            UpdateBlendModeAdjustment(gsHL);
         }
     }
 
