@@ -1,4 +1,5 @@
-﻿using System.Reflection.Metadata.Ecma335;
+﻿using System.Diagnostics;
+using System.Reflection.Metadata.Ecma335;
 using static ScreenShotTool.ColorBlend;
 
 namespace ScreenShotTool
@@ -31,6 +32,7 @@ namespace ScreenShotTool
             return blendmode switch
             {
                 BlendModes.TintBrightColors => true,
+                BlendModes.Tint => true,
                 _ => false
             };
         }
@@ -212,20 +214,21 @@ namespace ScreenShotTool
 
         public static Color Tint(Color color1, Color color2, int adjustment)
         {
-            // Replaces the hue of color 1 with color2's hue, keeps the darkest value of color1 and color2
+            float adjNormalized = Math.Clamp(adjustment / 256f, 0f, 1f);
+            // Replaces the hue of color 1 with color2's hue
+            // Adjustment 0..1:
+            //    0 tints while keeping saturation and value intact (brighter, desaturated and tinted).
+            //    1 mutes bright values down to color2's value (like an overlay film)
 
             ColorTools.ColorToHSV(color1, out double hue1, out double sat1, out double val1);
             ColorTools.ColorToHSV(color2, out double hue2, out double sat2, out double val2);
 
-            //if (val1*255 < adjustment)
-            //{
-            //    return color1;
-            //}
-
+            float color2Alpha = ((float)color2.A) / 255f;
             double H = hue2;
-            double S = sat2;
-            double V = Math.Min(val1, val2);
-            Color c = ColorTools.ColorFromHSV(H, S, V);
+            double S = Double.Lerp(sat1,sat2, adjNormalized);
+            double V = Math.Min(val1,Double.Lerp(val1, val2, adjNormalized));
+            Color c = ColorTools.MixColors(color1, ColorTools.ColorFromHSV(H, S, V), color2Alpha);
+            
             int Alpha = CombineTransparencies(color1, color2);
             return Color.FromArgb(Alpha, c.R, c.G, c.B);
         }

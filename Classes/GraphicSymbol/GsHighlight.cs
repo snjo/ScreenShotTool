@@ -12,6 +12,7 @@ public class GsHighlight : GsDynamicImage
     public float BlendStrengthBlue = 1f;
     public float BlendStrengthGreen = 1f;
     public int TintBrightColorsAdjustment = 64;
+    public int TintIntensityAdjustement = 0;
     public GsHighlight(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadow, int lineWidth) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadow, lineWidth)
     {
         Name = "Highlight";
@@ -72,7 +73,41 @@ public class GsHighlight : GsDynamicImage
                 int sampleY = bmpTop + y;
                 if (sampleX < 0 || sampleY < 0 || sampleX >= snoop.Width || sampleY >= snoop.Height) continue;
                 Color sourcePixel = snoop.GetPixel(sampleX, sampleY);
-                Color blended = ColorBlend.BlendColors(sourcePixel, FillColor, blendMode, TintBrightColorsAdjustment);
+                int adjustment = 0;
+                switch (blendMode)
+                {
+                    //case ColorBlend.BlendModes.None:
+                    //    break;
+                    //case ColorBlend.BlendModes.Normal:
+                    //    break;
+                    //case ColorBlend.BlendModes.Multiply:
+                    //    break;
+                    //case ColorBlend.BlendModes.Divide:
+                    //    break;
+                    //case ColorBlend.BlendModes.Lighten:
+                    //    break;
+                    //case ColorBlend.BlendModes.Darken:
+                    //    break;
+                    //case ColorBlend.BlendModes.Desaturate:
+                    //    break;
+                    //case ColorBlend.BlendModes.Invert:
+                    //    break;
+                    //case ColorBlend.BlendModes.Average:
+                    //    break;
+                    //case ColorBlend.BlendModes.Contrast:
+                    //    break;
+                    //case ColorBlend.BlendModes.InvertBrightness:
+                    //    break;
+                    case ColorBlend.BlendModes.Tint:
+                        adjustment = TintIntensityAdjustement;
+                        break;
+                    case ColorBlend.BlendModes.TintBrightColors:
+                        adjustment = TintBrightColorsAdjustment;
+                        break;
+                    default:
+                        break;
+                }
+                Color blended = ColorBlend.BlendColors(sourcePixel, FillColor, blendMode, adjustment);
                 target.SetPixel(x, y, ApplyChannel(sourcePixel, blended));
             }
         }

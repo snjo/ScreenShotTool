@@ -119,4 +119,14 @@ public static class ColorTools
         else
             return Color.FromArgb(255, v, p, q);
     }
+
+    public static Color MixColors(Color color1, Color color2, float amount)
+    {
+        return Color.FromArgb(
+            (int)float.Lerp(color1.A, color2.A, amount),
+            (int)float.Lerp(color1.R, color2.R, amount),
+            (int)float.Lerp(color1.G, color2.G, amount),
+            (int)float.Lerp(color1.B, color2.B, amount)
+            );
+    }
 }
