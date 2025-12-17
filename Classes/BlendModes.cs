@@ -10,6 +10,8 @@ namespace ScreenShotTool
 
         // Warning, none of these are accurate if the two colors have DIFFERENT alpha values
 
+        // When adding new blend modes, add an entry to the Control's combobox here: ScreenShotTool\Controls\SymbolBlendMode.Designer.cs
+        // as well as in BlendColors()
         public enum BlendModes
         {
             None = 0,

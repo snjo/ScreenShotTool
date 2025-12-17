@@ -180,14 +180,14 @@ public partial class ColorDialogAlpha : Form
     private void UpateColor(Color newColor)
     {
         //Debug.WriteLine($"Setting color: {this.Color}");
-        panelColorSampleSolid.BackColor = newColor;
+        panelColorSampleSolid.BackColor = Color.FromArgb(255, newColor.R, newColor.G, newColor.B);
         if (newColor == Color.Transparent)
         {
             panelColorSampleAlpha.BackColor = Color.Transparent;
         }
         else
         {
-            panelColorSampleAlpha.BackColor = Color.FromArgb(trackBarAlpha.Value, newColor);
+            panelColorSampleAlpha.BackColor = newColor;
         }
         trackBarAlpha.Value = newColor.A;
         trackBarRed.Value = newColor.R;
