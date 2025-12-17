@@ -148,9 +148,12 @@ namespace ScreenShotTool
         {
             // uses perceptual brightness to desaturate, blues are much darker than greens.
 
-            int Alpha = CombineTransparencies(color1, color2);
+            //int Alpha = CombineTransparencies(color1, color2);
             int desaturated = (int)(ColorTools.ColorBrightness(color1) * 255f);
-            return Color.FromArgb(Alpha, desaturated, desaturated, desaturated);
+            //return Color.FromArgb(Alpha, desaturated, desaturated, desaturated);
+
+            Color outColor = Color.FromArgb(desaturated, desaturated, desaturated);
+            return ColorTools.MixColors(color1, outColor, color2.A);
         }
 
         public static Color DesaturateAverageRGB(Color color1, Color color2)
@@ -167,6 +170,7 @@ namespace ScreenShotTool
         {
             //Inverts the brightness, also inverts the hues, a classic.
             //int Alpha = CombineTransparencies(color1, color2);
+
             return Color.FromArgb(color1.A, 255 - color1.R, 255 - color1.G, 255 - color1.B);
         }
 
@@ -191,8 +195,8 @@ namespace ScreenShotTool
             double finalSaturation = Double.Lerp(saturation, brightness, color2.G / 255d); // using brightness for saturation allows dark>bright colors to fade into whites
 
             Color outColor = ColorTools.ColorFromHSV(hue, finalSaturation, finalBrightness);
-
-            return outColor;
+            return ColorTools.MixColors(color1, outColor, color2.A);
+            //return outColor;
         }
 
         public static Color TintBrightColors(Color color1, Color color2, int adjustment)
@@ -201,17 +205,19 @@ namespace ScreenShotTool
             // useful for colorizing brigh text on a dark bakground, but not applying tint to the background.
             // (or tinting bright backgrounds but not the colored/dark text in front)
             // the higher the adjustment value, the less it will affect brighter colors, but also giving a more washed out color.
+
             
             int R2 = Math.Max(adjustment, color2.R);
             int G2 = Math.Max(adjustment, color2.G);
             int B2 = Math.Max(adjustment, color2.B);
-
+            int A = color2.A;
             int R = Math.Min(color1.R, R2);
             int G = Math.Min(color1.G, G2);
             int B = Math.Min(color1.B, B2);
-
-            int Alpha = CombineTransparencies(color1, color2);
-            return Color.FromArgb(Alpha, R, G, B);
+            Color outColor = Color.FromArgb(A, R, G, B);
+            return ColorTools.MixColors(color1, outColor, color2.A);
+            //int Alpha = CombineTransparencies(color1, color2);
+            //return Color.FromArgb(Alpha, R, G, B);
         }
 
         public static Color Tint(Color color1, Color color2, int adjustment)
@@ -225,14 +231,13 @@ namespace ScreenShotTool
             ColorTools.ColorToHSV(color1, out double hue1, out double sat1, out double val1);
             ColorTools.ColorToHSV(color2, out double hue2, out double sat2, out double val2);
 
-            float color2Alpha = ((float)color2.A) / 255f;
+            //float color2Alpha = ((float)color2.A) / 255f;
             double H = hue2;
             double S = Double.Lerp(sat1,sat2, adjNormalized);
             double V = Math.Min(val1,Double.Lerp(val1, val2, adjNormalized));
-            Color c = ColorTools.MixColors(color1, ColorTools.ColorFromHSV(H, S, V), color2Alpha);
-            
-            int Alpha = CombineTransparencies(color1, color2);
-            return Color.FromArgb(Alpha, c.R, c.G, c.B);
+            return ColorTools.MixColors(color1, ColorTools.ColorFromHSV(H, S, V), color2.A);
         }
+
+        
     }
 }

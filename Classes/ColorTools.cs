@@ -120,8 +120,9 @@ public static class ColorTools
             return Color.FromArgb(255, v, p, q);
     }
 
-    public static Color MixColors(Color color1, Color color2, float amount)
+    public static Color MixColors(Color color1, Color color2, int Alpha)
     {
+        float amount = Alpha / 255f;
         return Color.FromArgb(
             (int)float.Lerp(color1.A, color2.A, amount),
             (int)float.Lerp(color1.R, color2.R, amount),
