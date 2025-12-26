@@ -27,6 +27,7 @@ namespace ScreenShotTool
             InvertBrightness = 10,
             Tint = 11,
             TintBrightColors = 12,
+            Dither = 13,
         }
 
         public static bool HasAdjustmentValue(BlendModes blendmode)
@@ -39,25 +40,68 @@ namespace ScreenShotTool
             };
         }
 
-        public static Color BlendColors(Color color1, Color color2, BlendModes blendmode, int adjustment = 0) //, float AffectChannelRed = 1f, float AffectChannelGreen = 1f, float AffectChannelBlue = 1f)
+        public static (Color color, object? data) BlendColors(Color color1, Color color2, BlendModes blendmode, int adjustment = 0, object? error = null) //, float AffectChannelRed = 1f, float AffectChannelGreen = 1f, float AffectChannelBlue = 1f)
         {
             return blendmode switch
             {
-                BlendModes.None => color1, // keeps the bottom color unchanged
-                BlendModes.Normal => color2, // uses the top color unchanged
-                BlendModes.Multiply => Multiply(color1, color2), // all colors are darkened by the amount in color2
-                BlendModes.Divide => Divide(color1, color2), // this one gets kinda weird
-                BlendModes.Lighten => Lighten(color1, color2), // only colors that are darker than color2 are lightened
-                BlendModes.Darken => Darken(color1, color2), // only colors that are lighter than color2 are darkened
-                BlendModes.Desaturate => Desaturate(color1, color2), // grayscale
-                BlendModes.Invert => Invert(color1), // outputs the inverted color, light channels becomes dark, dark becomes light
-                BlendModes.InvertBrightness => InvertBrighness(color1, color2),
-                BlendModes.Tint => Tint(color1, color2, adjustment),
-                BlendModes.TintBrightColors => TintBrightColors(color1, color2, adjustment),
-                BlendModes.Average => Average(color1, color2), // same as Normal with 50% opacity
-                BlendModes.Contrast => Contrast(color1, color2),
-                _ => color1
+                BlendModes.None => (color1, null), // keeps the bottom color unchanged
+                BlendModes.Normal => (color2, null), // uses the top color unchanged
+                BlendModes.Multiply => (Multiply(color1, color2), null), // all colors are darkened by the amount in color2
+                BlendModes.Divide => (Divide(color1, color2), null), // this one gets kinda weird
+                BlendModes.Lighten => (Lighten(color1, color2), null), // only colors that are darker than color2 are lightened
+                BlendModes.Darken => (Darken(color1, color2), null), // only colors that are lighter than color2 are darkened
+                BlendModes.Desaturate => (Desaturate(color1, color2), null), // grayscale
+                BlendModes.Invert => (Invert(color1), null), // outputs the inverted color, light channels becomes dark, dark becomes light
+                BlendModes.InvertBrightness => (InvertBrighness(color1, color2), null),
+                BlendModes.Tint => (Tint(color1, color2, adjustment), null),
+                BlendModes.TintBrightColors => (TintBrightColors(color1, color2, adjustment), null),
+                BlendModes.Average => (Average(color1, color2), null), // same as Normal with 50% opacity
+                BlendModes.Contrast => (Contrast(color1, color2), null),
+                BlendModes.Dither => Dither(color1, color2, error),
+                _ => (color1, null)
             };
+        }
+
+        private static (Color color, object? error) Dither(Color color1, Color color2, object? rowInfo)
+        {
+            // Floyd - Steinberg Dithering
+            if (rowInfo is RowInfo info)
+            {
+                float resultBrightness = 0;
+                Color resultColor = color2;
+                float pixelError = info.CurrentRow[info.X];
+                float brightness = color1.GetBrightness();
+                float corrected = (brightness + pixelError);
+
+                if (corrected > 0.5)
+                {
+                    resultBrightness = 1;
+                    resultColor = Color.White;
+                }
+                float returnError = (corrected - resultBrightness) + (brightness - resultBrightness);
+
+                // dithering ratio
+                //      X   7
+                //  3   5   1
+                info.CurrentRow[info.X + 1] += returnError * 0.4375f; // 7/16
+                if (info.X > 0) info.NextRow[info.X - 1] += returnError * 0.1875f; // 3/16
+                info.NextRow[info.X] += returnError * 0.3125f; // 3/16
+                info.NextRow[info.X + 1] += returnError * 0.0625f; // 1/16
+
+                info.X++;
+                if (info.X >= info.Width)
+                {
+                    info.X = 0;
+                    info.Y++;
+                    info.NextRow.CopyTo(info.CurrentRow,0);
+                    info.NextRow = new float[info.Width+2];
+                }
+                return (resultColor, info);
+            }
+            else
+            {
+                return (Color.Red, null);
+            }
         }
 
         public static int CombineTransparencies(Color color1, Color color2)

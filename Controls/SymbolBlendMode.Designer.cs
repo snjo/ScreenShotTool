@@ -126,7 +126,7 @@
             // comboBoxBlendMode
             // 
             comboBoxBlendMode.FormattingEnabled = true;
-            comboBoxBlendMode.Items.AddRange(new object[] { "Multiply", "Lighten", "Darken", "Desaturate", "Normal", "Divide", "Invert", "Contrast", "InvertBrightness", "Tint", "TintBrightColors" });
+            comboBoxBlendMode.Items.AddRange(new object[] { "Multiply", "Lighten", "Darken", "Desaturate", "Normal", "Divide", "Invert", "Contrast", "InvertBrightness", "Tint", "TintBrightColors", "Dither" });
             comboBoxBlendMode.Location = new Point(3, 22);
             comboBoxBlendMode.Name = "comboBoxBlendMode";
             comboBoxBlendMode.Size = new Size(162, 23);
