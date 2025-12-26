@@ -79,7 +79,6 @@ namespace ScreenShotTool
                     resultColor = Color.White;
                 }
                 float returnError = (corrected - resultBrightness) + (brightness - resultBrightness);
-
                 // dithering ratio
                 //      X   7
                 //  3   5   1

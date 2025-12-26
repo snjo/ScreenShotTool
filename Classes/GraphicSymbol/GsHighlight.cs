@@ -69,7 +69,7 @@ public class GsHighlight : GsDynamicImage
 
         if (blendMode == ColorBlend.BlendModes.Dither)
         {
-            blendData = new RowInfo(rect.Width);
+            blendData = new RowInfo(bmpWidth);
         }
         else
         {
