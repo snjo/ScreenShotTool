@@ -74,7 +74,7 @@ namespace ScreenShotTool
                 float brightness = color1.GetBrightness();
                 float corrected = (brightness + pixelError);
 
-                float thresholdNormalized = (threshold / 33.3333f)-1f;
+                float thresholdNormalized = (threshold * 0.03f)-1f;
                 if (corrected > thresholdNormalized)
                 {
                     resultBrightness = 1;
