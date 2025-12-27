@@ -13,7 +13,11 @@ public class GsHighlight : GsDynamicImage
     public float BlendStrengthGreen = 1f;
     public int TintBrightColorsAdjustment = 64;
     public int TintIntensityAdjustement = 0;
+    public int DitherThreshold = 50;
     object? blendData = null;
+
+    
+
     public GsHighlight(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadow, int lineWidth) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadow, lineWidth)
     {
         Name = "Highlight";
@@ -114,6 +118,9 @@ public class GsHighlight : GsDynamicImage
                         break;
                     case ColorBlend.BlendModes.TintBrightColors:
                         adjustment = TintBrightColorsAdjustment;
+                        break;
+                    case ColorBlend.BlendModes.Dither:
+                        adjustment = DitherThreshold;
                         break;
                     default:
                         break;

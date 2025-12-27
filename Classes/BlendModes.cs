@@ -36,6 +36,7 @@ namespace ScreenShotTool
             {
                 BlendModes.TintBrightColors => true,
                 BlendModes.Tint => true,
+                BlendModes.Dither => true,
                 _ => false
             };
         }
@@ -57,12 +58,12 @@ namespace ScreenShotTool
                 BlendModes.TintBrightColors => (TintBrightColors(color1, color2, adjustment), null),
                 BlendModes.Average => (Average(color1, color2), null), // same as Normal with 50% opacity
                 BlendModes.Contrast => (Contrast(color1, color2), null),
-                BlendModes.Dither => Dither(color1, color2, error),
+                BlendModes.Dither => Dither(color1, color2, error, adjustment),
                 _ => (color1, null)
             };
         }
 
-        private static (Color color, object? error) Dither(Color color1, Color color2, object? rowInfo)
+        private static (Color color, object? error) Dither(Color color1, Color color2, object? rowInfo, int threshold)
         {
             // Floyd - Steinberg Dithering
             if (rowInfo is RowInfo info)
@@ -73,12 +74,14 @@ namespace ScreenShotTool
                 float brightness = color1.GetBrightness();
                 float corrected = (brightness + pixelError);
 
-                if (corrected > 0.5)
+                float thresholdNormalized = (threshold / 33.3333f)-1f;
+                if (corrected > thresholdNormalized)
                 {
                     resultBrightness = 1;
                     resultColor = Color.White;
                 }
                 float returnError = (corrected - resultBrightness) + (brightness - resultBrightness);
+                returnError = Math.Clamp(returnError, -1f, 1f);
                 // dithering ratio
                 //      X   7
                 //  3   5   1

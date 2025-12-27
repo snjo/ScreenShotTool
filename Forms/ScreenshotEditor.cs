@@ -994,6 +994,9 @@ public partial class ScreenshotEditor : Form
             case ColorBlend.BlendModes.Tint:
                 adjustmentValue = gsHL.TintIntensityAdjustement;
                 break;
+            case ColorBlend.BlendModes.Dither:
+                adjustmentValue = gsHL.DitherThreshold;
+                break;
         }
         SetNumericClamp(symbolBlendMode.numericAdjustmentValue, adjustmentValue);
     }
@@ -1149,6 +1152,9 @@ public partial class ScreenshotEditor : Form
                         break;
                     case ColorBlend.BlendModes.Tint:
                         gsHL.TintIntensityAdjustement = symbolBlendMode.numericAdjustmentValue.ValueInt();
+                        break;
+                    case ColorBlend.BlendModes.Dither:
+                        gsHL.DitherThreshold = symbolBlendMode.numericAdjustmentValue.ValueInt();
                         break;
                 }
             }
