@@ -41,7 +41,7 @@ namespace ScreenShotTool
             };
         }
 
-        public static (Color color, object? data) BlendColors(Color color1, Color color2, BlendModes blendmode, int adjustment = 0, object? error = null) //, float AffectChannelRed = 1f, float AffectChannelGreen = 1f, float AffectChannelBlue = 1f)
+        public static (Color color, object? data) BlendColors(Color color1, Color color2, BlendModes blendmode, int adjustment = 0, object? infoObject = null) //, float AffectChannelRed = 1f, float AffectChannelGreen = 1f, float AffectChannelBlue = 1f)
         {
             return blendmode switch
             {
@@ -58,43 +58,57 @@ namespace ScreenShotTool
                 BlendModes.TintBrightColors => (TintBrightColors(color1, color2, adjustment), null),
                 BlendModes.Average => (Average(color1, color2), null), // same as Normal with 50% opacity
                 BlendModes.Contrast => (Contrast(color1, color2), null),
-                BlendModes.Dither => Dither(color1, color2, error, adjustment),
+                BlendModes.Dither => Dither(color1, color2, infoObject, adjustment),
                 _ => (color1, null)
             };
         }
 
-        private static (Color color, object? error) Dither(Color color1, Color color2, object? rowInfo, int threshold)
+        /// <summary>
+        /// Dithers an image, outputs fully dark or light pixels using Floyd-Steinberg error diffusion
+        /// </summary>
+        /// <param name="color1">Image pixel to process</param>
+        /// <param name="color2">Color used for the dark pixels</param>
+        /// <param name="infoObject">A RowInfo object holding error diffusion data for the current and next row</param>
+        /// <param name="threshold">Pixels with a brightness above the threshold are light, below is dark. 0-100: Low gives light images, high gives darker images. Default 50.</param>
+        /// <returns></returns>
+        private static (Color color, object? error) Dither(Color color1, Color color2, object? infoObject, int threshold)
         {
             // Floyd - Steinberg Dithering
-            if (rowInfo is RowInfo info)
+
+            // the RowInfo/infoObject holds the current error diffusion data for the current and next row, and must be passed from the caller since this is a static function
+            // threshold is passed as an int because it is set in a multi-purpose numericUpDown
+
+            if (infoObject is RowInfo info)
             {
                 float resultBrightness = 0;
                 Color resultColor = color2;
                 float pixelError = info.CurrentRow[info.X];
                 float brightness = color1.GetBrightness();
-                float corrected = (brightness + pixelError);
+                float corrected = (brightness + pixelError); // current brightness plus the remaining error diffusion from previous pixels
 
-                float thresholdNormalized = (threshold * 0.03f)-1f;
+                float thresholdNormalized = (threshold * 0.03f)-1f; // convert threshold input from 0 to 100 into -1 to +2, where 50 is 0.5
                 if (corrected > thresholdNormalized)
                 {
                     resultBrightness = 1;
                     resultColor = Color.White;
                 }
-                float returnError = (corrected - resultBrightness) + (brightness - resultBrightness);
-                returnError = Math.Clamp(returnError, -1f, 1f);
-                // dithering ratio
+                float returnError = (corrected - resultBrightness) + (brightness - resultBrightness); // use the current error plus remnant from the diffused error so it can build over time
+                //if (returnError > 1 || returnError < -1) Debug.WriteLine($"return error at x{info.X} y{info.Y} is {returnError}");
+                returnError = Math.Clamp(returnError, -1f, 1f); //  without this the threshold value will be ineffective, as the error keeps being fixed automatically
+
+                // dithering ratio, output error * 1/16th on pixels to the right and below, X is current pixel. Precalculated the fractions into floats.
                 //      X   7
                 //  3   5   1
-                info.CurrentRow[info.X + 1] += returnError * 0.4375f; // 7/16
-                if (info.X > 0) info.NextRow[info.X - 1] += returnError * 0.1875f; // 3/16
-                info.NextRow[info.X] += returnError * 0.3125f; // 3/16
-                info.NextRow[info.X + 1] += returnError * 0.0625f; // 1/16
+                info.CurrentRow[info.X + 1] += returnError * 0.4375f; // 7/16th
+                if (info.X > 0) info.NextRow[info.X - 1] += returnError * 0.1875f; // 3/16th
+                info.NextRow[info.X] += returnError * 0.3125f; // 3/16th
+                info.NextRow[info.X + 1] += returnError * 0.0625f; // 1/16th
 
                 info.X++;
-                if (info.X >= info.Width)
+                if (info.X >= info.Width) // at the end of the row, swap in the next array, and update X and Y.
                 {
                     info.X = 0;
-                    info.Y++;
+                    info.Y++; //  Y is only used for debugging
                     info.NextRow.CopyTo(info.CurrentRow,0);
                     info.NextRow = new float[info.Width+2];
                 }
@@ -102,7 +116,7 @@ namespace ScreenShotTool
             }
             else
             {
-                return (Color.Red, null);
+                throw new InvalidDataException("Error in Dither blend mode: infoObject passed is not of type RowInfo");
             }
         }
 
