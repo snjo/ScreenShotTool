@@ -11,12 +11,39 @@ public class GsHighlight : GsDynamicImage
     public float BlendStrengthRed = 1f;
     public float BlendStrengthBlue = 1f;
     public float BlendStrengthGreen = 1f;
-    public int TintBrightColorsAdjustment = 64;
-    public int TintIntensityAdjustement = 0;
-    public int DitherThreshold = 50;
-    object? blendData = null;
+    private int TintBrightColorsAdjustment = 64;
+    private int TintIntensityAdjustement = 0;
+    private int DitherThreshold = 50;
+    //object? blendData = null;
 
-    
+    public int AdjustmentValue
+    {
+        get 
+        {
+            return blendMode switch
+            {
+                ColorBlend.BlendModes.Tint => TintIntensityAdjustement,
+                ColorBlend.BlendModes.TintBrightColors => TintBrightColorsAdjustment,
+                ColorBlend.BlendModes.Dither => DitherThreshold,
+                _ => 0
+            };
+        }
+        set 
+        {
+            switch (blendMode)
+            {
+                case ColorBlend.BlendModes.Tint:
+                    TintIntensityAdjustement = value;
+                    break;
+                case ColorBlend.BlendModes.TintBrightColors:
+                    TintBrightColorsAdjustment = value;
+                    break;
+                case ColorBlend.BlendModes.Dither:
+                    DitherThreshold = value;
+                    break;
+            }
+        }
+    }
 
     public GsHighlight(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadow, int lineWidth) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadow, lineWidth)
     {
@@ -71,13 +98,11 @@ public class GsHighlight : GsDynamicImage
         using var snoop = new BmpPixelSnoop(SourceImage);
         using var target = new BmpPixelSnoop(highlightedBmp);
 
+        object? blendData = null;
+
         if (blendMode == ColorBlend.BlendModes.Dither)
         {
             blendData = new RowInfo(bmpWidth);
-        }
-        else
-        {
-            blendData = null;
         }
 
         for (int y = 0; y < bmpHeight; y++)
@@ -88,45 +113,7 @@ public class GsHighlight : GsDynamicImage
                 int sampleY = bmpTop + y;
                 if (sampleX < 0 || sampleY < 0 || sampleX >= snoop.Width || sampleY >= snoop.Height) continue;
                 Color sourcePixel = snoop.GetPixel(sampleX, sampleY);
-                int adjustment = 0;
-                switch (blendMode)
-                {
-                    //case ColorBlend.BlendModes.None:
-                    //    break;
-                    //case ColorBlend.BlendModes.Normal:
-                    //    break;
-                    //case ColorBlend.BlendModes.Multiply:
-                    //    break;
-                    //case ColorBlend.BlendModes.Divide:
-                    //    break;
-                    //case ColorBlend.BlendModes.Lighten:
-                    //    break;
-                    //case ColorBlend.BlendModes.Darken:
-                    //    break;
-                    //case ColorBlend.BlendModes.Desaturate:
-                    //    break;
-                    //case ColorBlend.BlendModes.Invert:
-                    //    break;
-                    //case ColorBlend.BlendModes.Average:
-                    //    break;
-                    //case ColorBlend.BlendModes.Contrast:
-                    //    break;
-                    //case ColorBlend.BlendModes.InvertBrightness:
-                    //    break;
-                    case ColorBlend.BlendModes.Tint:
-                        adjustment = TintIntensityAdjustement;
-                        break;
-                    case ColorBlend.BlendModes.TintBrightColors:
-                        adjustment = TintBrightColorsAdjustment;
-                        break;
-                    case ColorBlend.BlendModes.Dither:
-                        adjustment = DitherThreshold;
-                        break;
-                    default:
-                        break;
-                }
-                (Color blended, blendData) = ColorBlend.BlendColors(sourcePixel, FillColor, blendMode, adjustment, blendData);
-
+                (Color blended, blendData) = ColorBlend.BlendColors(sourcePixel, FillColor, blendMode, AdjustmentValue, blendData);
                 target.SetPixel(x, y, ApplyChannel(sourcePixel, blended));
             }
         }

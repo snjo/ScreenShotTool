@@ -986,18 +986,7 @@ public partial class ScreenshotEditor : Form
         symbolBlendMode.numericAdjustmentValue.Enabled = ColorBlend.HasAdjustmentValue(gsHL.blendMode);
         symbolBlendMode.labelAdjustment.Enabled = ColorBlend.HasAdjustmentValue(gsHL.blendMode);
         decimal adjustmentValue = 0;
-        switch (gsHL.blendMode)
-        {
-            case ColorBlend.BlendModes.TintBrightColors:
-                adjustmentValue = gsHL.TintBrightColorsAdjustment;
-                break;
-            case ColorBlend.BlendModes.Tint:
-                adjustmentValue = gsHL.TintIntensityAdjustement;
-                break;
-            case ColorBlend.BlendModes.Dither:
-                adjustmentValue = gsHL.DitherThreshold;
-                break;
-        }
+        adjustmentValue = gsHL.AdjustmentValue;
         SetNumericClamp(symbolBlendMode.numericAdjustmentValue, adjustmentValue);
     }
 
@@ -1145,18 +1134,7 @@ public partial class ScreenshotEditor : Form
                 gsHL.BlendStrengthBlue = (float)symbolBlendMode.numericBlue.Value;
             if (sender == symbolBlendMode.numericAdjustmentValue)
             {
-                switch (gsHL.blendMode)
-                {
-                    case ColorBlend.BlendModes.TintBrightColors:
-                        gsHL.TintBrightColorsAdjustment = symbolBlendMode.numericAdjustmentValue.ValueInt();
-                        break;
-                    case ColorBlend.BlendModes.Tint:
-                        gsHL.TintIntensityAdjustement = symbolBlendMode.numericAdjustmentValue.ValueInt();
-                        break;
-                    case ColorBlend.BlendModes.Dither:
-                        gsHL.DitherThreshold = symbolBlendMode.numericAdjustmentValue.ValueInt();
-                        break;
-                }
+                gsHL.AdjustmentValue = symbolBlendMode.numericAdjustmentValue.ValueInt();
             }
         }
         editorCanvas.UpdateOverlay();
