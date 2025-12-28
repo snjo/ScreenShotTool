@@ -897,13 +897,13 @@ public partial class ScreenshotEditor : Form
                     case GsNumbered gsNumbered:
                         UpdatePropertiesGsNumbered(panelLeft, ref lastPanelBottom, gsNumbered);
                         break;
-                    case GsImage gsI:
-                        UpdatePropertiesGsImage(panelLeft, ref lastPanelBottom, gsI);
+                    case GsImage gsImage:
+                        UpdatePropertiesGsImage(panelLeft, ref lastPanelBottom, gsImage);
                         break;
-                    case GsPolygon gsP:
-                        UpdatePropertiesGsPolygon(panelLeft, ref lastPanelBottom, gsP);
+                    case GsPolygon gsPolygon:
+                        UpdatePropertiesGsPolygon(panelLeft, ref lastPanelBottom, gsPolygon);
                         break;
-                    case GsBoundingBox:
+                    case GsBoundingBox: // must be after all other symbols that inherit from GsBoundingBox, this is a fallback if a more specific Gs isn't defined
                         UpdatePropertiesGsBoundingBox(panelLeft, ref lastPanelBottom);
                         break;
                     case GsLine:
