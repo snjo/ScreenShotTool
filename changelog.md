@@ -1,8 +1,10 @@
 ﻿## Changelog
 
 ## 2.6 (In progress)
-- Added category filter to tag list. New tags automatically get assigned the current filter as category name.
-- Added higlight blend modes "Tint" and "Tint Bright Colors"
+- Added category filter to the Tag list. New tags automatically get assigned the current filter as category name.
+- Added higlight blend modes "Tint", "Tint Bright Colors" and "Dither"
+- Some blend modes transparency can now be set by the selected fill color's alpha
+- Fixed color picker showing solid colors with transparency
 
 ## 2.5
 - Trim the number of thumbnails in the list periodically, based on max thumbs setting
