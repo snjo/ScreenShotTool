@@ -880,91 +880,36 @@ public partial class ScreenshotEditor : Form
                 symbolShadows.checkBoxShadow.Checked = graphicSymbol.ShadowEnabled;
                 symbolOrganize.buttonDeleteSymbol.Tag = graphicSymbol;
 
-                if (graphicSymbol is GsText gsText)
+                switch (graphicSymbol)
                 {
-                    EnablePanel(symbolLineColor, panelLeft, ref lastPanelBottom);
-                    EnablePanel(symbolFont, panelLeft, ref lastPanelBottom);
-                    EnablePanel(symbolShadows, panelLeft, ref lastPanelBottom);
-
-                    symbolPosition.numericWidth.Enabled = false;
-                    symbolPosition.numericHeight.Enabled = false;
-                    symbolLineColor.numericLineWeight.Enabled = false;
-
-                    symbolFont.textBoxSymbolText.Text = gsText.Text;
-                    if (gsText.ListViewItem != null)
-                    {
-                        string displayText = gsText.Text[..Math.Min(gsText.Text.Length, 20)];
-                        gsText.ListViewItem.Text = "Text: " + displayText;
-                    }
-                    symbolFont.comboBoxFontFamily.Text = gsText.fontFamily.Name;
-                    symbolFont.numericPropertiesFontSize.Value = (int)Math.Clamp(gsText.fontEmSize, minimumFontSize, maxFontSize);
-                    symbolFont.checkBoxFontBold.Checked = (gsText.fontStyle & FontStyle.Bold) != 0;
-                    symbolFont.checkBoxFontItalic.Checked = (gsText.fontStyle & FontStyle.Italic) != 0;
-                    symbolFont.checkBoxStrikeout.Checked = (gsText.fontStyle & FontStyle.Strikeout) != 0;
-                    symbolFont.checkBoxUnderline.Checked = (gsText.fontStyle & FontStyle.Underline) != 0;
+                    case GsText gsText:
+                        UpdatePropertiesGsText(panelLeft, ref lastPanelBottom, gsText);
+                        break;
+                    case GsHighlight gsHL:
+                        UpdatePropertiesGsHighlight(panelLeft, ref lastPanelBottom, gsHL);
+                        break;
+                    case GsBlur gsBlur:
+                        UpdatePropertiesGsBlur(panelLeft, ref lastPanelBottom, gsBlur);
+                        break;
+                    case GsCrop:
+                        UpdatePropertiesGsCrop(panelLeft, ref lastPanelBottom);
+                        break;
+                    case GsNumbered gsNumbered:
+                        UpdatePropertiesGsNumbered(panelLeft, ref lastPanelBottom, gsNumbered);
+                        break;
+                    case GsImage gsI:
+                        UpdatePropertiesGsImage(panelLeft, ref lastPanelBottom, gsI);
+                        break;
+                    case GsPolygon gsP:
+                        UpdatePropertiesGsPolygon(panelLeft, ref lastPanelBottom, gsP);
+                        break;
+                    case GsBoundingBox:
+                        UpdatePropertiesGsBoundingBox(panelLeft, ref lastPanelBottom);
+                        break;
+                    case GsLine:
+                        UpdatePropertiesLine(panelLeft, ref lastPanelBottom);
+                        break;
                 }
-                else if (graphicSymbol is GsHighlight gsHL)
-                {
-                    EnablePanel(symbolFillColor, panelLeft, ref lastPanelBottom);
-                    EnablePanel(symbolBlendMode, panelLeft, ref lastPanelBottom);
-                    symbolBlendMode.comboBoxBlendMode.Text = gsHL.blendMode.ToString();
-
-                    SetNumericClamp(symbolBlendMode.numericRed, (decimal)gsHL.BlendStrengthRed);
-                    SetNumericClamp(symbolBlendMode.numericGreen, (decimal)gsHL.BlendStrengthGreen);
-                    SetNumericClamp(symbolBlendMode.numericBlue, (decimal)gsHL.BlendStrengthBlue);
-                    UpdateBlendModeAdjustment(gsHL);
-                }
-                else if (graphicSymbol is GsBlur gsb)
-                {
-                    EnablePanel(symbolMosaic, panelLeft, ref lastPanelBottom);
-                    symbolMosaic.numericBlurMosaicSize.SetValueClamped(gsb.MosaicSize);
-                }
-                else if (graphicSymbol is GsCrop)
-                {
-                    EnablePanel(symbolCrop, panelLeft, ref lastPanelBottom);
-                }
-                else if (graphicSymbol is GsNumbered gsNumbered)
-                {
-                    EnablePanel(symbolFillColor, panelLeft, ref lastPanelBottom);
-                    EnablePanel(symbolLineColor, panelLeft, ref lastPanelBottom);
-                    EnablePanel(symbolShadows, panelLeft, ref lastPanelBottom);
-                    EnablePanel(symbolNumbered, panelLeft, ref lastPanelBottom);
-                    symbolPosition.numericHeight.Enabled = false;
-                    if (gsNumbered.ListViewItem != null)
-                    {
-                        gsNumbered.ListViewItem.Text = "Number: " + gsNumbered.Text; // Number;
-                    }
-                    symbolNumbered.checkBoxAuto.Checked = gsNumbered.AutoNumber;
-                    symbolNumbered.NumberText.Enabled = !gsNumbered.AutoNumber;
-                    symbolNumbered.NumberText.Text = gsNumbered.Text;
-                }
-                else if (graphicSymbol is GsImage gsI)
-                {
-                    EnablePanel(symbolImage, panelLeft, ref lastPanelBottom);
-                    EnablePanel(symbolShadows, panelLeft, ref lastPanelBottom);
-                    SetNumericClamp(symbolImage.numericRotation, (decimal)gsI.Rotation % 360);
-                }
-                else if (graphicSymbol is GsPolygon gsP)
-                {
-                    EnablePanel(symbolFillColor, panelLeft, ref lastPanelBottom);
-                    EnablePanel(symbolLineColor, panelLeft, ref lastPanelBottom);
-                    EnablePanel(symbolCurve, panelLeft, ref lastPanelBottom);
-                    EnablePanel(symbolShadows, panelLeft, ref lastPanelBottom);
-                    symbolCurve.checkBoxCloseCurve.Checked = gsP.closedCurve;
-                    symbolCurve.numericCurveTension.Value = (decimal)gsP.curveTension;
-                }
-                else if (graphicSymbol is GsBoundingBox) // must be after all other symbols that inherit from GsBoundingBox
-                {
-                    EnablePanel(symbolFillColor, panelLeft, ref lastPanelBottom);
-                    EnablePanel(symbolLineColor, panelLeft, ref lastPanelBottom);
-                    EnablePanel(symbolShadows, panelLeft, ref lastPanelBottom);
-                }
-                else if (graphicSymbol is GsLine)
-                {
-                    EnablePanel(symbolLineColor, panelLeft, ref lastPanelBottom);
-                    EnablePanel(symbolShadows, panelLeft, ref lastPanelBottom);
-                }
-
 
                 EnablePanel(symbolOrganize, panelLeft, ref lastPanelBottom);
 
@@ -979,6 +924,100 @@ public partial class ScreenshotEditor : Form
             DisableAllPanels();
             ClearPropertyPanelValues();
         }
+    }
+
+    private void UpdatePropertiesLine(int panelLeft, ref int lastPanelBottom)
+    {
+        EnablePanel(symbolLineColor, panelLeft, ref lastPanelBottom);
+        EnablePanel(symbolShadows, panelLeft, ref lastPanelBottom);
+    }
+
+    private void UpdatePropertiesGsBoundingBox(int panelLeft, ref int lastPanelBottom)
+    {
+        EnablePanel(symbolFillColor, panelLeft, ref lastPanelBottom);
+        EnablePanel(symbolLineColor, panelLeft, ref lastPanelBottom);
+        EnablePanel(symbolShadows, panelLeft, ref lastPanelBottom);
+    }
+
+    private void UpdatePropertiesGsPolygon(int panelLeft, ref int lastPanelBottom, GsPolygon gsP)
+    {
+        EnablePanel(symbolFillColor, panelLeft, ref lastPanelBottom);
+        EnablePanel(symbolLineColor, panelLeft, ref lastPanelBottom);
+        EnablePanel(symbolCurve, panelLeft, ref lastPanelBottom);
+        EnablePanel(symbolShadows, panelLeft, ref lastPanelBottom);
+        symbolCurve.checkBoxCloseCurve.Checked = gsP.closedCurve;
+        symbolCurve.numericCurveTension.Value = (decimal)gsP.curveTension;
+    }
+
+    private void UpdatePropertiesGsImage(int panelLeft, ref int lastPanelBottom, GsImage gsI)
+    {
+        EnablePanel(symbolImage, panelLeft, ref lastPanelBottom);
+        EnablePanel(symbolShadows, panelLeft, ref lastPanelBottom);
+        SetNumericClamp(symbolImage.numericRotation, (decimal)gsI.Rotation % 360);
+    }
+
+    private void UpdatePropertiesGsNumbered(int panelLeft, ref int lastPanelBottom, GsNumbered gsNumbered)
+    {
+        EnablePanel(symbolFillColor, panelLeft, ref lastPanelBottom);
+        EnablePanel(symbolLineColor, panelLeft, ref lastPanelBottom);
+        EnablePanel(symbolShadows, panelLeft, ref lastPanelBottom);
+        EnablePanel(symbolNumbered, panelLeft, ref lastPanelBottom);
+        symbolPosition.numericHeight.Enabled = false;
+        if (gsNumbered.ListViewItem != null)
+        {
+            gsNumbered.ListViewItem.Text = "Number: " + gsNumbered.Text; // Number;
+        }
+        symbolNumbered.checkBoxAuto.Checked = gsNumbered.AutoNumber;
+        symbolNumbered.NumberText.Enabled = !gsNumbered.AutoNumber;
+        symbolNumbered.NumberText.Text = gsNumbered.Text;
+    }
+
+    private void UpdatePropertiesGsCrop(int panelLeft, ref int lastPanelBottom)
+    {
+        EnablePanel(symbolCrop, panelLeft, ref lastPanelBottom);
+    }
+
+    private void UpdatePropertiesGsBlur(int panelLeft, ref int lastPanelBottom, GsBlur gsb)
+    {
+        EnablePanel(symbolMosaic, panelLeft, ref lastPanelBottom);
+        symbolMosaic.numericBlurMosaicSize.SetValueClamped(gsb.MosaicSize);
+    }
+
+    private void  UpdatePropertiesGsHighlight(int panelLeft, ref int lastPanelBottom, GsHighlight gsHL)
+    {
+        EnablePanel(symbolFillColor, panelLeft, ref lastPanelBottom);
+        EnablePanel(symbolBlendMode, panelLeft, ref lastPanelBottom);
+        symbolBlendMode.comboBoxBlendMode.Text = gsHL.blendMode.ToString();
+
+        SetNumericClamp(symbolBlendMode.numericRed, (decimal)gsHL.BlendStrengthRed);
+        SetNumericClamp(symbolBlendMode.numericGreen, (decimal)gsHL.BlendStrengthGreen);
+        SetNumericClamp(symbolBlendMode.numericBlue, (decimal)gsHL.BlendStrengthBlue);
+        UpdateBlendModeAdjustment(gsHL);
+    }
+
+    private void UpdatePropertiesGsText(int panelLeft, ref int lastPanelBottom, GsText gsText)
+    {
+        EnablePanel(symbolLineColor, panelLeft, ref lastPanelBottom);
+        EnablePanel(symbolFont, panelLeft, ref lastPanelBottom);
+        EnablePanel(symbolShadows, panelLeft, ref lastPanelBottom);
+
+        symbolPosition.numericWidth.Enabled = false;
+        symbolPosition.numericHeight.Enabled = false;
+        symbolLineColor.numericLineWeight.Enabled = false;
+
+        symbolFont.textBoxSymbolText.Text = gsText.Text;
+        if (gsText.ListViewItem != null)
+        {
+            string displayText = gsText.Text[..Math.Min(gsText.Text.Length, 20)];
+            gsText.ListViewItem.Text = "Text: " + displayText;
+        }
+        symbolFont.comboBoxFontFamily.Text = gsText.fontFamily.Name;
+        symbolFont.numericPropertiesFontSize.Value = (int)Math.Clamp(gsText.fontEmSize, minimumFontSize, maxFontSize);
+        symbolFont.checkBoxFontBold.Checked = (gsText.fontStyle & FontStyle.Bold) != 0;
+        symbolFont.checkBoxFontItalic.Checked = (gsText.fontStyle & FontStyle.Italic) != 0;
+        symbolFont.checkBoxStrikeout.Checked = (gsText.fontStyle & FontStyle.Strikeout) != 0;
+        symbolFont.checkBoxUnderline.Checked = (gsText.fontStyle & FontStyle.Underline) != 0;
+        //return lastPanelBottom;
     }
 
     private void UpdateBlendModeAdjustment(GsHighlight gsHL)
