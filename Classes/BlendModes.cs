@@ -1,8 +1,4 @@
-﻿using System.Diagnostics;
-using System.Reflection.Metadata.Ecma335;
-using static ScreenShotTool.ColorBlend;
-
-namespace ScreenShotTool
+﻿namespace ScreenShotTool
 {
     public class ColorBlend
     {
@@ -88,7 +84,7 @@ namespace ScreenShotTool
                 float brightness = color1.GetBrightness();
                 float corrected = (brightness + pixelError); // current brightness plus the remaining error diffusion from previous pixels
 
-                float thresholdNormalized = (threshold * 0.03f)-1f; // convert threshold input from 0 to 100 into -1 to +2, where 50 is 0.5
+                float thresholdNormalized = (threshold * 0.03f) - 1f; // convert threshold input from 0 to 100 into -1 to +2, where 50 is 0.5
                 if (corrected > thresholdNormalized)
                 {
                     resultBrightness = 1;
@@ -111,8 +107,8 @@ namespace ScreenShotTool
                 {
                     info.X = 0;
                     info.Y++; //  Y is only used for debugging
-                    info.NextRow.CopyTo(info.CurrentRow,0);
-                    info.NextRow = new float[info.Width+2];
+                    info.NextRow.CopyTo(info.CurrentRow, 0);
+                    info.NextRow = new float[info.Width + 2];
                 }
                 return (resultColor, info);
             }
@@ -268,7 +264,7 @@ namespace ScreenShotTool
             // (or tinting bright backgrounds but not the colored/dark text in front)
             // the higher the adjustment value, the less it will affect brighter colors, but also giving a more washed out color.
 
-            
+
             int R2 = Math.Max(adjustment, color2.R);
             int G2 = Math.Max(adjustment, color2.G);
             int B2 = Math.Max(adjustment, color2.B);
@@ -295,11 +291,11 @@ namespace ScreenShotTool
 
             //float color2Alpha = ((float)color2.A) / 255f;
             double H = hue2;
-            double S = Double.Lerp(sat1,sat2, adjNormalized);
-            double V = Math.Min(val1,Double.Lerp(val1, val2, adjNormalized));
+            double S = Double.Lerp(sat1, sat2, adjNormalized);
+            double V = Math.Min(val1, Double.Lerp(val1, val2, adjNormalized));
             return ColorTools.MixColors(color1, ColorTools.ColorFromHSV(H, S, V), color2.A);
         }
 
-        
+
     }
 }

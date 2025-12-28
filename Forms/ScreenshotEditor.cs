@@ -983,7 +983,7 @@ public partial class ScreenshotEditor : Form
         symbolMosaic.numericBlurMosaicSize.SetValueClamped(gsb.MosaicSize);
     }
 
-    private void  UpdatePropertiesGsHighlight(int panelLeft, ref int lastPanelBottom, GsHighlight gsHL)
+    private void UpdatePropertiesGsHighlight(int panelLeft, ref int lastPanelBottom, GsHighlight gsHL)
     {
         EnablePanel(symbolFillColor, panelLeft, ref lastPanelBottom);
         EnablePanel(symbolBlendMode, panelLeft, ref lastPanelBottom);

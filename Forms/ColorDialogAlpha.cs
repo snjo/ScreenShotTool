@@ -16,8 +16,6 @@ public partial class ColorDialogAlpha : Form
     {
         InitializeComponent();
         Initialize(startColor);
-
-        //Debug.WriteLine($"Swatch size: {SwatchSize}, in panelSwatches size: {panelSwatches.Size}");
     }
 
     public ColorDialogAlpha(Color startColor, Point location)
@@ -60,11 +58,9 @@ public partial class ColorDialogAlpha : Form
                 swatchButton.BackColor = newColor;
                 if (newColor == Color.Transparent) swatchButton.Text = "T";
                 panelSwatches.Controls.Add(swatchButton);
-                //Debug.WriteLine($"Added color swatch {swatchCount}: {newColor.Name}");
                 swatchCount++;
             }
         }
-        //Debug.WriteLine($"Added {swatchCount} swatches");
     }
 
     private static List<Color> GetAllColors(bool includeUIColors)
@@ -113,18 +109,6 @@ public partial class ColorDialogAlpha : Form
         return rearrangedColors;
     }
 
-    //private static void MoveColorByName(List<Color> oldList, List<Color> newList, string name)
-    //{
-    //    for (int i = oldList.Count - 1; i > -1; i--)
-    //    {
-    //        Color color = oldList[i];
-    //        if (color.Name.Contains(name))
-    //        {
-    //            MoveToList(oldList, newList, color);
-    //        }
-    //    }
-    //}
-
     private static List<Color> OrderColorByHue(List<Color> colors)
     {
         // https://stackoverflow.com/questions/62203098/c-sharp-how-do-i-order-a-list-of-colors-in-the-order-of-a-rainbow
@@ -142,7 +126,6 @@ public partial class ColorDialogAlpha : Form
 
     private void ClickSwatch(object? sender, EventArgs e)
     {
-        Debug.WriteLine("Single clicked swatch, use color");
         if (sender is Button button)
         {
             UpateColor(button.BackColor);
@@ -179,7 +162,6 @@ public partial class ColorDialogAlpha : Form
 
     private void UpateColor(Color newColor)
     {
-        //Debug.WriteLine($"Setting color: {this.Color}");
         panelColorSampleSolid.BackColor = Color.FromArgb(255, newColor.R, newColor.G, newColor.B);
         if (newColor == Color.Transparent)
         {
@@ -212,16 +194,7 @@ public partial class ColorDialogAlpha : Form
 
     private void ButtonColorPicker_Click(object sender, EventArgs e)
     {
-        //ImageView imgView = ImageView.CreateUsingCurrentScreen(ImageView.ViewerMode.colorPicker);
         ImageView imgView = ImageView.CreateUsingAllScreens(ImageView.ViewerMode.colorPicker);
-        {
-            //Location = new Point(screen.Bounds.X, screen.Bounds.Y),
-            //CompleteCaptureOnMouseRelease = settings.RegionCompletesOnMouseRelease,
-            //SaveToFile = settings.RegionToFile,
-            //SendToEditor = settings.RegionToEditor,
-            //SendToClipboard = settings.RegionToClipboard,
-        }
-        ;
         imgView.SetImage();
         DialogResult result = imgView.ShowDialog();
         if (result == DialogResult.OK || result == DialogResult.Yes)

@@ -18,7 +18,7 @@ public class GsHighlight : GsDynamicImage
 
     public int AdjustmentValue
     {
-        get 
+        get
         {
             return blendMode switch
             {
@@ -28,7 +28,7 @@ public class GsHighlight : GsDynamicImage
                 _ => 0
             };
         }
-        set 
+        set
         {
             switch (blendMode)
             {
