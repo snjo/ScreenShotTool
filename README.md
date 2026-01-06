@@ -78,7 +78,7 @@ Save to file, open in Editor or copy to clipboard based on options (Options > Mo
 
 ## All Screens capture
 
-Captures all screen in a single image.
+Captures all screens in a single image.
 Save to file, open in Editor or copy to clipboard based on options (Options > Modes: Window)
 
 --------------------------------------------------------------------------------------
