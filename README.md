@@ -152,10 +152,13 @@ Tags are used for adding info to the file or folder name that can be changed on 
 
 To create and enable tags, use the Edit Tags window (Main window > Edit > Edit Tags).
 
-Tags have three parts:
+Tags have four parts:
 - The checkbox enables the tag
-- The Name field is what is output in the `$TAG`
-- The Description field is just for adding an explanatary note to yourself, and is not used in `$TAG` output
+- The Name is what is output in the `$TAG`
+- The Description is for adding an explanatary note to yourself, and is not used in `$TAG` output
+- The Category is used for filtering the list. You can set the filter using the Filter text box. Any new tags created will have the category pre-filled with the current filter text.
+
+*The Description and Category fields are optional.*
 
 When `$TAG` is present in the file or folder name setting, any enabled tags will be added in the name. If there are multiple active tag, they are separated with comma.
 
