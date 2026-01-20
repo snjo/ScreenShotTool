@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             panelPropertiesText = new Panel();
+            label1 = new Label();
+            comboBoxTextRenderingHint = new ComboBox();
             buttonPropertiesEditText = new Button();
             checkBoxUnderline = new CheckBox();
             checkBoxStrikeout = new CheckBox();
@@ -46,6 +48,8 @@
             // panelPropertiesText
             // 
             panelPropertiesText.BorderStyle = BorderStyle.FixedSingle;
+            panelPropertiesText.Controls.Add(label1);
+            panelPropertiesText.Controls.Add(comboBoxTextRenderingHint);
             panelPropertiesText.Controls.Add(buttonPropertiesEditText);
             panelPropertiesText.Controls.Add(checkBoxUnderline);
             panelPropertiesText.Controls.Add(checkBoxStrikeout);
@@ -59,8 +63,27 @@
             panelPropertiesText.Dock = DockStyle.Fill;
             panelPropertiesText.Location = new Point(0, 0);
             panelPropertiesText.Name = "panelPropertiesText";
-            panelPropertiesText.Size = new Size(170, 164);
+            panelPropertiesText.Size = new Size(170, 211);
             panelPropertiesText.TabIndex = 103;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(5, 164);
+            label1.Name = "label1";
+            label1.Size = new Size(116, 15);
+            label1.TabIndex = 47;
+            label1.Text = "Text rendering mode";
+            // 
+            // comboBoxTextRenderingHint
+            // 
+            comboBoxTextRenderingHint.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxTextRenderingHint.FormattingEnabled = true;
+            comboBoxTextRenderingHint.Items.AddRange(new object[] { "SystemDefault", "ClearTypeGridFit", "AntiAliasGridFit", "AntiAlias", "SingleBitPerPixelGridFit", "SingleBitPerPixel" });
+            comboBoxTextRenderingHint.Location = new Point(2, 182);
+            comboBoxTextRenderingHint.Name = "comboBoxTextRenderingHint";
+            comboBoxTextRenderingHint.Size = new Size(162, 23);
+            comboBoxTextRenderingHint.TabIndex = 46;
             // 
             // buttonPropertiesEditText
             // 
@@ -161,7 +184,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(panelPropertiesText);
             Name = "SymbolFont";
-            Size = new Size(170, 164);
+            Size = new Size(170, 211);
             panelPropertiesText.ResumeLayout(false);
             panelPropertiesText.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numericPropertiesFontSize).EndInit();
@@ -181,5 +204,7 @@
         internal NumericUpDown numericPropertiesFontSize;
         internal ComboBox comboBoxFontFamily;
         internal TextBox textBoxSymbolText;
+        private Label label1;
+        internal ComboBox comboBoxTextRenderingHint;
     }
 }
