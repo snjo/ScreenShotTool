@@ -737,7 +737,10 @@ public partial class ScreenshotEditor : Form
         symbolFont.checkBoxFontItalic.Click += FontStyle_CheckedChanged;
         symbolFont.checkBoxUnderline.Click += FontStyle_CheckedChanged;
         symbolFont.checkBoxStrikeout.Click += FontStyle_CheckedChanged;
+        symbolFont.comboBoxTextRenderingHint.SelectedIndexChanged += ComboBoxTextRenderingHint_ValueMemberChanged;
     }
+
+
     #endregion
 
     #region Enable/Disable Properties panels ------------------------------------------------------------
@@ -1017,6 +1020,7 @@ public partial class ScreenshotEditor : Form
         symbolFont.checkBoxFontItalic.Checked = (gsText.fontStyle & FontStyle.Italic) != 0;
         symbolFont.checkBoxStrikeout.Checked = (gsText.fontStyle & FontStyle.Strikeout) != 0;
         symbolFont.checkBoxUnderline.Checked = (gsText.fontStyle & FontStyle.Underline) != 0;
+        symbolFont.comboBoxTextRenderingHint.Text = gsText.TextRenderingHintName;
         //return lastPanelBottom;
     }
 
@@ -1257,6 +1261,16 @@ public partial class ScreenshotEditor : Form
                 textSymbol.fontFamily = value;
                 textSymbol.UpdateFont();
             }
+        }
+        editorCanvas.UpdateOverlay();
+    }
+
+    private void ComboBoxTextRenderingHint_ValueMemberChanged(object? sender, EventArgs e)
+    {
+        GsText? textSymbol = GetSelectedTextSymbol();
+        if (textSymbol != null)
+        {
+            textSymbol.TextRenderingHintName = symbolFont.comboBoxTextRenderingHint.Text;
         }
         editorCanvas.UpdateOverlay();
     }

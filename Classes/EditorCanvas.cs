@@ -284,7 +284,7 @@ public class EditorCanvas(ScreenshotEditor parent, PictureBox pictureBox)
         overlayGraphics = Graphics.FromImage(imageInProgress);
 
         overlayGraphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-        overlayGraphics.TextRenderingHint = TextRenderingHint.AntiAlias;
+        overlayGraphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
 
         DrawElements(overlayGraphics, temporarySymbol, ShowNonOutputWidgets: highlightSelected);
 

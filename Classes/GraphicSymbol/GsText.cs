@@ -12,6 +12,8 @@ public class GsText : GraphicSymbol
     public string Text = "Text";
     readonly int maxFontSize;
     readonly int minFontSize;
+    private System.Drawing.Text.TextRenderingHint TextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
+    public string TextRenderingHintName = "AntiAliasGridFit";
 
     public GsText(Point startPoint, Point endPoint, Color foregroundColor, Color backgroundColor, bool shadowEnabled) : base(startPoint, endPoint, foregroundColor, backgroundColor, shadowEnabled)
     {
@@ -65,11 +67,34 @@ public class GsText : GraphicSymbol
             //graphic.PageUnit = GraphicsUnit.Pixel;
             //StringFormat stringFormat = new StringFormat();
             //stringFormat.FormatFlags = StringFormatFlags.NoWrap;
+            System.Drawing.Text.TextRenderingHint previousRenderer = graphic.TextRenderingHint;
+            graphic.TextRenderingHint = GetTextRenderingHint(TextRenderingHintName);
             graphic.DrawString(Text, font, tempBrush, new PointF(Left + offset.X, Top + offset.Y));
             SizeF sizeInPixels = graphic.MeasureString(Text, font);
             Width = (int)sizeInPixels.Width;
             Height = (int)sizeInPixels.Height;
+            graphic.TextRenderingHint = previousRenderer;
         }
+    }
+
+    private System.Drawing.Text.TextRenderingHint GetTextRenderingHint(string name)
+    {
+        // SystemDefault
+        // SingleBitPerPixelGridFit
+        // SingleBitPerPixel
+        // AntiAlias
+        // AntiAliasGridFit
+        // ClearTypeGridFit
+        switch (name)
+        {
+            case "SystemDefault": return System.Drawing.Text.TextRenderingHint.SystemDefault;
+            case "SingleBitPerPixelGridFit": return System.Drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
+            case "SingleBitPerPixel": return System.Drawing.Text.TextRenderingHint.SingleBitPerPixel;
+            case "AntiAlias": return System.Drawing.Text.TextRenderingHint.AntiAlias;
+            case "AntiAliasGridFit": return System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
+            case "ClearTypeGridFit": return System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+        }
+        return TextRenderingHint;
     }
 
     internal override void UpdatePen()

@@ -5,6 +5,7 @@
 - Added higlight blend modes "Tint", "Tint Bright Colors" and "Dither"
 - Some blend modes transparency can now be set by the selected fill color's alpha
 - Fixed color picker showing solid colors with transparency
+- Added text rendering anti alias options.
 
 ## 2.5
 - Trim the number of thumbnails in the list periodically, based on max thumbs setting
