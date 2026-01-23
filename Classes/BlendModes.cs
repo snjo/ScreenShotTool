@@ -247,10 +247,7 @@ namespace ScreenShotTool
             //color2 GREEN channel is used to transition between using SOURCE SATURATION and IMPROVED SATURATION, allowing for bright colors to move toward whites
             //color2 BLUE channel is not used
             // using RED and GREEN because that matches the default Yellow highlighter values and gives the prettiest result.
-            double hue;
-            double saturation;
-            double brightness;
-            ColorTools.ColorToHSV(color1, out hue, out saturation, out brightness);
+            ColorTools.ColorToHSV(color1, out double hue, out double saturation, out double brightness);
             double perceptualBrightness = ColorTools.ColorBrightness(color1);
             double brightnessInvert1 = 1 - brightness;
             double brightnessInvert2 = 1 - perceptualBrightness;
@@ -292,7 +289,7 @@ namespace ScreenShotTool
             //    0 tints while keeping saturation and value intact (brighter, desaturated and tinted).
             //    1 mutes bright values down to color2's value (like an overlay film)
 
-            ColorTools.ColorToHSV(color1, out double hue1, out double sat1, out double val1);
+            ColorTools.ColorToHSV(color1, out _, out double sat1, out double val1);
             ColorTools.ColorToHSV(color2, out double hue2, out double sat2, out double val2);
 
             //float color2Alpha = ((float)color2.A) / 255f;
