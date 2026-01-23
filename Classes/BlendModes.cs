@@ -1,4 +1,6 @@
-﻿namespace ScreenShotTool
+﻿using System.Diagnostics;
+
+namespace ScreenShotTool
 {
     public class ColorBlend
     {
@@ -54,7 +56,7 @@
                 BlendModes.InvertBrightness => (InvertBrighness(color1, color2), null),
                 BlendModes.Tint => (Tint(color1, color2, adjustment), null),
                 BlendModes.TintBrightColors => (TintBrightColors(color1, color2, adjustment), null),
-                BlendModes.Average => (Average(color1, color2), null), // same as Normal with 50% opacity
+                BlendModes.Average => (Average(color1, color2), null), // same effect as doing Normal with 50% opacity
                 BlendModes.Contrast => (Contrast(color1, color2), null),
                 BlendModes.Dither => Dither(color1, color2, infoObject, adjustment),
                 _ => (color1, null)
@@ -91,7 +93,6 @@
                     resultColor = Color.White;
                 }
                 float returnError = (corrected - resultBrightness) + (brightness - resultBrightness); // use the current error plus remnant from the diffused error so it can build over time
-                //if (returnError > 1 || returnError < -1) Debug.WriteLine($"return error at x{info.X} y{info.Y} is {returnError}");
                 returnError = Math.Clamp(returnError, -1f, 1f); //  without this the threshold value will be ineffective, as the error keeps being fixed automatically
 
                 // dithering ratio, output error * 1/16th on pixels to the right and below, X is current pixel. Precalculated the fractions into floats.
@@ -102,19 +103,24 @@
                 info.NextRow[info.X] += returnError * 0.3125f; // 3/16th
                 info.NextRow[info.X + 1] += returnError * 0.0625f; // 1/16th
 
-                info.X++;
-                if (info.X >= info.Width) // at the end of the row, swap in the next array, and update X and Y.
-                {
-                    info.X = 0;
-                    info.Y++; //  Y is only used for debugging
-                    info.NextRow.CopyTo(info.CurrentRow, 0);
-                    info.NextRow = new float[info.Width + 2];
-                }
+                MoveRowInfoHead(info);
                 return (resultColor, info);
             }
             else
             {
                 throw new InvalidDataException("Error in Dither blend mode: infoObject passed is not of type RowInfo");
+            }
+        }
+
+        internal static void MoveRowInfoHead(RowInfo info)
+        {
+            info.X++;
+            if (info.X >= info.Width) // at the end of the row, swap in the next array, and update X and Y.
+            {
+                info.X = 0;
+                info.Y++; //  Y is only used for debugging
+                info.NextRow.CopyTo(info.CurrentRow, 0);
+                info.NextRow = new float[info.Width + 2];
             }
         }
 

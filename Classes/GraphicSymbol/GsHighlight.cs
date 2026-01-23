@@ -1,4 +1,6 @@
-﻿namespace ScreenShotTool;
+﻿using System.Diagnostics;
+
+namespace ScreenShotTool;
 #pragma warning disable CA1416 // Validate platform compatibility
 public class GsHighlight : GsDynamicImage
 {
@@ -86,10 +88,9 @@ public class GsHighlight : GsDynamicImage
         if (SourceImage == null) return;
         highlightedBmp.DisposeAndNull();
         highlightedBmp = new Bitmap(rect.Width, rect.Height);
-        //int bmpLeft = Math.Max(0, Left);
-        //int bmpTop = Math.Max(0, Top);
         int bmpLeft = Left;
         int bmpTop = Top;
+        
         int bmpRight = Math.Min(SourceImage.Width, Right);
         int bmpBottom = Math.Min(SourceImage.Height, Bottom);
         int bmpWidth = bmpRight - bmpLeft;
@@ -102,7 +103,7 @@ public class GsHighlight : GsDynamicImage
 
         if (blendMode == ColorBlend.BlendModes.Dither)
         {
-            blendData = new RowInfo(bmpWidth);
+            blendData = new RowInfo(bmpWidth, bmpLeft, bmpRight);
         }
 
         for (int y = 0; y < bmpHeight; y++)
@@ -111,10 +112,20 @@ public class GsHighlight : GsDynamicImage
             {
                 int sampleX = bmpLeft + x;
                 int sampleY = bmpTop + y;
-                if (sampleX < 0 || sampleY < 0 || sampleX >= snoop.Width || sampleY >= snoop.Height) continue;
+
+                if (sampleX < 0 || sampleY < 0 || sampleX >= snoop.Width || sampleY >= snoop.Height)
+                {
+                    // outside bounds
+                    if (blendMode == ColorBlend.BlendModes.Dither && blendData is RowInfo rinfo)
+                    {
+                        ColorBlend.MoveRowInfoHead(rinfo); // must move the dither x/y head since the BlendColors function is skipped
+                    }
+                    continue;
+                }
                 Color sourcePixel = snoop.GetPixel(sampleX, sampleY);
                 (Color blended, blendData) = ColorBlend.BlendColors(sourcePixel, FillColor, blendMode, AdjustmentValue, blendData);
                 target.SetPixel(x, y, ApplyChannel(sourcePixel, blended));
+                
             }
         }
     }
