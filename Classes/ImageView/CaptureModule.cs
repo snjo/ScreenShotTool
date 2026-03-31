@@ -189,6 +189,7 @@ public class CaptureModule : ImageViewModule
 
     public override void MouseUp(MouseEventArgs e)
     {
+        //Debug.WriteLine($"Mouse up: {regionRect} in {ScreenBounds}");
         mouseDrag = false;
         CloneRegionImage();
 
@@ -292,13 +293,59 @@ public class CaptureModule : ImageViewModule
 
     private void CloneRegionImage()
     {
+        
         if (regionRect.Width > 0 && regionRect.Height > 0)
         {
             Bitmap regionBmp;
             regionBmp = new Bitmap(parentForm.pictureBoxScreenshot.Image);
+            regionRect = MakeSafeRegion(regionRect, new Rectangle(0,0,regionBmp.Width,regionBmp.Height)); // check that the region selected from the screenshot is within the screenshot bounds
             ImageResult = regionBmp.Clone(regionRect, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             regionBmp.Dispose();
         }
+    }
+
+    private Rectangle MakeSafeRegion(Rectangle regionRect, Rectangle screenBounds)
+    {
+        //Debug.WriteLine($"RegionRect: {regionRect}, screenBounds: {screenBounds} ");
+        int leftmost = regionRect.Left;
+        int topmost = regionRect.Top;
+        int rightmost = regionRect.Right;
+        int bottommost = regionRect.Bottom;
+        int width = regionRect.Width;
+        int height = regionRect.Height;
+        if (leftmost < screenBounds.Left)
+        {
+            Debug.WriteLine($"left corrected from {leftmost} to {screenBounds.Left}");
+            leftmost = screenBounds.Left;
+        }
+        if (topmost < screenBounds.Top)
+        {
+            Debug.WriteLine($"top corrected from {topmost} to {screenBounds.Top}");
+            topmost = screenBounds.Top;
+        }
+        if (rightmost > screenBounds.Right)
+        {
+            Debug.WriteLine($"right corrected from {rightmost} to {screenBounds.Right}");
+            rightmost = screenBounds.Right;
+        }
+        if (bottommost > screenBounds.Bottom)
+        {
+            Debug.WriteLine($"bottom corrected from {bottommost} to {screenBounds.Bottom}");
+            bottommost = screenBounds.Bottom;
+        }
+        width = rightmost - leftmost;
+        height = bottommost - topmost;
+        if (width < 0)
+        {
+            width = 0;
+            Debug.WriteLine($"Warning, width was below 0");
+        }
+        if (height < 0)
+        {
+            height = 0;
+            Debug.WriteLine($"Warning, heigth was below 0");
+        }
+        return new Rectangle(leftmost, topmost, width, height);
     }
 
     private void DisposeAllImages()
