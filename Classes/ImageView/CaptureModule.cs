@@ -304,34 +304,34 @@ public class CaptureModule : ImageViewModule
         }
     }
 
-    private Rectangle MakeSafeRegion(Rectangle regionRect, Rectangle screenBounds)
+    private Rectangle MakeSafeRegion(Rectangle region, Rectangle imageBounds)
     {
         //Debug.WriteLine($"RegionRect: {regionRect}, screenBounds: {screenBounds} ");
-        int leftmost = regionRect.Left;
-        int topmost = regionRect.Top;
-        int rightmost = regionRect.Right;
-        int bottommost = regionRect.Bottom;
-        int width = regionRect.Width;
-        int height = regionRect.Height;
-        if (leftmost < screenBounds.Left)
+        int leftmost = region.Left;
+        int topmost = region.Top;
+        int rightmost = region.Right;
+        int bottommost = region.Bottom;
+        int width = region.Width;
+        int height = region.Height;
+        if (leftmost < imageBounds.Left)
         {
-            Debug.WriteLine($"left corrected from {leftmost} to {screenBounds.Left}");
-            leftmost = screenBounds.Left;
+            Debug.WriteLine($"left corrected from {leftmost} to {imageBounds.Left}");
+            leftmost = imageBounds.Left;
         }
-        if (topmost < screenBounds.Top)
+        if (topmost < imageBounds.Top)
         {
-            Debug.WriteLine($"top corrected from {topmost} to {screenBounds.Top}");
-            topmost = screenBounds.Top;
+            Debug.WriteLine($"top corrected from {topmost} to {imageBounds.Top}");
+            topmost = imageBounds.Top;
         }
-        if (rightmost > screenBounds.Right)
+        if (rightmost > imageBounds.Right)
         {
-            Debug.WriteLine($"right corrected from {rightmost} to {screenBounds.Right}");
-            rightmost = screenBounds.Right;
+            Debug.WriteLine($"right corrected from {rightmost} to {imageBounds.Right}");
+            rightmost = imageBounds.Right;
         }
-        if (bottommost > screenBounds.Bottom)
+        if (bottommost > imageBounds.Bottom)
         {
-            Debug.WriteLine($"bottom corrected from {bottommost} to {screenBounds.Bottom}");
-            bottommost = screenBounds.Bottom;
+            Debug.WriteLine($"bottom corrected from {bottommost} to {imageBounds.Bottom}");
+            bottommost = imageBounds.Bottom;
         }
         width = rightmost - leftmost;
         height = bottommost - topmost;
