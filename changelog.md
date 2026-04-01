@@ -1,6 +1,8 @@
 ﻿## Changelog
 
-## 2.6 (In progress)
+## 2.7 (In Progress)
+
+## 2.6
 - Added category filter to the Tag list. New tags automatically get assigned the current filter as category name.
 - Added higlight blend modes "Tint", "Tint Bright Colors" and "Dither"
 - Some blend modes transparency can now be set by the selected fill color's alpha
