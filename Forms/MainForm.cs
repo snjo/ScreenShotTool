@@ -539,6 +539,7 @@ public partial class MainForm : Form
     private static string MakeValidDirectoryName(string name)
     {
         name = name.Trim();
+        name = name.Replace(".\\", "_\\"); // prevent dirs with names ending in . which is not allowed
         List<char> invalidPathChars = Path.GetInvalidPathChars().ToList();
         bool fixesNeeded = false;
 
@@ -911,44 +912,49 @@ public partial class MainForm : Form
 
         if (Directory.Exists(folder))
         {
-            try
+            
+            //Stopwatch sw = Stopwatch.StartNew();
+            if (Path.GetExtension(filename).Equals(".pdf", StringComparison.OrdinalIgnoreCase))
             {
-                //Stopwatch sw = Stopwatch.StartNew();
-                if (Path.GetExtension(filename).Equals(".pdf", StringComparison.OrdinalIgnoreCase))
-                {
-                    Debug.WriteLine("SaveBitmap: Saving to PDF instead of image");
-                    SaveToPdf.Save(folder + "\\" + filename, capture, margins: 20f, imageScale: 0.87f);
-                }
-                else if (format == ImageFormat.Jpeg)
-                {
-                    SaveJpeg(folder + "\\" + filename, capture, settings.JpegQuality);
-                }
-                else
-                {
-                    //Debug.WriteLine("Saving image with format " + format.ToString() + " to " + folder + "\\" + filename);
-                    capture.Save(folder + "\\" + filename, format);
-                }
-                //sw.Stop();
-                //Debug.WriteLine($"Stopwatch, saved image in {sw.ElapsedMilliseconds}");
-                WriteMessage("Saved " + folder + "\\" + filename);
-
-                ShowBalloonToolTip("Capture saved", folder + Environment.NewLine + filename, ToolTipIcon.Info, BalloonTipType.ScreenshotSaved);
-
-                lastSavedFile = folder + "\\" + filename;
-                lastFolder = folder;
+                //Debug.WriteLine("SaveBitmap: Saving to PDF instead of image");
+                SaveToPdf.Save(folder + "\\" + filename, capture, margins: 20f, imageScale: 0.87f);
             }
-            catch (Exception ex)
+            else if (format == ImageFormat.Jpeg)
             {
-                WriteMessage("Could not save file to:\n"
-                    + folder + "\\" + filename + "\n"
-                    + "Check that you have write permission for this folder\n"
-                    + "\n"
-                    + ex.Message);
-
-                ShowBalloonToolTip("Capture error", "Couldn't save to folder." + folder + "\nCheck permission for this folder\n", ToolTipIcon.Warning, BalloonTipType.FolderError);
-
-                return false;
+                //Debug.WriteLine("Saving JPEG with format " + format.ToString() + " to " + folder + "\\" + filename);
+                bool saveResult = SaveJpeg(folder + "\\" + filename, capture, settings.JpegQuality);
+                if (saveResult == false)
+                {
+                    WriteMessage($"Could not save Jpeg: {filename}");
+                    ShowBalloonToolTip("Capture error", $"Could not save Bitmap: {filename}", ToolTipIcon.Warning, BalloonTipType.FolderError);
+                    return false;
+                }
             }
+            else
+            {
+                string path = Path.Combine(folder, filename);
+                //Debug.WriteLine("Saving image with format " + format.ToString() + " to " + folder + "\n + \\ + \n" + filename + "\n   " + path);
+                //capture.Save(folder + "\\" + filename, format);
+                try
+                {
+                    capture.Save(path, format);
+                }
+                catch (Exception ex)
+                {
+                    WriteMessage($"Could not save Bitmap: {path}, {ex.Message}");
+                    ShowBalloonToolTip("Capture error", $"Could not save Bitmap: {path}, {ex.GetType}", ToolTipIcon.Warning, BalloonTipType.FolderError);
+                    return false;
+                }
+            }
+            //sw.Stop();
+            //Debug.WriteLine($"Stopwatch, saved image in {sw.ElapsedMilliseconds}");
+            WriteMessage("Saved " + folder + "\\" + filename);
+
+            ShowBalloonToolTip("Capture saved", folder + Environment.NewLine + filename, ToolTipIcon.Info, BalloonTipType.ScreenshotSaved);
+
+            lastSavedFile = folder + "\\" + filename;
+            lastFolder = folder;
+
         }
         else
         {
@@ -963,14 +969,23 @@ public partial class MainForm : Form
     }
 
     // https://stackoverflow.com/questions/1484759/quality-of-a-saved-jpg-in-c-sharp
-    public static void SaveJpeg(string path, Bitmap image, long quality = 95L)
+    public static bool SaveJpeg(string path, Bitmap image, long quality = 95L)
     {
         //Debug.WriteLine("Saving JPEG with quality " + quality);
         using EncoderParameters encoderParameters = new EncoderParameters(1);
         using EncoderParameter encoderParameter = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, quality);
         ImageCodecInfo codecInfo = ImageCodecInfo.GetImageDecoders().First(codec => codec.FormatID == ImageFormat.Jpeg.Guid);
         encoderParameters.Param[0] = encoderParameter;
-        image.Save(path, codecInfo, encoderParameters);
+        try
+        {
+            image.Save(path, codecInfo, encoderParameters);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error saving Jpeg: {ex.Message}");
+            return false;
+        }
+        return true;
     }
 
     #endregion
