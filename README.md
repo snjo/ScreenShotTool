@@ -226,8 +226,11 @@ You can move, edit and scale symbols after you have placed them by clicking and 
 | Darken             | Only colors that are lighter than color2 are darkened =Min(C1,C2)   |
 | Desaturate         | Convert to grayscale, use ""Affect color channel"" to adjust amount |
 | Invert             | Inverts the color                                                   |
-| InvertBrightness   | Inverts the brightness, but keeps the hue. Adjust using selected color, More RED for Perceptual Brightness, More GREEN to allowing desaturate towards white |
+| InvertBrightness   | Inverts the brightness, but keeps the hue. Adjust using selected color, More RED for Perceptual Brightness, More GREEN to allow desaturating towards white |
 | Contrast           | White = full contrast, Gray = normal, Black = no contrast, Selected color hue will have an effect as well  |
+| Tint               | Replaces the hue but keeps the brightness. Use Adjustment to apply tint bright colors too |
+| TintBrightColors   | A variant of Darken, for applying tint to bright areas, but keeping leaving darker backgrounds intact. Adjustment changes the threshold and vibrance |
+| Dither             | Converts shades into monochrome pixels (Floyd-Steinberg Dithering) |
 
 
 # Images in the clipboard
