@@ -90,6 +90,7 @@
             aboutToolStripMenuItem = new ToolStripMenuItem();
             labelInfo = new Label();
             timerCleanThumbnailList = new System.Windows.Forms.Timer(components);
+            colorPickerToolStripMenuItem = new ToolStripMenuItem();
             contextMenuListView.SuspendLayout();
             contextMenuSysTray.SuspendLayout();
             menuStrip1.SuspendLayout();
@@ -124,7 +125,7 @@
             // 
             contextMenuListView.Items.AddRange(new ToolStripItem[] { itemOpenImage, itemOpenFileInExplorer, itemOpenFolder, itemDeleteFile, itemRename, itemRemove, copyToClipboardToolStripMenuItem, copyFileToolStripMenuItem, editImageToolStripMenuItem, convertFileFormatToolStripMenuItem });
             contextMenuListView.Name = "contextMenuListView";
-            contextMenuListView.Size = new Size(239, 246);
+            contextMenuListView.Size = new Size(239, 224);
             contextMenuListView.Opening += ContextMenuListView_Opening;
             // 
             // itemOpenImage
@@ -403,7 +404,7 @@
             // 
             // topMenuEdit
             // 
-            topMenuEdit.DropDownItems.AddRange(new ToolStripItem[] { editSelectedFileToolStripMenuItem, editFromClipboardToolStripMenuItem, openEditorToolStripMenuItem, editTagsToolStripMenuItem, toolStripMenuItem7, copyClipboardToFileToolStripMenuItem, saveClipboardToFileToolStripMenuItem, fixClipboardImageMenuItem });
+            topMenuEdit.DropDownItems.AddRange(new ToolStripItem[] { editSelectedFileToolStripMenuItem, editFromClipboardToolStripMenuItem, openEditorToolStripMenuItem, editTagsToolStripMenuItem, toolStripMenuItem7, copyClipboardToFileToolStripMenuItem, saveClipboardToFileToolStripMenuItem, fixClipboardImageMenuItem, colorPickerToolStripMenuItem });
             topMenuEdit.Name = "topMenuEdit";
             topMenuEdit.Size = new Size(39, 20);
             topMenuEdit.Text = "&Edit";
@@ -419,21 +420,21 @@
             // 
             editFromClipboardToolStripMenuItem.Name = "editFromClipboardToolStripMenuItem";
             editFromClipboardToolStripMenuItem.Size = new Size(279, 22);
-            editFromClipboardToolStripMenuItem.Text = "Edit from &clipboard";
+            editFromClipboardToolStripMenuItem.Text = "&Edit from clipboard";
             editFromClipboardToolStripMenuItem.Click += EditImageFromClipboard_Click;
             // 
             // openEditorToolStripMenuItem
             // 
             openEditorToolStripMenuItem.Name = "openEditorToolStripMenuItem";
             openEditorToolStripMenuItem.Size = new Size(279, 22);
-            openEditorToolStripMenuItem.Text = "Open &editor";
+            openEditorToolStripMenuItem.Text = "&Open editor";
             openEditorToolStripMenuItem.Click += EditImageNoFile_Click;
             // 
             // editTagsToolStripMenuItem
             // 
             editTagsToolStripMenuItem.Name = "editTagsToolStripMenuItem";
             editTagsToolStripMenuItem.Size = new Size(279, 22);
-            editTagsToolStripMenuItem.Text = "Edit Tags";
+            editTagsToolStripMenuItem.Text = "Edit &Tags";
             editTagsToolStripMenuItem.Click += ShowTagView_Click;
             // 
             // toolStripMenuItem7
@@ -445,21 +446,21 @@
             // 
             copyClipboardToFileToolStripMenuItem.Name = "copyClipboardToFileToolStripMenuItem";
             copyClipboardToFileToolStripMenuItem.Size = new Size(279, 22);
-            copyClipboardToFileToolStripMenuItem.Text = "Copy clipboard image to file drop";
+            copyClipboardToFileToolStripMenuItem.Text = "&Copy clipboard image to file drop";
             copyClipboardToFileToolStripMenuItem.Click += CopyClipboardToFileToolStripMenuItem_Click;
             // 
             // saveClipboardToFileToolStripMenuItem
             // 
             saveClipboardToFileToolStripMenuItem.Name = "saveClipboardToFileToolStripMenuItem";
             saveClipboardToFileToolStripMenuItem.Size = new Size(279, 22);
-            saveClipboardToFileToolStripMenuItem.Text = "Save clipboard image to file";
+            saveClipboardToFileToolStripMenuItem.Text = "&Save clipboard image to file";
             saveClipboardToFileToolStripMenuItem.Click += SaveClipboardToFileToolStripMenuItem_Click;
             // 
             // fixClipboardImageMenuItem
             // 
             fixClipboardImageMenuItem.Name = "fixClipboardImageMenuItem";
             fixClipboardImageMenuItem.Size = new Size(279, 22);
-            fixClipboardImageMenuItem.Text = "Fix clipboard image (more compatible)";
+            fixClipboardImageMenuItem.Text = "Fi&x clipboard image (more compatible)";
             fixClipboardImageMenuItem.Click += FixClipboardImageMenuItem_Click;
             // 
             // TopMenuHelp
@@ -523,6 +524,13 @@
             timerCleanThumbnailList.Enabled = true;
             timerCleanThumbnailList.Interval = 5000;
             timerCleanThumbnailList.Tick += TimerCleanThumbnailList_Tick;
+            // 
+            // colorPickerToolStripMenuItem
+            // 
+            colorPickerToolStripMenuItem.Name = "colorPickerToolStripMenuItem";
+            colorPickerToolStripMenuItem.Size = new Size(279, 22);
+            colorPickerToolStripMenuItem.Text = "Color &Picker";
+            colorPickerToolStripMenuItem.Click += colorPickerToolStripMenuItem_Click;
             // 
             // MainForm
             // 
@@ -612,5 +620,6 @@
         private ToolStripMenuItem toolStripMenuItem8;
         private ToolStripMenuItem itemRename;
         private System.Windows.Forms.Timer timerCleanThumbnailList;
+        private ToolStripMenuItem colorPickerToolStripMenuItem;
     }
 }

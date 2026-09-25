@@ -64,7 +64,7 @@
             buttonOK.Location = new Point(213, 415);
             buttonOK.Name = "buttonOK";
             buttonOK.Size = new Size(75, 23);
-            buttonOK.TabIndex = 0;
+            buttonOK.TabIndex = 15;
             buttonOK.Text = "OK";
             buttonOK.UseVisualStyleBackColor = true;
             buttonOK.Click += ButtonOK_Click;
@@ -75,7 +75,7 @@
             buttonCancel.Location = new Point(294, 414);
             buttonCancel.Name = "buttonCancel";
             buttonCancel.Size = new Size(75, 23);
-            buttonCancel.TabIndex = 1;
+            buttonCancel.TabIndex = 16;
             buttonCancel.Text = "Cancel";
             buttonCancel.UseVisualStyleBackColor = true;
             buttonCancel.Click += ButtonCancel_Click;
@@ -87,7 +87,7 @@
             trackBarRed.Maximum = 255;
             trackBarRed.Name = "trackBarRed";
             trackBarRed.Size = new Size(122, 28);
-            trackBarRed.TabIndex = 2;
+            trackBarRed.TabIndex = 20;
             trackBarRed.TickStyle = TickStyle.None;
             trackBarRed.ValueChanged += TrackbarColorChanged;
             // 
@@ -105,7 +105,7 @@
             numericRed.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
             numericRed.Name = "numericRed";
             numericRed.Size = new Size(52, 23);
-            numericRed.TabIndex = 7;
+            numericRed.TabIndex = 10;
             numericRed.ValueChanged += NumericColorChanged;
             // 
             // labelRed
@@ -120,7 +120,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(24, 302);
+            label1.Location = new Point(27, 331);
             label1.Name = "label1";
             label1.Size = new Size(30, 15);
             label1.TabIndex = 11;
@@ -128,21 +128,21 @@
             // 
             // numericBlue
             // 
-            numericBlue.Location = new Point(60, 300);
+            numericBlue.Location = new Point(60, 329);
             numericBlue.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
             numericBlue.Name = "numericBlue";
             numericBlue.Size = new Size(52, 23);
-            numericBlue.TabIndex = 10;
+            numericBlue.TabIndex = 12;
             numericBlue.ValueChanged += NumericColorChanged;
             // 
             // trackBarBlue
             // 
             trackBarBlue.AutoSize = false;
-            trackBarBlue.Location = new Point(118, 300);
+            trackBarBlue.Location = new Point(118, 329);
             trackBarBlue.Maximum = 255;
             trackBarBlue.Name = "trackBarBlue";
             trackBarBlue.Size = new Size(122, 28);
-            trackBarBlue.TabIndex = 9;
+            trackBarBlue.TabIndex = 22;
             trackBarBlue.TickStyle = TickStyle.None;
             trackBarBlue.ValueChanged += TrackbarColorChanged;
             // 
@@ -161,7 +161,7 @@
             numericAlpha.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
             numericAlpha.Name = "numericAlpha";
             numericAlpha.Size = new Size(52, 23);
-            numericAlpha.TabIndex = 16;
+            numericAlpha.TabIndex = 13;
             numericAlpha.ValueChanged += NumericColorChanged;
             // 
             // trackBarAlpha
@@ -171,14 +171,14 @@
             trackBarAlpha.Maximum = 255;
             trackBarAlpha.Name = "trackBarAlpha";
             trackBarAlpha.Size = new Size(122, 28);
-            trackBarAlpha.TabIndex = 15;
+            trackBarAlpha.TabIndex = 23;
             trackBarAlpha.TickStyle = TickStyle.None;
             trackBarAlpha.ValueChanged += TrackbarColorChanged;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(16, 331);
+            label3.Location = new Point(16, 302);
             label3.Name = "label3";
             label3.Size = new Size(38, 15);
             label3.TabIndex = 14;
@@ -186,21 +186,21 @@
             // 
             // numericGreen
             // 
-            numericGreen.Location = new Point(60, 329);
+            numericGreen.Location = new Point(60, 300);
             numericGreen.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
             numericGreen.Name = "numericGreen";
             numericGreen.Size = new Size(52, 23);
-            numericGreen.TabIndex = 13;
+            numericGreen.TabIndex = 11;
             numericGreen.ValueChanged += NumericColorChanged;
             // 
             // trackBarGreen
             // 
             trackBarGreen.AutoSize = false;
-            trackBarGreen.Location = new Point(118, 329);
+            trackBarGreen.Location = new Point(118, 300);
             trackBarGreen.Maximum = 255;
             trackBarGreen.Name = "trackBarGreen";
             trackBarGreen.Size = new Size(122, 28);
-            trackBarGreen.TabIndex = 12;
+            trackBarGreen.TabIndex = 21;
             trackBarGreen.TickStyle = TickStyle.None;
             trackBarGreen.ValueChanged += TrackbarColorChanged;
             // 
@@ -236,14 +236,14 @@
             panelSwatches.Location = new Point(12, 12);
             panelSwatches.Name = "panelSwatches";
             panelSwatches.Size = new Size(354, 237);
-            panelSwatches.TabIndex = 22;
+            panelSwatches.TabIndex = 30;
             // 
             // buttonColorPicker
             // 
             buttonColorPicker.Location = new Point(16, 387);
             buttonColorPicker.Name = "buttonColorPicker";
             buttonColorPicker.Size = new Size(75, 50);
-            buttonColorPicker.TabIndex = 23;
+            buttonColorPicker.TabIndex = 17;
             buttonColorPicker.Text = "Color picker";
             buttonColorPicker.UseVisualStyleBackColor = true;
             buttonColorPicker.Click += ButtonColorPicker_Click;

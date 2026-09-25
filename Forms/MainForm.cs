@@ -912,7 +912,7 @@ public partial class MainForm : Form
 
         if (Directory.Exists(folder))
         {
-            
+
             //Stopwatch sw = Stopwatch.StartNew();
             if (Path.GetExtension(filename).Equals(".pdf", StringComparison.OrdinalIgnoreCase))
             {
@@ -1931,6 +1931,12 @@ public partial class MainForm : Form
     {
         FixClipboardImage();
     }
+
+    private void colorPickerToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        SpawnColorPicker();
+    }
+
     #endregion
 
     #region ListView
@@ -2040,6 +2046,38 @@ public partial class MainForm : Form
             UpdateInfoLabelVisibility();
         }
     }
+
+    #region ColorPicker
+
+    private void SpawnColorPicker()
+    {
+        ImageView imgView = ImageView.CreateUsingAllScreens(ImageView.ViewerMode.colorPicker);
+        imgView.SetImage();
+        DialogResult result = imgView.ShowDialog();
+        if (result == DialogResult.OK || result == DialogResult.Yes)
+        {
+            if (imgView.PickedColor != Color.Empty)
+            {
+                try
+                {
+                    Color color = imgView.PickedColor;
+                    int colorNumber = ColorTranslator.ToWin32(color);
+                    string hex = $"{color.R:X2}{color.G:X2}{color.B:X2}";
+                    Clipboard.SetText($"{color.R},{color.G},{color.B} / {hex}");
+                }
+                catch
+                {
+                    Debug.WriteLine($"Error setting clipboard text from Color Picker");
+                }
+            }
+            else
+            {
+                Debug.WriteLine("Picked color is empty");
+            }
+        }
+    }
+
+    #endregion
 
     //private void FixTransparentPixels_Click(object sender, EventArgs e)
     //{
