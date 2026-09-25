@@ -1,6 +1,8 @@
 ﻿## Changelog
 
 ## 2.7 (In Progress)
+- Added Color Picker to main Edit menu
+- Fixed Color Picker color sliders order from RBG to RGB
 
 ## 2.6
 - Added category filter to the Tag list. New tags automatically get assigned the current filter as category name.
